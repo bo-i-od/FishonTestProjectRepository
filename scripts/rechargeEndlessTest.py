@@ -31,7 +31,7 @@ def buy_test(bp: BasePage, index):
     if wait_for_pay_result(bp) is False:  # 支付失败
         print("1+1礼包，支付失败，跳过测试")
         return False
-    reward_icon_list = RewardsPanel.get_reward_icon_list(bp)
+    reward_icon_list, gear_icon_list = RewardsPanel.get_reward_icon_list(bp)
     compare_list(reward_icon_list, icon_list)
     cur = 0
     while cur < len(item_count_list):
@@ -46,7 +46,7 @@ def buy_test(bp: BasePage, index):
     return True
 
 def buy_many_test(bp: BasePage):
-    HomePanel.jump_to(bp, element=ElementsData.Home.btn_endless)
+    HomePanel.go_to(bp, element=ElementsData.Home.btn_endless)
     click_icon_test(bp)
     # 随机点击锁定的buy按钮位置
     r = random.randint(1, 3)

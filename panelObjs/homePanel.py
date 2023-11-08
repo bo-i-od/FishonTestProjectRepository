@@ -21,8 +21,12 @@ class HomePanel(BasePage):
         return self.excelTools.get_exp_limit(lv)
 
     # 跳转界面
-    def jump_to(self, element):
+    def go_to(self, element):
         self.try_click_element(element_data=element)
+
+    def go_to_BattlePassPanel(self):
+        HomePanel.go_to(self, element=ElementsData.Home.btn_bp)
+
 
 
 

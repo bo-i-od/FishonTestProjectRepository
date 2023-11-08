@@ -5,19 +5,16 @@ from panelObjs.treasureChestPanel import TreasureChestPanel
 from panelObjs.treasureChestMerchantPanel import TreasureChestMerchantPanel
 from panelObjs.rechargeStorePanel import RechargeStorePanel
 from panelObjs.treasureChestRewardsPanel import TreasureChestRewardsPanel
+from panelObjs.treasureChestGearsShardsPanel import TreasureChestGearsShardsPanel
 from panelObjs.homePanel import HomePanel
+from panelObjs.itemTipsPanel import ItemTipsPanel
 from tools.commonTools import *
 from configs.elementsData import ElementsData
 
-def box_quantity_init(bp: BasePage):
-    bp.set_item_count(target_count=1,item_tpid="207001")
-    bp.set_item_count(target_count=9, item_tpid="207002")
-    bp.set_item_count(target_count=19, item_tpid="207003")
-    bp.set_item_count(target_count=20, item_tpid="207004")
-    bp.set_item_count(target_count=10000, item_tpid="207005")
+
 
 def change_box_test(bp: BasePage):
-    HomePanel.jump_to(bp, element=ElementsData.Home.btn_chest)
+    HomePanel.go_to(bp, element=ElementsData.Home.btn_chest)
     print("正在获取箱子图标和数量列表")
     box_icon_list, box_quantity_list =TreasureChestPanel.get_box_icon_and_quantity_list(bp)
     print("图标列表：", box_icon_list, "\n数量列表：", box_quantity_list)
@@ -39,8 +36,7 @@ def change_box_test(bp: BasePage):
         print(f"按钮应该显示OPEN X {expect_n},实际显示为OPEN X {n}")
         compare(expect_n, n)
         print("数量显示无误")
-        if n > 0:
-            open_box_test(bp,box_mian_icon, n)
+        open_box_test(bp, box_mian_icon, n)
         cur += 1
     print("测试通过")
 
@@ -68,7 +64,8 @@ def get_box_point_box_test(bp: BasePage):
     cur = 0
     while cur < 5:
         print(f"进行第{cur + 1}次进度条箱子点击测试")
-        click_progressbar_box_test(bp)
+        if click_progressbar_box_test(bp) is False:
+            break
         cur += 1
     print("测试通过")
 
@@ -80,7 +77,7 @@ def click_progressbar_box_test(bp: BasePage):
         box_points = TreasureChestPanel.get_box_points(bp)
         compare(box_points, box_points_expect)
         print("箱子点不足下的点击，测试通过")
-        return
+        return False
     box_icon_list, quantity_list = TreasureChestPanel.get_box_icon_and_quantity_list(bp)
     progressbar_box = TreasureChestPanel.get_progressbar_box(bp)
     cur = 0
@@ -100,7 +97,7 @@ def click_progressbar_box_test(bp: BasePage):
     compare(quantity_list, quantity_list_except)
     compare(box_points_numerator_expect, box_points_numerator)
     print("箱子点充足下的点击，测试通过")
-
+    return True
 
 def open_box_test(bp: BasePage, icon, quantity):
     print("正在获取开箱前的箱子点")
@@ -110,7 +107,11 @@ def open_box_test(bp: BasePage, icon, quantity):
     box_points_numerator_expect = box_points_numerator + chest_point * quantity
     print(f"开箱后箱子点期望为{box_points_numerator_expect}")
     TreasureChestPanel.click_open_x(bp)
-    TreasureChestRewardsPanel.close_TreasureChestRewardsPanel(bp)
+    if quantity > 0:
+        TreasureChestRewardsPanel.click_btn_close(bp)
+        if TreasureChestGearsShardsPanel.is_panel_active(bp):
+            print("点击tap to continue")
+            TreasureChestGearsShardsPanel.click_tap_to_continue(bp)
     print("等待加分动画")
     bp.sleep(1)
     box_points_numerator, box_points_denominator = TreasureChestPanel.get_box_points(bp)
@@ -118,46 +119,49 @@ def open_box_test(bp: BasePage, icon, quantity):
     compare(box_points_numerator, box_points_numerator_expect)
     print("箱子点一致")
 
+def click_tips_test(bp: BasePage):
+    TreasureChestPanel.click_btn_magnifier(bp)
+    TreasureChestPanel.click_btn_magnifier(bp)
+    preview_icon_list, preview_position_list = TreasureChestPanel.get_preview_icon_and_position_list(bp)
+    index_random = random.randint(0, len(preview_icon_list) - 1)
+    bp.click_position(preview_position_list[index_random])
+    item_icon = ItemTipsPanel.get_item_icon(bp)
+    compare(preview_icon_list[index_random], item_icon)
+    bp.click_position([0.5, 0.1])
+    if ItemTipsPanel.is_panel_active(bp):
+        raise FindElementError
+
 def TreasureChestMerchant_test(bp: BasePage):
-    print(f"将绿钞设为{500}")
-    bp.set_item_count(500, item_tpid="100100")
     TreasureChestPanel.goto_TreasureChestMerchantPanel(bp)
-    buy_test(bp)
+    # 免费项点两次
+    TreasureChestMerchantPanel.click_btn_buy(bp, 0)
+    TreasureChestMerchantPanel.click_btn_buy(bp, 0)
+    # 点一个绿钞项
+    index = random.randint(1,5)
+    TreasureChestMerchantPanel.click_btn_buy(bp, index)
     refresh_cost = TreasureChestMerchantPanel.get_refresh_cost(bp)
     while refresh_cost >= 0:
         TreasureChestMerchantPanel.click_btn_refresh(bp)
         refresh_cost = TreasureChestMerchantPanel.get_refresh_cost(bp)
         if refresh_cost > TreasureChestMerchantPanel.get_resource(bp):
-            bp.set_item_count(1000, item_tpid="100100")
-            TreasureChestMerchantPanel.close_TreasureChestMerchantPanel(bp)
-            TreasureChestPanel.goto_TreasureChestMerchantPanel(bp)
-    # 刷新次数用尽再点击
-    TreasureChestMerchantPanel.click_btn_refresh(bp)
-    print(f"将绿钞设为{5000}")
-    bp.set_item_count(5000, item_tpid="100100")
-    TreasureChestMerchantPanel.close_TreasureChestMerchantPanel(bp)
-    TreasureChestPanel.goto_TreasureChestMerchantPanel(bp)
-    buy_test(bp)
+            TreasureChestMerchantPanel.click_btn_refresh(bp)
+            print("刷新费用不足，结束测试")
+            break
 
-def buy_test(bp: BasePage):
-    cur = 0
-    while cur < 10:
-        index = random.randint(0,5)
-        TreasureChestMerchantPanel.click_btn_buy(bp, index)
-        cur += 1
+
+
 # 跳转测试
 def jump_test(bp: BasePage):
     print("正在打开付费商城界面")
     TreasureChestMerchantPanel.goto_RechargeStorePanel(bp)
     print("正在关闭付费商城界面")
-    RechargeStorePanel.close_RechargeStorePanel(bp)
+    RechargeStorePanel.click_btn_close(bp)
     print("正在关闭鱼箱商人界面")
     TreasureChestMerchantPanel.close_TreasureChestMerchantPanel(bp)
     print("正在关闭鱼箱界面")
-    TreasureChestPanel.close_TreasureChestPanel(bp)
+    TreasureChestPanel.click_btn_close(bp)
     print("测试通过")
 
 
 if __name__ == '__main__':
     bp = BasePage()
-    TreasureChestMerchant_test(bp)

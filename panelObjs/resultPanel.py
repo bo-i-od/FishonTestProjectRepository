@@ -14,7 +14,15 @@ class ResultPanel(BasePage):
         while (self.exist(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again) or self.exist(element_data=ElementsData.Result.pve_result.btn_claim) or self.exist(element_data=ElementsData.Result.pve_result.btn_throw)) is False:
             self.sleep(1)
 
-    def automatic_settlement(self):
+    def automatic_settlement(self, is_return=True):
+        if is_return is False:
+            if self.exist(element_data=ElementsData.Result.pve_result.btn_claim):
+                self.click_element(element_data=ElementsData.Result.pve_result.btn_claim)
+                return 1
+            ResultPanel.duel_sundries(self, is_return=False)
+            self.sleep(1)
+            self.try_click_element(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again)
+            return 0
         if self.exist(element_data=ElementsData.Result.pve_result.btn_claim):
             self.click_element(element_data=ElementsData.Result.pve_result.btn_claim)
             return "", {}
@@ -26,7 +34,20 @@ class ResultPanel(BasePage):
 
 
 
-    def duel_sundries(self):
+    def duel_sundries(self, is_return=True):
+        if is_return is False:
+            if self.exist(element_data=ElementsData.Result.pve_result.btn_open_by_key):
+                self.click_element(element_data=ElementsData.Result.pve_result.btn_open_by_key)
+            elif self.exist(element_data=ElementsData.Result.pve_result.btn_open_by_cash):
+                self.click_element(element_data=ElementsData.Result.pve_result.btn_open_by_cash)
+            elif self.exist(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again):
+                self.click_element(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again)
+            else:
+                self.click_element(element_data=ElementsData.Result.pve_result.btn_throw)
+            RewardsPanel.wait_for_RewardsPanel(self)
+            self.sleep(0.5)
+            RewardsPanel.click_tap_to_continue(self)
+            return
         chest_icon = ResultPanel.get_chest_icon(self)
         if self.exist(element_data=ElementsData.Result.pve_result.btn_open_by_key):
             self.click_element(element_data=ElementsData.Result.pve_result.btn_open_by_key)

@@ -1,14 +1,17 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-
+from tools.commonTools import *
 class TaskPanel(BasePage):
-    def get_view_port_range(self):
-        view_port = self.get_element(element_data=ElementsData.Task.view_port)
-        x_left = view_port.get_position()[0] - 0.5 * view_port.get_size()[0]
-        x_right = view_port.get_position()[0] + 0.5 * view_port.get_size()[0]
-        return x_left, x_right
+    def click_btn_close(self):
+        self.click_element(element_data=ElementsData.Task.btn_close)
+        if TaskPanel.is_panel_active(self):
+            raise FindElementError
+    def is_panel_active(self):
+        if self.exist(element_data=ElementsData.Task.TaskPanel):
+            return True
+        return False
+
     def get_button_position(self):
-        btn_completed_list = self.get_elements(ElementsData.Task.btn_completed_list)
-        for btn_completed in btn_completed_list:
-            print(btn_completed.get_position())
+        btn_completed_list = self.get_position_list(element_data=ElementsData.Task.btn_completed_list)
+
 

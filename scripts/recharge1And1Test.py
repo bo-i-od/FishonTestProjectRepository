@@ -32,7 +32,7 @@ def click_icon_test(bp: BasePage):
     print("点击图标测试通过")
 
 def buy_test(bp: BasePage):
-    HomePanel.jump_to(bp, element=ElementsData.Home.btn_1add1)
+    HomePanel.go_to(bp, element=ElementsData.Home.btn_1add1)
     if Recharge1And1Panel.is_btn_buy_clickable(bp) is False:
         Recharge1And1Panel.click_btn_buy(bp)
         Recharge1And1Panel.close_Recharge1And1Panel(bp)
@@ -46,7 +46,7 @@ def buy_test(bp: BasePage):
         print("1+1礼包，支付失败，跳过测试")
         return
     # 支付成功
-    reward_icon_list = RewardsPanel.get_reward_icon_list(bp)
+    reward_icon_list = RewardsPanel.get_reward_icon_list(bp, is_divide=False)
     compare_list(item_icon_list, reward_icon_list)
     RewardsPanel.click_tap_to_continue(bp)
     print("1+1礼包，测试通过")

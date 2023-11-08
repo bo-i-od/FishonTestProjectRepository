@@ -41,3 +41,9 @@ class CompareError(BaseError):
         比大小结果不正确时，会报错
     """
     pass
+
+class MoveError(BaseError):
+    """
+        移动时距离有问题，会报错
+    """
+    pass

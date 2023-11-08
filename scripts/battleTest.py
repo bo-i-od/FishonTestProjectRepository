@@ -67,7 +67,26 @@ def robot_test(bp: BasePage):
             rank_list, name_list, points_list = ChampoinshipTournamentsPanel.get_rank_data(bp)
             ChampoinshipTournamentsPanel.save_rank_data(bp, rank_list, name_list, points_list, cur)
 
-def update_dict(chest_icon: str,temp_dict: dict, res_dict: dict):
+def circulate_fish(bp: BasePage):
+    cur = 0
+    fish = 0
+    while True:
+        BattlePreparePanel.cast(bp)
+        while BuyEnergyPanel.buy_energy_panel_is_opened(bp):
+            BuyEnergyPanel.get_energy(bp)
+            bp.sleep(0.5)
+            BuyEnergyPanel.tap_to_close(bp)
+            bp.sleep(0.5)
+            BattlePreparePanel.cast(bp)
+        BattlePanel.reel_quick(bp)
+        ResultPanel.wait_for_result(bp)
+        if ResultPanel.automatic_settlement(bp, is_return=False) == 1:
+            fish += 1
+        cur += 1
+        print(f"第{cur}次钓鱼,鱼的概率为{fish/float(cur)}")
+
+
+def update_dict(chest_icon: str, temp_dict: dict, res_dict: dict):
     if temp_dict == {}:
         return res_dict
     for temp in temp_dict:
@@ -90,4 +109,4 @@ def update_dict(chest_icon: str,temp_dict: dict, res_dict: dict):
 
 if __name__ == '__main__':
     bp = BasePage()
-    circulate_chest(bp)
+    circulate_fish(bp)

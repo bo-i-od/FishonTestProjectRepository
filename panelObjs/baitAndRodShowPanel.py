@@ -19,3 +19,4 @@ class BaitAndRodShowPanel(BasePage):
             print("没有成功打开5d细节")
             return False
         self.click_position(position)
+

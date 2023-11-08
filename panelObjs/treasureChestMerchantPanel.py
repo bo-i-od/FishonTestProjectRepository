@@ -1,6 +1,6 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from tools.commonTools import *
+from items.resource import *
 from panelObjs.treasureChestPanel import TreasureChestPanel
 
 class TreasureChestMerchantPanel(BasePage):
@@ -12,7 +12,7 @@ class TreasureChestMerchantPanel(BasePage):
 
         times_refresh_numerator, times_refresh_denominator = TreasureChestMerchantPanel.get_times_refresh(self)
         times_refresh_expect = times_refresh_numerator
-        cash = TreasureChestMerchantPanel.get_resource(self)
+        cash = get_resource(self,"100100", element_data=ElementsData.TreasureChestMerchant.text_100100)
         refresh_cost = TreasureChestMerchantPanel.get_refresh_cost(self)
         cash_expect = cash - refresh_cost
         if refresh_cost < 0 or cash_expect < 0:
@@ -20,7 +20,7 @@ class TreasureChestMerchantPanel(BasePage):
             cash_expect = cash
             # 不管按钮是否可点击都点击
             self.click_position(position)
-            cash = TreasureChestMerchantPanel.get_resource(self)
+            cash = get_resource(self,"100100", element_data=ElementsData.TreasureChestMerchant.text_100100)
             price_list = TreasureChestMerchantPanel.get_price_list(self)
             times_refresh_numerator, times_refresh_denominator = TreasureChestMerchantPanel.get_times_refresh(self)
             print("无法刷新")
@@ -31,7 +31,7 @@ class TreasureChestMerchantPanel(BasePage):
         price_list_pre = TreasureChestMerchantPanel.get_price_list(self)
         self.click_position(position)
         price_list = TreasureChestMerchantPanel.get_price_list(self)
-        cash = TreasureChestMerchantPanel.get_resource(self)
+        cash = get_resource(self,"100100", element_data=ElementsData.TreasureChestMerchant.text_100100)
         times_refresh_expect -= 1
         times_refresh_numerator, times_refresh_denominator = TreasureChestMerchantPanel.get_times_refresh(self)
         compare(cash, cash_expect)
@@ -51,7 +51,7 @@ class TreasureChestMerchantPanel(BasePage):
         times_refresh_denominator = int(times_refresh_split_str[1])
         return times_refresh_numerator, times_refresh_denominator
 
-    def goto_RechargeStorePanel(self):
+    def go_to_RechargeStorePanel(self):
         self.click_a_until_b_appear(element_data_a=ElementsData.TreasureChestMerchant.btn_add_100100, element_data_b=ElementsData.RechargeStore.RechargeStorePanel)
         return ElementsData.TreasureChestMerchant.TreasureChestMerchantPanel
 
@@ -167,21 +167,14 @@ class TreasureChestMerchantPanel(BasePage):
         return int(price_str)
 
     # 获得绿钞数量
-    def get_resource(self):
-        cash_db = self.get_item_count(item_tpid="100100")
-        print(cash_db)
-        cash_show = self.get_text(element_data=ElementsData.TreasureChestMerchant.text_100100)
-        print(cash_show)
-        compare(cash_db, int(cash_show))
-        print(f"显示绿钞与数据库绿钞一致，数量为{cash_db}")
-        return cash_db
+
 
     # 看该按钮是否可以点击
     def is_clickable(self, price):
         if price < 0:
             print("已经购买无法购买")
             return False
-        cash = TreasureChestMerchantPanel.get_resource(self)
+        cash = get_resource(self,"100100", element_data=ElementsData.TreasureChestMerchant.text_100100)
         if price > cash:
             print("绿钞不足")
             return False
@@ -193,7 +186,7 @@ class TreasureChestMerchantPanel(BasePage):
     def click_btn_buy(self, index: int):
         btn_position_list = TreasureChestMerchantPanel.get_btn_position_list(self)
         price_list = TreasureChestMerchantPanel.get_price_list(self)
-        cash_expect = TreasureChestMerchantPanel.get_resource(self)
+        cash_expect = get_resource(self,"100100", element_data=ElementsData.TreasureChestMerchant.text_100100)
         box_icon_TreasureChest_list, quantity_TreasureChest_list = TreasureChestPanel.get_box_icon_and_quantity_list(self)
         print("点击购买")
         quantity_TreasureChest_list_expect = quantity_TreasureChest_list
@@ -208,7 +201,7 @@ class TreasureChestMerchantPanel(BasePage):
         print("点击后的期望箱子数量列表为",quantity_TreasureChest_list_expect)
         print("点击后的实际箱子数量列表为", quantity_TreasureChest_list)
         compare(quantity_TreasureChest_list, quantity_TreasureChest_list_expect)
-        cash = TreasureChestMerchantPanel.get_resource(self)
+        cash = get_resource(self,"100100", element_data=ElementsData.TreasureChestMerchant.text_100100)
         print(f"点击后的期望绿钞数为{cash_expect}，实际绿钞数为{cash}")
         compare(cash, cash_expect)
 

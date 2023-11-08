@@ -18,16 +18,17 @@ class BasePage:
     def __init__(self):
         # unity窗口使用UnityEditorWindow()
         # 手机使用connect_device("android://127.0.0.1:5037/设备号")
-        # dev = UnityEditorWindow()
-        dev = connect_device("android://127.0.0.1:5037/b6h65hd64p5pxcyh")
+        dev = UnityEditorWindow()
+        # dev = connect_device("android://127.0.0.1:5037/127.0.0.1:21573")
         # make sure your poco-sdk in the game runtime listens on the following port.
         # 默认端口 5001
         # IP is not used for now
-        addr = ('', 5001)
+        addr = ('', 5002)
         self.poco = UnityPoco(addr, device=dev)
         self.screen_w, self.screen_h = self.poco.get_screen_size()  # 获取屏幕尺寸
         self.excelTools = ExceTools("C:/trunk/datapool/策划模板导出工具/")
         self.pop_window_dict, self.pop_window_close_dict = self.set_pop_window_dict()  # 设定弹窗及其关闭方式
+        self.is_pay = True
 
     # pop_window_dict存放弹窗的ElementsData
     # pop_window_close_dict存放弹窗对应的关闭按钮的ElementsData
@@ -455,24 +456,6 @@ class BasePage:
             cur += 1
         return item_count_list
 
-    # 生成或更新item_dict
-    @staticmethod
-    def make_item_dict(item_coin_list: list, item_quantity_list: list, item_dict: dict = None):
-        item_coin_list_len = len(item_coin_list)
-        item_quantity_list_len = len(item_quantity_list)
-        if item_coin_list_len != item_quantity_list_len:
-            print("请保证图标列表长度和数量列表长度想等")
-            return None
-        cur = 0
-        if item_dict is None:
-            item_dict = {}
-        while cur < item_quantity_list_len:
-            if item_coin_list[cur] in item_dict:
-                item_dict[item_coin_list[cur]] += int(item_quantity_list[cur])
-            else:
-                item_dict[item_coin_list[cur]] = int(item_quantity_list[cur])
-            cur += 1
-        return item_dict
 
     # 休息t秒
     @staticmethod
