@@ -14,7 +14,7 @@ class BattlePanel(BasePage):
     # unity上才能用
     def reel_quick(self):
         self.wait_for_appear(element_data=ElementsData.Battle.btn_reel, is_click=False)
-        while self.exist(element_data=ElementsData.Result.ResultPanel) is False:
+        while not self.exist(element_data=ElementsData.Result.ResultPanel):
             self.send_key("G")
             self.sleep(0.5)
 

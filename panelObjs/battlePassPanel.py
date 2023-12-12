@@ -1,7 +1,7 @@
 from configs.elementsData import ElementsData
-from items.resource import *
 from tools.viewport import Viewport
-
+from common.basePage import BasePage
+from tools.commonTools import *
 
 class BattlePassPanel(BasePage):
     def click_btn_close(self):
@@ -53,6 +53,7 @@ class BattlePassPanel(BasePage):
         self.click_element(element_data=ElementsData.BattlePass.btn_collect)
         return True
 
+
     def get_premium_collectable_icon_quantity_and_position_list(self):
         return BattlePassPanel.get_collectable_icon_quantity_and_position_list(self, ElementsData.BattlePass.particle_claim_premium_list)
 
@@ -63,9 +64,9 @@ class BattlePassPanel(BasePage):
     def get_collectable_icon_quantity_and_position_list(self, element_particle_claim):
         # 获得付费的可点击
         particle_claim_id_list = self.get_parent_id_list(element_data=element_particle_claim)
-        icon_id_list = self.get_offspring_id_list(offspring_path="item>item_model_new(Clone)>icon",object_id_list=particle_claim_id_list)
+        icon_id_list = self.get_offspring_id_list(offspring_path="item>item_model_new(Clone)>icon", object_id_list=particle_claim_id_list)
         icon_list = self.get_icon_list(object_id_list=icon_id_list)
-        check_icon_list(icon_list)
+        # check_icon_list(icon_list)
         quantity_id_list = self.get_offspring_id_list(offspring_path="item>item_model_new(Clone)>quantity>value", object_id_list=particle_claim_id_list)
         quantity_list = self.get_text_list(object_id_list=quantity_id_list)
         str_to_int_list(quantity_list)

@@ -8,14 +8,17 @@ from tools.commonTools import *
 
 
 def playerEditNamePanelTest(bp: BasePage):
-    name = PlayerEditNamePanel.get_name(bp)
-    PlayerEditNamePanel.set_name(bp, name[1:])
+    if not PlayerEditNamePanel.is_panel_active(bp):
+        return
+    name = PlayerEditNamePanel.get_player_name(bp)
+    PlayerEditNamePanel.set_player_name(bp, name[1:])
     # 得到头像个数
     head_count = PlayerEditNamePanel.get_head_count(bp)
     # 随机选一个序号
     select_index = random.randrange(0, head_count - 1)
     # 点击该序号
     head_img_object_id = PlayerEditNamePanel.select_head(bp, select_index)
+    bp.sleep(1)
     # 得到head_object_id和select_object_id，它俩应该有相同的parent
     head_object_id = PlayerEditNamePanel.get_head_object_id(bp, head_img_object_id)
     select_object_id = PlayerEditNamePanel.get_select_object_id(bp)
@@ -23,6 +26,7 @@ def playerEditNamePanelTest(bp: BasePage):
     compare(bp.get_parent_id(head_object_id), bp.get_parent_id(select_object_id))
     # 点击确认按钮
     PlayerEditNamePanel.click_confirm(bp)
+    bp.sleep(1)
 
 def newbieGuidePanelTest(bp: BasePage):
     start_page = NewbieGuidePanel.get_start_page(bp)

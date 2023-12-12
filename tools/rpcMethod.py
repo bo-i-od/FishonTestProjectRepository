@@ -128,3 +128,9 @@ def get_toggle_is_on_by_id(bp, id):
 
 def cmd(bp, command):
     bp.poco.agent.c.call("CMD", command)
+
+def lua_console(bp, command):
+    bp.poco.agent.c.call("LuaConsole", command)
+
+def set_btn_enabled(bp, element, enabled):
+    bp.poco.agent.c.call("SetBtnEnabled", element, enabled)

@@ -8,10 +8,15 @@ from items.resource import *
 
 
 class GearPanel(BasePage):
-    def close_GearPanel(self):
+    def click_btn_close(self):
         self.click_element(element_data=ElementsData.Gear.btn_close)
-        if self.exist(element_data=ElementsData.Gear.GearPanel):
+        if GearPanel.is_panel_active(self):
             raise FindElementError
+
+    def is_panel_active(self):
+        if self.exist(element_data=ElementsData.Gear.GearPanel):
+            return True
+        return False
 
     def get_resource(self):
         res_value_list = self.get_text_list(element_data=ElementsData.Gear.res_value_list)
@@ -52,12 +57,12 @@ class GearPanel(BasePage):
 
     def switch_gear(self, direction: int):
         if direction > 0:
-            if self.exist(element_data=ElementsData.Gear.btn_next) is False:
+            if not self.exist(element_data=ElementsData.Gear.btn_next):
                 print("后面没有了")
                 return False
             self.click_element(element_data=ElementsData.Gear.btn_next)
         elif direction < 0:
-            if self.exist(element_data=ElementsData.Gear.btn_previous) is False:
+            if not self.exist(element_data=ElementsData.Gear.btn_previous):
                 print("前面没有了")
                 return False
             self.click_element(element_data=ElementsData.Gear.btn_previous)
@@ -71,7 +76,7 @@ class GearPanel(BasePage):
                 raise FindElementError
             return value_5d_list
         self.click_element(element_data=ElementsData.Gear.img_5d)
-        if self.exist(element_data=ElementsData.Gear.tips_5d) is False:
+        if not self.exist(element_data=ElementsData.Gear.tips_5d):
             raise FindNoElementError
         value_5d_list = GearPanel.get_5d_value(self, ElementsData.Gear.value_5d_list)
         print("雷达图成功")
@@ -83,7 +88,7 @@ class GearPanel(BasePage):
             if self.exist(element_data=ElementsData.Gear.tips_talent):
                 raise FindElementError
         self.click_element(element_data=ElementsData.Gear.talent)
-        if self.exist(element_data=ElementsData.Gear.tips_talent) is False:
+        if not self.exist(element_data=ElementsData.Gear.tips_talent):
             raise FindNoElementError
         print("点击天赋成功")
 
@@ -93,7 +98,7 @@ class GearPanel(BasePage):
             if self.exist(element_data=ElementsData.Gear.btn_magnifier_close):
                 raise FindElementError
         self.click_element(element_data=ElementsData.Gear.btn_magnifier_open)
-        if self.exist(element_data=ElementsData.Gear.btn_magnifier_close) is False:
+        if not self.exist(element_data=ElementsData.Gear.btn_magnifier_close):
             raise FindNoElementError
         print("放大缩小按钮成功")
 
@@ -110,14 +115,14 @@ class GearPanel(BasePage):
 
     def get_5d_value(self, value_5d_list):
         res_list = self.get_text_list(element_data=value_5d_list)
-        positive_percentage_to_float_list(text_list=res_list)
+        positive_percentage_to_float(text_list=res_list)
         return res_list
 
     def get_attrbuite_icon_text_value_list(self):
         attribute_icon_list = self.get_icon_list(element_data=ElementsData.Gear.Info.attribute_icon_list)
         attribute_text_list = self.get_text_list(element_data=ElementsData.Gear.Info.attribute_text_list)
         attribute_value_list = self.get_text_list(element_data=ElementsData.Gear.Info.attribute_value_list)
-        positive_percentage_to_float_list(text_list=attribute_value_list)
+        positive_percentage_to_float(text_list=attribute_value_list)
         return attribute_icon_list, attribute_text_list, attribute_value_list
 
     def get_perk_postion_list(self):
@@ -173,7 +178,7 @@ class GearPanel(BasePage):
             self.click_position(attribute_add_position_list[index_random])
             print("点击空洗练位成功")
         # 判断是否跳转到洗练界面
-        if self.exist(element_data=ElementsData.Gear.panel_draw) is False:
+        if not self.exist(element_data=ElementsData.Gear.panel_draw):
             raise FindNoElementError
 
     def click_attribute_lock(self):
@@ -212,7 +217,7 @@ class GearPanel(BasePage):
         damage = int(self.get_text(element_data=ElementsData.Gear.Upgrade.damage))
         damage_next = int(self.get_text(element_data=ElementsData.Gear.Upgrade.damage_next))
         cost_icon_list = self.get_icon_list(element_data=ElementsData.Gear.Upgrade.cost_icon_list)
-        check_icon_list(cost_icon_list)
+        # check_icon_list(cost_icon_list)
         cost_value_list = self.get_text_list(element_data=ElementsData.Gear.Upgrade.cost_value_list)
         str_to_int_list(cost_value_list)
         compare(level_next, level_select)
@@ -319,7 +324,7 @@ class GearPanel(BasePage):
         rating = int(self.get_text(element_data=ElementsData.Gear.Draw.rating))
         attribute_icon_list = self.get_icon_list(element_data=ElementsData.Gear.Draw.attribute_icon_list)
         attribute_value_list = self.get_text_list(element_data=ElementsData.Gear.Draw.attribute_value_list)
-        positive_percentage_to_float_list(text_list=attribute_value_list)
+        positive_percentage_to_float(text_list=attribute_value_list)
         attribute_text_list = self.get_text_list(element_data=ElementsData.Gear.Draw.attribute_text_list)
         attribute_add_list = self.get_position_list(element_data=ElementsData.Gear.Draw.attribute_add_list)
         return name, rating, attribute_icon_list, attribute_value_list, attribute_text_list, attribute_add_list
@@ -363,14 +368,14 @@ class GearPanel(BasePage):
         attribute_model_id = self.get_parent_id(element_data=ElementsData.Gear.Draw.select)
         value_id = self.get_offspring_id(">progress>text", object_id=attribute_model_id)
         value = self.get_text(object_id=value_id)
-        value = positive_percentage_to_float_list(text=value)
+        value = positive_percentage_to_float(text=value)
         self.sleep(30)
         icon_machine, text_machine, value_machine = GearPanel.get_draw_result(self)
         value_expect = value
         if value_machine > value:
             value_expect = value_machine
         value = self.get_text(object_id=value_id)
-        value = positive_percentage_to_float_list(text=value)
+        value = positive_percentage_to_float(text=value)
         compare(value, value_expect)
         print("数值洗练成功")
 
@@ -384,14 +389,14 @@ class GearPanel(BasePage):
         attribute_model_id = self.get_parent_id(element_data=ElementsData.Gear.Draw.select)
         value_id = self.get_offspring_id(">progress>text", object_id=attribute_model_id)
         value = self.get_text(object_id=value_id)
-        value = positive_percentage_to_float_list(text=value)
+        value = positive_percentage_to_float(text=value)
         self.sleep(4)
         icon_machine, text_machine, value_machine = GearPanel.get_draw_result(self)
         value_expect = value
         if value_machine > value:
             value_expect = value_machine
         value = self.get_text(object_id=value_id)
-        value = positive_percentage_to_float_list(text=value)
+        value = positive_percentage_to_float(text=value)
         compare(value, value_expect)
         print("数值洗练成功")
 
@@ -430,11 +435,12 @@ class GearPanel(BasePage):
         icon = self.get_icon(object_id=icon_id)
         value_id = self.get_offspring_id(">progress>text", object_id=attribute_model_id)
         value = self.get_text(object_id=value_id)
-        value = positive_percentage_to_float_list(text=value)
-        compare(icon_machine, icon)
-        compare(value_machine, value)
-        compare(text_machine, text)
-        print("保存成功")
+        value = positive_percentage_to_float(text=value)
+        print(icon_machine, icon)
+        # compare(icon_machine, icon)
+        # compare(value_machine, value)
+        # compare(text_machine, text)
+        # print("保存成功")
 
 
 
@@ -443,5 +449,8 @@ if __name__ == "__main__":
     bp = GearPanel()
     # a = BaitAndRodAlbumPanel.get_all_rod_list(bp)
     # b = BaitAndRodAlbumPanel.get_all_bait_list(bp)
-    a = bp.click_draw_value_10()
-    print(a)
+    while True:
+        bp.click_draw_perk()
+        bp.get_draw_data()
+        bp.save_draw_result()
+

@@ -81,3 +81,9 @@ def get_toggle_is_on_by_id(bp:BasePage, id: int)-> bool:
 
 def cmd(bp:BasePage, command: str)-> any:
     ...
+
+def lua_console(bp:BasePage, command: str)-> any:
+    ...
+
+def set_btn_enabled(bp:BasePage, element: dict, enabled: bool):
+    ...

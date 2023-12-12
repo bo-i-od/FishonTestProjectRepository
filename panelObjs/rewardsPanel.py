@@ -29,7 +29,7 @@ class RewardsPanel(BasePage):
 
     def get_reward_icon_list(self, is_divide=True):
         reward_icon_list = self.get_icon_list(element_data=ElementsData.Rewards.reward_icon_list)
-        check_icon_list(reward_icon_list)
+        # check_icon_list(reward_icon_list)
         if is_divide:
             item_icon_list, gear_icon_list = divide_item_and_gear_icon(reward_icon_list)
             return item_icon_list, gear_icon_list
@@ -38,6 +38,8 @@ class RewardsPanel(BasePage):
     def get_reward_position_list(self):
         reward_position_list = self.get_position_list(element_data=ElementsData.Rewards.reward_icon_list)
         return reward_position_list
+
+
 
 if __name__ == '__main__':
     bp = RewardsPanel()

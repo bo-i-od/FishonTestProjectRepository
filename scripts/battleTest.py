@@ -14,13 +14,13 @@ def circulate_chest(bp: BasePage):
     count_silver = 0
     count_normal = 0
     while True:
-        BattlePreparePanel.cast(bp)
-        while BuyEnergyPanel.buy_energy_panel_is_opened(bp):
+        BattlePreparePanel.click_btn_cast(bp)
+        while BuyEnergyPanel.is_panel_active(bp):
             BuyEnergyPanel.get_energy(bp)
             bp.sleep(0.5)
-            BuyEnergyPanel.tap_to_close(bp)
+            BuyEnergyPanel.click_tap_to_close(bp)
             bp.sleep(0.5)
-            BattlePreparePanel.cast(bp)
+            BattlePreparePanel.click_btn_cast(bp)
         BattlePanel.reel_quick(bp)
         ResultPanel.wait_for_result(bp)
         chest_icon, temp_dict = ResultPanel.automatic_settlement(bp)
@@ -52,10 +52,10 @@ def robot_test(bp: BasePage):
     ChampoinshipTournamentsPanel.save_rank_data(bp, rank_list, name_list, points_list, cur)
     while cur < 50:
         BattlePreparePanel.cast(bp)
-        while BuyEnergyPanel.buy_energy_panel_is_opened(bp):
+        while BuyEnergyPanel.is_panel_active(bp):
             BuyEnergyPanel.get_energy(bp)
             bp.sleep(0.5)
-            BuyEnergyPanel.tap_to_close(bp)
+            BuyEnergyPanel.click_tap_to_close(bp)
             bp.sleep(0.5)
             BattlePreparePanel.cast(bp)
         BattlePanel.reel_quick(bp)
@@ -71,15 +71,16 @@ def circulate_fish(bp: BasePage):
     cur = 0
     fish = 0
     while True:
-        BattlePreparePanel.cast(bp)
-        while BuyEnergyPanel.buy_energy_panel_is_opened(bp):
+        BattlePreparePanel.click_btn_cast(bp)
+        while BuyEnergyPanel.is_panel_active(bp):
             BuyEnergyPanel.get_energy(bp)
             bp.sleep(0.5)
-            BuyEnergyPanel.tap_to_close(bp)
+            BuyEnergyPanel.click_tap_to_close(bp)
             bp.sleep(0.5)
-            BattlePreparePanel.cast(bp)
+            BattlePreparePanel.click_btn_cast(bp)
         BattlePanel.reel_quick(bp)
         ResultPanel.wait_for_result(bp)
+        bp.get_screen_shoot()
         if ResultPanel.automatic_settlement(bp, is_return=False) == 1:
             fish += 1
         cur += 1
@@ -97,7 +98,6 @@ def update_dict(chest_icon: str, temp_dict: dict, res_dict: dict):
         res_dict[key] = 1
     return res_dict
 
-
 # def update_dict(temp_dict, res_dict):
 #     if temp_dict == {}:
 #         return {}
@@ -110,3 +110,7 @@ def update_dict(chest_icon: str, temp_dict: dict, res_dict: dict):
 if __name__ == '__main__':
     bp = BasePage()
     circulate_fish(bp)
+
+
+
+

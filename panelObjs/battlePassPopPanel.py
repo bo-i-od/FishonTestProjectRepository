@@ -21,7 +21,7 @@ class BattlePassPopPanel(BasePage):
     def get_clickable_icon_and_position_list(self):
         viewport = Viewport(self, element_viewport=ElementsData.BattlePassPop.Viewport, element_item_list=ElementsData.BattlePassPop.icon_list)
         icon_list, position_list = viewport.get_clickable_icon_and_position_list()
-        check_icon_list(icon_list)
+        # check_icon_list(icon_list)
         return icon_list, position_list
 
 

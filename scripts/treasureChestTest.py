@@ -2,14 +2,14 @@ import random
 
 from common.basePage import BasePage
 from panelObjs.treasureChestPanel import TreasureChestPanel
-from panelObjs.treasureChestMerchantPanel import TreasureChestMerchantPanel
-from panelObjs.rechargeStorePanel import RechargeStorePanel
+from panelObjs.storePanel import StorePanel
 from panelObjs.treasureChestRewardsPanel import TreasureChestRewardsPanel
 from panelObjs.treasureChestGearsShardsPanel import TreasureChestGearsShardsPanel
 from panelObjs.homePanel import HomePanel
 from panelObjs.itemTipsPanel import ItemTipsPanel
 from tools.commonTools import *
 from configs.elementsData import ElementsData
+from items import resource
 
 
 
@@ -40,15 +40,15 @@ def change_box_test(bp: BasePage):
         cur += 1
     print("测试通过")
 
-def TreasureChestMerchant_price_test(bp: BasePage):
+def TreasureChestMerchant_price_test(bp: BasePage, box_id_list:list):
     print("正在获取图标和质量列表")
-    icon_list, quantity_list, off_list = TreasureChestMerchantPanel.get_box_icon_and_quantity_and_box_off_list(bp)
+    icon_list, quantity_list, off_list = StorePanel.get_box_icon_and_quantity_and_box_off_list(bp)
     print("图标列表：",icon_list, "\n数量列表：",quantity_list, "\n折扣列表：", off_list)
     print("正在获取折扣和价格列表")
-    price_list = TreasureChestMerchantPanel.get_price_list(bp)
+    price_list = StorePanel.get_price_list(bp, box_id_list)
     print("价格列表：", price_list)
     print("正在计算期望价格列表")
-    expect_price_list = TreasureChestMerchantPanel.get_expect_price_list(bp, icon_list, quantity_list, off_list)
+    expect_price_list = StorePanel.get_expect_price_list(bp, icon_list, quantity_list, off_list)
     cur = 0
     while cur < len(expect_price_list):
         if price_list[cur] == -1:
@@ -131,37 +131,90 @@ def click_tips_test(bp: BasePage):
     if ItemTipsPanel.is_panel_active(bp):
         raise FindElementError
 
+def refresh_test(bp: BasePage):
+    times_refresh_numerator, times_refresh_denominator = StorePanel.get_times_refresh(bp)
+    times_refresh_expect = times_refresh_numerator
+    cash = StorePanel.get_cash(bp)
+    refresh_cost = StorePanel.get_refresh_cost(bp)
+    cash_expect = cash - refresh_cost
+    if refresh_cost < 0 or cash_expect < 0:
+        price_list_expect = StorePanel.get_price_list(bp)
+        cash_expect = cash
+        # 不管按钮是否可点击都点击
+        StorePanel.click_btn_refresh(bp)
+        cash = StorePanel.get_cash(bp)
+        price_list = StorePanel.get_price_list(bp)
+        times_refresh_numerator, times_refresh_denominator = StorePanel.get_times_refresh(bp)
+        print("无法刷新")
+        compare(cash, cash_expect)
+        compare(price_list, price_list_expect)
+        compare(times_refresh_numerator, times_refresh_expect)
+        return
+    price_list_pre = StorePanel.get_price_list(bp)
+    StorePanel.click_btn_refresh(bp)
+    price_list = StorePanel.get_price_list(bp)
+    cash = StorePanel.get_cash(bp)
+    times_refresh_expect -= 1
+    times_refresh_numerator, times_refresh_denominator = StorePanel.get_times_refresh(bp)
+    compare(cash, cash_expect)
+    compare(times_refresh_numerator, times_refresh_expect)
+    if price_list_pre == price_list:
+        print("未刷新成功")
+        raise SameError
+
 def TreasureChestMerchant_test(bp: BasePage):
-    TreasureChestPanel.goto_TreasureChestMerchantPanel(bp)
+    TreasureChestPanel.click_btn_box_store(bp)
+    box_id_list = StorePanel.get_box_id_list(bp)
+    btn_position_list = StorePanel.get_btn_position_list(bp, box_id_list)
+    TreasureChestMerchant_price_test(bp, box_id_list)
     # 免费项点两次
-    TreasureChestMerchantPanel.click_btn_buy(bp, 0)
-    TreasureChestMerchantPanel.click_btn_buy(bp, 0)
+    buy_test(bp, btn_position_list,0)
+    TreasureChestMerchant_price_test(bp, box_id_list)
+    buy_test(bp, btn_position_list, 0)
     # 点一个绿钞项
-    index = random.randint(1,5)
-    TreasureChestMerchantPanel.click_btn_buy(bp, index)
-    refresh_cost = TreasureChestMerchantPanel.get_refresh_cost(bp)
+    r = random.randint(1, 5)
+    buy_test(bp, btn_position_list, r)
+    TreasureChestMerchant_price_test(bp, box_id_list)
+    refresh_cost = StorePanel.get_refresh_cost(bp)
     while refresh_cost >= 0:
-        TreasureChestMerchantPanel.click_btn_refresh(bp)
-        refresh_cost = TreasureChestMerchantPanel.get_refresh_cost(bp)
-        if refresh_cost > TreasureChestMerchantPanel.get_resource(bp):
-            TreasureChestMerchantPanel.click_btn_refresh(bp)
-            print("刷新费用不足，结束测试")
+        # StorePanel.click_btn_refresh(bp)
+        refresh_test(bp)
+        refresh_cost = StorePanel.get_refresh_cost(bp)
+        if refresh_cost > StorePanel.get_cash(bp):
+            refresh_test(bp)
+            # StorePanel.click_btn_refresh(bp)
+            print("刷新费用不足")
             break
+    StorePanel.click_btn_close(bp)
+    # 检查箱子数量是否与库存一致
+    box_icon_list, box_quantity_list = TreasureChestPanel.get_box_icon_and_quantity_list(bp)
+    cur = 0
+    while cur < len(box_quantity_list):
+        item_count = bp.get_item_count(item_icon_name=box_icon_list[cur])
+        compare(item_count, box_quantity_list[cur])
+        cur += 1
+    print("TreasureChestMerchant_test购买箱子测试通过")
 
+def buy_test(bp:BasePage,btn_position_list, index: int):
+    price_list = StorePanel.get_price_list(bp)
+    cash_expect = StorePanel.get_cash(bp)
+    print("点击购买")
+    res = StorePanel.get_box_icon_and_quantity_and_box_off_list(bp)
+    box_icon_TreasureChestMerchant_list, quantity_TreasureChestMerchant_list, box_off_list = res
+    quantity_expect = bp.get_item_count(item_icon_name=box_icon_TreasureChestMerchant_list[index])
+    if StorePanel.is_clickable(bp, price_list[index]):
+        print("可以点击")
+        quantity_expect += quantity_TreasureChestMerchant_list[index]
+        cash_expect -= price_list[index]
+    bp.click_position(btn_position_list[index])
+    item_count = bp.get_item_count(item_icon_name=box_icon_TreasureChestMerchant_list[index])
+    compare(quantity_expect, item_count)
+    cash = StorePanel.get_cash(bp)
+    print(f"点击后的期望绿钞数为{cash_expect}，实际绿钞数为{cash}")
+    compare(cash, cash_expect)
 
-
-# 跳转测试
-def jump_test(bp: BasePage):
-    print("正在打开付费商城界面")
-    TreasureChestMerchantPanel.goto_RechargeStorePanel(bp)
-    print("正在关闭付费商城界面")
-    RechargeStorePanel.click_btn_close(bp)
-    print("正在关闭鱼箱商人界面")
-    TreasureChestMerchantPanel.close_TreasureChestMerchantPanel(bp)
-    print("正在关闭鱼箱界面")
-    TreasureChestPanel.click_btn_close(bp)
-    print("测试通过")
 
 
 if __name__ == '__main__':
     bp = BasePage()
+    change_box_test(bp)

@@ -1,11 +1,11 @@
 from tools.commonTools import *
-from common.basePage import BasePage
-def check_icon_list(icon_list):
+
+def check_icon_list(icon_list:list):
     cur = 0
     while cur < len(icon_list):
         icon_list[cur] = check_icon(icon_list[cur])
         cur += 1
-def check_icon(icon):
+def check_icon(icon:str):
     "store_buff_doublehook"
     s = icon.split('_')
     if s[0] == 'coin' and s[1] == "gold":
@@ -19,13 +19,18 @@ def check_icon(icon):
             icon = icon.replace("store", "item")
         elif s[1] == "res" and s[2] == "gear":
             icon = f'{s[1]}_{s[2]}_{s[3]}'
+        elif s[1] == "fishbag":
+            icon = icon.replace("store_", "")
     return icon
 
-def get_resource(bp:BasePage, item_tpid, element_data):
+def get_resource(bp, item_tpid:str, element_data:dict, is_unit_conversion=False):
     item_db = bp.get_item_count(item_tpid=item_tpid)
     item_show = bp.get_text(element_data=element_data)
-    item_show = unit_conversion_str_to_int(item_show)
-    compare(item_db, item_show)
+    if is_unit_conversion:
+        item_db_str = unit_conversion_int_to_str(item_db)
+    else:
+        item_db_str = str(item_db)
+    compare(item_db_str, item_show)
     return item_db
 
     # 生成或更新item_dict
@@ -56,7 +61,7 @@ def make_item_dict(item_coin_list: list, item_quantity_list: list, item_dict: di
     return item_dict
 
 
-def divide_item_and_gear_icon(icon_list):
+def divide_item_and_gear_icon(icon_list:list):
     item_icon_list = []
     gear_icon_list = []
     for icon in icon_list:
@@ -66,6 +71,8 @@ def divide_item_and_gear_icon(icon_list):
             continue
         item_icon_list.append(icon)
     return item_icon_list, gear_icon_list
+
+
 
 
 

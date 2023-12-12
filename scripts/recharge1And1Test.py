@@ -22,7 +22,7 @@ def click_icon_test(bp: BasePage):
     r = random.randint(2, 3)
     bp.click_position(item_position_list[r])
     item_icon = ItemTipsPanel.get_item_icon(bp)
-    item_icon = check_icon(icon=item_icon)
+    # item_icon = check_icon(icon=item_icon)
     compare(item_icon, item_icon_list[r])
     bp.click_position([0.5, 0.1])
     r = random.randint(4, 7)

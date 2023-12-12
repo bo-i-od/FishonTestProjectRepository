@@ -1,6 +1,7 @@
 from common.error import *
 import ctypes
 import inspect
+import re
 # 对比值或对象，不一致报错
 
 
@@ -11,9 +12,15 @@ def compare(a, b):
 
 
 def compare_list(list_a, list_b):
+    compare(len(list_a), len(list_b))
     for a in list_a:
-        if a in list_b is False:
+        if (a in list_b) is False:
             raise DifferError
+
+def compare_dict(dict_a, dict_b):
+    compare(len(dict_a), len(dict_b))
+    for key in dict_a:
+        compare(dict_a[key], dict_b[key])
 
 
 def checktoggle(toggle_is_on_list, index):
@@ -26,20 +33,27 @@ def checktoggle(toggle_is_on_list, index):
         cur += 1
 
 
-def str_to_int_list(str_list):
-    cur = 0
-    while cur < len(str_list):
-        str_list[cur] = int(str_list[cur])
-        cur += 1
+# def str_to_int_list(str_list):
+#     cur = 0
+#     while cur < len(str_list):
+#         try:
+#             str_list[cur] = int(str_list[cur])
+#         except:
+#             str_list[cur] = 0
+#         cur += 1
 
 
-def positive_percentage_to_float_list(text:str = "", text_list:list = None):
+def positive_percentage_to_float(text:str = "", text_list:list = None):
     if text != "":
-        text = float(text.split('+')[1].split('%')[0])
+        if '+' in text:
+            text = text.split('+')[1]
+        text = float(text.split('%')[0])
         return text
     cur = 0
     while cur < len(text_list):
-        text_list[cur] = float(text_list[cur].split('+')[1].split('%')[0])
+        if '+' in text_list[cur]:
+            text_list[cur] = text_list[cur].split('+')[1]
+        text_list[cur] = float(text_list[cur].split('%')[0])
         cur += 1
 
 
@@ -71,8 +85,7 @@ def unit_conversion_int_to_str(count:int):
         return str(int(count / 1000000)) + "M"
 
 
-
-def unit_conversion_str_to_int(count:str):
+def str_to_int(count:str):
     if count[-1:] == 'K':
         return int(count[:-1]) * 1000
     elif count[-1:] == 'M':
@@ -80,6 +93,39 @@ def unit_conversion_str_to_int(count:str):
     else:
         return int(count)
 
+def str_to_int_list(count_list:list):
+    cur = 0
+    while cur < len(count_list):
+        if count_list[cur][-3:] == 'min':
+            count_list[cur] = 0
+        elif count_list[cur][-1:] == 'K':
+            count_list[cur] = int(count_list[cur][:-1]) * 1000
+        elif count_list[cur][-1:] == 'M':
+            count_list[cur] = int(count_list[cur][:-1]) * 1000000
+        else:
+            count_list[cur] = int(count_list[cur])
+        cur += 1
+
+
+
+def split_string_by_uppercase(string):
+    pattern = r"(?=[A-Z])"
+    substrings = re.split(pattern, string)
+    return substrings
+
+def get_toggle_is_on_index(toggle_is_on_list:list):
+    cur = 0
+    res = -1
+    while cur < len(toggle_is_on_list):
+        if toggle_is_on_list[cur]:
+            res = cur
+            break
+        cur += 1
+    return res
+
+
+
+
 if __name__ == '__main__':
-    a = unit_conversion_str_to_int("10M")
+    a = split_string_by_uppercase("Bartletts Anthias")
     print(a)

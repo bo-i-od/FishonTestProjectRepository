@@ -43,11 +43,11 @@ class BattlePassBuyLevelPanel(BasePage):
         viewport = Viewport(self, element_viewport=ElementsData.BattlePassBuyLevelPanel.Viewport,
                             element_item_list=ElementsData.BattlePassBuyLevelPanel.reward_icon_free_list)
         icon_free_list, position_free_list = viewport.get_clickable_icon_and_position_list()
-        check_icon_list(icon_free_list)
+        # check_icon_list(icon_free_list)
         viewport = Viewport(self, element_viewport=ElementsData.BattlePassBuyLevelPanel.Viewport,
                             element_item_list=ElementsData.BattlePassBuyLevelPanel.reward_icon_premium_list)
         icon_premium_list, position_premium_list = viewport.get_clickable_icon_and_position_list()
-        check_icon_list(icon_premium_list)
+        # check_icon_list(icon_premium_list)
         return icon_free_list, position_free_list,icon_premium_list, position_premium_list
 
     def get_gear_position(self):
