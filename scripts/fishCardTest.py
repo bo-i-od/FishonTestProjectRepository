@@ -78,6 +78,7 @@ def select_card_test(bp: BasePage):
 
 def FishCardGiftPackPanel_test(bp: BasePage):
     FishCardPanel.click_btn_events(bp)
+    bp.sleep(0.5)
     icon_list = FishCardGiftPackPanel.get_item_icon_list(bp)
     quantity_list = FishCardGiftPackPanel.get_item_quantity_list(bp)
     click_pack_icon_test(bp, icon_list)
@@ -122,9 +123,8 @@ if __name__ == "__main__":
     # HomePanel.go_to_FishCardPanel(bp)
     # select_card_test(bp)
     # level_up_test(bp)
-    # icon_list = FishCardGiftPackPanel.get_item_icon_list(bp)
     FishCardGiftPackPanel_test(bp)
-    # FishCardPanel_test(bp)
+    # FishCardGiftPackPanel_test(bp)
 
 
 

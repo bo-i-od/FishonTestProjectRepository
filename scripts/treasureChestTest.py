@@ -13,7 +13,7 @@ from items import resource
 
 
 
-def change_box_test(bp: BasePage):
+def TreasureChestPanel_test(bp: BasePage):
     HomePanel.go_to(bp, element=ElementsData.Home.btn_chest)
     print("正在获取箱子图标和数量列表")
     box_icon_list, box_quantity_list =TreasureChestPanel.get_box_icon_and_quantity_list(bp)
@@ -38,6 +38,8 @@ def change_box_test(bp: BasePage):
         print("数量显示无误")
         open_box_test(bp, box_mian_icon, n)
         cur += 1
+    get_box_point_box_test(bp)
+    click_tips_test(bp)
     print("测试通过")
 
 def TreasureChestMerchant_price_test(bp: BasePage, box_id_list:list):
@@ -113,7 +115,7 @@ def open_box_test(bp: BasePage, icon, quantity):
             print("点击tap to continue")
             TreasureChestGearsShardsPanel.click_tap_to_continue(bp)
     print("等待加分动画")
-    bp.sleep(1)
+    bp.sleep(2)
     box_points_numerator, box_points_denominator = TreasureChestPanel.get_box_points(bp)
     print(f"开箱后箱子点实际为{box_points_numerator}")
     compare(box_points_numerator, box_points_numerator_expect)
@@ -131,7 +133,7 @@ def click_tips_test(bp: BasePage):
     if ItemTipsPanel.is_panel_active(bp):
         raise FindElementError
 
-def refresh_test(bp: BasePage):
+def refresh_test(bp: BasePage, box_id_list:list):
     times_refresh_numerator, times_refresh_denominator = StorePanel.get_times_refresh(bp)
     times_refresh_expect = times_refresh_numerator
     cash = StorePanel.get_cash(bp)
@@ -143,16 +145,16 @@ def refresh_test(bp: BasePage):
         # 不管按钮是否可点击都点击
         StorePanel.click_btn_refresh(bp)
         cash = StorePanel.get_cash(bp)
-        price_list = StorePanel.get_price_list(bp)
+        price_list = StorePanel.get_price_list(bp, box_id_list)
         times_refresh_numerator, times_refresh_denominator = StorePanel.get_times_refresh(bp)
         print("无法刷新")
         compare(cash, cash_expect)
         compare(price_list, price_list_expect)
         compare(times_refresh_numerator, times_refresh_expect)
         return
-    price_list_pre = StorePanel.get_price_list(bp)
+    price_list_pre = StorePanel.get_price_list(bp, box_id_list)
     StorePanel.click_btn_refresh(bp)
-    price_list = StorePanel.get_price_list(bp)
+    price_list = StorePanel.get_price_list(bp, box_id_list)
     cash = StorePanel.get_cash(bp)
     times_refresh_expect -= 1
     times_refresh_numerator, times_refresh_denominator = StorePanel.get_times_refresh(bp)
@@ -168,17 +170,17 @@ def TreasureChestMerchant_test(bp: BasePage):
     btn_position_list = StorePanel.get_btn_position_list(bp, box_id_list)
     TreasureChestMerchant_price_test(bp, box_id_list)
     # 免费项点两次
-    buy_test(bp, btn_position_list,0)
+    buy_test(bp, btn_position_list,box_id_list,0)
     TreasureChestMerchant_price_test(bp, box_id_list)
-    buy_test(bp, btn_position_list, 0)
+    buy_test(bp, btn_position_list,box_id_list, 0)
     # 点一个绿钞项
     r = random.randint(1, 5)
-    buy_test(bp, btn_position_list, r)
+    buy_test(bp, btn_position_list, box_id_list,r)
     TreasureChestMerchant_price_test(bp, box_id_list)
     refresh_cost = StorePanel.get_refresh_cost(bp)
     while refresh_cost >= 0:
         # StorePanel.click_btn_refresh(bp)
-        refresh_test(bp)
+        refresh_test(bp, box_id_list)
         refresh_cost = StorePanel.get_refresh_cost(bp)
         if refresh_cost > StorePanel.get_cash(bp):
             refresh_test(bp)
@@ -195,8 +197,9 @@ def TreasureChestMerchant_test(bp: BasePage):
         cur += 1
     print("TreasureChestMerchant_test购买箱子测试通过")
 
-def buy_test(bp:BasePage,btn_position_list, index: int):
-    price_list = StorePanel.get_price_list(bp)
+def buy_test(bp:BasePage,btn_position_list, box_id_list,index: int):
+    price_list = StorePanel.get_price_list(bp, item_id_list=box_id_list)
+    print(price_list)
     cash_expect = StorePanel.get_cash(bp)
     print("点击购买")
     res = StorePanel.get_box_icon_and_quantity_and_box_off_list(bp)
@@ -217,4 +220,4 @@ def buy_test(bp:BasePage,btn_position_list, index: int):
 
 if __name__ == '__main__':
     bp = BasePage()
-    change_box_test(bp)
+    TreasureChestPanel_test(bp)

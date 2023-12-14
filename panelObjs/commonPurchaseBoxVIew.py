@@ -46,3 +46,7 @@ class CommonPurchaseBoxVIew(BasePage):
         item_quantity = self.get_text(element_data=ElementsData.CommonPurchaseBox.cost_quantity)
         item_quantity = str_to_int(item_quantity)
         return item_quantity
+
+    def get_slider(self):
+        slider = self.get_slider_value(element_data=ElementsData.CommonPurchaseBox.slider)
+        return slider

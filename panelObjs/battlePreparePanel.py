@@ -12,6 +12,9 @@ class BattlePreparePanel(BasePage):
     def click_btn_cast(self):
         self.wait_for_appear(element_data=ElementsData.BattlePrepare.btn_cast, is_click=True)
 
+    def click_btn_quick_switch(self):
+        self.wait_for_appear(element_data=ElementsData.BattlePrepare.quick_switch, is_click=True)
+
 
 
 if __name__ == '__main__':

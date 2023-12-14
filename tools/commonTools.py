@@ -96,7 +96,7 @@ def str_to_int(count:str):
 def str_to_int_list(count_list:list):
     cur = 0
     while cur < len(count_list):
-        if count_list[cur][-3:] == 'min':
+        if len(count_list[cur]) > 2 and count_list[cur][-3:] == 'min':
             count_list[cur] = 0
         elif count_list[cur][-1:] == 'K':
             count_list[cur] = int(count_list[cur][:-1]) * 1000

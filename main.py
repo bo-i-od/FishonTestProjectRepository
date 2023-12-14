@@ -22,6 +22,7 @@ import base64
 from airtest.core.api import connect_device
 from scripts import battleTest, guideTest, resultTest, rechargeEndlessTest, recharge1And1Test, treasureChestTest
 from items import resource
+import random
 
 # def test_all():
 #     bp = BasePage()
@@ -53,8 +54,17 @@ from items import resource
 
 if __name__ == '__main__':
     bp = BasePage()
-    print(bp.get_item_count(item_tpid="100200"))
-    print(bp.get_item_count(item_tpid="100200") - 51360)
+    cur = 29
+    max = 38
+    while cur <= max:
+        r = random.randint(0,25)
+        bp.set_item_count(target_count=r, item_tpid=f"2000{cur}")
+        print(f"2000{cur}:{r}")
+        bp.sleep(0.1)
+        print(bp.get_item_count(item_tpid=f"2000{cur}"))
+        bp.sleep(0.1)
+        cur += 1
+
 
 
 

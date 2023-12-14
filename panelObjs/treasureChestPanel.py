@@ -92,4 +92,4 @@ class TreasureChestPanel(BasePage):
 
 if __name__ == "__main__":
     bp = TreasureChestPanel()
-    print(bp.click_progressbar_box())
+    bp.get_element_shot(element_data=ElementsData.Login.btn_login)

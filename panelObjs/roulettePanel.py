@@ -26,10 +26,13 @@ class RoulettePanel(BasePage):
         str_to_int_list(reward_quantity_list)
         return reward_quantity_list
 
-    def get_ticket_count(self):
-        ticket_count = self.get_text(element_data=ElementsData.Roulette.ticket_count)
-        ticket_count = str_to_int(ticket_count[1:])
-        return ticket_count
+    def get_ticket(self):
+        ticket = self.get_text(element_data=ElementsData.Roulette.ticket_count)
+        ticket = ticket.split('</color>')
+        ticket_count = str_to_int(ticket[0].split('>')[1])
+        ticket_cost = str_to_int(ticket[1].split('>')[1])
+        print(ticket_count, ticket_cost)
+        return ticket_count, ticket_cost
 
     def get_turntable_icon_list(self):
         return self.get_icon_list(element_data=ElementsData.Roulette.turntable_icon_list)

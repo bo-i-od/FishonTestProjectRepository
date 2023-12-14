@@ -7,14 +7,14 @@ from tools.commonTools import *
 from items import resource
 
 def spin_test(bp: BasePage):
-    ticket_expect_count = RoulettePanel.get_ticket_count(bp)
-    if ticket_expect_count < 100:
+    ticket_expect_count, ticket_cost = RoulettePanel.get_ticket(bp)
+    if ticket_expect_count < ticket_cost:
         return False
-    ticket_expect_count -= 100
+    ticket_expect_count -= ticket_cost
     bp.sleep(0.5)
     RoulettePanel.click_btn_spin(bp)
     bp.sleep(1)
-    ticket_count = RoulettePanel.get_ticket_count(bp)
+    ticket_count, ticket_cost = RoulettePanel.get_ticket(bp)
     compare(ticket_expect_count, ticket_count)
     return True
 
@@ -45,8 +45,4 @@ def RoulettePanel_test(bp: BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    turntable_icon_list = RoulettePanel.get_turntable_icon_list(bp)
-    a = bp.get_item_count_list(turntable_icon_list)
-    b= [0, 53200, 2, 30, 53200, 0, 1, 60, 9305, 0, 5, 0]
-    print(a)
-    print(b)
+    RoulettePanel_test(bp)

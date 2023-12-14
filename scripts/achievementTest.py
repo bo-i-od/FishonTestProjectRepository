@@ -45,6 +45,7 @@ def achievement_status_test(bp:BasePage):
     group_name = AchievementPanel.get_group_name(bp, achievement_id=viewport.item_id_list[unlocked_list[r]])
     position_list = AchievementPanel.get_achievement_position_list(bp)
     bp.click_position(position_list[unlocked_list[r]])
+    bp.sleep(0.5)
     title = AchievementGroupPanel.get_title(bp)
     compare(group_name, title)
     AchievementGroupPanel.click_btn_close(bp)

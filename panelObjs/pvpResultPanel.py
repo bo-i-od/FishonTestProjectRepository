@@ -14,6 +14,13 @@ class PVPResultPanel(BasePage):
         points_enemy = self.get_text(element_data=ElementsData.PVPResult.points_enemy)
         return int(points_enemy)
 
+    def get_points_mine(self):
+        points_mine = self.get_text(element_data=ElementsData.PVPResult.points_mine)
+        return int(points_mine)
+
+    def click_btn_open(self):
+        self.click_element(element_data=ElementsData.PVPResult.btn_open)
+
 if __name__ == '__main__':
     bp = BasePage()
     PVPResultPanel.click_tap_to_click(bp)

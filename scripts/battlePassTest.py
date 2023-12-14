@@ -97,6 +97,7 @@ def change_level_test(bp:BasePage):
     if buy_level_0 > 1:
         new_level_0 -= 1
     compare(new_level_0, new_level_1)
+    bp.sleep(0.5)
     bp.swipe(point_start=[slider.slider_range[1] - slider.slider_size[0] * 0.1, slider.slider_position[1]], point_end=[slider.slider_range[1] + slider.slider_size[0] * 0.3, slider.slider_position[1]])
     buy_level_0, new_level_0 = BattlePassBuyLevelPanel.get_buy_level_and_new_level(bp)
     BattlePassBuyLevelPanel.click_add_level(bp)
@@ -117,6 +118,7 @@ def buy_level_test(bp:BasePage):
 
 def BattlePassBuyLevelPanel_test(bp:BasePage):
     BattlePassPanel.click_btn_buy_levels(bp)
+    bp.sleep(0.5)
     change_level_test(bp)
     click_icon_buy_level_test(bp)
     BattlePassBuyLevelPanel.go_to_RechargeStorePanel(bp)
@@ -126,6 +128,7 @@ def BattlePassBuyLevelPanel_test(bp:BasePage):
 def jump_test(bp:BasePage):
     BattlePassPanel.click_btn_detail(bp)
     BaitAndRodShowPanel.click_tap_to_continue(bp)
+    bp.sleep(0.5)
     BattlePassPanel.click_btn_task(bp)
     TaskPanel.click_btn_close(bp)
     if not BattlePassPanel.is_panel_active(bp):
@@ -138,6 +141,7 @@ def jump_test(bp:BasePage):
 
 def buy_premium_test(bp:BasePage, index):
     BattlePassPanel.click_btn_get_premium(bp)
+    bp.sleep(0.5)
     if index == 0:
         BattlePassBuyLicensePanel.click_btn_buy_standard(bp)
     else:

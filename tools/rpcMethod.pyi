@@ -1,89 +1,91 @@
-from common.basePage import BasePage
+from poco.pocofw import Poco
 
-
-def my_print(bp:BasePage, element: dict) -> list:
+def my_print(poco:Poco) -> any:
     ...
 
-def set_text(bp:BasePage, element: dict, text: str) -> bool:
+def set_text(poco:Poco, element: dict, text: str) -> bool:
     ...
 
-def set_text_by_id(bp:BasePage, id: int, text: str) -> bool:
+def set_text_by_id(poco:Poco, id: int, text: str) -> bool:
     ...
 
-def get_text(bp:BasePage, element: dict) -> list:
+def get_text(poco:Poco, element: dict) -> list:
     ...
 
-def get_text_by_id(bp:BasePage, id: int) -> str:
+def get_text_by_id(poco:Poco, id: int) -> str:
     ...
 
-def get_slider_value(bp:BasePage, element: dict) -> list:
+def get_slider_value(poco:Poco, element: dict) -> list:
     ...
 
-def get_slider_value_by_id(bp:BasePage, id: int) -> float:
+def get_slider_value_by_id(poco:Poco, id: int) -> float:
     ...
 
-def get_img_name(bp:BasePage, element: dict) -> list:
+def get_img_name(poco:Poco, element: dict) -> list:
     ...
 
-def get_img_name_by_id(bp:BasePage, id: int) -> str:
+def get_img_name_by_id(poco:Poco, id: int) -> str:
     ...
 
-def get_name(bp:BasePage, element: dict) -> list:
+def get_name(poco:Poco, element: dict) -> list:
     ...
 
-def get_name_by_id(bp:BasePage, id: int) -> str:
+def get_name_by_id(poco:Poco, id: int) -> str:
     ...
 
-def get_position(bp:BasePage, element: dict) -> list:
+def get_position(poco:Poco, element: dict) -> list:
     ...
 
-def get_position_by_id(bp:BasePage, id: int) -> any:
+def get_position_by_id(poco:Poco, id: int) -> any:
     ...
 
-def get_size(bp:BasePage, element: dict) -> list:
+def get_size(poco:Poco, element: dict) -> list:
     ...
 
-def get_size_by_id(bp:BasePage, id: int) -> any:
+def get_size_by_id(poco:Poco, id: int) -> any:
     ...
 
-def get_object_id(bp:BasePage, element: dict) -> list:
+def get_object_id(poco:Poco, element: dict) -> list:
     ...
 
-def get_object_id_by_id(bp:BasePage, id: int) -> bool:
+def get_object_id_by_id(poco:Poco, id: int) -> bool:
     ...
 
-def get_child_id(bp:BasePage, element: dict, child_name: str) -> list:
+def get_child_id(poco:Poco, element: dict, child_name: str) -> list:
     ...
 
-def get_child_id_by_id(bp:BasePage, id: int, child_name: str) -> list:
+def get_child_id_by_id(poco:Poco, id: int, child_name: str) -> list:
     ...
 
 # def get_offspring_id(bp:BasePage, element: dict, offspring_path: str) -> list:
 #     ...
 
-def get_offspring_id_by_id(bp:BasePage, id: int, offspring_path: str) -> list:
+def get_offspring_id_by_id(poco:Poco, id: int, offspring_path: str) -> list:
     ...
 
-def get_parent_id(bp:BasePage, element: dict) -> list:
+def get_parent_id(poco:Poco, element: dict) -> list:
     ...
 
-def get_parent_id_by_id(bp:BasePage, id: int) -> int:
+def get_parent_id_by_id(poco:Poco, id: int) -> int:
     ...
 
-def get_item_count(bp:BasePage, tpid: str) -> int:
+def get_item_count(poco:Poco, tpid: str) -> int:
     ...
 
-def get_toggle_is_on(bp:BasePage, element: dict)-> list:
+def get_toggle_is_on(poco:Poco, element: dict)-> list:
     ...
 
-def get_toggle_is_on_by_id(bp:BasePage, id: int)-> bool:
+def get_toggle_is_on_by_id(poco:Poco, id: int)-> bool:
     ...
 
-def cmd(bp:BasePage, command: str)-> any:
+def screen_shot(poco:Poco, ui_x:int, ui_y:int, ui_w:int, ui_h:int)-> (str, str):
     ...
 
-def lua_console(bp:BasePage, command: str)-> any:
+def cmd(poco:Poco, command: str)-> any:
     ...
 
-def set_btn_enabled(bp:BasePage, element: dict, enabled: bool):
+def lua_console(poco:Poco, command: str)-> any:
+    ...
+
+def set_btn_enabled(poco:Poco, element: dict, enabled: bool):
     ...

@@ -54,13 +54,14 @@ def clear_duelcup(bp:BasePage):
         cur += 1
 
 def fish(bp):
+    BattlePreparePanel.click_btn_quick_switch(bp)
     while True:
         BattlePreparePanel.click_btn_cast(bp)
         bp.sleep(3)
         if PVPResultPanel.is_panel_active(bp):
             bp.sleep(3)
             break
-        BattlePanel.reel_quick(bp)
+        # BattlePanel.reel_quick(bp)
         ResultPanel.wait_for_result(bp)
         ResultPanel.click_btn_claim(bp)
         if PVPResultPanel.is_panel_active(bp):
@@ -102,13 +103,12 @@ def point_cal(duelcup):
     return int(start), int(end)
 
 def circulate_duel(bp:BasePage):
-    # rank = random.randint(0, 7)
-    rank = 3
+    rank = random.randint(0, 7)
+    # rank = 3
     clear_duelcup(bp)
     dc = random_duelcup(bp, rank)
     # s, e = point_cal(dc)
     # print(f"当前杯数：{dc},预期分数范围:{s,e}")
-    print(dc)
     action_list = [lambda: PVPHallPanel.click_btn_close(bp)]
     bp.try_actions(action_list=action_list)
     action_list = [
@@ -116,11 +116,14 @@ def circulate_duel(bp:BasePage):
         lambda: PVPHallPanel.click_btn_play(bp, rank)]
     bp.try_actions(action_list=action_list)
     fish(bp)
-    bp.sleep(2)
-    bp.get_screen_shoot()
+    bp.sleep(3)
+    PVPResultPanel.click_btn_open(bp)
+    bp.get_full_screen_shot()
     bp.sleep(1)
-    # points_enemy = PVPResultPanel.get_points_enemy(bp)
+    points_enemy = PVPResultPanel.get_points_enemy(bp)
+    points_mine = PVPResultPanel.get_points_mine(bp)
     PVPResultPanel.click_tap_to_click(bp)
+    print(f"玩家杯数：{dc}，玩家分数：{points_mine}，机器人分数：{points_enemy}")
     # n = "符合预期"
     # if points_enemy < s or points_enemy > e:
     #     n = "不符合预期"
@@ -170,7 +173,7 @@ def zhanbao_test(bp:BasePage):
     bp.try_actions(action_list=action_list)
     fish(bp)
     bp.sleep(2)
-    bp.get_screen_shoot()
+    bp.get_full_screen_shot()
     bp.sleep(1)
     PVPResultPanel.click_tap_to_click(bp)
     # PVPHallPanel.click_btn_close(bp)
@@ -182,24 +185,16 @@ def zhanbao_test(bp:BasePage):
 if __name__ == '__main__':
     bp = BasePage()
     # zhanbao_test(bp)
-    # while True:
-    #     circulate_duel(bp)
+    bp.cmd("autofish")
+    while True:
+        circulate_duel(bp)
 
-    # rank = random.randint(0, 7)
-    # rank = 6
+    # # rank = random.randint(0, 7)
+    # rank = 5
     # clear_duelcup(bp)
     # dc = random_duelcup(bp, rank)
     # print(dc)
-    # p = 0
-    # r0 = 3199
-    # k = get_k(r0)
-    # pd = get_pd(rank)
-    # rn = r0 + k * (p - pd)
-    # print(rn)
-    # while True:
-    #     circulate_duel(bp)
-    # circulate_duel(bp)
-    fish(bp)
+
 
 
 

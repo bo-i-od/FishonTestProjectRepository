@@ -168,6 +168,8 @@ def daily_task_test(bp:BasePage):
     PVPResultPanel.click_tap_to_click(bp)
     bp.sleep(0.5)
     PVPHallPanel.click_btn_close(bp)
+    bp.sleep(0.5)
+    HomePanel.go_to_TaskPanel(bp)
     # 加上对决投降的测试
     index = 0
     btn_collect_test(bp, task_id_list, viewport, index)
@@ -186,7 +188,6 @@ def TaskPanel_test(bp:BasePage):
 if __name__ == '__main__':
     bp = BasePage()
 
-    TaskPanel_test(bp)
 
 
 

@@ -21,7 +21,7 @@ class ElementsData:
         AchievementPanel = {"locator": "UICanvas>Default>AchievementPanel"}
         achievement_list = {"locator": "UICanvas>Default>AchievementPanel>panel>List>Viewport>Content>"}
         btn_close = {"locator": "UICanvas>Default>AchievementPanel>panel>btn_close>img"}
-        btn_i = {"locator": "UICanvas>Default>AchievementPanel>panel>title_group>btn_i>img"}
+        btn_i = {"locator": "UICanvas>Default>AchievementPanel>panel>title_group>btn_i"}
         tips = {"locator": "UICanvas>Default>AchievementPanel>panel>title_group>btn_i>tips"}
         tips_unlock = {"locator": "UICanvas>Default>AchievementPanel>panel>List>Viewport>Content>>tips_unlock"}
         task_mini_icon = {"locator": "UICanvas>Default>AchievementPanel>panel>task_mini>icon"}
@@ -629,6 +629,8 @@ class ElementsData:
         PVPResultPanel = {"locator": "UICanvas>Default>PVPResultPanel"}
         tap_to_close = {"locator": "UICanvas>Default>PVPResultPanel>panel>result>btn_close>text"}
         points_enemy = {"locator": "UICanvas>Default>PVPResultPanel>panel>top>red>player_info>points"}
+        points_mine = {"locator": "UICanvas>Default>PVPResultPanel>panel>top>blue>player_info>points"}
+        btn_open = {"locator": "UICanvas>Default>PVPResultPanel>panel>result>result_detail_list>detail_list>btn_open>img"}
 
     class PVPRuleTipsPanel:
         btn_close = {"locator": "UICanvas>Default>PVPRuleTipsPanel>Panel_Popups_Edit>Panel>btn_close>img"}
@@ -661,7 +663,7 @@ class ElementsData:
 
     class Result:
         ResultPanel = {"locator": "UICanvas>Default>ResultPanel"}
-        btn_claim = {"locator": "UICanvas>Default>ResultPanel>panel_result>panel_result>>btn_claim>btn_normal"}
+        btn_claim = {"locator": "UICanvas>Default>ResultPanel>panel_result>>btn_castAgain>btn_normal"}
         class pve_result:
             panel_pve_result = {"locator": "UICanvas>Default>ResultPanel>panel_pve_result"}
             exp = {"locator": "UICanvas>Default>ResultPanel>panel_pve_result>panel_result>rewards>exp>value"}
@@ -735,14 +737,12 @@ class ElementsData:
 
         class Resource:
             resource_tab_list = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_2>panel_subtab>subtab>view_port>content>>bg"}
-            gear_list = {"locator": "UICanvas>Default>StorePanel>Panel>>panel_list_type1>view_port>content>"}
+            item_list = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_2>>view_port>content>"}
             gear_icon_list = {"locator": "UICanvas>Default>StorePanel>Panel>>panel_list_type1>view_port>content>>group>>img"}
             gear_name_list = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_2>panel_list_type1>view_port>content>>group>title_bg>title"}
-            fish_card_list = {"locator": "UICanvas>Default>StorePanel>Panel>>panel_list_type1>view_port>content>"}
             fish_card_name_list = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_2>panel_list_type1>view_port>content>>group>title_bg>title"}
             fish_card_icon_list = {"locator": "UICanvas>Default>StorePanel>Panel>>panel_list_type1>view_port>content>>group>icon"}
             fish_card_quantity_list = {"locator": "UICanvas>Default>StorePanel>Panel>>panel_list_type1>view_port>content>>group>quantity>value"}
-            booster_list = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_2>panel_list_type2>view_port>content>"}
             booster_icon_list = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_2>panel_list_type2>view_port>content>>group>icon_list>>icon"}
             materials_icon_list = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_2>panel_list_type1>view_port>content>>group>icon"}
             materials_quantity_list = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_2>panel_list_type1>view_port>content>>group>quantity>value"}

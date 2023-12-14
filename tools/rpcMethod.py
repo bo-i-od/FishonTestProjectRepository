@@ -2,98 +2,98 @@ from poco.utils.simplerpc.utils import sync_wrapper
 
 
 @sync_wrapper
-def my_print(bp, element):
-    return bp.poco.agent.c.call("MyPrint", element)
+def my_print(poco):
+    return poco.agent.c.call("MyPrint")
 
 
 @sync_wrapper
-def set_text(bp, element, text):
-    return bp.poco.agent.c.call("SetText", element, text)
+def set_text(poco, element, text):
+    return poco.agent.c.call("SetText", element, text)
 
 
 @sync_wrapper
-def set_text_by_id(bp, id, text):
-    return bp.poco.agent.c.call("SetTextById", id, text)
+def set_text_by_id(poco, id, text):
+    return poco.agent.c.call("SetTextById", id, text)
 
 
 @sync_wrapper
-def get_text(bp, element):
-    return bp.poco.agent.c.call("GetText", element)
+def get_text(poco, element):
+    return poco.agent.c.call("GetText", element)
 
 
 @sync_wrapper
-def get_text_by_id(bp, id):
-    return bp.poco.agent.c.call("GetTextById", id)
+def get_text_by_id(poco, id):
+    return poco.agent.c.call("GetTextById", id)
 
 
 @sync_wrapper
-def get_slider_value(bp, element):
-    return bp.poco.agent.c.call("GetSliderValue", element)
+def get_slider_value(poco, element):
+    return poco.agent.c.call("GetSliderValue", element)
 
 
 @sync_wrapper
-def get_slider_value_by_id(bp, id):
-    return bp.poco.agent.c.call("GetSliderValueById", id)
+def get_slider_value_by_id(poco, id):
+    return poco.agent.c.call("GetSliderValueById", id)
 
 
 @sync_wrapper
-def get_img_name(bp, element):
-    return bp.poco.agent.c.call("GetImgName", element)
+def get_img_name(poco, element):
+    return poco.agent.c.call("GetImgName", element)
 
 
 @sync_wrapper
-def get_img_name_by_id(bp, id):
-    return bp.poco.agent.c.call("GetImgNameById", id)
+def get_img_name_by_id(poco, id):
+    return poco.agent.c.call("GetImgNameById", id)
 
 
 @sync_wrapper
-def get_name(bp, element):
-    return bp.poco.agent.c.call("GetName", element)
+def get_name(poco, element):
+    return poco.agent.c.call("GetName", element)
 
 
 @sync_wrapper
-def get_name_by_id(bp, id):
-    return bp.poco.agent.c.call("GetNameById", id)
+def get_name_by_id(poco, id):
+    return poco.agent.c.call("GetNameById", id)
 
 
 @sync_wrapper
-def get_position(bp, element):
-    return bp.poco.agent.c.call("GetPosition", element)
+def get_position(poco, element):
+    return poco.agent.c.call("GetPosition", element)
 
 
 @sync_wrapper
-def get_position_by_id(bp, id):
-    return bp.poco.agent.c.call("GetPositionById", id)
+def get_position_by_id(poco, id):
+    return poco.agent.c.call("GetPositionById", id)
 
 
 @sync_wrapper
-def get_size(bp, element):
-    return bp.poco.agent.c.call("GetSize", element)
+def get_size(poco, element):
+    return poco.agent.c.call("GetSize", element)
 
 
 @sync_wrapper
-def get_size_by_id(bp, id):
-    return bp.poco.agent.c.call("GetSizeById", id)
+def get_size_by_id(poco, id):
+    return poco.agent.c.call("GetSizeById", id)
 
 
 @sync_wrapper
-def get_object_id(bp, element):
-    return bp.poco.agent.c.call("GetObjectId", element)
+def get_object_id(poco, element):
+    return poco.agent.c.call("GetObjectId", element)
 
 
 @sync_wrapper
-def get_object_id_by_id(bp, id):
-    return bp.poco.agent.c.call("GetObjectIdById", id)
+def get_object_id_by_id(poco, id):
+    return poco.agent.c.call("GetObjectIdById", id)
 
 
 @sync_wrapper
-def get_child_id(bp, element, child_name):
-    return bp.poco.agent.c.call("GetChildId", element, child_name)
+def get_child_id(poco, element, child_name):
+    return poco.agent.c.call("GetChildId", element, child_name)
 
 
 @sync_wrapper
-def get_child_id_by_id(bp, id, child_name):
-    return bp.poco.agent.c.call("GetChildIdById", id, child_name)
+def get_child_id_by_id(poco, id, child_name):
+    return poco.agent.c.call("GetChildIdById", id, child_name)
 
 # @sync_wrapper
 # def get_offspring_id(bp, element, offspring_path):
@@ -101,36 +101,48 @@ def get_child_id_by_id(bp, id, child_name):
 
 
 @sync_wrapper
-def get_offspring_id_by_id(bp, id, offspring_path):
-    return bp.poco.agent.c.call("GetOffspringIdById", id, offspring_path)
+def get_offspring_id_by_id(poco, id, offspring_path):
+    return poco.agent.c.call("GetOffspringIdById", id, offspring_path)
 
 @sync_wrapper
-def get_parent_id(bp, element):
-    return bp.poco.agent.c.call("GetParentId", element)
-
-
-@sync_wrapper
-def get_parent_id_by_id(bp, id):
-    return bp.poco.agent.c.call("GetParentIdById", id)
+def get_parent_id(poco, element):
+    return poco.agent.c.call("GetParentId", element)
 
 
 @sync_wrapper
-def get_item_count(bp, tpid):
-    return bp.poco.agent.c.call("GetItemCount", tpid)
+def get_parent_id_by_id(poco, id):
+    return poco.agent.c.call("GetParentIdById", id)
+
 
 @sync_wrapper
-def get_toggle_is_on(bp, element):
-    return bp.poco.agent.c.call("GetToggleIsOn", element)
+def get_item_count(poco, tpid):
+    return poco.agent.c.call("GetItemCount", tpid)
+
 
 @sync_wrapper
-def get_toggle_is_on_by_id(bp, id):
-    return bp.poco.agent.c.call("GetToggleIsOnById", id)
+def get_toggle_is_on(poco, element):
+    return poco.agent.c.call("GetToggleIsOn", element)
 
-def cmd(bp, command):
-    bp.poco.agent.c.call("CMD", command)
 
-def lua_console(bp, command):
-    bp.poco.agent.c.call("LuaConsole", command)
+@sync_wrapper
+def get_toggle_is_on_by_id(poco, id):
+    return poco.agent.c.call("GetToggleIsOnById", id)
 
-def set_btn_enabled(bp, element, enabled):
-    bp.poco.agent.c.call("SetBtnEnabled", element, enabled)
+@sync_wrapper
+def screen_shot(poco, ui_x, ui_y, ui_w, ui_h):
+    return poco.agent.c.call("Screenshot", ui_x, ui_y, ui_w, ui_h)
+
+
+def cmd(poco, command):
+    poco.agent.c.call("CMD", command)
+
+
+def lua_console(poco, command):
+    poco.agent.c.call("LuaConsole", command)
+
+
+def set_btn_enabled(poco, element, enabled):
+    poco.agent.c.call("SetBtnEnabled", element, enabled)
+
+
+

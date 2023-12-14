@@ -8,10 +8,12 @@ from panelObjs.baitAndRodShowPanel import BaitAndRodShowPanel
 from panelObjs.fishCardPackTipsPanel import FishCardPackTipsPanel
 from tools.commonTools import *
 
+
 def gift_pack_test(bp:BasePage):
     StorePanel.change_tab(bp, 0)
     gift_pack_click_icon_test(bp)
     gift_pack_buy_test(bp)
+
 
 def gift_pack_click_icon_test(bp:BasePage):
     gift_pack_icon_list, gift_pack_position_list = StorePanel.get_gift_pack_icon_and_position_list(bp)
@@ -20,6 +22,7 @@ def gift_pack_click_icon_test(bp:BasePage):
     item_icon = ItemTipsPanel.get_item_icon(bp)
     compare(item_icon, gift_pack_icon_list[r])
     bp.click_position([0.5, 0.1])
+
 
 def gift_pack_buy_test(bp:BasePage):
     gift_pack_dict_list = StorePanel.get_gift_pack_dict_list(bp)
@@ -42,10 +45,12 @@ def gift_pack_buy_test(bp:BasePage):
     compare_list(item_count_expect_list, item_count_list)
     RewardsPanel.click_tap_to_continue(bp)
 
+
 def cash_test(bp:BasePage):
     StorePanel.change_tab(bp, 3)
     cash_click_icon_test(bp)
     cash_buy_test(bp)
+
 
 def cash_click_icon_test(bp:BasePage):
     if ItemTipsPanel.is_panel_active(bp):
@@ -57,6 +62,7 @@ def cash_click_icon_test(bp:BasePage):
     item_icon = ItemTipsPanel.get_item_icon(bp)
     compare(item_icon, cash_icon_list[r])
     bp.click_position([0.5, 0.1])
+
 
 def cash_buy_test(bp:BasePage):
     cash_icon_list = StorePanel.get_cash_icon_list(bp)
@@ -82,6 +88,7 @@ def cash_buy_test(bp:BasePage):
     compare(item_count_expect, item_count)
     RewardsPanel.click_tap_to_continue(bp)
 
+
 def gear_click_icon_test(bp:BasePage):
     gear_position_list = StorePanel.get_gear_position_list(bp)
     gear_name_list = StorePanel.get_gear_name_list(bp)
@@ -91,9 +98,10 @@ def gear_click_icon_test(bp:BasePage):
     compare(gear_name_list[r], gear_name)
     BaitAndRodShowPanel.click_tap_to_continue(bp)
 
+
 def gear_buy_test(bp:BasePage):
     gear_icon_list = StorePanel.get_gear_icon_list(bp)
-    gear_id_list = StorePanel.get_gear_id_list(bp)
+    gear_id_list = StorePanel.get_item_id_list(bp)
     btn_position_list = StorePanel.get_btn_position_list(bp, item_id_list=gear_id_list)
     price_list = StorePanel.get_price_list(bp, item_id_list=gear_id_list)
     r = random.randint(0, len(btn_position_list) - 1)
@@ -112,8 +120,14 @@ def gear_buy_test(bp:BasePage):
     compare(reward_gear_icon_list[0], gear_icon_list[r])
     RewardsPanel.click_tap_to_continue(bp)
 
+
+def fish_card_test(bp:BasePage):
+    fish_card_click_icon_test(bp)
+    fish_card_buy_test(bp)
+
+
 def fish_card_buy_test(bp:BasePage):
-    fish_card_id_list = StorePanel.get_fish_card_id_list(bp)
+    fish_card_id_list = StorePanel.get_item_id_list(bp)
     btn_position_list = StorePanel.get_btn_position_list(bp, item_id_list=fish_card_id_list)
     price_list = StorePanel.get_price_list(bp, item_id_list=fish_card_id_list)
     r = random.randint(0, len(btn_position_list) - 1)
@@ -129,6 +143,7 @@ def fish_card_buy_test(bp:BasePage):
     cash = StorePanel.get_cash(bp)
     compare(cash_expect, cash)
 
+
 def fish_card_click_icon_test(bp:BasePage):
     if FishCardPackTipsPanel.is_panel_active(bp):
         bp.click_position([0.5, 0.1])
@@ -139,6 +154,7 @@ def fish_card_click_icon_test(bp:BasePage):
     fish_card_name = FishCardPackTipsPanel.get_fish_card_name(bp)
     compare(fish_card_name_list[r], fish_card_name)
     bp.click_position([0.5, 0.1])
+
 
 def booster_click_icon_test(bp:BasePage):
     if ItemTipsPanel.is_panel_active(bp):
@@ -151,8 +167,9 @@ def booster_click_icon_test(bp:BasePage):
     compare(item_icon, booster_icon_list[r])
     bp.click_position([0.5, 0.1])
 
+
 def booster1_buy_test(bp:BasePage):
-    booster_id_list = StorePanel.get_booster_id_list(bp)
+    booster_id_list = StorePanel.get_item_id_list(bp)
     price_list = StorePanel.get_price_list(bp, item_id_list=booster_id_list)
     booster_dict_list = StorePanel.get_booster_dict_list(bp)
     # 买每日免费booster礼包
@@ -225,8 +242,9 @@ def booster1_buy_test(bp:BasePage):
         cash = StorePanel.get_cash(bp)
         compare(cash_expect, cash)
 
+
 def booster2_buy_test(bp:BasePage):
-    booster_id_list = StorePanel.get_booster_id_list(bp)
+    booster_id_list = StorePanel.get_item_id_list(bp)
     price_list = StorePanel.get_price_list(bp, item_id_list=booster_id_list)
     booster_dict_list = StorePanel.get_booster_dict_list(bp)
     btn_position_list = StorePanel.get_btn_position_list(bp, item_id_list=booster_id_list)
@@ -255,8 +273,33 @@ def booster2_buy_test(bp:BasePage):
         compare(cash_expect, cash)
 
 
+def materials_click_icon_test(bp:BasePage):
+    if ItemTipsPanel.is_panel_active(bp):
+        bp.click_position([0.5, 0.1])
+    materials_position_list = StorePanel.get_materials_position_list(bp)
+    materials_icon_list = StorePanel.get_materials_icon_list(bp)
+    r = random.randint(0, len(materials_position_list) - 1)
+    bp.click_position(materials_position_list[r])
+    materials_icon = ItemTipsPanel.get_item_icon(bp)
+    compare(materials_icon_list[r], materials_icon)
+    bp.click_position([0.5, 0.1])
 
+
+def materials_buy_test(bp:BasePage):
+    materials_id_list = StorePanel.get_item_id_list(bp)
+    btn_position_list = StorePanel.get_btn_position_list(bp, item_id_list=materials_id_list)
+    price_list = StorePanel.get_price_list(bp, item_id_list=materials_id_list)
+    r = random.randint(0, len(btn_position_list) - 1)
+    cash_expect = StorePanel.get_cash(bp)
+    is_clickable = StorePanel.is_clickable(bp, price_list[r])
+    bp.click_position(btn_position_list[r])
+    if not is_clickable:
+        return
+
+    cash_expect -= price_list[r]
+    cash = StorePanel.get_cash(bp)
+    compare(cash_expect, cash)
 
 if __name__ == '__main__':
     bp = BasePage()
-    booster_click_icon_test(bp)
+    cash_test(bp)

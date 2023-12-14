@@ -1,4 +1,3 @@
-from poco.drivers.unity3d import UnityPoco
 from poco.drivers.unity3d.device import UnityEditorWindow
 from tools.excelRead import ExceTools
 import time
@@ -13,6 +12,7 @@ from airtest.core.api import connect_device
 from tools import rpcMethod
 from items import resource
 from common.error import *
+import zlib
 
 class BasePage:
     def __init__(self):
@@ -27,7 +27,7 @@ class BasePage:
         # make sure your poco-sdk in the game runtime listens on the following port.
         # 默认端口 5001
         # IP is not used for now
-        addr = ('', 5002)
+        addr = ('', 5001)
         self.poco = UnityPoco(addr, device=dev)
         self.screen_w, self.screen_h = self.poco.get_screen_size()  # 获取屏幕尺寸
         print(self.screen_w, self.screen_h)
@@ -90,7 +90,7 @@ class BasePage:
 
     def get_object_id_list(self, element_data: dict, offspring_path=""):
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        object_id_list = rpcMethod.get_object_id(self, element_data_copy)
+        object_id_list = rpcMethod.get_object_id(self.poco, element_data_copy)
         return object_id_list
 
     def get_object_id(self, element_data: dict, offspring_path=""):
@@ -108,8 +108,8 @@ class BasePage:
                 child_id_list += child_id_list_temp
             return child_id_list
         if object_id != 0:
-            return rpcMethod.get_child_id_by_id(self, object_id, child_name)
-        return rpcMethod.get_child_id(self, element_data, child_name)
+            return rpcMethod.get_child_id_by_id(self.poco, object_id, child_name)
+        return rpcMethod.get_child_id(self.poco, element_data, child_name)
 
     def get_child_id(self, child_name="",object_id=0, element_data=None):
         child_id_list = self.get_child_id_list(child_name, object_id=object_id, element_data=element_data)
@@ -124,9 +124,9 @@ class BasePage:
                 offspring_id_list += offspring_id_list_temp
             return offspring_id_list
         if object_id != 0:
-            return rpcMethod.get_offspring_id_by_id(self, object_id, offspring_path)
+            return rpcMethod.get_offspring_id_by_id(self.poco, object_id, offspring_path)
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        return rpcMethod.get_object_id(self, element_data_copy)
+        return rpcMethod.get_object_id(self.poco, element_data_copy)
 
     def get_offspring_id(self, offspring_path, object_id=0, element_data=None):
         offspring_id_list = self.get_offspring_id_list(offspring_path, object_id=object_id, element_data=element_data)
@@ -140,12 +140,12 @@ class BasePage:
                 parent_id = self.get_parent_id(object_id=object_id)
                 parent_id_list.append(parent_id)
             return parent_id_list
-        return rpcMethod.get_parent_id(self, element_data)
+        return rpcMethod.get_parent_id(self.poco, element_data)
 
     # 输入是定位信息时，请保证定位信息是单数的
     def get_parent_id(self, object_id=0, element_data=None):
         if object_id != 0:
-            return rpcMethod.get_parent_id_by_id(self, object_id)
+            return rpcMethod.get_parent_id_by_id(self.poco, object_id)
         parent_id_list = self.get_parent_id_list(element_data=element_data)
         self.is_single_element(parent_id_list)
         return parent_id_list[0]
@@ -157,12 +157,12 @@ class BasePage:
                 text_list.append(self.get_text(object_id=object_id))
             return text_list
         element_data_copy = self.get_element_data(element_data,offspring_path)
-        text_list = rpcMethod.get_text(self, element_data_copy)
+        text_list = rpcMethod.get_text(self.poco, element_data_copy)
         return text_list
 
     def get_text(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
         if object_id != 0:
-            return rpcMethod.get_text_by_id(self, object_id)
+            return rpcMethod.get_text_by_id(self.poco, object_id)
         element_data_copy = self.get_element_data(element_data,offspring_path)
         text_list = self.get_text_list(element_data=element_data_copy)
         self.is_single_element(text_list)
@@ -174,14 +174,14 @@ class BasePage:
             for object_id in object_id_list:
                 self.set_text(object_id=object_id, text=text)
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        rpcMethod.set_text(self, element_data_copy, text)
+        rpcMethod.set_text(self.poco, element_data_copy, text)
 
     def set_text(self, object_id: int = 0, element_data: dict = None, text="", offspring_path=""):
         if object_id != 0:
-            rpcMethod.set_text_by_id(self, object_id, text)
+            rpcMethod.set_text_by_id(self.poco, object_id, text)
             return
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        rpcMethod.set_text(self, element_data_copy, text)
+        rpcMethod.set_text(self.poco, element_data_copy, text)
 
     def get_icon_list(self, object_id_list: list = None, element_data: dict = None, offspring_path=""):
         if object_id_list is not None:
@@ -190,14 +190,14 @@ class BasePage:
                 icon_list.append(self.get_icon(object_id=object_id))
             return icon_list
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        icon_list = rpcMethod.get_img_name(self, element_data_copy)
+        icon_list = rpcMethod.get_img_name(self.poco, element_data_copy)
         resource.check_icon_list(icon_list)
         return icon_list
 
     # 获取到的icon是icon的名称，因此是str类型的
     def get_icon(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
         if object_id != 0:
-            icon = rpcMethod.get_img_name_by_id(self, object_id)
+            icon = rpcMethod.get_img_name_by_id(self.poco, object_id)
             icon = resource.check_icon(icon)
             return icon
         element_data_copy = self.get_element_data(element_data, offspring_path)
@@ -212,12 +212,12 @@ class BasePage:
                 name_list.append(self.get_name(object_id=object_id))
             return name_list
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        name_list = rpcMethod.get_name(self, element_data_copy)
+        name_list = rpcMethod.get_name(self.poco, element_data_copy)
         return name_list
 
     def get_name(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
         if object_id != 0:
-            name = rpcMethod.get_name_by_id(self, object_id)
+            name = rpcMethod.get_name_by_id(self.poco, object_id)
             return name
         element_data_copy = self.get_element_data(element_data, offspring_path)
         name_list = self.get_name_list(element_data=element_data_copy)
@@ -231,12 +231,12 @@ class BasePage:
                 slider_value_list.append(self.get_slider_value(object_id=object_id))
             return slider_value_list
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        return rpcMethod.get_slider_value(self, element_data_copy)
+        return rpcMethod.get_slider_value(self.poco, element_data_copy)
 
     # 获取到的滑条值是float类型，值在0~1
     def get_slider_value(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
         if object_id != 0:
-            return rpcMethod.get_slider_value_by_id(self, object_id)
+            return rpcMethod.get_slider_value_by_id(self.poco, object_id)
         element_data_copy = self.get_element_data(element_data, offspring_path)
         slider_value_list = self.get_slider_value_list(element_data=element_data_copy)
         self.is_single_element(slider_value_list)
@@ -249,12 +249,12 @@ class BasePage:
                 size_list.append(self.get_size(object_id=object_id))
             return size_list
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        size_list = rpcMethod.get_size(self, element_data_copy)
+        size_list = rpcMethod.get_size(self.poco, element_data_copy)
         return size_list
 
     def get_size(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
         if object_id != 0:
-            return rpcMethod.get_size_by_id(self, object_id)
+            return rpcMethod.get_size_by_id(self.poco, object_id)
         element_data_copy = self.get_element_data(element_data, offspring_path)
         size_list = self.get_size_list(element_data=element_data_copy)
         self.is_single_element(size_list)
@@ -267,12 +267,12 @@ class BasePage:
                 toggle_is_on_list.append(self.get_toggle_is_on(object_id=object_id))
             return toggle_is_on_list
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        toggle_is_on_list = rpcMethod.get_toggle_is_on(self, element_data_copy)
+        toggle_is_on_list = rpcMethod.get_toggle_is_on(self.poco, element_data_copy)
         return toggle_is_on_list
 
     def get_toggle_is_on(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
         if object_id != 0:
-            return rpcMethod.get_toggle_is_on_by_id(self, object_id)
+            return rpcMethod.get_toggle_is_on_by_id(self.poco, object_id)
         element_data_copy = self.get_element_data(element_data, offspring_path)
         toggle_is_on_list = self.get_toggle_is_on_list(element_data=element_data_copy)
         self.is_single_element(toggle_is_on_list)
@@ -285,9 +285,9 @@ class BasePage:
                 position_list.append(self.get_position(object_id=object_id))
             return position_list
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        position_list = rpcMethod.get_position(self, element_data_copy)
+        position_list = rpcMethod.get_position(self.poco, element_data_copy)
         if "focus" in element_data_copy:
-            size_list = rpcMethod.get_size(self, element_data_copy)
+            size_list = rpcMethod.get_size(self.poco, element_data_copy)
             bias_x = 0.5 - element_data_copy["focus"][0]
             bias_y = 0.5 - element_data_copy["focus"][1]
             cur = 0
@@ -299,7 +299,7 @@ class BasePage:
 
     def get_position(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
         if object_id != 0:
-            position = rpcMethod.get_position_by_id(self, object_id)
+            position = rpcMethod.get_position_by_id(self.poco, object_id)
             return position
         element_data_copy = self.get_element_data(element_data, offspring_path)
         position_list = self.get_position_list(element_data=element_data_copy)
@@ -413,6 +413,7 @@ class BasePage:
             for i in range(len(action_list)):
                 # 获取当前需要执行的函数及其参数
                 action_list[i]()
+                self.sleep(0.5)
         except Exception as e:
             print("正在检查是否有弹窗遮挡", e)
             self.clear_popup()
@@ -446,7 +447,7 @@ class BasePage:
             self.poco.swipe(p1=point_start, p2=point_end, duration=t)  # direction可以填'left','right','up','down'
             return
         if object_id != 0:
-            point_start = rpcMethod.get_position_by_id(self, object_id)
+            point_start = rpcMethod.get_position_by_id(self.poco, object_id)
             self.poco.swipe(p1=point_start, p2=point_end, duration=t)
             return
         element_data_copy = self.get_element_data(element_data, offspring_path)
@@ -454,48 +455,64 @@ class BasePage:
         self.poco.swipe(p1=point_start, p2=point_end, duration=t)
 
     # 截取整个屏幕
-    def get_screen_shoot(self):
-        img_b64encode, fmt = self.poco.snapshot(self.screen_w * 0.5, self.screen_h * 0.5, self.screen_w, self.screen_h)
+    def get_screen_shot(self, x, y, w, h):
+        # img_b64encode, fmt = self.poco.snapshot(self.screen_w * 0.5, self.screen_h * 0.5, self.screen_w, self.screen_h)
+        img_b64encode, fmt = rpcMethod.screen_shot(self.poco, x, y, w, h)
+        if fmt.endswith('.deflate'):
+            fmt = fmt[:-len('.deflate')]
+            imgdata = base64.b64decode(img_b64encode)
+            imgdata = zlib.decompress(imgdata)
+            img_b64encode = base64.b64encode(imgdata)
         img_b64decode = base64.b64decode(img_b64encode)  # base64解码
         # open('screen.{}'.format(fmt), 'wb').write(img_b64decode)
-        img_array = np.fromstring(img_b64decode, np.uint8)  # 转换np序列
+        img_array = np.frombuffer(img_b64decode, np.uint8)  # 转换np序列
         img = cv2.imdecode(img_array, cv2.COLOR_BGR2RGB)  # 转换Opencv格式
+        return img
         # cv2.rectangle(img, (ui_l, ui_t), (ui_r, ui_b), (255, 0, 0), 3)
+        # path = "C:/Users/TU/Desktop/screenshot_result"  # 输入文件夹地址
+        # num_png = len(os.listdir(path))  # 读入文件夹,统计文件夹中的文件个数
+        # cur = num_png
+        # cv2.imwrite(path + f'/{cur}.jpg', img)
+        # cv2.imshow('img',img)
+        # cv2.waitKey(0)
+
+    def save_img(self, img):
         path = "C:/Users/TU/Desktop/screenshot_result"  # 输入文件夹地址
         num_png = len(os.listdir(path))  # 读入文件夹,统计文件夹中的文件个数
         cur = num_png
         cv2.imwrite(path + f'/{cur}.jpg', img)
-        # cv2.imshow('img',img)
-        # cv2.waitKey(0)
+
+    def get_full_screen_shot(self):
+        img = self.get_screen_shot(self.screen_w * 0.5, self.screen_h * 0.5, self.screen_w, self.screen_h)
+        self.save_img(img)
 
     # 对指定元素进行截取
-    def get_element_shoot(self, element_data: dict, offspring_path=""):
+    def get_element_shot(self, element_data: dict, offspring_path=""):
         element_data_copy = self.get_element_data(element_data, offspring_path)
         ui_x, ui_y = self.get_position(element_data=element_data_copy)
         ui_w, ui_h = self.get_size(element_data=element_data_copy)
-        print(ui_x, ui_y)
-        print(ui_w, ui_h)
         ui_x, ui_y = int(ui_x * self.screen_w), int(ui_y * self.screen_h)
         ui_w, ui_h = int(ui_w * self.screen_w), int(ui_h * self.screen_h)
-        print(ui_x, ui_y)
-        print(ui_w, ui_h)
-        img_b64encode, fmt = self.poco.snapshot(ui_x, ui_y, ui_w, ui_h)
-        # ui_l = int((ui_x - ui_w / 2) * self.screen_w)
-        # ui_r = int((ui_x + ui_w / 2) * self.screen_w)
-        # ui_t = int((ui_y - ui_h / 2) * self.screen_h)
-        # ui_b = int((ui_y + ui_h / 2) * self.screen_h)
-        img_b64decode = base64.b64decode(img_b64encode)  # base64解码
-        # open('screen.{}'.format(fmt), 'wb').write(img_b64decode)
-        img_array = np.fromstring(img_b64decode, np.uint8)  # 转换np序列
-        img = cv2.imdecode(img_array, cv2.COLOR_BGR2RGB)  # 转换Opencv格式
-        # cv2.rectangle(img, (ui_l, ui_t), (ui_r, ui_b), (255, 0, 0), 3)
-        cv2.imshow('img', img)
-        cv2.waitKey(0)
+        img = self.get_screen_shot(ui_x, ui_y, ui_w, ui_h)
+        self.save_img(img)
+        # img_b64encode, fmt = self.poco.snapshot(ui_x, ui_y, ui_w, ui_h)
+        # img_b64encode, fmt = rpcMethod.screen_shot(self, ui_x, ui_y, ui_w, ui_h)
+        # # ui_l = int((ui_x - ui_w / 2) * self.screen_w)
+        # # ui_r = int((ui_x + ui_w / 2) * self.screen_w)
+        # # ui_t = int((ui_y - ui_h / 2) * self.screen_h)
+        # # ui_b = int((ui_y + ui_h / 2) * self.screen_h)
+        # img_b64decode = base64.b64decode(img_b64encode)  # base64解码
+        # # open('screen.{}'.format(fmt), 'wb').write(img_b64decode)
+        # img_array = np.fromstring(img_b64decode, np.uint8)  # 转换np序列
+        # img = cv2.imdecode(img_array, cv2.COLOR_BGR2RGB)  # 转换Opencv格式
+        # # cv2.rectangle(img, (ui_l, ui_t), (ui_r, ui_b), (255, 0, 0), 3)
+        # cv2.imshow('img', img)
+        # cv2.waitKey(0)
 
     def get_item_count(self, item_name: str = "", item_icon_name: str = "", item_tpid: str = ""):
         book_list = self.excelTools.get_book_list()
         if item_tpid != "":
-            return rpcMethod.get_item_count(self, item_tpid)
+            return rpcMethod.get_item_count(self.poco, item_tpid)
         for book_dict in book_list:
             worksheet = self.excelTools.get_worksheet(book_dict["book_name"], "模板数据")
             if item_name != "":
@@ -508,14 +525,14 @@ class BasePage:
                 if res is not None:
                     item_tpid = res
                     break
-        item_count = rpcMethod.get_item_count(self, item_tpid)
+        item_count = rpcMethod.get_item_count(self.poco, item_tpid)
         return item_count
 
     def set_item_count(self, target_count, item_name: str = "", item_icon_name: str = "", item_tpid: str = ""):
         book_list = self.excelTools.get_book_list()
         if item_tpid != "":
             item_count = self.get_item_count(item_tpid=item_tpid)
-            rpcMethod.cmd(self, f"add {item_tpid[0]} {item_tpid} {target_count - item_count}")
+            rpcMethod.cmd(self.poco, f"add {item_tpid[0]} {item_tpid} {target_count - item_count}")
             return
         # 参数给的是icon_name或item_name就转换为tpid
         for book_dict in book_list:
@@ -531,7 +548,7 @@ class BasePage:
                     item_tpid = res
                     break
         item_count = self.get_item_count(item_tpid=item_tpid)
-        rpcMethod.cmd(self, f"add {item_tpid[0]} {item_tpid} {target_count - item_count}")
+        rpcMethod.cmd(self.poco, f"add {item_tpid[0]} {item_tpid} {target_count - item_count}")
 
     def is_resource_enough(self, icon_list, value_list):
         cur = 0
@@ -562,10 +579,10 @@ class BasePage:
         return item_count_list
 
     def cmd(self, command):
-        rpcMethod.cmd(self, command)
+        rpcMethod.cmd(self.poco, command)
 
     def lua_console(self, command):
-        rpcMethod.lua_console(self, command)
+        rpcMethod.lua_console(self.poco, command)
 
 
 
@@ -584,5 +601,6 @@ if __name__ == '__main__':
     bp = BasePage()
     # rpcMethod.set_btn_enabled(bp, element=ElementsData.BattlePass.BattlePassPanel, enabled=False)
     bp.lua_console('PanelMgr:OpenPanel("HomePanel")')
+
 
 

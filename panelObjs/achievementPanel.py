@@ -19,6 +19,7 @@ class AchievementPanel(BasePage):
 
     def click_btn_i(self):
         self.click_element(element_data=ElementsData.Achievement.btn_i)
+
     def is_tips_active(self):
         return self.exist(element_data=ElementsData.Achievement.tips)
 

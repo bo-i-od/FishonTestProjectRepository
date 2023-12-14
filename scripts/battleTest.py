@@ -80,7 +80,7 @@ def circulate_fish(bp: BasePage):
             BattlePreparePanel.click_btn_cast(bp)
         BattlePanel.reel_quick(bp)
         ResultPanel.wait_for_result(bp)
-        bp.get_screen_shoot()
+        bp.get_full_screen_shot()
         if ResultPanel.automatic_settlement(bp, is_return=False) == 1:
             fish += 1
         cur += 1

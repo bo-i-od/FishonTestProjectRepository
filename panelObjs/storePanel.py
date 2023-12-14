@@ -125,23 +125,16 @@ class StorePanel(BasePage):
         item_id_list = self.get_object_id_list(element_data=ElementsData.Store.Box.item_list)
         return item_id_list
 
-    def get_gear_id_list(self):
-        item_id_list = self.get_object_id_list(element_data=ElementsData.Store.Resource.gear_list)
-        return item_id_list
-
-    def get_fish_card_id_list(self):
-        item_id_list = self.get_object_id_list(element_data=ElementsData.Store.Resource.fish_card_list)
-        return item_id_list
-
-    def get_booster_id_list(self):
-        item_id_list = self.get_object_id_list(element_data=ElementsData.Store.Resource.booster_list)
+    def get_item_id_list(self):
+        item_id_list = self.get_object_id_list(element_data=ElementsData.Store.Resource.item_list)
         return item_id_list
 
     # 算出期望的价格列表
     def get_expect_price_list(self, icon_list, quantity_list, off_list):
         worksheet = self.excelTools.get_worksheet("ITEM_MAIN.xlsm", "模板数据")
         priceDiamond_list = self.excelTools.same_row_different_column_convert_list(worksheet, "iconName", "priceDiamond", icon_list)
-        str_to_int_list(priceDiamond_list)
+        # print(priceDiamond_list)
+        # str_to_int_list(priceDiamond_list)
         expect_price_list = []
         cur = 0
         while cur < len(icon_list):
@@ -240,7 +233,7 @@ class StorePanel(BasePage):
 
     def get_booster_dict_list(self):
         booster_dict_list = []
-        booster_id_list = self.get_object_id_list(element_data=ElementsData.Store.Resource.booster_list)
+        booster_id_list = self.get_object_id_list(element_data=ElementsData.Store.Resource.item_list)
         for booster_id in booster_id_list:
             icon_id_list = self.get_offspring_id_list(offspring_path="group>icon_list>>icon", object_id=booster_id)
             quantity_id_list = self.get_offspring_id_list(offspring_path="group>icon_list>>quantity>value", object_id=booster_id)
@@ -264,6 +257,10 @@ class StorePanel(BasePage):
         materials_icon_list = self.get_icon_list(element_data=ElementsData.Store.Resource.materials_icon_list)
         return materials_icon_list
 
+    def get_materials_position_list(self):
+        materials_position_list = self.get_position_list(element_data=ElementsData.Store.Resource.materials_icon_list)
+        return materials_position_list
+
     def get_materials_quantity_list(self):
         materials_quantity_list = self.get_text_list(element_data=ElementsData.Store.Resource.materials_quantity_list)
         return materials_quantity_list
@@ -271,6 +268,7 @@ class StorePanel(BasePage):
     def get_cash_position_list(self):
         cash_position_list = self.get_position_list(element_data=ElementsData.Store.Cash.cash_icon_list)
         return cash_position_list
+
     def get_cash_icon_list(self):
         cash_icon_list = self.get_icon_list(element_data=ElementsData.Store.Cash.cash_icon_list)
         return cash_icon_list
