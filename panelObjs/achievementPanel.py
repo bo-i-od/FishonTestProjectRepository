@@ -58,14 +58,13 @@ class AchievementPanel(BasePage):
             cur += 1
         return [locked_set, unlockable_set, unlocked_set]
 
-
     def get_achievement_position_list(self):
         position_list = self.get_position_list(element_data=ElementsData.Achievement.achievement_list, offspring_path="particle")
         return position_list
 
     def get_viewport(self):
-        viewport = Viewport(self, element_viewport=ElementsData.Achievement.viewport, element_item_list=ElementsData.Achievement.achievement_list)
-        return viewport
+        vp = Viewport(self, element_viewport=ElementsData.Achievement.viewport, element_item_list=ElementsData.Achievement.achievement_list)
+        return vp
 
     def get_group_name(self, achievement_id):
         group_name_id = self.get_offspring_id(offspring_path="group_com>groupbg>groupname", object_id=achievement_id)

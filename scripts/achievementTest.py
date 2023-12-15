@@ -66,7 +66,7 @@ def collect_test(bp:BasePage):
     compare(group_name, title)
     # 对比选中的成就项和显示的是否一致
     selected_status_list = AchievementGroupPanel.get_selected_status_list(bp)
-    selected_index = AchievementGroupPanel.get_selected_index(bp, selected_status_list)
+    selected_index = AchievementGroupPanel.get_selected_index(selected_status_list)
     achievement_icon_list = AchievementGroupPanel.get_achievement_icon_list(bp)
     icon_main = AchievementGroupPanel.get_icon_main(bp)
     compare(icon_main, achievement_icon_list[selected_index])
@@ -100,7 +100,7 @@ def select_test(bp:BasePage):
     bp.click_position(achievement_position_list[r])
     icon_main = AchievementGroupPanel.get_icon_main(bp)
     selected_status_list = AchievementGroupPanel.get_selected_status_list(bp)
-    selected_index = AchievementGroupPanel.get_selected_index(bp, selected_status_list)
+    selected_index = AchievementGroupPanel.get_selected_index(selected_status_list)
     compare(r, selected_index)
     compare(achievement_icon_list[r], icon_main)
 

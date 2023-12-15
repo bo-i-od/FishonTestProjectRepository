@@ -6,7 +6,7 @@ class Viewport:
         self.basePage = bp
         self.element_viewport = element_viewport
         self.element_item_list = element_item_list
-        self.viewport_objectId = self.get_viewport_objectId()
+        self.viewport_objectId = self.get_viewport_object_id()
         self.viewport_position = self.get_viewport_position()
         self.item_id_list = item_id_list
         if self.item_id_list is None:
@@ -19,18 +19,13 @@ class Viewport:
             self.viewport_range[1] -= viewport_edge[1] * self.viewport_size[1]
 
         self.delta_len = self.get_delta_len()
-    def get_viewport_objectId(self):
-         return self.basePage.get_object_id(element_data=self.element_viewport)
+
+    def get_viewport_object_id(self):
+        return self.basePage.get_object_id(element_data=self.element_viewport)
 
     def get_viewport_position(self):
         return self.basePage.get_position(element_data=self.element_viewport)
-    # def get_viewport_range(self):
-    #     viewport_size = self.basePage.get_size(element_data=self.element_viewport)
-    #     viewport_position = self.basePage.get_position(element_data=self.element_viewport)
-    #     print(viewport_size)
-    #     print(viewport_position)
-    #     self.basePage.get_element_shoot(element_data=self.element_viewport)
-    #     return viewport_position[0] - 0.5 * viewport_size[0], viewport_position[1] - 0.5 * viewport_size[1], viewport_position[0] + 0.5 * viewport_size[0], viewport_position[1] + 0.5 * viewport_size[1]
+
     def get_item_id_list(self):
         return self.basePage.get_object_id_list(element_data=self.element_item_list)
 
@@ -127,7 +122,6 @@ class Viewport:
         if object_id_list is not None:
             self.item_id_list = object_id_list
         self.item_id_list = self.basePage.get_object_id_list(element_data=element_data)
-
 
     def get_clickable_index_list(self):
         cur = 0

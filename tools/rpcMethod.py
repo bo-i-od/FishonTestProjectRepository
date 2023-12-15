@@ -3,7 +3,25 @@ from poco.utils.simplerpc.utils import sync_wrapper
 
 @sync_wrapper
 def my_print(poco):
-    return poco.agent.c.call("MyPrint")
+    # request = {
+    #     "jsonrpc": "2.0",
+    #     "id": "1",
+    #     "method": "MyPrint",
+    #     "params": {
+    #         "data": "Hello, PocoManager!"
+    #     }
+    # }
+    #
+    # # 将请求消息转换为JSON字符串
+    # request_json = json.dumps(request)
+    # request_json.encode()
+    # 发送请求消息
+    param0 = "aaa"
+    param1 = 123
+    param2 = [123, "45", True]
+    param3 = 0.6
+    param4 = True
+    return poco.agent.c.call("MyPrint", param0, param1, param2, param3, param4)
 
 
 @sync_wrapper

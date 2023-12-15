@@ -1,6 +1,5 @@
 import random
 from common.basePage import BasePage
-from configs.cmd import *
 from panelObjs.playerEditNamePanel import PlayerEditNamePanel
 from panelObjs.newbieGuidePanel import NewbieGuidePanel
 from panelObjs.battlePanel import BattlePanel
@@ -31,12 +30,12 @@ def playerEditNamePanelTest(bp: BasePage):
 def newbieGuidePanelTest(bp: BasePage):
     start_page = NewbieGuidePanel.get_start_page(bp)
     if start_page > 3:
-        open_auto_fish(bp)
+        bp.cmd("autofish")
         NewbieGuidePanel.do_guide_1(bp)
         # BattlePanel.reel(bp)
         NewbieGuidePanel.do_guide_2(bp)
     if start_page > 2:
-        open_auto_fish(bp)
+        bp.cmd("autofish")
         NewbieGuidePanel.do_guide_3(bp)
         BattlePanel.unleash_power(bp)
         # BattlePanel.reel(bp)

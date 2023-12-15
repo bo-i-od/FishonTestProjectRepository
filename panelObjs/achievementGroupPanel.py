@@ -36,7 +36,6 @@ class AchievementGroupPanel(BasePage):
         progress_denominator = int(progress[1])
         return progress_numerator, progress_denominator
 
-
     def click_btn_collect(self):
         res = False
         if self.exist(element_data=ElementsData.AchievementGroup.btn_collect, offspring_path="btn_normal"):
@@ -55,7 +54,9 @@ class AchievementGroupPanel(BasePage):
     def get_selected_status_list(self):
         return self.get_toggle_is_on_list(element_data=ElementsData.AchievementGroup.achievement_list)
 
-    def get_selected_index(self, selected_status_list):
+    # 看第几个是选中的
+    @staticmethod
+    def get_selected_index(selected_status_list):
         cur = 0
         while cur < len(selected_status_list):
             if selected_status_list[cur]:

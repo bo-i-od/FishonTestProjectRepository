@@ -1,6 +1,5 @@
 import random
 from common.basePage import BasePage
-from configs.cmd import *
 from panelObjs.fisheryGiftPackPanel import FisheryGiftPackPanel
 from panelObjs.rewardsPanel import RewardsPanel
 from panelObjs.itemTipsPanel import ItemTipsPanel

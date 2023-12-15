@@ -58,9 +58,9 @@ if __name__ == '__main__':
     max = 38
     while cur <= max:
         r = random.randint(0,25)
-        bp.set_item_count(target_count=r, item_tpid=f"2000{cur}")
-        print(f"2000{cur}:{r}")
-        bp.sleep(0.1)
+        # bp.set_item_count(target_count=r, item_tpid=f"2000{cur}")
+        # print(f"2000{cur}:{r}")
+        # bp.sleep(0.1)
         print(bp.get_item_count(item_tpid=f"2000{cur}"))
         bp.sleep(0.1)
         cur += 1
