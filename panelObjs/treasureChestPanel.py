@@ -3,6 +3,16 @@ from configs.elementsData import ElementsData
 from tools.commonTools import *
 
 class TreasureChestPanel(BasePage):
+    def click_btn_close(self):
+        self.click_element(element_data=ElementsData.TreasureChest.btn_close)
+        if TreasureChestPanel.is_panel_active(self):
+            raise FindElementError
+
+    def is_panel_active(self):
+        if self.exist(element_data=ElementsData.TreasureChest.TreasureChestPanel):
+            return True
+        return False
+
     """
     输出箱子点的分子和分母
     """
@@ -43,11 +53,8 @@ class TreasureChestPanel(BasePage):
         progressbar_box = self.get_icon(element_data=ElementsData.TreasureChest.progressbar_box)
         return progressbar_box
 
-    def goto_TreasureChestMerchantPanel(self):
-        self.click_a_until_b_appear(element_data_a=ElementsData.TreasureChest.btn_buy, element_data_b=ElementsData.TreasureChestMerchant.TreasureChestMerchantPanel)
-
-    def close_TreasureChestPanel(self):
-        self.click_until_disappear(element_data=ElementsData.TreasureChest.btn_close)
+    def click_btn_box_store(self):
+        self.click_element(element_data=ElementsData.TreasureChest.btn_buy)
 
     # 看箱子点是否充足，可以获得下一个箱子
     def is_box_points_enough(self):
@@ -57,8 +64,7 @@ class TreasureChestPanel(BasePage):
         return True
 
     def click_progressbar_box(self):
-            self.click_element(element_data=ElementsData.TreasureChest.progressbar_box)
-
+        self.click_element(element_data=ElementsData.TreasureChest.progressbar_box)
 
     def get_chest_point(self, progressbar_box_icon):
         worksheet = self.excelTools.get_worksheet("ITEM_MAIN.xlsm", "模板数据")
@@ -67,13 +73,23 @@ class TreasureChestPanel(BasePage):
         chest_point = self.excelTools.same_row_different_column_convert(worksheet, "itemTpId", "chestPoint", tpid)
         return int(chest_point)
 
+    def click_btn_magnifier(self):
+        if self.exist(element_data=ElementsData.TreasureChest.tips):
+            self.click_element(element_data=ElementsData.TreasureChest.btn_magnifier)
+            if self.exist(element_data=ElementsData.TreasureChest.tips):
+                raise FindElementError
+            return
+        self.click_element(element_data=ElementsData.TreasureChest.btn_magnifier)
+        if not self.exist(element_data=ElementsData.TreasureChest.tips):
+            raise FindNoElementError
 
-
-
-
+    def get_preview_icon_and_position_list(self):
+        preview_icon_list = self.get_icon_list(element_data=ElementsData.TreasureChest.preview_icon_list)
+        preview_position_list = self.get_position_list(element_data=ElementsData.TreasureChest.preview_icon_list)
+        return preview_icon_list, preview_position_list
 
 
 
 if __name__ == "__main__":
     bp = TreasureChestPanel()
-    print(bp.click_progressbar_box())
+    bp.get_element_shot(element_data=ElementsData.Login.btn_login)

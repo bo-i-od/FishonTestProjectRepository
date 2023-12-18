@@ -11,22 +11,49 @@ class ResultPanel(BasePage):
         return exp
 
     def wait_for_result(self):
-        while (self.exist(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again) or self.exist(element_data=ElementsData.Result.pve_result.btn_claim) or self.exist(element_data=ElementsData.Result.pve_result.btn_throw)) is False:
-            self.sleep(1)
+        btn_open_and_cast_again = self.exist(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again)
+        btn_claim = self.exist(element_data=ElementsData.Result.btn_claim)
+        btn_throw = self.exist(element_data=ElementsData.Result.pve_result.btn_throw)
+        while not (btn_open_and_cast_again or btn_claim or btn_throw):
+            btn_open_and_cast_again = self.exist(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again)
+            btn_claim = self.exist(element_data=ElementsData.Result.btn_claim)
+            btn_throw = self.exist(element_data=ElementsData.Result.pve_result.btn_throw)
 
-    def automatic_settlement(self):
-        if self.exist(element_data=ElementsData.Result.pve_result.btn_claim):
-            self.click_element(element_data=ElementsData.Result.pve_result.btn_claim)
+    def automatic_settlement(self, is_return=True):
+        if not is_return:
+            if self.exist(element_data=ElementsData.Result.btn_claim):
+                self.click_element(element_data=ElementsData.Result.btn_claim)
+                return 1
+            ResultPanel.duel_sundries(self, is_return=False)
+            self.sleep(1)
+            self.try_click_element(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again)
+            return 0
+        if self.exist(element_data=ElementsData.Result.btn_claim):
+            self.click_element(element_data=ElementsData.Result.btn_claim)
             return "", {}
         chest_icon, item_dict = ResultPanel.duel_sundries(self)
         self.sleep(1)
         self.try_click_element(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again)
         return chest_icon, item_dict
 
+    def click_btn_claim(self):
+        self.click_until_disappear(element_data=ElementsData.Result.btn_claim)
 
 
-
-    def duel_sundries(self):
+    def duel_sundries(self, is_return=True):
+        if not is_return:
+            if self.exist(element_data=ElementsData.Result.pve_result.btn_open_by_key):
+                self.click_element(element_data=ElementsData.Result.pve_result.btn_open_by_key)
+            elif self.exist(element_data=ElementsData.Result.pve_result.btn_open_by_cash):
+                self.click_element(element_data=ElementsData.Result.pve_result.btn_open_by_cash)
+            elif self.exist(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again):
+                self.click_element(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again)
+            else:
+                self.click_element(element_data=ElementsData.Result.pve_result.btn_throw)
+            RewardsPanel.wait_for_RewardsPanel(self)
+            self.sleep(0.5)
+            RewardsPanel.click_tap_to_continue(self)
+            return
         chest_icon = ResultPanel.get_chest_icon(self)
         if self.exist(element_data=ElementsData.Result.pve_result.btn_open_by_key):
             self.click_element(element_data=ElementsData.Result.pve_result.btn_open_by_key)
@@ -55,3 +82,7 @@ class ResultPanel(BasePage):
 
     def goto_HomePanel(self):
         self.click_a_until_b_appear(element_data_a=ElementsData.Result.pve_result.btn_gohome, element_data_b=ElementsData.Home.HomePanel)
+
+if __name__ == '__main__':
+    bp = BasePage()
+    print(bp.exist(element_data=ElementsData.Result.btn_claim))

@@ -3,7 +3,7 @@ from configs.elementsData import ElementsData
 
 
 class TreasureChestRewardsPanel(BasePage):
-    def close_TreasureChestRewardsPanel(self):
+    def click_btn_close(self):
         self.wait_for_appear(element_data=ElementsData.TreasureChestRewards.TreasureChestRewardsPanel)
         self.try_click_element(element_data=ElementsData.TreasureChestRewards.btn_close)
 

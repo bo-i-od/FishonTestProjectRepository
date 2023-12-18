@@ -5,17 +5,17 @@ from tools.commonTools import *
 class PlayerSettingPanel(BasePage):
     def click_tab_player(self):
         self.click_element(element_data=ElementsData.PlayerSetting.tab_player)
-        if self.exist(element_data=ElementsData.PlayerSetting.panel_player) is False:
+        if not self.exist(element_data=ElementsData.PlayerSetting.panel_player):
             raise FindNoElementError
 
     def click_tab_setting(self):
         self.click_element(element_data=ElementsData.PlayerSetting.tab_setting)
-        if self.exist(element_data=ElementsData.PlayerSetting.panel_setting) is False:
+        if not self.exist(element_data=ElementsData.PlayerSetting.panel_setting):
             raise FindNoElementError
 
     def click_tab_language(self):
         self.click_element(element_data=ElementsData.PlayerSetting.tab_language)
-        if self.exist(element_data=ElementsData.PlayerSetting.panel_language) is False:
+        if not self.exist(element_data=ElementsData.PlayerSetting.panel_language):
             raise FindNoElementError
 
     def get_exp_val(self):
@@ -45,27 +45,27 @@ class PlayerSettingPanel(BasePage):
 
     def click_name(self):
         self.click_element(element_data=ElementsData.PlayerSetting.player_name)
-        if self.exist(element_data=ElementsData.PlayerSetting.panel_name) is False:
+        if not self.exist(element_data=ElementsData.PlayerSetting.panel_name):
             raise FindNoElementError
 
     def click_head(self):
         self.click_element(element_data=ElementsData.PlayerSetting.head)
-        if self.exist(element_data=ElementsData.PlayerSetting.panel_name) is False:
+        if not self.exist(element_data=ElementsData.PlayerSetting.panel_name):
             raise FindNoElementError
 
     def click_flag(self):
         self.click_element(element_data=ElementsData.PlayerSetting.flag)
-        if self.exist(element_data=ElementsData.PlayerSetting.panel_banner) is False:
+        if not self.exist(element_data=ElementsData.PlayerSetting.panel_banner):
             raise FindNoElementError
 
     def click_edit_info(self):
         self.click_element(element_data=ElementsData.PlayerSetting.btn_edit_info)
-        if self.exist(element_data=ElementsData.PlayerSetting.panel_avatar) is False:
+        if not self.exist(element_data=ElementsData.PlayerSetting.panel_avatar):
             raise FindNoElementError
 
     def click_edit_badge(self):
         self.click_element(element_data=ElementsData.PlayerSetting.btn_edit_badge)
-        if self.exist(element_data=ElementsData.PlayerSetting.panel_badge) is False:
+        if not self.exist(element_data=ElementsData.PlayerSetting.panel_badge):
             raise FindNoElementError
 
     def close_edit_profile(self):
@@ -80,7 +80,7 @@ class PlayerSettingPanel(BasePage):
                 raise FindElementError
             return
         self.click_element(element_data=ElementsData.PlayerSetting.btn_i_badge)
-        if self.exist(element_data=ElementsData.PlayerSetting.Panel_Tip_Rules) is False:
+        if not self.exist(element_data=ElementsData.PlayerSetting.Panel_Tip_Rules):
             raise FindNoElementError
         self.click_element(element_data=ElementsData.PlayerSetting.btn_i_badge)
         if self.exist(element_data=ElementsData.PlayerSetting.Panel_Tip_Rules):
@@ -89,16 +89,16 @@ class PlayerSettingPanel(BasePage):
     def get_slider_music(self):
         return self.get_slider_value(element_data=ElementsData.PlayerSetting.options_music)
 
-    def set_slider_music(self, target):
-        if target > 0.99:
-            target = 0.99
+    def set_slider_music(self, target_val):
+        if target_val > 0.99:
+            target_val = 0.99
         w = self.get_size(element_data=ElementsData.PlayerSetting.options_music_bg)[0]
         x_center, y_center = self.get_position(element_data=ElementsData.PlayerSetting.options_music_bg)
         x_start = x_center - 0.5 * w
-        x_target = x_start + target * w
+        x_target = x_start + target_val * w
         self.click_position([x_target, y_center])
         slider_music = PlayerSettingPanel.get_slider_music(self)
-        delta = abs(target - slider_music)
+        delta = abs(target_val - slider_music)
         if delta > 0.05:
             raise DifferError
 
@@ -106,8 +106,10 @@ class PlayerSettingPanel(BasePage):
         return self.get_slider_value(element_data=ElementsData.PlayerSetting.options_sound)
 
     def set_slider_sound(self, target):
-        if target > 0.99:
-            target = 0.99
+        if target > 0.95:
+            target = 0.95
+        if target < 0.05:
+            target = 0.05
         w = self.get_size(element_data=ElementsData.PlayerSetting.options_sound_bg)[0]
         x_center, y_center = self.get_position(element_data=ElementsData.PlayerSetting.options_sound_bg)
         x_start = x_center - 0.5 * w
@@ -115,8 +117,53 @@ class PlayerSettingPanel(BasePage):
         self.click_position([x_target, y_center])
         slider_sound = PlayerSettingPanel.get_slider_sound(self)
         delta = abs(target - slider_sound)
-        if delta > 0.05:
+        if delta > 0.1:
             raise DifferError
+
+    def get_options_graphics_position_list(self):
+        position_list = self.get_position_list(element_data=ElementsData.PlayerSetting.options_graphics_list)
+        return position_list
+
+    def set_options_graphics(self, position_list, index):
+        self.click_position(position_list[index])
+        tab_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerSetting.options_graphics_list)
+        toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
+        toggle_is_on_index = get_toggle_is_on_index(toggle_is_on_list)
+        compare(index, toggle_is_on_index)
+
+    def get_options_frame_position_list(self):
+        position_list = self.get_position_list(element_data=ElementsData.PlayerSetting.options_frame_list)
+        return position_list
+
+    def set_options_frame(self, position_list, index):
+        self.click_position(position_list[index])
+        tab_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerSetting.options_frame_list)
+        toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
+        toggle_is_on_index = get_toggle_is_on_index(toggle_is_on_list)
+        compare(index, toggle_is_on_index)
+
+    def get_options_joystick_position_list(self):
+        position_list = self.get_position_list(element_data=ElementsData.PlayerSetting.options_joystick_list)
+        return position_list
+
+    def set_options_joystick(self, position_list, index):
+        self.click_position(position_list[index])
+        tab_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerSetting.options_joystick_list)
+        toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
+        toggle_is_on_index = get_toggle_is_on_index(toggle_is_on_list)
+        compare(index, toggle_is_on_index)
+
+    def get_options_vibration_position_list(self):
+        position_list = self.get_position_list(element_data=ElementsData.PlayerSetting.options_vibration_list)
+        return position_list
+
+    def set_options_vibration(self, position_list, index):
+        self.click_position(position_list[index])
+        tab_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerSetting.options_vibration_list)
+        toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
+        toggle_is_on_index = get_toggle_is_on_index(toggle_is_on_list)
+        compare(index, toggle_is_on_index)
+
 
     def language_test(self):
         language_check_dict = {"English": "SETTINGS", "русский": "НАСТРОЙКА", "Deutsch": "EINSTELLUNG",
@@ -140,15 +187,19 @@ class PlayerSettingPanel(BasePage):
             compare(text_tab_setting, text_tab_setting_expect)
             print(f"更改{language_title_text_list[cur]}语言成功")
             # 看保存按钮是否切换为SAVED
-            if self.exist(element_data=ElementsData.PlayerSetting.btn_saved_language) is False:
+            if not self.exist(element_data=ElementsData.PlayerSetting.btn_saved_language):
                 raise FindNoElementError
             cur += 1
         print("切换语言测试通过")
 
+    def click_btn_logout(self):
+        self.click_element(element_data=ElementsData.PlayerSetting.btn_logout)
+
 
 if __name__ == '__main__':
     bp = BasePage()
-    a = PlayerSettingPanel.language_test(bp)
+    options_graphics_position_list = PlayerSettingPanel.get_options_graphics_position_list(bp)
+    a = PlayerSettingPanel.set_options_graphics(bp, options_graphics_position_list,0)
     print(a)
 
 

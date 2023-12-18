@@ -3,6 +3,10 @@ from configs.elementsData import ElementsData
 from threading import Thread
 from tools.commonTools import *
 class BattlePanel(BasePage):
+    def is_panel_active(self):
+        if self.exist(element_data=ElementsData.Battle.BattlePanel):
+            return True
+        return False
     def reel(self):
         self.wait_for_appear(element_data=ElementsData.Battle.btn_reel, is_click=False)
         position = self.get_position(element_data=ElementsData.Battle.btn_reel)
@@ -14,7 +18,7 @@ class BattlePanel(BasePage):
     # unity上才能用
     def reel_quick(self):
         self.wait_for_appear(element_data=ElementsData.Battle.btn_reel, is_click=False)
-        while self.exist(element_data=ElementsData.Result.ResultPanel) is False:
+        while not self.exist(element_data=ElementsData.Result.ResultPanel):
             self.send_key("G")
             self.sleep(0.5)
 

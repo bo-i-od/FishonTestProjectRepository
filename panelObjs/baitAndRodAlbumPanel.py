@@ -1,6 +1,6 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from items.gears import GearAttribute
+from common.gears import GearAttribute
 from tools.commonTools import *
 
 
@@ -28,7 +28,7 @@ class BaitAndRodAlbumPanel(BasePage):
             name = self.get_text(object_id=name_id)
             temp_gear = GearAttribute(bg=bg, name=name, stars=stars, rating=rating, kind=kind, level=level, fragments_numerator=fragments_numerator, fragments_denominator=fragments_denominator, attribute_add_count=attribute_add_count,
                                       attribute_icon_list=attribute_icon_list)
-            lock_id = self.get_child_id_list("lock", object_id=gear_id)
+            lock_id = self.get_offspring_id_list("lock", object_id=gear_id)
             if lock_id:
                 stars_id = self.get_offspring_id("stars", object_id=gear_id)
                 stars = BaitAndRodAlbumPanel.get_stars(self, stars_id)
@@ -81,7 +81,7 @@ class BaitAndRodAlbumPanel(BasePage):
             return
         is_rod = self.exist(element_data=ElementsData.BaitAndRodAlbum.panel_bag_rod)
         is_bait = self.exist(element_data=ElementsData.BaitAndRodAlbum.panel_bag_bait)
-        if is_rod is False and is_bait is False:
+        if not(is_rod or is_bait):
             return
         if is_rod:
             print("当前为鱼竿相册，切换为鱼饵相册")

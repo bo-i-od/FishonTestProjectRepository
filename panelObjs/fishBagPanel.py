@@ -3,7 +3,7 @@ from configs.elementsData import ElementsData
 
 
 class FishBagPanel(BasePage):
-    def tap_to_continue(self):
+    def click_tap_to_continue(self):
         self.click_element(element_data=ElementsData.FishBag.tap_to_continue)
 
 

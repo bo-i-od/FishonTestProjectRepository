@@ -7,11 +7,12 @@ class PlayerEditNamePanel(BasePage):
         if self.exist(element_data=ElementsData.PlayerEditName.PlayerEditNamePanel):
             return True
         return False
-    def get_name(self):
+
+    def get_player_name(self):
         return self.get_text(element_data=ElementsData.PlayerEditName.Input_PlayerName)
 
     # 编辑名称
-    def set_name(self, name: str):
+    def set_player_name(self, name: str):
         self.set_text(element_data=ElementsData.PlayerEditName.Input_PlayerName, text=name)
 
     # 根据序号选择头像,并返回选择头像的object_id
@@ -40,6 +41,6 @@ class PlayerEditNamePanel(BasePage):
 
 if __name__ == "__main__":
     bp = PlayerEditNamePanel()
-    n = bp.get_name()
+    n = bp.get_player_name()
     print(n)
-    bp.set_name(n[1:])
+    bp.set_player_name(n[1:])

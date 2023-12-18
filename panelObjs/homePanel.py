@@ -2,7 +2,10 @@ from common.basePage import BasePage
 from configs.elementsData import ElementsData
 
 class HomePanel(BasePage):
-
+    def is_panel_active(self):
+        if self.exist(element_data=ElementsData.Home.HomePanel):
+            return True
+        return False
     # 获取玩家经验值
     def get_exp_val(self):
         # 得到等级
@@ -21,9 +24,39 @@ class HomePanel(BasePage):
         return self.excelTools.get_exp_limit(lv)
 
     # 跳转界面
-    def jump_to(self, element):
+    def go_to(self, element):
         self.try_click_element(element_data=element)
 
+    def go_to_BattlePassPanel(self):
+        HomePanel.go_to(self, element=ElementsData.Home.btn_bp)
+
+    def go_to_TaskPanel(self):
+        HomePanel.go_to(self, element=ElementsData.Home.btn_task)
+
+    def go_to_FishCardPanel(self):
+        HomePanel.go_to(self, element=ElementsData.Home.btn_album)
+
+    def go_to_RoulettePanel(self):
+        HomePanel.go_to(self, element=ElementsData.Home.btn_roulette)
+
+    def go_to_PlayerSettingPanel(self):
+        HomePanel.go_to(self, element=ElementsData.Home.player_info)
+
+    def go_to_AchievementPanel(self):
+        HomePanel.go_to(self, element=ElementsData.Home.btn_achievement)
+
+    def go_to_MailPanel(self):
+        HomePanel.go_to(self, element=ElementsData.Home.btn_mail)
+
+    def go_to_RechargeBlack5Panel(self):
+        HomePanel.go_to(self, element=ElementsData.Home.btn_black5)
+
+    def go_to_PVPHallPanel(self):
+        HomePanel.go_to(self, element=ElementsData.Home.btn_pvp)
+
+
+if __name__ == '__main__':
+    bp = BasePage()
 
 
 

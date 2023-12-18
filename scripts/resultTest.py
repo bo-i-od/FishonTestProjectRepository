@@ -11,7 +11,7 @@ def exp_test(bp: BasePage):
     exp, lv = HomePanel.get_exp_val(bp)
     print("当前玩家面板经验是：", exp, "点")
     # 跳转到锦标赛
-    HomePanel.jump_to(bp, ElementsData.Home.btn_pve)
+    HomePanel.go_to(bp, ElementsData.Home.btn_pve)
     # 随机选一个锦标赛
     TournamentsPanel.random_tournament(bp)
     # 点击cast按钮

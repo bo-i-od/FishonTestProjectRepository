@@ -1,6 +1,8 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from tools.commonTools import *
+from panelObjs.baitAndRodShowPanel import BaitAndRodShowPanel
+from panelObjs.treasureChestPanel import TreasureChestPanel
 
 class NewbieGuidePanel(BasePage):
     def get_start_page(self):
@@ -14,6 +16,7 @@ class NewbieGuidePanel(BasePage):
             return 1
         else:
             raise FindNoElementError
+
     def do_guide_1(self):
         perform_list = [ElementsData.NewbieGuide.NBG_rookie_1, ElementsData.NewbieGuide.NBG_rookie_2,
                         ElementsData.NewbieGuide.NBG_rookie_3, ElementsData.NewbieGuide.NBG_rookie_4,
@@ -51,10 +54,8 @@ class NewbieGuidePanel(BasePage):
         perform_list = [ElementsData.NewbieGuide.NBG_system_1, ElementsData.NewbieGuide.NBG_system_2,
                         ElementsData.NewbieGuide.NBG_system_click_TreasureChest,
                         ElementsData.NewbieGuide.NBG_system_get_reward_TreasureChest_01,
-                        ElementsData.NewbieGuide.NBG_system_close_TreasureChest,
-                        ElementsData.TreasureChestRewards.btn_close]
+                        ElementsData.BaitAndRodShow.BaitAndRodShowPanel]
         self.click_a_until_b_appear_list(perform_list)
-        self.sleep(0.5)
-        self.click_a_until_b_appear(ElementsData.NewbieGuide.NBG_system_close_TreasureChest, ElementsData.TreasureChestRewards.btn_close)
+        BaitAndRodShowPanel.click_tap_to_continue(self)
         self.click_until_disappear(ElementsData.TreasureChestRewards.btn_close)
-        self.click_until_disappear(ElementsData.NewbieGuide.NBG_system_close_TreasureChest)
+        TreasureChestPanel.click_btn_close(self)

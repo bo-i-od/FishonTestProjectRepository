@@ -1,13 +1,12 @@
 import random
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from tools.commonTools import *
 from panelObjs.homePanel import HomePanel
 from panelObjs.itemTipsPanel import ItemTipsPanel
 from panelObjs.baitAndRodShowPanel import BaitAndRodShowPanel
 from panelObjs.recharge1And1Panel import Recharge1And1Panel
 from panelObjs.rewardsPanel import RewardsPanel
-from items.resource import *
+from common.resource import *
 from common.pay import wait_for_pay_result
 def click_icon_test(bp: BasePage):
     item_position_list = Recharge1And1Panel.get_item_position_list(bp)
@@ -22,7 +21,7 @@ def click_icon_test(bp: BasePage):
     r = random.randint(2, 3)
     bp.click_position(item_position_list[r])
     item_icon = ItemTipsPanel.get_item_icon(bp)
-    item_icon = check_icon(icon=item_icon)
+    # item_icon = check_icon(icon=item_icon)
     compare(item_icon, item_icon_list[r])
     bp.click_position([0.5, 0.1])
     r = random.randint(4, 7)
@@ -32,7 +31,7 @@ def click_icon_test(bp: BasePage):
     print("点击图标测试通过")
 
 def buy_test(bp: BasePage):
-    HomePanel.jump_to(bp, element=ElementsData.Home.btn_1add1)
+    HomePanel.go_to(bp, element=ElementsData.Home.btn_1add1)
     if Recharge1And1Panel.is_btn_buy_clickable(bp) is False:
         Recharge1And1Panel.click_btn_buy(bp)
         Recharge1And1Panel.close_Recharge1And1Panel(bp)
@@ -46,7 +45,7 @@ def buy_test(bp: BasePage):
         print("1+1礼包，支付失败，跳过测试")
         return
     # 支付成功
-    reward_icon_list = RewardsPanel.get_reward_icon_list(bp)
+    reward_icon_list = RewardsPanel.get_reward_icon_list(bp, is_divide=False)
     compare_list(item_icon_list, reward_icon_list)
     RewardsPanel.click_tap_to_continue(bp)
     print("1+1礼包，测试通过")

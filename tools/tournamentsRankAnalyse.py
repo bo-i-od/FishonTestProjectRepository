@@ -1,7 +1,7 @@
 import json
 import matplotlib.pyplot as plt
-def load_data(rank_dict):
 
+def load_data(rank_dict):
     cur = 0
     while cur <= 50:
         with open(f'C:/Users/TU/Desktop/soroya20-30/{cur}.txt', 'r', encoding='utf-8') as f:

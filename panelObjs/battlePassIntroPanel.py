@@ -3,6 +3,11 @@ from configs.elementsData import ElementsData
 
 
 class BattlePassIntroPanel(BasePage):
+    def is_panel_active(self):
+        if self.exist(element_data=ElementsData.BattlePassIntro.BattlePassIntroPanel):
+            return True
+        return False
+
     def close_battlePassIntroPanel(self, is_test=True):
         if is_test:
             # 点next按钮 从1到2
@@ -18,11 +23,12 @@ class BattlePassIntroPanel(BasePage):
             # 点next按钮 从2到3
             self.click_element(element_data=ElementsData.BattlePassIntro.next2to3)
             # 点next按钮 关闭
-            self.click_element(element_data=ElementsData.BattlePassIntro.go)
+            self.click_element(element_data=ElementsData.BattlePassIntro.btn_go)
             return
         self.click_element(element_data=ElementsData.BattlePassIntro.panel1to2Btn)
         self.click_element(element_data=ElementsData.BattlePassIntro.panel2to3Btn)
-        self.click_element(element_data=ElementsData.BattlePassIntro.go)
+        self.click_element(element_data=ElementsData.BattlePassIntro.btn_go)
+
 
 if __name__ == "__main__":
     bp = BattlePassIntroPanel()

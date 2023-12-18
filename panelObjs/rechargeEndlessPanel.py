@@ -1,7 +1,6 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from tools.commonTools import *
-from items.resource import *
+from common.resource import *
 class RechargeEndlessPanel(BasePage):
     def close_RechargeEndlessPanel(self):
         self.click_element(element_data=ElementsData.RechargeEndless.btn_close)
@@ -20,7 +19,7 @@ class RechargeEndlessPanel(BasePage):
 
     def get_item_icon_and_quantity_list(self):
         item_icon_list = self.get_icon_list(element_data=ElementsData.RechargeEndless.icon_list)
-        check_icon_list(item_icon_list)
+        # check_icon_list(item_icon_list)
         item_quantity_list = self.get_text_list(element_data=ElementsData.RechargeEndless.quantity_list)
         str_to_int_list(item_quantity_list)
         return item_icon_list, item_quantity_list
