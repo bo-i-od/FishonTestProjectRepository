@@ -103,10 +103,10 @@ def point_cal(duelcup):
     return int(start), int(end)
 
 def circulate_duel(bp:BasePage):
-    rank = random.randint(0, 7)
+    rank = random.randint(5, 7)
     # rank = 3
-    clear_duelcup(bp)
-    dc = random_duelcup(bp, rank)
+    # clear_duelcup(bp)
+    # dc = random_duelcup(bp, rank)
     # s, e = point_cal(dc)
     # print(f"当前杯数：{dc},预期分数范围:{s,e}")
     action_list = [lambda: PVPHallPanel.click_btn_close(bp)]
@@ -123,7 +123,7 @@ def circulate_duel(bp:BasePage):
     points_enemy = PVPResultPanel.get_points_enemy(bp)
     points_mine = PVPResultPanel.get_points_mine(bp)
     PVPResultPanel.click_tap_to_click(bp)
-    print(f"玩家杯数：{dc}，玩家分数：{points_mine}，机器人分数：{points_enemy}")
+    print(f"玩家分数：{points_mine}，机器人分数：{points_enemy}")
     # n = "符合预期"
     # if points_enemy < s or points_enemy > e:
     #     n = "不符合预期"

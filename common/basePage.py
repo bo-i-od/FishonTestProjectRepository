@@ -19,7 +19,7 @@ class BasePage:
     def __init__(self):
         # unity窗口使用UnityEditorWindow()
         # 手机使用connect_device("android://127.0.0.1:5037/设备号")
-        self.is_android = True
+        self.is_android = False
         #
         if self.is_android:
             dev = connect_device("android://127.0.0.1:5037/127.0.0.1:21593")
