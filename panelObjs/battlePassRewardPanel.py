@@ -1,5 +1,5 @@
 from configs.elementsData import ElementsData
-from tools.viewport import Viewport
+from common.viewport import Viewport
 from common.basePage import BasePage
 from common.error import *
 class BattlePassRewardPanel(BasePage):

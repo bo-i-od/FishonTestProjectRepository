@@ -1,13 +1,7 @@
-from items.resource import *
-from panelObjs.taskPanel import TaskPanel
-from panelObjs.rewardsPanel import RewardsPanel
-from panelObjs.itemTipsPanel import ItemTipsPanel
-from tools.viewport import Viewport
 from panelObjs.playerSettingPanel import PlayerSettingPanel
 from panelObjs.loginPanel import LoginPanel
 from common.basePage import BasePage
 from panelObjs.homePanel import HomePanel
-from panelObjs.fisheryGiftPackPanel import FisheryGiftPackPanel
 from panelObjs.playerEditNamePanel import PlayerEditNamePanel
 
 def logout(bp:BasePage, index):

@@ -1,5 +1,3 @@
-from common.basePage import BasePage
-from configs.elementsData import ElementsData
 
 class Slider:
     def __init__(self, bp, element_slider):

@@ -1,5 +1,5 @@
 from configs.elementsData import ElementsData
-from tools.viewport import Viewport
+from common.viewport import Viewport
 from common.basePage import BasePage
 from tools.commonTools import *
 
@@ -86,7 +86,7 @@ class BattlePassPanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    a = BattlePassPanel.get_preview_icon_list(bp)
+    a = BattlePassPanel.get_free_collectable_icon_quantity_and_position_list(bp)
     print(a)
 
 

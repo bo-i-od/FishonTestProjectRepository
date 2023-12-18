@@ -1,6 +1,6 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from items.resource import *
+from common.resource import *
 
 class RewardsPanel(BasePage):
     def is_panel_active(self):

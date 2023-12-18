@@ -5,20 +5,21 @@ import pyautogui
 import base64
 import cv2
 import numpy as np
-import os
 from configs.elementsData import ElementsData
 from poco.drivers.unity3d import UnityPoco
 from airtest.core.api import connect_device
-from tools import rpcMethod
-from items import resource
+from common import rpcMethod, resource
 from common.error import *
 import zlib
+
+import os
+
 
 class BasePage:
     def __init__(self):
         # unity窗口使用UnityEditorWindow()
         # 手机使用connect_device("android://127.0.0.1:5037/设备号")
-        self.is_android = False
+        self.is_android = True
         #
         if self.is_android:
             dev = connect_device("android://127.0.0.1:5037/127.0.0.1:21593")
@@ -30,40 +31,88 @@ class BasePage:
         addr = ('', 5001)
         self.poco = UnityPoco(addr, device=dev)
         self.screen_w, self.screen_h = self.poco.get_screen_size()  # 获取屏幕尺寸
-        self.debug = True
-        if self.debug:
+        self.is_debug_log = True
+        if self.is_debug_log:
             print(self.screen_w, self.screen_h)
-        self.excelTools = ExceTools("C:/trunk/datapool/策划模板导出工具/")
-        self.pop_window_dict, self.pop_window_close_dict = self.set_pop_window_dict()  # 设定弹窗及其关闭方式
-
-
+        self.warning_list = []
+        self.erro_list = []
+        # 获取当前工作目录
+        current_dir = os.getcwd()
+        # 获取父目录
+        self.root_dir = os.path.abspath(os.path.dirname(current_dir))
+        # 获取当前工作目录
+        self.excelTools = ExceTools(self.root_dir + "/tables/")
     # pop_window_dict存放弹窗的ElementsData
     # pop_window_close_dict存放弹窗对应的关闭按钮的ElementsData
-    @staticmethod
-    def set_pop_window_dict():
-        pop_window_dict = {"FishBagPanel":ElementsData.FishBag.FishBagPanel,
-                           "BaitAndRodShowPanel":ElementsData.BaitAndRodShow.BaitAndRodShowPanel,
-                           "FisheryGiftPackPanel":ElementsData.FisheryGiftPack.FisheryGiftPackPanel,
-                           "Recharge1And1Panel":ElementsData.Recharge1And1.Recharge1And1Panel,
-                           "MessageBoxPanel":ElementsData.MessageBox.MessageBoxPanel,
-                           "LeaderBoardPopResultPanel":ElementsData.LeaderBoardPopResult.LeaderBoardPopResultPanel,
-                           "ChampointshipResult": ElementsData.ChampointshipResult.ChampointshipResultPopup,
-                           "DivisionChangePanel": ElementsData.DivisionChange.DivisionChangePanel,
-                           "PlayerLevelupPanel":ElementsData.PlayerLevelup.PlayerLevelupPanel,
-                           "PVPBoosterGiftPackPanel":ElementsData.PVPBoosterGiftPack.PVPBoosterGiftPackPanel
-                           }
-        pop_window_close_dict = {"FishBagPanel":ElementsData.FishBag.tap_to_continue,
-                                 "BaitAndRodShowPanel":ElementsData.BaitAndRodShow.closeArea,
-                                 "FisheryGiftPackPanel": ElementsData.FisheryGiftPack.btn_close,
-                                 "Recharge1And1Panel": ElementsData.Recharge1And1.btn_close,
-                                 "MessageBoxPanel": ElementsData.MessageBox.btn_confirm,
-                                 "LeaderBoardPopResultPanel": ElementsData.LeaderBoardPopResult.btn_claim,
-                                 "ChampointshipResult": ElementsData.ChampointshipResult.btn_collect,
-                                 "DivisionChangePanel": ElementsData.DivisionChange.tap_to_close,
-                                 "PlayerLevelupPanel": ElementsData.PlayerLevelup.tap_to_continue,
-                                 "PVPBoosterGiftPackPanel": ElementsData.PVPBoosterGiftPack.btn_close
-                                 }
-        return pop_window_dict, pop_window_close_dict
+
+        self.pop_window_set = {
+            "BaitAndRodShowPanel",
+            "ChampointshipResult",
+            "DivisionChangePanel",
+            "FishBagPanel",
+            "FisheryGiftPackPanel",
+            "LeaderBoardPopResultPanel",
+            "PlayerLevelupPanel",
+            "PVPBoosterGiftPackPanel",
+            "Recharge1And1Panel",
+            "MessageBoxPanel"}
+
+
+        self.panel_close_dict = {
+            "AchievementGroupPanel": [ElementsData.AchievementGroup.btn_close],
+            "AchievementPanel": [ElementsData.Achievement.btn_close],
+            "BaitAndRodAlbumPanel": [ElementsData.BaitAndRodAlbum.btn_close],
+            "BaitAndRodShowPanel": [ElementsData.BaitAndRodShow.closeArea],
+            "BattleExplainPanel": [ElementsData.BattleExplain.close],
+            "BattleFailedPanel": [ElementsData.BattleFailed.btn_again],
+            "BattlePassBuyLevelPanel": [ElementsData.BattlePassBuyLevel.btn_close],
+            "BattlePassBuyLicensePanel": [ElementsData.BattlePassBuyLicense.btn_close],
+            "BattlePassIntroPanel": [ElementsData.BattlePassIntro.panel1to2Btn, ElementsData.BattlePassIntro.panel2to3Btn, ElementsData.BattlePassIntro.btn_go],
+            "BattlePassPanel":[ElementsData.BattlePass.btn_close],
+            "BattlePassPopPanel": [ElementsData.BattlePassPop.btn_close],
+            "BattlePassRewardPanel": [ElementsData.BattlePassReward.btn_close],
+            "BattlePreparePanel": [ElementsData.BattlePrepare.btn_gohome],
+            "BuyEnergyPanel": [ElementsData.BuyEnergy.btn_close],
+            "ChampointshipResult": [ElementsData.ChampointshipResult.btn_collect],
+            "CommonPurchaseBoxVIew": [ElementsData.CommonPurchaseBox.btn_close],
+            "DivisionChangePanel": [ElementsData.DivisionChange.tap_to_close],
+            "FishBagPanel": [ElementsData.FishBag.tap_to_continue],
+            "FishCardGiftPackPanel":[ElementsData.FishCardGiftPack.btn_close],
+            "FishCardPanel": [ElementsData.FishCard.btn_close],
+            "FisheryGiftPackPanel": [ElementsData.FisheryGiftPack.btn_close],
+            "FishCardUpgradePanel": [ElementsData.FishCardUpgrade.btn_close],
+            "GearPanel":[ElementsData.Gear.btn_close],
+            "LeaderBoardPopResultPanel": [ElementsData.LeaderBoardPopResult.btn_claim],
+            "MailPanel": [ElementsData.Mail.btn_close],
+            "MessageBoxPanel": [ElementsData.MessageBox.btn_confirm],
+            "PlayerSettingPanel": [ElementsData.PlayerSetting.btn_close],
+            "PlayerLevelupPanel": [ElementsData.PlayerLevelup.tap_to_continue],
+            "PVPBoosterGiftPackPanel": [ElementsData.PVPBoosterGiftPack.btn_close],
+            "PVPHallPanel": [ElementsData.PVPHall.btn_close],
+            "PVPResultPanel":[ElementsData.PVPResult.tap_to_close],
+            "PVPRuleTipsPanel":[ElementsData.PVPRuleTipsPanel.btn_close],
+            "Recharge1And1Panel": [ElementsData.Recharge1And1.btn_close],
+            "RechargeBlack5Panel": [ElementsData.RechargeBlack5.btn_close],
+            "RechargeEndlessPanel":[ElementsData.RechargeEndless.btn_close],
+            "ResultPanel":[ElementsData.Result.btn_claim],
+            "RewardsPanel":[ElementsData.Rewards.tap_to_continue],
+            "RodMoreToOnePanel": [ElementsData.RodMoreToOne.btn_close],
+            "RoulettePanel":[ElementsData.Roulette.btn_close],
+            "StorePanel": [ElementsData.Store.btn_close],
+            "TaskFishingCareerPanel":[ElementsData.TaskFishingCareer.btn_close],
+            "TaskPanel": [ElementsData.Task.btn_close],
+            "TournamentsPanel":[ElementsData.Tournaments.btn_close],
+            "TreasureChestGearsShardsPanel":[ElementsData.TreasureChestGearsShards.btn_close],
+            "TreasureChestPanel": [ElementsData.TreasureChest.btn_close],
+            "TreasureChestRewardsPanel":[ElementsData.TreasureChestRewards.btn_close]
+        }
+
+
+
+    # 开启调试打印再打印
+    def debug_log(self, msg):
+        if self.is_debug_log:
+            print(msg)
 
     # 判断列表是不是长度为1，不为1会报错
     @staticmethod
@@ -435,23 +484,33 @@ class BasePage:
 
 
     # 关闭指定弹窗
-    def close_pop_window(self, element_pop_window, element_pop_window_close):
+    def close_pop_window_until_disappear(self, element_pop_window):
         while self.exist(element_data=element_pop_window):
-            self.click_element_safe(element_data=element_pop_window_close)
-            self.sleep(0.1)
+            self.clear_popup()
 
     # 清除一遍弹窗
     def clear_popup(self):
         panel_name_list = self.get_name_list(element_data=ElementsData.Panels)
         for panel_name in panel_name_list:
-            if panel_name in self.pop_window_close_dict:
-                self.click_element_safe(element_data=self.pop_window_close_dict[panel_name])
+            if panel_name not in self.pop_window_set:
+                continue
+            for close_element in self.panel_close_dict[panel_name]:
+                self.click_element_safe(element_data=close_element)
+                self.sleep(0.2)
 
     # 执行清除弹窗直到elements_data出现
     def clear_popup_until_appear(self, elements_data):
         while not self.exist(element_data=elements_data):
             self.clear_popup()
             self.sleep(0.5)
+
+    def go_home(self):
+        cur = 0
+        while not self.exist(element_data=ElementsData.Home.HomePanel):
+            cur += 1
+
+    # def clear_panel_except_home(self):
+    #
 
     # 元素滑动
     def swipe(self, object_id: int = 0, element_data: dict = None, point_start=None, point_end=None, t: float = 0.05, offspring_path=""):
@@ -481,16 +540,19 @@ class BasePage:
         img = cv2.imdecode(img_array, cv2.COLOR_BGR2RGB)  # 转换Opencv格式
         return img
 
-    def save_img(self, img):
-        path = "C:/Users/TU/Desktop/screenshot_result"  # 输入文件夹地址
+    def save_img(self, img, img_name=""):
+        path = f"{self.root_dir}/report"  # 输入文件夹地址
         num_png = len(os.listdir(path))  # 读入文件夹,统计文件夹中的文件个数
         cur = num_png
-        cv2.imwrite(path + f'/{cur}.jpg', img)
+        cv2.imwrite(path + f'/{img_name}{cur}.jpg', img)
+
+
+
 
     # 整屏截取
     def get_full_screen_shot(self):
         img = self.get_screen_shot(self.screen_w * 0.5, self.screen_h * 0.5, self.screen_w, self.screen_h)
-        self.save_img(img)
+        return img
 
     # 对指定元素进行截取
     def get_element_shot(self, element_data: dict, offspring_path=""):
@@ -500,7 +562,7 @@ class BasePage:
         ui_x, ui_y = int(ui_x * self.screen_w), int(ui_y * self.screen_h)
         ui_w, ui_h = int(ui_w * self.screen_w), int(ui_h * self.screen_h)
         img = self.get_screen_shot(ui_x, ui_y, ui_w, ui_h)
-        self.save_img(img)
+        return img
 
     # 获取物品数量
     def get_item_count(self, item_name: str = "", item_icon_name: str = "", item_tpid: str = ""):

@@ -1,7 +1,7 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from tools.commonTools import *
-from tools.viewport import Viewport
+from common.viewport import Viewport
 
 class PVPHallPanel(BasePage):
     def is_panel_active(self):

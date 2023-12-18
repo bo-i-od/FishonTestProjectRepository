@@ -1,8 +1,7 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from tools.commonTools import *
-from tools.viewport import Viewport
-from items.resource import *
+from common.viewport import Viewport
+from common.resource import *
 class BattlePassPopPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.BattlePassPop.btn_close)

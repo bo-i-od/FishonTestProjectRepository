@@ -2,6 +2,14 @@ from common.basePage import BasePage
 from configs.elementsData import ElementsData
 
 class BattlePreparePanel(BasePage):
+    def is_panel_active(self):
+        if self.exist(element_data=ElementsData.BattlePrepare.BattlePreparePanel):
+            return True
+        return False
+
+    def click_btn_gohome(self):
+        self.click_element(element_data=ElementsData.BattlePrepare.btn_gohome)
+
     def cast(self):
         self.wait_for_appear(element_data=ElementsData.BattlePrepare.btn_cast, is_click=False)
         position = self.get_position(element_data=ElementsData.BattlePrepare.btn_cast)

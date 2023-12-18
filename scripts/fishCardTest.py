@@ -8,7 +8,7 @@ from panelObjs.fishCardGiftPackPanel import FishCardGiftPackPanel
 from panelObjs.rewardsPanel import RewardsPanel
 from panelObjs.itemTipsPanel import ItemTipsPanel
 from panelObjs.fishCardPackTipsPanel import FishCardPackTipsPanel
-from items import resource
+from common import resource
 from tools.commonTools import *
 def FishCardUpgradePanel_test(bp: BasePage):
     card_information_now = FishCardUpgradePanel.get_card_information(bp)

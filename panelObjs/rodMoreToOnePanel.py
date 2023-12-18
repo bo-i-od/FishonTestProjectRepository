@@ -1,6 +1,6 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from items.resource import *
+
 
 class RodMoreToOnePanel(BasePage):
     def is_panel_active(self):

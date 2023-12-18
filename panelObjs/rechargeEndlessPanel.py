@@ -1,7 +1,6 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from tools.commonTools import *
-from items.resource import *
+from common.resource import *
 class RechargeEndlessPanel(BasePage):
     def close_RechargeEndlessPanel(self):
         self.click_element(element_data=ElementsData.RechargeEndless.btn_close)

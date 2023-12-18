@@ -2,9 +2,9 @@ from common.basePage import BasePage
 from panelObjs.homePanel import HomePanel
 from panelObjs.rewardsPanel import RewardsPanel
 from panelObjs.roulettePanel import RoulettePanel
-from configs.elementsData import ElementsData
 from tools.commonTools import *
-from items import resource
+from common import resource
+
 
 def spin_test(bp: BasePage):
     ticket_expect_count, ticket_cost = RoulettePanel.get_ticket(bp)

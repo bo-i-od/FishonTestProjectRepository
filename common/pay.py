@@ -1,6 +1,5 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from tools.commonTools import *
 from panelObjs.rewardsPanel import RewardsPanel
 
 def wait_for_pay_result(bp: BasePage):

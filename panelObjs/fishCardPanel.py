@@ -2,7 +2,7 @@ import random
 
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from tools.viewport import Viewport
+from common.viewport import Viewport
 from tools.commonTools import *
 
 class FishCardPanel(BasePage):

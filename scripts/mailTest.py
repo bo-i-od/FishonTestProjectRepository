@@ -1,8 +1,7 @@
 import random
-from items.resource import *
+from common.resource import *
 from panelObjs.rewardsPanel import RewardsPanel
 from panelObjs.itemTipsPanel import ItemTipsPanel
-from tools.viewport import Viewport
 from common.basePage import BasePage
 from panelObjs.homePanel import HomePanel
 from panelObjs.mailPanel import MailPanel

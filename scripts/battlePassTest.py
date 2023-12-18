@@ -12,7 +12,7 @@ from panelObjs.battlePassIntroPanel import BattlePassIntroPanel
 from panelObjs.storePanel import StorePanel
 from panelObjs.rewardsPanel import RewardsPanel
 from panelObjs.rodMoreToOnePanel import RodMoreToOnePanel
-from items.resource import *
+from common.resource import *
 from common.basePage import BasePage
 
 def collect_all_test(bp:BasePage):

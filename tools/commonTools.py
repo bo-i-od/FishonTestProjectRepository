@@ -2,20 +2,20 @@ from common.error import *
 import ctypes
 import inspect
 import re
+from collections import Counter
+
+
 # 对比值或对象，不一致报错
-
-
-
 def compare(a, b):
     if a != b:
         raise DifferError
 
 
+# 比较列表中的
 def compare_list(list_a, list_b):
-    compare(len(list_a), len(list_b))
-    for a in list_a:
-        if (a in list_b) is False:
-            raise DifferError
+    if Counter(list_a) != Counter(list_b):
+        raise DifferError
+
 
 def compare_dict(dict_a, dict_b):
     compare(len(dict_a), len(dict_b))
@@ -127,5 +127,5 @@ def get_toggle_is_on_index(toggle_is_on_list:list):
 
 
 if __name__ == '__main__':
-    a = split_string_by_uppercase("Bartletts Anthias")
-    print(a)
+    compare_list(["0.5",2,3],["0.5",3,2])
+

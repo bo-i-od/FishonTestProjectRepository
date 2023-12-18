@@ -1,7 +1,9 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from tools.commonTools import *
-from items import resource
+from common import resource
+
+
 class AchievementGroupPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.AchievementGroup.btn_close)
@@ -37,11 +39,11 @@ class AchievementGroupPanel(BasePage):
         return progress_numerator, progress_denominator
 
     def click_btn_collect(self):
-        res = False
-        if self.exist(element_data=ElementsData.AchievementGroup.btn_collect, offspring_path="btn_normal"):
-            res = True
         self.click_element(element_data=ElementsData.AchievementGroup.btn_collect)
-        return res
+
+    def click_btn_go(self):
+        self.click_element(element_data=ElementsData.AchievementGroup.btn_go)
+
 
     def get_icon_main(self):
         icon_main = self.get_icon(element_data=ElementsData.AchievementGroup.icon_main)
@@ -53,6 +55,10 @@ class AchievementGroupPanel(BasePage):
 
     def get_selected_status_list(self):
         return self.get_toggle_is_on_list(element_data=ElementsData.AchievementGroup.achievement_list)
+
+    def get_achievement_bg_icon_list(self):
+        achievement_bg_icon_list = self.get_icon_list(element_data=ElementsData.AchievementGroup.achievement_bg_icon_list)
+        return achievement_bg_icon_list
 
     # 看第几个是选中的
     @staticmethod
@@ -74,6 +80,47 @@ class AchievementGroupPanel(BasePage):
         position_list = self.get_position_list(element_data=ElementsData.AchievementGroup.achievement_icon_list)
         return position_list
 
+    def get_status_list(self):
+        achievement_bg_icon_list = AchievementGroupPanel.get_achievement_bg_icon_list(bp)
+        achievement_id_list = self.get_object_id_list(element_data=ElementsData.AchievementGroup.achievement_list)
+        status_list = []
+        cur = 0
+        while cur < len(achievement_bg_icon_list):
+            if "lock" in achievement_bg_icon_list[cur]:
+                status_list.append(0)
+                cur += 1
+                continue
+            achievement_collectable_list = self.get_offspring_id_list(offspring_path="tip_reward_bubble>bg>arrow", object_id=achievement_id_list[cur])
+            if achievement_collectable_list:
+                status_list.append(1)
+                cur += 1
+                continue
+            status_list.append(2)
+            cur += 1
+        return status_list
+
+    def get_go_collect_and_uncollect_index_list(self):
+        achievement_bg_icon_list = AchievementGroupPanel.get_achievement_bg_icon_list(self)
+        achievement_id_list = self.get_object_id_list(element_data=ElementsData.AchievementGroup.achievement_list)
+        go_index_list = []
+        collect_index_list = []
+        uncollect_index_list = []
+        cur = 0
+        while cur < len(achievement_bg_icon_list):
+            if "lock" in achievement_bg_icon_list[cur]:
+                go_index_list.append(cur)
+                cur += 1
+                continue
+            achievement_collectable_list = self.get_offspring_id_list(offspring_path="tip_reward_bubble>bg>arrow", object_id=achievement_id_list[cur])
+            if achievement_collectable_list:
+                collect_index_list.append(cur)
+                cur += 1
+                continue
+            uncollect_index_list.append(cur)
+            cur += 1
+        return go_index_list, collect_index_list, uncollect_index_list
+
+
 
 
 
@@ -81,5 +128,5 @@ class AchievementGroupPanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    a = AchievementGroupPanel.get_select_status_list(bp)
+    a = AchievementGroupPanel.get_status_list(bp)
     print(a)

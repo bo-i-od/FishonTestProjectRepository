@@ -1,6 +1,8 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from items import resource
+from common import resource
+
+
 class FishCardPackTipsPanel(BasePage):
     def is_panel_active(self):
         if self.exist(element_data=ElementsData.FishCardPackTips.FishCardPackTipsPanel):

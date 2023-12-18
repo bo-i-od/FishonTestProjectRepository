@@ -1,7 +1,8 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from tools.commonTools import *
-from items import resource
+from common import resource
+
 
 class StorePanel(BasePage):
     @staticmethod
@@ -163,7 +164,7 @@ class StorePanel(BasePage):
         if price < 0:
             print("已经购买无法购买")
             return False
-        cash = resource.get_resource(self,"100100", element_data=ElementsData.Store.text_100100)
+        cash = resource.get_resource(self, "100100", element_data=ElementsData.Store.text_100100)
         if price > cash:
             print("绿钞不足")
             return False

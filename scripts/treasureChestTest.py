@@ -9,8 +9,6 @@ from panelObjs.homePanel import HomePanel
 from panelObjs.itemTipsPanel import ItemTipsPanel
 from tools.commonTools import *
 from configs.elementsData import ElementsData
-from items import resource
-
 
 
 def TreasureChestPanel_test(bp: BasePage):

@@ -3,8 +3,7 @@ import random
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from panelObjs.baitAndRodAlbumPanel import BaitAndRodAlbumPanel
-from tools.commonTools import *
-from items.resource import *
+from common.resource import *
 
 
 class GearPanel(BasePage):
@@ -418,9 +417,9 @@ class GearPanel(BasePage):
             text_id = self.get_offspring_id(">text", object_id=attribute_model_id)
             text_pre = self.get_text(object_id=text_id)
             self.click_element(element_data=ElementsData.Gear.Draw.btn_save)
-            print(ElementsData.Gear.Draw.btn_save)
             text_id = self.get_offspring_id(">text", object_id=attribute_model_id)
             text = self.get_text(object_id=text_id)
+            print(text_pre, text)
             compare(text_pre, text)
             print("按钮置灰，点击无效")
             return
@@ -450,7 +449,8 @@ if __name__ == "__main__":
     # a = BaitAndRodAlbumPanel.get_all_rod_list(bp)
     # b = BaitAndRodAlbumPanel.get_all_bait_list(bp)
     while True:
-        bp.click_draw_perk()
+        bp.click_draw_perk_gold()
         bp.get_draw_data()
+        bp.sleep(0.5)
         bp.save_draw_result()
 

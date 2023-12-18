@@ -1,7 +1,7 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from tools.commonTools import *
-from tools.viewport import Viewport
+from common.viewport import Viewport
 class MailPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.Mail.btn_close)

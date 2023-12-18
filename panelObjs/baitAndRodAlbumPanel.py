@@ -1,6 +1,6 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from items.gears import GearAttribute
+from common.gears import GearAttribute
 from tools.commonTools import *
 
 

@@ -1,5 +1,4 @@
 import random
-from items import resource
 from common.basePage import BasePage
 from panelObjs.storePanel import StorePanel
 from panelObjs.itemTipsPanel import ItemTipsPanel

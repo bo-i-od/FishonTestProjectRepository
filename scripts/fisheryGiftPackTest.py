@@ -5,7 +5,7 @@ from panelObjs.rewardsPanel import RewardsPanel
 from panelObjs.itemTipsPanel import ItemTipsPanel
 from panelObjs.baitAndRodShowPanel import BaitAndRodShowPanel
 from tools.commonTools import *
-from items import resource
+
 
 def click_icon_test(bp: BasePage):
     icon_list = FisheryGiftPackPanel.get_item_icon_list(bp)

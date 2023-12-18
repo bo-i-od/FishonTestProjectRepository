@@ -1,13 +1,13 @@
 import random
 from common.basePage import BasePage
-from configs.elementsData import ElementsData
 from tools.commonTools import *
 from panelObjs.homePanel import HomePanel
 from panelObjs.itemTipsPanel import ItemTipsPanel
 from panelObjs.rechargeBlack5Panel import RechargeBlack5Panel
 from panelObjs.rewardsPanel import RewardsPanel
-from items import resource
-from common.pay import wait_for_pay_result
+from common import resource
+
+
 def click_icon_test(bp: BasePage):
     item_position_list = RechargeBlack5Panel.get_item_position_list(bp)
     item_icon_list = RechargeBlack5Panel.get_item_icon_list(bp)

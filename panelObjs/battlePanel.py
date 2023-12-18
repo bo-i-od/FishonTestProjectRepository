@@ -3,6 +3,10 @@ from configs.elementsData import ElementsData
 from threading import Thread
 from tools.commonTools import *
 class BattlePanel(BasePage):
+    def is_panel_active(self):
+        if self.exist(element_data=ElementsData.Battle.BattlePanel):
+            return True
+        return False
     def reel(self):
         self.wait_for_appear(element_data=ElementsData.Battle.btn_reel, is_click=False)
         position = self.get_position(element_data=ElementsData.Battle.btn_reel)

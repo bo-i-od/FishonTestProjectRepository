@@ -1,6 +1,5 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from items.resource import *
 class Viewport:
     def __init__(self, bp, element_viewport, element_item_list=None, item_id_list=None, viewport_edge=None):
         self.basePage = bp

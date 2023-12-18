@@ -1,5 +1,4 @@
 import random
-from items.resource import *
 from common.basePage import BasePage
 from threading import Thread
 

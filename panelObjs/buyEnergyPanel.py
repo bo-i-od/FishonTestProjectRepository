@@ -1,7 +1,8 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from panelObjs.rewardsPanel import RewardsPanel
-from items import resource
+from common import resource
+
 
 class BuyEnergyPanel(BasePage):
     def click_tap_to_close(self):

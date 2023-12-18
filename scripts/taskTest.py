@@ -1,9 +1,9 @@
 import random
-from items.resource import *
+from common.resource import *
 from panelObjs.taskPanel import TaskPanel
 from panelObjs.rewardsPanel import RewardsPanel
 from panelObjs.itemTipsPanel import ItemTipsPanel
-from tools.viewport import Viewport
+from common.viewport import Viewport
 from common.basePage import BasePage
 from panelObjs.homePanel import HomePanel
 from panelObjs.pvpBattleHUDPanel import PVPBattleHUDPanel

@@ -189,10 +189,8 @@ if __name__ == '__main__':
     while True:
         circulate_duel(bp)
 
+
     # # rank = random.randint(0, 7)
-    # rank = 5
-    # clear_duelcup(bp)
-    # dc = random_duelcup(bp, rank)
     # print(dc)
 
 

@@ -1,7 +1,7 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from tools.commonTools import *
-from tools.viewport import Viewport
+from common.viewport import Viewport
 
 class AchievementPanel(BasePage):
     def click_btn_close(self):
@@ -70,6 +70,7 @@ class AchievementPanel(BasePage):
         group_name_id = self.get_offspring_id(offspring_path="group_com>groupbg>groupname", object_id=achievement_id)
         group_name = self.get_text(object_id=group_name_id)
         return group_name
+
 
 
 

@@ -2,7 +2,7 @@ from common.basePage import BasePage
 from configs.elementsData import ElementsData
 
 from tools.commonTools import *
-from items import resource
+
 
 class FishCardGiftPackPanel(BasePage):
     def click_btn_close(self):
