@@ -8,12 +8,12 @@ class RewardsPanel(BasePage):
             return True
         return False
 
-    def click_tap_to_continue(self):
-        self.click_element(element_data=ElementsData.Rewards.tap_to_continue)
+    def click_tap_to_claim(self):
+        self.click_element(element_data=ElementsData.Rewards.tap_to_claim)
 
 
     def wait_for_RewardsPanel(self):
-        self.wait_for_appear(element_data=ElementsData.Rewards.tap_to_continue, is_click=False)
+        self.wait_for_appear(element_data=ElementsData.Rewards.tap_to_claim, is_click=False)
 
     def get_reward_dict(self):
         reward_icon_list = self.get_icon_list(element_data=ElementsData.Rewards.reward_icon_list)
@@ -43,4 +43,4 @@ class RewardsPanel(BasePage):
 
 if __name__ == '__main__':
     bp = RewardsPanel()
-    print(bp.get_reward_icon_list())
+    print(bp.click_tap_to_claim())

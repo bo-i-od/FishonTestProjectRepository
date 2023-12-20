@@ -30,10 +30,10 @@ class BuyEnergyPanel(BasePage):
 
     def get_energy(self):
         if BuyEnergyPanel.click_btn_drink(self) is True:
-            RewardsPanel.click_tap_to_continue(self)
+            RewardsPanel.click_tap_to_claim(self)
             return
         BuyEnergyPanel.click_btn_cash(self)
-        RewardsPanel.click_tap_to_continue(self)
+        RewardsPanel.click_tap_to_claim(self)
 
     def click_btn_add_100100(self):
         self.click_element(element_data=ElementsData.BuyEnergy.btn_add_100100)

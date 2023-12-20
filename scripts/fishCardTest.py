@@ -95,7 +95,7 @@ def FishCardGiftPackPanel_test(bp: BasePage):
     item_count_list = bp.get_item_count_list(icon_list)
     print(item_count_expect_list, item_count_list)
     compare_list(item_count_expect_list, item_count_list)
-    RewardsPanel.click_tap_to_continue(bp)
+    RewardsPanel.click_tap_to_claim(bp)
     print("buy_pack_test购买礼包测试通过")
 
 def click_pack_icon_test(bp: BasePage, icon_list):
@@ -111,8 +111,9 @@ def click_pack_icon_test(bp: BasePage, icon_list):
     bp.click_position([0.5, 0.1])
     print("click_pack_icon_test点击图标测试通过")
 
-def FishCardPanel_test(bp):
-    HomePanel.go_to_FishCardPanel(bp)
+def FishCardPanel_test(bp: BasePage):
+    # HomePanel.go_to_FishCardPanel(bp)
+    bp.go_to_panel("FishCardPanel")
     select_card_test(bp)
     level_up_test(bp)
     FishCardGiftPackPanel_test(bp)

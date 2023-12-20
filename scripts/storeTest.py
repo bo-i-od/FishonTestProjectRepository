@@ -42,7 +42,7 @@ def gift_pack_buy_test(bp:BasePage):
     compare_dict(reward_dict, gift_pack_dict)
     item_count_list = bp.get_item_count_list(gift_pack_icon_list)
     compare_list(item_count_expect_list, item_count_list)
-    RewardsPanel.click_tap_to_continue(bp)
+    RewardsPanel.click_tap_to_claim(bp)
 
 
 def cash_test(bp:BasePage):
@@ -85,7 +85,7 @@ def cash_buy_test(bp:BasePage):
     compare(cash_quantity_list[r], reward_quantity_list[0])
     item_count = bp.get_item_count(item_icon_name=cash_icon_list[r])
     compare(item_count_expect, item_count)
-    RewardsPanel.click_tap_to_continue(bp)
+    RewardsPanel.click_tap_to_claim(bp)
 
 
 def gear_click_icon_test(bp:BasePage):
@@ -117,7 +117,7 @@ def gear_buy_test(bp:BasePage):
     compare(cash_expect, cash)
     reward_item_icon_list, reward_gear_icon_list = RewardsPanel.get_reward_icon_list(bp, is_divide=True)
     compare(reward_gear_icon_list[0], gear_icon_list[r])
-    RewardsPanel.click_tap_to_continue(bp)
+    RewardsPanel.click_tap_to_claim(bp)
 
 
 def fish_card_test(bp:BasePage):
@@ -187,7 +187,7 @@ def booster1_buy_test(bp:BasePage):
         bp.click_position(btn_position_list[r])
         reward_dict = RewardsPanel.get_reward_dict(bp)
         compare_dict(reward_dict, booster_dict)
-        RewardsPanel.click_tap_to_continue(bp)
+        RewardsPanel.click_tap_to_claim(bp)
         cash = StorePanel.get_cash(bp)
         compare(cash_expect, cash)
         price_list = StorePanel.get_price_list(bp, item_id_list=booster_id_list)
@@ -208,7 +208,7 @@ def booster1_buy_test(bp:BasePage):
         bp.click_position(btn_position_list[r])
         reward_dict = RewardsPanel.get_reward_dict(bp)
         compare_dict(reward_dict, booster_dict)
-        RewardsPanel.click_tap_to_continue(bp)
+        RewardsPanel.click_tap_to_claim(bp)
         cash = StorePanel.get_cash(bp)
         compare(cash_expect, cash)
         price_list = StorePanel.get_price_list(bp, item_id_list=booster_id_list)
@@ -233,7 +233,7 @@ def booster1_buy_test(bp:BasePage):
         bp.click_position(btn_position_list[r])
         reward_dict = RewardsPanel.get_reward_dict(bp)
         compare_dict(reward_dict, booster_dict)
-        RewardsPanel.click_tap_to_continue(bp)
+        RewardsPanel.click_tap_to_claim(bp)
         cash = StorePanel.get_cash(bp)
         compare(cash_expect, cash)
     else:
@@ -263,7 +263,7 @@ def booster2_buy_test(bp:BasePage):
         bp.click_position(btn_position_list[r])
         reward_dict = RewardsPanel.get_reward_dict(bp)
         compare_dict(reward_dict, booster_dict)
-        RewardsPanel.click_tap_to_continue(bp)
+        RewardsPanel.click_tap_to_claim(bp)
         cash = StorePanel.get_cash(bp)
         compare(cash_expect, cash)
     else:

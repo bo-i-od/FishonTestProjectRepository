@@ -89,7 +89,7 @@ def btn_collect_test(bp:BasePage, task_id_list:list, viewport:Viewport, index:in
     if progress_value < TaskPanel.get_progress_value(bp) is False:
         raise CompareError
     # 关闭领奖弹窗
-    RewardsPanel.click_tap_to_continue(bp)
+    RewardsPanel.click_tap_to_claim(bp)
 
 def box_collect_test(bp:BasePage, index:int, box_award_dict:dict):
     status_list, position_list = TaskPanel.get_box_status_and_position_list(bp)
@@ -120,7 +120,7 @@ def box_collect_test(bp:BasePage, index:int, box_award_dict:dict):
     if status_list[index] != 2:
         raise FindNoElementError
     # 关闭弹窗
-    RewardsPanel.click_tap_to_continue(bp)
+    RewardsPanel.click_tap_to_claim(bp)
     print("box_collect_test宝箱领取测试通过")
 
 def switch_tab_test(bp:BasePage):
@@ -169,7 +169,8 @@ def daily_task_test(bp:BasePage):
     bp.sleep(0.5)
     PVPHallPanel.click_btn_close(bp)
     bp.sleep(0.5)
-    HomePanel.go_to_TaskPanel(bp)
+    # HomePanel.go_to_TaskPanel(bp)
+    bp.go_to_panel("TaskPanel")
     # 加上对决投降的测试
     index = 0
     btn_collect_test(bp, task_id_list, viewport, index)
@@ -180,7 +181,8 @@ def daily_task_test(bp:BasePage):
 
 
 def TaskPanel_test(bp:BasePage):
-    HomePanel.go_to_TaskPanel(bp)
+    bp.go_to_panel("TaskPanel")
+    # HomePanel.go_to_TaskPanel(bp)
     daily_task_test(bp)
     switch_tab_test(bp)
     TaskPanel.click_btn_close(bp)

@@ -1,12 +1,10 @@
 import random
 from tools.commonTools import *
 from common.basePage import BasePage
-from panelObjs.homePanel import HomePanel
 from panelObjs.rewardsPanel import RewardsPanel
 from panelObjs.itemTipsPanel import ItemTipsPanel
 from panelObjs.rechargeEndlessPanel import RechargeEndlessPanel
 from configs.elementsData import ElementsData
-from common.pay import wait_for_pay_result
 
 
 def click_icon_test(bp: BasePage):
@@ -39,14 +37,14 @@ def buy_test(bp: BasePage, index):
         cur += 1
     item_count_list = bp.get_item_count_list(icon_list)
     compare(item_count_list, quantity_list)
-    RewardsPanel.click_tap_to_continue(bp)
+    RewardsPanel.click_tap_to_claim(bp)
     if RewardsPanel.is_panel_active(bp):
         raise FindElementError
     print("购买测试成功")
     return True
 
 def buy_many_test(bp: BasePage):
-    HomePanel.go_to(bp, element=ElementsData.Home.btn_endless)
+    bp.go_to_panel("RechargeEndlessPanel")
     click_icon_test(bp)
     # 随机点击锁定的buy按钮位置
     r = random.randint(1, 3)

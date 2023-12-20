@@ -39,7 +39,7 @@ def buy_test(bp: BasePage):
     # compare_dict(reward_expect_dict, reward_dict)
     # print(item_count_expect_list, item_count_list)
     # compare_list(item_count_expect_list, item_count_list)
-    RewardsPanel.click_tap_to_continue(bp)
+    RewardsPanel.click_tap_to_claim(bp)
 
 if __name__ == "__main__":
     bp = BasePage()

@@ -105,14 +105,14 @@ def point_cal(duelcup):
 def circulate_duel(bp:BasePage):
     rank = random.randint(5, 7)
     # rank = 3
-    # clear_duelcup(bp)
-    # dc = random_duelcup(bp, rank)
+    clear_duelcup(bp)
+    random_duelcup(bp, rank)
     # s, e = point_cal(dc)
     # print(f"当前杯数：{dc},预期分数范围:{s,e}")
     action_list = [lambda: PVPHallPanel.click_btn_close(bp)]
     bp.try_actions(action_list=action_list)
     action_list = [
-        lambda: HomePanel.go_to_PVPHallPanel(bp),
+        lambda: bp.go_to_panel("PVPHallPanel"),
         lambda: PVPHallPanel.click_btn_play(bp, rank)]
     bp.try_actions(action_list=action_list)
     fish(bp)
@@ -168,7 +168,7 @@ def zhanbao_test(bp:BasePage):
     bp.sleep(2)
     bp.lua_console('PanelMgr:OpenPanel("HomePanel")')
     action_list = [
-        lambda: HomePanel.go_to_PVPHallPanel(bp),
+        lambda: bp.go_to_panel("PVPHallPanel"),
         lambda:PVPHallPanel.click_btn_play(bp, rank)]
     bp.try_actions(action_list=action_list)
     fish(bp)

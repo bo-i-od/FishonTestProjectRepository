@@ -45,7 +45,7 @@ def collect_all_test(bp:BasePage):
     while cur < len(reward_quantity_list):
         compare(reward_quantity_list[cur], item_dict[reward_icon_list[cur]])
         cur += 1
-    RewardsPanel.click_tap_to_continue(bp)
+    RewardsPanel.click_tap_to_claim(bp)
     print("collect_all_test全部获取测试通过")
 
 
@@ -231,7 +231,7 @@ def random_collect_test(bp:BasePage, collectable_data, clickable_position_list):
         reward_icon = reward_icon_list[0]
         reward_quantity = RewardsPanel.get_reward_quantity_list(bp)[0]
         item_count = bp.get_item_count(item_icon_name=collectable_icon_list[r])
-        RewardsPanel.click_tap_to_continue(bp)
+        RewardsPanel.click_tap_to_claim(bp)
         # 验证图标和数量变化是否正确
         compare(reward_icon, collectable_icon_list[r])
         compare(reward_quantity, collectable_quantity_list[r])
@@ -240,7 +240,8 @@ def random_collect_test(bp:BasePage, collectable_data, clickable_position_list):
 
 
 def BattlePass_rookie_test(bp:BasePage):
-    HomePanel.go_to_BattlePassPanel(bp)
+    # HomePanel.go_to_BattlePassPanel(bp)
+    bp.go_to_panel("BattlePassPanel")
     BattlePassRewardPanel_completed = False
     bp.sleep(1)
     if BattlePassIntroPanel.is_panel_active(bp):
@@ -255,7 +256,8 @@ def BattlePass_rookie_test(bp:BasePage):
     jump_test(bp)
     if not BattlePassRewardPanel_completed:
         BattlePassPanel.click_btn_close(bp)
-        HomePanel.go_to_BattlePassPanel(bp)
+        # HomePanel.go_to_BattlePassPanel(bp)
+        bp.go_to_panel("BattlePassPanel")
         if BattlePassRewardPanel.is_panel_active(bp):
             BattlePassRewardPanel_test(bp)
         if BattlePassPopPanel.is_panel_active(bp):
@@ -269,7 +271,9 @@ def BattlePass_rookie_test(bp:BasePage):
     print("BattlePass_rookie_test新手号的通行证测试通过")
 
 def BattlePass_veteran_test(bp:BasePage):
-    HomePanel.go_to_BattlePassPanel(bp)
+    # HomePanel.go_to_BattlePassPanel(bp)
+    bp.go_to_panel("BattlePassPanel")
+    bp.set_item_count(target_count=10000,item_tpid="100100")
     bp.sleep(1)
     if BattlePassIntroPanel.is_panel_active(bp):
         BattlePassIntroPanel.close_battlePassIntroPanel(bp, is_test=False)
@@ -278,16 +282,20 @@ def BattlePass_veteran_test(bp:BasePage):
     if BattlePassPopPanel.is_panel_active(bp):
         BattlePassPopPanel.click_btn_close(bp)
     buy_premium_test(bp, 1)
-    RewardsPanel.click_tap_to_continue(bp)
+    bp.sleep(0.5)
+    RewardsPanel.click_tap_to_claim(bp)
+    bp.sleep(0.5)
     BattlePassBuyLevelPanel_test(bp)
     glod_bank_test(bp)
     collect_all_test(bp)
     BattlePassPanel.click_btn_close(bp)
+    bp.sleep(0.5)
     RodMoreToOnePanel_test(bp)
     print("BattlePass_rookie_test老号的通行证测试通过")
 
 def BattlePass_test(bp:BasePage):
-    HomePanel.go_to_BattlePassPanel(bp)
+    # HomePanel.go_to_BattlePassPanel(bp)
+    bp.go_to_panel("BattlePassPanel")
     if BattlePassIntroPanel.is_panel_active(bp):
         BattlePassIntroPanel.close_battlePassIntroPanel(bp, is_test=False)
     elif BattlePassRewardPanel.is_panel_active(bp):
@@ -295,7 +303,7 @@ def BattlePass_test(bp:BasePage):
     if BattlePassPopPanel.is_panel_active(bp):
         BattlePassPopPanel.click_btn_close(bp)
     buy_premium_test(bp, 1)
-    RewardsPanel.click_tap_to_continue(bp)
+    RewardsPanel.click_tap_to_claim(bp)
     BattlePassBuyLevelPanel_test(bp)
     glod_bank_test(bp)
     collect_all_test(bp)
@@ -319,7 +327,7 @@ def RodMoreToOnePanel_test(bp:BasePage):
     RodMoreToOnePanel.click_confirm(bp)
     item_icon_list, gear_icon_list = RewardsPanel.get_reward_icon_list(bp)
     compare(gear_icon_list[0], rod_icon_list[r])
-    RewardsPanel.click_tap_to_continue(bp)
+    RewardsPanel.click_tap_to_claim(bp)
     RodMoreToOnePanel.click_btn_close(bp)
     if RodMoreToOnePanel.is_panel_active(bp):
         raise FindElementError
@@ -340,3 +348,4 @@ def RodMoreToOnePanel_test(bp:BasePage):
 if __name__ == '__main__':
     bp = BasePage()
     BattlePass_veteran_test(bp)
+

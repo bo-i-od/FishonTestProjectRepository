@@ -19,7 +19,7 @@ class BasePage:
     def __init__(self):
         # unity窗口使用UnityEditorWindow()
         # 手机使用connect_device("android://127.0.0.1:5037/设备号")
-        self.is_android = False
+        self.is_android = True
         #
         if self.is_android:
             dev = connect_device("android://127.0.0.1:5037/127.0.0.1:21593")
@@ -46,6 +46,7 @@ class BasePage:
     # pop_window_close_dict存放弹窗对应的关闭按钮的ElementsData
 
         self.pop_window_set = {
+            "AquariumCommonFishChangePanel",
             "BaitAndRodShowPanel",
             "ChampointshipResult",
             "DivisionChangePanel",
@@ -55,12 +56,16 @@ class BasePage:
             "PlayerLevelupPanel",
             "PVPBoosterGiftPackPanel",
             "Recharge1And1Panel",
-            "MessageBoxPanel"}
+            "MessageBoxPanel"
+
+        }
 
 
         self.panel_close_dict = {
             "AchievementGroupPanel": [ElementsData.AchievementGroup.btn_close],
             "AchievementPanel": [ElementsData.Achievement.btn_close],
+            "AquariumPanel": [ElementsData.Aquarium.btn_close],
+            "AquariumCommonFishChangePanel":[ElementsData.AquariumCommonFishChange.btn_close],
             "BaitAndRodAlbumPanel": [ElementsData.BaitAndRodAlbum.btn_close],
             "BaitAndRodShowPanel": [ElementsData.BaitAndRodShow.closeArea],
             "BattleExplainPanel": [ElementsData.BattleExplain.close],
@@ -81,30 +86,70 @@ class BasePage:
             "FishCardPanel": [ElementsData.FishCard.btn_close],
             "FisheryGiftPackPanel": [ElementsData.FisheryGiftPack.btn_close],
             "FishCardUpgradePanel": [ElementsData.FishCardUpgrade.btn_close],
-            "GearPanel":[ElementsData.Gear.btn_close],
+            "GearPanel": [ElementsData.Gear.btn_close],
+            "IAAPanel": [ElementsData.IAA.btn_close],
             "LeaderBoardPopResultPanel": [ElementsData.LeaderBoardPopResult.btn_claim],
             "MailPanel": [ElementsData.Mail.btn_close],
             "MessageBoxPanel": [ElementsData.MessageBox.btn_confirm],
-            "PlayerSettingPanel": [ElementsData.PlayerSetting.btn_close],
+            "PlayerSettingPanel": [ElementsData.PlayerSetting.btn_close_additional, ElementsData.PlayerSetting.btn_close],
             "PlayerLevelupPanel": [ElementsData.PlayerLevelup.tap_to_continue],
             "PVPBoosterGiftPackPanel": [ElementsData.PVPBoosterGiftPack.btn_close],
             "PVPHallPanel": [ElementsData.PVPHall.btn_close],
-            "PVPResultPanel":[ElementsData.PVPResult.tap_to_close],
-            "PVPRuleTipsPanel":[ElementsData.PVPRuleTipsPanel.btn_close],
+            "PVPResultPanel": [ElementsData.PVPResult.tap_to_close],
+            "PVPRuleTipsPanel": [ElementsData.PVPRuleTipsPanel.btn_close],
             "Recharge1And1Panel": [ElementsData.Recharge1And1.btn_close],
             "RechargeBlack5Panel": [ElementsData.RechargeBlack5.btn_close],
-            "RechargeEndlessPanel":[ElementsData.RechargeEndless.btn_close],
-            "ResultPanel":[ElementsData.Result.btn_claim],
-            "RewardsPanel":[ElementsData.Rewards.tap_to_continue],
+            "RechargeEndlessPanel": [ElementsData.RechargeEndless.btn_close],
+            "ResultPanel": [ElementsData.Result.btn_claim],
+            "RewardsPanel": [ElementsData.Rewards.tap_to_claim],
             "RodMoreToOnePanel": [ElementsData.RodMoreToOne.btn_close],
-            "RoulettePanel":[ElementsData.Roulette.btn_close],
+            "RoulettePanel": [ElementsData.Roulette.btn_close],
             "StorePanel": [ElementsData.Store.btn_close],
             "TaskFishingCareerPanel":[ElementsData.TaskFishingCareer.btn_close],
             "TaskPanel": [ElementsData.Task.btn_close],
-            "TournamentsPanel":[ElementsData.Tournaments.btn_close],
-            "TreasureChestGearsShardsPanel":[ElementsData.TreasureChestGearsShards.btn_close],
+            "TournamentsPanel": [ElementsData.Tournaments.btn_close],
+            "TreasureChestGearsShardsPanel": [ElementsData.TreasureChestGearsShards.btn_close],
             "TreasureChestPanel": [ElementsData.TreasureChest.btn_close],
-            "TreasureChestRewardsPanel":[ElementsData.TreasureChestRewards.btn_close]
+            "TreasureChestRewardsPanel": [ElementsData.TreasureChestRewards.btn_close]
+        }
+
+        self.panel_open_dict = {
+            "AchievementPanel": [ElementsData.Home.btn_achievement],
+            "BattlePassPanel":[ElementsData.Home.btn_bp],
+            "BaitAndRodAlbumPanel":[ElementsData.Home.btn_gears],
+            "FishCardPanel":[ElementsData.Home.btn_album],
+            "FisheryGiftPackPanel": [ElementsData.Home.btn_event_location],
+            "MailPanel": [ElementsData.Home.btn_mail],
+            "PlayerSettingPanel": [ElementsData.Home.player_info],
+            "PVPHallPanel": [ElementsData.Home.btn_pvp],
+            "Recharge1And1Panel": ElementsData.Home.btn_1add1,
+            "RechargeBlack5Panel": [ElementsData.Home.btn_black5],
+            "RechargeEndlessPanel": [ElementsData.Home.btn_endless],
+            "RoulettePanel":[ElementsData.Home.btn_roulette],
+            "StorePanel": [ElementsData.Home.btn_store],
+            "TaskPanel": [ElementsData.Home.btn_task],
+        }
+
+        self.panel_dict = {
+            "AchievementPanel": ElementsData.Achievement.AchievementPanel,
+            "BattlePassPanel":ElementsData.BattlePass.BattlePassPanel,
+            "BaitAndRodAlbumPanel": [ElementsData.BaitAndRodAlbum.BaitAndRodAlbumPanel],
+            "FishCardPanel": ElementsData.FishCard.FishCardPanel,
+            "FisheryGiftPackPanel":ElementsData.FisheryGiftPack.FisheryGiftPackPanel,
+            "MailPanel": ElementsData.Mail.MailPanel,
+            "PlayerSettingPanel": ElementsData.PlayerSetting.PlayerSettingPanel,
+            "PVPHallPanel": ElementsData.PVPHall.PVPHallPanel,
+            "Recharge1And1Panel":ElementsData.Recharge1And1.Recharge1And1Panel,
+            "RechargeBlack5Panel": ElementsData.RechargeBlack5.RechargeBlack5Panel,
+            "RechargeEndlessPanel":ElementsData.RechargeEndless.RechargeEndlessPanel,
+            "RoulettePanel":ElementsData.Roulette.RoulettePanel,
+            "StorePanel":ElementsData.Store.StorePanel,
+            "TaskPanel": ElementsData.Task.TaskPanel,
+
+
+
+
+
         }
 
 
@@ -504,13 +549,29 @@ class BasePage:
             self.clear_popup()
             self.sleep(0.5)
 
+
     def go_home(self):
         cur = 0
         while not self.exist(element_data=ElementsData.Home.HomePanel):
+            self.clear_panel_except_home()
             cur += 1
+            if cur > 10:
+                raise FindNoElementError
 
-    # def clear_panel_except_home(self):
-    #
+    def go_to_panel(self, panel):
+        if not self.exist(element_data=self.panel_dict[panel]):
+            self.go_home()
+            for element_data in self.panel_open_dict[panel]:
+                self.try_click_element(element_data=element_data)
+
+    def clear_panel_except_home(self):
+        panel_name_list = self.get_name_list(element_data=ElementsData.Panels)
+        for panel_name in panel_name_list:
+            if panel_name not in self.panel_close_dict:
+                continue
+            for close_element in self.panel_close_dict[panel_name]:
+                self.click_element_safe(element_data=close_element)
+        self.sleep(0.2)
 
     # 元素滑动
     def swipe(self, object_id: int = 0, element_data: dict = None, point_start=None, point_end=None, t: float = 0.05, offspring_path=""):
@@ -655,7 +716,8 @@ class BasePage:
 if __name__ == '__main__':
     bp = BasePage()
     # rpcMethod.set_btn_enabled(bp, element=ElementsData.BattlePass.BattlePassPanel, enabled=False)
-    bp.lua_console('PanelMgr:OpenPanel("HomePanel")')
+    # bp.lua_console('PanelMgr:OpenPanel("HomePanel")')
+    bp.get_item_count(item_icon_name="achv_group_icon_8")
 
 
 

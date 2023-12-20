@@ -1,7 +1,6 @@
 import random
 from common.basePage import BasePage
 from tools.commonTools import *
-from panelObjs.homePanel import HomePanel
 from panelObjs.itemTipsPanel import ItemTipsPanel
 from panelObjs.rechargeBlack5Panel import RechargeBlack5Panel
 from panelObjs.rewardsPanel import RewardsPanel
@@ -23,7 +22,7 @@ def buy_test(bp: BasePage):
     print("buy_test购买测试通过")
 
 def collect_test(bp: BasePage):
-    day = 1
+    day = 3
     day_icon_list = RechargeBlack5Panel.get_day_icon_list(bp, day)
     day_quantity_list = RechargeBlack5Panel.get_day_quantity_list(bp, day)
     day_dict = resource.make_item_dict(day_icon_list, day_quantity_list)
@@ -39,13 +38,13 @@ def collect_test(bp: BasePage):
     compare_dict(day_dict, reward_dict)
     print(item_count_expect_list, item_count_list)
     compare_list(item_count_expect_list, item_count_list)
-    RewardsPanel.click_tap_to_continue(bp)
+    RewardsPanel.click_tap_to_claim(bp)
     if RechargeBlack5Panel.is_btn_collect_clickable(bp):
         raise FindElementError
     print("collect_test领取测试通过")
 
 def RechargeBlack5Panel_test(bp:BasePage):
-    HomePanel.go_to_RechargeBlack5Panel(bp)
+    bp.go_to_panel("RechargeBlack5Panel")
     click_icon_test(bp)
     buy_test(bp)
     collect_test(bp)
@@ -53,4 +52,4 @@ def RechargeBlack5Panel_test(bp:BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    RechargeBlack5Panel_test(bp)
+    collect_test(bp)

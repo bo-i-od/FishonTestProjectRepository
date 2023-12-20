@@ -24,35 +24,34 @@ class HomePanel(BasePage):
         return self.excelTools.get_exp_limit(lv)
 
     # 跳转界面
-    def go_to(self, element):
-        self.try_click_element(element_data=element)
+
 
     def go_to_BattlePassPanel(self):
-        HomePanel.go_to(self, element=ElementsData.Home.btn_bp)
+        self.go_to(element_data=ElementsData.Home.btn_bp)
 
     def go_to_TaskPanel(self):
-        HomePanel.go_to(self, element=ElementsData.Home.btn_task)
+        self.go_to(element_data=ElementsData.Home.btn_task)
 
     def go_to_FishCardPanel(self):
-        HomePanel.go_to(self, element=ElementsData.Home.btn_album)
+        self.go_to(element_data=ElementsData.Home.btn_album)
 
     def go_to_RoulettePanel(self):
-        HomePanel.go_to(self, element=ElementsData.Home.btn_roulette)
+        self.go_to(element_data=ElementsData.Home.btn_roulette)
 
     def go_to_PlayerSettingPanel(self):
-        HomePanel.go_to(self, element=ElementsData.Home.player_info)
+        self.go_to(element_data=ElementsData.Home.player_info)
 
     def go_to_AchievementPanel(self):
-        HomePanel.go_to(self, element=ElementsData.Home.btn_achievement)
+        self.go_to(element_data=ElementsData.Home.btn_achievement)
 
     def go_to_MailPanel(self):
-        HomePanel.go_to(self, element=ElementsData.Home.btn_mail)
+        self.go_to(element_data=ElementsData.Home.btn_mail)
 
     def go_to_RechargeBlack5Panel(self):
-        HomePanel.go_to(self, element=ElementsData.Home.btn_black5)
+        self.go_to(element_data=ElementsData.Home.btn_black5)
 
     def go_to_PVPHallPanel(self):
-        HomePanel.go_to(self, element=ElementsData.Home.btn_pvp)
+        self.go_to(element_data=ElementsData.Home.btn_pvp)
 
 
 if __name__ == '__main__':

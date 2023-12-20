@@ -71,6 +71,7 @@ def circulate_fish(bp: BasePage):
     cur = 0
     fish = 0
     while True:
+        bp.cmd(f"mode 400308 30801{int(cur / 3)}")
         BattlePreparePanel.click_btn_cast(bp)
         while BuyEnergyPanel.is_panel_active(bp):
             BuyEnergyPanel.get_energy(bp)
@@ -80,11 +81,12 @@ def circulate_fish(bp: BasePage):
             BattlePreparePanel.click_btn_cast(bp)
         BattlePanel.reel_quick(bp)
         ResultPanel.wait_for_result(bp)
-        bp.get_full_screen_shot()
+        img = bp.get_full_screen_shot()
+        bp.save_img(img)
         if ResultPanel.automatic_settlement(bp, is_return=False) == 1:
             fish += 1
         cur += 1
-        print(f"第{cur}次钓鱼,鱼的概率为{fish/float(cur)}")
+        # print(f"第{cur}次钓鱼,鱼的概率为{fish/float(cur)}")
 
 
 def update_dict(chest_icon: str, temp_dict: dict, res_dict: dict):
