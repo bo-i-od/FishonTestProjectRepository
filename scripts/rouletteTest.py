@@ -1,5 +1,4 @@
 from common.basePage import BasePage
-from panelObjs.homePanel import HomePanel
 from panelObjs.rewardsPanel import RewardsPanel
 from panelObjs.roulettePanel import RoulettePanel
 from tools.commonTools import *
@@ -19,7 +18,7 @@ def spin_test(bp: BasePage):
     return True
 
 def RoulettePanel_test(bp: BasePage):
-    HomePanel.go_to_RoulettePanel(bp)
+    bp.go_to_panel("RoulettePanel")
     if not spin_test(bp):
         RoulettePanel.click_btn_close(bp)
         return

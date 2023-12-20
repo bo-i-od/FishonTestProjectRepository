@@ -61,13 +61,13 @@ def click_btn_claim_test(bp:BasePage):
     reward_icon_list = RewardsPanel.get_reward_icon_list(bp, is_divide=False)
     print(reward_icon_expect_list, reward_icon_list)
     compare_list(reward_icon_expect_list, reward_icon_list)
-    RewardsPanel.click_tap_to_continue(bp)
+    RewardsPanel.click_tap_to_claim(bp)
     if not MailPanel.is_claimed(bp):
         raise FindNoElementError
     print("奖励领取测试通过")
 
 def MailPanel_test(bp:BasePage):
-    HomePanel.go_to_MailPanel(bp)
+    bp.go_to_panel("MailPanel")
     switch_tab_test(bp)
     select_mail_test(bp)
     click_icon_test(bp)

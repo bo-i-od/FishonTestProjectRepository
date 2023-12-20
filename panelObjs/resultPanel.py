@@ -52,7 +52,7 @@ class ResultPanel(BasePage):
                 self.click_element(element_data=ElementsData.Result.pve_result.btn_throw)
             RewardsPanel.wait_for_RewardsPanel(self)
             self.sleep(0.5)
-            RewardsPanel.click_tap_to_continue(self)
+            RewardsPanel.click_tap_to_claim(self)
             return
         chest_icon = ResultPanel.get_chest_icon(self)
         if self.exist(element_data=ElementsData.Result.pve_result.btn_open_by_key):
@@ -69,7 +69,7 @@ class ResultPanel(BasePage):
         item_dict = {}
         if chest_icon != "":
             item_dict = RewardsPanel.get_reward_dict(self)
-        RewardsPanel.click_tap_to_continue(self)
+        RewardsPanel.click_tap_to_claim(self)
         return chest_icon, item_dict
 
     def get_chest_icon(self):

@@ -12,7 +12,8 @@ from configs.elementsData import ElementsData
 
 
 def TreasureChestPanel_test(bp: BasePage):
-    HomePanel.go_to(bp, element=ElementsData.Home.btn_chest)
+    bp.go_to_panel("TreasureChestPanel")
+    # HomePanel.go_to(bp, element=ElementsData.Home.btn_chest)
     print("正在获取箱子图标和数量列表")
     box_icon_list, box_quantity_list =TreasureChestPanel.get_box_icon_and_quantity_list(bp)
     print("图标列表：", box_icon_list, "\n数量列表：", box_quantity_list)
@@ -218,4 +219,5 @@ def buy_test(bp:BasePage,btn_position_list, box_id_list,index: int):
 
 if __name__ == '__main__':
     bp = BasePage()
-    TreasureChestPanel_test(bp)
+    # TreasureChestPanel_test(bp)
+    bp.go_to_panel("FisheryGiftPackPanel")

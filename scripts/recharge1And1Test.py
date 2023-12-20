@@ -1,7 +1,6 @@
 import random
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from panelObjs.homePanel import HomePanel
 from panelObjs.itemTipsPanel import ItemTipsPanel
 from panelObjs.baitAndRodShowPanel import BaitAndRodShowPanel
 from panelObjs.recharge1And1Panel import Recharge1And1Panel
@@ -31,7 +30,7 @@ def click_icon_test(bp: BasePage):
     print("点击图标测试通过")
 
 def buy_test(bp: BasePage):
-    HomePanel.go_to(bp, element=ElementsData.Home.btn_1add1)
+    bp.go_to_panel("Recharge1And1Panel")
     if Recharge1And1Panel.is_btn_buy_clickable(bp) is False:
         Recharge1And1Panel.click_btn_buy(bp)
         Recharge1And1Panel.close_Recharge1And1Panel(bp)
@@ -47,7 +46,7 @@ def buy_test(bp: BasePage):
     # 支付成功
     reward_icon_list = RewardsPanel.get_reward_icon_list(bp, is_divide=False)
     compare_list(item_icon_list, reward_icon_list)
-    RewardsPanel.click_tap_to_continue(bp)
+    RewardsPanel.click_tap_to_claim(bp)
     print("1+1礼包，测试通过")
 
 

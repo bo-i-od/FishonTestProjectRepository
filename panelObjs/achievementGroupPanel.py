@@ -2,6 +2,7 @@ from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from tools.commonTools import *
 from common import resource
+from panelObjs.rewardsPreviewPanel import RewardsPreviewPanel
 
 
 class AchievementGroupPanel(BasePage):
@@ -41,6 +42,7 @@ class AchievementGroupPanel(BasePage):
     def click_btn_collect(self):
         self.click_element(element_data=ElementsData.AchievementGroup.btn_collect)
 
+
     def click_btn_go(self):
         self.click_element(element_data=ElementsData.AchievementGroup.btn_go)
 
@@ -72,6 +74,11 @@ class AchievementGroupPanel(BasePage):
 
     def click_box(self):
         self.click_element(element_data=ElementsData.AchievementGroup.box)
+
+    def is_box_clickable(self):
+        if self.exist(element_data=ElementsData.AchievementGroup.box_collectable):
+            return True
+        return False
 
     def get_resource_100000(self):
         return resource.get_resource(self, item_tpid="100000", element_data=ElementsData.AchievementGroup.text_100000)
@@ -120,6 +127,27 @@ class AchievementGroupPanel(BasePage):
             cur += 1
         return go_index_list, collect_index_list, uncollect_index_list
 
+    def get_box_reward(self):
+        # 点击宝箱
+        AchievementGroupPanel.click_box(self)
+        cur = 0
+        while not RewardsPreviewPanel.is_panel_active(self):
+            # 防止没点上
+            AchievementGroupPanel.click_box(self)
+            cur += 1
+            if cur > 10:
+                raise FindNoElementError
+        reward_icon_list = RewardsPreviewPanel.get_reward_icon_list(self)
+        reward_quantity_list = RewardsPreviewPanel.get_reward_quantity_list(self)
+        self.click_position([0.5, 0.1])
+        return reward_icon_list, reward_quantity_list
+
+    def get_complete(self):
+        complete = self.get_text(element_data=ElementsData.AchievementGroup.complete)
+        complete = complete.split('>')
+        complete_numerator = int(complete[1].split('<')[0])
+        complete_denominator = int(complete[2].split('/')[1])
+        return complete_numerator, complete_denominator
 
 
 

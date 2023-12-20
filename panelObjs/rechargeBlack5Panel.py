@@ -18,9 +18,9 @@ class RechargeBlack5Panel(BasePage):
         self.click_element(element_data=ElementsData.RechargeBlack5.btn_buy)
 
     def click_btn_collect(self):
-        self.click_element(element_data=ElementsData.RechargeBlack5.btn_buy)
+        self.click_element(element_data=ElementsData.RechargeBlack5.btn_collect)
     def is_btn_collect_clickable(self):
-        if self.get_offspring_id_list("btn_disabled", element_data=ElementsData.RechargeBlack5.btn_buy):
+        if self.get_offspring_id_list("btn_disabled", element_data=ElementsData.RechargeBlack5.btn_collect):
             return False
         return True
 
