@@ -11,6 +11,7 @@ from panelObjs.rewardsPreviewPanel import RewardsPreviewPanel
 from panelObjs.loadingFisheryPanel import LoadingFisheryPanel
 from panelObjs.loadingPanel import LoadingPanel
 from common import resource
+from common import login
 
 # 点击页面介绍测试
 def AchievementPanel_test_0(bp:BasePage):
@@ -18,9 +19,12 @@ def AchievementPanel_test_0(bp:BasePage):
     print("点击页面介绍开始")
     bp.sleep(0.5)
     AchievementPanel.click_btn_i(bp)
+    bp.sleep(0.2)
     if not AchievementPanel.is_tips_active(bp):
         raise FindNoElementError
+    bp.sleep(0.2)
     bp.click_position([0.5, 0.1])
+    bp.sleep(0.2)
 
 
 # 随机点击未解锁成就测试
@@ -79,8 +83,6 @@ def AchievementPanel_test_2(bp:BasePage):
             cur += 1
         locked_set, unlockable_set, unlocked_set = AchievementPanel.get_achievement_status_set(bp)
         bp.debug_log(f"locked_set, unlockable_set, unlocked_set:{locked_set, unlockable_set, unlocked_set}")
-        bp.debug_log(f"unlocked_expect_set, unlocked_set:{unlocked_expect_set, unlocked_set}")
-        bp.debug_log(f"unlockable_expect_set, unlockable_set:{unlockable_expect_set, unlockable_set}")
         compare(unlocked_expect_set, unlocked_set)
         compare(unlockable_expect_set, unlockable_set)
         print("点击可解锁成就完成")
@@ -95,7 +97,6 @@ def AchievementPanel_test_3(bp:BasePage):
     group_name = AchievementPanel.get_task_mini_group_name(bp)
     AchievementPanel.click_task_mini(bp)
     title = AchievementGroupPanel.get_title(bp)
-    bp.debug_log(f"group_name, title：{group_name, title}")
     compare(group_name, title)
     bp.sleep(0.5)
     AchievementGroupPanel.click_btn_close(bp)
@@ -129,7 +130,6 @@ def AchievementGroupPanel_test_0(bp:BasePage):
         bp.click_position(position_list[unlocked_list[cur]])
         bp.sleep(0.5)
         title = AchievementGroupPanel.get_title(bp)
-        bp.debug_log(f"group_name, title：{group_name, title}")
         compare(group_name, title)
         achievement_jump_test(bp)
         bp.sleep(0.5)
@@ -166,6 +166,9 @@ def achievement_jump_test(bp: BasePage):
     bp.save_img(img, "achievementGroupPanel_jump_test")
     bp.go_to_panel("AchievementPanel")
 
+# def login(zhanghao,mima):
+
+
 def AchievementGroupPanel_test_1(bp: BasePage):
     bp.cmd("missiondone 10")
     bp.go_to_panel("AchievementPanel")
@@ -175,9 +178,20 @@ def AchievementGroupPanel_test_1(bp: BasePage):
     print("随机点击已解锁成就开始")
     # 点击已解锁成就
     unlocked_list = list(unlocked_set)
-    # 随机一个进行图标点击测试
-    r = random.randint(0, len(unlocked_list) - 1)
-    cur = 4
+    # 随机一个进行领取测试
+    r = random.randint(1, len(unlocked_list) - 1)
+    # viewport.move_until_appear(viewport.item_id_list[unlocked_list[r]])
+    # group_name = AchievementPanel.get_group_name(bp, achievement_id=viewport.item_id_list[unlocked_list[r]])
+    # position_list = AchievementPanel.get_achievement_position_list(bp)
+    # bp.click_position(position_list[unlocked_list[r]])
+    # bp.sleep(0.5)
+    # title = AchievementGroupPanel.get_title(bp)
+    # compare(group_name, title)
+    # click_icon_test(bp)
+    # collect_all_test(bp)
+    # AchievementGroupPanel.click_btn_close(bp)
+
+    cur = 1
     while cur < len(unlocked_list):
         viewport.move_until_appear(viewport.item_id_list[unlocked_list[cur]])
         group_name = AchievementPanel.get_group_name(bp, achievement_id=viewport.item_id_list[unlocked_list[cur]])
@@ -185,7 +199,6 @@ def AchievementGroupPanel_test_1(bp: BasePage):
         bp.click_position(position_list[unlocked_list[cur]])
         bp.sleep(0.5)
         title = AchievementGroupPanel.get_title(bp)
-        bp.debug_log(f"group_name, title：{group_name, title}")
         compare(group_name, title)
         if r == cur:
             click_icon_test(bp)
@@ -219,13 +232,13 @@ def collect_all_test(bp: BasePage):
             cur += 1
         AchievementGroupPanel.click_box(bp)
         reward_dict = RewardsPanel.get_reward_dict(bp)
-        bp.debug_log(f"item_dict, reward_dict:{item_dict, reward_dict}")
         compare_dict(item_dict, reward_dict)
         item_stock_list = bp.get_item_count_list(reward_icon_list)
-        bp.debug_log(f"item_stock_expect_list, item_stock_list:{item_stock_expect_list, item_stock_list}")
         compare_list(item_stock_expect_list, item_stock_list)
+        img = bp.get_full_screen_shot()
+        bp.save_img(img)
         RewardsPanel.click_tap_to_claim(bp)
-        # bp.sleep(0.5)
+        bp.sleep(0.5)
         # 防止鱼卡弹窗
         bp.clear_popup()
         achievement_point, progress_denominator = AchievementGroupPanel.get_achievement_point(bp)
@@ -267,7 +280,7 @@ def collect_once_test(bp: BasePage):
     return achievement_point, progress_denominator
 
 
-def select_test(bp: BasePage, index):
+def select_test(bp: BasePage, index:int):
     achievement_icon_list = AchievementGroupPanel.get_achievement_icon_list(bp)
     icon_main = AchievementGroupPanel.get_icon_main(bp)
     selected_status_list = AchievementGroupPanel.get_selected_status_list(bp)
@@ -325,6 +338,8 @@ def achievement_test(bp:BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
+    # cmd_l = ["guideskip", "add 1 100200 100000"]
+    # login.login_to_hall(bp, cmd_l)
     # AchievementPanel_test_0(bp)
     # AchievementPanel_test_1(bp)
     # AchievementPanel_test_2(bp)

@@ -127,8 +127,11 @@ class ElementsData:
         btn_i = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>title_group>btn_i>img"}
         exp = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>exp>exp"}
         btn_task = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>exp>btns>btn_task>btn_normal"}
+        btn_task_text ={"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>exp>btns>btn_task>text"}
         btn_buy = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>exp>btns>btn_buy>btn_normal"}
+        btn_buy_text = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>exp>btns>btn_buy>text"}
         btn_premium = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>title_group>lock>btn", "focus": (0, 0.5)}
+        bg_img = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>title_group>bg_img"}
         btn_unlock = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>btns>btn_unlock>btn_normal"}
         btn_collect = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>btns>btn_collect>btn_normal"}
         exp_value = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>exp>exp_value>value"}
@@ -142,6 +145,12 @@ class ElementsData:
         reward_gear_list = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>List>Viewport>Content>>model>>item>gear_model_new(Clone)>icon"}
         licenseLock_list = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>List>Viewport>Content>>model>licenseLock>lock"}
         title_bg = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>title_bg>img_1"}
+        free_icon_list = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>List>Viewport>Content>>model>free>item>item_model_new(Clone)>icon"}
+        premium_icon_list = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>List>Viewport>Content>>model>premium>item>item_model_new(Clone)>icon"}
+        free_quantity_list = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>List>Viewport>Content>>model>free>item>item_model_new(Clone)>quantity>value"}
+        premium_quantity_list = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>List>Viewport>Content>>model>premium>item>item_model_new(Clone)>quantity>value"}
+        free_list = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>List>Viewport>Content>>model>free"}
+        premium_list = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>List>Viewport>Content>>model>premium"}
         preview_item_icon_list ={"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>list_preview>reward_model>model>>item>item_model_new(Clone)>icon"}
         preview_gear_icon_list = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>list_preview>reward_model>model>>item>gear_model_new(Clone)>icon"}
         btn_i_goldbank = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>List>Viewport>Content>goldbank>btn_i>img"}
@@ -247,6 +256,11 @@ class ElementsData:
         btn_max = {"locator": "UICanvas>Default>CommonPurchaseBoxVIew>Panel>cost>btn_max"}
         btn_min = {"locator": "UICanvas>Default>CommonPurchaseBoxVIew>Panel>cost>btn_min"}
         slider = {"locator": "UICanvas>Default>CommonPurchaseBoxVIew>Panel>cost>slider"}
+
+    class DailyTips:
+        DailyTipsPanel = {"locator":"UICanvas>Default>DailyTipsPanel"}
+        btn_close = {"locator": "UICanvas>Default>DailyTipsPanel>panel>btn_close>img"}
+        toggle = {"locator": "UICanvas>Default>DailyTipsPanel>panel>option_2>Toggle"}
 
     class DivisionChange:
         DivisionChangePanel = {"locator":"UICanvas>Default>DivisionChangePanel"}
@@ -502,7 +516,7 @@ class ElementsData:
         LoginPanel = {"locator": "UICanvas>Default>LoginPanel"}
         InputField_UserName = {"locator": "UICanvas>Default>LoginPanel>panel_internal>InputField_UserName"}
         btn_login = {"locator": "UICanvas>Default>LoginPanel>panel_internal>btn_login>btn_normal"}
-        Dropdown = {"locator": "UICanvas>Default>LoginPanel>panel_internal>Dropdown>Label"}
+        Dropdown = {"locator": "UICanvas>Default>LoginPanel>panel_internal>Dropdown", "focus": (1, 0.5)}
         DropdownList_Viewport = {"locator": "UICanvas>Default>LoginPanel>panel_internal>Dropdown>Dropdown List>Viewport", "focus": (0, 0)}
         DropdownList = {"locator": "UICanvas>Default>LoginPanel>panel_internal>Dropdown>Dropdown List>Viewport>Content>"}
         dev_server = {"locator": "UICanvas>Default>LoginPanel>panel_internal>Dropdown>Dropdown List>Viewport>Content>Item 0: dev server"}

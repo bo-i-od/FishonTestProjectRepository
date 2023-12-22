@@ -8,7 +8,7 @@ class LoginPanel(BasePage):
             return True
         return False
     def click_btn_login(self):
-        self.click_element(element_data=ElementsData.Login.btn_login)
+        self.click_until_disappear(element_data=ElementsData.Login.btn_login)
 
     def set_login_name(self, login_name):
         self.set_text(element_data=ElementsData.Login.InputField_UserName, text=login_name)
@@ -16,4 +16,7 @@ class LoginPanel(BasePage):
     def get_login_name(self):
         login_name = self.get_text(element_data=ElementsData.Login.InputField_UserName)
         return login_name
+
+    def set_server(self, index):
+        self.set_dropdown_value(element_data=ElementsData.Login.Dropdown, index=index)
 

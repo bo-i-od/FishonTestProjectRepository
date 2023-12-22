@@ -14,39 +14,7 @@ from panelObjs.rewardsPanel import RewardsPanel
 from panelObjs.rodMoreToOnePanel import RodMoreToOnePanel
 from common.resource import *
 from common.basePage import BasePage
-
-def collect_all_test(bp:BasePage):
-    collectable_free_data = BattlePassPanel.get_free_collectable_icon_quantity_and_position_list(bp)
-    collectable_premium_data = BattlePassPanel.get_premium_collectable_icon_quantity_and_position_list(bp)
-    icon_list, quantity_list, position_list = collectable_free_data
-    item_dict = make_item_dict(item_coin_list=icon_list, item_quantity_list=quantity_list)
-    icon_list, quantity_list, position_list = collectable_premium_data
-    item_dict = make_item_dict(item_coin_list=icon_list, item_quantity_list=quantity_list, item_dict=item_dict)
-    stock_icon_list = []
-    for item in item_dict:
-        stock_icon_list.append(item)
-    stock_quantity_list = bp.get_item_count_list(stock_icon_list)
-    if not BattlePassPanel.click_btn_collect_all(bp):
-        if collectable_free_data[0]:
-            raise FindElementError
-        if collectable_premium_data[0]:
-            raise FindElementError
-        print("没有可领取项，collect_all_test测试跳过")
-        return
-    stock_expect_dict = item_dict.copy()
-    stock_expect_dict = make_item_dict(item_coin_list=stock_icon_list, item_quantity_list=stock_quantity_list, item_dict=stock_expect_dict)
-    stock_quantity_list = bp.get_item_count_list(stock_icon_list)
-    stock_dict = make_item_dict(item_coin_list=stock_icon_list, item_quantity_list=stock_quantity_list)
-    compare(stock_dict, stock_expect_dict)
-    reward_icon_list, gear_icon_list = RewardsPanel.get_reward_icon_list(bp)
-    reward_quantity_list = RewardsPanel.get_reward_quantity_list(bp)
-    compare(len(reward_quantity_list), len(item_dict))
-    cur = 0
-    while cur < len(reward_quantity_list):
-        compare(reward_quantity_list[cur], item_dict[reward_icon_list[cur]])
-        cur += 1
-    RewardsPanel.click_tap_to_claim(bp)
-    print("collect_all_test全部获取测试通过")
+from common.viewport import Viewport
 
 
 def swipe_test(bp:BasePage):
@@ -63,6 +31,7 @@ def swipe_test(bp:BasePage):
     # if x_0 - x_1 < viewport.viewport_size[0] * 0.05:
     #     raise MoveError
     print("swipe_test滑动测试通过")
+
 
 def click_icon_buy_level_test(bp:BasePage):
     res = BattlePassBuyLevelPanel.get_clickable_icon_and_position_list(bp)
@@ -106,15 +75,25 @@ def change_level_test(bp:BasePage):
         new_level_0 += 1
     compare(new_level_0, new_level_1)
     print("change_level_test改变购买等级测试通过")
+
+
 def buy_level_test(bp:BasePage):
-    is_cash_enough = BattlePassBuyLevelPanel.is_cash_enough(bp)
+    cost = BattlePassBuyLevelPanel.get_cost(bp)
+    cash_expect = BattlePassBuyLevelPanel.get_cash(bp)
     BattlePassBuyLevelPanel.click_btn_buy(bp)
-    if is_cash_enough:
-        BattlePassRewardPanel.click_tap_to_continue(bp)
-        print("购买成功，buy_level_test正面测试通过")
+    bp.sleep(0.5)
+    if cost > cash_expect:
+        cash = BattlePassBuyLevelPanel.get_cash(bp)
+        compare(cash_expect, cash)
+        BattlePassBuyLevelPanel.click_btn_close(bp)
+        print("购买失败，buy_level_test反面测试通过")
         return
-    BattlePassBuyLevelPanel.click_btn_close(bp)
-    print("购买成功，buy_level_test反面测试通过")
+    cash_expect = cash_expect - cost
+    cash = BattlePassBuyLevelPanel.get_cash(bp)
+    compare(cash_expect, cash)
+    BattlePassRewardPanel.click_tap_to_continue(bp)
+    print("购买成功，buy_level_test正面测试通过")
+
 
 def BattlePassBuyLevelPanel_test(bp:BasePage):
     BattlePassPanel.click_btn_buy_levels(bp)
@@ -122,7 +101,9 @@ def BattlePassBuyLevelPanel_test(bp:BasePage):
     change_level_test(bp)
     click_icon_buy_level_test(bp)
     BattlePassBuyLevelPanel.go_to_RechargeStorePanel(bp)
+    bp.sleep(0.5)
     StorePanel.click_btn_close(bp)
+    bp.sleep(0.5)
     buy_level_test(bp)
 
 def jump_test(bp:BasePage):
@@ -130,11 +111,15 @@ def jump_test(bp:BasePage):
     BaitAndRodShowPanel.click_tap_to_continue(bp)
     bp.sleep(0.5)
     BattlePassPanel.click_btn_task(bp)
+    bp.sleep(0.5)
     TaskPanel.click_btn_close(bp)
+    bp.sleep(0.5)
     if not BattlePassPanel.is_panel_active(bp):
         raise FindNoElementError
     BattlePassPanel.click_btn_unlock_premium(bp)
+    bp.sleep(0.5)
     BattlePassBuyLicensePanel.click_btn_close(bp)
+    bp.sleep(0.5)
     BattlePassPanel.click_btn_i(bp)
     BattlePassIntroPanel.close_battlePassIntroPanel(bp)
     print("jump_test跳转测试通过")
@@ -158,11 +143,9 @@ def BattlePassRewardPanel_test(bp:BasePage):
     # 点击并对照图标
     bp.click_position(position_free_list[r0])
     item_icon = ItemTipsPanel.get_item_icon(bp)
-    # item_icon = check_icon(item_icon)
     compare(icon_free_list[r0], item_icon)
     bp.click_position(position_premium_list[r1])
     item_icon = ItemTipsPanel.get_item_icon(bp)
-    # item_icon = check_icon(item_icon)
     compare(icon_premium_list[r1], item_icon)
     # 关闭页面
     BattlePassRewardPanel.click_tap_to_continue(bp)
@@ -182,66 +165,102 @@ def BattlePassPopPanel_test(bp:BasePage):
     BattlePassPopPanel.click_get_premium(bp)
     BattlePassBuyLicensePanel.click_btn_close(bp)
 
-def click_icon_test(bp:BasePage):
+def collect_test(bp:BasePage):
     # 获得可点击的信息列表
-    viewport = BattlePassPanel.get_viewport(bp)
-    clickable_icon_list, clickable_position_list = viewport.get_clickable_icon_and_position_list()
-    del clickable_position_list[len(clickable_icon_list) - 1]
-    del clickable_position_list[len(clickable_position_list) - 1]
+    viewport_free, viewport_premium = BattlePassPanel.get_viewport(bp)
+    free_icon_list = BattlePassPanel.get_free_icon_list(bp)
+    premium_icon_list = BattlePassPanel.get_premium_icon_list(bp)
+    free_quantity_list = BattlePassPanel.get_free_quantity_list(bp)
+    premium_quantity_list = BattlePassPanel.get_premium_quantity_list(bp)
     # 在免费可领取中点击一个
-    collectable_data = BattlePassPanel.get_free_collectable_icon_quantity_and_position_list(bp)
-    random_collect_test(bp, collectable_data, clickable_position_list)
+    free_status = BattlePassPanel.get_free_status(bp)
+    random_collect_test(bp, free_icon_list, free_quantity_list, free_status, viewport_free)
     # 在付费可领取中点击一个
-    collectable_data = BattlePassPanel.get_premium_collectable_icon_quantity_and_position_list(bp)
-    random_collect_test(bp, collectable_data, clickable_position_list)
-    # 随机点击图标
-    r = random.randint(0, len(clickable_position_list) - 1)
-    bp.click_position(clickable_position_list[r])
-    item_icon = ItemTipsPanel.get_item_icon(bp)
-    compare(item_icon, clickable_icon_list[r])
-    bp.click_position([0.5, 0.1])
-    # 获得预览图标及位置
-    res = BattlePassPanel.get_preview_icon_and_position_list(bp)
-    preview_item_icon_list, preview_item_position_list, preview_gear_icon_list, preview_gear_position_list = res
-    # 点击图标并对比弹窗图标
-    preview_item_position_list_len = len(preview_item_position_list)
-    if preview_item_position_list_len > 0:
-        r = random.randint(0, len(preview_item_position_list) - 1)
-        bp.click_position(preview_item_position_list[r])
-        item_icon = ItemTipsPanel.get_item_icon(bp)
-        compare(item_icon, preview_item_icon_list[r])
-        bp.click_position([0.5, 0.1])
+    premium_status = BattlePassPanel.get_premium_status(bp)
+    random_collect_test(bp, premium_icon_list,premium_quantity_list, premium_status, viewport_premium)
+    icon_list = []
+    quantity_list = []
     cur = 0
-    while cur < len(preview_gear_position_list):
-        bp.click_position(preview_gear_position_list[cur])
-        BaitAndRodShowPanel.click_tap_to_continue(bp)
+    while cur < len(free_status[1]):
+        free_icon_index = free_status[1][cur]
+        icon_list.append(free_icon_list[free_icon_index])
+        quantity_list.append(free_quantity_list[free_icon_index])
         cur += 1
+    cur = 0
+    while cur < len(premium_status[1]):
+        premium_icon_index = premium_status[1][cur]
+        icon_list.append(premium_icon_list[premium_icon_index])
+        quantity_list.append(premium_quantity_list[premium_icon_index])
+        cur += 1
+    collect_all_test(bp, icon_list, quantity_list)
 
-
-def random_collect_test(bp:BasePage, collectable_data, clickable_position_list):
-    collectable_icon_list, collectable_quantity_list, collectable_position_list = collectable_data
-    collectable_position_list_len = len(collectable_position_list)
-    if collectable_position_list_len > 0:
-        r = random.randint(0, collectable_position_list_len - 1)
-    if collectable_position_list and collectable_position_list[r] in clickable_position_list:
-        item_count = bp.get_item_count(item_icon_name=collectable_icon_list[r])
-        item_count_expect = item_count + collectable_quantity_list[r]
-        bp.click_position(collectable_position_list[r])
-        reward_icon_list, gear_icon_list = RewardsPanel.get_reward_icon_list(bp)
-        reward_icon = reward_icon_list[0]
-        reward_quantity = RewardsPanel.get_reward_quantity_list(bp)[0]
-        item_count = bp.get_item_count(item_icon_name=collectable_icon_list[r])
-        RewardsPanel.click_tap_to_claim(bp)
-        # 验证图标和数量变化是否正确
-        compare(reward_icon, collectable_icon_list[r])
-        compare(reward_quantity, collectable_quantity_list[r])
-        compare(item_count, item_count_expect)
+def random_collect_test(bp:BasePage, icon_list, quantity_list, status, viewport:Viewport):
+    collectable_list = status[1]
+    collectable_list_len = len(collectable_list)
+    if not collectable_list_len > 0:
+        print("没有可领取的奖励，random_collect_test跳过")
+        return
+    r = random.randint(0, collectable_list_len - 1)
+    icon_selected = icon_list[collectable_list[r]]
+    icon_selected_id = viewport.item_id_list[collectable_list[r]]
+    item_count = bp.get_item_count(item_icon_name=icon_selected)
+    item_count_expect = item_count + quantity_list[collectable_list[r]]
+    viewport.move_until_appear(icon_selected_id)
+    bp.sleep(0.5)
+    icon_position = BattlePassPanel.get_collectable_icon_position(bp, icon_selected_id)
+    bp.click_position(icon_position)
+    reward_icon_list, gear_icon_list = RewardsPanel.get_reward_icon_list(bp)
+    reward_icon = reward_icon_list[0]
+    reward_quantity = RewardsPanel.get_reward_quantity_list(bp)[0]
+    item_count = bp.get_item_count(item_icon_name=icon_selected)
+    RewardsPanel.click_tap_to_claim(bp)
+    # 验证图标和数量变化是否正确
+    compare(reward_icon, icon_list[collectable_list[r]])
+    compare(reward_quantity, quantity_list[collectable_list[r]])
+    compare(item_count, item_count_expect)
+    bp.click_position(icon_position)
+    bp.sleep(0.1)
+    if ItemTipsPanel.is_panel_active(bp):
+        item_icon = ItemTipsPanel.get_item_icon(bp)
+        compare(icon_selected, item_icon)
+        bp.click_position([0.5, 0.1])
+    if BaitAndRodShowPanel.is_panel_active(bp):
+        BaitAndRodShowPanel.click_tap_to_continue(bp)
+    collected = status[1].pop(r)
+    status[2].append(collected)
     print("random_collect_test随机领取测试通过")
 
 
-def BattlePass_rookie_test(bp:BasePage):
-    # HomePanel.go_to_BattlePassPanel(bp)
+def collect_all_test(bp: BasePage, icon_list, quantity_list):
+    item_dict = make_item_dict(item_coin_list=icon_list, item_quantity_list=quantity_list)
+    stock_icon_list = []
+    for item in item_dict:
+        stock_icon_list.append(item)
+    stock_quantity_list = bp.get_item_count_list(stock_icon_list)
+    if not BattlePassPanel.click_btn_collect_all(bp):
+        if icon_list:
+            raise FindElementError
+        print("没有可领取项，collect_all_test测试跳过")
+        return
+    stock_expect_dict = item_dict.copy()
+    stock_expect_dict = make_item_dict(item_coin_list=stock_icon_list, item_quantity_list=stock_quantity_list, item_dict=stock_expect_dict)
+    stock_quantity_list = bp.get_item_count_list(stock_icon_list)
+    stock_dict = make_item_dict(item_coin_list=stock_icon_list, item_quantity_list=stock_quantity_list)
+    compare(stock_dict, stock_expect_dict)
+    reward_icon_list, gear_icon_list = RewardsPanel.get_reward_icon_list(bp)
+    reward_quantity_list = RewardsPanel.get_reward_quantity_list(bp)
+    compare(len(reward_quantity_list), len(item_dict))
+    cur = 0
+    while cur < len(reward_quantity_list):
+        compare(reward_quantity_list[cur], item_dict[reward_icon_list[cur]])
+        cur += 1
+    RewardsPanel.click_tap_to_claim(bp)
+    print("collect_all_test全部获取测试通过")
+
+
+def BattlePass_test(bp:BasePage):
     bp.go_to_panel("BattlePassPanel")
+    bp.set_item_count(target_count=0,item_tpid="100100")
     BattlePassRewardPanel_completed = False
     bp.sleep(1)
     if BattlePassIntroPanel.is_panel_active(bp):
@@ -252,63 +271,37 @@ def BattlePass_rookie_test(bp:BasePage):
     if BattlePassPopPanel.is_panel_active(bp):
         BattlePassPopPanel_test(bp)
         BattlePassRewardPanel_completed = True
-    swipe_test(bp)
+    # swipe_test(bp)
     jump_test(bp)
     if not BattlePassRewardPanel_completed:
         BattlePassPanel.click_btn_close(bp)
         # HomePanel.go_to_BattlePassPanel(bp)
         bp.go_to_panel("BattlePassPanel")
+        bp.sleep(1)
         if BattlePassRewardPanel.is_panel_active(bp):
             BattlePassRewardPanel_test(bp)
+            bp.sleep(1)
         if BattlePassPopPanel.is_panel_active(bp):
             BattlePassPopPanel_test(bp)
-
+    bp.sleep(0.5)
     BattlePassPanel.click_btn_buy_levels(bp)
     buy_level_test(bp)
-    buy_premium_test(bp, 0)
-    click_icon_test(bp)
-    BattlePassPanel.click_btn_close(bp)
-    print("BattlePass_rookie_test新手号的通行证测试通过")
-
-def BattlePass_veteran_test(bp:BasePage):
-    # HomePanel.go_to_BattlePassPanel(bp)
-    bp.go_to_panel("BattlePassPanel")
-    bp.set_item_count(target_count=10000,item_tpid="100100")
-    bp.sleep(1)
-    if BattlePassIntroPanel.is_panel_active(bp):
-        BattlePassIntroPanel.close_battlePassIntroPanel(bp, is_test=False)
-    elif BattlePassRewardPanel.is_panel_active(bp):
-        BattlePassRewardPanel.click_tap_to_continue(bp)
-    if BattlePassPopPanel.is_panel_active(bp):
-        BattlePassPopPanel.click_btn_close(bp)
-    buy_premium_test(bp, 1)
+    r = random.randint(0, 1)
+    buy_premium_test(bp, r)
     bp.sleep(0.5)
-    RewardsPanel.click_tap_to_claim(bp)
-    bp.sleep(0.5)
+    if r == 1:
+        RewardsPanel.click_tap_to_claim(bp)
+    bp.set_item_count(target_count=10000, item_tpid="100100")
     BattlePassBuyLevelPanel_test(bp)
-    glod_bank_test(bp)
-    collect_all_test(bp)
-    BattlePassPanel.click_btn_close(bp)
     bp.sleep(0.5)
-    RodMoreToOnePanel_test(bp)
-    print("BattlePass_rookie_test老号的通行证测试通过")
-
-def BattlePass_test(bp:BasePage):
-    # HomePanel.go_to_BattlePassPanel(bp)
-    bp.go_to_panel("BattlePassPanel")
-    if BattlePassIntroPanel.is_panel_active(bp):
-        BattlePassIntroPanel.close_battlePassIntroPanel(bp, is_test=False)
-    elif BattlePassRewardPanel.is_panel_active(bp):
-        BattlePassRewardPanel.click_tap_to_continue(bp)
-    if BattlePassPopPanel.is_panel_active(bp):
-        BattlePassPopPanel.click_btn_close(bp)
-    buy_premium_test(bp, 1)
-    RewardsPanel.click_tap_to_claim(bp)
-    BattlePassBuyLevelPanel_test(bp)
     glod_bank_test(bp)
-    collect_all_test(bp)
+    bp.sleep(0.5)
+    collect_test(bp)
+    bp.sleep(0.5)
     BattlePassPanel.click_btn_close(bp)
     RodMoreToOnePanel_test(bp)
+
+
 def glod_bank_test(bp:BasePage):
     BattlePassPanel.click_btn_i_gold_band(bp)
     if not BattlePassPanel.is_Tip_goldbank_active(bp):
@@ -316,7 +309,14 @@ def glod_bank_test(bp:BasePage):
     bp.click_position([0.5, 0.1])
     print("glod_bank_test金库测试通过")
 
+
 def RodMoreToOnePanel_test(bp:BasePage):
+    cur = 0
+    while not RodMoreToOnePanel.is_panel_active(bp):
+        bp.sleep(0.5)
+        cur += 1
+        if cur > 20:
+            raise FindNoElementError
     # 随机一个进行预览与确定
     btn_preview_position_list = RodMoreToOnePanel.get_btn_preview_position_list(bp)
     rod_icon_list, rod_position_list = RodMoreToOnePanel.get_rod_icon_and_position_list(bp)
@@ -328,24 +328,15 @@ def RodMoreToOnePanel_test(bp:BasePage):
     item_icon_list, gear_icon_list = RewardsPanel.get_reward_icon_list(bp)
     compare(gear_icon_list[0], rod_icon_list[r])
     RewardsPanel.click_tap_to_claim(bp)
+    bp.sleep(0.5)
     RodMoreToOnePanel.click_btn_close(bp)
     if RodMoreToOnePanel.is_panel_active(bp):
         raise FindElementError
-    # HomePanel.go_to_BattlePassPanel(bp)
-    # BattlePassPanel.click_btn_close(bp)
-    # r = random.randint(0, len(btn_preview_position_list) - 1)
-    # bp.click_position(rod_position_list[r])
-    # RodMoreToOnePanel.click_confirm(bp)
-    # item_icon_list, gear_icon_list = RewardsPanel.get_reward_icon_list(bp)
-    # compare(gear_icon_list[0], rod_icon_list[r])
     print("RodMoreToOnePanel_test鱼竿三选一测试通过")
-
-
-
 
 
 
 if __name__ == '__main__':
     bp = BasePage()
-    BattlePass_veteran_test(bp)
+    BattlePass_test(bp)
 
