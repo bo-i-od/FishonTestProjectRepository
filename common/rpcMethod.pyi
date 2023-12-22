@@ -3,10 +3,10 @@ from poco.pocofw import Poco
 def my_print(poco:Poco) -> any:
     ...
 
-def set_text(poco:Poco, element: dict, text: str) -> bool:
+def set_text(poco:Poco, element: dict, text: str) -> any:
     ...
 
-def set_text_by_id(poco:Poco, id: int, text: str) -> bool:
+def set_text_by_id(poco:Poco, id: int, text: str) -> any:
     ...
 
 def get_text(poco:Poco, element: dict) -> list:
@@ -81,11 +81,17 @@ def get_toggle_is_on_by_id(poco:Poco, id: int)-> bool:
 def screen_shot(poco:Poco, ui_x:int, ui_y:int, ui_w:int, ui_h:int)-> (str, str):
     ...
 
+def get_dropdown_value(poco:Poco, element: dict)-> int:
+    ...
+
+def set_dropdown_value(poco:Poco, element: dict, index:int)-> any:
+    ...
+
 def cmd(poco:Poco, command: str)-> any:
     ...
 
 def lua_console(poco:Poco, command: str)-> any:
     ...
 
-def set_btn_enabled(poco:Poco, element: dict, enabled: bool):
+def set_btn_enabled(poco:Poco, element: dict, enabled: bool)-> any:
     ...

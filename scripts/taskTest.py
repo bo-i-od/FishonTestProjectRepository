@@ -58,7 +58,10 @@ def click_icon_test(bp:BasePage, viewport:Viewport):
 #     viewport.move_until_appear(task_id_list[r])
 #     print("swipe_test滑动测试通过")
 
-def btn_collect_test(bp:BasePage, task_id_list:list, viewport:Viewport, index:int):
+def collect_all_test(bp:BasePage, task_id_list:list, viewport:Viewport):
+    pass
+
+def collect_once_test(bp:BasePage, task_id_list:list, viewport:Viewport, index:int):
     viewport.move_until_appear(task_id_list[index])
     # 得到按钮状态 并检查是否可领奖
     status_list, position_list = TaskPanel.get_btn_status_and_position_list(bp, task_id_list)
@@ -86,7 +89,7 @@ def btn_collect_test(bp:BasePage, task_id_list:list, viewport:Viewport, index:in
     # 看按钮状态是否改为complete
     compare(status_list[index], 2)
     # 看进度条是否增长
-    if progress_value < TaskPanel.get_progress_value(bp) is False:
+    if progress_value < 1 and progress_value < TaskPanel.get_progress_value(bp) is False:
         raise CompareError
     # 关闭领奖弹窗
     RewardsPanel.click_tap_to_claim(bp)
@@ -173,9 +176,9 @@ def daily_task_test(bp:BasePage):
     bp.go_to_panel("TaskPanel")
     # 加上对决投降的测试
     index = 0
-    btn_collect_test(bp, task_id_list, viewport, index)
+    collect_once_test(bp, task_id_list, viewport, index)
     index = 1
-    btn_collect_test(bp, task_id_list, viewport, index)
+    collect_once_test(bp, task_id_list, viewport, index)
     index = 0
     box_collect_test(bp, index, box_award_dict)
 
@@ -186,6 +189,7 @@ def TaskPanel_test(bp:BasePage):
     daily_task_test(bp)
     switch_tab_test(bp)
     TaskPanel.click_btn_close(bp)
+
 
 if __name__ == '__main__':
     bp = BasePage()

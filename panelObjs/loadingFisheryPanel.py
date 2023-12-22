@@ -10,4 +10,4 @@ class LoadingFisheryPanel(BasePage):
 
     def wait_until_panel_disappear(self):
         while LoadingFisheryPanel.is_panel_active(self):
-            pass
+            self.sleep(0.1)

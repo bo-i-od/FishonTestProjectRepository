@@ -27,14 +27,15 @@ class BattlePassBuyLevelPanel(BasePage):
         new_level = int(matches[1].replace("<", ""))
         return buy_level, new_level
 
-    def is_cash_enough(self):
+
+    def get_cost(self):
         btn_buy_text = self.get_text(element_data=ElementsData.BattlePassBuyLevel.btn_buy_text)
         cost = int(btn_buy_text)
-        cash = get_resource(self,"100100", element_data=ElementsData.BattlePassBuyLevel.text_100100)
-        if cost > cash:
-            return False
-        return True
+        return cost
 
+    def get_cash(self):
+        cash = get_resource(self, "100100", element_data=ElementsData.BattlePassBuyLevel.text_100100)
+        return cash
     def click_btn_buy(self):
         self.click_element(element_data=ElementsData.BattlePassBuyLevel.btn_buy_text)
 
@@ -63,5 +64,5 @@ class BattlePassBuyLevelPanel(BasePage):
 
 if __name__ == "__main__":
     bp = BattlePassBuyLevelPanel()
-    a = bp.is_cash_enough()
+
     print(a)

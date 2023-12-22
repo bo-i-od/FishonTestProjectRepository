@@ -13,13 +13,18 @@ from common.error import *
 import zlib
 
 import os
+from configs.elementsData import ElementsData
+from common.rpcMethod import set_text
+
+from common.rpcMethod import get_text
+from common.rpcMethod import get_slider_value
 
 
 class BasePage:
     def __init__(self):
         # unity窗口使用UnityEditorWindow()
         # 手机使用connect_device("android://127.0.0.1:5037/设备号")
-        self.is_android = True
+        self.is_android = False
         #
         if self.is_android:
             dev = connect_device("android://127.0.0.1:5037/127.0.0.1:21593")
@@ -28,7 +33,7 @@ class BasePage:
         # make sure your poco-sdk in the game runtime listens on the following port.
         # 默认端口 5001
         # IP is not used for now
-        addr = ('', 5001)
+        addr = ('', 5003)
         self.poco = UnityPoco(addr, device=dev)
         self.screen_w, self.screen_h = self.poco.get_screen_size()  # 获取屏幕尺寸
         self.is_debug_log = True
@@ -36,6 +41,8 @@ class BasePage:
             print(self.screen_w, self.screen_h)
         self.warning_list = []
         self.erro_list = []
+        # current_dir = os.getcwd()
+        # self.excelTools = ExceTools(current_dir + "/tables/")
         # 获取当前工作目录
         current_dir = os.getcwd()
         # 获取父目录
@@ -49,6 +56,7 @@ class BasePage:
             "AquariumCommonFishChangePanel",
             "BaitAndRodShowPanel",
             "ChampointshipResult",
+            "DailyTipsPanel",
             "DivisionChangePanel",
             "FishBagPanel",
             "FisheryGiftPackPanel",
@@ -57,7 +65,6 @@ class BasePage:
             "PVPBoosterGiftPackPanel",
             "Recharge1And1Panel",
             "MessageBoxPanel"
-
         }
 
 
@@ -80,6 +87,7 @@ class BasePage:
             "BuyEnergyPanel": [ElementsData.BuyEnergy.btn_close],
             "ChampointshipResult": [ElementsData.ChampointshipResult.btn_collect],
             "CommonPurchaseBoxVIew": [ElementsData.CommonPurchaseBox.btn_close],
+            "DailyTipsPanel":[ElementsData.DailyTips.btn_close],
             "DivisionChangePanel": [ElementsData.DivisionChange.tap_to_close],
             "FishBagPanel": [ElementsData.FishBag.tap_to_continue],
             "FishCardGiftPackPanel":[ElementsData.FishCardGiftPack.btn_close],
@@ -145,10 +153,6 @@ class BasePage:
             "RoulettePanel":ElementsData.Roulette.RoulettePanel,
             "StorePanel":ElementsData.Store.StorePanel,
             "TaskPanel": ElementsData.Task.TaskPanel,
-
-
-
-
 
         }
 
@@ -346,6 +350,12 @@ class BasePage:
         self.is_single_element(slider_value_list)
         return slider_value_list[0]
 
+    def get_dropdown_value(self, element_data):
+        return rpcMethod.get_dropdown_value(self.poco, element_data)
+
+    def set_dropdown_value(self, element_data, index):
+        rpcMethod.set_dropdown_value(self.poco, element_data, index)
+
     # 获取尺寸
     def get_size_list(self, object_id_list: list = None, element_data: dict = None, offspring_path=""):
         if object_id_list is not None:
@@ -427,7 +437,9 @@ class BasePage:
     # position=[x,y]
     # 0<=x<=1, 0<=y<=1
     def click_position(self, position):
-        self.poco.click(position)
+        if not (0 <= position[0] <= 1) or not (0 <= position[1] <= 1):
+            raise InvalidOperationError('Click position out of screen. pos={}'.format(repr(position)))
+        self.poco.agent.input.click(position[0], position[1])
 
     # 元素点击
     def click_element(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
@@ -559,8 +571,10 @@ class BasePage:
                 raise FindNoElementError
 
     def go_to_panel(self, panel):
-        if not self.exist(element_data=self.panel_dict[panel]):
-            self.go_home()
+        if self.exist(element_data=self.panel_dict[panel]):
+            return
+        self.go_home()
+        while not self.exist(element_data=self.panel_dict[panel]):
             for element_data in self.panel_open_dict[panel]:
                 self.try_click_element(element_data=element_data)
 
@@ -717,7 +731,8 @@ if __name__ == '__main__':
     bp = BasePage()
     # rpcMethod.set_btn_enabled(bp, element=ElementsData.BattlePass.BattlePassPanel, enabled=False)
     # bp.lua_console('PanelMgr:OpenPanel("HomePanel")')
-    bp.get_item_count(item_icon_name="achv_group_icon_8")
-
-
+    # bp.get_item_count(item_icon_name="achv_group_icon_8")
+    # set_text(bp.poco, ElementsData.BattlePass.btn_buy_text,"kamsiya")
+    #print(get_text(bp.poco,ElementsData.BattlePass.btn_task_text))
+    print(get_slider_value(bp.poco,ElementsData.PlayerSetting.options_music))
 

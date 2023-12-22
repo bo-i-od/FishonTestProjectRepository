@@ -150,6 +150,13 @@ def get_toggle_is_on_by_id(poco, id):
 def screen_shot(poco, ui_x, ui_y, ui_w, ui_h):
     return poco.agent.c.call("Screenshot", ui_x, ui_y, ui_w, ui_h)
 
+@sync_wrapper
+def get_dropdown_value(poco, element):
+    return poco.agent.c.call("GetDropdownValue", element)
+
+def set_dropdown_value(poco, element, index):
+    poco.agent.c.call("SetDropdownValue", element, index)
+
 
 def cmd(poco, command):
     poco.agent.c.call("CMD", command)

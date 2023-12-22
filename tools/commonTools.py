@@ -8,13 +8,13 @@ from collections import Counter
 # 对比值或对象，不一致报错
 def compare(a, b):
     if a != b:
-        raise DifferError
+        raise DifferError(f"a,b:{a,b}")
 
 
 # 比较列表中的
 def compare_list(list_a, list_b):
     if Counter(list_a) != Counter(list_b):
-        raise DifferError
+        raise DifferError(f"list_a, list_b:{list_a, list_b}")
 
 
 def compare_dict(dict_a, dict_b):
@@ -27,9 +27,9 @@ def checktoggle(toggle_is_on_list, index):
     cur = 0
     while cur < len(toggle_is_on_list):
         if cur == index and toggle_is_on_list[cur] is False:
-            raise DifferError
+            raise DifferError(f"cur,index,toggle_is_on_list[cur]{cur,index,toggle_is_on_list[cur]}")
         if cur != index and toggle_is_on_list[cur] is True:
-            raise DifferError
+            raise DifferError(f"cur,index,toggle_is_on_list[cur]{cur,index,toggle_is_on_list[cur]}")
         cur += 1
 
 

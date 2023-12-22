@@ -10,7 +10,8 @@ def playerEditNamePanelTest(bp: BasePage):
     if not PlayerEditNamePanel.is_panel_active(bp):
         return
     name = PlayerEditNamePanel.get_player_name(bp)
-    PlayerEditNamePanel.set_player_name(bp, name[1:])
+    player_name = name[1:]
+    PlayerEditNamePanel.set_player_name(player_name)
     # 得到头像个数
     head_count = PlayerEditNamePanel.get_head_count(bp)
     # 随机选一个序号
