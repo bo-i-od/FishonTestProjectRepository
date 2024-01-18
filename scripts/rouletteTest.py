@@ -26,7 +26,7 @@ def RoulettePanel_test(bp: BasePage):
     reward_icon_list = RoulettePanel.get_reward_icon_list(bp)
     reward_quantity_list = RoulettePanel.get_reward_quantity_list(bp)
     item_expect_dict = resource.make_item_dict(reward_icon_list, reward_quantity_list)
-    stock_quantity_expect_list = bp.get_item_count_list(reward_icon_list)
+    stock_quantity_expect_list = bp.get_item_count_list(item_icon_name_list=reward_icon_list)
     print(stock_quantity_expect_list)
     cur = 0
     while cur < len(reward_icon_list):
@@ -36,7 +36,7 @@ def RoulettePanel_test(bp: BasePage):
     reward_dict = RewardsPanel.get_reward_dict(bp)
     print(item_expect_dict, reward_dict)
     compare_dict(item_expect_dict, reward_dict)
-    stock_quantity_list = bp.get_item_count_list(reward_icon_list)
+    stock_quantity_list = bp.get_item_count_list(item_icon_name_list=reward_icon_list)
     print(stock_quantity_expect_list, stock_quantity_list)
     compare(stock_quantity_expect_list, stock_quantity_list)
 

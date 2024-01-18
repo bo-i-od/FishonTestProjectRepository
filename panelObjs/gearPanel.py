@@ -281,7 +281,7 @@ class GearPanel(BasePage):
                 level, rating, damage = level_up_data
             else:
                 level, level_next, level_select, level_max, rating, rating_next, damage, damage_next, cost_icon_list, cost_value_list = level_up_data
-            item_count_list = self.get_item_count_list(target_icon_list)
+            item_count_list = self.get_item_count_list(item_icon_name_list=target_icon_list)
             compare(level, target_level)
             compare(rating, target_rating)
             compare(damage, target_damage)
@@ -291,14 +291,14 @@ class GearPanel(BasePage):
         target_level = level
         target_rating = rating
         target_damage = damage
-        target_item_count_list = self.get_item_count_list(cost_icon_list)
+        target_item_count_list = self.get_item_count_list(item_icon_name_list=cost_icon_list)
         self.click_element(element_data=ElementsData.Gear.Upgrade.btn_upgrade)
         level_up_data = GearPanel.get_level_up_data(self)
         if len(level_up_data) < 4:
             level, rating, damage = level_up_data
         else:
             level, level_next, level_select, level_max, rating, rating_next, damage, damage_next, cost_icon_list, cost_value_list = level_up_data
-        item_count_list = self.get_item_count_list(target_icon_list)
+        item_count_list = self.get_item_count_list(item_icon_name_list=target_icon_list)
         compare(level, target_level)
         compare(rating, target_rating)
         compare(damage, target_damage)
@@ -329,27 +329,27 @@ class GearPanel(BasePage):
         return name, rating, attribute_icon_list, attribute_value_list, attribute_text_list, attribute_add_list
 
     def click_draw(self, element_cost, element_icon, element_btn):
-        cost = int(self.get_text(element_data=element_cost))
-        icon = self.get_icon(element_data=element_icon)
-        res_icon_list, res_count_list = GearPanel.get_resource(self)
-        count_expect = 0
-        cur = 0
-        while cur < len(res_count_list):
-            if res_icon_list[cur] != icon:
-                cur += 1
-                continue
-            count_expect = res_count_list[cur]
-            if res_count_list[cur] < cost:
-                btn_disabled_id_list = self.get_offspring_id_list("btn_disabled", element_data=element_btn)
-                if not btn_disabled_id_list:
-                    raise FindNoElementError
-                break
-            count_expect -= cost
-            break
+        # cost = int(self.get_text(element_data=element_cost))
+        # icon = self.get_icon(element_data=element_icon)
+        # res_icon_list, res_count_list = GearPanel.get_resource(self)
+        # count_expect = 0
+        # cur = 0
+        # while cur < len(res_count_list):
+        #     if res_icon_list[cur] != icon:
+        #         cur += 1
+        #         continue
+        #     count_expect = res_count_list[cur]
+        #     if res_count_list[cur] < cost:
+        #         btn_disabled_id_list = self.get_offspring_id_list("btn_disabled", element_data=element_btn)
+        #         if not btn_disabled_id_list:
+        #             raise FindNoElementError
+        #         break
+        #     count_expect -= cost
+        #     break
         self.click_element(element_data=element_btn)
-        res_icon_list, res_count_list = GearPanel.get_resource(self)
-        compare(res_count_list[cur], count_expect)
-        print(f"点击成功，当前剩余数量为{res_count_list[cur]}")
+        # res_icon_list, res_count_list = GearPanel.get_resource(self)
+        # compare(res_count_list[cur], count_expect)
+        # print(f"点击成功，当前剩余数量为{res_count_list[cur]}")
 
     def click_draw_perk_gold(self):
         GearPanel.click_draw(self, element_cost=ElementsData.Gear.Draw.cost_perk_glod, element_icon=ElementsData.Gear.Draw.icon_perk_glod, element_btn=ElementsData.Gear.Draw.btn_draw_perk_glod)

@@ -34,10 +34,20 @@ class NewbieGuidePanel(BasePage):
         perform_list = [ElementsData.NewbieGuide.NBG_rookie_10, ElementsData.NewbieGuide.NBG_rookie_11,
                         ElementsData.NewbieGuide.NBG_rookie_12, ElementsData.NewbieGuide.NBG_rookie_13_1]
         self.click_a_until_b_appear_list(perform_list)
+        self.debug_log("NBG_rookie_13_1")
         self.click_until_disappear(element_data=ElementsData.NewbieGuide.NBG_rookie_13_1)
-        self.click_a_until_b_disappear(element_data_a=ElementsData.NewbieGuide.NBG_rookie_13_2, element_data_b=ElementsData.NewbieGuide.NBG_rookie_13_Guide_QTEInfo)
-        self.click_a_until_b_disappear(element_data_a=ElementsData.NewbieGuide.NBG_rookie_13_2, element_data_b=ElementsData.NewbieGuide.NBG_rookie_13_Guide_QTE_left)
+        self.debug_log("NBG_rookie_13_Guide_ULTUp")
+        self.click_until_disappear(element_data=ElementsData.NewbieGuide.NBG_rookie_13_Guide_ULTUp)
+        # self.debug_log("NBG_rookie_13_Guide_QTEInfo")
+        # self.click_a_until_b_disappear(element_data_a=ElementsData.NewbieGuide.NBG_rookie_13_2, element_data_b=ElementsData.NewbieGuide.NBG_rookie_13_Guide_QTEInfo)
+        # self.click_a_until_b_disappear(element_data_a=ElementsData.NewbieGuide.NBG_rookie_13_2, element_data_b=ElementsData.NewbieGuide.NBG_rookie_13_Guide_QTE_left)
+        self.debug_log("swipe")
+        position_start = self.get_position(element_data=ElementsData.Battle.btn_reel)
+        position_end = [position_start[0], position_start[1] - 0.2]
+        self.swipe(point_start=position_start,point_end=position_end)
+        self.debug_log("NBG_rookie_13_Guide_ULTInfoCloseBtn")
         self.click_a_until_b_appear(element_data_a=ElementsData.NewbieGuide.NBG_rookie_13_2, element_data_b=ElementsData.NewbieGuide.NBG_rookie_13_Guide_ULTInfoCloseBtn)
+
 
     def do_guide_4(self):
         self.click_a_until_b_appear(element_data_a=ElementsData.NewbieGuide.NBG_rookie_14,

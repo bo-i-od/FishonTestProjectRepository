@@ -14,7 +14,7 @@ from common import resource
 from common import login
 
 # 点击页面介绍测试
-def AchievementPanel_test_0(bp:BasePage):
+def tips_test(bp:BasePage):
     bp.go_to_panel("AchievementPanel")
     print("点击页面介绍开始")
     bp.sleep(0.5)
@@ -27,8 +27,8 @@ def AchievementPanel_test_0(bp:BasePage):
     bp.sleep(0.2)
 
 
-# 随机点击未解锁成就测试
-def AchievementPanel_test_1(bp:BasePage):
+# 点击未解锁成就测试
+def locked_test(bp:BasePage):
     bp.go_to_panel("AchievementPanel")
     locked_set, unlockable_set, unlocked_set = AchievementPanel.get_achievement_status_set(bp)
     bp.debug_log(f"locked_set, unlockable_set, unlocked_set:{locked_set, unlockable_set, unlocked_set}")
@@ -54,7 +54,7 @@ def AchievementPanel_test_1(bp:BasePage):
 
 
 # 点击可解锁成就测试
-def AchievementPanel_test_2(bp:BasePage):
+def unlock_test(bp:BasePage):
     bp.go_to_panel("AchievementPanel")
     print("改变等级使成就可解锁")
     exp = 10000000
@@ -89,8 +89,8 @@ def AchievementPanel_test_2(bp:BasePage):
     else:
         print("点击可解锁成就跳过")
 
-
-def AchievementPanel_test_3(bp:BasePage):
+# minitask跳转测试
+def minitask_test(bp:BasePage):
     bp.go_to_panel("AchievementPanel")
     print("minitask跳转开始")
     # 从任务导航进入成就 看进的成就组名称是否正确
@@ -99,11 +99,12 @@ def AchievementPanel_test_3(bp:BasePage):
     title = AchievementGroupPanel.get_title(bp)
     compare(group_name, title)
     bp.sleep(0.5)
+    click_icon_test(bp)
     AchievementGroupPanel.click_btn_close(bp)
     bp.sleep(0.5)
 
-# 随机点击已解锁成就测试
-def AchievementGroupPanel_test_0(bp:BasePage):
+# 点击已解锁成就并进行跳转测试
+def jump_all_test(bp:BasePage):
     locked_set, unlockable_set, unlocked_set = AchievementPanel.get_achievement_status_set(bp)
     viewport = AchievementPanel.get_viewport(bp)
     # 点击可解锁成就 将它们都解锁使task mini出现
@@ -131,12 +132,13 @@ def AchievementGroupPanel_test_0(bp:BasePage):
         bp.sleep(0.5)
         title = AchievementGroupPanel.get_title(bp)
         compare(group_name, title)
-        achievement_jump_test(bp)
+        jump_test(bp)
         bp.sleep(0.5)
         cur += 1
 
 
-def achievement_jump_test(bp: BasePage):
+# 成就跳转测试
+def jump_test(bp: BasePage):
     print("随机成就跳转开始")
     achievement_position_list = AchievementGroupPanel.get_achievement_position_list(bp)
     achievement_bg_icon_list = AchievementGroupPanel.get_achievement_bg_icon_list(bp)
@@ -168,8 +170,8 @@ def achievement_jump_test(bp: BasePage):
 
 # def login(zhanghao,mima):
 
-
-def AchievementGroupPanel_test_1(bp: BasePage):
+# 随机一个成就组全部领取测试
+def collect_test(bp: BasePage):
     bp.cmd("missiondone 10")
     bp.go_to_panel("AchievementPanel")
     locked_set, unlockable_set, unlocked_set = AchievementPanel.get_achievement_status_set(bp)
@@ -209,13 +211,15 @@ def AchievementGroupPanel_test_1(bp: BasePage):
 def collect_all_test(bp: BasePage):
     achievement_point, progress_denominator = AchievementGroupPanel.get_achievement_point(bp)
     if achievement_point == progress_denominator:
+        img = bp.get_full_screen_shot()
+        bp.save_img(img, "跳过collect_all_test期望状态为已经领取完成")
         return
     while AchievementGroupPanel.is_box_clickable(bp):
         AchievementGroupPanel.click_box(bp)
         RewardsPanel.click_tap_to_claim(bp)
         bp.sleep(0.5)
         # 防止鱼卡弹窗
-        bp.clear_popup()
+        bp.clear_popup_until_appear(elements_data=AchievementGroupPanel.get_panel_element())
         achievement_point, progress_denominator = AchievementGroupPanel.get_achievement_point(bp)
 
     reward_icon_list, reward_quantity_list = AchievementGroupPanel.get_box_reward(bp)
@@ -225,7 +229,7 @@ def collect_all_test(bp: BasePage):
         achievement_point, progress_denominator = collect_once_test(bp)
         if not AchievementGroupPanel.is_box_clickable(bp):
             continue
-        item_stock_expect_list = bp.get_item_count_list(reward_icon_list)
+        item_stock_expect_list = bp.get_item_count_list(item_icon_name_list=reward_icon_list)
         cur = 0
         while cur < len(reward_icon_list):
             item_stock_expect_list[cur] += item_dict[reward_icon_list[cur]]
@@ -233,14 +237,14 @@ def collect_all_test(bp: BasePage):
         AchievementGroupPanel.click_box(bp)
         reward_dict = RewardsPanel.get_reward_dict(bp)
         compare_dict(item_dict, reward_dict)
-        item_stock_list = bp.get_item_count_list(reward_icon_list)
+        item_stock_list = bp.get_item_count_list(item_icon_name_list=reward_icon_list)
         compare_list(item_stock_expect_list, item_stock_list)
         img = bp.get_full_screen_shot()
         bp.save_img(img)
         RewardsPanel.click_tap_to_claim(bp)
         bp.sleep(0.5)
         # 防止鱼卡弹窗
-        bp.clear_popup()
+        bp.clear_popup_once()
         achievement_point, progress_denominator = AchievementGroupPanel.get_achievement_point(bp)
         if achievement_point == progress_denominator:
             break
@@ -250,6 +254,8 @@ def collect_all_test(bp: BasePage):
     bp.debug_log(f"complete_numerator, complete_denominator:{complete_numerator, complete_denominator}")
     bp.debug_log(f"achievement_point, progress_denominator:{achievement_point, progress_denominator}")
     compare(complete_numerator, complete_denominator)
+    img = bp.get_full_screen_shot()
+    bp.save_img(img,"期望状态为全部领取完成")
 
 
 
@@ -270,11 +276,11 @@ def collect_once_test(bp: BasePage):
         cur += 1
     # 点击领取
     AchievementGroupPanel.click_btn_collect(bp)
-    # bp.sleep(0.5)
+    bp.sleep(0.2)
     achievement_point, progress_denominator = AchievementGroupPanel.get_achievement_point(bp)
     bp.debug_log(f"achievement_point_expect, achievement_point:{achievement_point_expect, achievement_point}")
     compare(achievement_point_expect, achievement_point)
-    item_count_list = bp.get_item_count_list(item_icon_list)
+    item_count_list = bp.get_item_count_list(item_icon_name_list=item_icon_list)
     bp.debug_log(f"item_quantity_list, item_count_list:{item_quantity_list, item_count_list}")
     compare_list(item_quantity_list, item_count_list)
     return achievement_point, progress_denominator
@@ -323,16 +329,17 @@ def click_icon_test(bp: BasePage):
     print("click_icon_test图标点击测试通过")
 
 def achievement_test(bp:BasePage):
-    bp.go_to_panel("AchievementPanel")
+    tips_test(bp)
     # click_tips_test(bp)
     # achievement_status_test(bp)
-    # collect_test(bp)
+    #
     # select_test(bp)
-    click_icon_test(bp)
-    AchievementGroupPanel.click_btn_close(bp)
-    AchievementPanel.click_btn_close(bp)
-    print("achievement_test成就系统测试通过")
-
+    # click_icon_test(bp)
+    locked_test(bp)
+    unlock_test(bp)
+    minitask_test(bp)
+    jump_all_test(bp)
+    collect_test(bp)
 
 
 
@@ -340,10 +347,6 @@ if __name__ == '__main__':
     bp = BasePage()
     # cmd_l = ["guideskip", "add 1 100200 100000"]
     # login.login_to_hall(bp, cmd_l)
-    # AchievementPanel_test_0(bp)
-    # AchievementPanel_test_1(bp)
-    # AchievementPanel_test_2(bp)
-    # AchievementPanel_test_3(bp)
-    # AchievementGroupPanel_test_0(bp)
-    AchievementGroupPanel_test_1(bp)
+    bp.set_item_count(target_count=100000, item_tpid="100200")
+    achievement_test(bp)
     # print(bp.get_item_count(item_tpid="100000"))

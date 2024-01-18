@@ -181,10 +181,10 @@ class BattlePassPanel(BasePage):
 
 
     def get_viewport(self):
-        # viewport_size = self.get_size(element_data=ElementsData.BattlePass.Viewport)[0]
-        # right_size = self.get_size_list(element_data=ElementsData.BattlePass.preview_item_icon_list)[0][0]/viewport_size
-        viewport_free = Viewport(self, element_viewport=ElementsData.BattlePass.Viewport, element_item_list=ElementsData.BattlePass.free_icon_list)
-        viewport_premium = Viewport(self, element_viewport=ElementsData.BattlePass.Viewport, element_item_list=ElementsData.BattlePass.premium_icon_list)
+        viewport_size = self.get_size(element_data=ElementsData.BattlePass.Viewport)[0]
+        right_size = self.get_size_list(element_data=ElementsData.BattlePass.free_icon_list)[0][0]/viewport_size
+        viewport_free = Viewport(self, element_viewport=ElementsData.BattlePass.Viewport, element_item_list=ElementsData.BattlePass.free_icon_list, viewport_edge=[0, right_size])
+        viewport_premium = Viewport(self, element_viewport=ElementsData.BattlePass.Viewport, element_item_list=ElementsData.BattlePass.premium_icon_list, viewport_edge=[0, right_size])
         return viewport_free, viewport_premium
 
     def get_preview_icon_and_position_list(self):

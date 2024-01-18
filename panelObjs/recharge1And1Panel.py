@@ -4,10 +4,9 @@ from tools.commonTools import *
 
 class Recharge1And1Panel(BasePage):
     def close_Recharge1And1Panel(self):
-        self.try_click_element(element_data=ElementsData.Recharge1And1.btn_close)
+        self.click_element(element_data=ElementsData.Recharge1And1.btn_close)
         if Recharge1And1Panel.is_panel_active(self):
             raise FindElementError
-        print("购买测试通过")
 
     def is_panel_active(self):
         if self.exist(element_data=ElementsData.Recharge1And1.Recharge1And1Panel):

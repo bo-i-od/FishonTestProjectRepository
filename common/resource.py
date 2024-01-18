@@ -11,6 +11,13 @@ def check_icon_list(icon_list:list):
 # 该check就是按图标名转为最普通的图标（表里tpid对应的图标名）
 def check_icon(icon:str):
     "store_buff_doublehook"
+    if icon == "store_items_shop_1":
+        return 'coin_gold'
+    if icon == "store_items_shop_2":
+        return 'res_gear_1'
+    if icon == "store_items_shop_3":
+        return 'res_gear_3'
+
     s = icon.split('_')
     if s[0] == 'coin' and s[1] == "gold":
         icon = 'coin_gold'
@@ -25,17 +32,18 @@ def check_icon(icon:str):
             icon = f'{s[1]}_{s[2]}_{s[3]}'
         elif s[1] == "fishbag":
             icon = icon.replace("store_", "")
+
     return icon
 
 # 得到数据库中物品数量
-def get_resource(bp, item_tpid:str, element_data:dict, is_unit_conversion=False):
+def get_resource(bp, item_tpid:str, element_data:dict):
     item_db = bp.get_item_count(item_tpid=item_tpid)
     item_show = bp.get_text(element_data=element_data)
-    if is_unit_conversion:
-        item_db_str = unit_conversion_int_to_str(item_db)
-    else:
-        item_db_str = str(item_db)
-    compare(item_db_str, item_show)
+
+    item_db_str_unit_conversion = unit_conversion_int_to_str(item_db)
+    item_db_str = str(item_db)
+    if item_show != item_db_str_unit_conversion and item_show != item_db_str:
+        raise DifferError
     return item_db
 
 # 生成或更新item_dict
@@ -77,6 +85,8 @@ def divide_item_and_gear_icon(icon_list:list):
             continue
         item_icon_list.append(icon)
     return item_icon_list, gear_icon_list
+
+
 
 
 

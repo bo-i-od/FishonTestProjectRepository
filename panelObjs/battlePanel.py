@@ -15,30 +15,18 @@ class BattlePanel(BasePage):
             self.sleep(0.1)
         # self.send_key("G")
 
+    def click_btn_reel(self):
+        self.wait_for_appear(element_data=ElementsData.Battle.btn_reel, is_click=True)
+
     # unity上才能用
     def reel_quick(self):
         self.wait_for_appear(element_data=ElementsData.Battle.btn_reel, is_click=False)
+        self.sleep(2)
+        self.click_element(element_data=ElementsData.Battle.btn_reel)
         while not self.exist(element_data=ElementsData.Result.ResultPanel):
             self.send_key("G")
             self.sleep(0.5)
 
-    def reel_without_sleep(self):
-        self.wait_for_appear(element_data=ElementsData.Battle.btn_reel, is_click=False)
-        position = self.get_position(element_data=ElementsData.Battle.btn_reel)
-        print(position)
-        hold_reel_thread = Thread(target=BattlePanel.hold_reel, args=[self, position])
-        hold_reel_thread.start()
-        self.wait_for_appear(element_data=ElementsData.Battle.btn_reel, is_click=False)
-        print("张力超限")
-        # stop_thread(hold_reel_thread)
-
-    def hold_reel(self, position):
-        print("开始按")
-        try:
-            self.press_position(position=position, duration=5)
-        except:
-            pass
-        print("结束按")
 
     def unleash_power(self):
         # 得到reel按钮的位置

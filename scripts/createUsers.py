@@ -8,7 +8,7 @@ def logout(bp:BasePage, index):
     while not HomePanel.is_panel_active(bp):
         pass
     HomePanel.go_to_PlayerSettingPanel(bp)
-    PlayerSettingPanel.click_tab_setting(bp)
+    PlayerSettingPanel.click_tab_settings(bp)
     if index > 0:
         count = int(600 - index)
         c = f"add 1 101200 {count}"

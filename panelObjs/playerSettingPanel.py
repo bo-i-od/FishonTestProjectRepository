@@ -1,14 +1,23 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from tools.commonTools import *
+from common.viewport import Viewport
 
 class PlayerSettingPanel(BasePage):
+    def is_panel_active(self):
+        if self.exist(element_data=ElementsData.PlayerSetting.PlayerSettingPanel):
+            return True
+        return False
+
+    def click_btn_close(self):
+        self.click_element(element_data=ElementsData.PlayerSetting.btn_close)
+
     def click_tab_player(self):
         self.click_element(element_data=ElementsData.PlayerSetting.tab_player)
         if not self.exist(element_data=ElementsData.PlayerSetting.panel_player):
             raise FindNoElementError
 
-    def click_tab_setting(self):
+    def click_tab_settings(self):
         self.click_element(element_data=ElementsData.PlayerSetting.tab_setting)
         if not self.exist(element_data=ElementsData.PlayerSetting.panel_setting):
             raise FindNoElementError
@@ -45,32 +54,56 @@ class PlayerSettingPanel(BasePage):
 
     def click_name(self):
         self.click_element(element_data=ElementsData.PlayerSetting.player_name)
+        self.sleep(0.5)
         if not self.exist(element_data=ElementsData.PlayerSetting.panel_name):
             raise FindNoElementError
 
     def click_head(self):
         self.click_element(element_data=ElementsData.PlayerSetting.head)
-        if not self.exist(element_data=ElementsData.PlayerSetting.panel_name):
+        self.sleep(0.5)
+        if not self.exist(element_data=ElementsData.PlayerSetting.panel_avatar):
             raise FindNoElementError
 
     def click_flag(self):
         self.click_element(element_data=ElementsData.PlayerSetting.flag)
+        self.sleep(0.5)
         if not self.exist(element_data=ElementsData.PlayerSetting.panel_banner):
             raise FindNoElementError
 
     def click_edit_info(self):
         self.click_element(element_data=ElementsData.PlayerSetting.btn_edit_info)
+        self.sleep(0.5)
         if not self.exist(element_data=ElementsData.PlayerSetting.panel_avatar):
             raise FindNoElementError
 
     def click_edit_badge(self):
         self.click_element(element_data=ElementsData.PlayerSetting.btn_edit_badge)
+        self.sleep(0.5)
         if not self.exist(element_data=ElementsData.PlayerSetting.panel_badge):
             raise FindNoElementError
 
     def close_edit_profile(self):
-        self.click_element(element_data=ElementsData.PlayerSetting.btn_close_profile)
+        self.click_element(element_data=ElementsData.PlayerSetting.btn_close_additional)
+        self.sleep(0.5)
         if self.exist(element_data=ElementsData.PlayerSetting.Panel_Popups_Edit):
+            raise FindElementError
+
+    def click_btn_giftcode(self):
+        self.click_element(element_data=ElementsData.PlayerSetting.btn_giftcode)
+
+    def set_giftcode(self, text):
+        self.set_text(element_data=ElementsData.PlayerSetting.giftcode_input, text=text)
+
+    def get_giftcode(self):
+        giftcode_input = self.get_text(element_data=ElementsData.PlayerSetting.giftcode_input)
+        return giftcode_input
+
+    def click_btn_confirm(self):
+        self.click_element(element_data=ElementsData.PlayerSetting.btn_confirm)
+
+    def click_btn_close_giftcode(self):
+        self.click_element(element_data=ElementsData.PlayerSetting.btn_close_additional)
+        if self.exist(element_data=ElementsData.PlayerSetting.Panel_Giftcode):
             raise FindElementError
 
     def click_badge_i(self):
@@ -82,9 +115,6 @@ class PlayerSettingPanel(BasePage):
         self.click_element(element_data=ElementsData.PlayerSetting.btn_i_badge)
         if not self.exist(element_data=ElementsData.PlayerSetting.Panel_Tip_Rules):
             raise FindNoElementError
-        self.click_element(element_data=ElementsData.PlayerSetting.btn_i_badge)
-        if self.exist(element_data=ElementsData.PlayerSetting.Panel_Tip_Rules):
-            raise FindElementError
 
     def get_slider_music(self):
         return self.get_slider_value(element_data=ElementsData.PlayerSetting.options_music)
@@ -124,7 +154,8 @@ class PlayerSettingPanel(BasePage):
         position_list = self.get_position_list(element_data=ElementsData.PlayerSetting.options_graphics_list)
         return position_list
 
-    def set_options_graphics(self, position_list, index):
+    def set_options_graphics(self, index):
+        position_list = PlayerSettingPanel.get_options_graphics_position_list(self)
         self.click_position(position_list[index])
         tab_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerSetting.options_graphics_list)
         toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
@@ -135,7 +166,8 @@ class PlayerSettingPanel(BasePage):
         position_list = self.get_position_list(element_data=ElementsData.PlayerSetting.options_frame_list)
         return position_list
 
-    def set_options_frame(self, position_list, index):
+    def set_options_frame(self, index):
+        position_list = PlayerSettingPanel.get_options_frame_position_list(self)
         self.click_position(position_list[index])
         tab_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerSetting.options_frame_list)
         toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
@@ -146,7 +178,8 @@ class PlayerSettingPanel(BasePage):
         position_list = self.get_position_list(element_data=ElementsData.PlayerSetting.options_joystick_list)
         return position_list
 
-    def set_options_joystick(self, position_list, index):
+    def set_options_joystick(self, index):
+        position_list = PlayerSettingPanel.get_options_joystick_position_list(self)
         self.click_position(position_list[index])
         tab_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerSetting.options_joystick_list)
         toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
@@ -157,43 +190,64 @@ class PlayerSettingPanel(BasePage):
         position_list = self.get_position_list(element_data=ElementsData.PlayerSetting.options_vibration_list)
         return position_list
 
-    def set_options_vibration(self, position_list, index):
+    def set_options_vibration(self, index):
+        position_list = PlayerSettingPanel.get_options_vibration_position_list(self)
         self.click_position(position_list[index])
         tab_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerSetting.options_vibration_list)
         toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
         toggle_is_on_index = get_toggle_is_on_index(toggle_is_on_list)
         compare(index, toggle_is_on_index)
 
-
-    def language_test(self):
+    @staticmethod
+    def get_language_check_dict():
         language_check_dict = {"English": "SETTINGS", "русский": "НАСТРОЙКА", "Deutsch": "EINSTELLUNG",
-                               "Português": "CONFIGURAÇÃO", "Bahasa Indonesia": "PENGATURAN"}
-        self.click_element(element_data=ElementsData.PlayerSetting.tab_language)
-        self.sleep(1)
-        language_title_text_list = self.get_text_list(element_data=ElementsData.PlayerSetting.language_title_list)
-        language_title_position_list = self.get_position_list(element_data=ElementsData.PlayerSetting.language_title_list)
-        language_title_parent_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerSetting.language_title_list)
-        cur = 0
-        while cur < len(language_title_text_list):
-            self.click_position(language_title_position_list[cur])
-            # 比较当前点击标签与选中标签是否一致
-            select_parent_id = self.get_parent_id(element_data=ElementsData.PlayerSetting.select)
-            compare(language_title_parent_id_list[cur], select_parent_id)
-            # 保存
-            self.click_element(element_data=ElementsData.PlayerSetting.btn_save_language)
-            # 比较语言是否改为对应语言
-            text_tab_setting_expect = language_check_dict[language_title_text_list[cur]]
-            text_tab_setting = self.get_text(element_data=ElementsData.PlayerSetting.tab_setting)
-            compare(text_tab_setting, text_tab_setting_expect)
-            print(f"更改{language_title_text_list[cur]}语言成功")
-            # 看保存按钮是否切换为SAVED
-            if not self.exist(element_data=ElementsData.PlayerSetting.btn_saved_language):
-                raise FindNoElementError
-            cur += 1
-        print("切换语言测试通过")
+                               "Português": "CONFIGURAÇÃO", "Bahasa Indonesia": "PENGATURAN", "简体中文": "设置"}
+        return language_check_dict
+
+    def get_text_tab_setting(self):
+        return self.get_text(element_data=ElementsData.PlayerSetting.tab_setting)
+
+    def get_select_parent_id(self):
+        return self.get_parent_id(element_data=ElementsData.PlayerSetting.select)
+
+    def get_language_title_parent_id_list(self):
+        return self.get_parent_id_list(element_data=ElementsData.PlayerSetting.language_title_list)
+
+    def get_language_title_text_list(self):
+        language_title_list = self.get_text_list(element_data=ElementsData.PlayerSetting.language_title_list)
+        return language_title_list
+
+    def click_btn_save_language(self):
+        self.click_element(element_data=ElementsData.PlayerSetting.btn_save_language)
+
+    def is_btn_saved_language_active(self):
+        if self.exist(element_data=ElementsData.PlayerSetting.btn_saved_language):
+            return True
+        return False
+
+    def get_language_title_position_list(self):
+        return self.get_position_list(element_data=ElementsData.PlayerSetting.language_title_list)
 
     def click_btn_logout(self):
         self.click_element(element_data=ElementsData.PlayerSetting.btn_logout)
+
+    def get_avatar_id_list(self):
+        return self.get_object_id_list(element_data=ElementsData.PlayerSetting.avatar_list)
+
+    def get_avatar_viewport(self, avatar_id_list):
+        avatar_viewport = Viewport(self, element_viewport=ElementsData.PlayerSetting.viewport_avatar, item_id_list=avatar_id_list)
+        return avatar_viewport
+
+    def select_avatar(self, avatar_id_list, index):
+        self.click_element(object_id=avatar_id_list[index])
+        select_id_list = self.get_offspring_id_list(object_id=avatar_id_list[index], offspring_path="select")
+        if not select_id_list:
+            raise FindNoElementError
+
+    def get_avatar(self, avatar_id):
+        head_img_id = self.get_offspring_id(object_id=avatar_id, offspring_path="head>head_mask>head_img")
+        return self.get_icon(object_id=head_img_id)
+
 
 
 if __name__ == '__main__':

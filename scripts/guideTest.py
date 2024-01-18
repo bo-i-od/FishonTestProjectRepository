@@ -11,7 +11,7 @@ def playerEditNamePanelTest(bp: BasePage):
         return
     name = PlayerEditNamePanel.get_player_name(bp)
     player_name = name[1:]
-    PlayerEditNamePanel.set_player_name(player_name)
+    PlayerEditNamePanel.set_player_name(bp, player_name)
     # 得到头像个数
     head_count = PlayerEditNamePanel.get_head_count(bp)
     # 随机选一个序号

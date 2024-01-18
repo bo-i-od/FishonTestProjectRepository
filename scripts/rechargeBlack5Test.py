@@ -26,14 +26,14 @@ def collect_test(bp: BasePage):
     day_icon_list = RechargeBlack5Panel.get_day_icon_list(bp, day)
     day_quantity_list = RechargeBlack5Panel.get_day_quantity_list(bp, day)
     day_dict = resource.make_item_dict(day_icon_list, day_quantity_list)
-    item_count_expect_list = bp.get_item_count_list(day_icon_list)
+    item_count_expect_list = bp.get_item_count_list(item_icon_name_list=day_icon_list)
     cur = 0
     while cur < len(day_icon_list):
         item_count_expect_list[cur] += day_quantity_list[cur]
         cur += 1
     RechargeBlack5Panel.click_btn_collect(bp)
     reward_dict = RewardsPanel.get_reward_dict(bp)
-    item_count_list = bp.get_item_count_list(day_icon_list)
+    item_count_list = bp.get_item_count_list(item_icon_name_list=day_icon_list)
     print(day_dict,reward_dict)
     compare_dict(day_dict, reward_dict)
     print(item_count_expect_list, item_count_list)

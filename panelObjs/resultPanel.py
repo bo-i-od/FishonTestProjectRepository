@@ -5,10 +5,8 @@ from panelObjs.rewardsPanel import RewardsPanel
 class ResultPanel(BasePage):
 
     def get_exp(self):
-        exp_str = self.get_text(element_data=ElementsData.Result.pve_result.exp)
-        exp_str = exp_str[1:]
-        exp = int(exp_str)
-        return exp
+        exp_str = self.get_text(element_data=ElementsData.Result.exp)
+        return exp_str
 
     def wait_for_result(self):
         btn_open_and_cast_again = self.exist(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again)
@@ -19,42 +17,24 @@ class ResultPanel(BasePage):
             btn_claim = self.exist(element_data=ElementsData.Result.btn_claim)
             btn_throw = self.exist(element_data=ElementsData.Result.pve_result.btn_throw)
 
-    def automatic_settlement(self, is_return=True):
-        if not is_return:
-            if self.exist(element_data=ElementsData.Result.btn_claim):
-                self.click_element(element_data=ElementsData.Result.btn_claim)
-                return 1
-            ResultPanel.duel_sundries(self, is_return=False)
-            self.sleep(1)
-            self.try_click_element(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again)
-            return 0
+    def automatic_settlement(self):
         if self.exist(element_data=ElementsData.Result.btn_claim):
-            self.click_element(element_data=ElementsData.Result.btn_claim)
-            return "", {}
-        chest_icon, item_dict = ResultPanel.duel_sundries(self)
+            ResultPanel.click_btn_claim(self)
+            return
+        ResultPanel.duel_sundries(self)
         self.sleep(1)
-        self.try_click_element(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again)
-        return chest_icon, item_dict
+        self.click_element(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again)
+
+
 
     def click_btn_claim(self):
         self.click_until_disappear(element_data=ElementsData.Result.btn_claim)
 
+    def click_btn_claim_token_fish(self):
+        self.click_until_disappear(element_data=ElementsData.Result.btn_claim_token_fish)
 
-    def duel_sundries(self, is_return=True):
-        if not is_return:
-            if self.exist(element_data=ElementsData.Result.pve_result.btn_open_by_key):
-                self.click_element(element_data=ElementsData.Result.pve_result.btn_open_by_key)
-            elif self.exist(element_data=ElementsData.Result.pve_result.btn_open_by_cash):
-                self.click_element(element_data=ElementsData.Result.pve_result.btn_open_by_cash)
-            elif self.exist(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again):
-                self.click_element(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again)
-            else:
-                self.click_element(element_data=ElementsData.Result.pve_result.btn_throw)
-            RewardsPanel.wait_for_RewardsPanel(self)
-            self.sleep(0.5)
-            RewardsPanel.click_tap_to_claim(self)
-            return
-        chest_icon = ResultPanel.get_chest_icon(self)
+
+    def duel_sundries(self):
         if self.exist(element_data=ElementsData.Result.pve_result.btn_open_by_key):
             self.click_element(element_data=ElementsData.Result.pve_result.btn_open_by_key)
         elif self.exist(element_data=ElementsData.Result.pve_result.btn_open_by_cash):
@@ -63,21 +43,11 @@ class ResultPanel(BasePage):
             self.click_element(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again)
         else:
             self.click_element(element_data=ElementsData.Result.pve_result.btn_throw)
-            return "", {}
         RewardsPanel.wait_for_RewardsPanel(self)
         self.sleep(0.5)
-        item_dict = {}
-        if chest_icon != "":
-            item_dict = RewardsPanel.get_reward_dict(self)
         RewardsPanel.click_tap_to_claim(self)
-        return chest_icon, item_dict
+        return
 
-    def get_chest_icon(self):
-        icon = self.get_icon(element_data=ElementsData.Result.pve_result.icon_sundries)
-        if icon != "ChestNormal" and icon != "ChestGold" and icon != "ChestSilver":
-            return ""
-        print("钓到了箱子")
-        return icon
 
 
     def goto_HomePanel(self):

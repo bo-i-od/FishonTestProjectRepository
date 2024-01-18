@@ -63,8 +63,10 @@ class AchievementPanel(BasePage):
         return position_list
 
     def get_viewport(self):
-        vp = Viewport(self, element_viewport=ElementsData.Achievement.viewport, element_item_list=ElementsData.Achievement.achievement_list)
-        return vp
+        size = self.get_size_list(element_data=ElementsData.Achievement.achievement_list)[0]
+        edge = [0, 0.5 * size[0]]
+        viewport = Viewport(self, element_viewport=ElementsData.Achievement.viewport, element_item_list=ElementsData.Achievement.achievement_list, viewport_edge=edge)
+        return viewport
 
     def get_group_name(self, achievement_id):
         group_name_id = self.get_offspring_id(offspring_path="group_com>groupbg>groupname", object_id=achievement_id)

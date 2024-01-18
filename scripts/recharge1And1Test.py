@@ -6,7 +6,6 @@ from panelObjs.baitAndRodShowPanel import BaitAndRodShowPanel
 from panelObjs.recharge1And1Panel import Recharge1And1Panel
 from panelObjs.rewardsPanel import RewardsPanel
 from common.resource import *
-from common.pay import wait_for_pay_result
 def click_icon_test(bp: BasePage):
     item_position_list = Recharge1And1Panel.get_item_position_list(bp)
     item_icon_list = Recharge1And1Panel.get_item_icon_list(bp)
@@ -39,10 +38,7 @@ def buy_test(bp: BasePage):
         return
     item_icon_list = Recharge1And1Panel.get_item_icon_list(bp)
     Recharge1And1Panel.click_btn_buy(bp)
-    # 手机上要加支付逻辑
-    if wait_for_pay_result(bp) is False:  # 支付失败
-        print("1+1礼包，支付失败，跳过测试")
-        return
+    bp.sleep(0.5)
     # 支付成功
     reward_icon_list = RewardsPanel.get_reward_icon_list(bp, is_divide=False)
     compare_list(item_icon_list, reward_icon_list)

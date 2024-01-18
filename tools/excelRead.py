@@ -41,6 +41,13 @@ class ExceTools:
             cur += 1
         return exp_limit, exp_limit_all
 
+    def get_fish_type(self, fish_list):
+        tpid = "tpId"
+        fishtype = "fishType"
+        worksheet = self.get_worksheet("FISH.xlsm", "模板数据")
+        res_list = self.same_row_different_column_convert_list(worksheet=worksheet, source_header=tpid, target_header=fishtype, source_list=fish_list)
+        return res_list
+
     def get_book_list(self):
         book_list = [{"book_name": "RESOURCE.xlsm", "name": "name", "id": "resourceID", "icon": "itemIcon"},
                 {"book_name": "ITEM_MAIN.xlsm", "name": "name", "id": "itemTpId", "icon": "iconName"}]
