@@ -76,7 +76,7 @@ def stop_thread( thread):
     _async_raise(thread.ident, SystemExit)
 
 
-def unit_conversion_int_to_str(count:int):
+def unit_conversion_int_to_str(count: int):
     if count < 10000:
         return str(count)
     elif count < 10000000:
@@ -90,6 +90,10 @@ def str_to_int(count:str):
         return int(count[:-1]) * 1000
     elif count[-1:] == 'M':
         return int(count[:-1]) * 1000000
+    elif count[-1:] == '万':
+        return int(count[:-1]) * 10000
+    elif count[-1:] == '亿':
+        return int(count[:-1]) * 100000000
     else:
         return int(count)
 

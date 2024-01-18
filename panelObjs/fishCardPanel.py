@@ -36,7 +36,12 @@ class FishCardPanel(BasePage):
         if selected_index == index:
             return
         target_id = card_id_list[index]
-        viewport = Viewport(self, element_viewport=ElementsData.FishCard.fish_card_viewport, item_id_list=card_id_list)
+        size = self.get_size(object_id=target_id)
+        if self.is_android:
+            edge = [0, 4 * size[0]]
+        else:
+            edge = [0, 0.5 * size[0]]
+        viewport = Viewport(self, element_viewport=ElementsData.FishCard.fish_card_viewport, item_id_list=card_id_list, viewport_edge=edge)
         viewport.move_until_appear(target_id)
         # position_list = self.get_position_list(element_data=ElementsData.FishCard.fisheries_title_list)
         self.click_element(object_id=card_id_list[index])
@@ -50,7 +55,8 @@ class FishCardPanel(BasePage):
         cur = 0
         while cur < len(fish_card_model_id_list):
             if name_list[cur] == "FishCard_on":
-                fish_card_model_id_list[cur] = self.get_offspring_id(offspring_path="FishCard_on>", object_id=fish_card_model_id_list[cur])
+                print(fish_card_model_id_list[cur])
+                fish_card_model_id_list[cur] = self.get_offspring_id(offspring_path=">", object_id=fish_card_model_id_list[cur])
                 selected_index = cur
                 break
             cur += 1

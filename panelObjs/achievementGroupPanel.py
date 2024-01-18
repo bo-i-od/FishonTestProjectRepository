@@ -16,6 +16,10 @@ class AchievementGroupPanel(BasePage):
             return True
         return False
 
+    @staticmethod
+    def get_panel_element():
+        return ElementsData.AchievementGroup.AchievementGroupPanel
+
     def get_title(self):
         title = self.get_text(element_data=ElementsData.AchievementGroup.title)
         return title

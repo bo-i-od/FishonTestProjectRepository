@@ -74,21 +74,11 @@ class BaitAndRodAlbumPanel(BasePage):
             attribute_icon_list.append(self.get_icon(object_id=attribute_icon_id))
         return attribute_icon_list
 
-    def switch_tab(self, index=-1):
-        if index >= 0:
-            position_list = self.get_position_list(element_data=ElementsData.BaitAndRodAlbum.tab_list)
-            self.click_position(position_list[index])
-            return
-        is_rod = self.exist(element_data=ElementsData.BaitAndRodAlbum.panel_bag_rod)
-        is_bait = self.exist(element_data=ElementsData.BaitAndRodAlbum.panel_bag_bait)
-        if not(is_rod or is_bait):
-            return
-        if is_rod:
-            print("当前为鱼竿相册，切换为鱼饵相册")
-            self.click_element(element_data=ElementsData.BaitAndRodAlbum.tab_bait)
-        if is_bait:
-            print("当前为鱼饵相册，切换为鱼竿相册")
-            self.click_element(element_data=ElementsData.BaitAndRodAlbum.tab_rod)
+    def switch_tab(self, index):
+        position_list = self.get_position_list(element_data=ElementsData.BaitAndRodAlbum.tab_list)
+        self.click_position(position_list[index])
+
+
 
     def switch_filter(self, rarity=0, available_location=0, hide_unowned=False):
         # 打开筛选面板
@@ -144,4 +134,5 @@ class BaitAndRodAlbumPanel(BasePage):
 
 if __name__ == "__main__":
     bp = BaitAndRodAlbumPanel()
-    BaitAndRodAlbumPanel.swipe_gear_list(bp, 1)
+    a = BaitAndRodAlbumPanel.get_gear_list(bp)
+    print(a)

@@ -22,7 +22,7 @@ def click_icon_test(bp: BasePage):
 
 def buy_test(bp: BasePage, index):
     icon_list, quantity_list = RechargeEndlessPanel.get_select_icon_and_quantity_list(bp, index)
-    item_count_list = bp.get_item_count_list(icon_list)
+    item_count_list = bp.get_item_count_list(item_icon_name_list=icon_list)
     price = RechargeEndlessPanel.click_btn_buy(bp, index)
     if price != "FREE":
         pass  # 手机加支付和取消支付逻辑
@@ -35,7 +35,7 @@ def buy_test(bp: BasePage, index):
     while cur < len(item_count_list):
         quantity_list[cur] += item_count_list[cur]
         cur += 1
-    item_count_list = bp.get_item_count_list(icon_list)
+    item_count_list = bp.get_item_count_list(item_icon_name_list=icon_list)
     compare(item_count_list, quantity_list)
     RewardsPanel.click_tap_to_claim(bp)
     if RewardsPanel.is_panel_active(bp):

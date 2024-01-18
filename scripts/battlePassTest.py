@@ -19,10 +19,10 @@ from common.viewport import Viewport
 
 def swipe_test(bp:BasePage):
     viewport = BattlePassPanel.get_viewport(bp)
-    x_0 = bp.get_position(viewport.item_id_list[0])[0]
+    x_0 = bp.get_position(object_id=viewport.item_id_list[0])[0]
     point_end = [viewport.viewport_position[0] - viewport.viewport_size[0] * 0.1, viewport.viewport_position[1]]
     bp.swipe(point_start=viewport.viewport_position, point_end=point_end)
-    x_1 = bp.get_position(viewport.item_id_list[0])[0]
+    x_1 = bp.get_position(object_id=viewport.item_id_list[0])[0]
     if x_0 - x_1 < viewport.viewport_size[0] * 0.05:
         raise MoveError
     # point_end = [viewport.viewport_position[0] + viewport.viewport_size[0] * 0.1, viewport.viewport_position[1]]
@@ -38,6 +38,7 @@ def click_icon_buy_level_test(bp:BasePage):
     icon_free_list, position_free_list, icon_premium_list, position_premium_list = res
     r = random.randint(0, len(icon_free_list) - 1)
     bp.click_position(position_free_list[r])
+    bp.sleep(0.2)
     item_icon = ItemTipsPanel.get_item_icon(bp)
     # item_icon = check_icon(item_icon)
     compare(item_icon, icon_free_list[r])
@@ -142,9 +143,11 @@ def BattlePassRewardPanel_test(bp:BasePage):
     r1 = random.randint(0,len(icon_premium_list) - 1)
     # 点击并对照图标
     bp.click_position(position_free_list[r0])
+    bp.sleep(0.2)
     item_icon = ItemTipsPanel.get_item_icon(bp)
     compare(icon_free_list[r0], item_icon)
     bp.click_position(position_premium_list[r1])
+    bp.sleep(0.2)
     item_icon = ItemTipsPanel.get_item_icon(bp)
     compare(icon_premium_list[r1], item_icon)
     # 关闭页面
@@ -209,6 +212,7 @@ def random_collect_test(bp:BasePage, icon_list, quantity_list, status, viewport:
     bp.sleep(0.5)
     icon_position = BattlePassPanel.get_collectable_icon_position(bp, icon_selected_id)
     bp.click_position(icon_position)
+    bp.sleep(0.2)
     reward_icon_list, gear_icon_list = RewardsPanel.get_reward_icon_list(bp)
     reward_icon = reward_icon_list[0]
     reward_quantity = RewardsPanel.get_reward_quantity_list(bp)[0]
@@ -219,7 +223,7 @@ def random_collect_test(bp:BasePage, icon_list, quantity_list, status, viewport:
     compare(reward_quantity, quantity_list[collectable_list[r]])
     compare(item_count, item_count_expect)
     bp.click_position(icon_position)
-    bp.sleep(0.1)
+    bp.sleep(0.2)
     if ItemTipsPanel.is_panel_active(bp):
         item_icon = ItemTipsPanel.get_item_icon(bp)
         compare(icon_selected, item_icon)
@@ -236,7 +240,7 @@ def collect_all_test(bp: BasePage, icon_list, quantity_list):
     stock_icon_list = []
     for item in item_dict:
         stock_icon_list.append(item)
-    stock_quantity_list = bp.get_item_count_list(stock_icon_list)
+    stock_quantity_list = bp.get_item_count_list(item_icon_name_list=stock_icon_list)
     if not BattlePassPanel.click_btn_collect_all(bp):
         if icon_list:
             raise FindElementError
@@ -244,7 +248,7 @@ def collect_all_test(bp: BasePage, icon_list, quantity_list):
         return
     stock_expect_dict = item_dict.copy()
     stock_expect_dict = make_item_dict(item_coin_list=stock_icon_list, item_quantity_list=stock_quantity_list, item_dict=stock_expect_dict)
-    stock_quantity_list = bp.get_item_count_list(stock_icon_list)
+    stock_quantity_list = bp.get_item_count_list(item_icon_name_list=stock_icon_list)
     stock_dict = make_item_dict(item_coin_list=stock_icon_list, item_quantity_list=stock_quantity_list)
     compare(stock_dict, stock_expect_dict)
     reward_icon_list, gear_icon_list = RewardsPanel.get_reward_icon_list(bp)
@@ -279,9 +283,11 @@ def BattlePass_test(bp:BasePage):
         bp.go_to_panel("BattlePassPanel")
         bp.sleep(1)
         if BattlePassRewardPanel.is_panel_active(bp):
+            bp.sleep(0.5)
             BattlePassRewardPanel_test(bp)
             bp.sleep(1)
         if BattlePassPopPanel.is_panel_active(bp):
+            bp.sleep(0.5)
             BattlePassPopPanel_test(bp)
     bp.sleep(0.5)
     BattlePassPanel.click_btn_buy_levels(bp)
@@ -325,8 +331,10 @@ def RodMoreToOnePanel_test(bp:BasePage):
     BaitAndRodShowPanel.click_tap_to_continue(bp)
     bp.click_position(rod_position_list[r])
     RodMoreToOnePanel.click_confirm(bp)
+    bp.sleep(0.2)
     item_icon_list, gear_icon_list = RewardsPanel.get_reward_icon_list(bp)
     compare(gear_icon_list[0], rod_icon_list[r])
+    bp.sleep(0.3)
     RewardsPanel.click_tap_to_claim(bp)
     bp.sleep(0.5)
     RodMoreToOnePanel.click_btn_close(bp)

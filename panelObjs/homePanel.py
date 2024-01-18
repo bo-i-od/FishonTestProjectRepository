@@ -33,7 +33,7 @@ class HomePanel(BasePage):
         self.go_to(element_data=ElementsData.Home.btn_task)
 
     def go_to_FishCardPanel(self):
-        self.go_to(element_data=ElementsData.Home.btn_album)
+        self.go_to(element_data=ElementsData.Home.btn_fishcard)
 
     def go_to_RoulettePanel(self):
         self.go_to(element_data=ElementsData.Home.btn_roulette)

@@ -34,8 +34,17 @@ class MailPanel(BasePage):
         return position_list
 
     def get_mail_viewport(self):
-        mail_viewport = Viewport(self, element_viewport=ElementsData.Mail.mail_Viewport, element_item_list=ElementsData.Mail.mail_list)
+        size_list = self.get_size_list(element_data=ElementsData.Mail.mail_list)
+        bottom = 0
+        if size_list:
+            bottom = 0.5 * size_list[0][1]
+        mail_viewport = Viewport(self, element_viewport=ElementsData.Mail.mail_viewport, element_item_list=ElementsData.Mail.mail_list,viewport_edge=[0, bottom])
         return mail_viewport
+
+    def get_mail_detail_viewport(self,item_id_list):
+        mail_detail_viewport = Viewport(self, element_viewport=ElementsData.Mail.mail_detail_viewport, item_id_list=item_id_list)
+        mail_detail_viewport.viewport_direction = "column"
+        return mail_detail_viewport
 
     def get_mail_is_on_list(self):
         return self.get_toggle_is_on_list(element_data=ElementsData.Mail.mail_list)
@@ -53,6 +62,10 @@ class MailPanel(BasePage):
     def click_btn_claim(self):
         self.click_element(element_data=ElementsData.Mail.btn_claim)
 
+    def get_reward_icon_id_list(self):
+        reward_icon_id_list = self.get_object_id_list(element_data=ElementsData.Mail.reward_icon_list)
+        return reward_icon_id_list
+
     def get_reward_icon_list(self):
         reward_icon_list = self.get_icon_list(element_data=ElementsData.Mail.reward_icon_list)
         return reward_icon_list
@@ -65,6 +78,10 @@ class MailPanel(BasePage):
         reward_quantity_list = self.get_text_list(element_data=ElementsData.Mail.reward_quantity_list)
         str_to_int_list(reward_quantity_list)
         return reward_quantity_list
+
+    def get_btn_claim_id_list(self):
+        return self.get_object_id_list(element_data=ElementsData.Mail.btn_claim)
+
 
 
 

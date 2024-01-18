@@ -12,7 +12,7 @@ class Viewport:
             self.item_id_list = self.get_item_id_list()
         self.viewport_direction = self.get_viewport_direction()
         self.viewport_size = self.get_viewport_size()
-        self.viewport_range = self.get_viewport_range(viewport_edge)
+        self.viewport_range = self.get_viewport_range()
         if viewport_edge is not None:
             self.viewport_range[0] += viewport_edge[0] * self.viewport_size[0]
             self.viewport_range[1] -= viewport_edge[1] * self.viewport_size[1]
@@ -48,7 +48,7 @@ class Viewport:
         return 0
 
     def move_delta_len(self, target_id):
-        target_position = self.basePage.get_position(target_id)
+        target_position = self.basePage.get_position(object_id=target_id)
         point_end = [0, 0]
         point_end[0] = self.viewport_position[0]
         point_end[1] = self.viewport_position[1]
@@ -81,7 +81,7 @@ class Viewport:
         while self.move_delta_len(target_id):
             pass
 
-    def get_viewport_range(self, viewport_edge):
+    def get_viewport_range(self):
         size = self.viewport_size
         position = self.viewport_position
         if self.viewport_direction == "column":
@@ -120,6 +120,7 @@ class Viewport:
     def change_item(self, element_data=None, object_id_list=None):
         if object_id_list is not None:
             self.item_id_list = object_id_list
+            return
         self.item_id_list = self.basePage.get_object_id_list(element_data=element_data)
 
     def get_clickable_index_list(self):

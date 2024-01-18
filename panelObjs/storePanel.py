@@ -44,7 +44,7 @@ class StorePanel(BasePage):
 
 
     # 获得图标、数量和折扣列表
-    def get_box_icon_and_quantity_and_box_off_list(self):
+    def get_box_details(self):
         icon_list = self.get_icon_list(element_data=ElementsData.Store.Box.box_list)
         quantity_list = self.get_text_list(element_data=ElementsData.Store.Box.quantity_list)
         off_list = self.get_text_list(element_data=ElementsData.Store.Box.off_list)
@@ -61,19 +61,25 @@ class StorePanel(BasePage):
 
     # 获得折扣和价格的列表 没有就补零填充
     def get_price_list(self, item_id_list=None):
-        if item_id_list is None:
-            price_list = self.get_text_list(element_data=ElementsData.Store.btn_buy_list)
-            str_to_int_list(price_list)
-            return price_list
         price_list = []
         for item_id in item_id_list:
             btn_disabled_id = self.get_offspring_id_list("btn_disabled", object_id=item_id)
-            text_sellout_id = self.get_offspring_id_list("sellout>text", object_id=item_id)
             if btn_disabled_id:
                 # -1 代表已经购买
                 price_list.append("-1")
                 continue
-            elif text_sellout_id:
+            text_sellout_id = self.get_offspring_id_list("sellout>text", object_id=item_id)
+            if text_sellout_id:
+                # -1 代表已经购买
+                price_list.append("-1")
+                continue
+            text_sellout_id = self.get_offspring_id_list("soldout>bg>text", object_id=item_id)
+            if text_sellout_id:
+                # -1 代表已经购买
+                price_list.append("-1")
+                continue
+            text_sellout_id = self.get_offspring_id_list("sellout>bg>text", object_id=item_id)
+            if text_sellout_id:
                 # -1 代表已经购买
                 price_list.append("-1")
                 continue
@@ -99,22 +105,50 @@ class StorePanel(BasePage):
         # str_to_int_list(price_list)
         # return price_list
 
+    def get_btn_icon_list(self, item_id_list):
+        btn_icon_list = []
+        for item_id in item_id_list:
+            btn_disabled_id = self.get_offspring_id_list("btn_disabled>text", object_id=item_id)
+            if btn_disabled_id:
+                # -1 代表已经购买
+                btn_icon_list.append("")
+                continue
+            text_sellout_id = self.get_offspring_id_list("sellout>text", object_id=item_id)
+            if text_sellout_id:
+                btn_icon_list.append("")
+                continue
+            text_sellout_id = self.get_offspring_id_list("soldout>bg>text", object_id=item_id)
+            if text_sellout_id:
+                btn_icon_list.append("")
+                continue
+            text_sellout_id = self.get_offspring_id_list("sellout>bg>text", object_id=item_id)
+            if text_sellout_id:
+                btn_icon_list.append("")
+                continue
+            btn_icon_id = self.get_offspring_id("btn_buy>icon", object_id=item_id)
+            btn_icon_list.append(self.get_icon(object_id=btn_icon_id))
+        return btn_icon_list
     # 没有状态变化的按钮就直接返回位置列表
     # 因为按钮状态有三个所以将按钮位置保存到列表
     # 点击按钮时直接点列表对应索引的位置
-    def get_btn_position_list(self, item_id_list=None):
-        if item_id_list is None:
-            btn_position_list = self.get_position_list(element_data=ElementsData.Store.btn_buy_list)
-            return btn_position_list
+    def get_btn_position_list(self, item_id_list):
         btn_position_list = []
         for item_id in item_id_list:
             btn_disabled_id = self.get_offspring_id_list("btn_disabled>text", object_id=item_id)
-            text_sellout_id = self.get_offspring_id_list("sellout>text", object_id=item_id)
             if btn_disabled_id:
                 # -1 代表已经购买
                 btn_position_list.append(self.get_position(object_id=btn_disabled_id[0]))
                 continue
-            elif text_sellout_id:
+            text_sellout_id = self.get_offspring_id_list("sellout>text", object_id=item_id)
+            if text_sellout_id:
+                btn_position_list.append(self.get_position(object_id=text_sellout_id[0]))
+                continue
+            text_sellout_id = self.get_offspring_id_list("soldout>bg>text", object_id=item_id)
+            if text_sellout_id:
+                btn_position_list.append(self.get_position(object_id=text_sellout_id[0]))
+                continue
+            text_sellout_id = self.get_offspring_id_list("sellout>bg>text", object_id=item_id)
+            if text_sellout_id:
                 btn_position_list.append(self.get_position(object_id=text_sellout_id[0]))
                 continue
             btn_buy_id = self.get_offspring_id("btn_buy>text", object_id=item_id)
@@ -129,6 +163,15 @@ class StorePanel(BasePage):
     def get_item_id_list(self):
         item_id_list = self.get_object_id_list(element_data=ElementsData.Store.Resource.item_list)
         return item_id_list
+
+    def get_cash_id_list(self):
+        cash_id_list = self.get_object_id_list(element_data=ElementsData.Store.Cash.cash_list)
+        return cash_id_list
+
+    def get_gift_pack_id_list(self):
+        gift_pack_id_list = self.get_object_id_list(element_data=ElementsData.Store.GiftPack.gift_pack_list)
+        return gift_pack_id_list
+
 
     # 算出期望的价格列表
     def get_expect_price_list(self, icon_list, quantity_list, off_list):
@@ -160,15 +203,21 @@ class StorePanel(BasePage):
     # 获得绿钞数量
 
     # 看该按钮是否可以点击
-    def is_clickable(self, price):
-        if price < 0:
-            print("已经购买无法购买")
+    def is_clickable(self, cost, icon):
+        if cost < 0:
+            self.debug_log("已经购买无法购买")
             return False
-        cash = resource.get_resource(self, "100100", element_data=ElementsData.Store.text_100100)
-        if price > cash:
-            print("绿钞不足")
+        item_tpid = self.get_tpid(item_icon_name=icon)
+        element_data = None
+        if item_tpid == "100000":
+            element_data = ElementsData.Store.text_100000
+        elif item_tpid == "100100":
+            element_data = ElementsData.Store.text_100100
+
+        count = resource.get_resource(self, item_tpid=item_tpid, element_data=element_data)
+        if cost > count:
+            self.debug_log("资源不足")
             return False
-        print("绿钞充足")
         return True
 
 
@@ -200,22 +249,41 @@ class StorePanel(BasePage):
             gift_pack_dict_list.append(item_dict)
         return gift_pack_dict_list
 
-    def get_gift_pack_icon_and_position_list(self):
-        gift_pack_icon_list = self.get_icon_list(element_data=ElementsData.Store.GiftPack.icon_list)
+    def get_gift_pack_position_list(self):
         gift_pack_position_list = self.get_position_list(element_data=ElementsData.Store.GiftPack.icon_list)
-        return gift_pack_icon_list, gift_pack_position_list
+        return gift_pack_position_list
+
+    def get_gift_pack_icon_list(self):
+        gift_pack_icon_list = self.get_icon_list(element_data=ElementsData.Store.GiftPack.icon_list)
+        return gift_pack_icon_list
 
     def get_gear_position_list(self):
-        gear_position_list = self.get_position_list(element_data=ElementsData.Store.Resource.gear_icon_list)
+        gear_position_list = self.get_position_list(element_data=ElementsData.Store.Resource.gear_card_list)
         return gear_position_list
 
     def get_gear_name_list(self):
         gear_name_list = self.get_text_list(element_data=ElementsData.Store.Resource.gear_name_list)
+        cur = 0
+        while cur < len(gear_name_list):
+            gear_name_list[cur] = gear_name_list[cur].split('>')[1].split('<')[0]
+            cur += 1
         return gear_name_list
 
     def get_gear_icon_list(self):
-        gear_icon_list = self.get_icon_list(element_data=ElementsData.Store.Resource.gear_icon_list)
+        gear_card_id_list = self.get_object_id_list(element_data=ElementsData.Store.Resource.gear_card_list)
+        gear_icon_id_list = []
+        for gear_card_id in gear_card_id_list:
+            icon_id_list = self.get_offspring_id_list(object_id=gear_card_id, offspring_path="rod_mask>icon")
+            if icon_id_list:
+                gear_icon_id_list.append(icon_id_list[0])
+            icon_id_list = self.get_offspring_id_list(object_id=gear_card_id, offspring_path="bait_mask>icon")
+            if icon_id_list:
+                gear_icon_id_list.append(icon_id_list[0])
+        gear_icon_list = self.get_icon_list(object_id_list=gear_icon_id_list)
         return gear_icon_list
+
+    def click_btn_info(self):
+        self.click_element(element_data=ElementsData.Store.Resource.btn_info)
 
     def get_fish_card_icon_list(self):
         fish_card_icon_list = self.get_icon_list(element_data=ElementsData.Store.Resource.fish_card_icon_list)
@@ -224,6 +292,10 @@ class StorePanel(BasePage):
     def get_fish_card_name_list(self):
         fish_card_name_list = self.get_text_list(element_data=ElementsData.Store.Resource.fish_card_name_list)
         return fish_card_name_list
+
+    def get_fish_card_main_name(self):
+        fish_card_main_name = self.get_text(element_data=ElementsData.Store.Resource.fish_card_main_name)
+        return fish_card_main_name
 
     def get_fish_card_position_list(self):
         fish_card_position_list = self.get_position_list(element_data=ElementsData.Store.Resource.fish_card_icon_list)
@@ -262,9 +334,44 @@ class StorePanel(BasePage):
         materials_position_list = self.get_position_list(element_data=ElementsData.Store.Resource.materials_icon_list)
         return materials_position_list
 
-    def get_materials_quantity_list(self):
-        materials_quantity_list = self.get_text_list(element_data=ElementsData.Store.Resource.materials_quantity_list)
-        return materials_quantity_list
+    def click_btn_min(self):
+        self.click_element(element_data=ElementsData.Store.Resource.btn_min)
+
+    def click_btn_max(self):
+        self.click_element(element_data=ElementsData.Store.Resource.btn_max)
+
+    def click_btn_add(self):
+        self.click_element(element_data=ElementsData.Store.Resource.btn_add)
+
+    def click_btn_sub(self):
+        self.click_element(element_data=ElementsData.Store.Resource.btn_sub)
+
+    def click_btn_purchase(self):
+        self.click_element(element_data=ElementsData.Store.Resource.btn_purchase)
+
+    def get_slider_size(self):
+        return self.get_size(element_data=ElementsData.Store.Resource.slider)
+
+    def get_slider_position(self):
+        return self.get_position(element_data=ElementsData.Store.Resource.slider)
+
+    def get_item_icon(self):
+        item_icon = self.get_icon(element_data=ElementsData.Store.Resource.item_icon)
+        return item_icon
+
+    def get_item_quantity(self):
+        item_quantity = self.get_text(element_data=ElementsData.Store.Resource.item_quantity)
+        item_quantity = str_to_int(item_quantity)
+        return item_quantity
+
+    def get_cost_icon(self):
+        item_icon = self.get_icon(element_data=ElementsData.Store.Resource.cost_icon)
+        return item_icon
+
+    def get_cost_quantity(self):
+        item_quantity = self.get_text(element_data=ElementsData.Store.Resource.cost_quantity)
+        item_quantity = str_to_int(item_quantity)
+        return item_quantity
 
     def get_cash_position_list(self):
         cash_position_list = self.get_position_list(element_data=ElementsData.Store.Cash.cash_icon_list)
@@ -287,10 +394,15 @@ class StorePanel(BasePage):
             cash_first_time_list.append(first_bg)
         return cash_first_time_list
 
+    def change_resource_tab(self, index):
+        resource_tab_position_list = self.get_position_list(element_data=ElementsData.Store.Resource.resource_tab_list)
+        self.click_position(resource_tab_position_list[index])
+
+
 
 
 if __name__ == '__main__':
     bp = BasePage()
     # a = StorePanel.get_gift_pack_dict_list(bp)
-    a = StorePanel.change_tab(bp, 3)
+    a = bp.get_text(element_data=ElementsData.Store.text_100000)
     print(a)

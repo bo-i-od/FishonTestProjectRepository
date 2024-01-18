@@ -18,7 +18,7 @@ class FishCardUpgradePanel(BasePage):
     def click_btn_level_up(self):
         self.click_element(element_data=ElementsData.FishCardUpgrade.btn_level_up)
 
-    def is_btn_level_up_btn_abled(self):
+    def level_up_check(self):
         stock = FishCardUpgradePanel.get_stock(self)
         cost = self.get_text(element_data=ElementsData.FishCardUpgrade.cost_value_list)
         cost = str_to_int(cost)
@@ -26,16 +26,23 @@ class FishCardUpgradePanel(BasePage):
         progress_split = progress.split('/')
         progress_numerator = int(progress_split[0])
         progress_denominator = int(progress_split[1])
-        if self.get_offspring_id_list(offspring_path="btn_disabled", element_data=ElementsData.FishCardUpgrade.btn_level_up):
-            if stock >= cost and progress_numerator >= progress_denominator :
-                raise CompareError
-            return False
+        # if not FishCardUpgradePanel.is_btn_level_up_abled(self):
+        #     if stock >= cost and progress_numerator >= progress_denominator :
+        #         raise CompareError
+        #     return False
         if cost > stock or progress_denominator > progress_numerator:
             raise CompareError
+        # return True
+
+    def is_btn_level_up_abled(self):
+        if self.get_offspring_id_list(offspring_path="btn_disabled",element_data=ElementsData.FishCardUpgrade.btn_level_up):
+            return False
         return True
 
+
+
     def get_stock(self):
-        stock = resource.get_resource(self, "100000", element_data=ElementsData.FishCardUpgrade.text_100000, is_unit_conversion=True)
+        stock = resource.get_resource(self, "100000", element_data=ElementsData.FishCardUpgrade.text_100000)
         return stock
 
     def get_card_information(self):
@@ -74,9 +81,9 @@ class FishCardUpgradePanel(BasePage):
         progress_numerator = int(progress_split[0])
         progress_denominator = int(progress_split[1])
         level_now = self.get_text(element_data=ElementsData.FishCardUpgrade.level_now)
-        level_now = int(level_now[-1:])
+        level_now = int(level_now.split('.')[1])
         level_next = self.get_text(element_data=ElementsData.FishCardUpgrade.level_next)
-        level_next = int(level_next[-1:])
+        level_next = int(level_next.split('.')[1])
         cost_icon_list = self.get_icon_list(element_data=ElementsData.FishCardUpgrade.cost_icon_list)
         cost_value_list = self.get_text_list(element_data=ElementsData.FishCardUpgrade.cost_value_list)
         str_to_int_list(cost_value_list)
@@ -108,5 +115,5 @@ class FishCardUpgradePanel(BasePage):
 
 if __name__ == "__main__":
     bp = BasePage()
-    a = FishCardUpgradePanel.is_btn_level_up_btn_abled(bp)
+    a = FishCardUpgradePanel.is_level_up_abled(bp)
     print(a)
