@@ -1,7 +1,7 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 class Viewport:
-    def __init__(self, bp, element_viewport, element_item_list=None, item_id_list=None, viewport_edge=None):
+    def __init__(self, bp, element_viewport, element_item_list=None, item_id_list=None, viewport_direction=None, viewport_edge=None):
         self.basePage = bp
         self.element_viewport = element_viewport
         self.element_item_list = element_item_list
@@ -10,7 +10,9 @@ class Viewport:
         self.item_id_list = item_id_list
         if self.item_id_list is None:
             self.item_id_list = self.get_item_id_list()
-        self.viewport_direction = self.get_viewport_direction()
+        self.viewport_direction = viewport_direction
+        if self.viewport_direction is None:
+            self.viewport_direction = self.get_viewport_direction()
         self.viewport_size = self.get_viewport_size()
         self.viewport_range = self.get_viewport_range()
         if viewport_edge is not None:
@@ -53,8 +55,8 @@ class Viewport:
         point_end[0] = self.viewport_position[0]
         point_end[1] = self.viewport_position[1]
         if self.viewport_direction == "row":
-            edge_start = self.viewport_range[0] + self.delta_len * 0.2
-            edge_end = self.viewport_range[1] - self.delta_len * 0.2
+            edge_start = self.viewport_range[0]
+            edge_end = self.viewport_range[1]
             if target_position[0] > edge_start and target_position[0] < edge_end:
                 return False
             if target_position[0] > edge_start:
@@ -65,8 +67,10 @@ class Viewport:
             self.basePage.swipe(point_start=self.viewport_position, point_end=point_end)
             return True
 
-        edge_start = self.viewport_range[0] + self.delta_len * 0.2
-        edge_end = self.viewport_range[1] - self.delta_len * 0.2
+        # edge_start = self.viewport_range[0] + self.delta_len * 0.2
+        # edge_end = self.viewport_range[1] - self.delta_len * 0.2
+        edge_start = self.viewport_range[0]
+        edge_end = self.viewport_range[1]
         if target_position[1] > edge_start and target_position[1] < edge_end:
             return False
         if target_position[1] > edge_start:

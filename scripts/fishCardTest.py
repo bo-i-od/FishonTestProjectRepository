@@ -90,7 +90,7 @@ def FishCardGiftPackPanel_test(bp: BasePage):
     quantity_list = FishCardGiftPackPanel.get_item_quantity_list(bp)
     click_pack_icon_test(bp, icon_list)
     resource.str_to_int_list(quantity_list)
-    item_dict = resource.make_item_dict(item_coin_list=icon_list, item_quantity_list=quantity_list)
+    item_dict = resource.make_item_dict(item_icon_list=icon_list, item_quantity_list=quantity_list)
     item_count_expect_list = bp.get_item_count_list(item_icon_name_list=icon_list)
     cur = 0
     while cur < len(item_count_expect_list):

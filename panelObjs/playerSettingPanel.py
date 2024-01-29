@@ -2,6 +2,7 @@ from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from tools.commonTools import *
 from common.viewport import Viewport
+from panelObjs.homePanel import HomePanel
 
 class PlayerSettingPanel(BasePage):
     def is_panel_active(self):
@@ -26,6 +27,7 @@ class PlayerSettingPanel(BasePage):
         self.click_element(element_data=ElementsData.PlayerSetting.tab_language)
         if not self.exist(element_data=ElementsData.PlayerSetting.panel_language):
             raise FindNoElementError
+
 
     def get_exp_val(self):
         # 得到等级
@@ -231,30 +233,170 @@ class PlayerSettingPanel(BasePage):
     def click_btn_logout(self):
         self.click_element(element_data=ElementsData.PlayerSetting.btn_logout)
 
+    # edit profile
+
+    def open_edit_profile(self):
+        HomePanel.go_to_panel(self, "PlayerSettingPanel")
+        PlayerSettingPanel.click_tab_player(self)
+        PlayerSettingPanel.click_edit_info(self)
+
+    def click_tab_avatar(self):
+        self.click_element(element_data=ElementsData.PlayerSetting.tab_avatar)
+
+    def click_tab_banner(self):
+        self.click_element(element_data=ElementsData.PlayerSetting.tab_banner)
+
+    def click_tab_name(self):
+        self.click_element(element_data=ElementsData.PlayerSetting.tab_name)
+
+    def click_tab_badge(self):
+        self.click_element(element_data=ElementsData.PlayerSetting.tab_badge)
+
+
+
+
     def get_avatar_id_list(self):
         return self.get_object_id_list(element_data=ElementsData.PlayerSetting.avatar_list)
 
     def get_avatar_viewport(self, avatar_id_list):
-        avatar_viewport = Viewport(self, element_viewport=ElementsData.PlayerSetting.viewport_avatar, item_id_list=avatar_id_list)
+        size_list = self.get_size_list(object_id_list=avatar_id_list)
+        h = 0
+        if size_list:
+            h = size_list[0][1]
+        avatar_viewport = Viewport(self, element_viewport=ElementsData.PlayerSetting.viewport_avatar, item_id_list=avatar_id_list,viewport_direction="column", viewport_edge=[0, 0.5 * h])
         return avatar_viewport
 
     def select_avatar(self, avatar_id_list, index):
-        self.click_element(object_id=avatar_id_list[index])
-        select_id_list = self.get_offspring_id_list(object_id=avatar_id_list[index], offspring_path="select")
-        if not select_id_list:
-            raise FindNoElementError
+        avatar_viewport = PlayerSettingPanel.get_avatar_viewport(self, avatar_id_list)
+        avatar_viewport.move_until_appear(target_id=avatar_id_list[index])
+        self.click_element(object_id=avatar_id_list[index], focus=[0, 0.5])
+        selected_avatar_index = PlayerSettingPanel.get_selected_icon_index(self, avatar_id_list)
+        compare(index, selected_avatar_index)
+
+    def get_selected_icon_index(self, icon_id_list):
+        select_id_list = self.get_offspring_id_list(object_id_list=icon_id_list, offspring_path="select")
+        icon_id = self.get_parent_id(object_id=select_id_list[0])
+        index = icon_id_list.index(icon_id)
+        return index
 
     def get_avatar(self, avatar_id):
         head_img_id = self.get_offspring_id(object_id=avatar_id, offspring_path="head>head_mask>head_img")
         return self.get_icon(object_id=head_img_id)
 
+    def get_banner_id_list(self):
+        return self.get_object_id_list(element_data=ElementsData.PlayerSetting.banner_list)
+
+    def get_banner_viewport(self, banner_id_list):
+        size_list = self.get_size_list(object_id_list=banner_id_list)
+        h = 0
+        if size_list:
+            h = size_list[0][1]
+        banner_viewport = Viewport(self, element_viewport=ElementsData.PlayerSetting.viewport_banner, item_id_list=banner_id_list,viewport_direction="column", viewport_edge=[0, 0.5 * h])
+        return banner_viewport
+
+    def select_banner(self, banner_id_list, index):
+        banner_viewport = PlayerSettingPanel.get_banner_viewport(self, banner_id_list)
+        banner_viewport.move_until_appear(target_id=banner_id_list[index])
+        self.click_element(object_id=banner_id_list[index], focus=[0, 0.5])
+        selected_banner_index = PlayerSettingPanel.get_selected_icon_index(self, banner_id_list)
+        compare(index, selected_banner_index)
+
+
+
+    def get_banner(self, banner_id):
+        head_img_id = self.get_offspring_id(object_id=banner_id, offspring_path="icon")
+        return self.get_icon(object_id=head_img_id)
+
+    def click_btn_save(self):
+        self.click_element(element_data=ElementsData.PlayerSetting.btn_save_profile)
+
+    def is_btn_saved_active(self):
+        btn_saved_profile_id_list = self.get_object_id_list(element_data=ElementsData.PlayerSetting.btn_saved_profile)
+        if btn_saved_profile_id_list:
+            return True
+        return False
+
+    def get_badge_slot_id_list(self):
+        badge_slot_id_list =  self.get_object_id_list(element_data=ElementsData.PlayerSetting.badge_slot_list)
+        return badge_slot_id_list
+
+    def get_badge_id_list(self):
+        badge_id_list = self.get_object_id_list(element_data=ElementsData.PlayerSetting.badge_list)
+        return badge_id_list
+
+    def get_badge_viewport(self, badge_id_list):
+        size_list = self.get_size_list(object_id_list=badge_id_list)
+        h = 0
+        if size_list:
+            h = size_list[0][1]
+        badge_viewport = Viewport(self, element_viewport=ElementsData.PlayerSetting.viewport_badge, item_id_list=badge_id_list,viewport_direction="column", viewport_edge=[0, 0.5 * h])
+        return badge_viewport
+
+    def get_badge_slot_list(self, badge_slot_id_list):
+        badge_slot_list = []
+        cur = 0
+        while cur < len(badge_slot_id_list):
+            badge_img_list = self.get_icon_list(object_id=badge_slot_id_list[cur], offspring_path="badge_img")
+            if badge_img_list:
+                badge_slot_list.append(badge_img_list[0])
+                cur += 1
+                continue
+            badge_slot_list.append("")
+            cur += 1
+
+
+        return badge_slot_list
+
+    def select_badge_slot(self, badge_slot_id_list, index):
+        self.click_element(object_id=badge_slot_id_list[index])
+
+    def get_selected_badge_slot_index(self):
+        toggle_is_on_list = self.get_toggle_is_on_list(element_data=ElementsData.PlayerSetting.badge_slot_list)
+        index = get_toggle_is_on_index(toggle_is_on_list=toggle_is_on_list)
+        return index
+
+    def get_badge_status(self, badge_id_list):
+        locked_list = []
+        unlocked_list = []
+        equipped_list = []
+        cur = 0
+        while cur < len(badge_id_list):
+            lock_id_list = self.get_offspring_id_list(object_id=badge_id_list[cur], offspring_path="lock")
+            if lock_id_list:
+                locked_list.append(cur)
+                cur += 1
+                continue
+            tip_equipped_id_list = self.get_offspring_id_list(object_id=badge_id_list[cur], offspring_path="tip_equipped")
+            if tip_equipped_id_list:
+                equipped_list.append(cur)
+            unlocked_list.append(cur)
+            cur += 1
+        return locked_list, unlocked_list, equipped_list
+
+    def get_badge_list(self, badge_id_list):
+        icon_list = self.get_icon_list(object_id_list=badge_id_list, offspring_path="icon")
+        return icon_list
+
+    def select_badge(self, badge_id_list, index):
+        badge_viewport = PlayerSettingPanel.get_badge_viewport(self, badge_id_list)
+        badge_viewport.move_until_appear(target_id=badge_id_list[index])
+        self.click_element(object_id=badge_id_list[index], focus=[0, 0.5])
+
+    def get_badge_player_list(self):
+        return self.get_icon_list(element_data=ElementsData.PlayerSetting.badge_player_list)
+
+    def set_player_name(self, name):
+        self.set_text(element_data=ElementsData.PlayerSetting.Input_PlayerName, text=name)
 
 
 if __name__ == '__main__':
     bp = BasePage()
-    options_graphics_position_list = PlayerSettingPanel.get_options_graphics_position_list(bp)
-    a = PlayerSettingPanel.set_options_graphics(bp, options_graphics_position_list,0)
+    badge_id_list = PlayerSettingPanel.get_badge_id_list(bp)
+    a = PlayerSettingPanel.get_badge_status(bp, badge_id_list)
     print(a)
+    # options_graphics_position_list = PlayerSettingPanel.get_options_graphics_position_list(bp)
+    # a = PlayerSettingPanel.set_options_graphics(bp, options_graphics_position_list,0)
+
 
 
 

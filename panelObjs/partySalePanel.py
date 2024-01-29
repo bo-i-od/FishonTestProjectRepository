@@ -30,5 +30,11 @@ class PartySalePanel(BasePage):
 
     # 获取图标
     def get_item_quantity_list(self):
-        quantity_list = resource.str_to_int_list(self.get_text_list(element_data=ElementsData.PartySale.item_quantity_list))
+        quantity_list =self.get_text_list(element_data=ElementsData.PartySale.item_quantity_list)
+        resource.str_to_int_list(quantity_list)
         return quantity_list
+
+if __name__ == '__main__':
+    bp = BasePage()
+    a = bp.get_text_list(element_data=ElementsData.PartySale.item_quantity_list)
+    print(resource.str_to_int_list(a))

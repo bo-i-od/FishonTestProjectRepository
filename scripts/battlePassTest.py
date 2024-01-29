@@ -17,20 +17,7 @@ from common.basePage import BasePage
 from common.viewport import Viewport
 
 
-def swipe_test(bp:BasePage):
-    viewport = BattlePassPanel.get_viewport(bp)
-    x_0 = bp.get_position(object_id=viewport.item_id_list[0])[0]
-    point_end = [viewport.viewport_position[0] - viewport.viewport_size[0] * 0.1, viewport.viewport_position[1]]
-    bp.swipe(point_start=viewport.viewport_position, point_end=point_end)
-    x_1 = bp.get_position(object_id=viewport.item_id_list[0])[0]
-    if x_0 - x_1 < viewport.viewport_size[0] * 0.05:
-        raise MoveError
-    # point_end = [viewport.viewport_position[0] + viewport.viewport_size[0] * 0.1, viewport.viewport_position[1]]
-    # bp.swipe(point_start=viewport.viewport_position, point_end=point_end)
-    # x_0 = bp.get_position(viewport.child_id_list[0])[0]
-    # if x_0 - x_1 < viewport.viewport_size[0] * 0.05:
-    #     raise MoveError
-    print("swipe_test滑动测试通过")
+
 
 
 def click_icon_buy_level_test(bp:BasePage):
@@ -236,7 +223,7 @@ def random_collect_test(bp:BasePage, icon_list, quantity_list, status, viewport:
 
 
 def collect_all_test(bp: BasePage, icon_list, quantity_list):
-    item_dict = make_item_dict(item_coin_list=icon_list, item_quantity_list=quantity_list)
+    item_dict = make_item_dict(item_icon_list=icon_list, item_quantity_list=quantity_list)
     stock_icon_list = []
     for item in item_dict:
         stock_icon_list.append(item)
@@ -247,9 +234,9 @@ def collect_all_test(bp: BasePage, icon_list, quantity_list):
         print("没有可领取项，collect_all_test测试跳过")
         return
     stock_expect_dict = item_dict.copy()
-    stock_expect_dict = make_item_dict(item_coin_list=stock_icon_list, item_quantity_list=stock_quantity_list, item_dict=stock_expect_dict)
+    stock_expect_dict = make_item_dict(item_icon_list=stock_icon_list, item_quantity_list=stock_quantity_list, item_dict=stock_expect_dict)
     stock_quantity_list = bp.get_item_count_list(item_icon_name_list=stock_icon_list)
-    stock_dict = make_item_dict(item_coin_list=stock_icon_list, item_quantity_list=stock_quantity_list)
+    stock_dict = make_item_dict(item_icon_list=stock_icon_list, item_quantity_list=stock_quantity_list)
     compare(stock_dict, stock_expect_dict)
     reward_icon_list, gear_icon_list = RewardsPanel.get_reward_icon_list(bp)
     reward_quantity_list = RewardsPanel.get_reward_quantity_list(bp)

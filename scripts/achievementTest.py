@@ -223,7 +223,7 @@ def collect_all_test(bp: BasePage):
         achievement_point, progress_denominator = AchievementGroupPanel.get_achievement_point(bp)
 
     reward_icon_list, reward_quantity_list = AchievementGroupPanel.get_box_reward(bp)
-    item_dict = resource.make_item_dict(item_coin_list=reward_icon_list, item_quantity_list= reward_quantity_list)
+    item_dict = resource.make_item_dict(item_icon_list=reward_icon_list, item_quantity_list= reward_quantity_list)
 
     while achievement_point != progress_denominator:
         achievement_point, progress_denominator = collect_once_test(bp)
@@ -249,7 +249,7 @@ def collect_all_test(bp: BasePage):
         if achievement_point == progress_denominator:
             break
         reward_icon_list, reward_quantity_list = AchievementGroupPanel.get_box_reward(bp)
-        item_dict = resource.make_item_dict(item_coin_list=reward_icon_list, item_quantity_list=reward_quantity_list)
+        item_dict = resource.make_item_dict(item_icon_list=reward_icon_list, item_quantity_list=reward_quantity_list)
     complete_numerator, complete_denominator = AchievementGroupPanel.get_complete(bp)
     bp.debug_log(f"complete_numerator, complete_denominator:{complete_numerator, complete_denominator}")
     bp.debug_log(f"achievement_point, progress_denominator:{achievement_point, progress_denominator}")

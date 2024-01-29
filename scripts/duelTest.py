@@ -100,31 +100,31 @@ def wait_for_ResultPanel(bp):
 
 def point_cal(duelcup):
     if duelcup < 15:
-        start = 55.33 * duelcup
-        end = 86.67 * duelcup + 500
+        start = 20 * duelcup + 300
+        end = 30 * duelcup + 400
         return int(start), int(end)
     if duelcup < 150:
-        start = 21.35 * duelcup + 3430.8
-        end = 27.24 * duelcup + 6212.4
+        start = 3 * duelcup + 500
+        end = 5 * duelcup + 700
         return int(start), int(end)
     if duelcup < 300:
-        start = 45.72 * duelcup + 224
-        end = 66.78 * duelcup + 226
+        start = 3 * duelcup + 700
+        end = 5 * duelcup + 900
         return int(start), int(end)
     if duelcup < 600:
-        start = 21.22 * duelcup + 8742
-        end = 33.9 * duelcup + 11825
+        start = 2 * duelcup + 1300
+        end = 4 * duelcup + 1600
         return int(start), int(end)
     if duelcup < 2100:
-        start = 21.92 * duelcup + 12398.6
-        end = 30.19 * duelcup + 15869.8
+        start = duelcup + 1300
+        end = duelcup + 2500
         return int(start), int(end)
     if duelcup < 4000:
-        start = 37.3 * duelcup - 12152
-        end = 30.6 * duelcup + 14752
+        start = 0.5 * duelcup + 2000
+        end = 0.5 * duelcup + 2800
         return int(start), int(end)
-    start = 10 * duelcup + 97217
-    end = 20 * duelcup + 57217
+    start = 0.2 * duelcup + 2800
+    end = 0.2 * duelcup + 3600
     return int(start), int(end)
 
 def circulate_duel(bp:BasePage):
@@ -215,7 +215,11 @@ if __name__ == '__main__':
     # bp.set_item_count(target_count=250000, item_tpid="100200")
     bp.set_item_count(target_count=25000000, item_tpid="100200")
     clear_duelcup(bp)
-    random_duelcup(bp, 7)
+    dc = random_duelcup(bp, 7)
+    # print(dc)
+    # area = point_cal(210)
+    # bp.cmd("duelcup 1008 27000")
+    # print(f"当前杯数:{0}，分数范围:{area}")
     # bp.cmd("add 5 500021 1")
     # bp.cmd("guideskip")
     # PlayerEditNamePanel.click_confirm(bp)

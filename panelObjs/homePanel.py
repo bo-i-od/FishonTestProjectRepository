@@ -23,35 +23,20 @@ class HomePanel(BasePage):
     def get_exp_limit_val(self, lv):
         return self.excelTools.get_exp_limit(lv)
 
-    # 跳转界面
+    def get_head_img(self):
+        head_img = self.get_icon(element_data=ElementsData.Home.head_img)
+        return head_img
+
+    def get_flag(self):
+        flag = self.get_icon(element_data=ElementsData.Home.flag)
+        return flag
+
+    def get_player_name(self):
+        player_name = self.get_text(element_data=ElementsData.Home.player_name)
+        return player_name
 
 
-    def go_to_BattlePassPanel(self):
-        self.go_to(element_data=ElementsData.Home.btn_bp)
 
-    def go_to_TaskPanel(self):
-        self.go_to(element_data=ElementsData.Home.btn_task)
-
-    def go_to_FishCardPanel(self):
-        self.go_to(element_data=ElementsData.Home.btn_fishcard)
-
-    def go_to_RoulettePanel(self):
-        self.go_to(element_data=ElementsData.Home.btn_roulette)
-
-    def go_to_PlayerSettingPanel(self):
-        self.go_to(element_data=ElementsData.Home.player_info)
-
-    def go_to_AchievementPanel(self):
-        self.go_to(element_data=ElementsData.Home.btn_achievement)
-
-    def go_to_MailPanel(self):
-        self.go_to(element_data=ElementsData.Home.btn_mail)
-
-    def go_to_RechargeBlack5Panel(self):
-        self.go_to(element_data=ElementsData.Home.btn_black5)
-
-    def go_to_PVPHallPanel(self):
-        self.go_to(element_data=ElementsData.Home.btn_pvp)
 
 
 if __name__ == '__main__':

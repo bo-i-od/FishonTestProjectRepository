@@ -5,6 +5,14 @@ from tools.commonTools import *
 
 
 class BaitAndRodAlbumPanel(BasePage):
+    def is_panel_active(self):
+        if self.exist(element_data=ElementsData.BaitAndRodAlbum.BaitAndRodAlbumPanel):
+            return True
+        return False
+
+    def click_btn_close(self):
+        self.click_element(element_data=ElementsData.BaitAndRodAlbum.btn_close)
+
     def get_gear_list(self):
         gear_id_list = self.get_object_id_list(element_data=ElementsData.BaitAndRodAlbum.model_list)
         gear_all_list = []

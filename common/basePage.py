@@ -14,10 +14,6 @@ import zlib
 
 import os
 from configs.elementsData import ElementsData
-from common.rpcMethod import set_text
-
-from common.rpcMethod import get_text
-from common.rpcMethod import get_slider_value
 from configs.jumpData import JumpData
 
 
@@ -28,9 +24,9 @@ class BasePage:
         self.is_android = True
         #
         if self.is_android:
-            # dev = connect_device("android://127.0.0.1:5037/127.0.0.1:21593")
+            dev = connect_device("android://127.0.0.1:5037/127.0.0.1:21593")
             # dev = connect_device("android://127.0.0.1:5037/b6h65hd64p5pxcyh")
-            dev = connect_device("android://127.0.0.1:5037/28cce18906027ece")
+            # dev = connect_device("android://127.0.0.1:5037/28cce18906027ece")
         else:
             dev = UnityEditorWindow()
         # make sure your poco-sdk in the game runtime listens on the following port.
@@ -301,8 +297,7 @@ class BasePage:
         return toggle_is_on_list[0]
 
     # 获取位置
-    def get_position_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None,
-                          offspring_path=""):
+    def get_position_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None, offspring_path=""):
         if object_id_list is not None:
             return rpcMethod.get_position_by_id(self.poco, object_id_list, offspring_path)
         if object_id != 0:
@@ -353,9 +348,17 @@ class BasePage:
         self.click_position_base(position)
 
     # 元素点击
-    def click_element(self, object_id: int = 0, element_data: dict = None, offspring_path="", ignore_set=None):
+    def click_element(self, object_id: int = 0, element_data: dict = None, offspring_path="", ignore_set=None, focus=None):
         if object_id != 0:
             position = self.get_position(object_id=object_id)
+            if focus is None:
+                self.click_position(position)
+                return position
+            size = self.get_size(object_id=object_id)
+            bias_x = 0.5 - focus[0]
+            bias_y = 0.5 - focus[1]
+            position[0] += size[0] * bias_x
+            position[1] += size[1] * bias_y
             self.click_position(position)
             return position
         element_data_copy = self.get_element_data(element_data, offspring_path)
@@ -602,6 +605,11 @@ class BasePage:
         if item_tpid == "":
             item_tpid = self.get_tpid(item_name, item_icon_name)
         item_count = self.get_item_count(item_tpid=item_tpid)
+        count = target_count - item_count
+        if not isinstance(count, int):
+            return
+        if count == 0:
+            return
         self.cmd(f"add {item_tpid[0]} {item_tpid} {target_count - item_count}")
 
     def set_item_count_list(self, target_count_list, item_name_list:list=None, item_icon_name_list:list=None, item_tpid_list:list=None):
@@ -614,7 +622,14 @@ class BasePage:
             item_tpid = item_tpid_list[cur]
             target_count = target_count_list[cur]
             item_count = item_count_list[cur]
-            command_list.append(f"add {item_tpid[0]} {item_tpid} {target_count - item_count}")
+            count = target_count - item_count
+            if not isinstance(count, int):
+                cur += 1
+                continue
+            if count == 0:
+                cur += 1
+                continue
+            command_list.append(f"add {item_tpid[0]} {item_tpid} {count}")
             cur += 1
         self.cmd_list(command_list=command_list)
 

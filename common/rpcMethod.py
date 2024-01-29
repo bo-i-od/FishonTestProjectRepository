@@ -149,7 +149,6 @@ def get_dropdown_value(poco, element):
     return poco.agent.c.call("GetDropdownValue", element)
 
 
-@sync_wrapper
 def set_dropdown_value(poco, element, index):
     poco.agent.c.call("SetDropdownValue", element, index)
 

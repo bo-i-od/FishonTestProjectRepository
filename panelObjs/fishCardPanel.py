@@ -37,10 +37,8 @@ class FishCardPanel(BasePage):
             return
         target_id = card_id_list[index]
         size = self.get_size(object_id=target_id)
-        if self.is_android:
-            edge = [0, 4 * size[0]]
-        else:
-            edge = [0, 0.5 * size[0]]
+
+        edge = [0, 0.5 * size[0]]
         viewport = Viewport(self, element_viewport=ElementsData.FishCard.fish_card_viewport, item_id_list=card_id_list, viewport_edge=edge)
         viewport.move_until_appear(target_id)
         # position_list = self.get_position_list(element_data=ElementsData.FishCard.fisheries_title_list)

@@ -245,7 +245,7 @@ class StorePanel(BasePage):
             resource.check_icon_list(icon_list)
             quantity_list = self.get_text_list(object_id_list=quantity_id_list)
             str_to_int_list(quantity_list)
-            item_dict = resource.make_item_dict(item_coin_list=icon_list, item_quantity_list=quantity_list)
+            item_dict = resource.make_item_dict(item_icon_list=icon_list, item_quantity_list=quantity_list)
             gift_pack_dict_list.append(item_dict)
         return gift_pack_dict_list
 
@@ -314,7 +314,7 @@ class StorePanel(BasePage):
             resource.check_icon_list(icon_list)
             quantity_list = self.get_text_list(object_id_list=quantity_id_list)
             str_to_int_list(quantity_list)
-            item_dict = resource.make_item_dict(item_coin_list=icon_list, item_quantity_list=quantity_list)
+            item_dict = resource.make_item_dict(item_icon_list=icon_list, item_quantity_list=quantity_list)
             booster_dict_list.append(item_dict)
         return booster_dict_list
 

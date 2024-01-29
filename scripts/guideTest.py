@@ -13,11 +13,12 @@ def playerEditNamePanelTest(bp: BasePage):
     player_name = name[1:]
     PlayerEditNamePanel.set_player_name(bp, player_name)
     # 得到头像个数
-    head_count = PlayerEditNamePanel.get_head_count(bp)
+    head_id_list = PlayerEditNamePanel.get_head_id_list(bp)
+    head_count = len(head_id_list)
     # 随机选一个序号
     select_index = random.randrange(0, head_count - 1)
     # 点击该序号
-    head_img_object_id = PlayerEditNamePanel.select_head(bp, select_index)
+    head_img_object_id = PlayerEditNamePanel.select_head(bp, head_id_list,select_index)
     bp.sleep(1)
     # 得到head_object_id和select_object_id，它俩应该有相同的parent
     head_object_id = PlayerEditNamePanel.get_head_object_id(bp, head_img_object_id)
@@ -48,5 +49,6 @@ def newbieGuidePanelTest(bp: BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    playerEditNamePanelTest(bp)
-    newbieGuidePanelTest(bp)
+    bp.cmd("mode 400301 301012")
+    # playerEditNamePanelTest(bp)
+    # newbieGuidePanelTest(bp)

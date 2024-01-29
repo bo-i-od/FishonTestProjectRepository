@@ -74,7 +74,9 @@ class BattlePreparePanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    BattlePreparePanel.click_btn_cast(bp)
+
+    a = bp.get_position_list(element_data=ElementsData.BattlePrepare.btn_cast)
+    print(a)
 
 
 

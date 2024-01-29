@@ -1,26 +1,32 @@
 from common.basePage import BasePage
+import os
+
+
+
+
+
+def count_lines(file_path):
+    with open(file_path, 'r', encoding='gbk', errors='ignore') as file:
+        count = sum(1 for line in file if line.strip() != '')
+    return count
+
+
+def count_code_lines(directory):
+    total_count = 0
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            if file.endswith('.py'):
+                file_path = os.path.join(root, file)
+                count = count_lines(file_path)
+                total_count += count
+    return total_count
+
 
 
 if __name__ == '__main__':
-    bp = BasePage()
-    buff = 0
-    tpid = 308003
-    fish_type = bp.excelTools.get_fish_type([tpid])[0]
-    base1 = 1000
-    base2 = base1 + 200
-    FISHTYPE_ADD_common = 0
-    if fish_type == 1:
-        FISHTYPE_ADD_common = -950
-    elif fish_type == 2:
-        FISHTYPE_ADD_common = -850
-    elif fish_type == 3:
-        FISHTYPE_ADD_common = -600
-    elif fish_type == 4:
-        FISHTYPE_ADD_common = 0
-    elif fish_type == 5:
-        FISHTYPE_ADD_common = 1500
-    base3 = base2 * (1000 + FISHTYPE_ADD_common)/1000
-    point = base3 * (1000 + buff) /1000
+    project_directory = 'D:\FishonTestProject'
+    code_line_count = count_code_lines(project_directory)
+    print(f"Total code lines: {code_line_count}")
 
 
 
