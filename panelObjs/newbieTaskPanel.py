@@ -15,6 +15,10 @@ class NewbieTaskPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.NewbieTask.btn_close)
 
+    def get_remain_day(self):
+        remain_time = self.get_text(element_data=ElementsData.NewbieTask.remain_time)
+        return int(remain_time.split('D')[0])
+
     # 点击左上角问号弹出tips
     def click_btn_i(self):
         self.click_element(element_data=ElementsData.NewbieTask.btn_i)

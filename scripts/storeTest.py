@@ -746,5 +746,6 @@ def store_test(bp: BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    bp.set_item_count(target_count=1000000, item_tpid="100200")
+    # bp.set_item_count(target_count=1000000, item_tpid="100200")
     store_test(bp)
+    # box_test(bp)

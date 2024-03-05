@@ -9,21 +9,19 @@ class ResultPanel(BasePage):
         return exp_str
 
     def wait_for_result(self):
-        btn_open_and_cast_again = self.exist(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again)
         btn_claim = self.exist(element_data=ElementsData.Result.btn_claim)
-        btn_throw = self.exist(element_data=ElementsData.Result.pve_result.btn_throw)
-        while not (btn_open_and_cast_again or btn_claim or btn_throw):
-            btn_open_and_cast_again = self.exist(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again)
+        btn_claim_token_fish = self.exist(element_data=ElementsData.Result.btn_claim_token_fish)
+        while not (btn_claim or btn_claim_token_fish):
             btn_claim = self.exist(element_data=ElementsData.Result.btn_claim)
-            btn_throw = self.exist(element_data=ElementsData.Result.pve_result.btn_throw)
+            btn_claim_token_fish = self.exist(element_data=ElementsData.Result.btn_claim_token_fish)
 
     def automatic_settlement(self):
         if self.exist(element_data=ElementsData.Result.btn_claim):
             ResultPanel.click_btn_claim(self)
             return
-        ResultPanel.duel_sundries(self)
-        self.sleep(1)
-        self.click_element(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again)
+        if self.exist(element_data=ElementsData.Result.btn_claim_token_fish):
+            ResultPanel.click_btn_claim_token_fish(self)
+            return
 
 
 
@@ -55,4 +53,4 @@ class ResultPanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    print(bp.exist(element_data=ElementsData.Result.btn_claim))
+    ResultPanel.click_btn_claim(bp)

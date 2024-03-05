@@ -31,7 +31,8 @@ def TreasureChestPanel_test(bp: BasePage):
 
     # 进入鱼箱界面
     # bp.go_to_panel("TreasureChestPanel")
-    bp.lua_console('PanelMgr:OpenPanel("TreasureChestPanel")')
+    # bp.lua_console('PanelMgr:OpenPanel("TreasureChestPanel")')
+    bp.click_position([0.5, 0.7])
     bp.sleep(0.5)
 
 
@@ -68,6 +69,8 @@ def TreasureChestPanel_test(bp: BasePage):
 
     # 进行tips点击测试
     click_tips_test(bp)
+
+    TreasureChestPanel.click_btn_close(bp)
     print("测试通过")
 
 
@@ -131,6 +134,7 @@ def open_box_test(bp: BasePage, icon, quantity):
 
     # 得到open x后的可打开数量, 再次计算期望箱子点
     n = TreasureChestRewardsPanel.get_open_x_n(bp)
+    print("箱子",n)
     box_points_numerator_expect = box_points_numerator_expect + chest_point * n
 
     # 可以打开就继续开

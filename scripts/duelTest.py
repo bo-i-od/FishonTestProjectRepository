@@ -56,14 +56,15 @@ def clear_duelcup(bp:BasePage):
         cur += 1
 
 def fish(bp):
-    BattlePreparePanel.click_btn_quick_switch(bp)
+    # BattlePreparePanel.click_btn_quick_switch(bp)
     while True:
         BattlePreparePanel.click_btn_cast(bp)
         bp.sleep(3)
         if PVPResultPanel.is_panel_active(bp):
             bp.sleep(3)
             break
-        # BattlePanel.reel_quick(bp)
+        BattlePanel.hook(bp)
+        BattlePanel.reel_quick(bp)
         ResultPanel.wait_for_result(bp)
         ResultPanel.click_btn_claim(bp)
         if PVPResultPanel.is_panel_active(bp):
@@ -127,25 +128,32 @@ def point_cal(duelcup):
     end = 0.2 * duelcup + 3600
     return int(start), int(end)
 
-def circulate_duel(bp:BasePage):
-    rank = random.randint(4, 5)
+def circulate_duel(bp:BasePage, rank):
+    # rank = random.randint(4, 5)
+    # # rank = 0
+    # clear_duelcup(bp)
+    # random_duelcup(bp, rank)
     # rank = 0
-    clear_duelcup(bp)
-    random_duelcup(bp, rank)
-    bp.set_item_count(target_count=250000, item_tpid="100200")
+    # print(rank)
+    # bp.set_item_count(target_count=250000, item_tpid="100200")
+    PVPHallPanel.click_btn_play(bp, rank)
     # s, e = point_cal(dc)
     # print(f"当前杯数：{dc},预期分数范围:{s,e}")
-    action_list = [lambda: PVPHallPanel.click_btn_close(bp)]
-    bp.try_actions(action_list=action_list)
-    action_list = [
-        lambda: bp.go_to_panel("PVPHallPanel"),
-        lambda: PVPHallPanel.click_btn_play(bp, rank)]
-    bp.try_actions(action_list=action_list)
+    # action_list = [lambda: PVPHallPanel.click_btn_close(bp)]
+    # bp.try_actions(action_list=action_list)
+    # action_list = [
+    #     lambda: bp.go_to_panel("PVPHallPanel"),
+    #     lambda: PVPHallPanel.click_btn_play(bp, rank)]
+    # bp.try_actions(action_list=action_list)
     fish(bp)
     bp.sleep(2)
-    # PVPResultPanel.click_btn_open(bp)
-    img = bp.get_full_screen_shot()
-    bp.save_img(img)
+    PVPResultPanel.click_btn_open(bp)
+    bp.sleep(1)
+    result_right = PVPResultPanel.get_result_right(bp)
+    print("钓了：",len(result_right),"条鱼")
+    # print(result_right)
+    # img = bp.get_full_screen_shot()
+    # bp.save_img(img)
     bp.sleep(1)
     points_enemy = PVPResultPanel.get_points_enemy(bp)
     points_mine = PVPResultPanel.get_points_mine(bp)
@@ -194,6 +202,7 @@ def zhanbao_test(bp:BasePage):
     print(login_name, dc)
     bp.sleep(2)
     bp.lua_console('PanelMgr:OpenPanel("HomePanel")')
+
     action_list = [
         lambda: bp.go_to_panel("PVPHallPanel"),
         lambda:PVPHallPanel.click_btn_play(bp, rank)]
@@ -213,21 +222,22 @@ if __name__ == '__main__':
     bp = BasePage()
     # zhanbao_test(bp)
     # bp.set_item_count(target_count=250000, item_tpid="100200")
-    bp.set_item_count(target_count=25000000, item_tpid="100200")
+    # bp.set_item_count(target_count=25000000, item_tpid="100200")
     clear_duelcup(bp)
     dc = random_duelcup(bp, 7)
-    # print(dc)
+    print(dc)
     # area = point_cal(210)
     # bp.cmd("duelcup 1008 27000")
     # print(f"当前杯数:{0}，分数范围:{area}")
     # bp.cmd("add 5 500021 1")
-    # bp.cmd("guideskip")
+
     # PlayerEditNamePanel.click_confirm(bp)
     # bp.sleep(3)
     # bp.go_to_panel("PVPHallPanel")
+    # bp.cmd("autofish")
     # cur = 0
-    # while cur < 2:
-    #     circulate_duel(bp)
+    # while cur < 1:
+    #     circulate_duel(bp, 0)
     #     cur += 1
     #     print(f"第{cur}次钓鱼")
 

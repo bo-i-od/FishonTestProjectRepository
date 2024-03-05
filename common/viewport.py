@@ -76,9 +76,11 @@ class Viewport:
         if target_position[1] > edge_start:
             point_end[1] = self.viewport_position[1] - self.delta_len
             self.basePage.swipe(point_start=self.viewport_position, point_end=point_end)
+            print(0, self.viewport_position, point_end)
             return True
         point_end[1] = self.viewport_position[1] + self.delta_len
         self.basePage.swipe(point_start=self.viewport_position, point_end=point_end)
+        print(1, self.viewport_position, point_end)
         return True
 
     def move_until_appear(self, target_id):

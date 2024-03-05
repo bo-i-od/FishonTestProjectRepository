@@ -70,12 +70,17 @@ class BattlePreparePanel(BasePage):
     def click_progress_info(self):
         self.click_element(element_data=ElementsData.BattlePrepare.GlobalProgress.progress_info)
 
+    def is_progress_finish(self):
+        if self.exist(element_data=ElementsData.BattlePrepare.GlobalProgress.progress_finish):
+            return True
+        return False
+
 
 
 if __name__ == '__main__':
     bp = BasePage()
 
-    a = bp.get_position_list(element_data=ElementsData.BattlePrepare.btn_cast)
+    a = bp.get_icon_list(element_data=ElementsData.BattlePrepare.btn_cast)
     print(a)
 
 

@@ -20,10 +20,10 @@ class FishCardPanel(BasePage):
         self.click_element(element_data=ElementsData.FishCard.btn_upgrade)
 
     def switch_tab(self, index):
-        target_id = self.get_object_id_list(element_data=ElementsData.FishCard.fisheries_bg_list)[index]
-        viewport = Viewport(self, element_viewport=ElementsData.FishCard.fisheries_viewport, element_item_list=ElementsData.FishCard.fisheries_bg_list)
+        target_id = self.get_object_id_list(element_data=ElementsData.FishCard.tab_list)[index]
+        viewport = Viewport(self, element_viewport=ElementsData.FishCard.fisheries_viewport, element_item_list=ElementsData.FishCard.tab_list)
         viewport.move_until_appear(target_id)
-        position_list = self.get_position_list(element_data=ElementsData.FishCard.fisheries_title_list)
+        position_list = self.get_position_list(element_data=ElementsData.FishCard.tab_list)
         self.click_position(position_list[index])
 
     def get_fisheries_list(self):
@@ -32,14 +32,10 @@ class FishCardPanel(BasePage):
 
 
     def select_card(self, index):
-        card_id_list, selected_index = FishCardPanel.get_card_id_list(self)
-        if selected_index == index:
-            return
-        target_id = card_id_list[index]
-        size = self.get_size(object_id=target_id)
+        card_id_list = FishCardPanel.get_card_id_list(self)
 
-        edge = [0, 0.5 * size[0]]
-        viewport = Viewport(self, element_viewport=ElementsData.FishCard.fish_card_viewport, item_id_list=card_id_list, viewport_edge=edge)
+        target_id = card_id_list[index]
+        viewport = Viewport(self, element_viewport=ElementsData.FishCard.fish_card_viewport, item_id_list=card_id_list, viewport_direction="column")
         viewport.move_until_appear(target_id)
         # position_list = self.get_position_list(element_data=ElementsData.FishCard.fisheries_title_list)
         self.click_element(object_id=card_id_list[index])
@@ -48,17 +44,7 @@ class FishCardPanel(BasePage):
     # 选中的卡记作selected_index 如果没有选中selected_index = -1
     def get_card_id_list(self):
         fish_card_model_id_list = self.get_object_id_list(element_data=ElementsData.FishCard.fish_card_model_list)
-        name_list = self.get_name_list(element_data=ElementsData.FishCard.fish_card_model_list)
-        selected_index = -1
-        cur = 0
-        while cur < len(fish_card_model_id_list):
-            if name_list[cur] == "FishCard_on":
-                print(fish_card_model_id_list[cur])
-                fish_card_model_id_list[cur] = self.get_offspring_id(offspring_path=">", object_id=fish_card_model_id_list[cur])
-                selected_index = cur
-                break
-            cur += 1
-        return fish_card_model_id_list, selected_index
+        return fish_card_model_id_list
 
     def get_card_information(self):
         fish_name = self.get_text(element_data=ElementsData.FishCard.fish_name_selected)
@@ -95,34 +81,68 @@ class FishCardPanel(BasePage):
             cur += 1
         return talent_dict
 
-    def get_arrow_index_list(self):
-        fish_card_model_id_list, selected_index = FishCardPanel.get_card_id_list(self)
-        arrow_index_list = []
+    def get_progress_list(self, fish_card_model_id_list):
+        progress_list = []
         cur = 0
         while cur < len(fish_card_model_id_list):
-            if self.get_offspring_id_list(offspring_path="kind_02>arrow", object_id=fish_card_model_id_list[cur]):
-                arrow_index_list.append(cur)
+            progress = self.get_text_list(offspring_path="progress>text", object_id=fish_card_model_id_list[cur])
+            numerator, denominator = progress[0].split("/")
+            progress_list.append([int(numerator), int(denominator)])
             cur += 1
-        return arrow_index_list
+        return progress_list
 
-    def select_arrow_card(self):
-        fisheries_title_list = self.get_text_list(element_data=ElementsData.FishCard.fisheries_title_list)
+
+    def get_card_status(self):
+        fish_card_model_id_list = FishCardPanel.get_card_id_list(self)
+        unlock_list = []
+        unlevelable_list = []
+        levelable_list = []
+        progress_list = FishCardPanel.get_progress_list(self, fish_card_model_id_list)
         cur = 0
-        while cur < len(fisheries_title_list):
-            FishCardPanel.switch_tab(self, cur)
-            fisheries_name_list = self.get_text_list(element_data=ElementsData.FishCard.fisheries_name_list)
-            for fisheries_name in fisheries_name_list:
-                compare(fisheries_title_list[cur], fisheries_name)
-            arrow_index_list = FishCardPanel.get_arrow_index_list(self)
-            if not arrow_index_list:
+        while cur < len(progress_list):
+            if progress_list[cur][0] >= progress_list[cur][1]:
+                levelable_list.append(cur)
                 cur += 1
                 continue
-            r = random.randint(0, len(arrow_index_list) - 1)
-            FishCardPanel.select_card(self, arrow_index_list[r])
-            break
+            lock_id_list = self.get_offspring_id_list(offspring_path="lock", object_id=fish_card_model_id_list[cur])
+            if lock_id_list:
+                unlock_list.append(cur)
+                cur += 1
+                continue
+            unlevelable_list.append(cur)
+            cur += 1
+        return unlock_list, unlevelable_list, levelable_list
+
+    def get_tab_status(self):
+        tab_id_list = self.get_object_id_list(element_data=ElementsData.FishCard.tab_list)
+        unlock_tab_list = []
+        lock_tab_list = []
+
+        cur = 0
+        while cur < len(tab_id_list):
+            if self.get_offspring_id_list(object_id=tab_id_list[cur], offspring_path="lock"):
+                lock_tab_list.append(cur)
+                cur += 1
+                continue
+            unlock_tab_list.append(cur)
+            cur += 1
+        return unlock_tab_list, lock_tab_list
+
 
     def click_btn_events(self):
         self.click_element(element_data=ElementsData.FishCard.btn_events)
+
+    def switch_sub_tab(self, index):
+        position_list = self.get_position_list(element_data=ElementsData.FishCard.sub_tab_list)
+        self.click_position(position_list[index])
+
+    def click_btn_i(self):
+        self.click_element(element_data=ElementsData.FishCard.btn_i)
+
+    def is_tips_cardbonus_active(self):
+        if self.exist(element_data=ElementsData.FishCard.tips_cardbonus):
+            return True
+        return False
 
     @staticmethod
     def bg_to_tier(bg:str):
@@ -141,4 +161,6 @@ class FishCardPanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    FishCardPanel.select_arrow_card(bp)
+    progress_list = FishCardPanel.switch_tab(bp, 11)
+    print(progress_list)
+

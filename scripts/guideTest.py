@@ -49,6 +49,6 @@ def newbieGuidePanelTest(bp: BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    bp.cmd("mode 400301 301012")
-    # playerEditNamePanelTest(bp)
-    # newbieGuidePanelTest(bp)
+    bp.cmd("mode 0 0")
+    playerEditNamePanelTest(bp)
+    newbieGuidePanelTest(bp)

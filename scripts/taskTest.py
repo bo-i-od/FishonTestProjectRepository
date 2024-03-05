@@ -8,7 +8,6 @@ from common.basePage import BasePage
 from panelObjs.loadingFisheryPanel import LoadingFisheryPanel
 from panelObjs.loadingPanel import LoadingPanel
 
-from common import resource
 
 def click_icon_test(bp:BasePage,task_id_list:list, viewport:Viewport):
     # 点击可点击范围的随机图标

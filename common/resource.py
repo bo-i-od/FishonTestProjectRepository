@@ -16,7 +16,9 @@ def check_icon(icon:str):
     if icon == "store_items_shop_2":
         return 'res_gear_1'
     if icon == "store_items_shop_3":
-        return 'res_gear_3'
+        return 'coin_turntable'
+    if "res_power" in icon:
+        return "res_power"
 
     s = icon.split('_')
     if s[0] == 'coin' and s[1] == "gold":

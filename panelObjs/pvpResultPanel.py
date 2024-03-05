@@ -21,6 +21,13 @@ class PVPResultPanel(BasePage):
     def click_btn_open(self):
         self.click_element(element_data=ElementsData.PVPResult.btn_open)
 
+    def get_result_right(self):
+        name_list = self.get_text_list(element_data=ElementsData.PVPResult.right_list, offspring_path="text")
+        point_list = self.get_text_list(element_data=ElementsData.PVPResult.right_list, offspring_path="points>value_1")
+        res = dict(zip(name_list, point_list))
+        return res
+
 if __name__ == '__main__':
     bp = BasePage()
-    PVPResultPanel.click_tap_to_click(bp)
+    a = PVPResultPanel.get_result_right(bp)
+    print(a)

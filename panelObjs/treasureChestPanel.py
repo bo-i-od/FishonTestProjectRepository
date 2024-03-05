@@ -46,8 +46,11 @@ class TreasureChestPanel(BasePage):
         self.click_element(element_data=ElementsData.TreasureChest.btn_open)
 
     def get_box_main_icon(self):
-        box_main_icon = self.get_icon(element_data=ElementsData.TreasureChest.box).split("_")[0]
-        return box_main_icon
+        box_main = self.get_name(element_data=ElementsData.TreasureChest.box).split("(Clone)")[0]
+        return "box" + box_main[-1:]
+
+    def click_box_main(self):
+        self.click_element(element_data=ElementsData.TreasureChest.box)
 
     def get_progressbar_box(self):
         progressbar_box = self.get_icon(element_data=ElementsData.TreasureChest.progressbar_box)
@@ -92,4 +95,4 @@ class TreasureChestPanel(BasePage):
 
 if __name__ == "__main__":
     bp = TreasureChestPanel()
-    bp.get_element_shot(element_data=ElementsData.Login.btn_login)
+    print(TreasureChestPanel.get_box_main_icon(bp))

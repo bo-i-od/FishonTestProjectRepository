@@ -1,3 +1,4 @@
+import win32timezone
 from poco.drivers.unity3d.device import UnityEditorWindow
 from tools.excelRead import ExceTools
 import time
@@ -21,8 +22,8 @@ class BasePage:
     def __init__(self):
         # unity窗口使用UnityEditorWindow()
         # 手机使用connect_device("android://127.0.0.1:5037/设备号")
-        self.is_android = True
-        #
+        self.is_android = False
+        #GGGGGGG
         if self.is_android:
             dev = connect_device("android://127.0.0.1:5037/127.0.0.1:21593")
             # dev = connect_device("android://127.0.0.1:5037/b6h65hd64p5pxcyh")
@@ -343,6 +344,7 @@ class BasePage:
             raise InvalidOperationError('Click position out of screen. pos={}'.format(repr(position)))
         self.poco.agent.input.click(position[0], position[1])
 
+
     def click_position(self, position, ignore_set=None):
         self.clear_popup(ignore_set)
         self.click_position_base(position)
@@ -398,7 +400,7 @@ class BasePage:
     # 等待指定元素出现
     def wait_for_appear(self, element_data: dict, is_click: bool = True, interval: float = 0.1):
         while True:
-            position = self.exist(element_data=element_data)
+            position = self.get_position_list(element_data=element_data)
             if position:
                 break
             self.sleep(interval)
@@ -418,9 +420,10 @@ class BasePage:
             try:
                 self.click_position_base(position_list[0])
             except:
-                print("超出屏幕范围，没有进行点击")
+                pass
+                # print("超出屏幕范围，没有进行点击")
             return
-        print(f"{object_id, element_data}元素不存在，没有进行点击")
+        # print(f"{object_id, element_data}元素不存在，没有进行点击")
 
     # 尝试点击
     # 如果点击失败就看是否有弹窗遮挡
@@ -554,6 +557,14 @@ class BasePage:
         img = self.get_screen_shot(ui_x, ui_y, ui_w, ui_h)
         return img
 
+    def draw_circle(self, img, center_x, center_y):
+        # 在指定像素点上绘制圆
+        color = (0, 255, 0)  # 圆的颜色，这里是红色
+
+        cv2.circle(img, (center_x * self.screen_w, center_y * self.screen_h), 10, color, 2)
+
+        # cv2.circle(img, (center_x * self.screen_w, center_y * self.screen_h), 3, color, 3)
+
     # 获取物品数量
     def get_item_count(self, item_name: str = "", item_icon_name: str = "", item_tpid: str = ""):
         if item_tpid != "":
@@ -673,6 +684,19 @@ class BasePage:
     def lua_console(self, command):
         self.lua_console_list([command])
 
+    def custom_cmd_list(self, command_list):
+        rpcMethod.custom_cmd(self.poco, command_list)
+
+    def custom_cmd(self, command):
+        self.custom_cmd_list([command])
+
+    def click_button(self, element_data:dict):
+        rpcMethod.click_button(self.poco, element_data)
+
+    # kind包含up，down，click
+    def ray_input(self, element_data:dict, target_name:str, kind:str):
+        rpcMethod.ray_input(self.poco, element_data, target_name, kind)
+
     # 休息t秒
     @staticmethod
     def sleep(t: float):
@@ -684,22 +708,42 @@ class BasePage:
         pyautogui.typewrite(key)
 
 
+
+
+
 if __name__ == '__main__':
     bp = BasePage()
-    # target_count_list = [5, 10]
-    # item_tpid_list = ["100000", "100500"]
+    bp.ray_input(element_data=ElementsData.Battle.joystick, target_name="BattlePanel", kind="down")
+    # bp.sleep(1)
+    # bp.ray_input(element_data=ElementsData.Battle.btn_reel, target_name="btn_cast", kind="up")
+    # bp.sleep(0.2)
+    # bp.ray_input(element_data=ElementsData.Home.btn_add_100000, target_name="btn_add", kind="up")
+    # bp.ray_click(position[0], position[1])
+    #
+    # res = bp.get_item_count_list(item_tpid_list=["100100", "100000", "207004", "211091"])
+    # print(res)
+
+
+    # bp.go_to_panel("BattlePassPanel")
+    # a= bp.get_object_id_list(element_data= {"locator": "UICanvas>Default>>>>btn_cast>btn_normal"})
+    # print(a)
+    # img = bp.get_full_screen_shot()
+    # bp.save_img(img, "306006")
+    # target_count_list = [100]
+    # item_tpid_list = ["100100"]
     # bp.set_item_count_list(target_count_list=target_count_list, item_tpid_list=item_tpid_list)
-    rpcMethod.set_btn_enabled(bp.poco, element=ElementsData.NewbieTask.NewbieTaskPanel, enabled=False)
-    screen_h = bp.screen_h
-    screen_w = bp.screen_w
-    step = 50
-    x = 0
-    while x < screen_w:
-        y = 0
-        while y < screen_h:
-            bp.click_position([x/screen_w, y/screen_h])
-            y += step
-        x += step
+    # rpcMethod.set_btn_enabled(bp.poco, element=ElementsData.FishCardUpgrade.FishCardUpgradePanel,
+    # enabled=True)
+    # screen_h = bp.screen_h
+    # screen_w = bp.screen_w
+    # step = 50
+    # x = 0
+    # while x < screen_w:
+    #     y = 0
+    #     while y < screen_h:
+    #         bp.click_position([x/screen_w, y/screen_h])
+    #         y += step
+    #     x += step
 
     # bp.lua_console('PanelMgr:OpenPanel("HomePanel")')
     # bp.get_item_count(item_icon_name="achv_group_icon_8")

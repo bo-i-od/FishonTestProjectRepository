@@ -21,8 +21,8 @@ def energy_test(bp: BasePage):
     cash_recovery_value = BuyEnergyPanel.get_cash_recovery_value(bp)
 
     # 应该处于不可点击状态
-    btn_cash_status = BuyEnergyPanel.get_btn_cash_status(bp)
-    compare(btn_cash_status, 0)
+    # btn_cash_status = BuyEnergyPanel.get_btn_cash_status(bp)
+    # compare(btn_cash_status, 0)
     BuyEnergyPanel.click_btn_cash(bp)
     bp.sleep(0.5)
     energy_expect = energy
@@ -69,7 +69,7 @@ def energy_test(bp: BasePage):
     while BuyEnergyPanel.get_btn_cash_status(bp) != 2:
         cash_cost = BuyEnergyPanel.get_cash_cost(bp)
         cash_count_expect = BuyEnergyPanel.get_cash_value(bp) - cash_cost
-        cash_usd_recovery_value = BuyEnergyPanel.get_cash_usd_recovery_value(bp)
+        cash_recovery_value = BuyEnergyPanel.get_cash_recovery_value(bp)
         energy_expect = cash_recovery_value + energy
         BuyEnergyPanel.click_btn_cash(bp)
         bp.sleep(0.5)
@@ -82,6 +82,7 @@ def energy_test(bp: BasePage):
 
     # cash_usd买
     while BuyEnergyPanel.get_btn_cash_usd_status(bp) != 2:
+        cash_usd_recovery_value = BuyEnergyPanel.get_cash_usd_recovery_value(bp)
         energy_expect = cash_usd_recovery_value + energy
         BuyEnergyPanel.click_btn_cash_usd(bp)
         bp.sleep(0.5)

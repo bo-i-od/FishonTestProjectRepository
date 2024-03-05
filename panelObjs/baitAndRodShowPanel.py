@@ -4,7 +4,7 @@ from configs.elementsData import ElementsData
 
 class BaitAndRodShowPanel(BasePage):
     def click_tap_to_continue(self):
-        self.click_element(element_data=ElementsData.BaitAndRodShow.closeArea,  ignore_set={"BaitAndRodShowPanel"})
+        self.click_element(element_data=ElementsData.BaitAndRodShow.tap_to_continue, ignore_set={"BaitAndRodShowPanel"})
 
     def is_panel_active(self):
         if self.exist(element_data=ElementsData.BaitAndRodShow.BaitAndRodShowPanel):

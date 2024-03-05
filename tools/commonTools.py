@@ -83,6 +83,8 @@ def unit_conversion_int_to_str(count: int):
         return str(int(count/1000)) + "K"
     elif count < 10000000000:
         return str(int(count / 1000000)) + "M"
+    elif count < 10000000000000:
+        return str(int(count / 1000000000)) + "B"
 
 
 def str_to_int(count:str):
@@ -90,6 +92,8 @@ def str_to_int(count:str):
         return int(count[:-1]) * 1000
     elif count[-1:] == 'M':
         return int(count[:-1]) * 1000000
+    elif count[-1:] == 'B':
+        return int(count[:-1]) * 1000000000
     elif count[-1:] == '万':
         return int(count[:-1]) * 10000
     elif count[-1:] == '亿':
@@ -106,6 +110,10 @@ def str_to_int_list(count_list:list):
             count_list[cur] = int(count_list[cur][:-1]) * 1000
         elif count_list[cur][-1:] == 'M':
             count_list[cur] = int(count_list[cur][:-1]) * 1000000
+        elif count_list[cur][-1:] == '万':
+            count_list[cur] = int(count_list[cur][:-1]) * 10000
+        elif count_list[cur][-1:] == '亿':
+            count_list[cur] = int(count_list[cur][:-1]) * 100000000
         else:
             count_list[cur] = int(count_list[cur])
         cur += 1

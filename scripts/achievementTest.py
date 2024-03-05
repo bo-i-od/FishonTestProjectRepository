@@ -106,7 +106,6 @@ def minitask_test(bp:BasePage):
 # 点击已解锁成就并进行跳转测试
 def jump_all_test(bp:BasePage):
     locked_set, unlockable_set, unlocked_set = AchievementPanel.get_achievement_status_set(bp)
-    viewport = AchievementPanel.get_viewport(bp)
     # 点击可解锁成就 将它们都解锁使task mini出现
     print("随机点击已解锁成就开始")
     # 点击已解锁成就
@@ -125,6 +124,7 @@ def jump_all_test(bp:BasePage):
     #     bp.debug_log("随机点击已解锁成就跳过")
     cur = 0
     while cur < len(unlocked_list):
+        viewport = AchievementPanel.get_viewport(bp)
         viewport.move_until_appear(viewport.item_id_list[unlocked_list[cur]])
         group_name = AchievementPanel.get_group_name(bp, achievement_id=viewport.item_id_list[unlocked_list[cur]])
         position_list = AchievementPanel.get_achievement_position_list(bp)
@@ -164,8 +164,8 @@ def jump_test(bp: BasePage):
     bp.sleep(0.2)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
     LoadingPanel.wait_until_panel_disappear(bp)
-    img = bp.get_full_screen_shot()
-    bp.save_img(img, "achievementGroupPanel_jump_test")
+    # img = bp.get_full_screen_shot()
+    # bp.save_img(img, "achievementGroupPanel_jump_test")
     bp.go_to_panel("AchievementPanel")
 
 # def login(zhanghao,mima):
@@ -347,6 +347,6 @@ if __name__ == '__main__':
     bp = BasePage()
     # cmd_l = ["guideskip", "add 1 100200 100000"]
     # login.login_to_hall(bp, cmd_l)
-    bp.set_item_count(target_count=100000, item_tpid="100200")
+    # bp.set_item_count(target_count=100000, item_tpid="100200")
     achievement_test(bp)
     # print(bp.get_item_count(item_tpid="100000"))

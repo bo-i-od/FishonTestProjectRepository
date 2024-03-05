@@ -213,6 +213,7 @@ def gift_code_test(bp: BasePage):
     PlayerSettingPanel.click_btn_confirm(bp)
     bp.sleep(0.2)
     RewardsPanel.click_tap_to_claim(bp)
+    bp.sleep(0.2)
     PlayerSettingPanel.click_btn_close_giftcode(bp)
 
 

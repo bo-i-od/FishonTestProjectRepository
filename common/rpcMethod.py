@@ -148,21 +148,33 @@ def screen_shot(poco, ui_x, ui_y, ui_w, ui_h):
 def get_dropdown_value(poco, element):
     return poco.agent.c.call("GetDropdownValue", element)
 
-
+@sync_wrapper
 def set_dropdown_value(poco, element, index):
-    poco.agent.c.call("SetDropdownValue", element, index)
+    return poco.agent.c.call("SetDropdownValue", element, index)
 
-
+@sync_wrapper
 def cmd(poco, command_list):
-    poco.agent.c.call("CMD", command_list)
+    return poco.agent.c.call("CMD", command_list)
 
-
+@sync_wrapper
 def lua_console(poco, command_list):
-    poco.agent.c.call("LuaConsole", command_list)
+    return poco.agent.c.call("LuaConsole", command_list)
 
+@sync_wrapper
+def custom_cmd(poco, command_list):
+    return poco.agent.c.call("CustomCMD", command_list)
 
+@sync_wrapper
 def set_btn_enabled(poco, element, enabled):
-    poco.agent.c.call("SetBtnEnabled", element, enabled)
+    return poco.agent.c.call("SetBtnEnabled", element, enabled)
+
+@sync_wrapper
+def click_button(poco, element):
+    return poco.agent.c.call("ClickButton", element)
+
+@sync_wrapper
+def ray_input(poco, element, target_name, kind):
+    return poco.agent.c.call("RayInput", element, target_name, kind)
 
 
 

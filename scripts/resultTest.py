@@ -14,11 +14,11 @@ def exp_test(bp: BasePage):
     bp.go_to_panel("TournamentsPanel")
     # HomePanel.go_to(bp, ElementsData.Home.btn_pve)
     # 随机选一个锦标赛
-    TournamentsPanel.random_tournament(bp)
+    TournamentsPanel.go_to_first_location(bp)
     # 点击cast按钮
     BattlePreparePanel.cast(bp)
     # 进行reel in操作
-    BattlePanel.reel(bp)
+    # BattlePanel.reel(bp)
     # 等待结算界面
     ResultPanel.wait_for_result(bp)
     # 进行结算得到分数
