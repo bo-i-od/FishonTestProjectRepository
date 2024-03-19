@@ -37,6 +37,9 @@ class RoulettePanel(BasePage):
     def get_turntable_icon_list(self):
         return self.get_icon_list(element_data=ElementsData.Roulette.turntable_icon_list)
 
+    def click_btn_i(self):
+        self.click_element(element_data=ElementsData.Roulette.btn_i)
+
 
 if __name__ == '__main__':
     bp = BasePage()

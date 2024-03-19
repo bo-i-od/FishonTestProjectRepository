@@ -1,6 +1,6 @@
 import random
 
-from common import resource
+from common import resource, gameInit
 from tools.commonTools import *
 from common.basePage import BasePage
 from panelObjs.newbieTaskPanel import NewbieTaskPanel
@@ -19,7 +19,7 @@ from scripts import battleTest
 def tips_test(bp: BasePage):
     # 打开tips
     NewbieTaskPanel.click_btn_i(bp)
-    bp.sleep(0.2)
+    bp.sleep(1)
 
     # 关闭tips
     NewbieTaskPanel.click_tap_to_close(bp)
@@ -28,11 +28,11 @@ def tips_test(bp: BasePage):
 def party_sale_test(bp: BasePage):
     # 打开付费页面
     NewbieTaskPanel.click_btn_sale(bp)
-    bp.sleep(0.2)
+    bp.sleep(1)
 
     # 关闭面板
     PartySalePanel.click_btn_close(bp)
-    bp.sleep(0.2)
+    bp.sleep(1)
 
     # 关闭新手三天 自动弹出party_sale 等待动画
     NewbieTaskPanel.click_btn_close(bp)
@@ -41,19 +41,19 @@ def party_sale_test(bp: BasePage):
     # 点击鱼竿进行预览后退出
     item_position_list = PartySalePanel.get_item_position_list(bp)
     bp.click_position(item_position_list[0])
-    bp.sleep(0.2)
+    bp.sleep(1)
     BaitAndRodShowPanel.click_tap_to_continue(bp)
-    bp.sleep(0.2)
+    bp.sleep(1)
 
     # 点击道具图标
     item_icon_list = PartySalePanel.get_item_icon_list(bp)
     item_quantity_list = PartySalePanel.get_item_quantity_list(bp)
     r = random.randint(1, len(item_position_list) - 1)
     bp.click_position(item_position_list[r])
-    bp.sleep(0.2)
+    bp.sleep(1)
     item_icon = ItemTipsPanel.get_item_icon(bp)
     compare(item_icon_list[r], item_icon)
-    bp.click_position([0.5, 0.2])
+    bp.click_position_base([0.9, 0.1])
 
     # 之后需要补充装备的数量测试
     gear_icon = item_icon_list[0]
@@ -65,7 +65,7 @@ def party_sale_test(bp: BasePage):
 
     # 点击购买
     PartySalePanel.click_btn_buy(bp)
-    bp.sleep(0.2)
+    bp.sleep(1)
 
     reward_dict = RewardsPanel.get_reward_dict(bp)
     compare_dict(item_dict, reward_dict)
@@ -77,13 +77,15 @@ def party_sale_test(bp: BasePage):
     stock_list = bp.get_item_count_list(item_icon_name_list=item_icon_list)
     compare_list(stock_expect_list, stock_list)
 
+    RewardsPanel.wait_for_panel_appear(bp)
+    bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
 
 
 def leaderboard_test(bp: BasePage):
     # 打开排行榜面板
     NewbieTaskPanel.click_btn_leaderboard(bp)
-    bp.sleep(0.2)
+    bp.sleep(1)
 
     # 代币数量前后端一致
     coin_stock = bp.get_item_count(item_tpid="209001")
@@ -92,7 +94,7 @@ def leaderboard_test(bp: BasePage):
 
     # 开关tips
     LeaderBoardPanel.click_btn_i(bp)
-    bp.sleep(0.2)
+    bp.sleep(1)
     LeaderBoardPanel.click_tap_to_close(bp)
 
     # 得到排名奖励
@@ -104,15 +106,14 @@ def leaderboard_test(bp: BasePage):
     # 点击图标
     r = random.randint(0, len(rewards_position_list) - 1)
     bp.click_position(rewards_position_list[r])
-    bp.sleep(0.2)
+    bp.sleep(1)
     if ItemTipsPanel.is_panel_active(bp):
         item_icon = ItemTipsPanel.get_item_icon(bp)
         compare(rewards_icon_list[r], item_icon)
-        bp.click_position_base([0.5, 0.2])
     elif FishCardPackTipsPanel.is_panel_active(bp):
         item_icon = FishCardPackTipsPanel.get_item_icon(bp)
         compare(rewards_icon_list[r], item_icon)
-        bp.click_position_base([0.5, 0.2])
+        bp.click_position_base([0.9, 0.1])
 
     # 得到前100奖励
     top_100_rewards_icon_list = LeaderBoardPanel.get_top_100_rewards_icon_list(bp)
@@ -122,15 +123,14 @@ def leaderboard_test(bp: BasePage):
     # 点击图标
     r = random.randint(0, len(top_100_rewards_position_list) - 1)
     bp.click_position(top_100_rewards_position_list[r])
-    bp.sleep(0.2)
+    bp.sleep(1)
     if ItemTipsPanel.is_panel_active(bp):
         item_icon = ItemTipsPanel.get_item_icon(bp)
         compare(top_100_rewards_icon_list[r], item_icon)
-        bp.click_position_base([0.5, 0.2])
     elif FishCardPackTipsPanel.is_panel_active(bp):
         item_icon = FishCardPackTipsPanel.get_item_icon(bp)
         compare(top_100_rewards_icon_list[r], item_icon)
-        bp.click_position_base([0.5, 0.2])
+        bp.click_position_base([0.9, 0.1])
     LeaderBoardPanel.click_btn_close(bp)
     #
     # ranking = LeaderBoardPanel.get_ranking(bp)
@@ -144,7 +144,7 @@ def leaderboard_test(bp: BasePage):
     #     cur += 1
     # print(stock_expect_list)
     # LeaderBoardPanel.click_btn_close(bp)
-    # bp.sleep(0.2)
+    # bp.sleep(1)
     # NewbieTaskPanel.click_btn_close(bp)
     #
     # # 领取奖励
@@ -156,15 +156,15 @@ def leaderboard_test(bp: BasePage):
     # compare_dict(rewards_dict, result_rewards_dict)
     # r = random.randint(0, len(result_rewards_position_list) - 1)
     # bp.click_position_base(result_rewards_position_list[r])
-    # bp.sleep(0.2)
+    # bp.sleep(1)
     # if ItemTipsPanel.is_panel_active(bp):
     #     item_icon = ItemTipsPanel.get_item_icon(bp)
     #     compare(result_rewards_icon_list[r], item_icon)
-    #     bp.click_position_base([0.5, 0.2])
+    #     bp.click_position_base([0.9, 0.1])
     # elif FishCardPackTipsPanel.is_panel_active(bp):
     #     item_icon = FishCardPackTipsPanel.get_item_icon(bp)
     #     compare(result_rewards_icon_list[r], item_icon)
-    #     bp.click_position_base([0.5, 0.2])
+    #     bp.click_position_base([0.9, 0.1])
     # LeaderBoardPopResultPanel.click_btn_claim(bp)
     # stock_list = bp.get_item_count_list(item_icon_name_list=list(rewards_dict))
     # compare_list(stock_expect_list, stock_list)
@@ -203,7 +203,7 @@ def day_test(bp: BasePage):
         task_viewport.move_until_appear(target_id=task_id)
         btn_claim_position = NewbieTaskPanel.get_task_position_list(bp, task_id_list=[task_id])[0]
         bp.click_position(btn_claim_position)
-        bp.sleep(0.2)
+        bp.sleep(1)
 
         # 代币数量前后端一致
         NewbieTaskPanel.get_coin(bp)
@@ -214,6 +214,8 @@ def day_test(bp: BasePage):
         compare_dict(task_reward_dict, reward_dict)
 
         # 关闭恭喜获得
+        RewardsPanel.wait_for_panel_appear(bp)
+        bp.sleep(1)
         RewardsPanel.click_tap_to_claim(bp)
 
         # 对照库存
@@ -236,16 +238,16 @@ def day_test(bp: BasePage):
         task_viewport.move_until_appear(target_id=task_id)
         btn_go_position = NewbieTaskPanel.get_task_position_list(bp, task_id_list=[task_id])[0]
         bp.click_position(btn_go_position)
-        bp.sleep(0.2)
+        bp.sleep(1)
         LoadingFisheryPanel.wait_until_panel_disappear(bp)
-        LoadingPanel.wait_until_panel_disappear(bp)
+        LoadingPanel.wait_until_panel_disappear(bp, is_wait_for_appear=False)
         img = bp.get_full_screen_shot()
         bp.save_img(img, "NewbieTaskPanel_jump_test")
         bp.go_to_panel("NewbieTaskPanel")
 
 
     NewbieTaskPanel.switch_tab(bp, 1)
-    bp.sleep(0.2)
+    bp.sleep(1)
     task_id_list = NewbieTaskPanel.get_task_id_list(bp)
     task_status = NewbieTaskPanel.get_task_status(bp, task_id_list)
     # 应该都是锁定的
@@ -253,7 +255,7 @@ def day_test(bp: BasePage):
         raise FindElementError
 
     NewbieTaskPanel.switch_tab(bp, 2)
-    bp.sleep(0.2)
+    bp.sleep(1)
     task_id_list = NewbieTaskPanel.get_task_id_list(bp)
     task_status = NewbieTaskPanel.get_task_status(bp, task_id_list)
     # 应该都是锁定的
@@ -289,11 +291,13 @@ def progress_test(bp:BasePage):
     # 随机点击奖励位置进行领取
     r = random.randint(0, len(progress_reward_position_list) - 1)
     bp.click_position(progress_reward_position_list[r])
-    bp.sleep(0.2)
+    bp.sleep(1)
 
     # 对照奖励数量
     reward_dict = RewardsPanel.get_reward_dict(bp)
     compare_dict(item_dict, reward_dict)
+    RewardsPanel.wait_for_panel_appear(bp)
+    bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
 
     # 对照库存
@@ -314,19 +318,19 @@ def progress_test(bp:BasePage):
     reward_icon = progress_reward_icon_list[r]
     progress_reward_viewport.move_until_appear(target_id=locked_list[r])
     bp.click_position(progress_reward_position_list[r])
-    bp.sleep(0.2)
+    bp.sleep(1)
     if 'rod' in reward_icon:
         BaitAndRodShowPanel.click_tap_to_continue(bp)
     else:
         item_icon = ItemTipsPanel.get_item_icon(bp)
         compare(reward_icon, item_icon)
-        bp.click_position([0.5, 0.2])
 
     # 让刚好无法领取大奖
     max_reward_threshold = NewbieTaskPanel.get_max_reward_threshold(bp)
     bp.set_item_count(target_count=max_reward_threshold - 1, item_tpid="209001")
     bp.click_position(progress_reward_position_list[r])
-    bp.sleep(0.2)
+    RewardsPanel.wait_for_panel_appear(bp)
+    bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
 
     # 只领取大奖
@@ -340,11 +344,13 @@ def progress_test(bp:BasePage):
     # 点击领取
     max_reward_position = NewbieTaskPanel.get_max_reward_position(bp)
     bp.click_position(max_reward_position)
-    bp.sleep(0.2)
+    bp.sleep(1)
 
     # 对照奖励
     reward_dict = RewardsPanel.get_reward_dict(bp)
     compare(item_dict, reward_dict)
+    RewardsPanel.wait_for_panel_appear(bp)
+    bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
 
     # 对照库存
@@ -354,7 +360,7 @@ def progress_test(bp:BasePage):
 
 def challenge_test(bp:BasePage):
     NewbieTaskPanel.switch_tab(bp, 3)
-    bp.sleep(0.2)
+    bp.sleep(1)
 
     # 随机选择go fishing跳转
     challenge_id_list = NewbieTaskPanel.get_challenge_id_list(bp)
@@ -364,9 +370,9 @@ def challenge_test(bp:BasePage):
     btn_go_position_list = NewbieTaskPanel.get_challenge_position_list(bp, challenge_id_list=[challenge_id_list[r]])
     btn_go_position = btn_go_position_list[0]
     bp.click_position(btn_go_position)
-    bp.sleep(0.2)
+    bp.sleep(1)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
-    LoadingPanel.wait_until_panel_disappear(bp)
+    LoadingPanel.wait_until_panel_disappear(bp, is_wait_for_appear=False)
     img = bp.get_full_screen_shot()
     bp.save_img(img, "NewbieTaskPanel_jump_test")
 
@@ -399,8 +405,12 @@ def challenge_test(bp:BasePage):
     #     compare(coin_expect, coin)
     #     cur += 1
 
-def NewbieTask_test(bp: BasePage):
-    # 去新手三天界面
+def main(bp: BasePage):
+    # 进入大厅
+    cmd_list = ["guideskip"]
+    gameInit.login_to_hall(bp, cmd_list=cmd_list)
+
+    # # 去新手三天界面
     bp.go_to_panel("NewbieTaskPanel")
 
     # 派对礼包测试
@@ -427,4 +437,4 @@ def NewbieTask_test(bp: BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    NewbieTask_test(bp)
+    main(bp)

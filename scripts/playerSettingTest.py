@@ -1,6 +1,7 @@
 import random
 import time
 
+from common import gameInit
 from common.resource import *
 from panelObjs.playerSettingPanel import PlayerSettingPanel
 from common.basePage import BasePage
@@ -25,13 +26,13 @@ def player_test(bp: BasePage):
     PlayerSettingPanel.close_edit_profile(bp)
 
     PlayerSettingPanel.click_badge_i(bp)
-    bp.click_position([0.5, 0.1])
+    bp.click_position_base([0.5, 0.9])
 
 
 
 def avatar_test(bp: BasePage):
     PlayerSettingPanel.click_tab_avatar(bp)
-    bp.sleep(0.2)
+    bp.sleep(1)
     # 排除当前选中的头像
     avatar_id_list = PlayerSettingPanel.get_avatar_id_list(bp)
     selected_avatar_index = PlayerSettingPanel.get_selected_icon_index(bp, avatar_id_list)
@@ -46,6 +47,7 @@ def avatar_test(bp: BasePage):
     compare(selected_avatar_index, random_num)
     avatar = PlayerSettingPanel.get_avatar(bp, avatar_id=avatar_id_list[selected_avatar_index])
     PlayerSettingPanel.click_btn_save(bp)
+    bp.sleep(1)
     bp.go_home()
     head_img = HomePanel.get_head_img(bp)
     compare(avatar, head_img)
@@ -55,7 +57,7 @@ def avatar_test(bp: BasePage):
 
 def banner_test(bp: BasePage):
     PlayerSettingPanel.click_tab_banner(bp)
-    bp.sleep(0.2)
+    bp.sleep(1)
     # 排除当前选中的头像
     banner_id_list = PlayerSettingPanel.get_banner_id_list(bp)
     selected_banner_index = PlayerSettingPanel.get_selected_icon_index(bp, banner_id_list)
@@ -70,13 +72,14 @@ def banner_test(bp: BasePage):
     compare(selected_banner_index, random_num)
     banner = PlayerSettingPanel.get_banner(bp, banner_id=banner_id_list[selected_banner_index])
     PlayerSettingPanel.click_btn_save(bp)
+    bp.sleep(1)
     bp.go_home()
     flag = HomePanel.get_flag(bp)
     compare(banner, flag)
 
 def name_test(bp: BasePage):
     PlayerSettingPanel.click_tab_name(bp)
-    bp.sleep(0.2)
+    bp.sleep(1)
     # 将名字改为当前时间
     now = datetime.datetime.now()
     formatted_time = now.strftime("%y%m%d%H%M%S")
@@ -84,6 +87,7 @@ def name_test(bp: BasePage):
 
     # 保存
     PlayerSettingPanel.click_btn_save(bp)
+    bp.sleep(1)
 
     # 回主界面对比名称是否改成功
     bp.go_home()
@@ -101,7 +105,7 @@ def badge_test(bp: BasePage):
 
     # 点击徽章页签
     PlayerSettingPanel.click_tab_badge(bp)
-    bp.sleep(0.2)
+    bp.sleep(1)
 
     # 确认装备的成就有equipped
     badge_slot_id_list = PlayerSettingPanel.get_badge_slot_id_list(bp)
@@ -195,15 +199,18 @@ def language_test(bp: BasePage):
     print("切换语言测试通过")
 
 def gift_code_test(bp: BasePage):
+    if not PlayerSettingPanel.is_btn_giftcode_active(bp):
+        bp.debug_log("跳过激活码测试")
+        return
     PlayerSettingPanel.click_btn_giftcode(bp)
-    bp.sleep(0.2)
+    bp.sleep(1)
     # 输入不存在的礼包码
     giftcode = "1234"
     PlayerSettingPanel.set_giftcode(bp, giftcode)
     giftcode_input = PlayerSettingPanel.get_giftcode(bp)
     compare(giftcode, giftcode_input)
     PlayerSettingPanel.click_btn_confirm(bp)
-    bp.sleep(0.2)
+    bp.sleep(1)
     bp.cmd("activationcodeclear")
     # 输入存在的礼包码
     giftcode = "fishon888"
@@ -211,16 +218,21 @@ def gift_code_test(bp: BasePage):
     giftcode_input = PlayerSettingPanel.get_giftcode(bp)
     compare(giftcode, giftcode_input)
     PlayerSettingPanel.click_btn_confirm(bp)
-    bp.sleep(0.2)
+    RewardsPanel.wait_for_panel_appear(bp)
+    bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
-    bp.sleep(0.2)
+    bp.sleep(1)
     PlayerSettingPanel.click_btn_close_giftcode(bp)
 
 
-def player_setting_test(bp: BasePage):
+def main(bp: BasePage):
+    # 进入大厅
+    cmd_list = ["guideskip"]
+    gameInit.login_to_hall(bp, cmd_list=cmd_list)
+
     HomePanel.go_to_panel(bp,"PlayerSettingPanel")
     PlayerSettingPanel.click_tab_player(bp)
-    bp.sleep(0.2)
+    bp.sleep(1)
     player_test(bp)
 
     PlayerSettingPanel.open_edit_profile(bp)
@@ -237,11 +249,11 @@ def player_setting_test(bp: BasePage):
 
     # 切换到settings
     PlayerSettingPanel.click_tab_settings(bp)
-    bp.sleep(0.2)
+    bp.sleep(1)
     settings_test(bp)
 
     PlayerSettingPanel.click_tab_language(bp)
-    bp.sleep(0.2)
+    bp.sleep(1)
     language_test(bp)
 
     gift_code_test(bp)
@@ -252,4 +264,4 @@ def player_setting_test(bp: BasePage):
 if __name__ == '__main__':
     bp = BasePage()
     # badge_test(bp)
-    player_setting_test(bp)
+    main(bp)

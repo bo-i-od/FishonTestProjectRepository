@@ -30,10 +30,11 @@ def collect_next_test(bp: BasePage):
     current_rewards_expect_dict = resource.make_item_dict(item_icon_list=current_rewards_icon_list, item_quantity_list=current_rewards_quantity_list, item_dict={next_reward_icon: next_reward_quantity})
 
     # 钓一条鱼
-    battleTest.fish_once(bp, fishscene_id="400301", fish_id="301001")
+    battleTest.fish_once(bp, fishery_id="400301", fish_id="301001")
     bp.sleep(3)
 
     # 对照奖励
+
     current_rewards_icon_list = BattlePreparePanel.get_current_rewards_icon_list(bp)
     current_rewards_quantity_list = BattlePreparePanel.get_current_rewards_quantity_list(bp)
     current_rewards_dict = resource.make_item_dict(item_icon_list=current_rewards_icon_list, item_quantity_list=current_rewards_quantity_list)
@@ -57,6 +58,8 @@ def collect_next_test(bp: BasePage):
     compare_list(stock_expect_list, stock_list)
 
     # 关闭恭喜获得
+    RewardsPanel.wait_for_panel_appear(bp)
+    bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
 
 
@@ -66,7 +69,8 @@ def mini_panel_test(bp: BasePage):
     current_rewards_icon_list = BattlePreparePanel.get_current_rewards_icon_list(bp)
     if current_rewards_icon_list:
         BattlePreparePanel.click_progress_info(bp)
-        bp.sleep(0.2)
+        RewardsPanel.wait_for_panel_appear(bp)
+        bp.sleep(1)
         RewardsPanel.click_tap_to_claim(bp)
         bp.sleep(0.2)
     current_rewards_icon_list = BattlePreparePanel.get_current_rewards_icon_list(bp)
@@ -153,6 +157,8 @@ def complete_test(bp: BasePage):
     compare(stock_expect_list, stock_list)
 
     # 关闭恭喜获得
+    RewardsPanel.wait_for_panel_appear(bp)
+    bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
     bp.sleep(0.2)
 

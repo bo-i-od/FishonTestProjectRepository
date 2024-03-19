@@ -104,6 +104,8 @@ def collect_all_test(bp:BasePage, task_id_list:list, viewport:Viewport):
         compare_list(box_status_now[0], box_status[0])
         compare_list(box_status_now[1], box_status[1])
         compare_list(box_status_now[2], box_status[2])
+        RewardsPanel.wait_for_panel_appear(bp)
+        bp.sleep(1)
         RewardsPanel.click_tap_to_claim(bp)
         bp.sleep(0.5)
         if progress_value < 0.99 and progress_value < TaskPanel.get_progress_value(bp) is False:
@@ -187,6 +189,8 @@ def btn_collect_once_test(bp:BasePage, task_id_list:list, viewport:Viewport, ind
     if progress_value < 0.99 and progress_value < TaskPanel.get_progress_value(bp) is False:
         raise CompareError
     # 关闭领奖弹窗
+    RewardsPanel.wait_for_panel_appear(bp)
+    bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
 
 # 宝箱的奖励领取测试
@@ -215,6 +219,8 @@ def box_collect_test(bp:BasePage, index:int, box_award_dict:dict):
     if index + 1 not in status[2]:
         raise FindNoElementError
     # 关闭弹窗
+    RewardsPanel.wait_for_panel_appear(bp)
+    bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
     print("box_collect_test宝箱领取测试通过")
 
@@ -222,7 +228,6 @@ def box_collect_test(bp:BasePage, index:int, box_award_dict:dict):
 
 
 def collect_test(bp:BasePage):
-    bp.set_item_count(target_count=60000,item_tpid="100200")
     bp.cmd("missiondone 2")
     bp.go_to_panel("TaskPanel")
     bp.sleep(1)
@@ -273,6 +278,8 @@ def collect_test(bp:BasePage):
     if month_box_status != 2:
         raise FindNoElementError
     # 关闭弹窗
+    RewardsPanel.wait_for_panel_appear(bp)
+    bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
     # 切换到日常标签
     TaskPanel.switch_tab(bp, 0)
@@ -280,11 +287,15 @@ def collect_test(bp:BasePage):
     compare(task_kind, "Daily")
     TaskPanel.click_btn_close(bp)
 
+def main(bp: BasePage):
+    jump_test(bp)
+    collect_test(bp)
+
 
 if __name__ == '__main__':
     bp = BasePage()
     # bp.set_item_count(target_count=60000, item_tpid="100200")
-    collect_test(bp)
+    main(bp)
 
 
 

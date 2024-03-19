@@ -1,6 +1,8 @@
 import random
 
+from common import gameInit
 from common.basePage import BasePage
+from panelObjs.gearPanel import GearPanel
 from panelObjs.treasureChestPanel import TreasureChestPanel
 from panelObjs.storePanel import StorePanel
 from panelObjs.treasureChestRewardsPanel import TreasureChestRewardsPanel
@@ -20,20 +22,21 @@ def random_box_count():
     return random.randint(11, 20)
 
 
-def TreasureChestPanel_test(bp: BasePage):
+def main(bp: BasePage):
+    # 进入大厅
+    cmd_list = ["guideskip"]
+    gameInit.login_to_hall(bp, cmd_list=cmd_list)
     # 初始化箱子数量
     cur = 1
     while cur < 6:
         box_count = random_box_count()
         bp.set_item_count(target_count=box_count, item_tpid=f"20700{cur}")
         cur += 1
-    bp.sleep(0.5)
+    bp.sleep(1)
 
     # 进入鱼箱界面
-    # bp.go_to_panel("TreasureChestPanel")
-    # bp.lua_console('PanelMgr:OpenPanel("TreasureChestPanel")')
-    bp.click_position([0.5, 0.7])
-    bp.sleep(0.5)
+    bp.go_to_panel("TreasureChestPanel")
+    bp.sleep(1)
 
 
     # 获取箱子信息
@@ -46,7 +49,7 @@ def TreasureChestPanel_test(bp: BasePage):
         # 选中
         bp.debug_log(f"正在选择第{cur + 1}个箱子")
         TreasureChestPanel.select_box(bp, cur)
-        bp.sleep(0.2)
+        bp.sleep(1)
         # 得到当前展示箱子的icon名，与第cur个箱子的icon名对比
         box_mian_icon = TreasureChestPanel.get_box_main_icon(bp)
         bp.debug_log(f"当前展示箱子图标名称为：{box_mian_icon}，选中的箱子图标名称为：{box_icon_list[cur]}")
@@ -89,7 +92,7 @@ def click_progressbar_box_test(bp: BasePage):
     if TreasureChestPanel.is_box_points_enough(bp) is False:
         box_points_expect = TreasureChestPanel.get_box_points(bp)
         TreasureChestPanel.click_progressbar_box(bp)
-        bp.sleep(0.5)
+        bp.sleep(1)
         box_points = TreasureChestPanel.get_box_points(bp)
         compare(box_points, box_points_expect)
         print("箱子点不足下的点击，测试通过")
@@ -106,7 +109,7 @@ def click_progressbar_box_test(bp: BasePage):
     box_points_numerator, box_points_denominator = TreasureChestPanel.get_box_points(bp)
     box_points_numerator_expect = box_points_numerator - box_points_denominator
     TreasureChestPanel.click_progressbar_box(bp)
-    bp.sleep(0.5)
+    bp.sleep(1)
     box_points_numerator_new, box_points_denominator_new = TreasureChestPanel.get_box_points(bp)
     box_points_numerator = box_points_numerator_new
     box_icon_list, quantity_list = TreasureChestPanel.get_box_icon_and_quantity_list(bp)
@@ -126,6 +129,7 @@ def open_box_test(bp: BasePage, icon, quantity):
     # 点击开箱
     TreasureChestPanel.click_open_x(bp)
 
+
     # 无法开箱就直接返回
     if quantity == 0:
         box_points_numerator, box_points_denominator = TreasureChestPanel.get_box_points(bp)
@@ -139,11 +143,14 @@ def open_box_test(bp: BasePage, icon, quantity):
 
     # 可以打开就继续开
     if n > 0:
+        TreasureChestRewardsPanel.skip_anime(bp)
+        bp.sleep(1)
         TreasureChestRewardsPanel.click_open_x(bp)
         bp.debug_log(f"开箱后箱子点期望为{box_points_numerator_expect}")
 
     # 返回
     TreasureChestRewardsPanel.skip_anime(bp)
+    bp.sleep(1)
 
     box_fragment_test(bp)
 
@@ -161,43 +168,44 @@ def box_fragment_test(bp:BasePage):
     # 没有就不进行测试
     if not box_fragment_position:
         TreasureChestRewardsPanel.click_btn_close(bp)
+        bp.sleep(1)
         return
     r = random.randint(0, 3)
 
     if r == 0:
         bp.click_position(box_fragment_position)
-        bp.sleep(0.2)
+        bp.sleep(1)
         TreasureChestGearsShardsPanel.click_tap_to_continue(bp)
-        bp.sleep(0.2)
+        bp.sleep(1)
         TreasureChestRewardsPanel.click_btn_close(bp)
-        bp.sleep(0.2)
+        bp.sleep(1)
         TreasureChestGearsShardsPanel.click_tap_to_continue(bp)
     elif r == 1:
         bp.click_position(box_fragment_position)
-        bp.sleep(0.2)
+        bp.sleep(1)
         btn_enhance_position_list = TreasureChestGearsShardsPanel.get_btn_enhance_position_list(bp)
         s = random.randint(0, len(btn_enhance_position_list) - 1)
         bp.click_position(btn_enhance_position_list[s])
-        bp.sleep(0.2)
+        bp.sleep(1)
         if not BaitAndRodAlbumPanel.is_panel_active(bp):
             raise FindNoElementError
         BaitAndRodAlbumPanel.click_btn_close(bp)
         return
     elif r == 2:
         TreasureChestRewardsPanel.click_btn_close(bp)
-        bp.sleep(0.2)
+        bp.sleep(1)
         TreasureChestGearsShardsPanel.click_tap_to_continue(bp)
         return
     elif r == 3:
         TreasureChestRewardsPanel.click_btn_close(bp)
-        bp.sleep(0.2)
+        bp.sleep(1)
         btn_enhance_position_list = TreasureChestGearsShardsPanel.get_btn_enhance_position_list(bp)
         s = random.randint(0, len(btn_enhance_position_list) - 1)
         bp.click_position(btn_enhance_position_list[s])
-        bp.sleep(0.2)
-        if not BaitAndRodAlbumPanel.is_panel_active(bp):
+        bp.sleep(1)
+        if not GearPanel.is_panel_active(bp):
             raise FindNoElementError
-        BaitAndRodAlbumPanel.click_btn_close(bp)
+        GearPanel.click_btn_close(bp)
         return
 
 
@@ -223,4 +231,4 @@ def click_tips_test(bp: BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    TreasureChestPanel_test(bp)
+    main(bp)

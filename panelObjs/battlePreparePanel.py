@@ -75,6 +75,9 @@ class BattlePreparePanel(BasePage):
             return True
         return False
 
+    def click_btn_tournaments(self):
+        self.click_element(element_data=ElementsData.BattlePrepare.btn_tournaments)
+
 
 
 if __name__ == '__main__':

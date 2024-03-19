@@ -14,6 +14,11 @@ class GearLevelupPanel(BasePage):
             return True
         return False
 
+    def is_max_active(self):
+        if self.exist(element_data=ElementsData.GearLevelup.max):
+            return True
+        return False
+
     def get_level(self):
         lv_str = self.get_text(element_data=ElementsData.GearLevelup.lv)
         if "LV." in lv_str:
@@ -25,13 +30,18 @@ class GearLevelupPanel(BasePage):
     def get_level_next(self):
         lv_str = self.get_text(element_data=ElementsData.GearLevelup.lv_next)
         if "LV." in lv_str:
-            return int(lv_str.spilt('LV.')[1])
+            return int(lv_str.split('LV.')[1])
         if "等级" in lv_str:
-            return int(lv_str.spilt('等级')[1])
+            return int(lv_str.split('等级')[1])
         return -1
 
     def get_skill_value_list(self):
         skill_value_list = self.get_text_list(element_data=ElementsData.GearLevelup.skill_value_list)
+        str_to_int_list(skill_value_list)
+        return skill_value_list
+
+    def get_skill_value_next_list(self):
+        skill_value_list = self.get_text_list(element_data=ElementsData.GearLevelup.skill_value_next_list)
         str_to_int_list(skill_value_list)
         return skill_value_list
 
@@ -76,5 +86,7 @@ class GearLevelupPanel(BasePage):
         self.click_element(element_data=ElementsData.GearLevelup.btn_add_100000)
 
 if __name__ == '__main__':
-    pass
+    bp = BasePage()
+    GearLevelupPanel.click_btn_next(bp)
+    GearLevelupPanel.click_btn_previous(bp)
 

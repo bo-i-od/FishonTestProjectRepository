@@ -53,13 +53,13 @@ def ab(s:str):
         return True
     return False
 if __name__ == '__main__':
-    input = "abab"
-    res = ab(input)
-    print(res)
+    # input = "abab"
+    # res = ab(input)
+    # print(res)
     # print(move(4, 4))
-    # project_directory = 'D:\FishonTestProject'
-    # code_line_count = count_code_lines(project_directory)
-    # print(f"Total code lines: {code_line_count}")
+    project_directory = 'D:\FishonTestProject'
+    code_line_count = count_code_lines(project_directory)
+    print(f"Total code lines: {code_line_count}")
 
 
 

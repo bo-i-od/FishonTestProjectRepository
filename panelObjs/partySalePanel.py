@@ -36,5 +36,4 @@ class PartySalePanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    a = bp.get_text_list(element_data=ElementsData.PartySale.item_quantity_list)
-    print(resource.str_to_int_list(a))
+    PartySalePanel.click_btn_buy(bp)

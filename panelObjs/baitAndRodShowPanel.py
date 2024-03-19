@@ -11,6 +11,9 @@ class BaitAndRodShowPanel(BasePage):
             return True
         return False
 
+    def wait_for_panel_appear(self):
+        self.wait_for_appear(element_data=ElementsData.BaitAndRodShow.BaitAndRodShowPanel)
+
     def open_and_close_talent(self):
         position = self.click_element(element_data=ElementsData.BaitAndRodShow.talent)
         if not self.exist(element_data=ElementsData.BaitAndRodShow.tips_talent):

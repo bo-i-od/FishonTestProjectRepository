@@ -11,7 +11,7 @@ from panelObjs.rewardsPreviewPanel import RewardsPreviewPanel
 from panelObjs.loadingFisheryPanel import LoadingFisheryPanel
 from panelObjs.loadingPanel import LoadingPanel
 from common import resource
-from common import login
+from common import gameInit
 
 # 点击页面介绍测试
 def tips_test(bp:BasePage):
@@ -19,12 +19,12 @@ def tips_test(bp:BasePage):
     print("点击页面介绍开始")
     bp.sleep(0.5)
     AchievementPanel.click_btn_i(bp)
-    bp.sleep(0.2)
+    bp.sleep(0.5)
     if not AchievementPanel.is_tips_active(bp):
         raise FindNoElementError
-    bp.sleep(0.2)
-    bp.click_position([0.5, 0.1])
-    bp.sleep(0.2)
+    bp.sleep(0.5)
+    AchievementPanel.click_btn_i(bp)
+    bp.sleep(0.5)
 
 
 # 点击未解锁成就测试
@@ -46,7 +46,6 @@ def locked_test(bp:BasePage):
         bp.click_position(position_list[locked_list[cur]])
         if not AchievementPanel.is_unlock_tips_active(bp):
             raise FindNoElementError
-        bp.click_position([0.5, 0.1])
         cur += 1
     print("点击未解锁成就完成")
 
@@ -57,7 +56,7 @@ def locked_test(bp:BasePage):
 def unlock_test(bp:BasePage):
     bp.go_to_panel("AchievementPanel")
     print("改变等级使成就可解锁")
-    exp = 10000000
+    exp = 12345678
     # 升级后返回出进下刷新界面
     bp.set_item_count(exp, item_tpid="100200")
     bp.debug_log(f"exp:{exp}")
@@ -110,31 +109,33 @@ def jump_all_test(bp:BasePage):
     print("随机点击已解锁成就开始")
     # 点击已解锁成就
     unlocked_list = list(unlocked_set)
-    # if unlocked_list:
-    #     r = random.randint(0, len(unlocked_list) - 1)
-    #     viewport.move_until_appear(viewport.item_id_list[unlocked_list[r]])
-    #     group_name = AchievementPanel.get_group_name(bp, achievement_id=viewport.item_id_list[unlocked_list[r]])
-    #     position_list = AchievementPanel.get_achievement_position_list(bp)
-    #     bp.click_position(position_list[unlocked_list[r]])
-    #     bp.sleep(1)
-    #     title = AchievementGroupPanel.get_title(bp)
-    #     compare(group_name, title)
-    #     bp.debug_log("随机点击已解锁成就完成")
-    # else:
-    #     bp.debug_log("随机点击已解锁成就跳过")
-    cur = 0
-    while cur < len(unlocked_list):
+    if unlocked_list:
+        r = random.randint(0, len(unlocked_list) - 1)
         viewport = AchievementPanel.get_viewport(bp)
-        viewport.move_until_appear(viewport.item_id_list[unlocked_list[cur]])
-        group_name = AchievementPanel.get_group_name(bp, achievement_id=viewport.item_id_list[unlocked_list[cur]])
+        viewport.move_until_appear(viewport.item_id_list[unlocked_list[r]])
+        group_name = AchievementPanel.get_group_name(bp, achievement_id=viewport.item_id_list[unlocked_list[r]])
         position_list = AchievementPanel.get_achievement_position_list(bp)
-        bp.click_position(position_list[unlocked_list[cur]])
+        bp.click_position(position_list[unlocked_list[r]])
         bp.sleep(0.5)
         title = AchievementGroupPanel.get_title(bp)
         compare(group_name, title)
         jump_test(bp)
-        bp.sleep(0.5)
-        cur += 1
+        bp.debug_log("随机点击已解锁成就完成")
+    else:
+        bp.debug_log("随机点击已解锁成就跳过")
+    # cur = 0
+    # while cur < len(unlocked_list):
+    #     viewport = AchievementPanel.get_viewport(bp)
+    #     viewport.move_until_appear(viewport.item_id_list[unlocked_list[cur]])
+    #     group_name = AchievementPanel.get_group_name(bp, achievement_id=viewport.item_id_list[unlocked_list[cur]])
+    #     position_list = AchievementPanel.get_achievement_position_list(bp)
+    #     bp.click_position(position_list[unlocked_list[cur]])
+    #     bp.sleep(0.5)
+    #     title = AchievementGroupPanel.get_title(bp)
+    #     compare(group_name, title)
+    #     jump_test(bp)
+    #     bp.sleep(0.5)
+    #     cur += 1
 
 
 # 成就跳转测试
@@ -154,16 +155,16 @@ def jump_test(bp: BasePage):
         print("网页跳转直接跳过")
         return
     bp.click_position(achievement_position_list[go_index_list[r]])
-    bp.sleep(1)
+    bp.sleep(0.5)
     select_test(bp, go_index_list[r])
     cur = 0
     while cur < 10:
         if AchievementGroupPanel.is_panel_active(bp):
             AchievementGroupPanel.click_btn_go(bp)
         cur += 1
-    bp.sleep(0.2)
+    bp.sleep(0.5)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
-    LoadingPanel.wait_until_panel_disappear(bp)
+    LoadingPanel.wait_until_panel_disappear(bp, is_wait_for_appear=False)
     # img = bp.get_full_screen_shot()
     # bp.save_img(img, "achievementGroupPanel_jump_test")
     bp.go_to_panel("AchievementPanel")
@@ -182,31 +183,32 @@ def collect_test(bp: BasePage):
     unlocked_list = list(unlocked_set)
     # 随机一个进行领取测试
     r = random.randint(1, len(unlocked_list) - 1)
-    # viewport.move_until_appear(viewport.item_id_list[unlocked_list[r]])
-    # group_name = AchievementPanel.get_group_name(bp, achievement_id=viewport.item_id_list[unlocked_list[r]])
-    # position_list = AchievementPanel.get_achievement_position_list(bp)
-    # bp.click_position(position_list[unlocked_list[r]])
-    # bp.sleep(0.5)
-    # title = AchievementGroupPanel.get_title(bp)
-    # compare(group_name, title)
-    # click_icon_test(bp)
-    # collect_all_test(bp)
-    # AchievementGroupPanel.click_btn_close(bp)
+    viewport.move_until_appear(viewport.item_id_list[unlocked_list[r]])
+    group_name = AchievementPanel.get_group_name(bp, achievement_id=viewport.item_id_list[unlocked_list[r]])
+    position_list = AchievementPanel.get_achievement_position_list(bp)
+    bp.click_position(position_list[unlocked_list[r]])
+    bp.sleep(0.5)
+    title = AchievementGroupPanel.get_title(bp)
+    compare(group_name, title)
+    click_icon_test(bp)
+    collect_all_test(bp)
+    AchievementGroupPanel.click_btn_close(bp)
 
-    cur = 1
-    while cur < len(unlocked_list):
-        viewport.move_until_appear(viewport.item_id_list[unlocked_list[cur]])
-        group_name = AchievementPanel.get_group_name(bp, achievement_id=viewport.item_id_list[unlocked_list[cur]])
-        position_list = AchievementPanel.get_achievement_position_list(bp)
-        bp.click_position(position_list[unlocked_list[cur]])
-        bp.sleep(0.5)
-        title = AchievementGroupPanel.get_title(bp)
-        compare(group_name, title)
-        if r == cur:
-            click_icon_test(bp)
-        collect_all_test(bp)
-        AchievementGroupPanel.click_btn_close(bp)
-        cur += 1
+    # 所有进行领取
+    # cur = 1
+    # while cur < len(unlocked_list):
+    #     viewport.move_until_appear(viewport.item_id_list[unlocked_list[cur]])
+    #     group_name = AchievementPanel.get_group_name(bp, achievement_id=viewport.item_id_list[unlocked_list[cur]])
+    #     position_list = AchievementPanel.get_achievement_position_list(bp)
+    #     bp.click_position(position_list[unlocked_list[cur]])
+    #     bp.sleep(0.5)
+    #     title = AchievementGroupPanel.get_title(bp)
+    #     compare(group_name, title)
+    #     if r == cur:
+    #         click_icon_test(bp)
+    #     collect_all_test(bp)
+    #     AchievementGroupPanel.click_btn_close(bp)
+    #     cur += 1
 
 def collect_all_test(bp: BasePage):
     achievement_point, progress_denominator = AchievementGroupPanel.get_achievement_point(bp)
@@ -216,6 +218,8 @@ def collect_all_test(bp: BasePage):
         return
     while AchievementGroupPanel.is_box_clickable(bp):
         AchievementGroupPanel.click_box(bp)
+        RewardsPanel.wait_for_panel_appear(bp)
+        bp.sleep(0.5)
         RewardsPanel.click_tap_to_claim(bp)
         bp.sleep(0.5)
         # 防止鱼卡弹窗
@@ -241,6 +245,8 @@ def collect_all_test(bp: BasePage):
         compare_list(item_stock_expect_list, item_stock_list)
         img = bp.get_full_screen_shot()
         bp.save_img(img)
+        RewardsPanel.wait_for_panel_appear(bp)
+        bp.sleep(0.5)
         RewardsPanel.click_tap_to_claim(bp)
         bp.sleep(0.5)
         # 防止鱼卡弹窗
@@ -276,7 +282,7 @@ def collect_once_test(bp: BasePage):
         cur += 1
     # 点击领取
     AchievementGroupPanel.click_btn_collect(bp)
-    bp.sleep(0.2)
+    bp.sleep(0.5)
     achievement_point, progress_denominator = AchievementGroupPanel.get_achievement_point(bp)
     bp.debug_log(f"achievement_point_expect, achievement_point:{achievement_point_expect, achievement_point}")
     compare(achievement_point_expect, achievement_point)
@@ -307,7 +313,7 @@ def click_icon_test(bp: BasePage):
     item_icon = ItemTipsPanel.get_item_icon(bp)
     bp.debug_log(f"item_icon_expect, item_icon:{item_icon_expect, item_icon}")
     compare(item_icon_expect, item_icon)
-    bp.click_position([0.5, 0.1])
+    bp.click_position_base([0.9, 0.1])
     # 点击宝箱
     AchievementGroupPanel.click_box(bp)
     cur = 0
@@ -325,13 +331,16 @@ def click_icon_test(bp: BasePage):
     item_icon = ItemTipsPanel.get_item_icon(bp)
     bp.debug_log(f"reward_icon_list[r], item_icon:{reward_icon_list[r], item_icon}")
     compare(reward_icon_list[r], item_icon)
-    bp.click_position([0.5, 0.1])
+    bp.click_position_base([0.9, 0.1])
     print("click_icon_test图标点击测试通过")
 
-def achievement_test(bp:BasePage):
+def main(bp:BasePage):
+    # 登录到大厅
+    cmd_list = ["guideskip", "add 1 100200 12345"]
+    gameInit.login_to_hall(bp, cmd_list=cmd_list)
+    bp.go_to_panel("AchievementPanel")
     tips_test(bp)
-    # click_tips_test(bp)
-    # achievement_status_test(bp)
+
     #
     # select_test(bp)
     # click_icon_test(bp)
@@ -344,9 +353,6 @@ def achievement_test(bp:BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage()
-    # cmd_l = ["guideskip", "add 1 100200 100000"]
-    # login.login_to_hall(bp, cmd_l)
-    # bp.set_item_count(target_count=100000, item_tpid="100200")
-    achievement_test(bp)
-    # print(bp.get_item_count(item_tpid="100000"))
+    bp = BasePage("127.0.0.1:21593")
+    main(bp)
+

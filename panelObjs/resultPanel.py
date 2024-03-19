@@ -41,7 +41,7 @@ class ResultPanel(BasePage):
             self.click_element(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again)
         else:
             self.click_element(element_data=ElementsData.Result.pve_result.btn_throw)
-        RewardsPanel.wait_for_RewardsPanel(self)
+        RewardsPanel.wait_for_panel_appear(self)
         self.sleep(0.5)
         RewardsPanel.click_tap_to_claim(self)
         return

@@ -12,7 +12,7 @@ class RewardsPanel(BasePage):
         self.click_element(element_data=ElementsData.Rewards.tap_to_claim)
 
 
-    def wait_for_RewardsPanel(self):
+    def wait_for_panel_appear(self):
         self.wait_for_appear(element_data=ElementsData.Rewards.tap_to_claim, is_click=False)
 
     def get_reward_dict(self):
@@ -43,4 +43,4 @@ class RewardsPanel(BasePage):
 
 if __name__ == '__main__':
     bp = RewardsPanel()
-    print(bp.click_tap_to_claim())
+

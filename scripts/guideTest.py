@@ -1,9 +1,13 @@
 import random
+import time
+
+from common import gameInit
 from common.basePage import BasePage
 from panelObjs.playerEditNamePanel import PlayerEditNamePanel
 from panelObjs.newbieGuidePanel import NewbieGuidePanel
 from panelObjs.battlePanel import BattlePanel
 from tools.commonTools import *
+
 
 
 def playerEditNamePanelTest(bp: BasePage):
@@ -32,23 +36,22 @@ def playerEditNamePanelTest(bp: BasePage):
 def newbieGuidePanelTest(bp: BasePage):
     start_page = NewbieGuidePanel.get_start_page(bp)
     if start_page > 3:
-        bp.cmd("autofish")
         NewbieGuidePanel.do_guide_1(bp)
-        # BattlePanel.reel(bp)
         NewbieGuidePanel.do_guide_2(bp)
     if start_page > 2:
-        bp.cmd("autofish")
         NewbieGuidePanel.do_guide_3(bp)
-        BattlePanel.unleash_power(bp)
-        # BattlePanel.reel(bp)
         NewbieGuidePanel.do_guide_4(bp)
     if start_page > 1:
         NewbieGuidePanel.do_guide_5(bp)
     if start_page > 0:
         NewbieGuidePanel.do_guide_6(bp)
 
-if __name__ == '__main__':
-    bp = BasePage()
-    bp.cmd("mode 0 0")
+def main(bp:BasePage):
+    username = str(time.time()).split('.')[0]
+    gameInit.login(bp, username=username)
     playerEditNamePanelTest(bp)
     newbieGuidePanelTest(bp)
+
+if __name__ == '__main__':
+    bp = BasePage()
+    main(bp)

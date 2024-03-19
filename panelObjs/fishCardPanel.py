@@ -134,6 +134,8 @@ class FishCardPanel(BasePage):
 
     def switch_sub_tab(self, index):
         position_list = self.get_position_list(element_data=ElementsData.FishCard.sub_tab_list)
+        if len(position_list) - 1 < index:
+            index = len(position_list) - 1
         self.click_position(position_list[index])
 
     def click_btn_i(self):

@@ -1,5 +1,5 @@
-import win32timezone
 from poco.drivers.unity3d.device import UnityEditorWindow
+
 from tools.excelRead import ExceTools
 import time
 import pyautogui
@@ -19,21 +19,16 @@ from configs.jumpData import JumpData
 
 
 class BasePage:
-    def __init__(self):
+    def __init__(self, serial_number=None):
         # unity窗口使用UnityEditorWindow()
         # 手机使用connect_device("android://127.0.0.1:5037/设备号")
         self.is_android = False
         #GGGGGGG
-        if self.is_android:
-            dev = connect_device("android://127.0.0.1:5037/127.0.0.1:21593")
-            # dev = connect_device("android://127.0.0.1:5037/b6h65hd64p5pxcyh")
-            # dev = connect_device("android://127.0.0.1:5037/28cce18906027ece")
-        else:
-            dev = UnityEditorWindow()
         # make sure your poco-sdk in the game runtime listens on the following port.
         # 默认端口 5001
         # IP is not used for now
         addr = ('', 5001)
+        dev = self.get_device(serial_number=serial_number)
         self.poco = UnityPoco(addr, device=dev)
         self.screen_w, self.screen_h = self.poco.get_screen_size()  # 获取屏幕尺寸
         self.is_debug_log = True
@@ -49,6 +44,19 @@ class BasePage:
         self.root_dir = os.path.abspath(os.path.dirname(current_dir))
         # 获取当前工作目录
         self.excelTools = ExceTools(self.root_dir + "/tables/")
+
+
+    def get_device(self, serial_number=None):
+        if self.is_android:
+            if serial_number is None:
+                serial_number = "127.0.0.1:21593"
+            dev = connect_device(f"android://127.0.0.1:5037/{serial_number}")
+            # dev = connect_device("android://127.0.0.1:5037/b6h65hd64p5pxcyh")
+            # dev = connect_device("android://127.0.0.1:5037/28cce18906027ece")
+            return dev
+        dev = UnityEditorWindow()
+        return dev
+
 
     # 开启调试打印再打印
     def debug_log(self, msg):
@@ -398,7 +406,7 @@ class BasePage:
         self.click_a_until_b_disappear(element_data_a=element_data, element_data_b=element_data)
 
     # 等待指定元素出现
-    def wait_for_appear(self, element_data: dict, is_click: bool = True, interval: float = 0.1):
+    def wait_for_appear(self, element_data: dict, is_click: bool = False, interval: float = 0.1):
         while True:
             position = self.get_position_list(element_data=element_data)
             if position:
@@ -465,7 +473,7 @@ class BasePage:
         for panel_name in pop_window_set:
             for close_element in JumpData.panel_close_dict[panel_name]:
                 self.click_element_safe(element_data=close_element)
-                self.sleep(0.2)
+                self.sleep(1)
         return False
 
     def clear_popup(self, ignore_set=None):
@@ -480,14 +488,18 @@ class BasePage:
             self.clear_popup_once()
             self.sleep(0.5)
 
-    def go_home(self):
+    def go_home(self, cur_panel=None):
         cur = 0
-        while not self.exist(element_data=ElementsData.Home.HomePanel):
+        at_home_flag = True
+        while at_home_flag:
             self.clear_panel_except_home()
             self.sleep(0.1)
             cur += 1
             if cur > 100:
                 raise FindNoElementError
+            at_home_flag = (not self.exist(element_data=ElementsData.Home.HomePanel))
+            if cur_panel is not None:
+                at_home_flag = at_home_flag or self.exist(element_data=JumpData.panel_dict[cur_panel])
 
     def go_to_panel(self, panel):
         if self.exist(element_data=JumpData.panel_dict[panel]):
@@ -508,7 +520,12 @@ class BasePage:
         self.sleep(0.2)
 
     # 元素滑动
-    def swipe(self, object_id: int = 0, element_data: dict = None, point_start=None, point_end=None, t: float = 0.2,
+    def swipe(self, object_id: int = 0, element_data: dict = None, point_start=None, point_end=None, t: float = 0.5,
+              offspring_path="", ignore_set=None):
+        self.clear_popup(ignore_set)
+        self.swipe_base(object_id, element_data, point_start, point_end, t, offspring_path)
+
+    def swipe_base(self, object_id: int = 0, element_data: dict = None, point_start=None, point_end=None, t: float = 0.5,
               offspring_path=""):
         if point_start is not None:
             self.poco.swipe(p1=point_start, p2=point_end, duration=t)  # direction可以填'left','right','up','down'
@@ -673,21 +690,45 @@ class BasePage:
         return item_count_list
 
     def cmd(self, command):
+        if command == "":
+            return
+        if command is None:
+            return
         self.cmd_list(command_list=[command])
 
     def cmd_list(self, command_list):
+        if not command_list:
+            return
+        if command_list is None:
+            return
         rpcMethod.cmd(self.poco, command_list)
 
     def lua_console_list(self, command_list):
+        if not command_list:
+            return
+        if command_list is None:
+            return
         rpcMethod.lua_console(self.poco, command_list)
 
     def lua_console(self, command):
+        if command == "":
+            return
+        if command is None:
+            return
         self.lua_console_list([command])
 
     def custom_cmd_list(self, command_list):
+        if not command_list:
+            return
+        if command_list is None:
+            return
         rpcMethod.custom_cmd(self.poco, command_list)
 
     def custom_cmd(self, command):
+        if command == "":
+            return
+        if command is None:
+            return
         self.custom_cmd_list([command])
 
     def click_button(self, element_data:dict):
@@ -713,7 +754,17 @@ class BasePage:
 
 if __name__ == '__main__':
     bp = BasePage()
-    bp.ray_input(element_data=ElementsData.Battle.joystick, target_name="BattlePanel", kind="down")
+    a = bp.excelTools.get_table_data("ACHIEVEMENT_CATEGORY.xlsm")
+    print(a)
+    # lv = 1
+    # while lv < 145:
+    #     a = bp.excelTools.get_exp_limit(lv)
+    #     print(lv, a)
+    #     lv += 1
+
+
+    # bp.go_home(cur_panel="QuestionnairePanel")
+    # bp.ray_input(element_data=ElementsData.Battle.joystick, target_name="BattlePanel", kind="down")
     # bp.sleep(1)
     # bp.ray_input(element_data=ElementsData.Battle.btn_reel, target_name="btn_cast", kind="up")
     # bp.sleep(0.2)
@@ -747,7 +798,6 @@ if __name__ == '__main__':
 
     # bp.lua_console('PanelMgr:OpenPanel("HomePanel")')
     # bp.get_item_count(item_icon_name="achv_group_icon_8")
-    # set_text(bp.poco, ElementsData.BattlePass.btn_buy_text,"kamsiya")
     # print(get_text(bp.poco,ElementsData.BattlePass.btn_task_text))
     # print(get_slider_value(bp.poco,ElementsData.PlayerSetting.options_music))
     # action_list = [

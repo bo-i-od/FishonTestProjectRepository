@@ -2,6 +2,7 @@ from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from common.resource import *
 from common.viewport import Viewport
+import random
 
 
 class GearPanel(BasePage):
@@ -12,6 +13,16 @@ class GearPanel(BasePage):
 
     def is_panel_active(self):
         if self.exist(element_data=ElementsData.Gear.GearPanel):
+            return True
+        return False
+
+    def is_upgrade_max_active(self):
+        if self.exist(element_data=ElementsData.Gear.upgrade_max):
+            return True
+        return False
+
+    def is_enhance_max_active(self):
+        if self.exist(element_data=ElementsData.Gear.enhance_max):
             return True
         return False
 
@@ -61,7 +72,6 @@ class GearPanel(BasePage):
         rod_id_list = self.get_object_id_list(element_data=ElementsData.Gear.rod_list)
         return rod_id_list
 
-
     def get_rod_status(self, rod_id_list):
         cur = 0
         lock_list = []
@@ -82,15 +92,80 @@ class GearPanel(BasePage):
     def get_rod_position_list(self):
         return self.get_position_list(element_data=ElementsData.Gear.rod_bg_list)
 
+    def select_unlock_rod(self):
+        # 获取鱼竿列表
+        rod_id_list = GearPanel.get_rod_id_list(self)
+        lock_list, unlock_list = GearPanel.get_rod_status(self, rod_id_list)
+
+        # 获取viewport
+        rodlist_viewport = GearPanel.get_rodlist_viewport(self)
+
+        # 随机选取未解锁鱼竿
+        r = random.randint(0, len(unlock_list) - 1)
+        rod_index = unlock_list[r]
+
+        # 移动到鱼竿出现，点击鱼竿
+        rodlist_viewport.move_until_appear(target_id=rod_id_list[rod_index])
+        rod_position_list = GearPanel.get_rod_position_list(self)
+        self.click_position(rod_position_list[rod_index])
+
+    def select_lock_rod(self):
+        # 获取鱼竿列表
+        rod_id_list = GearPanel.get_rod_id_list(self)
+        lock_list, unlock_list = GearPanel.get_rod_status(self, rod_id_list)
+
+        # 获取viewport
+        rodlist_viewport = GearPanel.get_rodlist_viewport(self)
+
+        # 随机选取未解锁鱼竿
+        r = random.randint(0, len(lock_list) - 1)
+        rod_index = lock_list[r]
+
+        # 移动到鱼竿出现，点击鱼竿
+        rodlist_viewport.move_until_appear(target_id=rod_id_list[rod_index])
+        rod_position_list = GearPanel.get_rod_position_list(self)
+        self.click_position(rod_position_list[rod_index])
+
+    def click_btn_filter(self):
+        self.click_element(element_data=ElementsData.Gear.btn_filter)
+
+    def is_tip_filter_rod_active(self):
+        if self.exist(element_data=ElementsData.Gear.tip_filter_rod):
+            return True
+        return False
+
+    def click_btn_apply(self):
+        self.click_element(element_data=ElementsData.Gear.btn_apply)
+
+    def click_btn_reset(self):
+        self.click_element(element_data=ElementsData.Gear.btn_reset)
+
+    def get_hide_unowned_toggle(self):
+        return self.get_toggle_is_on(element_data=ElementsData.Gear.hide_unowned)
+
+    def get_rarity_toggle_list(self):
+        return self.get_toggle_is_on_list(element_data=ElementsData.Gear.rarity_list)
+
+    def get_rarity_position_list(self):
+        return self.get_position_list(element_data=ElementsData.Gear.rarity_list)
+
+    def get_available_location_toggle_list(self):
+        return self.get_toggle_is_on_list(element_data=ElementsData.Gear.available_location_list)
+
+    def get_available_location_position_list(self):
+        return self.get_position_list(element_data=ElementsData.Gear.available_location_list)
+
 
 
 
 
 if __name__ == "__main__":
     bp = GearPanel()
-    rod_id_list = GearPanel.get_rod_id_list(bp)
-    a = GearPanel.get_rod_status(bp, rod_id_list)
-    print(rod_id_list)
+    a = bp.click_btn_reset()
+    print(a)
+    # rod_id_list = GearPanel.get_rod_id_list(bp)
+    # a = GearPanel.get_rod_status(bp, rod_id_list)
+    # print(rod_id_list)
     # a = BaitAndRodAlbumPanel.get_all_rod_list(bp)
     # b = BaitAndRodAlbumPanel.get_all_bait_list(bp)
 

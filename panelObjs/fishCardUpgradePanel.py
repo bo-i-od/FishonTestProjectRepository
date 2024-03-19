@@ -31,6 +31,8 @@ class FishCardUpgradePanel(BasePage):
         # return True
 
     def is_btn_level_up_abled(self):
+        if self.exist(element_data=ElementsData.FishCardUpgrade.max_text):
+            return False
         progress = self.get_text(element_data=ElementsData.FishCardUpgrade.progress)
         progress_split = progress.split('/')
         progress_numerator = int(progress_split[0])
@@ -117,6 +119,9 @@ class FishCardUpgradePanel(BasePage):
             talent_dict[str_split[0]] = positive_percentage_to_float(str_split[1])
             cur += 1
         return talent_dict
+
+    def click_fishcard(self):
+        self.click_element(element_data=ElementsData.FishCardUpgrade.cotent_fishcard)
 
 
 if __name__ == "__main__":

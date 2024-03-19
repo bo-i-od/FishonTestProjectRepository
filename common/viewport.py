@@ -16,8 +16,8 @@ class Viewport:
         self.viewport_size = self.get_viewport_size()
         self.viewport_range = self.get_viewport_range()
         if viewport_edge is not None:
-            self.viewport_range[0] += viewport_edge[0] * self.viewport_size[0]
-            self.viewport_range[1] -= viewport_edge[1] * self.viewport_size[1]
+            self.viewport_range[0] += viewport_edge[0]
+            self.viewport_range[1] -= viewport_edge[1]
 
         self.delta_len = self.get_delta_len()
 
@@ -76,16 +76,14 @@ class Viewport:
         if target_position[1] > edge_start:
             point_end[1] = self.viewport_position[1] - self.delta_len
             self.basePage.swipe(point_start=self.viewport_position, point_end=point_end)
-            print(0, self.viewport_position, point_end)
             return True
         point_end[1] = self.viewport_position[1] + self.delta_len
         self.basePage.swipe(point_start=self.viewport_position, point_end=point_end)
-        print(1, self.viewport_position, point_end)
         return True
 
     def move_until_appear(self, target_id):
         while self.move_delta_len(target_id):
-            pass
+            self.basePage.sleep(1)
 
     def get_viewport_range(self):
         size = self.viewport_size

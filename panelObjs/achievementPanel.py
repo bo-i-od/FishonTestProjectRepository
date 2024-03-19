@@ -23,6 +23,9 @@ class AchievementPanel(BasePage):
     def is_tips_active(self):
         return self.exist(element_data=ElementsData.Achievement.tips)
 
+    def get_achievement_icon_list(self):
+        return self.get_icon_list(element_data=ElementsData.Achievement.achievement_icon_list)
+
     def click_task_mini(self):
         self.click_element(element_data=ElementsData.Achievement.task_mini_icon)
 
@@ -65,6 +68,7 @@ class AchievementPanel(BasePage):
     def get_viewport(self):
         size = self.get_size_list(element_data=ElementsData.Achievement.achievement_list)[0]
         edge = [0, 0.5 * size[0]]
+
         viewport = Viewport(self, element_viewport=ElementsData.Achievement.viewport, element_item_list=ElementsData.Achievement.achievement_list, viewport_edge=edge)
         return viewport
 
@@ -72,6 +76,10 @@ class AchievementPanel(BasePage):
         group_name_id = self.get_offspring_id(offspring_path="group_com>groupbg>groupname", object_id=achievement_id)
         group_name = self.get_text(object_id=group_name_id)
         return group_name
+
+    def switch_tab(self, index):
+        position_list = self.get_position_list(element_data=ElementsData.Achievement.tab_list)
+        self.click_position(position_list[index])
 
 
 
@@ -84,9 +92,8 @@ if __name__ == '__main__':
     # print(locked_set)
     # b = AchievementPanel.get_achievement_position_list(bp)
     # print(b)
-    achievement_id_list = bp.get_object_id_list(element_data=ElementsData.Achievement.achievement_list)
-    viewport = AchievementPanel.get_viewport(bp)
-    viewport.move_until_appear(target_id=achievement_id_list[0])
+    a = bp.get_item_count(item_tpid="100200")
+    print(a)
 
 
 

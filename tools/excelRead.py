@@ -1,4 +1,7 @@
 from openpyxl import *
+from openpyxl.utils import get_column_letter
+
+
 
 class ExceTools:
     def __init__(self, root_path):
@@ -41,6 +44,19 @@ class ExceTools:
             cur += 1
         return exp_limit, exp_limit_all
 
+    def get_unlock_lv(self, system_name):
+        table_data = self.get_table_data("UNLOCK_SYSTEM.xlsm")
+        self.get_value_from_key(table_data, header_key='name', header_value='content', key=system_name)
+        index = table_data['name'].index(system_name)
+        unlock_lv = int(table_data['content'][index])
+        return unlock_lv
+
+    @staticmethod
+    def get_value_from_key(table_data, header_key, header_value, key):
+        index = table_data[header_key].index(key)
+        value = int(table_data[header_value][index])
+        return value
+
     def get_fish_type(self, fish_list):
         tpid = "tpId"
         fishtype = "fishType"
@@ -52,29 +68,6 @@ class ExceTools:
         book_list = [{"book_name": "RESOURCE.xlsm", "name": "name", "id": "resourceID", "icon": "itemIcon"},
                 {"book_name": "ITEM_MAIN.xlsm", "name": "name", "id": "itemTpId", "icon": "iconName"}]
         return book_list
-
-    # def item_name_to_item_icon_name(self, book_name,item_name):
-    #     worksheet = self.get_worksheet(book_name, "模板数据")
-    #     return self.same_row_different_column_convert(worksheet, "name", "iconName", item_name)
-    #
-    # def item_name_to_item_tpid(self, book_name, item_name):
-    #     worksheet = self.get_worksheet(book_name, "模板数据")
-    #     return self.same_row_different_column_convert(worksheet, "name", "itemTpId", item_name)
-    #
-    # def item_icon_name_to_item_name(self, book_name, item_icon_name):
-    #     worksheet = self.get_worksheet(book_name, "模板数据")
-    #     return self.same_row_different_column_convert(worksheet, "iconName", "name", item_icon_name)
-    # def item_icon_name_to_item_tpid(self, book_name, item_icon_name):
-    #     worksheet = self.get_worksheet(book_name, "模板数据")
-    #     return self.same_row_different_column_convert(worksheet, "iconName", "itemTpId", item_icon_name)
-    #
-    # def item_tpid_to_item_name(self, book_name, item_icon_name):
-    #     worksheet = self.get_worksheet(book_name, "模板数据")
-    #     return self.same_row_different_column_convert(worksheet, "itemTpId", "name", item_icon_name)
-    #
-    # def item_tpid_to_item_icon_name(self, book_name, item_icon_name):
-    #     worksheet = self.get_worksheet(book_name, "模板数据")
-    #     return self.same_row_different_column_convert(worksheet, "itemTpId", "iconName", item_icon_name)
 
 
     def same_row_different_column_convert(self, worksheet, source_header, target_header, source):
@@ -94,3 +87,93 @@ class ExceTools:
             row_index = self.get_row_index(worksheet, column_index_source, source)
             res_list.append(worksheet.cell(row_index, column_index_target).value)
         return res_list
+
+
+    def get_table_struct(self, book_name):
+        res_dict = {}
+        worksheet = self.get_worksheet(book_name=book_name, sheet_name="OrgData")
+        ItemName1_column_index = 3
+        cell_value_pre = ""
+        row_index_cur = 2
+        while worksheet.cell(row_index_cur, ItemName1_column_index - 1).value is not None:
+            cell_value = worksheet.cell(row_index_cur, ItemName1_column_index).value
+            # 数组的添加索引列表
+            if cell_value == cell_value_pre:
+                res_dict[cell_value].append(row_index_cur - 1)
+                row_index_cur += 1
+                continue
+            # 普通的也直接添加
+            if cell_value is not None:
+                res_dict[cell_value] = [row_index_cur - 1]
+                cell_value_pre = cell_value
+                row_index_cur += 1
+                continue
+            dict_list_len = len(res_dict[cell_value_pre])
+            res_dict[cell_value_pre][dict_list_len - 1] = {}
+            ItemName2_column_index = ItemName1_column_index + 1
+            res_dict[cell_value_pre][dict_list_len - 1][worksheet.cell(row_index_cur - 1, ItemName2_column_index).value] = [row_index_cur - 2]
+            cur = row_index_cur
+            while worksheet.cell(cur, ItemName1_column_index).value is None and worksheet.cell(cur, ItemName1_column_index - 1).value is not None:
+                res_dict[cell_value_pre][dict_list_len - 1][worksheet.cell(cur, ItemName2_column_index).value] = [cur - 1]
+                cur += 1
+            row_index_cur = cur
+        return res_dict, row_index_cur - 2
+
+    def get_table_data(self, book_name):
+        table_data, table_data_len = self.get_table_struct(book_name=book_name)
+        worksheet = self.get_worksheet(book_name=book_name, sheet_name="模板数据")
+        # 去除空白列
+        bias_list = self.get_bias_list(worksheet, table_data_len)
+        # table_data = {}
+        for key in table_data:
+            if len(table_data[key]) == 1:
+                if isinstance(table_data[key][0], int):
+                    table_data[key] = self.get_column_data(worksheet, table_data[key][0], bias_list)
+                    continue
+                # table_data[key] = []
+                # table_data[key].append({})
+                for key_sub in table_data[key][0]:
+                    table_data[key][0][key_sub] = self.get_column_data(worksheet, table_data[key][0][key_sub][0], bias_list)
+                continue
+            cur = 0
+            while cur < len(table_data[key]):
+
+                if isinstance(table_data[key][cur], int):
+                    table_data[key][cur] = self.get_column_data(worksheet, table_data[key][cur], bias_list)
+                else:
+                    for key_sub in table_data[key][cur]:
+                        table_data[key][cur][key_sub] = self.get_column_data(worksheet,
+                                                                             table_data[key][cur][key_sub][0], bias_list)
+                cur += 1
+        return table_data
+
+
+    def get_bias_list(self, worksheet, table_data_len):
+        bias_list = []
+        bias = 0
+        cur = 1
+        while cur < table_data_len + 1:
+            if worksheet.cell(2, cur + bias).value is None:
+                bias += 1
+                continue
+            bias_list.append(bias)
+            cur += 1
+        return bias_list
+
+
+
+    def get_column_data(self, worksheet, column_index, bias_list):
+        column_data = []
+        # 第六行开始
+        cur = 6
+        while worksheet.cell(cur, 1).value is not None:
+            index = column_index - 1
+            column_data.append(worksheet.cell(cur, column_index + bias_list[index]).value)
+            cur += 1
+        return column_data
+
+
+
+
+
+

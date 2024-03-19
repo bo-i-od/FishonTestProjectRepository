@@ -11,7 +11,7 @@ class BaitAndRodAlbumPanel(BasePage):
         return False
 
     def click_btn_close(self):
-        self.click_element(element_data=ElementsData.BaitAndRodAlbum.btn_close)
+        self.click_element(element_data=ElementsData.BaitAndRodAlbum.btn_close, ignore_set={"BaitAndRodShowPanel"})
 
     def get_gear_list(self):
         gear_id_list = self.get_object_id_list(element_data=ElementsData.BaitAndRodAlbum.model_list)

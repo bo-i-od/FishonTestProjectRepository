@@ -10,6 +10,16 @@ class PlayerSettingPanel(BasePage):
             return True
         return False
 
+    def is_btn_giftcode_active(self):
+        if self.exist(element_data=ElementsData.PlayerSetting.btn_giftcode):
+            return True
+        return False
+
+    def is_Panel_Popups_Edit_active(self):
+        if self.exist(element_data=ElementsData.PlayerSetting.Panel_Popups_Edit):
+            return True
+        return False
+
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.PlayerSetting.btn_close)
 
@@ -56,37 +66,37 @@ class PlayerSettingPanel(BasePage):
 
     def click_name(self):
         self.click_element(element_data=ElementsData.PlayerSetting.player_name)
-        self.sleep(0.5)
+        self.sleep(1)
         if not self.exist(element_data=ElementsData.PlayerSetting.panel_name):
             raise FindNoElementError
 
     def click_head(self):
         self.click_element(element_data=ElementsData.PlayerSetting.head)
-        self.sleep(0.5)
+        self.sleep(1)
         if not self.exist(element_data=ElementsData.PlayerSetting.panel_avatar):
             raise FindNoElementError
 
     def click_flag(self):
         self.click_element(element_data=ElementsData.PlayerSetting.flag)
-        self.sleep(0.5)
+        self.sleep(1)
         if not self.exist(element_data=ElementsData.PlayerSetting.panel_banner):
             raise FindNoElementError
 
     def click_edit_info(self):
         self.click_element(element_data=ElementsData.PlayerSetting.btn_edit_info)
-        self.sleep(0.5)
+        self.sleep(1)
         if not self.exist(element_data=ElementsData.PlayerSetting.panel_avatar):
             raise FindNoElementError
 
     def click_edit_badge(self):
         self.click_element(element_data=ElementsData.PlayerSetting.btn_edit_badge)
-        self.sleep(0.5)
+        self.sleep(1)
         if not self.exist(element_data=ElementsData.PlayerSetting.panel_badge):
             raise FindNoElementError
 
     def close_edit_profile(self):
         self.click_element(element_data=ElementsData.PlayerSetting.btn_close_additional)
-        self.sleep(0.5)
+        self.sleep(1)
         if self.exist(element_data=ElementsData.PlayerSetting.Panel_Popups_Edit):
             raise FindElementError
 
@@ -130,6 +140,7 @@ class PlayerSettingPanel(BasePage):
         x_target = x_start + target_val * w
         self.click_position([x_target, y_center])
         slider_music = PlayerSettingPanel.get_slider_music(self)
+        print(target_val, slider_music)
         delta = abs(target_val - slider_music)
         if delta > 0.05:
             raise DifferError
@@ -237,7 +248,10 @@ class PlayerSettingPanel(BasePage):
 
     def open_edit_profile(self):
         HomePanel.go_to_panel(self, "PlayerSettingPanel")
+        if PlayerSettingPanel.is_Panel_Popups_Edit_active(self):
+            return
         PlayerSettingPanel.click_tab_player(self)
+        self.sleep(1)
         PlayerSettingPanel.click_edit_info(self)
 
     def click_tab_avatar(self):
@@ -391,8 +405,7 @@ class PlayerSettingPanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    badge_id_list = PlayerSettingPanel.get_badge_id_list(bp)
-    a = PlayerSettingPanel.get_badge_status(bp, badge_id_list)
+    a = bp.excelTools.get_exp_limit(10)
     print(a)
     # options_graphics_position_list = PlayerSettingPanel.get_options_graphics_position_list(bp)
     # a = PlayerSettingPanel.set_options_graphics(bp, options_graphics_position_list,0)

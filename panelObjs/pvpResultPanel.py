@@ -8,7 +8,7 @@ class PVPResultPanel(BasePage):
             return True
         return False
     def click_tap_to_click(self):
-        self.click_element(element_data=ElementsData.PVPResult.tap_to_close)
+        self.click_until_disappear(element_data=ElementsData.PVPResult.tap_to_close)
 
     def get_points_enemy(self):
         points_enemy = self.get_text(element_data=ElementsData.PVPResult.points_enemy)

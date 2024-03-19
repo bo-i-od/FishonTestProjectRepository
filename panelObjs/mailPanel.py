@@ -89,5 +89,5 @@ class MailPanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    position_list = MailPanel.get_tab_position_list(bp)
-    MailPanel.switch_tab(bp, position_list,1)
+    mail_viewport = MailPanel.get_mail_viewport(bp)
+    mail_viewport.move_until_appear(mail_viewport.item_id_list[0])

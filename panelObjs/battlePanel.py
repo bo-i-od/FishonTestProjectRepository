@@ -20,13 +20,13 @@ class BattlePanel(BasePage):
             if self.exist(element_data=ElementsData.Battle.tip_slide):
                 BattlePanel.unleash_power(self)
                 continue
-            if self.exist(element_data=ElementsData.Battle.qte_left):
+            if self.exist(element_data=ElementsData.Battle.qte_left) or self.exist(element_data=ElementsData.Battle.qte_jump_left):
                 if not qte_flag_left:
                     BattlePanel.slide(self,"left")
                     continue
             else:
                 qte_flag_left = False
-            if self.exist(element_data=ElementsData.Battle.qte_right):
+            if self.exist(element_data=ElementsData.Battle.qte_right) or self.exist(element_data=ElementsData.Battle.qte_jump_right):
                 if not qte_flag_right:
                     BattlePanel.slide(self,"right")
                     continue
@@ -37,9 +37,9 @@ class BattlePanel(BasePage):
 
     def slide(self, dir):
         if dir == "left":
-            self.swipe(point_start=[0.3, 0.7], point_end=[0.2, 0.7], t=0.05)
+            self.swipe(point_start=[0.3, 0.7], point_end=[0.2, 0.7], t=0.1)
         if dir == "right":
-            self.swipe(point_start=[0.3, 0.7], point_end=[0.4, 0.7], t=0.05)
+            self.swipe(point_start=[0.3, 0.7], point_end=[0.4, 0.7], t=0.1)
 
 
 
@@ -50,8 +50,8 @@ class BattlePanel(BasePage):
     # unity上才能用
     def reel_quick(self):
         while not self.exist(element_data=ElementsData.Result.ResultPanel):
-            self.send_key("G")
-            self.sleep(0.5)
+            self.lua_console(command="GameRoot:GetFishingMatch().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
+            self.sleep(1)
 
 
     def unleash_power(self):
@@ -75,14 +75,18 @@ class BattlePanel(BasePage):
         range = [progress_position[0][1] - 0.5 * h, progress_position[0][1] + 0.5 * h]
         arrow_position = self.get_position(element_data=ElementsData.Battle.arrow)
         progress = (arrow_position[1] - range[0]) / h
-        while progress < 0.9:
+        while progress < 0.8:
             arrow_position = self.get_position(element_data=ElementsData.Battle.arrow)
             progress = (arrow_position[1] - range[0]) / h
         self.ray_input(element_data=ElementsData.Battle.btn_reel, target_name="btn_cast", kind="down")
         # self.ray_input(element_data=ElementsData.Battle.btn_reel, target_name="btn_cast", kind="up")
         # self.click_position_base(position_btn_reel)
 
+    def hook_guide(self):
+        perform_list = [ElementsData.NewbieGuide.NBG_hook_1, ElementsData.NewbieGuide.NBG_hook_2, ElementsData.NewbieGuide.NBG_hook_3, ElementsData.NewbieGuide.NBG_hook_5]
+        self.click_a_until_b_appear_list(perform_list)
+        self.click_until_disappear(ElementsData.NewbieGuide.NBG_hook_5)
+
 if __name__ == '__main__':
-    bp = BasePage()
-    a = bp.get_object_id_list(element_data=ElementsData.Battle.progress)
-    print(a)
+    bp = BasePage("127.0.0.1:21593")
+    a = BattlePanel.reel_quick(bp)
