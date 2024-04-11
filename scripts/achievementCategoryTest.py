@@ -3,6 +3,7 @@ import random
 
 from panelObjs.achievementCategoryPanel import AchievementCategoryPanel
 from panelObjs.flashTipsPanel import FlashTipsPanel
+from panelObjs.playerLevelupPanel import PlayerLevelupPanel
 from tools.commonTools import *
 
 from panelObjs.achievementPanel import AchievementPanel
@@ -17,6 +18,7 @@ def unlock_test(bp: BasePage):
 
     # 切换到悬赏鱼页面
     AchievementPanel.switch_tab(bp, 2)
+    bp.sleep(1)
 
     # 解锁
     locked_set, unlockable_set, unlocked_set = AchievementPanel.get_achievement_status_set(bp)
@@ -28,6 +30,7 @@ def unlock_test(bp: BasePage):
         position_list = AchievementPanel.get_achievement_position_list(bp)
         bp.click_position(position_list[unlockable_list[cur]])
         cur += 1
+        bp.sleep(0.5)
         if cur < len(unlockable_list):
             continue
         bp.sleep(1)
@@ -36,13 +39,18 @@ def unlock_test(bp: BasePage):
     locked_set, unlockable_set, unlocked_set = AchievementPanel.get_achievement_status_set(bp)
     unlocked_list = list(unlocked_set)
     r = random.randint(0, len(unlocked_list) - 1)
+    print(viewport.item_id_list)
+    viewport.move_until_appear(viewport.item_id_list[unlocked_list[r]])
     achievement_position_list = AchievementPanel.get_achievement_position_list(bp)
-    bp.click_position(achievement_position_list[r])
+    bp.click_position(achievement_position_list[unlocked_list[r]])
     bp.sleep(1)
 
     # 点击解锁
+    category_viewport = AchievementCategoryPanel.get_category_viewport(bp)
+    r = random.randint(0, len(category_viewport.item_id_list) - 1)
+    category_viewport.move_until_appear(target_id=category_viewport.item_id_list[r])
+    bp.sleep(1)
     category_position_list = AchievementCategoryPanel.get_category_position_list(bp)
-    r = random.randint(0, len(category_position_list) - 1)
     bp.click_position(category_position_list[r])
     bp.sleep(1)
     if not FlashTipsPanel.is_panel_active(bp):
@@ -56,8 +64,8 @@ def unlock_test(bp: BasePage):
     bp.sleep(1)
     item_icon = ItemTipsPanel.get_item_icon(bp)
     compare(reward_icon_list[r], item_icon)
-    bp.click_position_base([0.9, 0.1])
-    bp.sleep(1)
+    # bp.click_position([0.9, 0.1])
+    # bp.sleep(1)
 
     # 关闭
     bp.go_home()
@@ -68,7 +76,8 @@ def category_test(bp: BasePage):
 
     # 随机选一个鱼种完成
     table_open_index_list = AchievementCategoryPanel.get_table_open_index_list(bp, table_data=table_data)
-    r = random.randint(0, len(table_open_index_list) - 1)
+    # r = random.randint(0, len(table_open_index_list) - 1)
+    r = 7
     AchievementCategoryPanel.do_category(bp, table_data=table_data, index=r)
     bp.go_home()
 
@@ -131,10 +140,14 @@ def main(bp: BasePage):
     cmd_list = ["guideskip", "add 1 100200 123456789", "add 1 100500 1234"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
+    # 关闭升级弹窗
+    PlayerLevelupPanel.wait_for_panel_appear(bp)
+
     # 升级
     unlock_test(bp)
     category_test(bp)
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21593")
+    bp = BasePage()
     main(bp)
+

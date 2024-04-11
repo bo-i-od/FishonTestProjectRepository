@@ -20,9 +20,16 @@ class PVPHallPanel(BasePage):
         edge_right = 0.8 * size_list[0][0]
         # print(edge_right)
         viewport = Viewport(self, element_viewport=ElementsData.PVPHall.Viewport, element_item_list=ElementsData.PVPHall.btn_play_list, viewport_edge=[edge_left, edge_right])
-        viewport.move_until_appear(viewport.item_id_list[index])
-        position_list = self.get_position_list(element_data=ElementsData.PVPHall.btn_play_list)
-        self.click_position(position_list[index])
+        while PVPHallPanel.is_panel_active(self):
+            try:
+                viewport.move_until_appear(viewport.item_id_list[index])
+            except:
+                print("viewport有问题")
+            position_list = self.get_position_list(element_data=ElementsData.PVPHall.btn_play_list)
+            if not position_list:
+                return
+            self.click_position(position_list[index])
+            self.sleep(0.5)
 
     def click_btn_turntable(self):
         self.click_element(element_data=ElementsData.PVPHall.btn_turntable)

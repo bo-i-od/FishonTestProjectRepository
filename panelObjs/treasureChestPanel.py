@@ -39,7 +39,9 @@ class TreasureChestPanel(BasePage):
 
     def get_open_x_n(self):
         open_x_n = self.get_text(element_data=ElementsData.TreasureChest.btn_open)
-        n = open_x_n.split('x')[1]
+        pattern = r"\d+"
+        match = re.search(pattern, open_x_n)
+        n = match.group()
         return int(n)
 
     def click_open_x(self):

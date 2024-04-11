@@ -65,7 +65,7 @@ class BattlePanel(BasePage):
         self.sleep(0.5)
 
     def hook(self):
-        self.wait_for_appear(element_data=ElementsData.Battle.btn_reel, is_click=False)
+        self.wait_for_appear(element_data=ElementsData.Battle.btn_reel, is_click=False, timeout=20)
         # 如果没有刺鱼就跳过
         progress_position = self.get_position_list(element_data=ElementsData.Battle.progress)
         if not progress_position:
@@ -75,9 +75,10 @@ class BattlePanel(BasePage):
         range = [progress_position[0][1] - 0.5 * h, progress_position[0][1] + 0.5 * h]
         arrow_position = self.get_position(element_data=ElementsData.Battle.arrow)
         progress = (arrow_position[1] - range[0]) / h
-        while progress < 0.8:
+        while progress < 0.7:
             arrow_position = self.get_position(element_data=ElementsData.Battle.arrow)
             progress = (arrow_position[1] - range[0]) / h
+            self.sleep(0.05)
         self.ray_input(element_data=ElementsData.Battle.btn_reel, target_name="btn_cast", kind="down")
         # self.ray_input(element_data=ElementsData.Battle.btn_reel, target_name="btn_cast", kind="up")
         # self.click_position_base(position_btn_reel)
@@ -86,6 +87,8 @@ class BattlePanel(BasePage):
         perform_list = [ElementsData.NewbieGuide.NBG_hook_1, ElementsData.NewbieGuide.NBG_hook_2, ElementsData.NewbieGuide.NBG_hook_3, ElementsData.NewbieGuide.NBG_hook_5]
         self.click_a_until_b_appear_list(perform_list)
         self.click_until_disappear(ElementsData.NewbieGuide.NBG_hook_5)
+
+
 
 if __name__ == '__main__':
     bp = BasePage("127.0.0.1:21593")

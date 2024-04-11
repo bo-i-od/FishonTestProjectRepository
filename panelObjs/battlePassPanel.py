@@ -133,7 +133,6 @@ class BattlePassPanel(BasePage):
             status_list.append(0)
             cur += 1
             continue
-        print(len(status_list))
         return BattlePassPanel.get_status(status_list)
 
     @staticmethod
@@ -181,7 +180,7 @@ class BattlePassPanel(BasePage):
 
 
     def get_viewport(self):
-        right_size = self.get_size_list(element_data=ElementsData.BattlePass.free_icon_list)[0][0]
+        right_size = self.get_size_list(element_data=ElementsData.BattlePass.free_icon_list)[0][0] + 0.05
         viewport_free = Viewport(self, element_viewport=ElementsData.BattlePass.Viewport, element_item_list=ElementsData.BattlePass.free_icon_list, viewport_edge=[0, right_size])
         viewport_premium = Viewport(self, element_viewport=ElementsData.BattlePass.Viewport, element_item_list=ElementsData.BattlePass.premium_icon_list, viewport_edge=[0, right_size])
         return viewport_free, viewport_premium

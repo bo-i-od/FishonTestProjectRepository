@@ -138,7 +138,6 @@ def open_box_test(bp: BasePage, icon, quantity):
 
     # 得到open x后的可打开数量, 再次计算期望箱子点
     n = TreasureChestRewardsPanel.get_open_x_n(bp)
-    print("箱子",n)
     box_points_numerator_expect = box_points_numerator_expect + chest_point * n
 
     # 可以打开就继续开
@@ -151,7 +150,7 @@ def open_box_test(bp: BasePage, icon, quantity):
     # 返回
     TreasureChestRewardsPanel.skip_anime(bp)
     bp.sleep(1)
-
+    bp.clear_popup()
     box_fragment_test(bp)
 
     # 对比箱子点和期望箱子点
@@ -208,8 +207,6 @@ def box_fragment_test(bp:BasePage):
         GearPanel.click_btn_close(bp)
         return
 
-
-
 def click_tips_test(bp: BasePage):
     TreasureChestPanel.click_btn_magnifier(bp)
     TreasureChestPanel.click_btn_magnifier(bp)
@@ -218,13 +215,9 @@ def click_tips_test(bp: BasePage):
     bp.click_position(preview_position_list[index_random])
     item_icon = ItemTipsPanel.get_item_icon(bp)
     compare(preview_icon_list[index_random], item_icon)
-    bp.click_position([0.5, 0.1])
+    bp.click_position([0.5, 0.9])
     if ItemTipsPanel.is_panel_active(bp):
         raise FindElementError
-
-
-
-
 
 
 

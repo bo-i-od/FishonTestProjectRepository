@@ -1,5 +1,6 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
+from panelObjs.battleFailedPanel import BattleFailedPanel
 from panelObjs.rewardsPanel import RewardsPanel
 
 class ResultPanel(BasePage):
@@ -9,19 +10,23 @@ class ResultPanel(BasePage):
         return exp_str
 
     def wait_for_result(self):
-        btn_claim = self.exist(element_data=ElementsData.Result.btn_claim)
-        btn_claim_token_fish = self.exist(element_data=ElementsData.Result.btn_claim_token_fish)
-        while not (btn_claim or btn_claim_token_fish):
+        while True:
             btn_claim = self.exist(element_data=ElementsData.Result.btn_claim)
+            if btn_claim:
+                return ElementsData.Result.btn_claim
             btn_claim_token_fish = self.exist(element_data=ElementsData.Result.btn_claim_token_fish)
+            if btn_claim_token_fish:
+                return ElementsData.Result.btn_claim_token_fish
+            btn_cast_again = self.exist(element_data=ElementsData.BattleFailed.btn_again)
+            if btn_cast_again:
+                return ElementsData.BattleFailed.btn_again
+            self.sleep(0.1)
 
-    def automatic_settlement(self):
-        if self.exist(element_data=ElementsData.Result.btn_claim):
-            ResultPanel.click_btn_claim(self)
-            return
-        if self.exist(element_data=ElementsData.Result.btn_claim_token_fish):
-            ResultPanel.click_btn_claim_token_fish(self)
-            return
+    def automatic_settlement(self, element_btn):
+        while self.exist(element_data=element_btn):
+            self.clear_popup_once()
+            self.sleep(1)
+            self.click_element_safe(element_data=element_btn)
 
 
 

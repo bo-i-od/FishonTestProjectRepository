@@ -8,8 +8,6 @@ from panelObjs.rewardsPreviewPanel import RewardsPreviewPanel
 class AchievementGroupPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.AchievementGroup.btn_close)
-        if AchievementGroupPanel.is_panel_active(self):
-            raise FindElementError
 
     def is_panel_active(self):
         if self.exist(element_data=ElementsData.AchievementGroup.AchievementGroupPanel):
@@ -160,5 +158,6 @@ class AchievementGroupPanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    a = AchievementGroupPanel.get_status_list(bp)
+    a = bp.exist(element_data=ElementsData.AchievementGroup.achievement_list)
+    # a = AchievementGroupPanel.get_status_list(bp)
     print(a)

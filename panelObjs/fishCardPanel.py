@@ -146,6 +146,14 @@ class FishCardPanel(BasePage):
             return True
         return False
 
+    def get_rating(self):
+        rating = int(self.get_text(element_data=ElementsData.FishCard.rating))
+        return rating
+
+    def get_rating_fisheries(self):
+        rating = int(self.get_text(element_data=ElementsData.FishCard.rating_fisheries))
+        return rating
+
     @staticmethod
     def bg_to_tier(bg:str):
         if bg == "FishCard_namebg01":

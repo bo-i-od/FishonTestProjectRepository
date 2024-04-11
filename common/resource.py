@@ -42,9 +42,8 @@ def get_resource(bp, item_tpid:str, element_data:dict):
     item_db = bp.get_item_count(item_tpid=item_tpid)
     item_show = bp.get_text(element_data=element_data)
 
-    item_db_str_unit_conversion = unit_conversion_int_to_str(item_db)
-    item_db_str = str(item_db)
-    if item_show != item_db_str_unit_conversion and item_show != item_db_str:
+    target_list = [unit_conversion_int_to_str(item_db), unit_conversion_int_to_str_chs(item_db), str(item_db)]
+    if item_show not in target_list:
         raise DifferError
     return item_db
 

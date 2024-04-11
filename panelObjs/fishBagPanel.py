@@ -10,7 +10,7 @@ class FishBagPanel(BasePage):
 
     def click_tap_to_continue(self):
         while FishBagPanel.is_panel_active(self):
-            self.click_element_safe(element_data=ElementsData.FishBag.tap_to_continue)
+            self.click_element_safe(element_data=ElementsData.FishBag.btn_close)
 
     def wait_for_panel_appear(self):
         self.wait_for_appear(element_data=ElementsData.FishBag.FishBagPanel)

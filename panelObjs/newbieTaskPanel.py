@@ -38,7 +38,7 @@ class NewbieTaskPanel(BasePage):
     # 得到3天活动代币数量
     def get_coin(self):
         coin = resource.str_to_int(self.get_text(element_data=ElementsData.NewbieTask.coin))
-        item_count = self.get_item_count( item_tpid="209001")
+        item_count = self.get_item_count( item_tpid="209012")
         compare(coin, item_count)
         return coin
 
@@ -221,10 +221,6 @@ class NewbieTaskPanel(BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage()
-    challenge_id_list = NewbieTaskPanel.get_challenge_id_list(bp)
-    a = NewbieTaskPanel.get_challenge_point_list(bp, challenge_id_list)
-    print(a)
-    b = NewbieTaskPanel.get_challenge_position_list(bp, challenge_id_list)
-    print(b)
+    bp = BasePage("192.168.111.77:20015")
+    NewbieTaskPanel.switch_tab(bp, 0)
 

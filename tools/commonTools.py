@@ -1,3 +1,5 @@
+from airtest.core.helper import G
+from airtest.core.android.android import Android as cls
 from common.error import *
 import ctypes
 import inspect
@@ -76,7 +78,7 @@ def stop_thread( thread):
     _async_raise(thread.ident, SystemExit)
 
 
-def unit_conversion_int_to_str(count: int):
+def unit_conversion_int_to_str(count: int, significant_digits=0):
     if count < 10000:
         return str(count)
     elif count < 10000000:
@@ -85,6 +87,24 @@ def unit_conversion_int_to_str(count: int):
         return str(int(count / 1000000)) + "M"
     elif count < 10000000000000:
         return str(int(count / 1000000000)) + "B"
+
+def unit_conversion_int_to_str_chs(count: int, significant_digits=0):
+    if count < 10000:
+        return str(count)
+    elif count < 100000000:
+        return str(int(count/10000)) + "万"
+    elif count < 1000000000000:
+        return str(int(count / 100000000)) + "亿"
+    elif count < 10000000000000000:
+        return str(int(count / 1000000000000)) + "兆"
+
+
+
+def remove_decimals(value_with_unit):
+    # 正则表达式匹配小数点后的数字
+    pattern = re.compile(r"(\.\d+)")
+    # 替换为空字符串，即删除小数点后的数字
+    return pattern.sub('', value_with_unit)
 
 
 def str_to_int(count:str):
@@ -134,6 +154,13 @@ def get_toggle_is_on_index(toggle_is_on_list:list):
             break
         cur += 1
     return res
+
+def get_img_position(query,img):
+    if img is None:
+        print("屏幕可能锁定")
+        return
+    match_pos = query.match_in(img)
+    return match_pos
 
 
 

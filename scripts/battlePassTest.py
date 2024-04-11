@@ -9,6 +9,7 @@ from panelObjs.itemTipsPanel import ItemTipsPanel
 from panelObjs.battlePassPopPanel import BattlePassPopPanel
 from panelObjs.battlePassBuyLicensePanel import BattlePassBuyLicensePanel
 from panelObjs.baitAndRodShowPanel import BaitAndRodShowPanel
+from panelObjs.playerLevelupPanel import PlayerLevelupPanel
 from panelObjs.taskPanel import TaskPanel
 from panelObjs.battlePassIntroPanel import BattlePassIntroPanel
 from panelObjs.storePanel import StorePanel
@@ -31,13 +32,13 @@ def click_icon_buy_level_test(bp:BasePage):
     item_icon = ItemTipsPanel.get_item_icon(bp)
     # item_icon = check_icon(item_icon)
     compare(item_icon, icon_free_list[r])
-    bp.click_position_base([0.9, 0.1])
+    bp.click_position([0.5, 0.9])
     r = random.randint(0, len(icon_premium_list) - 1)
     bp.click_position(position_premium_list[r])
     item_icon = ItemTipsPanel.get_item_icon(bp)
     # item_icon = check_icon(item_icon)
     compare(item_icon, icon_premium_list[r])
-    bp.click_position_base([0.9, 0.1])
+    bp.click_position([0.5, 0.9])
     gear_position = BattlePassBuyLevelPanel.get_gear_position(bp)
     if gear_position is None:
         print("click_icon_buy_level_test购买等级页面点击图标测试通过")
@@ -49,7 +50,7 @@ def click_icon_buy_level_test(bp:BasePage):
 
 def change_level_test(bp:BasePage):
     slider = BattlePassBuyLevelPanel.get_slider(bp)
-    bp.swipe(point_start=[slider.slider_range[0] + slider.slider_size[0] * 0.1, slider.slider_position[1]], point_end=[slider.slider_range[0] - slider.slider_size[0] * 0.3, slider.slider_position[1]])
+    bp.swipe(point_start=[slider.slider_range[0] + slider.slider_size[0] * 0.2, slider.slider_position[1]], point_end=[slider.slider_range[0] - slider.slider_size[0] * 0.2, slider.slider_position[1]])
     buy_level_0, new_level_0 = BattlePassBuyLevelPanel.get_buy_level_and_new_level(bp)
     BattlePassBuyLevelPanel.click_sub_level(bp)
     buy_level_1, new_level_1 = BattlePassBuyLevelPanel.get_buy_level_and_new_level(bp)
@@ -57,7 +58,7 @@ def change_level_test(bp:BasePage):
         new_level_0 -= 1
     compare(new_level_0, new_level_1)
     bp.sleep(1)
-    bp.swipe(point_start=[slider.slider_range[1] - slider.slider_size[0] * 0.1, slider.slider_position[1]], point_end=[slider.slider_range[1] + slider.slider_size[0] * 0.3, slider.slider_position[1]])
+    bp.swipe(point_start=[slider.slider_range[1] - slider.slider_size[0] * 0.2, slider.slider_position[1]], point_end=[slider.slider_range[1] + slider.slider_size[0] * 0.2, slider.slider_position[1]])
     buy_level_0, new_level_0 = BattlePassBuyLevelPanel.get_buy_level_and_new_level(bp)
     BattlePassBuyLevelPanel.click_add_level(bp)
     buy_level_1, new_level_1 = BattlePassBuyLevelPanel.get_buy_level_and_new_level(bp)
@@ -188,11 +189,14 @@ def collect_test(bp:BasePage):
     collect_all_test(bp, icon_list, quantity_list)
 
 def random_collect_test(bp:BasePage, icon_list, quantity_list, status, viewport:Viewport):
+    # 获取可领取列表
     collectable_list = status[1]
     collectable_list_len = len(collectable_list)
     if not collectable_list_len > 0:
         print("没有可领取的奖励，random_collect_test跳过")
         return
+
+    # 随机选择一个进行领取
     r = random.randint(0, collectable_list_len - 1)
     icon_selected = icon_list[collectable_list[r]]
     icon_selected_id = viewport.item_id_list[collectable_list[r]]
@@ -202,12 +206,11 @@ def random_collect_test(bp:BasePage, icon_list, quantity_list, status, viewport:
     bp.sleep(1)
     icon_position = BattlePassPanel.get_collectable_icon_position(bp, icon_selected_id)
     bp.click_position(icon_position)
-    bp.sleep(1)
+    RewardsPanel.wait_for_panel_appear(bp)
     reward_icon_list, gear_icon_list = RewardsPanel.get_reward_icon_list(bp)
     reward_icon = reward_icon_list[0]
     reward_quantity = RewardsPanel.get_reward_quantity_list(bp)[0]
     item_count = bp.get_item_count(item_icon_name=icon_selected)
-    RewardsPanel.wait_for_panel_appear(bp)
     bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
     bp.sleep(1)
@@ -220,7 +223,7 @@ def random_collect_test(bp:BasePage, icon_list, quantity_list, status, viewport:
     if ItemTipsPanel.is_panel_active(bp):
         item_icon = ItemTipsPanel.get_item_icon(bp)
         compare(icon_selected, item_icon)
-        bp.click_position_base([0.9, 0.1])
+        bp.click_position([0.5, 0.9])
     if BaitAndRodShowPanel.is_panel_active(bp):
         BaitAndRodShowPanel.click_tap_to_continue(bp)
     collected = status[1].pop(r)
@@ -263,7 +266,7 @@ def glod_bank_test(bp:BasePage):
     BattlePassPanel.click_btn_i_gold_band(bp)
     if not BattlePassPanel.is_Tip_goldbank_active(bp):
         raise FindNoElementError
-    bp.click_position_base([0.9, 0.1])
+    bp.click_position([0.5, 0.9])
     print("glod_bank_test金库测试通过")
 
 
@@ -298,6 +301,8 @@ def main(bp:BasePage):
     # 登录到大厅
     cmd_list = ["guideskip", "add 1 100200 123456"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
+    # 关闭升级弹窗
+    PlayerLevelupPanel.wait_for_panel_appear(bp)
 
     # 进入BP界面
     bp.go_to_panel("BattlePassPanel")
@@ -366,6 +371,6 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage()
+    bp = BasePage("127.0.0.1:21503")
     main(bp)
 

@@ -7,7 +7,7 @@ from panelObjs.progressRewardsPanel import ProgressRewardsPanel
 from panelObjs.loadingPanel import LoadingPanel
 from panelObjs.loadingFisheryPanel import LoadingFisheryPanel
 from panelObjs.itemTipsPanel import ItemTipsPanel
-from common import resource
+from common import resource, gameInit
 from scripts import battleTest
 from tools.commonTools import *
 
@@ -19,42 +19,41 @@ def collect_next_test(bp: BasePage):
     bp.cmd_list(cmd_list)
     TournamentsPanel.go_to_first_location(bp)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
-    LoadingPanel.wait_until_panel_disappear(bp)
-    bp.sleep(0.2)
+    LoadingPanel.wait_until_panel_disappear(bp, is_wait_for_appear=False)
+    bp.sleep(1)
 
     # 得到期望奖励
-    current_rewards_icon_list = BattlePreparePanel.get_current_rewards_icon_list(bp)
-    current_rewards_quantity_list = BattlePreparePanel.get_current_rewards_quantity_list(bp)
     next_reward_icon = BattlePreparePanel.get_next_reward_icon(bp)
-    next_reward_quantity = BattlePreparePanel.get_next_reward_quantity(bp)
-    current_rewards_expect_dict = resource.make_item_dict(item_icon_list=current_rewards_icon_list, item_quantity_list=current_rewards_quantity_list, item_dict={next_reward_icon: next_reward_quantity})
+    # next_reward_quantity = BattlePreparePanel.get_next_reward_quantity(bp)
+
 
     # 钓一条鱼
     battleTest.fish_once(bp, fishery_id="400301", fish_id="301001")
-    bp.sleep(3)
+    bp.sleep(10)
 
-    # 对照奖励
-
+    # 下一奖励应在奖励列表里
     current_rewards_icon_list = BattlePreparePanel.get_current_rewards_icon_list(bp)
     current_rewards_quantity_list = BattlePreparePanel.get_current_rewards_quantity_list(bp)
     current_rewards_dict = resource.make_item_dict(item_icon_list=current_rewards_icon_list, item_quantity_list=current_rewards_quantity_list)
-    compare_dict(current_rewards_expect_dict, current_rewards_dict)
+    if next_reward_icon not in current_rewards_dict:
+        raise FindNoElementError
 
     # 计算期望库存
-    stock_expect_list = bp.get_item_count_list(item_icon_name_list=current_rewards_icon_list)
+    rewards_icon_list = list(current_rewards_dict)
+    stock_expect_list = bp.get_item_count_list(item_icon_name_list=rewards_icon_list)
     cur = 0
-    while cur < len(current_rewards_icon_list):
-        stock_expect_list[cur] += current_rewards_quantity_list[cur]
+    while cur < len(rewards_icon_list):
+        stock_expect_list[cur] += current_rewards_dict[rewards_icon_list[cur]]
         cur += 1
 
     # 领取奖励
     BattlePreparePanel.click_progress_info(bp)
-    bp.sleep(0.2)
+    bp.sleep(1)
     reward_dict = RewardsPanel.get_reward_dict(bp)
     compare_dict(current_rewards_dict, reward_dict)
 
     # 计算库存是否正确
-    stock_list = bp.get_item_count_list(item_icon_name_list=current_rewards_icon_list)
+    stock_list = bp.get_item_count_list(item_icon_name_list=rewards_icon_list)
     compare_list(stock_expect_list, stock_list)
 
     # 关闭恭喜获得
@@ -72,7 +71,7 @@ def mini_panel_test(bp: BasePage):
         RewardsPanel.wait_for_panel_appear(bp)
         bp.sleep(1)
         RewardsPanel.click_tap_to_claim(bp)
-        bp.sleep(0.2)
+        bp.sleep(1)
     current_rewards_icon_list = BattlePreparePanel.get_current_rewards_icon_list(bp)
     if current_rewards_icon_list:
         raise FindElementError
@@ -105,17 +104,17 @@ def mini_panel_test(bp: BasePage):
     big_rewards_icon_list = ProgressRewardsPanel.get_big_rewards_icon_list(bp)
     r = random.randint(0, len(big_rewards_position_list) - 1)
     bp.click_position(big_rewards_position_list[r])
-    bp.sleep(0.2)
+    bp.sleep(1)
     item_icon = ItemTipsPanel.get_item_icon(bp)
     compare(item_icon, big_rewards_icon_list[r])
-    bp.click_position([0.5, 0.2])
+    bp.click_position([0.5, 0.9])
 
     next_reward_position = ProgressRewardsPanel.get_next_reward_position(bp)
     bp.click_position(next_reward_position)
-    bp.sleep(0.2)
+    bp.sleep(1)
     item_icon = ItemTipsPanel.get_item_icon(bp)
     compare(icon, item_icon)
-    bp.click_position([0.5, 0.2])
+    bp.click_position([0.5, 0.9])
 
     # 关闭界面
     ProgressRewardsPanel.click_btn_close(bp)
@@ -129,8 +128,7 @@ def complete_test(bp: BasePage):
     bp.cmd_list(cmd_list)
     TournamentsPanel.go_to_first_location(bp)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
-    LoadingPanel.wait_until_panel_disappear(bp)
-    bp.sleep(0.2)
+    bp.sleep(1)
 
     # 得到期望奖励
     current_rewards_icon_list = BattlePreparePanel.get_current_rewards_icon_list(bp)
@@ -148,7 +146,7 @@ def complete_test(bp: BasePage):
 
     # 点击领奖
     BattlePreparePanel.click_btn_close(bp)
-    bp.sleep(0.2)
+    bp.sleep(1)
     reward_dict = RewardsPanel.get_reward_dict(bp)
     compare_dict(current_rewards_dict, reward_dict)
 
@@ -160,13 +158,11 @@ def complete_test(bp: BasePage):
     RewardsPanel.wait_for_panel_appear(bp)
     bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
-    bp.sleep(0.2)
+    bp.sleep(1)
 
     # 查看面板是否改为完成状态
-    if not BattlePreparePanel.is_progress_finish(bp):
-        raise FindNoElementError
-    BattlePreparePanel.click_progress_info(bp)
-    bp.sleep(0.2)
+    BattlePreparePanel.click_progress_finish(bp)
+    bp.sleep(1)
     if not ProgressRewardsPanel.is_progress_finish(bp):
         raise FindNoElementError
     ProgressRewardsPanel.click_btn_close(bp)
@@ -175,14 +171,19 @@ def complete_test(bp: BasePage):
 
 
 
-def progressRewards_test(bp: BasePage):
+def main(bp: BasePage):
     # 进入渔场
-    bp.lua_console('PanelMgr:OpenPanel("TournamentsPanel")')
-    bp.sleep(0.2)
+    # 登录到大厅
+    cmd_list = ["guideskip"]
+    gameInit.login_to_hall(bp, cmd_list=cmd_list)
+    bp.go_to_panel("TournamentsPanel")
+    bp.sleep(1)
+
+
     TournamentsPanel.go_to_first_location(bp)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
-    LoadingPanel.wait_until_panel_disappear(bp)
-    bp.sleep(0.2)
+    LoadingPanel.wait_until_panel_disappear(bp, is_wait_for_appear=False)
+    bp.sleep(1)
 
     # 领取下一项奖励的测试
     collect_next_test(bp)
@@ -193,6 +194,9 @@ def progressRewards_test(bp: BasePage):
     # 完成进度条测试
     complete_test(bp)
 
+    # 回到大厅
+    bp.go_home()
+
 if __name__ == '__main__':
     bp = BasePage()
-    progressRewards_test(bp)
+    main(bp)

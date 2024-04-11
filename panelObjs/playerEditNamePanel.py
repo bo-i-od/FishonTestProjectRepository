@@ -43,7 +43,7 @@ class PlayerEditNamePanel(BasePage):
 
     # 点击确认按钮
     def click_confirm(self):
-        self.click_element(element_data=ElementsData.PlayerEditName.btn_confirm)
+        self.click_until_disappear(element_data=ElementsData.PlayerEditName.btn_confirm)
 
 if __name__ == "__main__":
     bp = BasePage()

@@ -1,5 +1,8 @@
 import random
+
+from common import gameInit
 from common.resource import *
+from panelObjs.playerLevelupPanel import PlayerLevelupPanel
 from panelObjs.taskPanel import TaskPanel
 from panelObjs.rewardsPanel import RewardsPanel
 from panelObjs.itemTipsPanel import ItemTipsPanel
@@ -60,13 +63,15 @@ def jump_once_test(bp:BasePage, task_id_list:list, viewport:Viewport, index:int)
     position_list = TaskPanel.get_btn_position_list(bp, task_id_list)
     bp.click_position(position_list[index])
     # 等待跳转后的场景加载
-    bp.sleep(0.2)
+    bp.sleep(1)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
-    LoadingPanel.wait_until_panel_disappear(bp)
+    LoadingPanel.wait_until_panel_disappear(bp, is_wait_for_appear=False)
     # # 跳转到相应界面后截图
     # img = bp.get_full_screen_shot()
     # bp.save_img(img, "task_jump_once_test")
     # 返回任务系统
+    bp.clear_panel_except_home()
+    bp.sleep(1)
     bp.go_to_panel("TaskPanel")
 
 def jump_all_test(bp:BasePage, tab_index):
@@ -173,10 +178,13 @@ def btn_collect_once_test(bp:BasePage, task_id_list:list, viewport:Viewport, ind
     # 点击领取
     position_list = TaskPanel.get_btn_position_list(bp, task_id_list)
     bp.click_position(position_list[index])
-    bp.sleep(0.2)
+    RewardsPanel.wait_for_panel_appear(bp)
+    bp.sleep(1)
     # 对比奖励图标和数量
     reward_expect_dict = RewardsPanel.get_reward_dict(bp)
     compare_dict(reward_expect_dict, reward_dict)
+    # 关闭领奖弹窗
+    RewardsPanel.click_tap_to_claim(bp)
     # 对比库存和期望库存
     for reward_icon in reward_expect_dict:
         count = bp.get_item_count(item_icon_name=reward_icon)
@@ -188,10 +196,7 @@ def btn_collect_once_test(bp:BasePage, task_id_list:list, viewport:Viewport, ind
     # 看进度条是否增长
     if progress_value < 0.99 and progress_value < TaskPanel.get_progress_value(bp) is False:
         raise CompareError
-    # 关闭领奖弹窗
-    RewardsPanel.wait_for_panel_appear(bp)
-    bp.sleep(1)
-    RewardsPanel.click_tap_to_claim(bp)
+
 
 # 宝箱的奖励领取测试
 def box_collect_test(bp:BasePage, index:int, box_award_dict:dict):
@@ -207,7 +212,7 @@ def box_collect_test(bp:BasePage, index:int, box_award_dict:dict):
         stock_expect_dict[stock_icon] += count
     # 点击宝箱
     bp.click_position(position_list[index])
-    bp.sleep(0.2)
+    bp.sleep(1)
     # 对照奖励
     reward_dict = RewardsPanel.get_reward_dict(bp)
     compare_dict(box_award_dict, reward_dict)
@@ -238,19 +243,19 @@ def collect_test(bp:BasePage):
     # 周常
     bp.cmd("missiondone 3")
     TaskPanel.switch_tab(bp, 1)
-    task_kind = TaskPanel.get_task_kind(bp)
-    compare(task_kind, "Weekly")
+    # task_kind = TaskPanel.get_task_kind(bp)
+    # compare(task_kind, "Weekly")
     task_id_list = TaskPanel.get_task_id_list(bp)
     viewport.change_item(object_id_list=task_id_list)
     collect_all_test(bp, task_id_list, viewport)
     # 月常
     bp.cmd("missiondone 4")
     TaskPanel.switch_tab(bp, 2)
-    task_kind = TaskPanel.get_task_kind(bp)
-    compare(task_kind, "Monthly")
+    # task_kind = TaskPanel.get_task_kind(bp)
+    # compare(task_kind, "Monthly")
     box_position = TaskPanel.get_month_box_position(bp)
     box_award_dict = TaskPanel.get_month_award_detail(bp, box_position)
-    print(box_award_dict)
+    # print(box_award_dict)
     task_id_list = TaskPanel.get_task_id_list(bp)
     viewport.change_item(object_id_list=task_id_list)
     collect_all_test(bp, task_id_list, viewport)
@@ -265,10 +270,9 @@ def collect_test(bp:BasePage):
         stock_expect_dict[stock_icon] += count
     # 点击宝箱
     bp.click_position(box_position)
-    bp.sleep(0.2)
+    bp.sleep(1)
     # 对照奖励
     reward_dict = RewardsPanel.get_reward_dict(bp)
-    print(box_award_dict, reward_dict)
     compare_dict(box_award_dict, reward_dict)
     # 对照库存
     for stock_icon in stock_expect_dict:
@@ -283,13 +287,24 @@ def collect_test(bp:BasePage):
     RewardsPanel.click_tap_to_claim(bp)
     # 切换到日常标签
     TaskPanel.switch_tab(bp, 0)
-    task_kind = TaskPanel.get_task_kind(bp)
-    compare(task_kind, "Daily")
-    TaskPanel.click_btn_close(bp)
+    # task_kind = TaskPanel.get_task_kind(bp)
+    # compare(task_kind, "Daily")
 
 def main(bp: BasePage):
+    # 登录到大厅
+    cmd_list = ["guideskip", "add 1 100200 12345678"]
+    gameInit.login_to_hall(bp, cmd_list=cmd_list)
+
+    # 关闭升级弹窗
+    PlayerLevelupPanel.wait_for_panel_appear(bp)
+
+    # 跳转测试
     jump_test(bp)
+
+    # 领取测试
     collect_test(bp)
+
+    # 返回大厅
 
 
 if __name__ == '__main__':

@@ -31,7 +31,6 @@ class RoulettePanel(BasePage):
         ticket = ticket.split('</color>')
         ticket_count = str_to_int(ticket[0].split('>')[1])
         ticket_cost = str_to_int(ticket[1].split('>')[1])
-        print(ticket_count, ticket_cost)
         return ticket_count, ticket_cost
 
     def get_turntable_icon_list(self):

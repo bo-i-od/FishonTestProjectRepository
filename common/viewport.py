@@ -83,7 +83,7 @@ class Viewport:
 
     def move_until_appear(self, target_id):
         while self.move_delta_len(target_id):
-            self.basePage.sleep(1)
+            self.basePage.sleep(0.5)
 
     def get_viewport_range(self):
         size = self.viewport_size

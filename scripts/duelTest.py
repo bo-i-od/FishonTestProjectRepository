@@ -71,9 +71,9 @@ def pvp_fish(bp):
             bp.custom_cmd("autofish")
             qteThread = Thread(target=BattlePanel.qte, args=[bp])
             qteThread.start()
-        BattlePanel.reel_quick(bp)
-        ResultPanel.wait_for_result(bp)
-        ResultPanel.click_btn_claim(bp)
+        # BattlePanel.reel_quick(bp)
+        element_btn = ResultPanel.wait_for_result(bp)
+        ResultPanel.automatic_settlement(bp, element_btn)
         if PVPResultPanel.is_panel_active(bp):
             bp.sleep(3)
             break
@@ -226,7 +226,7 @@ def zhanbao_test(bp:BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage(serial_number="127.0.0.1:21593")
+    bp = BasePage()
     # zhanbao_test(bp)
     # bp.set_item_count(target_count=10000, item_tpid="100500")
     # # bp.set_item_count(target_count=25000000, item_tpid="100200")
@@ -243,12 +243,13 @@ if __name__ == '__main__':
     # bp.go_to_panel("PVPHallPanel")
     # bp.cmd("autofish")
     cur = 0
-    while cur < 14:
-        rank = random.randint(0, 6)
-        clear_duelcup(bp)
-        dc = random_duelcup(bp, 6)
-        print(dc)
-        circulate_duel(bp, 6)
+    while cur < 80:
+
+        # clear_duelcup(bp)
+        # dc = random_duelcup(bp, 4)
+        # print(dc)
+        r = random.randint(0, 7)
+        circulate_duel(bp, r)
         cur += 1
         print(f"第{cur}次钓鱼")
 

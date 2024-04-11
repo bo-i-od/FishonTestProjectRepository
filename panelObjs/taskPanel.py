@@ -190,7 +190,8 @@ class TaskPanel(BasePage):
         reward_icon_list = TaskPanel.get_box_award_icon_list(self)
         reward_quantity_list = TaskPanel.get_box_award_quantity_list(self)
         item_dict = resource.make_item_dict(item_icon_list=reward_icon_list, item_quantity_list=reward_quantity_list)
-        self.click_position([0.5, 0.1])
+        self.click_position([0.5, 0.9])
+        self.sleep(1)
         return item_dict
 
     def get_month_award_detail(self, position):
@@ -293,12 +294,9 @@ class TaskPanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    v = TaskPanel.get_viewport(bp)
-    # print(v.viewport_range)
-    v.change_item(ElementsData.Task.task_award_icon_list)
-    il,pl =v.get_clickable_icon_and_position_list()
-    bp.click_position(pl[0])
-    # task_id_list = TaskPanel.get_task_id_list(bp)
+
+    task_id_list = TaskPanel.get_task_id_list(bp)
+    print(TaskPanel.get_task_award_dict(bp, task_id_list, 1))
     # # btn_status_list, btn_position_list = TaskPanel.get_btn_status_and_position_list(bp, task_id_list)
     # # bp.click_position(btn_position_list[1])
     # # v.move_until_appear(task_id_list[8])

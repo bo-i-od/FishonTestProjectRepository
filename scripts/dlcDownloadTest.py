@@ -22,12 +22,11 @@ def main(bp: BasePage):
     bp.click_position(reward_icon_position_list[r])
     item_icon = ItemTipsPanel.get_item_icon(bp)
     compare(reward_icon_list[r], item_icon)
-    bp.click_position_base([0.9, 0.1])
+    bp.click_position([0.5, 0.1])
 
     # 点击领取
     item_dict_list = DLCDownloadPanel.get_item_dict_list(bp)
     btn_claim_position_list = DLCDownloadPanel.get_btn_claim_position_list(bp)
-    print(btn_claim_position_list)
     cur = 0
     while cur < len(item_dict_list):
         if not btn_claim_position_list[cur]:
@@ -51,7 +50,6 @@ def claim_once_test(bp: BasePage, item_dict_list, btn_claim_position_list, index
 
     # 点击领取
     btn_claim_position = btn_claim_position_list[index]
-    print(btn_claim_position)
     bp.click_position(btn_claim_position)
     bp.sleep(1)
 

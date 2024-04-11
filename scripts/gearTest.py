@@ -51,7 +51,7 @@ def lock_test(bp: BasePage):
     bp.sleep(1)
     tips_skill_icon = GearSkillTipsPanel.get_skill_icon(bp)
     compare(skill_icon, tips_skill_icon)
-    bp.click_position_base([0.9, 0.1])
+    bp.click_position([0.5, 0.9])
     bp.sleep(1)
 
     GearEnhancePanel.click_btn_close(bp)
@@ -129,7 +129,7 @@ def unlock_test(bp: BasePage):
     bp.sleep(1)
     tips_skill_icon = GearSkillTipsPanel.get_skill_icon(bp)
     compare(skill_icon, tips_skill_icon)
-    bp.click_position_base([0.9, 0.1])
+    bp.click_position([0.5, 0.9])
     bp.sleep(1)
 
     # 关闭升星界面
@@ -322,7 +322,7 @@ def GearPanel_test(bp: BasePage):
     bp.click_position(skill_position_list[r])
     skill_icon = GearSkillTipsPanel.get_skill_icon(bp)
     compare(skill_icon_list[r], skill_icon)
-    bp.click_position_base([0.9, 0.1])
+    bp.click_position([0.5, 0.9])
 
     # 点击筛选
     GearPanel.click_btn_filter(bp)
@@ -342,6 +342,7 @@ def main(bp: BasePage):
     cmd_list = ["guideskip"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
     bp.set_item_count(target_count=0, item_tpid="100000")
+
 
     # 进入装备界面
     bp.go_to_panel("GearPanel")

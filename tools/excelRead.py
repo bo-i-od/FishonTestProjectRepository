@@ -172,6 +172,20 @@ class ExceTools:
             cur += 1
         return column_data
 
+    def get_item_tpid_list(self, icon):
+        table_data = self.get_table_data("ITEM_MAIN.xlsm")
+        icon_list = table_data['iconName']
+        tpid_list = table_data['itemTpId']
+        res_list = []
+        cur = 0
+        while cur < len(icon_list):
+            if icon_list[cur] != icon:
+                cur += 1
+                continue
+            res_list.append(tpid_list[cur])
+            cur += 1
+        return res_list
+
 
 
 

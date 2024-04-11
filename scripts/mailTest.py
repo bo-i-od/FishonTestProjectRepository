@@ -2,6 +2,7 @@ import random
 
 from common import gameInit
 from common.resource import *
+from panelObjs.playerLevelupPanel import PlayerLevelupPanel
 from panelObjs.rewardsPanel import RewardsPanel
 from panelObjs.itemTipsPanel import ItemTipsPanel
 from common.basePage import BasePage
@@ -51,11 +52,11 @@ def click_icon_test(bp: BasePage):
     if ItemTipsPanel.is_panel_active(bp):
         item_icon = ItemTipsPanel.get_item_icon(bp)
         compare(item_icon, reward_icon_list[r])
-        bp.click_position_base([0.9, 0.1])
+        bp.click_position_base([0.5, 0.9])
     elif FishCardPackTipsPanel.is_panel_active(bp):
         item_icon = FishCardPackTipsPanel.get_item_icon(bp)
         compare(item_icon, reward_icon_list[r])
-        bp.click_position_base([0.9, 0.1])
+        bp.click_position_base([0.5, 0.9])
     elif BaitAndRodShowPanel.is_panel_active(bp):
         BaitAndRodShowPanel.click_tap_to_continue(bp)
     print("click_icon_test点击图标测试通过")
@@ -88,6 +89,8 @@ def main(bp:BasePage):
     # 进入大厅
     cmd_list = ["guideskip", f"add 1 100200 {exp}"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
+    # 关闭升级弹窗
+    PlayerLevelupPanel.wait_for_panel_appear(bp)
 
     bp.go_to_panel("MailPanel")
     bp.sleep(1)

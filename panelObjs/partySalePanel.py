@@ -34,6 +34,8 @@ class PartySalePanel(BasePage):
         resource.str_to_int_list(quantity_list)
         return quantity_list
 
+
+
 if __name__ == '__main__':
     bp = BasePage()
     PartySalePanel.click_btn_buy(bp)

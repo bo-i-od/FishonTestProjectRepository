@@ -14,6 +14,18 @@ class AquariumPanel(BasePage):
             return True
         return False
 
+    def click_btn_add_100100(self):
+        self.click_element(element_data=ElementsData.Aquarium.btn_add_100100)
+
+    def click_rewards(self):
+        self.click_element(element_data=ElementsData.Aquarium.Rewards)
+
+    def click_btn_build(self):
+        self.click_element(element_data=ElementsData.Aquarium.btn_build)
+
+    def click_btn_fish(self):
+        self.click_element(element_data=ElementsData.Aquarium.btn_fish)
+
     def guide(self):
         perform_list = [ElementsData.NewbieGuide.NBG_aquarium_2_1, ElementsData.NewbieGuide.NBG_aquarium_2_2,
                         ElementsData.NewbieGuide.NBG_aquarium_2_3, ElementsData.NewbieGuide.NBG_aquarium_2_4,

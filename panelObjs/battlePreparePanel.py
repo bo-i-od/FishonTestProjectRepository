@@ -1,6 +1,7 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from common import resource
+from tools.commonTools import *
 
 class BattlePreparePanel(BasePage):
     def is_panel_active(self):
@@ -22,7 +23,8 @@ class BattlePreparePanel(BasePage):
 
     # 点击抛竿
     def click_btn_cast(self):
-        self.wait_for_appear(element_data=ElementsData.BattlePrepare.btn_cast, is_click=True)
+        self.wait_for_appear(element_data=ElementsData.BattlePrepare.btn_cast, is_click=False)
+        self.click_until_disappear(element_data=ElementsData.BattlePrepare.btn_cast)
 
     # 点击快速换装
     def click_btn_quick_switch(self):
@@ -75,15 +77,90 @@ class BattlePreparePanel(BasePage):
             return True
         return False
 
+    def click_progress_finish(self):
+        self.click_element(element_data=ElementsData.BattlePrepare.GlobalProgress.progress_finish)
+
     def click_btn_tournaments(self):
         self.click_element(element_data=ElementsData.BattlePrepare.btn_tournaments)
+
+    # 得到钓点状态
+    def get_location_status(self):
+        location_id_list = self.get_object_id_list(element_data=ElementsData.BattlePrepare.location_list)
+        treasure_id_list = self.get_object_id_list(element_data=ElementsData.BattlePrepare.treasure_list)
+        select_list = []
+        selectable_list = []
+        cur = 0
+        while cur < len(location_id_list):
+            select_id_list = self.get_offspring_id_list(object_id=location_id_list[cur], offspring_path="select")
+            if select_id_list:
+                select_list.append(cur)
+                cur += 1
+                continue
+            selectable_list.append(cur)
+            cur += 1
+        bias = cur
+        cur = 0
+        while cur < len(treasure_id_list):
+            select_id_list = self.get_offspring_id_list(object_id=treasure_id_list[cur], offspring_path="select")
+            if select_id_list:
+                select_list.append(cur + bias)
+                cur += 1
+                continue
+            selectable_list.append(cur + bias)
+            cur += 1
+        return select_list, selectable_list
+
+    def get_energy_list(self):
+        location_energy_list = self.get_text_list(element_data=ElementsData.BattlePrepare.location_energy_list)
+        str_to_int_list(location_energy_list)
+        treasure_energy_list = self.get_text_list(element_data=ElementsData.BattlePrepare.treasure_energy_list)
+        str_to_int_list(treasure_energy_list)
+        return location_energy_list + treasure_energy_list
+
+    def click_btn_add_100500(self):
+        self.click_element(element_data=ElementsData.BattlePrepare.btn_add_100500)
+
+    def click_btn_location(self):
+        self.click_element(element_data=ElementsData.BattlePrepare.btn_location)
+
+    def click_btn_collection(self):
+        self.click_element(element_data=ElementsData.BattlePrepare.btn_collection)
+
+    def click_gears(self):
+        self.click_element(element_data=ElementsData.BattlePrepare.gears)
+
+    class Minitask(BasePage):
+        def click_btn_recommend(self):
+            self.click_element(element_data=ElementsData.BattlePrepare.Minitask.btn_recommend)
+
+        def click_btn_go(self):
+            self.click_element(element_data=ElementsData.BattlePrepare.Minitask.btn_go)
+
+        def click_btn_gift(self):
+            self.click_element(element_data=ElementsData.BattlePrepare.Minitask.btn_gift)
+
+        def get_progress(self):
+            progress = self.get_text(element_data=ElementsData.BattlePrepare.Minitask.progress)
+            res = progress.split("/")
+            numerator = int(res[0])
+            denominator = int(res[1])
+            return numerator, denominator
+
+        def click_btn_claim(self):
+            self.click_element(element_data=ElementsData.BattlePrepare.Minitask.btn_claim)
+
+        def get_text_task(self):
+            return self.get_text(element_data=ElementsData.BattlePrepare.Minitask.text_task)
+
+        def click_btn_collection(self):
+            self.click_element(element_data=ElementsData.BattlePrepare.btn_collection)
 
 
 
 if __name__ == '__main__':
     bp = BasePage()
 
-    a = bp.get_icon_list(element_data=ElementsData.BattlePrepare.btn_cast)
+    a = BattlePreparePanel.get_energy_list(bp)
     print(a)
 
 

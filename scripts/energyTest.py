@@ -3,6 +3,7 @@ import random
 from common import gameInit
 from common.basePage import BasePage
 from panelObjs.buyEnergyPanel import BuyEnergyPanel
+from panelObjs.rewardsPanel import RewardsPanel
 from tools.commonTools import *
 
 
@@ -91,14 +92,29 @@ def main(bp: BasePage):
         bp.sleep(1)
 
     # cash_usd买
+    cur = 1
     while BuyEnergyPanel.get_btn_cash_usd_status(bp) != 2 and energy_max > energy:
+
         cash_usd_recovery_value = BuyEnergyPanel.get_cash_usd_recovery_value(bp)
         energy_expect = cash_usd_recovery_value + energy
         BuyEnergyPanel.click_btn_cash_usd(bp)
         bp.sleep(1)
+        while RewardsPanel.is_panel_active(bp):
+            RewardsPanel.click_tap_to_claim(bp)
+            bp.sleep(1)
         energy = BuyEnergyPanel.get_energy_value(bp)
         compare(energy_expect, energy)
         # 等待动画播放完
+        bp.sleep(1)
+        cur += 1
+        if cur > 5:
+            continue
+        # 分别测0，小，中，大，超R
+        cmd = f"setPlayerLayer {cur}000"
+        bp.cmd(command=cmd)
+        BuyEnergyPanel.click_tap_to_close(bp)
+        # 关闭打开刷新
+        bp.go_to_panel("BuyEnergyPanel")
         bp.sleep(1)
 
     # 关闭页面
@@ -106,7 +122,7 @@ def main(bp: BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21593")
+    bp = BasePage()
     main(bp)
 
 

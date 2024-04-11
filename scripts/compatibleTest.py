@@ -1,4 +1,7 @@
 from common.basePage import BasePage
+from panelObjs.aquariumBuildMainPanel import AquariumBuildMainPanel
+from panelObjs.aquariumBuildPanel import AquariumBuildPanel
+from panelObjs.aquariumFishPanel import AquariumFishPanel
 from panelObjs.battleFailedPanel import BattleFailedPanel
 from panelObjs.battlePanel import BattlePanel
 from panelObjs.battlePassBuyLevelPanel import BattlePassBuyLevelPanel
@@ -11,19 +14,25 @@ from panelObjs.buyEnergyPanel import BuyEnergyPanel
 from panelObjs.divisionLeaderboardPanel import DivisionLeaderboardPanel
 from panelObjs.divisionListPanel import DivisionListPanel
 from panelObjs.dlcDownloadPanel import DLCDownloadPanel
+from panelObjs.homePanel import HomePanel
 from panelObjs.leaderBoardPanel import LeaderBoardPanel
 from panelObjs.loadingFisheryPanel import LoadingFisheryPanel
+from panelObjs.loadingPanel import LoadingPanel
 from panelObjs.mailPanel import MailPanel
+from panelObjs.messageBoxPanel import MessageBoxPanel
 from panelObjs.newbieTaskPanel import NewbieTaskPanel
 from panelObjs.partySalePanel import PartySalePanel
 from panelObjs.playerLevelupPanel import PlayerLevelupPanel
 from panelObjs.progressRewardsPanel import ProgressRewardsPanel
+from panelObjs.pvpBattleHUDPanel import PVPBattleHUDPanel
 from panelObjs.pvpHallPanel import PVPHallPanel
+from panelObjs.pvpMatchPanel import PVPMatchPanel
 from panelObjs.pvpResultPanel import PVPResultPanel
 from panelObjs.pvpRuleTipsPanel import PVPRuleTipsPanel
 from panelObjs.questionnairePanel import QuestionnairePanel
 from panelObjs.rodMoreToOnePanel import RodMoreToOnePanel
 from panelObjs.roulettePanel import RoulettePanel
+from panelObjs.sharePanel import SharePanel
 from panelObjs.taskPanel import TaskPanel
 from panelObjs.tournamentsInfoPanel import TournamentsInfoPanel
 from panelObjs.tournamentsPanel import TournamentsPanel
@@ -64,7 +73,7 @@ def account_init(bp: BasePage):
         bp.sleep(0.2)
         cur += 1
 
-    cmd_list = ["allrod 1234", "fishcardall 999", "unlockfish", "progressSetPoint 123456", "aquarium"]
+    cmd_list = ["allrod 1234", "fishcardall 999", "unlockfish", "progressSetPoint 123456"]
     for cmd in cmd_list:
         bp.cmd(cmd)
         bp.sleep(0.2)
@@ -107,14 +116,10 @@ def achievement(bp: BasePage):
         bp.click_position(position_list[unlockable_list[cur - 1]])
         bp.sleep(1)
 
-
-
     # 领取奖励
-    cur = 0
-    while cur < 10:
-        AchievementGroupPanel.click_btn_collect(bp)
-        bp.sleep(1)
-        cur += 1
+    AchievementGroupPanel.click_btn_collect(bp)
+    bp.sleep(1)
+
 
     AchievementGroupPanel.click_btn_close(bp)
     bp.sleep(1)
@@ -164,8 +169,68 @@ def achievement(bp: BasePage):
 
 
 def aquarium(bp: BasePage):
+    # 进入水族箱
     bp.go_to_panel("AquariumPanel")
-    AquariumPanel.guide(bp)
+    bp.sleep(3)
+
+    # 跳转商城
+    AquariumPanel.click_btn_add_100100(bp)
+    bp.sleep(1)
+    StorePanel.click_btn_close(bp)
+    bp.sleep(1)
+
+    # 点宝箱看奖励预览
+    AquariumPanel.click_rewards(bp)
+    bp.sleep(1)
+    bp.click_position([0.5, 0.1])
+
+    # 点击建造
+    AquariumPanel.click_btn_build(bp)
+    bp.sleep(1)
+
+    # 点击建筑
+    build_lv_position_list = AquariumBuildMainPanel.get_build_lv_position_list(bp)
+    while build_lv_position_list:
+        bp.click_position(build_lv_position_list[0])
+        bp.sleep(1)
+        build_lv_position_list = AquariumBuildMainPanel.get_build_lv_position_list(bp)
+
+
+
+    # 切换到更换皮肤
+    AquariumBuildPanel.switch_tab(bp, 1)
+    bp.sleep(1)
+
+    # 跳转商城返回
+    AquariumBuildPanel.click_btn_add_100100(bp)
+    bp.sleep(1)
+    StorePanel.click_btn_close(bp)
+    bp.sleep(1)
+
+    # 返回水族箱主界面
+    AquariumBuildPanel.click_btn_close(bp)
+    bp.sleep(1)
+    AquariumBuildMainPanel.click_btn_close(bp)
+    bp.sleep(1)
+
+    # 点击放鱼
+    AquariumPanel.click_btn_fish(bp)
+    bp.sleep(1)
+
+    # 跳转商城返回
+    AquariumFishPanel.click_btn_add_100100(bp)
+    bp.sleep(1)
+    StorePanel.click_btn_close(bp)
+    bp.sleep(1)
+
+    # 切换到观赏鱼
+    AquariumFishPanel.switch_tab(bp, 1)
+    bp.sleep(1)
+
+    # 返回
+    AquariumFishPanel.click_btn_close(bp)
+
+    # 返回大厅
     bp.go_home()
 
 def battle_pass(bp: BasePage):
@@ -300,28 +365,34 @@ def energy(bp: BasePage):
     bp.sleep(1)
     BuyEnergyPanel.click_btn_cash(bp)
     bp.sleep(1)
-    BuyEnergyPanel.click_btn_cash(bp)
-    bp.sleep(1)
-    BuyEnergyPanel.click_btn_drink(bp)
-    bp.sleep(1)
     bp.go_home()
 
 
 def fish_album(bp: BasePage):
     bp.go_to_panel("FishAlbum3DPanel")
-    FishAlbum3DPanel.guide(bp)
+    # 点击分享按钮
+    FishAlbum3DPanel.click_btn_share(bp)
+
+    # 等待分享图
+    bp.sleep(2)
+    SharePanel.click_btn_close(bp)
+    bp.sleep(1)
+
+    # 点击更换渔场按钮
+    FishAlbum3DPanel.click_btn_switch(bp)
+    bp.sleep(1)
+
+
+    # 回到大厅
+    bp.go_home()
 
 
 def fish_card(bp: BasePage):
     bp.go_to_panel("FishCardPanel")
-    # 挨个点击渔场
-    cur = 11
-    while cur >= 0:
-        FishCardPanel.switch_tab(bp, cur)
-        bp.sleep(1)
-        FishCardPanel.switch_sub_tab(bp, cur % 2)
-        bp.sleep(1)
-        cur -= 1
+    # 切换tab
+    FishCardPanel.switch_sub_tab(bp, 1)
+    bp.sleep(1)
+
 
     # 鱼卡升级
     FishCardPanel.select_card(bp, 0)
@@ -330,11 +401,11 @@ def fish_card(bp: BasePage):
     bp.sleep(1)
     FishCardUpgradePanel.click_btn_previous(bp)
     bp.sleep(1)
-    cur = 0
-    while cur < 10:
-        FishCardUpgradePanel.click_btn_level_up(bp)
-        FishCardUpgradePanel.click_fishcard(bp)
-        cur += 1
+
+    FishCardUpgradePanel.click_btn_level_up(bp)
+    bp.sleep(1)
+    FishCardUpgradePanel.click_fishcard(bp)
+
     FishCardUpgradePanel.click_btn_close(bp)
     bp.sleep(1)
     FishCardGiftPackPanel.click_btn_close(bp)
@@ -362,12 +433,8 @@ def gear(bp: BasePage):
     bp.sleep(1)
     GearLevelupPanel.click_btn_previous(bp)
     bp.sleep(1)
-    cur = 0
-    while cur < 10:
-        GearLevelupPanel.click_btn_upgrade(bp)
-
-        bp.sleep(1)
-        cur += 1
+    GearLevelupPanel.click_btn_upgrade(bp)
+    bp.sleep(1)
     GearLevelupPanel.click_btn_close(bp)
     bp.sleep(1)
 
@@ -378,12 +445,11 @@ def gear(bp: BasePage):
     bp.sleep(1)
     GearEnhancePanel.click_btn_previous(bp)
     bp.sleep(1)
-    cur = 0
-    while cur < 4:
-        GearEnhancePanel.click_btn_enhance(bp)
-        bp.sleep(5)
-        GearEnhanceSuccesPanel.click_btn_close(bp)
-        cur += 1
+
+    GearEnhancePanel.click_btn_enhance(bp)
+    bp.sleep(5)
+    GearEnhanceSuccesPanel.click_btn_close(bp)
+
     GearEnhancePanel.click_btn_close(bp)
     bp.sleep(1)
 
@@ -441,13 +507,12 @@ def newbie_task(bp: BasePage):
     bp.sleep(1)
 
 #
-# # 切换页签
-#     NewbieTaskPanel.switch_tab(bp, 1)
-#     bp.sleep(1)
-#     NewbieTaskPanel.switch_tab(bp, 2)
-#     bp.sleep(1)
-#     NewbieTaskPanel.switch_tab(bp, 3)
-#     bp.sleep(1)
+# 切换页签
+    cur = 0
+    while cur < 6:
+        NewbieTaskPanel.switch_tab(bp, cur)
+        bp.sleep(1)
+        cur += 1
 
     # 购买礼包
     NewbieTaskPanel.click_btn_sale(bp)
@@ -509,6 +574,8 @@ def pve(bp: BasePage):
     # 点锦标赛
     BattlePreparePanel.click_btn_tournaments(bp)
     bp.sleep(1)
+    TournamentsInfoPanel.switch_tab(bp, 0)
+    bp.sleep(1)
     TournamentsInfoPanel.switch_tab(bp, 1)
     bp.sleep(1)
     TournamentsInfoPanel.switch_tab(bp, 2)
@@ -528,6 +595,31 @@ def pve(bp: BasePage):
     ProgressRewardsPanel.click_btn_close(bp)
     bp.sleep(1)
 
+    # 鱼册
+    BattlePreparePanel.click_btn_collection(bp)
+    bp.sleep(1)
+    FishAlbum3DPanel.click_btn_close(bp)
+    bp.sleep(1)
+
+    # 体力面板
+    BattlePreparePanel.click_btn_add_100500(bp)
+    bp.sleep(1)
+    BuyEnergyPanel.click_tap_to_close(bp)
+    bp.sleep(1)
+
+    # 多倍钓点按钮
+    BattlePreparePanel.click_btn_location(bp)
+    bp.sleep(1)
+    bp.click_position([0.5, 0.1])
+    bp.sleep(1)
+
+    # 选择装备
+    BattlePreparePanel.click_gears(bp)
+    bp.sleep(1)
+    BattlePreparePanel.click_btn_apply(bp)
+    bp.sleep(1)
+
+
     # 回选择界面
     BattlePreparePanel.click_btn_close(bp)
     bp.sleep(1)
@@ -541,12 +633,9 @@ def pve(bp: BasePage):
     TournamentsPanel.go_to_fishery_by_tpid(bp, fishery_tpid=fishery)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
 
-    # 进行刺鱼引导
-    bp.cmd("mode 400301 301013")
-    BattlePreparePanel.click_btn_cast(bp)
-    BattlePanel.hook_guide(bp)
 
     # 超范围测试
+    BattlePreparePanel.click_btn_cast(bp)
     BattleFailedPanel.click_cast_again(bp)
     bp.sleep(1)
 
@@ -568,6 +657,7 @@ def pve(bp: BasePage):
     achievement_position_list = AchievementPanel.get_achievement_position_list(bp)
     index = achievement_icon_list.index(target_icon)
     bp.click_position(achievement_position_list[index])
+    bp.sleep(1)
 
     # 解锁
     wanted_position_list = AchievementWantedPanel.get_wanted_position_list(bp)
@@ -577,7 +667,7 @@ def pve(bp: BasePage):
         bp.sleep(1)
         cur += 1
 
-    # 领取奖励 对比奖励数量
+    # 领取奖励
     AchievementWantedPanel.click_btn_rewards(bp)
     RewardsPanel.wait_for_panel_appear(bp)
     bp.sleep(1)
@@ -599,6 +689,28 @@ def pvp(bp: BasePage):
     # bp.sleep(1)
 
     # 战斗
+    PVPHallPanel.click_btn_play(bp, 0)
+    bp.sleep(3)
+    # 取消对决
+    PVPMatchPanel.click_btn_cancel(bp)
+    bp.sleep(1)
+    PVPHallPanel.click_btn_play(bp, 3)
+
+    # 表情和投降
+    PVPBattleHUDPanel.wait_for_panel_appear(bp)
+    PVPBattleHUDPanel.click_btn_chat(bp)
+    bp.sleep(1)
+    PVPBattleHUDPanel.click_btn_surrender(bp)
+    bp.sleep(1)
+    MessageBoxPanel.click_btn_confirm(bp)
+
+    # 打开战绩
+    bp.sleep(3)
+    PVPResultPanel.click_btn_open(bp)
+    bp.sleep(1)
+    PVPResultPanel.click_tap_to_click(bp)
+    bp.sleep(1)
+
     PVPHallPanel.click_btn_play(bp, 7)
     duelTest.pvp_fish(bp)
     bp.sleep(2)
@@ -625,7 +737,7 @@ def roulette(bp: BasePage):
 
     # 按压旋转
     RoulettePanel.press_btn_spin(bp, 1)
-    bp.sleep(20)
+    bp.sleep(10)
 
     RoulettePanel.click_btn_spin(bp)
     bp.sleep(1)
@@ -639,6 +751,8 @@ def roulette(bp: BasePage):
     bp.go_home()
 
 def questionnaire(bp: BasePage):
+    if not HomePanel.is_btn_questionnaire_exist(bp):
+        return
     bp.go_to_panel("QuestionnairePanel")
     bp.sleep(1)
     QuestionnairePanel.click_btn_close(bp)
@@ -651,12 +765,9 @@ def store(bp: BasePage):
     # 购买鱼竿
     StorePanel.change_tab(bp, 1)
     bp.sleep(1)
-    StorePanel.click_btn_purchase(bp)
+    StorePanel.click_btn_info(bp)
     BaitAndRodShowPanel.wait_for_panel_appear(bp)
     BaitAndRodShowPanel.click_tap_to_continue(bp)
-    RewardsPanel.wait_for_panel_appear(bp)
-    bp.sleep(1)
-    RewardsPanel.click_tap_to_claim(bp)
     bp.sleep(1)
     gear_position_list = StorePanel.get_gear_position_list(bp)
     cur = 1
@@ -665,26 +776,12 @@ def store(bp: BasePage):
         bp.sleep(1)
         cur += 1
 
-    # 购买鱼卡
+    # 鱼卡
     StorePanel.change_resource_tab(bp, 1)
     bp.sleep(1)
-    StorePanel.click_btn_purchase(bp)
-    bp.sleep(1)
-    if RewardsPanel.is_panel_active(bp):
-        RewardsPanel.wait_for_panel_appear(bp)
-        bp.sleep(1)
-        RewardsPanel.click_tap_to_claim(bp)
-    FishBagPanel.wait_for_panel_appear(bp)
-    FishBagPanel.click_tap_to_continue(bp)
-    bp.sleep(1)
-    if RewardsPanel.is_panel_active(bp):
-        RewardsPanel.wait_for_panel_appear(bp)
-        bp.sleep(1)
-        RewardsPanel.click_tap_to_claim(bp)
     StorePanel.click_btn_info(bp)
     bp.sleep(1)
     StorePanel.click_btn_info(bp)
-
     bp.sleep(1)
     fish_card_position_list = StorePanel.get_fish_card_position_list(bp)
     cur = 1
@@ -715,11 +812,8 @@ def store(bp: BasePage):
     # 鱼箱
     StorePanel.change_tab(bp, 2)
     bp.sleep(1)
-    cur = 0
-    while cur < 8:
-        StorePanel.click_btn_refresh(bp)
-        bp.sleep(1)
-        cur += 1
+    StorePanel.click_btn_refresh(bp)
+    bp.sleep(1)
 
     # 现金
     StorePanel.change_tab(bp, 3)
@@ -732,15 +826,12 @@ def store(bp: BasePage):
 
 def main(bp: BasePage):
     login(bp)
+    bp.cmd("guideskip")
     playerEditName(bp)
-    guide(bp)
-    bp.cmd("add 1 100200 12345")
+    bp.cmd("add 1 100200 123456789")
     player_setting(bp)
     account_init(bp)
-    PlayerLevelupPanel.wait_for_panel_appear(bp)
-    bp.cmd("add 1 100200 123456789")
     fish_album(bp)
-    PlayerLevelupPanel.wait_for_panel_appear(bp)
     aquarium(bp)
     bp.cmd("missiondone 10")
     store(bp)
@@ -762,5 +853,6 @@ def main(bp: BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.81:20010")
+    bp = BasePage("debug3.testin.cn:4082")
     main(bp)
+

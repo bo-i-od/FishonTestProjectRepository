@@ -1,5 +1,6 @@
 import random
 from common.basePage import BasePage
+from panelObjs.playerLevelupPanel import PlayerLevelupPanel
 from panelObjs.storePanel import StorePanel
 from panelObjs.itemTipsPanel import ItemTipsPanel
 from panelObjs.rewardsPanel import RewardsPanel
@@ -29,11 +30,13 @@ def gift_pack_click_icon_test(bp:BasePage):
     r = random.randint(0, len(gift_pack_position_list) - 1)
     bp.click_position(gift_pack_position_list[r])
 
-    # 得到弹出的图标
-    item_icon = ItemTipsPanel.get_item_icon(bp)
-
-    # 对比点击的图标和弹出的图标
-    compare(item_icon, gift_pack_icon_list[r])
+    # 得到弹出的图标并对比
+    if ItemTipsPanel.is_panel_active(bp):
+        item_icon = ItemTipsPanel.get_item_icon(bp)
+        compare(item_icon, gift_pack_icon_list[r])
+    elif FishCardPackTipsPanel.is_panel_active(bp):
+        item_icon = FishCardPackTipsPanel.get_item_icon(bp)
+        compare(item_icon, gift_pack_icon_list[r])
 
     # 消去弹出的浮窗
     bp.click_position([0.5, 0.1])
@@ -346,6 +349,7 @@ def fish_card_click_icon_test(bp:BasePage):
     fish_card_main_name = StorePanel.get_fish_card_main_name(bp)  # 主展示卡包名
     fish_card_name = FishCardPackTipsPanel.get_fish_card_name(bp)
     fish_card_name = fish_card_name.replace(" Pack", "")  # 浮窗上卡包名
+    fish_card_name = fish_card_name.replace("卡包", "")  # 浮窗上卡包名
     compare(fish_card_main_name, fish_card_name_list[r])
     compare(fish_card_name_list[r], fish_card_name)
 
@@ -751,25 +755,30 @@ def box_refresh_test(bp: BasePage, box_id_list: list):
         raise SameError
 
 def main(bp: BasePage):
-    # 查询邮件的解锁等级
+    # 查询商城的解锁等级
     unlock_lv = bp.excelTools.get_unlock_lv("商店")
     exp = bp.excelTools.get_exp_limit(unlock_lv)[1]
 
     # 进入大厅
-    cmd_list = ["guideskip", f"add 1 100200 {exp}"]
+    # 设置分层
+    layer = random.randint(1, 5)
+    cmd_list = ["guideskip", f"setPlayerLayer {layer}000", f"add 1 100200 {exp}"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
+
+    # 关闭升级弹窗
+    PlayerLevelupPanel.wait_for_panel_appear(bp)
 
     bp.go_to_panel("StorePanel")
     gift_pack_test(bp)
+    bp.cmd_list([f"setPlayerLayer {layer}000", "refreshshop"])
     cash_test(bp)
     gear_test(bp)
-    # fish_card_test(bp)
+    fish_card_test(bp)
     materials_test(bp)
     box_test(bp)
     bp.go_home()
 
 if __name__ == '__main__':
     bp = BasePage()
-    # bp.set_item_count(target_count=1000000, item_tpid="100200")
     main(bp)
     # box_test(bp)

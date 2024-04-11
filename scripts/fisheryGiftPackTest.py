@@ -23,7 +23,7 @@ def click_icon_test(bp: BasePage):
     elif FishCardPackTipsPanel.is_panel_active(bp):
         item_icon = FishCardPackTipsPanel.get_item_icon(bp)
         compare(item_icon, icon_list[r])
-    bp.click_position_base([0.9, 0.1])
+    bp.click_position([0.5, 0.9])
     print("click_icon_test点击图标测试通过")
 
 def buy_test(bp: BasePage):

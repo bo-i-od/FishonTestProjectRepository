@@ -33,8 +33,8 @@ class TournamentsPanel(BasePage):
 
     def get_entrance_viewport(self):
         size = self.get_size(element_data=ElementsData.Tournaments.panel_sidebar_bg)
-        edge_left = size[0]
-        edge_right = 0
+        edge_left = 0.75 * size[0]
+        edge_right = 0.75 * size[0]
         entrance_viewport = Viewport(self, element_viewport=ElementsData.Tournaments.entrance_viewport, element_item_list=ElementsData.Tournaments.btn_enter_list,viewport_edge=[edge_left, edge_right])
         return entrance_viewport
 
@@ -53,10 +53,10 @@ class TournamentsPanel(BasePage):
 
 
 if __name__ == "__main__":
-    bp = BasePage()
+    bp = BasePage("b6h65hd64p5pxcyh")
     # TournamentsPanel.get_fishery_list(bp)
     entrance_viewport = TournamentsPanel.get_entrance_viewport(bp)
-    entrance_viewport.move_until_appear(entrance_viewport.item_id_list[0])
+    entrance_viewport.move_until_appear(entrance_viewport.item_id_list[3])
 
 
 

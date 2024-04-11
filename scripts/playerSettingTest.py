@@ -16,8 +16,8 @@ def player_test(bp: BasePage):
     PlayerSettingPanel.click_head(bp)
     PlayerSettingPanel.close_edit_profile(bp)
 
-    PlayerSettingPanel.click_flag(bp)
-    PlayerSettingPanel.close_edit_profile(bp)
+    # PlayerSettingPanel.click_flag(bp)
+    # PlayerSettingPanel.close_edit_profile(bp)
 
     PlayerSettingPanel.click_name(bp)
     PlayerSettingPanel.close_edit_profile(bp)
@@ -26,7 +26,7 @@ def player_test(bp: BasePage):
     PlayerSettingPanel.close_edit_profile(bp)
 
     PlayerSettingPanel.click_badge_i(bp)
-    bp.click_position_base([0.5, 0.9])
+    bp.click_position([0.5, 0.9])
 
 
 
@@ -231,6 +231,12 @@ def main(bp: BasePage):
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     HomePanel.go_to_panel(bp,"PlayerSettingPanel")
+
+    # 切换到settings
+    PlayerSettingPanel.click_tab_settings(bp)
+    bp.sleep(1)
+    settings_test(bp)
+
     PlayerSettingPanel.click_tab_player(bp)
     bp.sleep(1)
     player_test(bp)
@@ -238,8 +244,8 @@ def main(bp: BasePage):
     PlayerSettingPanel.open_edit_profile(bp)
     avatar_test(bp)
 
-    PlayerSettingPanel.open_edit_profile(bp)
-    banner_test(bp)
+    # PlayerSettingPanel.open_edit_profile(bp)
+    # banner_test(bp)
 
     PlayerSettingPanel.open_edit_profile(bp)
     name_test(bp)
@@ -247,15 +253,13 @@ def main(bp: BasePage):
     PlayerSettingPanel.open_edit_profile(bp)
     badge_test(bp)
 
-    # 切换到settings
-    PlayerSettingPanel.click_tab_settings(bp)
-    bp.sleep(1)
-    settings_test(bp)
 
-    PlayerSettingPanel.click_tab_language(bp)
-    bp.sleep(1)
-    language_test(bp)
+    # 语言测试
+    # PlayerSettingPanel.click_tab_language(bp)
+    # bp.sleep(1)
+    # language_test(bp)
 
+    # 兑换码测试
     gift_code_test(bp)
 
     bp.go_home()
@@ -263,5 +267,4 @@ def main(bp: BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    # badge_test(bp)
     main(bp)

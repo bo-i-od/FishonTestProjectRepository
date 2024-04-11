@@ -1,3 +1,5 @@
+import re
+
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 
@@ -23,7 +25,9 @@ class TreasureChestRewardsPanel(BasePage):
         while not open_x_n:
             self.clear_popup_once()
             open_x_n = self.get_text_list(element_data=ElementsData.TreasureChestRewards.btn_open)
-        n = open_x_n[0].split('x')[1]
+        pattern = r"\d+"
+        match = re.search(pattern, open_x_n[0])
+        n = match.group()
         return int(n)
 
 if __name__ == '__main__':

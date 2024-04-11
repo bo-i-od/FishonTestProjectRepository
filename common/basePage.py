@@ -1,3 +1,4 @@
+from airtest.core.helper import G
 from poco.drivers.unity3d.device import UnityEditorWindow
 
 from tools.excelRead import ExceTools
@@ -16,6 +17,7 @@ import zlib
 import os
 from configs.elementsData import ElementsData
 from configs.jumpData import JumpData
+from poco.drivers.android.uiautomation import AndroidUiautomationPoco
 
 
 class BasePage:
@@ -23,6 +25,7 @@ class BasePage:
         # unity窗口使用UnityEditorWindow()
         # 手机使用connect_device("android://127.0.0.1:5037/设备号")
         self.is_android = False
+        self.record = False
         #GGGGGGG
         # make sure your poco-sdk in the game runtime listens on the following port.
         # 默认端口 5001
@@ -31,7 +34,7 @@ class BasePage:
         dev = self.get_device(serial_number=serial_number)
         self.poco = UnityPoco(addr, device=dev)
         self.screen_w, self.screen_h = self.poco.get_screen_size()  # 获取屏幕尺寸
-        self.is_debug_log = True
+        self.is_debug_log = False
         if self.is_debug_log:
             print(self.screen_w, self.screen_h)
         self.warning_list = []
@@ -48,8 +51,13 @@ class BasePage:
 
     def get_device(self, serial_number=None):
         if self.is_android:
+            try:
+                dev = G.DEVICE
+                return dev
+            except:
+                print("进行设备连接")
             if serial_number is None:
-                serial_number = "127.0.0.1:21593"
+                serial_number = "127.0.0.1:21503"
             dev = connect_device(f"android://127.0.0.1:5037/{serial_number}")
             # dev = connect_device("android://127.0.0.1:5037/b6h65hd64p5pxcyh")
             # dev = connect_device("android://127.0.0.1:5037/28cce18906027ece")
@@ -59,7 +67,7 @@ class BasePage:
 
 
     # 开启调试打印再打印
-    def debug_log(self, msg):
+    def debug_log(self, *msg:object):
         if self.is_debug_log:
             print(msg)
 
@@ -350,10 +358,31 @@ class BasePage:
     def click_position_base(self, position):
         if not (0 <= position[0] <= 1) or not (0 <= position[1] <= 1):
             raise InvalidOperationError('Click position out of screen. pos={}'.format(repr(position)))
+        if self.record:
+            img = self.get_full_screen_shot()
+            self.draw_circle(img, (position[0], position[1]))
+            self.save_img(img)
         self.poco.agent.input.click(position[0], position[1])
 
 
+    def draw_circle(self, img, center_coordinates):
+        center_coordinates = (int(center_coordinates[0] * self.screen_w), int(center_coordinates[1] * self.screen_h))
+        # 定义圆形的半径
+        radius0 = 20
+        radius1 = 30
+        # 定义圆形的颜色 (B, G, R)
+        color = (0, 0, 255)
+        # 定义圆形的厚度; -1表示圆形将会被填充，默认值是1
+        thickness = 2
+        # 在图片上画一个圆形
+        cv2.circle(img, center_coordinates, 5, color, -1)
+        cv2.circle(img, center_coordinates, radius0, color, thickness)
+        cv2.circle(img, center_coordinates, radius1, color, thickness)
+
+
+
     def click_position(self, position, ignore_set=None):
+        # 清除一遍弹窗
         self.clear_popup(ignore_set)
         self.click_position_base(position)
 
@@ -390,7 +419,7 @@ class BasePage:
     def click_a_until_b_appear_list(self, perform_list: list):
         cur = 0
         while cur < len(perform_list) - 1:
-            print(perform_list[cur], perform_list[cur + 1])
+            # print(perform_list[cur], perform_list[cur + 1])
             self.click_a_until_b_appear(perform_list[cur], perform_list[cur + 1])
             cur += 1
 
@@ -406,14 +435,20 @@ class BasePage:
         self.click_a_until_b_disappear(element_data_a=element_data, element_data_b=element_data)
 
     # 等待指定元素出现
-    def wait_for_appear(self, element_data: dict, is_click: bool = False, interval: float = 0.1):
-        while True:
+    def wait_for_appear(self, element_data: dict, is_click: bool = False, interval: float = 0.2, timeout=120):
+        cur = 0
+        position = []
+        while cur < timeout:
             position = self.get_position_list(element_data=element_data)
             if position:
                 break
             self.sleep(interval)
-        if is_click:
-            self.click_position(position[0])
+            cur += interval
+        if not position:
+            return
+        if not is_click:
+            return
+        self.click_position(position[0])
 
     # 等待指定元素消失
     def wait_for_disappear(self, element_data: dict, interval: float = 0.1):
@@ -493,13 +528,14 @@ class BasePage:
         at_home_flag = True
         while at_home_flag:
             self.clear_panel_except_home()
-            self.sleep(0.1)
+            self.sleep(0.5)
             cur += 1
-            if cur > 100:
+            if cur > 30:
                 raise FindNoElementError
             at_home_flag = (not self.exist(element_data=ElementsData.Home.HomePanel))
             if cur_panel is not None:
                 at_home_flag = at_home_flag or self.exist(element_data=JumpData.panel_dict[cur_panel])
+
 
     def go_to_panel(self, panel):
         if self.exist(element_data=JumpData.panel_dict[panel]):
@@ -509,14 +545,17 @@ class BasePage:
             self.clear_popup_once()
             for element_data in JumpData.panel_open_dict[panel]:
                 self.click_element_safe(element_data=element_data)
+                self.sleep(0.5)
 
     def clear_panel_except_home(self):
         panel_name_list = self.get_name_list(element_data=ElementsData.Panels)
         for panel_name in panel_name_list:
             if panel_name not in JumpData.panel_close_dict:
                 continue
+            self.clear_popup_once()
             for close_element in JumpData.panel_close_dict[panel_name]:
                 self.click_element_safe(element_data=close_element)
+            break
         self.sleep(0.2)
 
     # 元素滑动
@@ -574,11 +613,11 @@ class BasePage:
         img = self.get_screen_shot(ui_x, ui_y, ui_w, ui_h)
         return img
 
-    def draw_circle(self, img, center_x, center_y):
-        # 在指定像素点上绘制圆
-        color = (0, 255, 0)  # 圆的颜色，这里是红色
-
-        cv2.circle(img, (center_x * self.screen_w, center_y * self.screen_h), 10, color, 2)
+    # def draw_circle(self, img, center_x, center_y):
+    #     # 在指定像素点上绘制圆
+    #     color = (0, 255, 0)  # 圆的颜色，这里是红色
+    #
+    #     cv2.circle(img, (center_x * self.screen_w, center_y * self.screen_h), 10, color, 2)
 
         # cv2.circle(img, (center_x * self.screen_w, center_y * self.screen_h), 3, color, 3)
 
@@ -735,7 +774,7 @@ class BasePage:
         rpcMethod.click_button(self.poco, element_data)
 
     # kind包含up，down，click
-    def ray_input(self, element_data:dict, target_name:str, kind:str):
+    def ray_input(self, element_data:dict, target_name: str, kind: str):
         rpcMethod.ray_input(self.poco, element_data, target_name, kind)
 
     # 休息t秒
@@ -752,15 +791,25 @@ class BasePage:
 
 
 
+
+
 if __name__ == '__main__':
-    bp = BasePage()
-    a = bp.excelTools.get_table_data("ACHIEVEMENT_CATEGORY.xlsm")
-    print(a)
-    # lv = 1
-    # while lv < 145:
-    #     a = bp.excelTools.get_exp_limit(lv)
-    #     print(lv, a)
-    #     lv += 1
+    bp = BasePage("192.168.111.77:20088")
+    # "mode 400312 390116"
+    # bp.cmd("mode 400302 390015")
+    # bp.cmd_list(["add 1 100200 1000000", ""])
+    # serial_number = "127.0.0.1:21593"
+    # dev = connect_device(f"android://127.0.0.1:5037/{serial_number}")
+    # poco = AndroidUiautomationPoco()
+    # poco()
+    # a = bp.excelTools.get_table_data("ACHIEVEMENT_CATEGORY.xlsm")
+    #
+    # print(a)
+    lv = 1
+    while lv < 44:
+        a = bp.excelTools.get_exp_limit(lv)
+        print(lv, a)
+        lv += 1
 
 
     # bp.go_home(cur_panel="QuestionnairePanel")

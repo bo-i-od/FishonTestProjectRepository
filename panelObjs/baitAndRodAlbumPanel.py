@@ -105,7 +105,7 @@ class BaitAndRodAlbumPanel(BasePage):
             self.click_element(element_data=ElementsData.BaitAndRodAlbum.toggle_hide_unowned)
         # 点击apply按钮
         self.click_element(element_data=ElementsData.BaitAndRodAlbum.btn_apply)
-        print("筛选成功")
+        # print("筛选成功")
 
     def reset_filter(self):
         self.click_a_until_b_appear(element_data_a=ElementsData.BaitAndRodAlbum.btn_filter, element_data_b=ElementsData.BaitAndRodAlbum.options)
@@ -117,7 +117,7 @@ class BaitAndRodAlbumPanel(BasePage):
         hide_unowned_cur = self.get_toggle_is_on(element_data=ElementsData.BaitAndRodAlbum.toggle_hide_unowned)
         compare(hide_unowned_cur, True)
         self.click_a_until_b_disappear(element_data_a=ElementsData.BaitAndRodAlbum.btn_filter, element_data_b=ElementsData.BaitAndRodAlbum.options)
-        print("筛选重置成功")
+        # print("筛选重置成功")
 
     def get_rod_list(self):
         BaitAndRodAlbumPanel.switch_tab(self, 0)

@@ -17,14 +17,14 @@ class BaitAndRodShowPanel(BasePage):
     def open_and_close_talent(self):
         position = self.click_element(element_data=ElementsData.BaitAndRodShow.talent)
         if not self.exist(element_data=ElementsData.BaitAndRodShow.tips_talent):
-            print("没有成功打开天赋细节")
+            # print("没有成功打开天赋细节")
             return False
         self.click_position(position)
 
     def open_and_close_5d(self):
         position = self.click_element(element_data=ElementsData.BaitAndRodShow.five_dimension)
         if not self.exist(element_data=ElementsData.BaitAndRodShow.tips_five_dimension):
-            print("没有成功打开5d细节")
+            # print("没有成功打开5d细节")
             return False
         self.click_position(position)
 

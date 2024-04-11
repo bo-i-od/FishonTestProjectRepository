@@ -8,6 +8,7 @@ from panelObjs.fishCardUpgradePanel import FishCardUpgradePanel
 from panelObjs.homePanel import HomePanel
 from panelObjs.flashTipsPanel import FlashTipsPanel
 from panelObjs.fishCardGiftPackPanel import FishCardGiftPackPanel
+from panelObjs.playerLevelupPanel import PlayerLevelupPanel
 from panelObjs.rewardsPanel import RewardsPanel
 from panelObjs.itemTipsPanel import ItemTipsPanel
 from panelObjs.fishCardPackTipsPanel import FishCardPackTipsPanel
@@ -75,9 +76,17 @@ def level_up_test(bp: BasePage):
         bp.sleep(0.5)
         # card_information_now = FishCardUpgradePanel.get_card_information(bp)
         # compare(card_information, card_information_now)
+    # 获取战斗力
+    rating = FishCardUpgradePanel.get_rating(bp)
+    rating_fisheries = FishCardUpgradePanel.get_rating_fisheries(bp)
+
+    # 关闭升级面板
     FishCardUpgradePanel.click_btn_close(bp)
+
+    # 关闭鱼卡礼包弹窗
     if FishCardGiftPackPanel.is_panel_active(bp):
         FishCardGiftPackPanel.click_btn_close(bp)
+    return rating, rating_fisheries
 
 
 def select_card_test(bp: BasePage):
@@ -170,12 +179,13 @@ def FishCardGiftPackPanel_test(bp: BasePage):
     #     item_count_expect_list[cur] += quantity_list[cur]
     #     cur += 1
     FishCardGiftPackPanel.click_btn_buy(bp)
+    bp.sleep(1)
+    bp.clear_popup()
     RewardsPanel.wait_for_panel_appear(bp)
     reward_dict = RewardsPanel.get_reward_dict(bp)
     compare_dict(item_dict, reward_dict)
     # item_count_list = bp.get_item_count_list(item_icon_name_list=icon_list)
     # compare_list(item_count_expect_list, item_count_list)
-    RewardsPanel.wait_for_panel_appear(bp)
     bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
     print("buy_pack_test购买礼包测试通过")
@@ -190,7 +200,7 @@ def click_pack_icon_test(bp: BasePage, icon_list):
     elif FishCardPackTipsPanel.is_panel_active(bp):
         item_icon = FishCardPackTipsPanel.get_item_icon(bp)
     compare(item_icon, icon_list[r])
-    bp.click_position_base([0.9, 0.1])
+    bp.click_position([0.5, 0.9])
     print("click_pack_icon_test点击图标测试通过")
 
 def click_tips_test(bp: BasePage):
@@ -201,12 +211,20 @@ def click_tips_test(bp: BasePage):
     if FishCardPanel.is_tips_cardbonus_active(bp):
         raise FindElementError
 
+def rating_test(bp: BasePage, rating_expect, rating_fisheries_expect):
+    rating = FishCardPanel.get_rating(bp)
+    rating_fisheries = FishCardPanel.get_rating_fisheries(bp)
+    compare(rating_expect, rating)
+    compare(rating_fisheries_expect, rating_fisheries)
+
 def main(bp: BasePage):
     # 进入大厅
     r1 = random.randint(8, 22)
     r2 = random.randint(23, 37)
     cmd_list = ["guideskip", "add 1 100000 1234567890", "add 1 100200 123456", f"add 10 1000{str(r1).zfill(3)} 1", f"add 10 1000{str(r2).zfill(3)} 500000"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
+    # 关闭升级弹窗
+    PlayerLevelupPanel.wait_for_panel_appear(bp)
 
     # 进入鱼卡系统
     bp.go_to_panel("FishCardPanel")
@@ -215,14 +233,27 @@ def main(bp: BasePage):
     AchievementPopupPanel.wait_for_panel_disappear(bp)
 
     select_card_test(bp)
-    level_up_test(bp)
+
+    rating, rating_fisheries = level_up_test(bp)
+
+    # 看战力是否更新
+    rating_test(bp, rating, rating_fisheries)
     FishCardGiftPackPanel_test(bp)
-    FishCardPanel.click_btn_close(bp)
+
+    # 跟大厅的战斗力对比
+    rating_expect = FishCardPanel.get_rating(bp)
+    rating_expect_list = [unit_conversion_int_to_str_chs(rating_expect), unit_conversion_int_to_str(rating_expect)]
+    bp.go_home()
+    rating = remove_decimals(HomePanel.get_rating(bp))
+    if rating not in rating_expect_list:
+        print(rating, rating_expect_list)
+        raise DifferError
 
 
 if __name__ == "__main__":
-    bp = BasePage()
-    main(bp)
+    bp = BasePage("127.0.0.1:21503")
+    FishCardGiftPackPanel_test(bp)
+    # main(bp)
 
 
 

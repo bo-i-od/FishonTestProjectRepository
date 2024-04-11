@@ -55,17 +55,25 @@ class FishCardUpgradePanel(BasePage):
         # progress_numerator = int(progress_split[0])
         # progress_denominator = int(progress_split[1])
         level = int(self.get_text(element_data=ElementsData.FishCardUpgrade.level_selected))
-        talent = self.get_text(element_data=ElementsData.FishCardUpgrade.talent_selected)
-        talent = positive_percentage_to_float(talent)
+        rating_card = int(self.get_text(element_data=ElementsData.FishCardUpgrade.rating_card))
+
         # title_bg = self.get_icon(element_data=ElementsData.FishCardUpgrade.title_bg_selected)
         card_information = {"fish_name": fish_name,
                             # "fisheries_name": fisheries_name,
                             # "progress_numerator": progress_numerator,
                             # "progress_denominator": progress_denominator,
                             "level": level,
-                            "talent": talent}
+                            "rating_card": rating_card}
                             # "title_bg": title_bg
         return card_information
+
+    def get_rating(self):
+        rating = int(self.get_text(element_data=ElementsData.FishCardUpgrade.rating))
+        return rating
+
+    def get_rating_fisheries(self):
+        rating = int(self.get_text(element_data=ElementsData.FishCardUpgrade.rating_fisheries))
+        return rating
 
     def get_level_up_information(self):
         level_up_information = {}
