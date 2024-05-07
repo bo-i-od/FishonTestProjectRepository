@@ -103,5 +103,5 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage()
+    bp = BasePage("192.168.111.81:20012")
     main(bp)

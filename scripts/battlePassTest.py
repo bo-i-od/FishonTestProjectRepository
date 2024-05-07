@@ -18,9 +18,7 @@ from panelObjs.rodMoreToOnePanel import RodMoreToOnePanel
 from common.resource import *
 from common.basePage import BasePage
 from common.viewport import Viewport
-
-
-
+from scripts.duelTest import random_duelcup, circulate_duel
 
 
 def click_icon_buy_level_test(bp:BasePage):
@@ -73,6 +71,9 @@ def buy_level_test(bp:BasePage):
     cash_expect = BattlePassBuyLevelPanel.get_cash(bp)
     BattlePassBuyLevelPanel.click_btn_buy(bp)
     bp.sleep(1)
+    if RewardsPanel.is_panel_active(bp):
+        RewardsPanel.click_tap_to_claim(bp)
+        bp.sleep(1)
     if cost > cash_expect:
         cash = BattlePassBuyLevelPanel.get_cash(bp)
         compare(cash_expect, cash)
@@ -115,14 +116,21 @@ def jump_test(bp:BasePage):
     BattlePassIntroPanel.close_battlePassIntroPanel(bp)
     print("jump_test跳转测试通过")
 
-def buy_premium_test(bp:BasePage, index):
+def buy_premium_test(bp:BasePage):
+    # 买付费通行证
+    r = random.randint(0, 1)
     BattlePassPanel.click_btn_get_premium(bp)
     bp.sleep(1)
-    if index == 0:
+    if r == 0:
         BattlePassBuyLicensePanel.click_btn_buy_standard(bp)
     else:
         BattlePassBuyLicensePanel.click_btn_buy_pro(bp)
     BattlePassBuyLicensePanel.wait_for_pay_result(bp)
+    bp.sleep(1)
+    if r == 1:
+        RewardsPanel.wait_for_panel_appear(bp)
+        bp.sleep(1)
+        RewardsPanel.click_tap_to_claim(bp)
 
 
 def BattlePassRewardPanel_test(bp:BasePage):
@@ -292,17 +300,21 @@ def RodMoreToOnePanel_test(bp:BasePage):
     bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
     bp.sleep(1)
+
+    if not bp.is_pay:
+        return
     RodMoreToOnePanel.click_btn_close(bp)
+    bp.sleep(1)
     if RodMoreToOnePanel.is_panel_active(bp):
         raise FindElementError
-    print("RodMoreToOnePanel_test鱼竿三选一测试通过")
+
 
 def main(bp:BasePage):
     # 登录到大厅
     cmd_list = ["guideskip", "add 1 100200 123456"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
-    # 关闭升级弹窗
-    PlayerLevelupPanel.wait_for_panel_appear(bp)
+    # # 关闭升级弹窗
+    # PlayerLevelupPanel.wait_for_panel_appear(bp)
 
     # 进入BP界面
     bp.go_to_panel("BattlePassPanel")
@@ -340,14 +352,15 @@ def main(bp:BasePage):
     BattlePassPanel.click_btn_buy_levels(bp)
     buy_level_test(bp)
 
+
     # 买付费通行证
-    r = random.randint(0, 1)
-    buy_premium_test(bp, r)
-    bp.sleep(1)
-    if r == 1:
-        RewardsPanel.wait_for_panel_appear(bp)
+    if bp.is_pay:
+        buy_premium_test(bp)
+    else:
+        BattlePassPanel.click_btn_get_premium(bp)
         bp.sleep(1)
-        RewardsPanel.click_tap_to_claim(bp)
+        BattlePassBuyLicensePanel.click_btn_close(bp)
+        bp.sleep(1)
 
     # 绿钞足购买等级
     bp.set_item_count(target_count=10000, item_tpid="100100")
@@ -371,6 +384,16 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21503")
+    bp = BasePage("192.168.111.78:20085")
     main(bp)
+    # cur = 0
+    # while cur < 80:
+    #
+    #     # clear_duelcup(bp)
+    #     # dc = random_duelcup(bp, 4)
+    #     # print(dc)
+    #     r = random.randint(0, 7)
+    #     circulate_duel(bp, r)
+    #     cur += 1
+    #     print(f"第{cur}次钓鱼")
 

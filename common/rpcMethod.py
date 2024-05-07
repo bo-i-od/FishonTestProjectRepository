@@ -169,12 +169,24 @@ def set_btn_enabled(poco, element, enabled):
     return poco.agent.c.call("SetBtnEnabled", element, enabled)
 
 @sync_wrapper
+def set_object_active(poco, element, active):
+    return poco.agent.c.call("SetObjectActive", element, active)
+
+@sync_wrapper
+def set_object_active_by_id(poco, id_list, offspring_path, active):
+    return poco.agent.c.call("SetObjectActiveById", id_list, offspring_path, active)
+
+@sync_wrapper
 def click_button(poco, element):
     return poco.agent.c.call("ClickButton", element)
 
 @sync_wrapper
 def ray_input(poco, element, target_name, kind):
     return poco.agent.c.call("RayInput", element, target_name, kind)
+
+@sync_wrapper
+def set_time_scale(poco):
+    return poco.agent.c.call("SetTimeScale")
 
 
 

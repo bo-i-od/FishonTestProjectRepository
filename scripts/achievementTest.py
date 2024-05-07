@@ -352,8 +352,8 @@ def main(bp:BasePage):
     # 登录到大厅
     cmd_list = ["guideskip", "add 1 100200 12345"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
-    # 关闭升级弹窗
-    PlayerLevelupPanel.wait_for_panel_appear(bp)
+    # # 关闭升级弹窗
+    # PlayerLevelupPanel.wait_for_panel_appear(bp)
 
     bp.go_to_panel("AchievementPanel")
     tips_test(bp)
@@ -369,6 +369,6 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage()
+    bp = BasePage("192.168.111.81:20012")
     main(bp)
 

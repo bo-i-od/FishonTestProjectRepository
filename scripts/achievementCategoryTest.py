@@ -76,6 +76,7 @@ def category_test(bp: BasePage):
 
     # 随机选一个鱼种完成
     table_open_index_list = AchievementCategoryPanel.get_table_open_index_list(bp, table_data=table_data)
+    print(table_open_index_list)
     # r = random.randint(0, len(table_open_index_list) - 1)
     r = 7
     AchievementCategoryPanel.do_category(bp, table_data=table_data, index=r)
@@ -140,14 +141,14 @@ def main(bp: BasePage):
     cmd_list = ["guideskip", "add 1 100200 123456789", "add 1 100500 1234"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
-    # 关闭升级弹窗
-    PlayerLevelupPanel.wait_for_panel_appear(bp)
+    # # 关闭升级弹窗
+    # PlayerLevelupPanel.wait_for_panel_appear(bp)
 
     # 升级
     unlock_test(bp)
     category_test(bp)
 
 if __name__ == '__main__':
-    bp = BasePage()
+    bp = BasePage("b6h65hd64p5pxcyh")
     main(bp)
 

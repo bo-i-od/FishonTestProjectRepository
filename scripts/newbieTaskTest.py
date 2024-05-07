@@ -60,6 +60,9 @@ def party_sale_test(bp: BasePage):
         compare(item_icon, item_icon_list[r])
     bp.click_position([0.5, 0.1])
 
+    if not bp.is_pay:
+        return
+
     # 之后需要补充装备的数量测试
     gear_icon = item_icon_list[0]
     gear_quantity = item_quantity_list[0]
@@ -103,23 +106,23 @@ def leaderboard_test(bp: BasePage):
     bp.sleep(1)
     LeaderBoardPanel.click_tap_to_close(bp)
 
-    # 得到排名奖励
-    rewards_icon_list = LeaderBoardPanel.get_rewards_icon_list(bp)
-    # rewards_quantity_list = LeaderBoardPanel.get_rewards_quantity_list(bp)
-    rewards_position_list = LeaderBoardPanel.get_rewards_position_list(bp)
-    # rewards_dict = resource.make_item_dict(item_icon_list=rewards_icon_list, item_quantity_list=rewards_quantity_list)
-
-    # 点击图标
-    r = random.randint(0, len(rewards_position_list) - 1)
-    bp.click_position(rewards_position_list[r])
-    bp.sleep(1)
-    if ItemTipsPanel.is_panel_active(bp):
-        item_icon = ItemTipsPanel.get_item_icon(bp)
-        compare(rewards_icon_list[r], item_icon)
-    elif FishCardPackTipsPanel.is_panel_active(bp):
-        item_icon = FishCardPackTipsPanel.get_item_icon(bp)
-        compare(rewards_icon_list[r], item_icon)
-        bp.click_position([0.5, 0.9])
+    # # 得到排名奖励
+    # rewards_icon_list = LeaderBoardPanel.get_rewards_icon_list(bp)
+    # # rewards_quantity_list = LeaderBoardPanel.get_rewards_quantity_list(bp)
+    # rewards_position_list = LeaderBoardPanel.get_rewards_position_list(bp)
+    # # rewards_dict = resource.make_item_dict(item_icon_list=rewards_icon_list, item_quantity_list=rewards_quantity_list)
+    #
+    # # 点击图标
+    # r = random.randint(0, len(rewards_position_list) - 1)
+    # bp.click_position(rewards_position_list[r])
+    # bp.sleep(1)
+    # if ItemTipsPanel.is_panel_active(bp):
+    #     item_icon = ItemTipsPanel.get_item_icon(bp)
+    #     compare(rewards_icon_list[r], item_icon)
+    # elif FishCardPackTipsPanel.is_panel_active(bp):
+    #     item_icon = FishCardPackTipsPanel.get_item_icon(bp)
+    #     compare(rewards_icon_list[r], item_icon)
+    #     bp.click_position([0.5, 0.9])
 
     # # 得到前100奖励
     # top_100_rewards_icon_list = LeaderBoardPanel.get_top_100_rewards_icon_list(bp)
@@ -286,7 +289,7 @@ def collect_test(bp:BasePage):
 
 def progress_test(bp:BasePage):
     # 让刚好有三个奖励可领取
-    bp.set_item_count(target_count=20000, item_tpid="209012")
+    bp.set_item_count(target_count=3000, item_tpid="209012")
 
     # 拿到除鱼竿外的奖励及数量
     reward_status = NewbieTaskPanel.get_progress_reward_status(bp)
@@ -443,6 +446,7 @@ def main(bp: BasePage):
     # 派对礼包测试
     party_sale_test(bp)
     bp.go_to_panel("NewbieTaskPanel")
+    bp.sleep(1)
 
     # tips测试
     tips_test(bp)
@@ -508,5 +512,5 @@ def main(bp: BasePage):
     bp.go_home()
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.77:20024")
+    bp = BasePage("ABSHUT1818002287")
     main(bp)

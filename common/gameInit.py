@@ -28,18 +28,27 @@ def login(bp: BasePage, username):
     # while not LoginPanel.is_panel_active(bp):
     #     EntryUpdateLoading.click_tap_to_start(bp)
     # 选服务器
-    LoginPanel.set_server(bp, 3)
+    LoginPanel.set_server(bp, 4)
     LoginPanel.set_login_name(bp, username)
 
     LoginPanel.click_btn_login(bp)
-    LoadingPanel.wait_until_panel_disappear(bp)
+    bp.sleep(2)
+    LoadingPanel.wait_until_panel_disappear(bp, is_wait_for_appear=False)
 
+def set_joystick(bp:BasePage, state="FLOATING"):
+    if state == "FLOATING":
+        bp.lua_console( "SettingMgr:Write(_G.FISH_SETTING_JOYSTICK.JOYSTICK_NAME, _G.FISH_SETTING_JOYSTICK.TYPE_FLOATING)")
+        return
+    if state == "FIXED":
+        bp.lua_console( "SettingMgr:Write(_G.FISH_SETTING_JOYSTICK.JOYSTICK_NAME, _G.FISH_SETTING_JOYSTICK.TYPE_FIXED)")
+        return
 
 def account_init(bp: BasePage, player_name, cmd_list):
     while not PlayerEditNamePanel.is_panel_active(bp):
         bp.sleep(0.1)
     PlayerEditNamePanel.set_player_name(bp, player_name)
     bp.cmd_list(cmd_list)
+    set_joystick(bp)
     bp.sleep(1)
     PlayerEditNamePanel.click_confirm(bp)
 

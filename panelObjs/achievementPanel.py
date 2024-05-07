@@ -70,9 +70,11 @@ class AchievementPanel(BasePage):
 
     def get_viewport(self):
         size = self.get_size_list(element_data=ElementsData.Achievement.achievement_list)[0]
-        edge = [0, 1.5 * size[0] + 0.01]
-
-        viewport = Viewport(self, element_viewport=ElementsData.Achievement.viewport, element_item_list=ElementsData.Achievement.achievement_list, viewport_direction="row", viewport_edge=edge)
+        viewport = Viewport(self, element_viewport=ElementsData.Achievement.viewport, element_item_list=ElementsData.Achievement.achievement_list,viewport_direction="row")
+        viewport.viewport_range = [viewport.viewport_range[0], 1]
+        edge = [0.01, 0.01]
+        viewport.viewport_edge = edge
+        viewport.viewport_range_shift()
         return viewport
 
     def get_group_name(self, achievement_id):
@@ -90,8 +92,13 @@ class AchievementPanel(BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage()
-
+    bp = BasePage("R5CT22NJ44H")
+    a = bp.get_size_list(element_data=ElementsData.Achievement.achievement_list)
+    achievement_id_list = bp.get_object_id_list(element_data=ElementsData.Achievement.achievement_list)
+    print(bp.get_position_list(element_data=ElementsData.Achievement.achievement_list))
+    print(bp.get_position_list(object_id_list=achievement_id_list))
+    print(AchievementPanel.get_viewport(bp).viewport_range)
+    print(a)
 
 
 

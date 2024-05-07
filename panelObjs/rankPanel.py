@@ -6,7 +6,6 @@ class RankPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.Rank.btn_close)
 
-
     def is_panel_active(self):
         if self.exist(element_data=ElementsData.Rank.RankPanel):
             return True
@@ -56,6 +55,24 @@ class RankPanel(BasePage):
             data_list.append(cur)
             cur += 1
         return data_list, no_data_list
+
+    def get_photo_id_list(self):
+        return self.get_object_id_list(element_data=ElementsData.Rank.photo_list)
+
+    def get_rank_data(self, index):
+        photo_id_list = RankPanel.get_photo_id_list(self)
+        rank_data = {
+            "player_name": self.get_text(object_id=photo_id_list[index], offspring_path="player_info>player_name"),
+            "division": self.get_icon(object_id=photo_id_list[index], offspring_path="player_info>division"),
+            "lv": self.get_text(object_id=photo_id_list[index], offspring_path="player_info>lv"),
+            "rating": self.get_text(object_id=photo_id_list[index], offspring_path="player_info>rating>num"),
+            "head_img": self.get_icon(object_id=photo_id_list[index], offspring_path="player_info>head>head_mask>head_img"),
+            "rank": self.get_icon(object_id=photo_id_list[index], offspring_path="rank"),
+            "fish": self.get_icon_list(object_id=photo_id_list[index], offspring_path="fish"),
+            "fish_black": self.get_icon_list(object_id=photo_id_list[index], offspring_path="fish_black"),
+            "fish_name": self.get_text(object_id=photo_id_list[index], offspring_path="fish_name"),
+            "points": self.get_text(object_id=photo_id_list[index], offspring_path="points")}
+        return rank_data
 
 if __name__ == '__main__':
     bp = BasePage()

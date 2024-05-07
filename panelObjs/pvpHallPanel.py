@@ -14,6 +14,9 @@ class PVPHallPanel(BasePage):
         if PVPHallPanel.is_panel_active(self):
             raise FindElementError
 
+    def wait_for_panel_appear(self):
+        self.wait_for_appear(element_data=ElementsData.PVPHall.PVPHallPanel)
+
     def click_btn_play(self, index=0):
         size_list = self.get_size_list(element_data=ElementsData.PVPHall.btn_play_list)
         edge_left = size_list[0][0]
@@ -29,13 +32,16 @@ class PVPHallPanel(BasePage):
             if not position_list:
                 return
             self.click_position(position_list[index])
-            self.sleep(0.5)
+            self.sleep(1)
 
     def click_btn_turntable(self):
         self.click_element(element_data=ElementsData.PVPHall.btn_turntable)
 
     def click_btn_i(self):
         self.click_element(element_data=ElementsData.PVPHall.btn_i)
+
+    def click_btn_leaderboard(self):
+        self.click_element(element_data=ElementsData.PVPHall.btn_leaderboard)
 
 if __name__ == '__main__':
     bp = BasePage()

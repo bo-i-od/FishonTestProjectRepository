@@ -15,10 +15,12 @@ class JumpData:
         "LeaderBoardPopResultPanel",
         # "NBG_prepare_2_album_01(Clone)",
         "PlayerLevelupPanel",
+        "PVENewbieGiftPackPanel",
         "PVPBoosterGiftPackPanel",
         "Recharge1And1Panel",
         "BattleTreasureMapPanel",
-        "MessageBoxPanel"
+        "MessageBoxPanel",
+        "EventSignSevenDayPanel"
     }
 
     panel_close_dict = {
@@ -43,11 +45,13 @@ class JumpData:
         "BattleTreasureMapPanel":[ElementsData.BattleTreasureMap.btn_close],
         "BuyEnergyPanel": [ElementsData.BuyEnergy.btn_close],
         "ChampointshipResultPopup": [ElementsData.ChampointshipResult.btn_close],
+        "CommonWebViewPanel":[ElementsData.CommonWebView.btn_close],
         "DailyTipsPanel": [ElementsData.DailyTips.btn_close],
         "DivisionChangePanel": [ElementsData.DivisionChange.tap_to_close],
         "DivisionLeaderboardPanel":[ElementsData.DivisionLeaderboard.btn_close],
         "DivisionListPanel":[ElementsData.DivisionList.btn_close],
         "DLCDownloadPanel": [ElementsData.DLCDownload.btn_close],
+        "EventSignSevenDayPanel":[ElementsData.EventSignSevenDay.btn_receive, ElementsData.Rewards.tap_to_claim],
         "FishAlbum3DPanel":[ElementsData.FishAlbum3D.btn_close],
         "FishAlbumPreviewPanel": [ElementsData.FishAlbumPreview.btn_close],
         "FishBagPanel": [ ElementsData.FishBag.btn_close],
@@ -68,10 +72,12 @@ class JumpData:
         "NewbieTaskPanel":[ElementsData.NewbieTask.btn_close],
         # "NBG_prepare_2_album_01(Clone)": [ElementsData.NewbieGuide.NBG_prepare_2_album_01, ElementsData.NewbieGuide.NBG_prepare_2_album_02, ElementsData.NewbieGuide.NBG_prepare_2_album_03, ElementsData.NewbieGuide.NBG_album_01, ElementsData.NewbieGuide.NBG_album_02, ElementsData.NewbieGuide.NBG_album_03, ElementsData.NewbieGuide.NBG_prepare_weak_01],
         "PartySalePanel":[ElementsData.PartySale.btn_close],
+        "PlayerInfoPanel": [ElementsData.PlayerInfo.btn_close_additional, ElementsData.PlayerInfo.btn_confirm, ElementsData.PlayerInfo.btn_close],
         "PlayerSettingPanel": [ElementsData.PlayerSetting.btn_close_additional, ElementsData.PlayerSetting.btn_close],
         "PlayerLevelupPanel": [ElementsData.PlayerLevelup.tap_to_continue],
         "PVPBoosterGiftPackPanel": [ElementsData.PVPBoosterGiftPack.btn_close],
         "ProgressRewardsPanel":[ElementsData.ProgressRewards.btn_close],
+        "PVENewbieGiftPackPanel":[ElementsData.PVENewbieGiftPack.btn_close],
         "PVPHallPanel": [ElementsData.PVPHall.btn_close],
         "PVPResultPanel": [ElementsData.PVPResult.tap_to_close],
         "PVPRuleTipsPanel": [ElementsData.PVPRuleTips.btn_close],
@@ -108,7 +114,8 @@ class JumpData:
         "GearPanel": [ElementsData.Home.btn_gears],
         "MailPanel": [ElementsData.Home.btn_mail],
         "NewbieTaskPanel": [ElementsData.Home.btn_rookie3days],
-        "PlayerSettingPanel": [ElementsData.Home.player_info],
+        "PlayerSettingPanel": [ElementsData.Home.player_info, ElementsData.PlayerInfo.btn_setting],
+        "PlayerInfoPanel":[ElementsData.Home.player_info],
         "ProgressRewardsPanel": [ElementsData.Home.btn_globa_progress],
         "PVPHallPanel": [ElementsData.Home.btn_pvp],
         "QuestionnairePanel": [ElementsData.Home.btn_questionnaire],
@@ -139,6 +146,7 @@ class JumpData:
         "MailPanel": ElementsData.Mail.MailPanel,
         "NewbieTaskPanel": ElementsData.NewbieTask.NewbieTaskPanel,
         "PlayerSettingPanel": ElementsData.PlayerSetting.PlayerSettingPanel,
+        "PlayerInfoPanel": ElementsData.PlayerInfo.PlayerInfoPanel,
         "ProgressRewardsPanel": ElementsData.ProgressRewards.ProgressRewardsPanel,
         "PVPHallPanel": ElementsData.PVPHall.PVPHallPanel,
         "QuestionnairePanel": ElementsData.Questionnaire.QuestionnairePanel,
@@ -150,5 +158,5 @@ class JumpData:
         "StorePanel": ElementsData.Store.StorePanel,
         "TaskPanel": ElementsData.Task.TaskPanel,
         "TournamentsPanel": ElementsData.Tournaments.TournamentsPanel,
-        "TreasureChestPanel": ElementsData.TreasureChest.TreasureChestPanel,
+        "TreasureChestPanel": ElementsData.TreasureChest.TreasureChestPanel
     }

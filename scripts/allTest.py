@@ -1,7 +1,9 @@
 import traceback
 
 from airtest.core.api import connect_device
-from scripts import achievementTest, achievementCategoryTest, achievementWantedTest, battlePassTest, dlcDownloadTest, energyTest, fishCardTest, gearTest, guideTest, mailTest,minitaskTest, playerSettingTest, progressRewardsTest, storeTest, taskTest, treasureChestTest
+from scripts import achievementTest, achievementCategoryTest, achievementWantedTest, battlePassTest, dlcDownloadTest, \
+    energyTest, fishCardTest, gearTest, guideTest, mailTest, minitaskTest, playerSettingTest, progressRewardsTest, \
+    storeTest, taskTest, treasureChestTest, newbieTaskTest, duelTest, rankTest
 
 from common.basePage import BasePage
 from common import gameInit
@@ -9,12 +11,14 @@ from common import gameInit
 if __name__ == '__main__':
     # serial_number = "b6h65hd64p5pxcyh"
     # serial_number = "127.0.0.1:21503"
-    serial_number = "192.168.111.77:20024"
+    serial_number = "ABSHUT1818002287"
     connect_device(f"android://127.0.0.1:5037/{serial_number}")
-    test_list = [ playerSettingTest, battlePassTest, dlcDownloadTest, energyTest, fishCardTest, gearTest, guideTest, mailTest, minitaskTest, progressRewardsTest, storeTest,  treasureChestTest, taskTest, achievementTest, achievementCategoryTest, achievementWantedTest]
-    cur = 0
+    test_list = [playerSettingTest, battlePassTest, dlcDownloadTest, energyTest, fishCardTest, gearTest, guideTest, mailTest, minitaskTest, storeTest,  newbieTaskTest, treasureChestTest, taskTest,  achievementCategoryTest, achievementWantedTest, achievementTest, duelTest, rankTest]
+    print(f"当前测试模块共计{len(test_list)}个")
+    cur = 13
     retry_times = 0
     res_list = []
+
     while cur < len(test_list):
         # 重试3次
         if retry_times > 2:

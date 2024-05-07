@@ -44,7 +44,8 @@ class FishCardUpgradePanel(BasePage):
 
 
     def get_stock(self):
-        stock = resource.get_resource(self, "100000", element_data=ElementsData.FishCardUpgrade.text_100000)
+        stock = self.get_item_count(item_tpid="100000")
+        # stock = resource.get_resource(self, "100000", element_data=ElementsData.FishCardUpgrade.text_100000)
         return stock
 
     def get_card_information(self):

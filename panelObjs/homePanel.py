@@ -1,3 +1,5 @@
+import re
+
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 
@@ -45,6 +47,22 @@ class HomePanel(BasePage):
         if self.exist(element_data=ElementsData.Home.btn_questionnaire):
             return True
         return False
+
+    def get_level(self):
+        player_lv = self.get_text(element_data=ElementsData.Home.player_lv)
+        return player_lv
+
+    def get_player_info(self):
+        lv = int(self.get_text(element_data=ElementsData.Home.player_lv))
+        rating = int(self.get_text(element_data=ElementsData.Home.rating))
+        player_info = {
+            "player_name": self.get_text(element_data=ElementsData.Home.player_name),
+            "head_img": self.get_icon(element_data=ElementsData.Home.head_img),
+            "lv": lv,
+            "rating": rating,
+        }
+        return player_info
+
 
     class Minitask(BasePage):
         def click_btn_recommend(self):

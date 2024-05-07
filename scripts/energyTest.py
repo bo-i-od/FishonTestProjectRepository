@@ -6,21 +6,10 @@ from panelObjs.buyEnergyPanel import BuyEnergyPanel
 from panelObjs.rewardsPanel import RewardsPanel
 from tools.commonTools import *
 
-
-def main(bp: BasePage):
-    # 登录到大厅
-    cmd_list = ["guideskip"]
-    gameInit.login_to_hall(bp, cmd_list=cmd_list)
-
-    # 获取体力上限
-    table_data = bp.excelTools.get_table_data("GLOBAL_VALUE.xlsm")
-    index = table_data['key'].index("ENERGY_LIMIT_MAX")
-    energy_max = int(table_data['value'][index])
-
+def energy_drink_test(bp: BasePage):
     # 设定体力
     energy = random.randint(0, 200)
     bp.set_item_count(target_count=energy, item_tpid="100500")
-
     # 设定绿钞
     bp.set_item_count(target_count=0, item_tpid="100100")
 
@@ -76,6 +65,8 @@ def main(bp: BasePage):
     energy = BuyEnergyPanel.get_energy_value(bp)
     compare(energy_expect, energy)
 
+def energy_cash_test(bp:BasePage):
+    energy = BuyEnergyPanel.get_energy_value(bp)
     # cash买
     while BuyEnergyPanel.get_btn_cash_status(bp) != 2:
         cash_cost = BuyEnergyPanel.get_cash_cost(bp)
@@ -91,10 +82,17 @@ def main(bp: BasePage):
         # 等待动画播放完
         bp.sleep(1)
 
+def energy_cash_usd_test(bp:BasePage):
+    if not bp.is_pay:
+        return
+    # 获取体力上限
+    table_data = bp.excelTools.get_table_data("GLOBAL_VALUE.xlsm")
+    index = table_data['key'].index("ENERGY_LIMIT_MAX")
+    energy_max = int(table_data['value'][index])
+    energy = BuyEnergyPanel.get_energy_value(bp)
     # cash_usd买
     cur = 1
     while BuyEnergyPanel.get_btn_cash_usd_status(bp) != 2 and energy_max > energy:
-
         cash_usd_recovery_value = BuyEnergyPanel.get_cash_usd_recovery_value(bp)
         energy_expect = cash_usd_recovery_value + energy
         BuyEnergyPanel.click_btn_cash_usd(bp)
@@ -110,19 +108,35 @@ def main(bp: BasePage):
         if cur > 5:
             continue
         # 分别测0，小，中，大，超R
-        cmd = f"setPlayerLayer {cur}000"
+        layer = f"{cur}000"
+        bp.debug_log(f"当前分层为{layer}")
+        cmd = f"setPlayerLayer " + layer
         bp.cmd(command=cmd)
         BuyEnergyPanel.click_tap_to_close(bp)
         # 关闭打开刷新
         bp.go_to_panel("BuyEnergyPanel")
         bp.sleep(1)
 
+def main(bp: BasePage):
+    # 登录到大厅
+    cmd_list = ["guideskip"]
+    gameInit.login_to_hall(bp, cmd_list=cmd_list)
+
+    # 喝饮料测试
+    energy_drink_test(bp)
+
+    # 钻石购买测试
+    energy_cash_test(bp)
+
+    # 充值测试
+    energy_cash_usd_test(bp)
+
     # 关闭页面
     BuyEnergyPanel.click_tap_to_close(bp)
 
 
 if __name__ == '__main__':
-    bp = BasePage()
+    bp = BasePage("192.168.111.81:20012")
     main(bp)
 
 

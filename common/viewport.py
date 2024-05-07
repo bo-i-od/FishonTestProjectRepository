@@ -1,23 +1,25 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 class Viewport:
-    def __init__(self, bp, element_viewport, element_item_list=None, item_id_list=None, viewport_direction=None, viewport_edge=None):
+    def __init__(self, bp, element_viewport, element_item_list=None, item_id_list=None, viewport_direction=None,viewport_range=None, viewport_edge=None):
         self.basePage = bp
         self.element_viewport = element_viewport
         self.element_item_list = element_item_list
         self.viewport_objectId = self.get_viewport_object_id()
         self.viewport_position = self.get_viewport_position()
         self.item_id_list = item_id_list
+        self.viewport_range = viewport_range
+        self.viewport_edge = viewport_edge
         if self.item_id_list is None:
             self.item_id_list = self.get_item_id_list()
         self.viewport_direction = viewport_direction
         if self.viewport_direction is None:
             self.viewport_direction = self.get_viewport_direction()
         self.viewport_size = self.get_viewport_size()
-        self.viewport_range = self.get_viewport_range()
-        if viewport_edge is not None:
-            self.viewport_range[0] += viewport_edge[0]
-            self.viewport_range[1] -= viewport_edge[1]
+        if self.viewport_range is None:
+            self.viewport_range = self.get_viewport_range()
+        if self.viewport_edge is not None:
+            self.viewport_range_shift()
 
         self.delta_len = self.get_delta_len()
 
@@ -95,6 +97,10 @@ class Viewport:
             range_start = position[0] - size[0] * 0.5
             range_end = position[0] + size[0] * 0.5
         return [range_start, range_end]
+
+    def viewport_range_shift(self):
+        self.viewport_range[0] += self.viewport_edge[0]
+        self.viewport_range[1] -= self.viewport_edge[1]
 
     def get_viewport_size(self):
         viewport_size = self.basePage.get_size(element_data=self.element_viewport)

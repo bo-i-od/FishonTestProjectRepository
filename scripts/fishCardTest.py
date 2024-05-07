@@ -1,5 +1,7 @@
 import random
 
+from airtest.core.api import connect_device
+
 from common.basePage import BasePage
 from panelObjs.achievementPopupPanel import AchievementPopupPanel
 from panelObjs.commonItemGetPanel import CommonItemGetPanel
@@ -14,6 +16,7 @@ from panelObjs.itemTipsPanel import ItemTipsPanel
 from panelObjs.fishCardPackTipsPanel import FishCardPackTipsPanel
 from panelObjs.storePanel import StorePanel
 from common import resource, gameInit
+from scripts import createUsers
 from tools.commonTools import *
 def FishCardUpgradePanel_test(bp: BasePage):
     # 比较卡面和右侧面板数值
@@ -50,7 +53,6 @@ def FishCardUpgradePanel_test(bp: BasePage):
         talent_val_expect = level_up_information_now["talent_val_next_list"][cur]
         compare(talent_val_expect, level_up_information_next["talent_val_now_list"][cur])
         cur += 1
-    print("level_up_test升级测试通过")
     # return card_information_next
 
 # def check_information_test(bp: BasePage):
@@ -82,10 +84,12 @@ def level_up_test(bp: BasePage):
 
     # 关闭升级面板
     FishCardUpgradePanel.click_btn_close(bp)
+    bp.sleep(1)
 
     # 关闭鱼卡礼包弹窗
     if FishCardGiftPackPanel.is_panel_active(bp):
         FishCardGiftPackPanel.click_btn_close(bp)
+        bp.sleep(1)
     return rating, rating_fisheries
 
 
@@ -150,7 +154,6 @@ def select_card_test(bp: BasePage):
     bp.sleep(1)
     card_information_2 = FishCardUpgradePanel.get_card_information(bp)
     compare(card_information_0, card_information_2)
-    print("select_card_test选择卡片测试通过")
 
 def a_test(bp: BasePage):
     card_information_0 = FishCardUpgradePanel.get_card_information(bp)
@@ -169,8 +172,15 @@ def FishCardGiftPackPanel_test(bp: BasePage):
     FishCardPanel.click_btn_events(bp)
     bp.sleep(1)
     icon_list = FishCardGiftPackPanel.get_item_icon_list(bp)
-    quantity_list = FishCardGiftPackPanel.get_item_quantity_list(bp)
     click_pack_icon_test(bp, icon_list)
+
+    # 跳过购买测试
+    if not bp.is_pay:
+        FishCardGiftPackPanel.click_btn_close(bp)
+        return
+
+    # 购买测试
+    quantity_list = FishCardGiftPackPanel.get_item_quantity_list(bp)
     resource.str_to_int_list(quantity_list)
     item_dict = resource.make_item_dict(item_icon_list=icon_list, item_quantity_list=quantity_list)
     # item_count_expect_list = bp.get_item_count_list(item_icon_name_list=icon_list)
@@ -188,7 +198,8 @@ def FishCardGiftPackPanel_test(bp: BasePage):
     # compare_list(item_count_expect_list, item_count_list)
     bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
-    print("buy_pack_test购买礼包测试通过")
+    bp.sleep(1)
+
 
 def click_pack_icon_test(bp: BasePage, icon_list):
     position_list = FishCardGiftPackPanel.get_item_position_list(bp)
@@ -221,10 +232,12 @@ def main(bp: BasePage):
     # 进入大厅
     r1 = random.randint(8, 22)
     r2 = random.randint(23, 37)
-    cmd_list = ["guideskip", "add 1 100000 1234567890", "add 1 100200 123456", f"add 10 1000{str(r1).zfill(3)} 1", f"add 10 1000{str(r2).zfill(3)} 500000"]
+    r3 = random.randint(1, 5)
+    print(f"付费分层{r3}000")
+    cmd_list = ["guideskip", "add 1 100000 1234567890", "add 1 100200 123456", f"add 10 1000{str(r1).zfill(3)} 1", f"add 10 1000{str(r2).zfill(3)} 500000", f"setPlayerLayer {r3}000"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
-    # 关闭升级弹窗
-    PlayerLevelupPanel.wait_for_panel_appear(bp)
+    # # 关闭升级弹窗
+    # PlayerLevelupPanel.wait_for_panel_appear(bp)
 
     # 进入鱼卡系统
     bp.go_to_panel("FishCardPanel")
@@ -241,6 +254,7 @@ def main(bp: BasePage):
     FishCardGiftPackPanel_test(bp)
 
     # 跟大厅的战斗力对比
+    bp.clear_popup()
     rating_expect = FishCardPanel.get_rating(bp)
     rating_expect_list = [unit_conversion_int_to_str_chs(rating_expect), unit_conversion_int_to_str(rating_expect)]
     bp.go_home()
@@ -251,9 +265,10 @@ def main(bp: BasePage):
 
 
 if __name__ == "__main__":
-    bp = BasePage("127.0.0.1:21503")
-    FishCardGiftPackPanel_test(bp)
-    # main(bp)
+    bp = BasePage("192.168.111.78:20094")
+    main(bp)
+
+
 
 
 

@@ -1,3 +1,5 @@
+import random
+
 from airtest.core.helper import G
 from poco.drivers.unity3d.device import UnityEditorWindow
 
@@ -25,7 +27,9 @@ class BasePage:
         # unity窗口使用UnityEditorWindow()
         # 手机使用connect_device("android://127.0.0.1:5037/设备号")
         self.is_android = False
+        self.is_pay = True
         self.record = False
+        self.is_time_scale = True
         #GGGGGGG
         # make sure your poco-sdk in the game runtime listens on the following port.
         # 默认端口 5001
@@ -777,6 +781,28 @@ class BasePage:
     def ray_input(self, element_data:dict, target_name: str, kind: str):
         rpcMethod.ray_input(self.poco, element_data, target_name, kind)
 
+    def set_object_active_list(self, active,object_id=0, object_id_list: list = None, element_data: dict = None, offspring_path=""):
+        if object_id_list is not None:
+            rpcMethod.set_object_active_by_id(self.poco, object_id_list, offspring_path, active)
+            return
+        if object_id != 0:
+            self.set_object_active_list(object_id_list=[object_id], offspring_path=offspring_path, active=active)
+            return
+        element_data_copy = self.get_element_data(element_data, offspring_path)
+        rpcMethod.set_object_active(self.poco, element_data_copy, active)
+
+    def set_object_active(self,active, object_id: int = 0, element_data: dict = None, offspring_path=""):
+        if object_id != 0:
+            self.set_object_active_list(active=active, object_id=object_id, offspring_path=offspring_path)
+            return
+        element_data_copy = self.get_element_data(element_data, offspring_path)
+        rpcMethod.set_object_active(self.poco, element_data_copy, active)
+
+    def set_time_scale(self):
+        if not self.is_time_scale:
+            return
+        rpcMethod.set_time_scale(self.poco)
+
     # 休息t秒
     @staticmethod
     def sleep(t: float):
@@ -795,6 +821,7 @@ class BasePage:
 
 if __name__ == '__main__':
     bp = BasePage("192.168.111.77:20088")
+    bp.cmd("mode 400301 301013")
     # "mode 400312 390116"
     # bp.cmd("mode 400302 390015")
     # bp.cmd_list(["add 1 100200 1000000", ""])
@@ -805,11 +832,26 @@ if __name__ == '__main__':
     # a = bp.excelTools.get_table_data("ACHIEVEMENT_CATEGORY.xlsm")
     #
     # print(a)
-    lv = 1
-    while lv < 44:
-        a = bp.excelTools.get_exp_limit(lv)
-        print(lv, a)
-        lv += 1
+    # cur = 0
+    # phone = ""
+    # while cur < 8:
+    #     r = random.randint(0,9)
+    #     phone += str(r)
+    #     cur += 1
+    # print(phone)
+    #
+    # cur = 0
+    # password = ""
+    # while cur < 6:
+    #     r = random.randint(0,9)
+    #     password += str(r)
+    #     cur += 1
+    # print(password)
+    # lv = 1
+    # while lv < 44:
+    #     a = bp.excelTools.get_exp_limit(lv)
+    #     print(lv, a)
+    #     lv += 1
 
 
     # bp.go_home(cur_panel="QuestionnairePanel")
@@ -845,7 +887,7 @@ if __name__ == '__main__':
     #         y += step
     #     x += step
 
-    # bp.lua_console('PanelMgr:OpenPanel("HomePanel")')
+    bp.lua_console('PanelMgr:OpenPanel("HomePanel")')
     # bp.get_item_count(item_icon_name="achv_group_icon_8")
     # print(get_text(bp.poco,ElementsData.BattlePass.btn_task_text))
     # print(get_slider_value(bp.poco,ElementsData.PlayerSetting.options_music))

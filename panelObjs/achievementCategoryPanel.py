@@ -56,7 +56,8 @@ class AchievementCategoryPanel(BasePage):
         while cur < len(data_list):
             fishery = str(table_data["fishList"][cur]["source"][index])
             if fishery == "0":
-                break
+                cur += 1
+                continue
             # 进入指定渔场
             self.go_to_panel("TournamentsPanel")
             TournamentsPanel.go_to_fishery_by_tpid(self, fishery_tpid=fishery)
@@ -72,3 +73,8 @@ class AchievementCategoryPanel(BasePage):
 
     def click_btn_rewards(self):
         self.click_element(element_data=ElementsData.AchievementCategory.btn_rewards)
+
+if __name__ == '__main__':
+    bp = BasePage()
+    a = AchievementCategoryPanel.get_category_table_data(bp)
+    print(a)

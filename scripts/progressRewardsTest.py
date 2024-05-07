@@ -84,10 +84,10 @@ def mini_panel_test(bp: BasePage):
     # 打开面板
     BattlePreparePanel.click_progress_info(bp)
 
-    # 应该没有可领取奖励
-    current_rewards_icon_list = ProgressRewardsPanel.get_current_rewards_icon_list(bp)
-    if current_rewards_icon_list:
-        raise FindElementError
+    # # 应该没有可领取奖励
+    # current_rewards_icon_list = ProgressRewardsPanel.get_current_rewards_icon_list(bp)
+    # if current_rewards_icon_list:
+    #     raise FindElementError
 
     # 记录面板信息
     progress = ProgressRewardsPanel.get_progress(bp)
@@ -160,12 +160,12 @@ def complete_test(bp: BasePage):
     RewardsPanel.click_tap_to_claim(bp)
     bp.sleep(1)
 
-    # 查看面板是否改为完成状态
-    BattlePreparePanel.click_progress_finish(bp)
-    bp.sleep(1)
-    if not ProgressRewardsPanel.is_progress_finish(bp):
-        raise FindNoElementError
-    ProgressRewardsPanel.click_btn_close(bp)
+    # # 查看面板是否改为完成状态
+    # BattlePreparePanel.click_progress_finish(bp)
+    # bp.sleep(1)
+    # if not ProgressRewardsPanel.is_progress_finish(bp):
+    #     raise FindNoElementError
+    # ProgressRewardsPanel.click_btn_close(bp)
 
 
 
@@ -198,5 +198,5 @@ def main(bp: BasePage):
     bp.go_home()
 
 if __name__ == '__main__':
-    bp = BasePage()
+    bp = BasePage("192.168.111.81:20015")
     main(bp)

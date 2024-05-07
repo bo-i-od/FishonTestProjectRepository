@@ -1,5 +1,6 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
+from panelObjs.achievementPanel import AchievementPanel
 from panelObjs.battlePanel import BattlePanel
 from panelObjs.battlePreparePanel import BattlePreparePanel
 from panelObjs.loadingFisheryPanel import LoadingFisheryPanel
@@ -72,6 +73,17 @@ class AchievementWantedPanel(BasePage):
     def click_btn_rewards(self):
         self.click_element(element_data=ElementsData.AchievementWanted.btn_rewards)
 
+    def guide(self):
+        self.click_a_until_b_appear(element_data_a=ElementsData.NewbieGuide.NBG_fishphoto_2, element_data_b=ElementsData.NewbieGuide.NBG_fishphoto_3)
+        self.click_until_disappear(element_data=ElementsData.NewbieGuide.NBG_fishphoto_3)
+        self.sleep(1)
+        AchievementWantedPanel.click_btn_close(self)
+        self.sleep(1)
+        AchievementPanel.click_btn_close(self)
+
 
 if __name__ == '__main__':
-    bp = BasePage()
+    bp = BasePage("192.168.111.78:20009")
+    a = AchievementWantedPanel.get_wanted_table_data(bp)
+    print(a)
+

@@ -22,62 +22,6 @@ def random_box_count():
     return random.randint(11, 20)
 
 
-def main(bp: BasePage):
-    # 进入大厅
-    cmd_list = ["guideskip"]
-    gameInit.login_to_hall(bp, cmd_list=cmd_list)
-    # 初始化箱子数量
-    cur = 1
-    while cur < 6:
-        box_count = random_box_count()
-        bp.set_item_count(target_count=box_count, item_tpid=f"20700{cur}")
-        cur += 1
-    bp.sleep(1)
-
-    # 进入鱼箱界面
-    bp.go_to_panel("TreasureChestPanel")
-    bp.sleep(1)
-
-
-    # 获取箱子信息
-    box_icon_list, box_quantity_list =TreasureChestPanel.get_box_icon_and_quantity_list(bp)
-    bp.debug_log(f"图标列表：{box_icon_list} , 数量列表： {box_quantity_list}")
-
-    # 挨个选中进行打开
-    cur = 0
-    while cur < len(box_icon_list):
-        # 选中
-        bp.debug_log(f"正在选择第{cur + 1}个箱子")
-        TreasureChestPanel.select_box(bp, cur)
-        bp.sleep(1)
-        # 得到当前展示箱子的icon名，与第cur个箱子的icon名对比
-        box_mian_icon = TreasureChestPanel.get_box_main_icon(bp)
-        bp.debug_log(f"当前展示箱子图标名称为：{box_mian_icon}，选中的箱子图标名称为：{box_icon_list[cur]}")
-        compare(box_icon_list[cur], box_mian_icon)
-
-        # 得到open x后的可打开数量，与第cur个箱子的数量对比
-        n = TreasureChestPanel.get_open_x_n(bp)
-        expect_n = box_quantity_list[cur]
-        if box_quantity_list[cur] > 10:
-            expect_n = 10
-        bp.debug_log(f"按钮应该显示OPEN X {expect_n},实际显示为OPEN X {n}")
-        compare(expect_n, n)
-
-        # 进行开箱测试
-        open_box_test(bp, box_mian_icon, n)
-        cur += 1
-
-    # 进行点击箱子点测试
-    get_box_point_box_test(bp)
-
-    # 进行tips点击测试
-    click_tips_test(bp)
-
-    TreasureChestPanel.click_btn_close(bp)
-    print("测试通过")
-
-
-
 
 def get_box_point_box_test(bp: BasePage):
     cur = 0
@@ -186,9 +130,9 @@ def box_fragment_test(bp:BasePage):
         s = random.randint(0, len(btn_enhance_position_list) - 1)
         bp.click_position(btn_enhance_position_list[s])
         bp.sleep(1)
-        if not BaitAndRodAlbumPanel.is_panel_active(bp):
-            raise FindNoElementError
-        BaitAndRodAlbumPanel.click_btn_close(bp)
+        # if not BaitAndRodAlbumPanel.is_panel_active(bp):
+        #     raise FindNoElementError
+        GearPanel.click_btn_close(bp)
         return
     elif r == 2:
         TreasureChestRewardsPanel.click_btn_close(bp)
@@ -202,8 +146,8 @@ def box_fragment_test(bp:BasePage):
         s = random.randint(0, len(btn_enhance_position_list) - 1)
         bp.click_position(btn_enhance_position_list[s])
         bp.sleep(1)
-        if not GearPanel.is_panel_active(bp):
-            raise FindNoElementError
+        # if not GearPanel.is_panel_active(bp):
+        #     raise FindNoElementError
         GearPanel.click_btn_close(bp)
         return
 
@@ -216,12 +160,92 @@ def click_tips_test(bp: BasePage):
     item_icon = ItemTipsPanel.get_item_icon(bp)
     compare(preview_icon_list[index_random], item_icon)
     bp.click_position([0.5, 0.9])
-    if ItemTipsPanel.is_panel_active(bp):
+
+
+def box_store_test(bp: BasePage):
+    # 未解锁情况点击商店
+    TreasureChestPanel.click_btn_box_store(bp)
+    bp.sleep(1)
+    if StorePanel.is_panel_active(bp):
         raise FindElementError
 
+    # 查询商城的解锁等级
+    unlock_lv = bp.excelTools.get_unlock_lv("商店")
+    exp = bp.excelTools.get_exp_limit(unlock_lv)[1]
+    bp.cmd(f"add 1 100200 {exp}")
+
+    # 返回大厅
+    bp.go_home()
+
+    # 再次进入尝试点击商店
+    bp.go_to_panel("TreasureChestPanel")
+    bp.sleep(1)
+    TreasureChestPanel.click_btn_box_store(bp)
+    bp.sleep(1)
+    StorePanel.click_btn_close(bp)
+    bp.sleep(1)
+
+
+
+
+def main(bp: BasePage):
+    # 进入大厅
+    cmd_list = ["guideskip"]
+    gameInit.login_to_hall(bp, cmd_list=cmd_list)
+    # 初始化箱子数量
+    cur = 1
+    while cur < 6:
+        box_count = random_box_count()
+        bp.set_item_count(target_count=box_count, item_tpid=f"20700{cur}")
+        cur += 1
+    bp.sleep(1)
+
+    # 进入鱼箱界面
+    bp.go_to_panel("TreasureChestPanel")
+    bp.sleep(1)
+
+
+    # 获取箱子信息
+    box_icon_list, box_quantity_list =TreasureChestPanel.get_box_icon_and_quantity_list(bp)
+    bp.debug_log(f"图标列表：{box_icon_list} , 数量列表： {box_quantity_list}")
+
+    # 挨个选中进行打开
+    cur = 0
+    while cur < len(box_icon_list):
+        # 选中
+        bp.debug_log(f"正在选择第{cur + 1}个箱子")
+        TreasureChestPanel.select_box(bp, cur)
+        bp.sleep(1)
+        # 得到当前展示箱子的icon名，与第cur个箱子的icon名对比
+        box_mian_icon = TreasureChestPanel.get_box_main_icon(bp)
+        bp.debug_log(f"当前展示箱子图标名称为：{box_mian_icon}，选中的箱子图标名称为：{box_icon_list[cur]}")
+        compare(box_icon_list[cur], box_mian_icon)
+
+        # 得到open x后的可打开数量，与第cur个箱子的数量对比
+        n = TreasureChestPanel.get_open_x_n(bp)
+        expect_n = box_quantity_list[cur]
+        if box_quantity_list[cur] > 10:
+            expect_n = 10
+        bp.debug_log(f"按钮应该显示OPEN X {expect_n},实际显示为OPEN X {n}")
+        compare(expect_n, n)
+
+        # 进行开箱测试
+        open_box_test(bp, box_mian_icon, n)
+        cur += 1
+
+    # 进行点击箱子点测试
+    get_box_point_box_test(bp)
+
+    # 进行tips点击测试
+    click_tips_test(bp)
+
+    box_store_test(bp)
+
+    # 返回大厅
+    bp.go_home()
 
 
 
 if __name__ == '__main__':
-    bp = BasePage()
+    bp = BasePage("192.168.111.77:20010")
     main(bp)

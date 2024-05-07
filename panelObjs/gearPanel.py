@@ -4,6 +4,9 @@ from common.resource import *
 from common.viewport import Viewport
 import random
 
+from panelObjs.battlePreparePanel import BattlePreparePanel
+from panelObjs.gearLevelupPanel import GearLevelupPanel
+
 
 class GearPanel(BasePage):
     def click_btn_close(self):
@@ -154,6 +157,20 @@ class GearPanel(BasePage):
 
     def get_available_location_position_list(self):
         return self.get_position_list(element_data=ElementsData.Gear.available_location_list)
+
+    def guide(self):
+        perform_list = [ElementsData.NewbieGuide.NBG_fishing_fail_1, ElementsData.NewbieGuide.NBG_fishing_fail_2,
+                        ElementsData.NewbieGuide.NBG_fishing_fail_3, ElementsData.NewbieGuide.NBG_fishing_fail_4,
+                        ElementsData.NewbieGuide.NBG_fishing_fail_5, ElementsData.NewbieGuide.NBG_fishing_fail_6,
+                        ElementsData.NewbieGuide.NBG_fishing_fail_7]
+        self.click_a_until_b_appear_list(perform_list=perform_list)
+        self.click_until_disappear(element_data=ElementsData.NewbieGuide.NBG_fishing_fail_7)
+        self.sleep(1)
+        GearLevelupPanel.click_btn_close(self)
+        self.sleep(1)
+        GearPanel.click_btn_close(self)
+        self.sleep(1)
+        BattlePreparePanel.click_btn_apply(self)
 
 
 

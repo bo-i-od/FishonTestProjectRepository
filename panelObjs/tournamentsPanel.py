@@ -34,8 +34,10 @@ class TournamentsPanel(BasePage):
     def get_entrance_viewport(self):
         size = self.get_size(element_data=ElementsData.Tournaments.panel_sidebar_bg)
         edge_left = 0.75 * size[0]
-        edge_right = 0.75 * size[0]
-        entrance_viewport = Viewport(self, element_viewport=ElementsData.Tournaments.entrance_viewport, element_item_list=ElementsData.Tournaments.btn_enter_list,viewport_edge=[edge_left, edge_right])
+        entrance_viewport = Viewport(self, element_viewport=ElementsData.Tournaments.entrance_viewport, element_item_list=ElementsData.Tournaments.btn_enter_list, )
+        entrance_viewport.viewport_range = [entrance_viewport.viewport_range[0], 1]
+        entrance_viewport.viewport_edge = [edge_left, 0.05]
+        entrance_viewport.viewport_range_shift()
         return entrance_viewport
 
     # 跳转指定tpid渔场
@@ -50,6 +52,9 @@ class TournamentsPanel(BasePage):
         entrance_viewport.move_until_appear(entrance_viewport.item_id_list[index])
         entrance_position = self.get_position(object_id=entrance_viewport.item_id_list[index])
         self.click_position(entrance_position)
+
+    def click_btn_leaderboard(self):
+        self.click_element(element_data=ElementsData.Tournaments.btn_leaderboard)
 
 
 if __name__ == "__main__":

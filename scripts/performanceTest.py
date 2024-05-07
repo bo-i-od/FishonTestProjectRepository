@@ -313,15 +313,7 @@ def fish_album(bp: BasePage):
 
 
 def fish_card(bp: BasePage):
-    bp.go_to_panel("FishCardPanel")
-    # 挨个点击渔场
-    cur = 11
-    while cur >= 0:
-        FishCardPanel.switch_tab(bp, cur)
-        bp.sleep(1)
-        FishCardPanel.switch_sub_tab(bp, cur % 2)
-        bp.sleep(1)
-        cur -= 1
+    FishCardPanel.guide(bp)
 
     # 鱼卡升级
     FishCardPanel.select_card(bp, 0)
@@ -339,6 +331,15 @@ def fish_card(bp: BasePage):
     bp.sleep(1)
     FishCardGiftPackPanel.click_btn_close(bp)
     bp.sleep(1)
+
+    # 挨个点击渔场
+    cur = 11
+    while cur >= 0:
+        FishCardPanel.switch_tab(bp, cur)
+        bp.sleep(1)
+        FishCardPanel.switch_sub_tab(bp, cur % 2)
+        bp.sleep(1)
+        cur -= 1
 
     # 规则说明
     FishCardPanel.click_btn_i(bp)
@@ -734,10 +735,11 @@ def main(bp: BasePage):
     login(bp)
     playerEditName(bp)
     guide(bp)
-    bp.cmd("add 1 100200 12345")
+    bp.cmd("add 1 100200 1234")
     player_setting(bp)
-    account_init(bp)
     PlayerLevelupPanel.wait_for_panel_appear(bp)
+    bp.clear_popup()
+    account_init(bp)
     bp.cmd("add 1 100200 123456789")
     fish_album(bp)
     PlayerLevelupPanel.wait_for_panel_appear(bp)
@@ -762,5 +764,6 @@ def main(bp: BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.81:20010")
-    main(bp)
+    bp = BasePage("127.0.0.1:21503")
+    account_init(bp)
+    # main(bp)

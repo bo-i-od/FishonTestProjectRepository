@@ -41,7 +41,11 @@ class BattlePanel(BasePage):
         if dir == "right":
             self.swipe(point_start=[0.3, 0.7], point_end=[0.4, 0.7], t=0.1)
 
+    def release_btn_reel(self):
+        self.ray_input(element_data=ElementsData.Battle.btn_reel, target_name="btn_cast", kind="up")
 
+    def hold_btn_reel(self):
+        self.ray_input(element_data=ElementsData.Battle.btn_reel, target_name="btn_cast", kind="down")
 
 
     def click_btn_reel(self):
@@ -56,13 +60,16 @@ class BattlePanel(BasePage):
 
     def unleash_power(self):
         # 得到reel按钮的位置
-        pos_start = self.get_position(element_data=ElementsData.Battle.btn_reel)
-        pos_end = []
-        pos_end.append(pos_start[0])
-        pos_end.append(pos_start[1] - 0.3)
-        # while self.exist(element_data=ElementsData.Battle.tip_slide):
-        self.swipe(point_start=pos_start, point_end=pos_end, t=0.05)
-        self.sleep(0.5)
+        try:
+            pos_start = self.get_position(element_data=ElementsData.Battle.btn_reel)
+            pos_end = []
+            pos_end.append(pos_start[0])
+            pos_end.append(pos_start[1] - 0.3)
+            # while self.exist(element_data=ElementsData.Battle.tip_slide):
+            self.swipe(point_start=pos_start, point_end=pos_end, t=0.05)
+            self.sleep(0.5)
+        except:
+            pass
 
     def hook(self):
         self.wait_for_appear(element_data=ElementsData.Battle.btn_reel, is_click=False, timeout=20)
@@ -89,7 +96,22 @@ class BattlePanel(BasePage):
         self.click_until_disappear(ElementsData.NewbieGuide.NBG_hook_5)
 
 
+    def get_distance(self):
+        m_value = self.get_text_list(element_data=ElementsData.Battle.m_value)
+        if not m_value:
+            return None
+        pattern = r'\d+\.\d+|\d+'
+        match = re.search(pattern, m_value)
+        m = match.group()
+        return float(m)
+
+    def is_warning_active(self):
+        if self.exist(element_data=ElementsData.Battle.warning):
+            return True
+        return False
+
+
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21593")
-    a = BattlePanel.reel_quick(bp)
+    bp = BasePage()
+    bp.set_object_active(element_data=ElementsData.Login.LoginPanel, active=True)

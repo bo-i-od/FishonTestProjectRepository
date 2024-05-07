@@ -113,5 +113,5 @@ def recommend_test(bp: BasePage):
     return text_task_1
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.77:20012")
+    bp = BasePage("192.168.111.81:20012")
     main(bp)

@@ -39,6 +39,9 @@ class RoulettePanel(BasePage):
     def click_btn_i(self):
         self.click_element(element_data=ElementsData.Roulette.btn_i)
 
+    def click_btn_announcement(self):
+        self.click_element(element_data=ElementsData.Roulette.btn_announcement)
+
 
 if __name__ == '__main__':
     bp = BasePage()

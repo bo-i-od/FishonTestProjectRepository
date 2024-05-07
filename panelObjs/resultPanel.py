@@ -23,9 +23,14 @@ class ResultPanel(BasePage):
             self.sleep(0.1)
 
     def automatic_settlement(self, element_btn):
+        # f_flag = True
         while self.exist(element_data=element_btn):
+            # if f_flag:
+            #     img = self.get_full_screen_shot()
+            #     self.save_img(img)
+            #     f_flag = False
             self.clear_popup_once()
-            self.sleep(1)
+            self.sleep(0.5)
             self.click_element_safe(element_data=element_btn)
 
 

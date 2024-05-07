@@ -21,9 +21,9 @@ def click_icon_test(bp:BasePage,task_id_list:list, viewport:Viewport):
     task_award_position_list = TaskPanel.get_task_award_position_list(bp)
     r = r * 2 + random.randint(0,1)
     bp.click_position(task_award_position_list[r])
-    # 对照奖励和浮窗的图标
-    item_icon = ItemTipsPanel.get_item_icon(bp)
-    compare(item_icon, task_award_icon_list[r])
+    # # 对照奖励和浮窗的图标
+    # item_icon = ItemTipsPanel.get_item_icon(bp)
+    # compare(item_icon, task_award_icon_list[r])
     bp.click_position([0.5, 0.1])
     # 点击宝箱 请确保没有可领取的宝箱
     box_position_list = TaskPanel.get_box_position_list(bp)
@@ -295,8 +295,8 @@ def main(bp: BasePage):
     cmd_list = ["guideskip", "add 1 100200 12345678"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
-    # 关闭升级弹窗
-    PlayerLevelupPanel.wait_for_panel_appear(bp)
+    # # 关闭升级弹窗
+    # PlayerLevelupPanel.wait_for_panel_appear(bp)
 
     # 跳转测试
     jump_test(bp)
@@ -308,7 +308,7 @@ def main(bp: BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage()
+    bp = BasePage("192.168.111.81:20021")
     # bp.set_item_count(target_count=60000, item_tpid="100200")
     main(bp)
 

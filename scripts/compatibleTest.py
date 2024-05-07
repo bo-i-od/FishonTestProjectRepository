@@ -447,9 +447,10 @@ def gear(bp: BasePage):
     bp.sleep(1)
 
     GearEnhancePanel.click_btn_enhance(bp)
-    bp.sleep(5)
-    GearEnhanceSuccesPanel.click_btn_close(bp)
-
+    bp.sleep(7)
+    if GearEnhanceSuccesPanel.is_panel_active(bp):
+        GearEnhanceSuccesPanel.click_btn_close(bp)
+        bp.sleep(1)
     GearEnhancePanel.click_btn_close(bp)
     bp.sleep(1)
 
@@ -690,10 +691,11 @@ def pvp(bp: BasePage):
 
     # 战斗
     PVPHallPanel.click_btn_play(bp, 0)
-    bp.sleep(3)
+
     # 取消对决
+    PVPMatchPanel.wait_for_panel_appear(bp)
     PVPMatchPanel.click_btn_cancel(bp)
-    bp.sleep(1)
+    PVPHallPanel.wait_for_panel_appear(bp)
     PVPHallPanel.click_btn_play(bp, 3)
 
     # 表情和投降
@@ -781,7 +783,7 @@ def store(bp: BasePage):
     bp.sleep(1)
     StorePanel.click_btn_info(bp)
     bp.sleep(1)
-    StorePanel.click_btn_info(bp)
+    bp.click_position([0.5, 0.1])
     bp.sleep(1)
     fish_card_position_list = StorePanel.get_fish_card_position_list(bp)
     cur = 1
@@ -823,7 +825,6 @@ def store(bp: BasePage):
     bp.go_home()
 
 
-
 def main(bp: BasePage):
     login(bp)
     bp.cmd("guideskip")
@@ -853,6 +854,6 @@ def main(bp: BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("debug3.testin.cn:4082")
+    bp = BasePage("f15ec2b5")
     main(bp)
 

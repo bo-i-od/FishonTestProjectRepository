@@ -130,6 +130,7 @@ def badge_test(bp: BasePage):
         PlayerSettingPanel.select_badge_slot(bp, badge_slot_id_list=badge_slot_id_list, index=cur)
         r = random.randint(0, len(badge_status[1]) - 1)
         PlayerSettingPanel.select_badge(bp, badge_id_list=badge_id_list, index=badge_status[1][r])
+        bp.sleep(1)
         if badge_list[badge_status[1][r]] != badge_slot_list[cur]:
             PlayerSettingPanel.click_btn_save(bp)
         badge_status = PlayerSettingPanel.get_badge_status(bp, badge_id_list)
@@ -234,7 +235,7 @@ def main(bp: BasePage):
 
     # 切换到settings
     PlayerSettingPanel.click_tab_settings(bp)
-    bp.sleep(1)
+    bp.sleep(2)
     settings_test(bp)
 
     PlayerSettingPanel.click_tab_player(bp)
@@ -266,5 +267,5 @@ def main(bp: BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage()
+    bp = BasePage("192.168.111.81:20012")
     main(bp)

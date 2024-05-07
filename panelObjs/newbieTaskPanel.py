@@ -221,6 +221,6 @@ class NewbieTaskPanel(BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.77:20015")
+    bp = BasePage("192.168.111.77:20013")
     NewbieTaskPanel.switch_tab(bp, 0)
 

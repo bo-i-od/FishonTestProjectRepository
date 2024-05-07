@@ -43,7 +43,8 @@ def gift_pack_click_icon_test(bp:BasePage):
 
 
 def gift_pack_buy_test(bp:BasePage):
-
+    if not bp.is_pay:
+        return
 
     # 得到购买按钮位置的列表
     gift_pack_id_list = StorePanel.get_gift_pack_id_list(bp)
@@ -123,6 +124,8 @@ def cash_click_icon_test(bp:BasePage):
     bp.click_position([0.5, 0.1])
 
 def cash_buy_test(bp:BasePage):
+    if not bp.is_pay:
+        return
     # 得到图标、数量、首次x2、按钮位置
     cash_icon_list = StorePanel.get_cash_icon_list(bp)
     cash_id_list = StorePanel.get_cash_id_list(bp)
@@ -511,18 +514,22 @@ def materials_click_icon_test(bp:BasePage):
 
 def materials_slider_test(bp:BasePage):
     # 得到最小单位和单位价格的数量
+    StorePanel.click_btn_min(bp)
+    bp.sleep(1)
     item_min = StorePanel.get_item_quantity(bp)
     cost_min = StorePanel.get_cost_quantity(bp)
     k = int(item_min / cost_min)
 
     # 测btn_max
     StorePanel.click_btn_max(bp)
+    bp.sleep(1)
     item_max = StorePanel.get_item_quantity(bp)
     cost_max = StorePanel.get_cost_quantity(bp)
     compare(k, int(item_max/cost_max))
 
     # 测上限时的btn_add
     StorePanel.click_btn_add(bp)
+    bp.sleep(1)
     item_cur = StorePanel.get_item_quantity(bp)
     cost_cur = StorePanel.get_cost_quantity(bp)
     compare(item_max, item_cur)
@@ -531,6 +538,7 @@ def materials_slider_test(bp:BasePage):
 
     # 测btn_sub
     StorePanel.click_btn_sub(bp)
+    bp.sleep(1)
     item_cur = StorePanel.get_item_quantity(bp)
     cost_cur = StorePanel.get_cost_quantity(bp)
     compare(item_max - item_min, item_cur)
@@ -540,7 +548,8 @@ def materials_slider_test(bp:BasePage):
     # 测滑条滑到下限
     slider_position = StorePanel.get_slider_position(bp)
     slider_size = StorePanel.get_slider_size(bp)
-    bp.swipe(point_start=[slider_position[0] - 0.4 * slider_size[0], slider_position[1]], point_end=[slider_position[0] - 0.6 * slider_size[0], slider_position[1]])
+    bp.swipe(point_start=[slider_position[0] - 0.2 * slider_size[0], slider_position[1]], point_end=[slider_position[0] - 0.6 * slider_size[0], slider_position[1]])
+    bp.sleep(1)
     item_cur = StorePanel.get_item_quantity(bp)
     cost_cur = StorePanel.get_cost_quantity(bp)
     compare(item_min, item_cur)
@@ -549,6 +558,7 @@ def materials_slider_test(bp:BasePage):
 
     # 测下限时的btn_sub
     StorePanel.click_btn_sub(bp)
+    bp.sleep(1)
     item_cur = StorePanel.get_item_quantity(bp)
     cost_cur = StorePanel.get_cost_quantity(bp)
     compare(item_min, item_cur)
@@ -557,6 +567,7 @@ def materials_slider_test(bp:BasePage):
 
     # 测btn_add
     StorePanel.click_btn_add(bp)
+    bp.sleep(1)
     item_cur = StorePanel.get_item_quantity(bp)
     cost_cur = StorePanel.get_cost_quantity(bp)
     compare(item_min + item_min, item_cur)
@@ -564,7 +575,8 @@ def materials_slider_test(bp:BasePage):
     compare(k, int(item_cur / cost_cur))
 
     # 测滑条滑到上限
-    bp.swipe(point_start=[slider_position[0] + 0.4 * slider_size[0], slider_position[1]], point_end=[slider_position[0] + 0.6 * slider_size[0], slider_position[1]])
+    bp.swipe(point_start=[slider_position[0] + 0.2 * slider_size[0], slider_position[1]], point_end=[slider_position[0] + 0.6 * slider_size[0], slider_position[1]])
+    bp.sleep(1)
     item_cur = StorePanel.get_item_quantity(bp)
     cost_cur = StorePanel.get_cost_quantity(bp)
     compare(item_max, item_cur)
@@ -761,16 +773,18 @@ def main(bp: BasePage):
 
     # 进入大厅
     # 设置分层
-    layer = random.randint(1, 5)
-    cmd_list = ["guideskip", f"setPlayerLayer {layer}000", f"add 1 100200 {exp}"]
+    layer = f"{random.randint(1, 5)}000"
+    bp.debug_log(f"当前分层{layer}")
+    cmd_list = ["guideskip", f"setPlayerLayer {layer}", f"add 1 100200 {exp}"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
-    # 关闭升级弹窗
-    PlayerLevelupPanel.wait_for_panel_appear(bp)
+    # # 关闭升级弹窗
+    # PlayerLevelupPanel.wait_for_panel_appear(bp)
 
     bp.go_to_panel("StorePanel")
     gift_pack_test(bp)
-    bp.cmd_list([f"setPlayerLayer {layer}000", "refreshshop"])
+    bp.debug_log(f"当前分层{layer}")
+    bp.cmd_list([f"setPlayerLayer {layer}", "refreshshop"])
     cash_test(bp)
     gear_test(bp)
     fish_card_test(bp)
@@ -779,6 +793,6 @@ def main(bp: BasePage):
     bp.go_home()
 
 if __name__ == '__main__':
-    bp = BasePage()
+    bp = BasePage("192.168.111.81:20021")
     main(bp)
     # box_test(bp)

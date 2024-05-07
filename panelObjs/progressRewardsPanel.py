@@ -74,3 +74,6 @@ class ProgressRewardsPanel(BasePage):
             return True
         return False
 
+if __name__ == '__main__':
+    bp = BasePage("b6h65hd64p5pxcyh")
+    bp.cmd("setPlayerLayer 5000")

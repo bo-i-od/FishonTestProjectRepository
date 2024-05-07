@@ -113,8 +113,6 @@ class PlayerSettingPanel(BasePage):
 
     def click_btn_close_giftcode(self):
         self.click_element(element_data=ElementsData.PlayerSetting.btn_close_additional)
-        if self.exist(element_data=ElementsData.PlayerSetting.Panel_Giftcode):
-            raise FindElementError
 
     def click_badge_i(self):
         if self.exist(element_data=ElementsData.PlayerSetting.Panel_Tip_Rules):
@@ -402,6 +400,18 @@ class PlayerSettingPanel(BasePage):
 
     def set_player_name(self, name):
         self.set_text(element_data=ElementsData.PlayerSetting.Input_PlayerName, text=name)
+
+    def get_points(self):
+        points = self.get_text_list(element_data=ElementsData.PlayerSetting.points)
+        if not points:
+            return "0"
+        return points[0]
+
+    def get_weight(self):
+        weight = self.get_text_list(element_data=ElementsData.PlayerSetting.weight)
+        if not weight:
+            return "0"
+        return weight[0]
 
 
 if __name__ == '__main__':

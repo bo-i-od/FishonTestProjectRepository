@@ -1,6 +1,9 @@
+import common.resource
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from common import resource
+from panelObjs.messageBoxPanel import MessageBoxPanel
+from panelObjs.rewardsPanel import RewardsPanel
 from tools.commonTools import *
 
 class BattlePreparePanel(BasePage):
@@ -12,6 +15,24 @@ class BattlePreparePanel(BasePage):
     # 点击关闭
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.BattlePrepare.btn_close)
+        self.sleep(1)
+        if not RewardsPanel.is_panel_active(self):
+            return
+        RewardsPanel.click_tap_to_claim(self)
+        self.sleep(1)
+        self.click_element(element_data=ElementsData.BattlePrepare.btn_close)
+        self.sleep(1)
+        if not MessageBoxPanel.is_panel_active(self):
+            return
+        MessageBoxPanel.click_btn_confirm(self)
+        self.sleep(1)
+        self.click_element(element_data=ElementsData.BattlePrepare.btn_close)
+
+
+    def get_rod_position_list(self):
+        return self.get_position_list(element_data=ElementsData.BattlePrepare.rod_model_list)
+
+
 
     # 点击抛竿
     def cast(self):
@@ -110,6 +131,13 @@ class BattlePreparePanel(BasePage):
             cur += 1
         return select_list, selectable_list
 
+    def get_location_position_list(self):
+        location_position_list = self.get_position_list(element_data=ElementsData.BattlePrepare.location_list)
+
+        location_position_list += self.get_position_list(element_data=ElementsData.BattlePrepare.treasure_list)
+        return location_position_list
+
+
     def get_energy_list(self):
         location_energy_list = self.get_text_list(element_data=ElementsData.BattlePrepare.location_energy_list)
         str_to_int_list(location_energy_list)
@@ -160,8 +188,24 @@ class BattlePreparePanel(BasePage):
 if __name__ == '__main__':
     bp = BasePage()
 
-    a = BattlePreparePanel.get_energy_list(bp)
-    print(a)
+    a = BattlePreparePanel.get_current_rewards_icon_list(bp)
+    b= BattlePreparePanel.get_current_rewards_quantity_list(bp)
+    c = common.resource.make_item_dict(item_icon_list=a, item_quantity_list=b)
+    print(c)
+    # c = bp.excelTools.get_table_data("POINT_PROGRESS_REWARD.xlsm")["progressRewards"]
+    # # c = bp.excelTools.get_table_data("POINT_PROGRESS_REWARD_ENDLESS.xlsm")["progressRewards"]
+    # r = 8
+    # res = {}
+    # cur = 0
+    # while cur < len(c):
+    #     print(c[cur]["tpId"][r], c[cur]["count"][r])
+    #     if c[cur]["isMultiple"][r] != 0:
+    #         cur += 1
+    #         continue
+    #     res = common.resource.make_item_dict(item_dict=res, item_icon_list=[str(c[cur]["tpId"][r])], item_quantity_list=[str(c[cur]["count"][r])])
+    #     print(res)
+    #     cur += 1
+    # print(res)
 
 
 
