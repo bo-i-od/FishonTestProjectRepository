@@ -86,7 +86,7 @@ def fish_all(bp: BasePage):
         index = str(cur).zfill(2)
         fishery_id = f"4003{index}"
         TournamentsPanel.go_to_fishery_by_tpid(bp, fishery_id)
-        circulate_fish(bp, is_monster=True, fishery_id=fishery_id, is_quick=False)
+        circulate_fish(bp, is_monster=True, fishery_id=fishery_id, is_quick=True)
         BattlePreparePanel.click_btn_close(bp)
         bp.sleep(1)
         cur += 1
@@ -100,9 +100,9 @@ if __name__ == '__main__':
     # circulate_fish(bp, is_quick=True,fishery_id="400317", is_monster=True)
     # monster_all(bp, is_quick=True, fishery_id="400317")
 
-    circulate_fish(bp, is_quick=True)
+    # circulate_fish(bp, is_quick=True)
     # bp.set_item_count(target_count=72000,item_tpid="209013")
-    # fish_all(bp)
+    fish_all(bp)
     # bp.cmd("mode 400301 390001")
 
     # worksheet = bp.excelTools.get_worksheet(book_name="玩家信息采样.xlsx", sheet_name="Sheet1")

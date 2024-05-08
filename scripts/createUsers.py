@@ -82,14 +82,14 @@ def tournament(bp:BasePage):
     bp.go_home()
 
 def ndays(bp:BasePage, count):
-    # bp.cmd("levelupto 30")
+    bp.cmd("levelupto 30")
     # bp.cmd(f"add 1 101200 {count}")
-    bp.cmd(f"add 2 209013 {count}")
+    # bp.cmd(f"add 2 209012 {count}")
     # bp.cmd(f"monopolyscore {count}")
-    # bp.cmd(f"add 2 209002 {count}")
-    # bp.cmd(f"add 2 209006 {count}")
-    # bp.cmd(f"add 2 209008 {count}")
-    # bp.cmd(f"add 2 209010 {count}")
+    bp.cmd(f"add 2 209002 {count}")
+    bp.cmd(f"add 2 209006 {count}")
+    bp.cmd(f"add 2 209008 {count}")
+    bp.cmd(f"add 2 209010 {count}")
 
 def clone(bp:BasePage, name):
     bp.sleep(2)
@@ -106,10 +106,10 @@ def auto_export():
 
 
 def main(bp):
-    cur = 61
-    limit = 71
+    cur = 1
+    limit = 11
     while cur < limit:
-        name = "zzz0" + str(cur)
+        name = "zz" + str(cur)
         login(bp, name)
         bp.sleep(2)
         bp.clear_popup()

@@ -105,6 +105,8 @@ def click_button(poco:Poco, element: dict)-> any:
 def ray_input(poco:Poco, element: dict, target_name:str, kind:str)-> any:
     ...
 
-def set_time_scale(poco:Poco):
+def set_time_scale(poco:Poco, time_scale:float)-> any:
     ...
 
+def fish(poco:Poco, spot_id:str, times:int)-> any:
+    ...

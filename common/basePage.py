@@ -798,10 +798,10 @@ class BasePage:
         element_data_copy = self.get_element_data(element_data, offspring_path)
         rpcMethod.set_object_active(self.poco, element_data_copy, active)
 
-    def set_time_scale(self):
+    def set_time_scale(self, time_scale=5):
         if not self.is_time_scale:
             return
-        rpcMethod.set_time_scale(self.poco)
+        rpcMethod.set_time_scale(self.poco, time_scale)
 
     # 休息t秒
     @staticmethod
@@ -847,11 +847,11 @@ if __name__ == '__main__':
     #     password += str(r)
     #     cur += 1
     # print(password)
-    # lv = 1
-    # while lv < 44:
-    #     a = bp.excelTools.get_exp_limit(lv)
-    #     print(lv, a)
-    #     lv += 1
+    lv = 1
+    while lv < 44:
+        a = bp.excelTools.get_exp_limit(lv)
+        print(lv, a)
+        lv += 1
 
 
     # bp.go_home(cur_panel="QuestionnairePanel")
@@ -887,7 +887,7 @@ if __name__ == '__main__':
     #         y += step
     #     x += step
 
-    bp.lua_console('PanelMgr:OpenPanel("HomePanel")')
+    # bp.lua_console('PanelMgr:OpenPanel("HomePanel")')
     # bp.get_item_count(item_icon_name="achv_group_icon_8")
     # print(get_text(bp.poco,ElementsData.BattlePass.btn_task_text))
     # print(get_slider_value(bp.poco,ElementsData.PlayerSetting.options_music))

@@ -185,8 +185,27 @@ def ray_input(poco, element, target_name, kind):
     return poco.agent.c.call("RayInput", element, target_name, kind)
 
 @sync_wrapper
-def set_time_scale(poco):
-    return poco.agent.c.call("SetTimeScale")
+def set_time_scale(poco, time_scale):
+    return poco.agent.c.call("SetTimeScale", time_scale)
+
+@sync_wrapper
+def fish(poco, spot_id, times):
+    scene_id = spot_id[:6]
+    scene_to_rod = {"400301": "500001",
+                    "400302": "500002",
+                    "400303": "500001",
+                    "400304": "500004",
+                    "400305": "500003",
+                    "400306": "500006",
+                    "400307": "500005",
+                    "400308": "500008",
+                    "400309": "500004",
+                    "400310": "500005",
+                    "400311": "500008",
+                    "400312": "500008"
+                    }
+    rod_id = scene_to_rod[scene_id]
+    return poco.agent.c.call("Fish", spot_id, rod_id, times)
 
 
 
