@@ -16,7 +16,9 @@ def check_icon(icon:str):
     if icon == "store_items_shop_2":
         return 'res_gear_1'
     if icon == "store_items_shop_3":
-        return 'res_gear_3'
+        return 'coin_turntable'
+    if "res_power" in icon:
+        return "res_power"
 
     s = icon.split('_')
     if s[0] == 'coin' and s[1] == "gold":
@@ -40,16 +42,15 @@ def get_resource(bp, item_tpid:str, element_data:dict):
     item_db = bp.get_item_count(item_tpid=item_tpid)
     item_show = bp.get_text(element_data=element_data)
 
-    item_db_str_unit_conversion = unit_conversion_int_to_str(item_db)
-    item_db_str = str(item_db)
-    if item_show != item_db_str_unit_conversion and item_show != item_db_str:
+    target_list = [unit_conversion_int_to_str(item_db), unit_conversion_int_to_str_chs(item_db), str(item_db)]
+    if item_show not in target_list:
         raise DifferError
     return item_db
 
 # 生成或更新item_dict
 # 物品及数量以字典格式{'图标名0':数量0，'图标名1':数量1，……}展示
-def make_item_dict(item_coin_list: list, item_quantity_list: list, item_dict: dict = None):
-    item_coin_list_len = len(item_coin_list)
+def make_item_dict(item_icon_list: list, item_quantity_list: list, item_dict: dict = None):
+    item_coin_list_len = len(item_icon_list)
     item_quantity_list_len = len(item_quantity_list)
     if item_coin_list_len != item_quantity_list_len:
         print("请保证图标列表长度和数量列表长度想等")
@@ -58,18 +59,18 @@ def make_item_dict(item_coin_list: list, item_quantity_list: list, item_dict: di
     if item_dict is None:
         item_dict = {}
     while cur < item_quantity_list_len:
-        if item_coin_list[cur] in item_dict:
+        if item_icon_list[cur] in item_dict:
             try:
                 item_quantity = int(item_quantity_list[cur])
             except:
                 item_quantity = 1
-            item_dict[item_coin_list[cur]] += item_quantity
+            item_dict[item_icon_list[cur]] += item_quantity
         else:
             try:
                 item_quantity = int(item_quantity_list[cur])
             except:
                 item_quantity = 1
-            item_dict[item_coin_list[cur]] = item_quantity
+            item_dict[item_icon_list[cur]] = item_quantity
         cur += 1
     return item_dict
 

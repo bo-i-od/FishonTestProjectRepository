@@ -23,6 +23,9 @@ class AchievementPanel(BasePage):
     def is_tips_active(self):
         return self.exist(element_data=ElementsData.Achievement.tips)
 
+    def get_achievement_icon_list(self):
+        return self.get_icon_list(element_data=ElementsData.Achievement.achievement_icon_list)
+
     def click_task_mini(self):
         self.click_element(element_data=ElementsData.Achievement.task_mini_icon)
 
@@ -40,7 +43,7 @@ class AchievementPanel(BasePage):
         return achievement_group_name_list[index]
 
     def get_achievement_status_set(self):
-        achievement_id_list = self.get_object_id_list(element_data=ElementsData.Achievement.achievement_list)
+        achievement_id_list = AchievementPanel.get_achievement_id_list(self)
         locked_set = set()
         unlockable_set = set()
         unlocked_set = set()
@@ -58,14 +61,20 @@ class AchievementPanel(BasePage):
             cur += 1
         return [locked_set, unlockable_set, unlocked_set]
 
+    def get_achievement_id_list(self):
+        return self.get_object_id_list(element_data=ElementsData.Achievement.achievement_list)
+
     def get_achievement_position_list(self):
-        position_list = self.get_position_list(element_data=ElementsData.Achievement.achievement_list, offspring_path="particle")
+        position_list = self.get_position_list(element_data=ElementsData.Achievement.achievement_list)
         return position_list
 
     def get_viewport(self):
         size = self.get_size_list(element_data=ElementsData.Achievement.achievement_list)[0]
-        edge = [0, 0.5 * size[0]]
-        viewport = Viewport(self, element_viewport=ElementsData.Achievement.viewport, element_item_list=ElementsData.Achievement.achievement_list, viewport_edge=edge)
+        viewport = Viewport(self, element_viewport=ElementsData.Achievement.viewport, element_item_list=ElementsData.Achievement.achievement_list,viewport_direction="row")
+        viewport.viewport_range = [viewport.viewport_range[0], 1]
+        edge = [0.01, 0.01]
+        viewport.viewport_edge = edge
+        viewport.viewport_range_shift()
         return viewport
 
     def get_group_name(self, achievement_id):
@@ -73,20 +82,23 @@ class AchievementPanel(BasePage):
         group_name = self.get_text(object_id=group_name_id)
         return group_name
 
+    def switch_tab(self, index):
+        position_list = self.get_position_list(element_data=ElementsData.Achievement.tab_list)
+        self.click_position(position_list[index])
+
 
 
 
 
 
 if __name__ == '__main__':
-    bp = BasePage()
-    # locked_set, unlockable_set, unlocked_set = AchievementPanel.get_achievement_status_set(bp)
-    # print(locked_set)
-    # b = AchievementPanel.get_achievement_position_list(bp)
-    # print(b)
+    bp = BasePage("R5CT22NJ44H")
+    a = bp.get_size_list(element_data=ElementsData.Achievement.achievement_list)
     achievement_id_list = bp.get_object_id_list(element_data=ElementsData.Achievement.achievement_list)
-    viewport = AchievementPanel.get_viewport(bp)
-    viewport.move_until_appear(target_id=achievement_id_list[0])
+    print(bp.get_position_list(element_data=ElementsData.Achievement.achievement_list))
+    print(bp.get_position_list(object_id_list=achievement_id_list))
+    print(AchievementPanel.get_viewport(bp).viewport_range)
+    print(a)
 
 
 

@@ -1,5 +1,6 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
+from scripts.createUsers import login, fish, logout
 from tools.commonTools import *
 from common import resource
 
@@ -47,15 +48,19 @@ class StorePanel(BasePage):
     def get_box_details(self):
         icon_list = self.get_icon_list(element_data=ElementsData.Store.Box.box_list)
         quantity_list = self.get_text_list(element_data=ElementsData.Store.Box.quantity_list)
-        off_list = self.get_text_list(element_data=ElementsData.Store.Box.off_list)
+        item_id_list = self.get_object_id_list(element_data=ElementsData.Store.Box.item_list)
+        off_list = []
         cur = 0
-        while cur < len(off_list):
-            off_list[cur] = int(off_list[cur].split('%')[0]) / float(100)
+        while cur < len(item_id_list):
+            # off_list[cur] = int(off_list[cur].split('%')[0]) / float(100)
+            off = self.get_text_list(object_id=item_id_list[cur], offspring_path="value_bg>number")
+            if off:
+                off_list.append(1 - (int(off[0]) / float(10)))
+                cur += 1
+                continue
+            off_list.append(0)
             cur += 1
-        cur = 0
-        while cur < len(icon_list):
-            off_list.append(float(0))
-            cur += 1
+        off_list[0] = 1
         str_to_int_list(quantity_list)
         return icon_list, quantity_list, off_list
 
@@ -85,8 +90,10 @@ class StorePanel(BasePage):
                 continue
             btn_buy_id = self.get_offspring_id("btn_buy>text", object_id=item_id)
             price = self.get_text(object_id=btn_buy_id)
-            if price == "FREE":
+            free_list = ["FREE", "免费"]
+            if price in free_list:
                 price = '0'
+
             price_list.append(price)
             # if btn_buy_id != 0:
             #     btn_buy_text_id = self.get_child_id("text",object_id=btn_buy_id)
@@ -194,9 +201,11 @@ class StorePanel(BasePage):
             price_str = self.get_text(element_data=ElementsData.Store.Box.btn_refresh_value)
         else:
             price_str = price_str_list[0]
-        if price_str == 'FREE':
+        free_list = ["FREE", "免费"]
+        if price_str in free_list:
             return 0
-        if price_str == 'SOLD OUT':
+        sold_out_list = ["SOLD OUT", "售罄"]
+        if price_str in sold_out_list:
             return -1
         return int(price_str)
 
@@ -245,7 +254,7 @@ class StorePanel(BasePage):
             resource.check_icon_list(icon_list)
             quantity_list = self.get_text_list(object_id_list=quantity_id_list)
             str_to_int_list(quantity_list)
-            item_dict = resource.make_item_dict(item_coin_list=icon_list, item_quantity_list=quantity_list)
+            item_dict = resource.make_item_dict(item_icon_list=icon_list, item_quantity_list=quantity_list)
             gift_pack_dict_list.append(item_dict)
         return gift_pack_dict_list
 
@@ -314,7 +323,7 @@ class StorePanel(BasePage):
             resource.check_icon_list(icon_list)
             quantity_list = self.get_text_list(object_id_list=quantity_id_list)
             str_to_int_list(quantity_list)
-            item_dict = resource.make_item_dict(item_coin_list=icon_list, item_quantity_list=quantity_list)
+            item_dict = resource.make_item_dict(item_icon_list=icon_list, item_quantity_list=quantity_list)
             booster_dict_list.append(item_dict)
         return booster_dict_list
 
@@ -403,6 +412,10 @@ class StorePanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    # a = StorePanel.get_gift_pack_dict_list(bp)
-    a = bp.get_text(element_data=ElementsData.Store.text_100000)
-    print(a)
+    cur = 301
+    while cur <= 400:
+        name = f"player0"
+        login(bp, name, cur)
+        fish(bp)
+        logout(bp, cur)
+        cur += 1

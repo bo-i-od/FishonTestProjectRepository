@@ -7,6 +7,15 @@ class LoginPanel(BasePage):
         if self.exist(element_data=ElementsData.Login.LoginPanel):
             return True
         return False
+    def is_btn_login_active(self):
+        if self.exist(element_data=ElementsData.Login.btn_login):
+            return True
+        return False
+
+    def wait_for_btn_login(self):
+        while not LoginPanel.is_btn_login_active(self):
+            self.sleep(0.5)
+
     def click_btn_login(self):
         self.click_until_disappear(element_data=ElementsData.Login.btn_login)
 

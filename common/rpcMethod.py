@@ -148,22 +148,64 @@ def screen_shot(poco, ui_x, ui_y, ui_w, ui_h):
 def get_dropdown_value(poco, element):
     return poco.agent.c.call("GetDropdownValue", element)
 
-
 @sync_wrapper
 def set_dropdown_value(poco, element, index):
-    poco.agent.c.call("SetDropdownValue", element, index)
+    return poco.agent.c.call("SetDropdownValue", element, index)
 
-
+@sync_wrapper
 def cmd(poco, command_list):
-    poco.agent.c.call("CMD", command_list)
+    return poco.agent.c.call("CMD", command_list)
 
-
+@sync_wrapper
 def lua_console(poco, command_list):
-    poco.agent.c.call("LuaConsole", command_list)
+    return poco.agent.c.call("LuaConsole", command_list)
 
+@sync_wrapper
+def custom_cmd(poco, command_list):
+    return poco.agent.c.call("CustomCMD", command_list)
 
+@sync_wrapper
 def set_btn_enabled(poco, element, enabled):
-    poco.agent.c.call("SetBtnEnabled", element, enabled)
+    return poco.agent.c.call("SetBtnEnabled", element, enabled)
+
+@sync_wrapper
+def set_object_active(poco, element, active):
+    return poco.agent.c.call("SetObjectActive", element, active)
+
+@sync_wrapper
+def set_object_active_by_id(poco, id_list, offspring_path, active):
+    return poco.agent.c.call("SetObjectActiveById", id_list, offspring_path, active)
+
+@sync_wrapper
+def click_button(poco, element):
+    return poco.agent.c.call("ClickButton", element)
+
+@sync_wrapper
+def ray_input(poco, element, target_name, kind):
+    return poco.agent.c.call("RayInput", element, target_name, kind)
+
+@sync_wrapper
+def set_time_scale(poco, time_scale):
+    return poco.agent.c.call("SetTimeScale", time_scale)
+
+@sync_wrapper
+def fish(poco, spot_id, times):
+    scene_id = spot_id[:6]
+    scene_to_rod = {"400301": "500001",
+                    "400302": "500002",
+                    "400303": "500001",
+                    "400304": "500004",
+                    "400305": "500003",
+                    "400306": "500006",
+                    "400307": "500005",
+                    "400308": "500008",
+                    "400309": "500004",
+                    "400310": "500005",
+                    "400311": "500008",
+                    "400312": "500008"
+                    }
+    rod_id = scene_to_rod[scene_id]
+    return poco.agent.c.call("Fish", spot_id, rod_id, times)
 
 
 

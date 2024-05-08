@@ -1,4 +1,8 @@
+import random
+
+from airtest.core.helper import G
 from poco.drivers.unity3d.device import UnityEditorWindow
+
 from tools.excelRead import ExceTools
 import time
 import pyautogui
@@ -14,32 +18,27 @@ import zlib
 
 import os
 from configs.elementsData import ElementsData
-from common.rpcMethod import set_text
-
-from common.rpcMethod import get_text
-from common.rpcMethod import get_slider_value
 from configs.jumpData import JumpData
+from poco.drivers.android.uiautomation import AndroidUiautomationPoco
 
 
 class BasePage:
-    def __init__(self):
+    def __init__(self, serial_number=None):
         # unity窗口使用UnityEditorWindow()
         # 手机使用connect_device("android://127.0.0.1:5037/设备号")
-        self.is_android = True
-        #
-        if self.is_android:
-            # dev = connect_device("android://127.0.0.1:5037/127.0.0.1:21593")
-            # dev = connect_device("android://127.0.0.1:5037/b6h65hd64p5pxcyh")
-            dev = connect_device("android://127.0.0.1:5037/28cce18906027ece")
-        else:
-            dev = UnityEditorWindow()
+        self.is_android = False
+        self.is_pay = True
+        self.record = False
+        self.is_time_scale = True
+        #GGGGGGG
         # make sure your poco-sdk in the game runtime listens on the following port.
         # 默认端口 5001
         # IP is not used for now
         addr = ('', 5001)
+        dev = self.get_device(serial_number=serial_number)
         self.poco = UnityPoco(addr, device=dev)
         self.screen_w, self.screen_h = self.poco.get_screen_size()  # 获取屏幕尺寸
-        self.is_debug_log = True
+        self.is_debug_log = False
         if self.is_debug_log:
             print(self.screen_w, self.screen_h)
         self.warning_list = []
@@ -53,8 +52,26 @@ class BasePage:
         # 获取当前工作目录
         self.excelTools = ExceTools(self.root_dir + "/tables/")
 
+
+    def get_device(self, serial_number=None):
+        if self.is_android:
+            try:
+                dev = G.DEVICE
+                return dev
+            except:
+                print("进行设备连接")
+            if serial_number is None:
+                serial_number = "127.0.0.1:21503"
+            dev = connect_device(f"android://127.0.0.1:5037/{serial_number}")
+            # dev = connect_device("android://127.0.0.1:5037/b6h65hd64p5pxcyh")
+            # dev = connect_device("android://127.0.0.1:5037/28cce18906027ece")
+            return dev
+        dev = UnityEditorWindow()
+        return dev
+
+
     # 开启调试打印再打印
-    def debug_log(self, msg):
+    def debug_log(self, *msg:object):
         if self.is_debug_log:
             print(msg)
 
@@ -301,8 +318,7 @@ class BasePage:
         return toggle_is_on_list[0]
 
     # 获取位置
-    def get_position_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None,
-                          offspring_path=""):
+    def get_position_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None, offspring_path=""):
         if object_id_list is not None:
             return rpcMethod.get_position_by_id(self.poco, object_id_list, offspring_path)
         if object_id != 0:
@@ -346,16 +362,46 @@ class BasePage:
     def click_position_base(self, position):
         if not (0 <= position[0] <= 1) or not (0 <= position[1] <= 1):
             raise InvalidOperationError('Click position out of screen. pos={}'.format(repr(position)))
+        if self.record:
+            img = self.get_full_screen_shot()
+            self.draw_circle(img, (position[0], position[1]))
+            self.save_img(img)
         self.poco.agent.input.click(position[0], position[1])
 
+
+    def draw_circle(self, img, center_coordinates):
+        center_coordinates = (int(center_coordinates[0] * self.screen_w), int(center_coordinates[1] * self.screen_h))
+        # 定义圆形的半径
+        radius0 = 20
+        radius1 = 30
+        # 定义圆形的颜色 (B, G, R)
+        color = (0, 0, 255)
+        # 定义圆形的厚度; -1表示圆形将会被填充，默认值是1
+        thickness = 2
+        # 在图片上画一个圆形
+        cv2.circle(img, center_coordinates, 5, color, -1)
+        cv2.circle(img, center_coordinates, radius0, color, thickness)
+        cv2.circle(img, center_coordinates, radius1, color, thickness)
+
+
+
     def click_position(self, position, ignore_set=None):
+        # 清除一遍弹窗
         self.clear_popup(ignore_set)
         self.click_position_base(position)
 
     # 元素点击
-    def click_element(self, object_id: int = 0, element_data: dict = None, offspring_path="", ignore_set=None):
+    def click_element(self, object_id: int = 0, element_data: dict = None, offspring_path="", ignore_set=None, focus=None):
         if object_id != 0:
             position = self.get_position(object_id=object_id)
+            if focus is None:
+                self.click_position(position)
+                return position
+            size = self.get_size(object_id=object_id)
+            bias_x = 0.5 - focus[0]
+            bias_y = 0.5 - focus[1]
+            position[0] += size[0] * bias_x
+            position[1] += size[1] * bias_y
             self.click_position(position)
             return position
         element_data_copy = self.get_element_data(element_data, offspring_path)
@@ -377,7 +423,7 @@ class BasePage:
     def click_a_until_b_appear_list(self, perform_list: list):
         cur = 0
         while cur < len(perform_list) - 1:
-            print(perform_list[cur], perform_list[cur + 1])
+            # print(perform_list[cur], perform_list[cur + 1])
             self.click_a_until_b_appear(perform_list[cur], perform_list[cur + 1])
             cur += 1
 
@@ -393,14 +439,20 @@ class BasePage:
         self.click_a_until_b_disappear(element_data_a=element_data, element_data_b=element_data)
 
     # 等待指定元素出现
-    def wait_for_appear(self, element_data: dict, is_click: bool = True, interval: float = 0.1):
-        while True:
-            position = self.exist(element_data=element_data)
+    def wait_for_appear(self, element_data: dict, is_click: bool = False, interval: float = 0.2, timeout=120):
+        cur = 0
+        position = []
+        while cur < timeout:
+            position = self.get_position_list(element_data=element_data)
             if position:
                 break
             self.sleep(interval)
-        if is_click:
-            self.click_position(position[0])
+            cur += interval
+        if not position:
+            return
+        if not is_click:
+            return
+        self.click_position(position[0])
 
     # 等待指定元素消失
     def wait_for_disappear(self, element_data: dict, interval: float = 0.1):
@@ -415,9 +467,10 @@ class BasePage:
             try:
                 self.click_position_base(position_list[0])
             except:
-                print("超出屏幕范围，没有进行点击")
+                pass
+                # print("超出屏幕范围，没有进行点击")
             return
-        print(f"{object_id, element_data}元素不存在，没有进行点击")
+        # print(f"{object_id, element_data}元素不存在，没有进行点击")
 
     # 尝试点击
     # 如果点击失败就看是否有弹窗遮挡
@@ -459,7 +512,7 @@ class BasePage:
         for panel_name in pop_window_set:
             for close_element in JumpData.panel_close_dict[panel_name]:
                 self.click_element_safe(element_data=close_element)
-                self.sleep(0.2)
+                self.sleep(1)
         return False
 
     def clear_popup(self, ignore_set=None):
@@ -474,14 +527,19 @@ class BasePage:
             self.clear_popup_once()
             self.sleep(0.5)
 
-    def go_home(self):
+    def go_home(self, cur_panel=None):
         cur = 0
-        while not self.exist(element_data=ElementsData.Home.HomePanel):
+        at_home_flag = True
+        while at_home_flag:
             self.clear_panel_except_home()
-            self.sleep(0.1)
+            self.sleep(0.5)
             cur += 1
-            if cur > 100:
+            if cur > 30:
                 raise FindNoElementError
+            at_home_flag = (not self.exist(element_data=ElementsData.Home.HomePanel))
+            if cur_panel is not None:
+                at_home_flag = at_home_flag or self.exist(element_data=JumpData.panel_dict[cur_panel])
+
 
     def go_to_panel(self, panel):
         if self.exist(element_data=JumpData.panel_dict[panel]):
@@ -491,18 +549,26 @@ class BasePage:
             self.clear_popup_once()
             for element_data in JumpData.panel_open_dict[panel]:
                 self.click_element_safe(element_data=element_data)
+                self.sleep(0.5)
 
     def clear_panel_except_home(self):
         panel_name_list = self.get_name_list(element_data=ElementsData.Panels)
         for panel_name in panel_name_list:
             if panel_name not in JumpData.panel_close_dict:
                 continue
+            self.clear_popup_once()
             for close_element in JumpData.panel_close_dict[panel_name]:
                 self.click_element_safe(element_data=close_element)
+            break
         self.sleep(0.2)
 
     # 元素滑动
-    def swipe(self, object_id: int = 0, element_data: dict = None, point_start=None, point_end=None, t: float = 0.2,
+    def swipe(self, object_id: int = 0, element_data: dict = None, point_start=None, point_end=None, t: float = 0.5,
+              offspring_path="", ignore_set=None):
+        self.clear_popup(ignore_set)
+        self.swipe_base(object_id, element_data, point_start, point_end, t, offspring_path)
+
+    def swipe_base(self, object_id: int = 0, element_data: dict = None, point_start=None, point_end=None, t: float = 0.5,
               offspring_path=""):
         if point_start is not None:
             self.poco.swipe(p1=point_start, p2=point_end, duration=t)  # direction可以填'left','right','up','down'
@@ -550,6 +616,14 @@ class BasePage:
         ui_w, ui_h = int(ui_w * self.screen_w), int(ui_h * self.screen_h)
         img = self.get_screen_shot(ui_x, ui_y, ui_w, ui_h)
         return img
+
+    # def draw_circle(self, img, center_x, center_y):
+    #     # 在指定像素点上绘制圆
+    #     color = (0, 255, 0)  # 圆的颜色，这里是红色
+    #
+    #     cv2.circle(img, (center_x * self.screen_w, center_y * self.screen_h), 10, color, 2)
+
+        # cv2.circle(img, (center_x * self.screen_w, center_y * self.screen_h), 3, color, 3)
 
     # 获取物品数量
     def get_item_count(self, item_name: str = "", item_icon_name: str = "", item_tpid: str = ""):
@@ -602,6 +676,11 @@ class BasePage:
         if item_tpid == "":
             item_tpid = self.get_tpid(item_name, item_icon_name)
         item_count = self.get_item_count(item_tpid=item_tpid)
+        count = target_count - item_count
+        if not isinstance(count, int):
+            return
+        if count == 0:
+            return
         self.cmd(f"add {item_tpid[0]} {item_tpid} {target_count - item_count}")
 
     def set_item_count_list(self, target_count_list, item_name_list:list=None, item_icon_name_list:list=None, item_tpid_list:list=None):
@@ -614,7 +693,14 @@ class BasePage:
             item_tpid = item_tpid_list[cur]
             target_count = target_count_list[cur]
             item_count = item_count_list[cur]
-            command_list.append(f"add {item_tpid[0]} {item_tpid} {target_count - item_count}")
+            count = target_count - item_count
+            if not isinstance(count, int):
+                cur += 1
+                continue
+            if count == 0:
+                cur += 1
+                continue
+            command_list.append(f"add {item_tpid[0]} {item_tpid} {count}")
             cur += 1
         self.cmd_list(command_list=command_list)
 
@@ -647,16 +733,75 @@ class BasePage:
         return item_count_list
 
     def cmd(self, command):
+        if command == "":
+            return
+        if command is None:
+            return
         self.cmd_list(command_list=[command])
 
     def cmd_list(self, command_list):
+        if not command_list:
+            return
+        if command_list is None:
+            return
         rpcMethod.cmd(self.poco, command_list)
 
     def lua_console_list(self, command_list):
+        if not command_list:
+            return
+        if command_list is None:
+            return
         rpcMethod.lua_console(self.poco, command_list)
 
     def lua_console(self, command):
+        if command == "":
+            return
+        if command is None:
+            return
         self.lua_console_list([command])
+
+    def custom_cmd_list(self, command_list):
+        if not command_list:
+            return
+        if command_list is None:
+            return
+        rpcMethod.custom_cmd(self.poco, command_list)
+
+    def custom_cmd(self, command):
+        if command == "":
+            return
+        if command is None:
+            return
+        self.custom_cmd_list([command])
+
+    def click_button(self, element_data:dict):
+        rpcMethod.click_button(self.poco, element_data)
+
+    # kind包含up，down，click
+    def ray_input(self, element_data:dict, target_name: str, kind: str):
+        rpcMethod.ray_input(self.poco, element_data, target_name, kind)
+
+    def set_object_active_list(self, active,object_id=0, object_id_list: list = None, element_data: dict = None, offspring_path=""):
+        if object_id_list is not None:
+            rpcMethod.set_object_active_by_id(self.poco, object_id_list, offspring_path, active)
+            return
+        if object_id != 0:
+            self.set_object_active_list(object_id_list=[object_id], offspring_path=offspring_path, active=active)
+            return
+        element_data_copy = self.get_element_data(element_data, offspring_path)
+        rpcMethod.set_object_active(self.poco, element_data_copy, active)
+
+    def set_object_active(self,active, object_id: int = 0, element_data: dict = None, offspring_path=""):
+        if object_id != 0:
+            self.set_object_active_list(active=active, object_id=object_id, offspring_path=offspring_path)
+            return
+        element_data_copy = self.get_element_data(element_data, offspring_path)
+        rpcMethod.set_object_active(self.poco, element_data_copy, active)
+
+    def set_time_scale(self, time_scale=5):
+        if not self.is_time_scale:
+            return
+        rpcMethod.set_time_scale(self.poco, time_scale)
 
     # 休息t秒
     @staticmethod
@@ -669,26 +814,81 @@ class BasePage:
         pyautogui.typewrite(key)
 
 
+
+
+
+
+
 if __name__ == '__main__':
-    bp = BasePage()
-    # target_count_list = [5, 10]
-    # item_tpid_list = ["100000", "100500"]
+    bp = BasePage("192.168.111.77:20088")
+    bp.cmd("mode 400301 301013")
+    # "mode 400312 390116"
+    # bp.cmd("mode 400302 390015")
+    # bp.cmd_list(["add 1 100200 1000000", ""])
+    # serial_number = "127.0.0.1:21593"
+    # dev = connect_device(f"android://127.0.0.1:5037/{serial_number}")
+    # poco = AndroidUiautomationPoco()
+    # poco()
+    # a = bp.excelTools.get_table_data("ACHIEVEMENT_CATEGORY.xlsm")
+    #
+    # print(a)
+    # cur = 0
+    # phone = ""
+    # while cur < 8:
+    #     r = random.randint(0,9)
+    #     phone += str(r)
+    #     cur += 1
+    # print(phone)
+    #
+    # cur = 0
+    # password = ""
+    # while cur < 6:
+    #     r = random.randint(0,9)
+    #     password += str(r)
+    #     cur += 1
+    # print(password)
+    lv = 1
+    while lv < 44:
+        a = bp.excelTools.get_exp_limit(lv)
+        print(lv, a)
+        lv += 1
+
+
+    # bp.go_home(cur_panel="QuestionnairePanel")
+    # bp.ray_input(element_data=ElementsData.Battle.joystick, target_name="BattlePanel", kind="down")
+    # bp.sleep(1)
+    # bp.ray_input(element_data=ElementsData.Battle.btn_reel, target_name="btn_cast", kind="up")
+    # bp.sleep(0.2)
+    # bp.ray_input(element_data=ElementsData.Home.btn_add_100000, target_name="btn_add", kind="up")
+    # bp.ray_click(position[0], position[1])
+    #
+    # res = bp.get_item_count_list(item_tpid_list=["100100", "100000", "207004", "211091"])
+    # print(res)
+
+
+    # bp.go_to_panel("BattlePassPanel")
+    # a= bp.get_object_id_list(element_data= {"locator": "UICanvas>Default>>>>btn_cast>btn_normal"})
+    # print(a)
+    # img = bp.get_full_screen_shot()
+    # bp.save_img(img, "306006")
+    # target_count_list = [100]
+    # item_tpid_list = ["100100"]
     # bp.set_item_count_list(target_count_list=target_count_list, item_tpid_list=item_tpid_list)
-    rpcMethod.set_btn_enabled(bp.poco, element=ElementsData.NewbieTask.NewbieTaskPanel, enabled=False)
-    screen_h = bp.screen_h
-    screen_w = bp.screen_w
-    step = 50
-    x = 0
-    while x < screen_w:
-        y = 0
-        while y < screen_h:
-            bp.click_position([x/screen_w, y/screen_h])
-            y += step
-        x += step
+    # rpcMethod.set_btn_enabled(bp.poco, element=ElementsData.FishCardUpgrade.FishCardUpgradePanel,
+    # enabled=True)
+    # screen_h = bp.screen_h
+    # screen_w = bp.screen_w
+    # step = 50
+    # x = 0
+    # while x < screen_w:
+    #     y = 0
+    #     while y < screen_h:
+    #         bp.click_position([x/screen_w, y/screen_h])
+    #         y += step
+    #     x += step
 
     # bp.lua_console('PanelMgr:OpenPanel("HomePanel")')
     # bp.get_item_count(item_icon_name="achv_group_icon_8")
-    # set_text(bp.poco, ElementsData.BattlePass.btn_buy_text,"kamsiya")
     # print(get_text(bp.poco,ElementsData.BattlePass.btn_task_text))
     # print(get_slider_value(bp.poco,ElementsData.PlayerSetting.options_music))
     # action_list = [

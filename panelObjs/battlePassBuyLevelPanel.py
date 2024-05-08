@@ -64,5 +64,3 @@ class BattlePassBuyLevelPanel(BasePage):
 
 if __name__ == "__main__":
     bp = BattlePassBuyLevelPanel()
-
-    print(a)

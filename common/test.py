@@ -1,26 +1,66 @@
-from common.basePage import BasePage
+from typing import List
+
+import os
 
 
+def count_lines(file_path):
+    with open(file_path, 'r', encoding='gbk', errors='ignore') as file:
+        count = sum(1 for line in file if line.strip() != '')
+    return count
+
+
+def count_code_lines(directory):
+    total_count = 0
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            if file.endswith('.py'):
+                file_path = os.path.join(root, file)
+                count = count_lines(file_path)
+                total_count += count
+    return total_count
+
+def move(m,n):
+    if m == 1 and n == 1:
+        return 0
+    if m == 1:
+        return 1
+    if n == 1:
+        return 1
+    return move(m - 1, n) + move(m, n - 1)
+
+def fun_test(a, b):
+    if a < 10:
+        return b - 1
+    if b > 4:
+        return b + 2
+    while a > b:
+        b += 1
+    return b
+
+def ab(s:str):
+    cur = 0
+    count = 0
+    while cur < len(s):
+        if s[cur] == 'a':
+            count += 1
+            cur += 1
+            continue
+        count -= 1
+        if count < 0:
+            return False
+        cur += 1
+    if count == 0:
+        return True
+    return False
 if __name__ == '__main__':
-    bp = BasePage()
-    buff = 0
-    tpid = 308003
-    fish_type = bp.excelTools.get_fish_type([tpid])[0]
-    base1 = 1000
-    base2 = base1 + 200
-    FISHTYPE_ADD_common = 0
-    if fish_type == 1:
-        FISHTYPE_ADD_common = -950
-    elif fish_type == 2:
-        FISHTYPE_ADD_common = -850
-    elif fish_type == 3:
-        FISHTYPE_ADD_common = -600
-    elif fish_type == 4:
-        FISHTYPE_ADD_common = 0
-    elif fish_type == 5:
-        FISHTYPE_ADD_common = 1500
-    base3 = base2 * (1000 + FISHTYPE_ADD_common)/1000
-    point = base3 * (1000 + buff) /1000
+    # input = "abab"
+    # res = ab(input)
+    # print(res)
+    # print(move(4, 4))
+    project_directory = 'D:\FishonTestProject'
+    code_line_count = count_code_lines(project_directory)
+    print(f"Total code lines: {code_line_count}")
+
 
 
 

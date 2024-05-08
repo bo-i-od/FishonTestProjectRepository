@@ -34,7 +34,7 @@ class ProgressRewardsPanel(BasePage):
 
     # 得到大奖图标位置
     def get_big_rewards_position_list(self):
-        position_list = self.get_icon_list(element_data=ElementsData.ProgressRewards.big_rewards_icon_list)
+        position_list = self.get_position_list(element_data=ElementsData.ProgressRewards.big_rewards_icon_list)
         return position_list
 
     # 得到进度条分子和分母
@@ -69,3 +69,11 @@ class ProgressRewardsPanel(BasePage):
         resource.str_to_int_list(quantity_list)
         return quantity_list
 
+    def is_progress_finish(self):
+        if self.exist(element_data=ElementsData.ProgressRewards.progress_finish):
+            return True
+        return False
+
+if __name__ == '__main__':
+    bp = BasePage("b6h65hd64p5pxcyh")
+    bp.cmd("setPlayerLayer 5000")

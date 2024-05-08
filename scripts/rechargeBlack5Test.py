@@ -38,6 +38,8 @@ def collect_test(bp: BasePage):
     compare_dict(day_dict, reward_dict)
     print(item_count_expect_list, item_count_list)
     compare_list(item_count_expect_list, item_count_list)
+    RewardsPanel.wait_for_panel_appear(bp)
+    bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
     if RechargeBlack5Panel.is_btn_collect_clickable(bp):
         raise FindElementError

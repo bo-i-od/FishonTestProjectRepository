@@ -1,5 +1,6 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
+from panelObjs.battleFailedPanel import BattleFailedPanel
 from panelObjs.rewardsPanel import RewardsPanel
 
 class ResultPanel(BasePage):
@@ -9,21 +10,28 @@ class ResultPanel(BasePage):
         return exp_str
 
     def wait_for_result(self):
-        btn_open_and_cast_again = self.exist(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again)
-        btn_claim = self.exist(element_data=ElementsData.Result.btn_claim)
-        btn_throw = self.exist(element_data=ElementsData.Result.pve_result.btn_throw)
-        while not (btn_open_and_cast_again or btn_claim or btn_throw):
-            btn_open_and_cast_again = self.exist(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again)
+        while True:
             btn_claim = self.exist(element_data=ElementsData.Result.btn_claim)
-            btn_throw = self.exist(element_data=ElementsData.Result.pve_result.btn_throw)
+            if btn_claim:
+                return ElementsData.Result.btn_claim
+            btn_claim_token_fish = self.exist(element_data=ElementsData.Result.btn_claim_token_fish)
+            if btn_claim_token_fish:
+                return ElementsData.Result.btn_claim_token_fish
+            btn_cast_again = self.exist(element_data=ElementsData.BattleFailed.btn_again)
+            if btn_cast_again:
+                return ElementsData.BattleFailed.btn_again
+            self.sleep(0.1)
 
-    def automatic_settlement(self):
-        if self.exist(element_data=ElementsData.Result.btn_claim):
-            ResultPanel.click_btn_claim(self)
-            return
-        ResultPanel.duel_sundries(self)
-        self.sleep(1)
-        self.click_element(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again)
+    def automatic_settlement(self, element_btn):
+        # f_flag = True
+        while self.exist(element_data=element_btn):
+            # if f_flag:
+            #     img = self.get_full_screen_shot()
+            #     self.save_img(img)
+            #     f_flag = False
+            self.clear_popup_once()
+            self.sleep(0.5)
+            self.click_element_safe(element_data=element_btn)
 
 
 
@@ -43,7 +51,7 @@ class ResultPanel(BasePage):
             self.click_element(element_data=ElementsData.Result.pve_result.btn_open_and_cast_again)
         else:
             self.click_element(element_data=ElementsData.Result.pve_result.btn_throw)
-        RewardsPanel.wait_for_RewardsPanel(self)
+        RewardsPanel.wait_for_panel_appear(self)
         self.sleep(0.5)
         RewardsPanel.click_tap_to_claim(self)
         return
@@ -55,4 +63,4 @@ class ResultPanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    print(bp.exist(element_data=ElementsData.Result.btn_claim))
+    ResultPanel.click_btn_claim(bp)

@@ -33,4 +33,3 @@ class FishCardGiftPackPanel(BasePage):
 if __name__ == "__main__":
     bp = BasePage()
 
-    print(a)

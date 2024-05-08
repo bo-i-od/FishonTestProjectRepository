@@ -37,6 +37,8 @@ def buy_test(bp: BasePage, index):
         cur += 1
     item_count_list = bp.get_item_count_list(item_icon_name_list=icon_list)
     compare(item_count_list, quantity_list)
+    RewardsPanel.wait_for_panel_appear(bp)
+    bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
     if RewardsPanel.is_panel_active(bp):
         raise FindElementError

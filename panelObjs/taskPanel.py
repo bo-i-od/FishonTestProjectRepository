@@ -32,7 +32,7 @@ class TaskPanel(BasePage):
         icon_list = self.get_icon_list(object_id_list=icon_id_list)
         quantity_list = self.get_text_list(object_id_list=quantity_id_list)
         str_to_int_list(quantity_list)
-        item_dict = resource.make_item_dict(item_coin_list=icon_list, item_quantity_list=quantity_list)
+        item_dict = resource.make_item_dict(item_icon_list=icon_list, item_quantity_list=quantity_list)
         return item_dict
 
     def get_task_id_list(self):
@@ -189,8 +189,9 @@ class TaskPanel(BasePage):
         TaskPanel.make_award_detail_appear(self, position=position)
         reward_icon_list = TaskPanel.get_box_award_icon_list(self)
         reward_quantity_list = TaskPanel.get_box_award_quantity_list(self)
-        item_dict = resource.make_item_dict(item_coin_list=reward_icon_list, item_quantity_list=reward_quantity_list)
-        self.click_position([0.5, 0.1])
+        item_dict = resource.make_item_dict(item_icon_list=reward_icon_list, item_quantity_list=reward_quantity_list)
+        self.click_position([0.5, 0.9])
+        self.sleep(1)
         return item_dict
 
     def get_month_award_detail(self, position):
@@ -198,7 +199,7 @@ class TaskPanel(BasePage):
         TaskPanel.make_award_detail_month_appear(self, position=position)
         reward_icon_list = TaskPanel.get_month_box_award_icon_list(self)
         reward_quantity_list = TaskPanel.get_month_box_award_quantity_list(self)
-        item_dict = resource.make_item_dict(item_coin_list=reward_icon_list, item_quantity_list=reward_quantity_list)
+        item_dict = resource.make_item_dict(item_icon_list=reward_icon_list, item_quantity_list=reward_quantity_list)
         self.click_position([0.5, 0.1])
         return item_dict
 
@@ -247,7 +248,7 @@ class TaskPanel(BasePage):
     def get_box_award_dict(self):
         box_award_icon_list = TaskPanel.get_box_award_icon_list(self)
         box_award_quantity_list = TaskPanel.get_box_award_quantity_list(self)
-        return resource.make_item_dict(item_coin_list=box_award_icon_list, item_quantity_list=box_award_quantity_list)
+        return resource.make_item_dict(item_icon_list=box_award_icon_list, item_quantity_list=box_award_quantity_list)
 
     def get_progress_value(self):
         progress_value = self.get_slider_value(element_data=ElementsData.Task.progress_value)
@@ -293,12 +294,9 @@ class TaskPanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    v = TaskPanel.get_viewport(bp)
-    # print(v.viewport_range)
-    v.change_item(ElementsData.Task.task_award_icon_list)
-    il,pl =v.get_clickable_icon_and_position_list()
-    bp.click_position(pl[0])
-    # task_id_list = TaskPanel.get_task_id_list(bp)
+
+    task_id_list = TaskPanel.get_task_id_list(bp)
+    print(TaskPanel.get_task_award_dict(bp, task_id_list, 1))
     # # btn_status_list, btn_position_list = TaskPanel.get_btn_status_and_position_list(bp, task_id_list)
     # # bp.click_position(btn_position_list[1])
     # # v.move_until_appear(task_id_list[8])

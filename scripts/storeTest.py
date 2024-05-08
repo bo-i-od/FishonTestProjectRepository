@@ -1,12 +1,13 @@
 import random
 from common.basePage import BasePage
+from panelObjs.playerLevelupPanel import PlayerLevelupPanel
 from panelObjs.storePanel import StorePanel
 from panelObjs.itemTipsPanel import ItemTipsPanel
 from panelObjs.rewardsPanel import RewardsPanel
 from panelObjs.baitAndRodShowPanel import BaitAndRodShowPanel
 from panelObjs.fishCardPackTipsPanel import FishCardPackTipsPanel
 from tools.commonTools import *
-from common import resource
+from common import resource, gameInit
 
 
 def gift_pack_test(bp:BasePage):
@@ -29,18 +30,21 @@ def gift_pack_click_icon_test(bp:BasePage):
     r = random.randint(0, len(gift_pack_position_list) - 1)
     bp.click_position(gift_pack_position_list[r])
 
-    # 得到弹出的图标
-    item_icon = ItemTipsPanel.get_item_icon(bp)
-
-    # 对比点击的图标和弹出的图标
-    compare(item_icon, gift_pack_icon_list[r])
+    # 得到弹出的图标并对比
+    if ItemTipsPanel.is_panel_active(bp):
+        item_icon = ItemTipsPanel.get_item_icon(bp)
+        compare(item_icon, gift_pack_icon_list[r])
+    elif FishCardPackTipsPanel.is_panel_active(bp):
+        item_icon = FishCardPackTipsPanel.get_item_icon(bp)
+        compare(item_icon, gift_pack_icon_list[r])
 
     # 消去弹出的浮窗
     bp.click_position([0.5, 0.1])
 
 
 def gift_pack_buy_test(bp:BasePage):
-
+    if not bp.is_pay:
+        return
 
     # 得到购买按钮位置的列表
     gift_pack_id_list = StorePanel.get_gift_pack_id_list(bp)
@@ -61,7 +65,7 @@ def gift_pack_buy_once_test(bp:BasePage, gift_pack_dict, btn_position):
 
     # 点击购买
     bp.click_position(btn_position)
-    bp.sleep(0.5)
+    bp.sleep(1)
 
     # 对比售卖的物品和实际获得的物品
     reward_dict = RewardsPanel.get_reward_dict(bp)
@@ -81,6 +85,8 @@ def gift_pack_buy_once_test(bp:BasePage, gift_pack_dict, btn_position):
     compare_list(item_count_expect_list, item_count_list)
 
     # 关闭恭喜获得
+    RewardsPanel.wait_for_panel_appear(bp)
+    bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
 
 
@@ -118,6 +124,8 @@ def cash_click_icon_test(bp:BasePage):
     bp.click_position([0.5, 0.1])
 
 def cash_buy_test(bp:BasePage):
+    if not bp.is_pay:
+        return
     # 得到图标、数量、首次x2、按钮位置
     cash_icon_list = StorePanel.get_cash_icon_list(bp)
     cash_id_list = StorePanel.get_cash_id_list(bp)
@@ -142,7 +150,7 @@ def cash_buy_once_test(bp:BasePage, cash_icon, cash_quantity, btn_position):
 
     # 点击购买
     bp.click_position(btn_position)
-    bp.sleep(0.5)
+    bp.sleep(1)
 
     # 对比商品数量和实际获取物品数量
     reward_quantity_list = RewardsPanel.get_reward_quantity_list(bp)
@@ -158,11 +166,13 @@ def cash_buy_once_test(bp:BasePage, cash_icon, cash_quantity, btn_position):
     compare(item_count_expect, item_count)
 
     # 关闭恭喜获得
+    RewardsPanel.wait_for_panel_appear(bp)
+    bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
 
 def gear_test(bp:BasePage):
     StorePanel.change_tab(bp, 1)
-    bp.sleep(0.5)
+    bp.sleep(1)
     StorePanel.change_resource_tab(bp, 0)
     item_tpid_list = ["100000", "100100"]
     target_count_list = [1500000, 10000]
@@ -185,7 +195,7 @@ def gear_show_test(bp:BasePage):
 
     # 点击放大镜
     StorePanel.click_btn_info(bp)
-    bp.sleep(0.5)
+    bp.sleep(1)
 
     # 对比鱼竿名是否正确
     gear_name = BaitAndRodShowPanel.get_gear_name(bp)
@@ -206,7 +216,7 @@ def gear_buy_test(bp:BasePage):
     while cur < len(gear_icon_list):
         # 点击指定鱼竿
         bp.click_position(gear_position_list[cur])
-        bp.sleep(0.5)
+        bp.sleep(1)
 
         # 获取价格
         price_list = StorePanel.get_price_list(bp, item_id_list=item_id_list)
@@ -238,9 +248,9 @@ def gear_buy_once_test(bp:BasePage, gear_icon, price,btn_icon, btn_position):
         return
 
     # 关闭鱼竿展示界面
-    bp.sleep(0.5)
+    bp.sleep(1)
     BaitAndRodShowPanel.click_tap_to_continue(bp)
-    bp.sleep(0.5)
+    bp.sleep(1)
 
     # 计算库存与实际库存，然后对比
     stock_expect -= price
@@ -252,17 +262,19 @@ def gear_buy_once_test(bp:BasePage, gear_icon, price,btn_icon, btn_position):
     compare(reward_gear_icon_list[0], gear_icon)
 
     # 关闭恭喜获得
+    RewardsPanel.wait_for_panel_appear(bp)
+    bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
 
 
 def fish_card_test(bp:BasePage):
     StorePanel.change_tab(bp, 1)
-    bp.sleep(0.5)
+    bp.sleep(1)
     StorePanel.change_resource_tab(bp, 1)
-    # 得到第一根鱼卡包的价格，差一块钱
+    # 得到第一个鱼卡包的价格，差一块钱
     item_id_list = StorePanel.get_item_id_list(bp)
     price_list = StorePanel.get_price_list(bp, item_id_list=item_id_list)
-    bp.set_item_count(target_count=price_list[0] - 1, item_tpid="100000")
+    bp.set_item_count(target_count=price_list[0] - 1, item_tpid="100100")
     fish_card_click_icon_test(bp)
     fish_card_buy_test(bp)
 
@@ -280,7 +292,7 @@ def fish_card_buy_test(bp:BasePage):
     while cur < len(fish_card_position_list):
         # 点击购买
         bp.click_position(fish_card_position_list[cur])
-        bp.sleep(0.5)
+        bp.sleep(1)
 
         # 获取价格
         price_list = StorePanel.get_price_list(bp, item_id_list=item_id_list)
@@ -340,6 +352,7 @@ def fish_card_click_icon_test(bp:BasePage):
     fish_card_main_name = StorePanel.get_fish_card_main_name(bp)  # 主展示卡包名
     fish_card_name = FishCardPackTipsPanel.get_fish_card_name(bp)
     fish_card_name = fish_card_name.replace(" Pack", "")  # 浮窗上卡包名
+    fish_card_name = fish_card_name.replace("卡包", "")  # 浮窗上卡包名
     compare(fish_card_main_name, fish_card_name_list[r])
     compare(fish_card_name_list[r], fish_card_name)
 
@@ -379,6 +392,8 @@ def booster1_buy_test(bp:BasePage):
         bp.click_position(btn_position_list[r])
         reward_dict = RewardsPanel.get_reward_dict(bp)
         compare_dict(reward_dict, booster_dict)
+        RewardsPanel.wait_for_panel_appear(bp)
+        bp.sleep(1)
         RewardsPanel.click_tap_to_claim(bp)
         cash = StorePanel.get_cash(bp)
         compare(cash_expect, cash)
@@ -400,6 +415,8 @@ def booster1_buy_test(bp:BasePage):
         bp.click_position(btn_position_list[r])
         reward_dict = RewardsPanel.get_reward_dict(bp)
         compare_dict(reward_dict, booster_dict)
+        RewardsPanel.wait_for_panel_appear(bp)
+        bp.sleep(1)
         RewardsPanel.click_tap_to_claim(bp)
         cash = StorePanel.get_cash(bp)
         compare(cash_expect, cash)
@@ -425,6 +442,8 @@ def booster1_buy_test(bp:BasePage):
         bp.click_position(btn_position_list[r])
         reward_dict = RewardsPanel.get_reward_dict(bp)
         compare_dict(reward_dict, booster_dict)
+        RewardsPanel.wait_for_panel_appear(bp)
+        bp.sleep(1)
         RewardsPanel.click_tap_to_claim(bp)
         cash = StorePanel.get_cash(bp)
         compare(cash_expect, cash)
@@ -455,6 +474,8 @@ def booster2_buy_test(bp:BasePage):
         bp.click_position(btn_position_list[r])
         reward_dict = RewardsPanel.get_reward_dict(bp)
         compare_dict(reward_dict, booster_dict)
+        RewardsPanel.wait_for_panel_appear(bp)
+        bp.sleep(1)
         RewardsPanel.click_tap_to_claim(bp)
         cash = StorePanel.get_cash(bp)
         compare(cash_expect, cash)
@@ -465,7 +486,7 @@ def booster2_buy_test(bp:BasePage):
 
 def materials_test(bp: BasePage):
     StorePanel.change_tab(bp, 1)
-    bp.sleep(0.5)
+    bp.sleep(1)
     StorePanel.change_resource_tab(bp, 2)
     materials_click_icon_test(bp)
     materials_slider_test(bp)
@@ -493,18 +514,22 @@ def materials_click_icon_test(bp:BasePage):
 
 def materials_slider_test(bp:BasePage):
     # 得到最小单位和单位价格的数量
+    StorePanel.click_btn_min(bp)
+    bp.sleep(1)
     item_min = StorePanel.get_item_quantity(bp)
     cost_min = StorePanel.get_cost_quantity(bp)
     k = int(item_min / cost_min)
 
     # 测btn_max
     StorePanel.click_btn_max(bp)
+    bp.sleep(1)
     item_max = StorePanel.get_item_quantity(bp)
     cost_max = StorePanel.get_cost_quantity(bp)
     compare(k, int(item_max/cost_max))
 
     # 测上限时的btn_add
     StorePanel.click_btn_add(bp)
+    bp.sleep(1)
     item_cur = StorePanel.get_item_quantity(bp)
     cost_cur = StorePanel.get_cost_quantity(bp)
     compare(item_max, item_cur)
@@ -513,6 +538,7 @@ def materials_slider_test(bp:BasePage):
 
     # 测btn_sub
     StorePanel.click_btn_sub(bp)
+    bp.sleep(1)
     item_cur = StorePanel.get_item_quantity(bp)
     cost_cur = StorePanel.get_cost_quantity(bp)
     compare(item_max - item_min, item_cur)
@@ -522,7 +548,8 @@ def materials_slider_test(bp:BasePage):
     # 测滑条滑到下限
     slider_position = StorePanel.get_slider_position(bp)
     slider_size = StorePanel.get_slider_size(bp)
-    bp.swipe(point_start=[slider_position[0] - 0.4 * slider_size[0], slider_position[1]], point_end=[slider_position[0] - 0.6 * slider_size[0], slider_position[1]])
+    bp.swipe(point_start=[slider_position[0] - 0.2 * slider_size[0], slider_position[1]], point_end=[slider_position[0] - 0.6 * slider_size[0], slider_position[1]])
+    bp.sleep(1)
     item_cur = StorePanel.get_item_quantity(bp)
     cost_cur = StorePanel.get_cost_quantity(bp)
     compare(item_min, item_cur)
@@ -531,6 +558,7 @@ def materials_slider_test(bp:BasePage):
 
     # 测下限时的btn_sub
     StorePanel.click_btn_sub(bp)
+    bp.sleep(1)
     item_cur = StorePanel.get_item_quantity(bp)
     cost_cur = StorePanel.get_cost_quantity(bp)
     compare(item_min, item_cur)
@@ -539,6 +567,7 @@ def materials_slider_test(bp:BasePage):
 
     # 测btn_add
     StorePanel.click_btn_add(bp)
+    bp.sleep(1)
     item_cur = StorePanel.get_item_quantity(bp)
     cost_cur = StorePanel.get_cost_quantity(bp)
     compare(item_min + item_min, item_cur)
@@ -546,7 +575,8 @@ def materials_slider_test(bp:BasePage):
     compare(k, int(item_cur / cost_cur))
 
     # 测滑条滑到上限
-    bp.swipe(point_start=[slider_position[0] + 0.4 * slider_size[0], slider_position[1]], point_end=[slider_position[0] + 0.6 * slider_size[0], slider_position[1]])
+    bp.swipe(point_start=[slider_position[0] + 0.2 * slider_size[0], slider_position[1]], point_end=[slider_position[0] + 0.6 * slider_size[0], slider_position[1]])
+    bp.sleep(1)
     item_cur = StorePanel.get_item_quantity(bp)
     cost_cur = StorePanel.get_cost_quantity(bp)
     compare(item_max, item_cur)
@@ -592,7 +622,7 @@ def materials_buy_once_test(bp: BasePage):
     # 充足的情况下购买
     bp.set_item_count(target_count=cost_quantity, item_tpid="100100")
     StorePanel.click_btn_purchase(bp)
-    bp.sleep(0.5)
+    bp.sleep(1)
     # 对比钞票
     cash_expect = 0
     cash = StorePanel.get_cash(bp)
@@ -610,11 +640,13 @@ def materials_buy_once_test(bp: BasePage):
     compare(item_stock_expect, item_stock)
 
     # 关闭恭喜获得
+    RewardsPanel.wait_for_panel_appear(bp)
+    bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
 
 def box_test(bp: BasePage):
     StorePanel.change_tab(bp, 2)
-    bp.sleep(0.5)
+    bp.sleep(1)
     box_id_list = StorePanel.get_box_id_list(bp)
     btn_position_list = StorePanel.get_btn_position_list(bp, box_id_list)
     box_price_test(bp, box_id_list)
@@ -734,9 +766,25 @@ def box_refresh_test(bp: BasePage, box_id_list: list):
         print("未刷新成功")
         raise SameError
 
-def store_test(bp: BasePage):
+def main(bp: BasePage):
+    # 查询商城的解锁等级
+    unlock_lv = bp.excelTools.get_unlock_lv("商店")
+    exp = bp.excelTools.get_exp_limit(unlock_lv)[1]
+
+    # 进入大厅
+    # 设置分层
+    layer = f"{random.randint(1, 5)}000"
+    bp.debug_log(f"当前分层{layer}")
+    cmd_list = ["guideskip", f"setPlayerLayer {layer}", f"add 1 100200 {exp}"]
+    gameInit.login_to_hall(bp, cmd_list=cmd_list)
+
+    # # 关闭升级弹窗
+    # PlayerLevelupPanel.wait_for_panel_appear(bp)
+
     bp.go_to_panel("StorePanel")
     gift_pack_test(bp)
+    bp.debug_log(f"当前分层{layer}")
+    bp.cmd_list([f"setPlayerLayer {layer}", "refreshshop"])
     cash_test(bp)
     gear_test(bp)
     fish_card_test(bp)
@@ -745,6 +793,6 @@ def store_test(bp: BasePage):
     bp.go_home()
 
 if __name__ == '__main__':
-    bp = BasePage()
-    bp.set_item_count(target_count=1000000, item_tpid="100200")
-    store_test(bp)
+    bp = BasePage("192.168.111.81:20021")
+    main(bp)
+    # box_test(bp)

@@ -31,11 +31,16 @@ class RoulettePanel(BasePage):
         ticket = ticket.split('</color>')
         ticket_count = str_to_int(ticket[0].split('>')[1])
         ticket_cost = str_to_int(ticket[1].split('>')[1])
-        print(ticket_count, ticket_cost)
         return ticket_count, ticket_cost
 
     def get_turntable_icon_list(self):
         return self.get_icon_list(element_data=ElementsData.Roulette.turntable_icon_list)
+
+    def click_btn_i(self):
+        self.click_element(element_data=ElementsData.Roulette.btn_i)
+
+    def click_btn_announcement(self):
+        self.click_element(element_data=ElementsData.Roulette.btn_announcement)
 
 
 if __name__ == '__main__':

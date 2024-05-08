@@ -44,10 +44,15 @@ class BuyEnergyPanel(BasePage):
 
     def buy_energy(self):
         if BuyEnergyPanel.click_btn_drink(self) is True:
+            RewardsPanel.wait_for_panel_appear(self)
+            self.sleep(1)
             RewardsPanel.click_tap_to_claim(self)
             return
         BuyEnergyPanel.click_btn_cash(self)
+        RewardsPanel.wait_for_panel_appear(self)
+        self.sleep(1)
         RewardsPanel.click_tap_to_claim(self)
+
 
     def get_energy_value(self):
         energy_text = self.get_text(element_data=ElementsData.BuyEnergy.text_100500)

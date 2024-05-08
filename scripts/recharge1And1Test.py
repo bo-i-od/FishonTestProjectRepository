@@ -42,6 +42,8 @@ def buy_test(bp: BasePage):
     # 支付成功
     reward_icon_list = RewardsPanel.get_reward_icon_list(bp, is_divide=False)
     compare_list(item_icon_list, reward_icon_list)
+    RewardsPanel.wait_for_panel_appear(bp)
+    bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
     print("1+1礼包，测试通过")
 

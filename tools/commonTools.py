@@ -1,3 +1,5 @@
+from airtest.core.helper import G
+from airtest.core.android.android import Android as cls
 from common.error import *
 import ctypes
 import inspect
@@ -18,9 +20,9 @@ def compare_list(list_a, list_b):
 
 
 def compare_dict(dict_a, dict_b):
-    compare(len(dict_a), len(dict_b))
     for key in dict_a:
         compare(dict_a[key], dict_b[key])
+    compare(len(dict_a), len(dict_b))
 
 
 def checktoggle(toggle_is_on_list, index):
@@ -76,13 +78,33 @@ def stop_thread( thread):
     _async_raise(thread.ident, SystemExit)
 
 
-def unit_conversion_int_to_str(count: int):
+def unit_conversion_int_to_str(count: int, significant_digits=0):
     if count < 10000:
         return str(count)
     elif count < 10000000:
         return str(int(count/1000)) + "K"
     elif count < 10000000000:
         return str(int(count / 1000000)) + "M"
+    elif count < 10000000000000:
+        return str(int(count / 1000000000)) + "B"
+
+def unit_conversion_int_to_str_chs(count: int, significant_digits=0):
+    if count < 10000:
+        return str(count)
+    elif count < 100000000:
+        return str(int(count/10000)) + "万"
+    elif count < 1000000000000:
+        return str(int(count / 100000000)) + "亿"
+    elif count < 10000000000000000:
+        return str(int(count / 1000000000000)) + "兆"
+
+
+
+def remove_decimals(value_with_unit):
+    # 正则表达式匹配小数点后的数字
+    pattern = re.compile(r"(\.\d+)")
+    # 替换为空字符串，即删除小数点后的数字
+    return pattern.sub('', value_with_unit)
 
 
 def str_to_int(count:str):
@@ -90,6 +112,8 @@ def str_to_int(count:str):
         return int(count[:-1]) * 1000
     elif count[-1:] == 'M':
         return int(count[:-1]) * 1000000
+    elif count[-1:] == 'B':
+        return int(count[:-1]) * 1000000000
     elif count[-1:] == '万':
         return int(count[:-1]) * 10000
     elif count[-1:] == '亿':
@@ -106,6 +130,10 @@ def str_to_int_list(count_list:list):
             count_list[cur] = int(count_list[cur][:-1]) * 1000
         elif count_list[cur][-1:] == 'M':
             count_list[cur] = int(count_list[cur][:-1]) * 1000000
+        elif count_list[cur][-1:] == '万':
+            count_list[cur] = int(count_list[cur][:-1]) * 10000
+        elif count_list[cur][-1:] == '亿':
+            count_list[cur] = int(count_list[cur][:-1]) * 100000000
         else:
             count_list[cur] = int(count_list[cur])
         cur += 1
@@ -126,6 +154,13 @@ def get_toggle_is_on_index(toggle_is_on_list:list):
             break
         cur += 1
     return res
+
+def get_img_position(query,img):
+    if img is None:
+        print("屏幕可能锁定")
+        return
+    match_pos = query.match_in(img)
+    return match_pos
 
 
 

@@ -11,3 +11,7 @@ class TreasureChestGearsShardsPanel(BasePage):
         if self.exist(element_data=ElementsData.TreasureChestGearsShards.TreasureChestGearsShardsPanel):
             return True
         return False
+
+    def get_btn_enhance_position_list(self):
+        btn_enhance_position_list = self.get_position_list(element_data=ElementsData.TreasureChestGearsShards.btn_enhance_list)
+        return btn_enhance_position_list
