@@ -512,5 +512,5 @@ def main(bp: BasePage):
     bp.go_home()
 
 if __name__ == '__main__':
-    bp = BasePage("ABSHUT1818002287")
+    bp = BasePage("192.168.111.77:20090")
     main(bp)

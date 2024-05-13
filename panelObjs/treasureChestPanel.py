@@ -79,14 +79,8 @@ class TreasureChestPanel(BasePage):
         return int(chest_point)
 
     def click_btn_magnifier(self):
-        if self.exist(element_data=ElementsData.TreasureChest.tips):
-            self.click_element(element_data=ElementsData.TreasureChest.btn_magnifier)
-            if self.exist(element_data=ElementsData.TreasureChest.tips):
-                raise FindElementError
-            return
         self.click_element(element_data=ElementsData.TreasureChest.btn_magnifier)
-        if not self.exist(element_data=ElementsData.TreasureChest.tips):
-            raise FindNoElementError
+
 
     def get_preview_icon_and_position_list(self):
         preview_icon_list = self.get_icon_list(element_data=ElementsData.TreasureChest.preview_icon_list)

@@ -96,7 +96,7 @@ def energy_cash_usd_test(bp:BasePage):
         cash_usd_recovery_value = BuyEnergyPanel.get_cash_usd_recovery_value(bp)
         energy_expect = cash_usd_recovery_value + energy
         BuyEnergyPanel.click_btn_cash_usd(bp)
-        bp.sleep(1)
+        bp.sleep(2)
         while RewardsPanel.is_panel_active(bp):
             RewardsPanel.click_tap_to_claim(bp)
             bp.sleep(1)

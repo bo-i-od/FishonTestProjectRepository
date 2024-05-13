@@ -100,7 +100,7 @@ def main(bp:BasePage):
     # 刺鱼引导
     bp.go_to_panel("TournamentsPanel")
     bp.cmd("mode 400301 390001")
-    bp.sleep(100)
+    bp.sleep(1)
     hookTest(bp)
     BattlePanel.reel_quick(bp)
     element_btn = ResultPanel.wait_for_result(bp)
@@ -129,5 +129,5 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("133390d1")
+    bp = BasePage("192.168.111.77:20052")
     main(bp)

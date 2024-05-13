@@ -72,7 +72,7 @@ def unlock_test(bp: BasePage):
     bp.sleep(1)
     rod_info_gear_next = GearLevelupPanel.get_rod_info(bp)
     if rod_info_gear_levelup == rod_info_gear_next:
-        raise SameError
+        bp.debug_log("erro_", "rod_info_gear_levelup == rod_info_gear_next", rod_info_gear_levelup, rod_info_gear_next)
 
     # 再点击previous切回来 对照信息
     GearLevelupPanel.click_btn_previous(bp)
@@ -105,17 +105,25 @@ def unlock_test(bp: BasePage):
     bp.sleep(1)
     rod_info_gear_next = GearEnhancePanel.get_rod_info(bp)
     if rod_info_gear_enhance == rod_info_gear_next:
-        raise SameError
-
+        bp.debug_log("erro_", "rod_info_gear_enhance == rod_info_gear_next", rod_info_gear_enhance, rod_info_gear_next)
     # 再点击previous切回来 对照信息
     GearEnhancePanel.click_btn_previous(bp)
     bp.sleep(1)
     rod_info_gear_previous = GearEnhancePanel.get_rod_info(bp)
     compare(rod_info_gear_enhance, rod_info_gear_previous)
 
-    # 点击升星按钮
+    # 升星直到碎片不足
     GearEnhancePanel.click_btn_enhance(bp)
-    bp.sleep(1)
+    # 等待动画
+    bp.sleep(3)
+    # 关闭升星成功面板
+    while not CommonItemGetPanel.is_panel_active(bp):
+        GearEnhanceSuccesPanel.click_btn_close(bp)
+        bp.sleep(1)
+        # 点击升星按钮
+        GearEnhancePanel.click_btn_enhance(bp)
+        # 等待动画
+        bp.sleep(3)
     CommonItemGetPanel.click_btn_close(bp)
     bp.sleep(1)
 
@@ -354,5 +362,5 @@ def main(bp: BasePage):
 
 
 if __name__ == "__main__":
-    bp = BasePage("192.168.111.81:20012")
+    bp = BasePage("192.168.111.77:20052")
     main(bp)

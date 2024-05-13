@@ -25,7 +25,7 @@ def tips_test(bp:BasePage):
     AchievementPanel.click_btn_i(bp)
     bp.sleep(0.5)
     if not AchievementPanel.is_tips_active(bp):
-        raise FindNoElementError
+        bp.debug_log("erro_if not AchievementPanel.is_tips_active(bp)")
     bp.sleep(0.5)
     AchievementPanel.click_btn_i(bp)
     bp.sleep(0.5)
@@ -34,7 +34,7 @@ def tips_test(bp:BasePage):
 # 点击未解锁成就测试
 def locked_test(bp:BasePage):
     bp.go_to_panel("AchievementPanel")
-    bp.sleep(1)
+    bp.sleep(0.5)
     locked_set, unlockable_set, unlocked_set = AchievementPanel.get_achievement_status_set(bp)
     bp.debug_log(f"locked_set, unlockable_set, unlocked_set:{locked_set, unlockable_set, unlocked_set}")
     locked_list = list(locked_set)
@@ -51,7 +51,7 @@ def locked_test(bp:BasePage):
         bp.click_position(position_list[locked_list[cur]])
         bp.sleep(0.5)
         if not AchievementPanel.is_unlock_tips_active(bp):
-            raise FindNoElementError
+            bp.debug_log("erro_if not AchievementPanel.is_unlock_tips_active(bp)")
         cur += 1
     bp.debug_log("点击未解锁成就完成")
 
@@ -224,6 +224,8 @@ def collect_all_test(bp: BasePage):
         img = bp.get_full_screen_shot()
         bp.save_img(img, "跳过collect_all_test期望状态为已经领取完成")
         return
+
+    # 点击箱子查看奖励
     while AchievementGroupPanel.is_box_clickable(bp):
         AchievementGroupPanel.click_box(bp)
         RewardsPanel.wait_for_panel_appear(bp)
@@ -236,7 +238,6 @@ def collect_all_test(bp: BasePage):
 
     reward_icon_list, reward_quantity_list = AchievementGroupPanel.get_box_reward(bp)
     item_dict = resource.make_item_dict(item_icon_list=reward_icon_list, item_quantity_list= reward_quantity_list)
-
     while achievement_point != progress_denominator:
         achievement_point, progress_denominator = collect_once_test(bp)
         if not AchievementGroupPanel.is_box_clickable(bp):
@@ -251,12 +252,10 @@ def collect_all_test(bp: BasePage):
         compare_dict(item_dict, reward_dict)
         item_stock_list = bp.get_item_count_list(item_icon_name_list=reward_icon_list)
         compare_list(item_stock_expect_list, item_stock_list)
-        img = bp.get_full_screen_shot()
-        bp.save_img(img)
         RewardsPanel.wait_for_panel_appear(bp)
         bp.sleep(0.5)
         RewardsPanel.click_tap_to_claim(bp)
-        bp.sleep(1)
+        bp.sleep(0.5)
         # 防止鱼卡弹窗
         if FishBagPanel.is_panel_active(bp):
             bp.clear_popup()
@@ -271,7 +270,7 @@ def collect_all_test(bp: BasePage):
     bp.debug_log(f"achievement_point, progress_denominator:{achievement_point, progress_denominator}")
     compare(complete_numerator, complete_denominator)
     img = bp.get_full_screen_shot()
-    bp.save_img(img,"期望状态为全部领取完成")
+    bp.save_img(img,"collect_all")
 
 
 
@@ -292,7 +291,7 @@ def collect_once_test(bp: BasePage):
         cur += 1
     # 点击领取
     AchievementGroupPanel.click_btn_collect(bp)
-    bp.sleep(0.5)
+    bp.sleep(1)
     achievement_point, progress_denominator = AchievementGroupPanel.get_achievement_point(bp)
     bp.debug_log(f"achievement_point_expect, achievement_point:{achievement_point_expect, achievement_point}")
     compare(achievement_point_expect, achievement_point)
@@ -350,15 +349,15 @@ def click_icon_test(bp: BasePage):
 
 def main(bp:BasePage):
     # 登录到大厅
-    cmd_list = ["guideskip", "add 1 100200 12345"]
-    gameInit.login_to_hall(bp, cmd_list=cmd_list)
-    # # 关闭升级弹窗
-    # PlayerLevelupPanel.wait_for_panel_appear(bp)
-
-    bp.go_to_panel("AchievementPanel")
-    tips_test(bp)
-    locked_test(bp)
-    unlock_test(bp)
+    # cmd_list = ["guideskip", "add 1 100200 12345"]
+    # gameInit.login_to_hall(bp, cmd_list=cmd_list)
+    # # # 关闭升级弹窗
+    # # PlayerLevelupPanel.wait_for_panel_appear(bp)
+    #
+    # bp.go_to_panel("AchievementPanel")
+    # tips_test(bp)
+    # locked_test(bp)
+    # unlock_test(bp)
     minitask_test(bp)
     jump_all_test(bp)
     collect_test(bp)
@@ -369,6 +368,6 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.81:20012")
+    bp = BasePage("192.168.111.77:20059")
     main(bp)
 

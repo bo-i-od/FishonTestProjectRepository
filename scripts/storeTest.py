@@ -249,6 +249,16 @@ def gear_buy_once_test(bp:BasePage, gear_icon, price,btn_icon, btn_position):
 
     # 关闭鱼竿展示界面
     bp.sleep(1)
+    if RewardsPanel.is_panel_active(bp):
+        # 看购买的图标与商品图标是否一致
+        reward_item_icon_list, reward_gear_icon_list = RewardsPanel.get_reward_icon_list(bp, is_divide=True)
+        compare(reward_gear_icon_list[0], gear_icon)
+
+        # 关闭恭喜获得
+        RewardsPanel.wait_for_panel_appear(bp)
+        bp.sleep(1)
+        RewardsPanel.click_tap_to_claim(bp)
+        bp.sleep(1)
     BaitAndRodShowPanel.click_tap_to_continue(bp)
     bp.sleep(1)
 
@@ -257,14 +267,7 @@ def gear_buy_once_test(bp:BasePage, gear_icon, price,btn_icon, btn_position):
     stock = bp.get_item_count(bp, item_tpid=item_tpid)
     compare(stock_expect, stock)
 
-    # 看购买的图标与商品图标是否一致
-    reward_item_icon_list, reward_gear_icon_list = RewardsPanel.get_reward_icon_list(bp, is_divide=True)
-    compare(reward_gear_icon_list[0], gear_icon)
 
-    # 关闭恭喜获得
-    RewardsPanel.wait_for_panel_appear(bp)
-    bp.sleep(1)
-    RewardsPanel.click_tap_to_claim(bp)
 
 
 def fish_card_test(bp:BasePage):
@@ -769,13 +772,12 @@ def box_refresh_test(bp: BasePage, box_id_list: list):
 def main(bp: BasePage):
     # 查询商城的解锁等级
     unlock_lv = bp.excelTools.get_unlock_lv("商店")
-    exp = bp.excelTools.get_exp_limit(unlock_lv)[1]
 
     # 进入大厅
     # 设置分层
     layer = f"{random.randint(1, 5)}000"
     bp.debug_log(f"当前分层{layer}")
-    cmd_list = ["guideskip", f"setPlayerLayer {layer}", f"add 1 100200 {exp}"]
+    cmd_list = ["guideskip", f"setPlayerLayer {layer}", f"levelupto {unlock_lv}"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     # # 关闭升级弹窗
@@ -793,6 +795,6 @@ def main(bp: BasePage):
     bp.go_home()
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.81:20021")
+    bp = BasePage("192.168.111.77:20059")
     main(bp)
     # box_test(bp)

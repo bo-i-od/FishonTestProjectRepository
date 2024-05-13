@@ -153,7 +153,7 @@ def box_fragment_test(bp:BasePage):
 
 def click_tips_test(bp: BasePage):
     TreasureChestPanel.click_btn_magnifier(bp)
-    TreasureChestPanel.click_btn_magnifier(bp)
+    bp.sleep(1)
     preview_icon_list, preview_position_list = TreasureChestPanel.get_preview_icon_and_position_list(bp)
     index_random = random.randint(0, len(preview_icon_list) - 1)
     bp.click_position(preview_position_list[index_random])
@@ -171,8 +171,7 @@ def box_store_test(bp: BasePage):
 
     # 查询商城的解锁等级
     unlock_lv = bp.excelTools.get_unlock_lv("商店")
-    exp = bp.excelTools.get_exp_limit(unlock_lv)[1]
-    bp.cmd(f"add 1 100200 {exp}")
+    bp.cmd(f"levelupto {unlock_lv}")
 
     # 返回大厅
     bp.go_home()
@@ -247,5 +246,5 @@ def main(bp: BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.77:20010")
+    bp = BasePage("192.168.111.77:20059")
     main(bp)

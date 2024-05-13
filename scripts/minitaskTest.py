@@ -17,7 +17,8 @@ def main(bp: BasePage):
     cmd_list = ["guideskip"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
-    bp.click_position([0, 0])
+    bp.clear_popup()
+    bp.go_home()
 
     # 推荐切换
     recommend_test(bp)
@@ -113,5 +114,5 @@ def recommend_test(bp: BasePage):
     return text_task_1
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.81:20012")
+    bp = BasePage("192.168.111.77:20090")
     main(bp)

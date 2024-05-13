@@ -1,6 +1,7 @@
 import random
 from threading import Thread
 
+import common
 from common import gameInit
 from common.basePage import BasePage
 from panelObjs.commonWebViewPanel import CommonWebViewPanel
@@ -20,6 +21,7 @@ from panelObjs.playerSettingPanel import PlayerSettingPanel
 from panelObjs.loginPanel import LoginPanel
 from panelObjs.battleFailedPanel import BattleFailedPanel
 from panelObjs.roulettePanel import RoulettePanel
+from scripts import battleTest
 
 
 def random_duelcup(bp:BasePage, rank):
@@ -79,7 +81,7 @@ def pvp_fish(bp):
             bp.custom_cmd("autofish")
             qteThread = Thread(target=BattlePanel.qte, args=[bp])
             qteThread.start()
-        # BattlePanel.reel_quick(bp)
+        BattlePanel.reel_quick(bp)
         element_btn = ResultPanel.wait_for_result(bp)
         ResultPanel.automatic_settlement(bp, element_btn)
         if PVPResultPanel.is_panel_active(bp):
@@ -167,12 +169,13 @@ def circulate_duel(bp:BasePage, rank):
     # result_right = PVPResultPanel.get_result_right(bp)
     # print("钓了：",len(result_right),"条鱼")
     # print(result_right)
-    img = bp.get_full_screen_shot()
-    bp.save_img(img)
+    # img = bp.get_full_screen_shot()
+    # bp.save_img(img)
 
     # points_enemy = PVPResultPanel.get_points_enemy(bp)
     # points_mine = PVPResultPanel.get_points_mine(bp)
     PVPResultPanel.click_tap_to_click(bp)
+    bp.sleep(1)
     # print(f"玩家分数：{points_mine}，机器人分数：{points_enemy}")
     # n = "符合预期"
     # if points_enemy < s or points_enemy > e:
@@ -345,7 +348,7 @@ def main(bp:BasePage, duelTest=None):
 
 
 if __name__ == '__main__':
-    bp = BasePage("ABSHUT1818002287")
+    bp = BasePage("192.168.111.77:20059")
     main(bp)
     # bp.cmd("add 1 100200 1234569")
     # circulate_fish(bp, fishery_id="400301",is_quick=True, is_monster=True)
@@ -365,13 +368,18 @@ if __name__ == '__main__':
     # bp.sleep(3)
     # bp.go_to_panel("PVPHallPanel")
     # bp.cmd("autofish")
+    # common.gameInit.set_joystick(bp)
+    # while True:
+    #     battleTest.tournament(bp)
+    # bp.set_item_count(target_count=72000,item_tpid="209013")
+
     # cur = 0
     # while cur < 80:
     #
     #     # clear_duelcup(bp)
     #     # dc = random_duelcup(bp, 4)
     #     # print(dc)
-    #     r = random.randint(0, 7)
+    #     r = random.randint(4, 7)
     #     circulate_duel(bp, r)
     #     cur += 1
     #     print(f"第{cur}次钓鱼")

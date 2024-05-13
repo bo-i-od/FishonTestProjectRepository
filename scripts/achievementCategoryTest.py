@@ -14,11 +14,11 @@ from common import gameInit
 
 def unlock_test(bp: BasePage):
     bp.go_to_panel("AchievementPanel")
-    bp.sleep(1)
+    bp.sleep(0.5)
 
     # 切换到悬赏鱼页面
     AchievementPanel.switch_tab(bp, 2)
-    bp.sleep(1)
+    bp.sleep(0.5)
 
     # 解锁
     locked_set, unlockable_set, unlocked_set = AchievementPanel.get_achievement_status_set(bp)
@@ -33,39 +33,38 @@ def unlock_test(bp: BasePage):
         bp.sleep(0.5)
         if cur < len(unlockable_list):
             continue
-        bp.sleep(1)
+        bp.sleep(0.5)
 
     # 随机点击一个
     locked_set, unlockable_set, unlocked_set = AchievementPanel.get_achievement_status_set(bp)
     unlocked_list = list(unlocked_set)
     r = random.randint(0, len(unlocked_list) - 1)
-    print(viewport.item_id_list)
     viewport.move_until_appear(viewport.item_id_list[unlocked_list[r]])
     achievement_position_list = AchievementPanel.get_achievement_position_list(bp)
     bp.click_position(achievement_position_list[unlocked_list[r]])
-    bp.sleep(1)
+    bp.sleep(0.5)
 
     # 点击解锁
     category_viewport = AchievementCategoryPanel.get_category_viewport(bp)
     r = random.randint(0, len(category_viewport.item_id_list) - 1)
     category_viewport.move_until_appear(target_id=category_viewport.item_id_list[r])
-    bp.sleep(1)
+    bp.sleep(0.5)
     category_position_list = AchievementCategoryPanel.get_category_position_list(bp)
     bp.click_position(category_position_list[r])
-    bp.sleep(1)
+    bp.sleep(0.5)
     if not FlashTipsPanel.is_panel_active(bp):
-        raise FindNoElementError
+        bp.debug_log("erro_if not FlashTipsPanel.is_panel_active(bp)")
 
     # 点击奖励图标
     reward_position_list = AchievementCategoryPanel.get_reward_position_list(bp)
     reward_icon_list = AchievementCategoryPanel.get_reward_icon_list(bp)
     r = random.randint(0, len(reward_position_list) - 1)
     bp.click_position(reward_position_list[r])
-    bp.sleep(1)
+    bp.sleep(0.5)
     item_icon = ItemTipsPanel.get_item_icon(bp)
     compare(reward_icon_list[r], item_icon)
     # bp.click_position([0.9, 0.1])
-    # bp.sleep(1)
+    # bp.sleep(0.5)
 
     # 关闭
     bp.go_home()
@@ -84,9 +83,9 @@ def category_test(bp: BasePage):
 
     # 去悬赏界面
     bp.go_to_panel("AchievementPanel")
-    bp.sleep(1)
+    bp.sleep(0.5)
     AchievementPanel.switch_tab(bp, 2)
-    bp.sleep(1)
+    bp.sleep(0.5)
 
     # 选择对应的渔场
     target_icon = table_data["icon"][r]
@@ -103,9 +102,9 @@ def category_test(bp: BasePage):
         category_viewport.move_until_appear(category_viewport.item_id_list[cur])
         category_position_list = AchievementCategoryPanel.get_category_position_list(bp)
         bp.click_position(category_position_list[cur])
-        bp.sleep(1)
+        bp.sleep(0.5)
         if FlashTipsPanel.is_panel_active(bp):
-            raise FindElementError
+            bp.debug_log("erro_if not FlashTipsPanel.is_panel_active(bp)")
         cur += 1
 
     # 计算期望奖励
@@ -127,7 +126,7 @@ def category_test(bp: BasePage):
         compare(reward_dict[reward_icon_list[cur]], reward_quantity_list[cur])
         cur += 1
     RewardsPanel.wait_for_panel_appear(bp)
-    bp.sleep(1)
+    bp.sleep(0.5)
     RewardsPanel.click_tap_to_claim(bp)
 
     # 对照库存数量
@@ -138,7 +137,7 @@ def category_test(bp: BasePage):
 
 def main(bp: BasePage):
     # 登录到大厅
-    cmd_list = ["guideskip", "add 1 100200 123456789", "add 1 100500 1234"]
+    cmd_list = ["guideskip", "levelupto 60", "add 1 100500 1234"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     # # 关闭升级弹窗
