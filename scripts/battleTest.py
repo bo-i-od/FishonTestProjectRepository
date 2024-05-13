@@ -10,21 +10,21 @@ from panelObjs.tournamentsPanel import TournamentsPanel
 
 
 def fish_once(bp: BasePage, fishery_id="", fish_id="",is_quick=True):
-    # bp.set_time_scale()
+    bp.set_time_scale()
     # bp.sleep(5)
     if fish_id != "":
         c = f"mode {fishery_id} {fish_id}"
         bp.cmd(c)
     BattlePreparePanel.click_btn_cast(bp)
     BattlePanel.hook(bp)
-    # bp.set_time_scale()
+    bp.set_time_scale()
     if BattlePanel.is_reel_active(bp):
         bp.custom_cmd("autofish")
         qteThread = Thread(target=BattlePanel.qte, args=[bp])
         qteThread.start()
     if is_quick:
         BattlePanel.reel_quick(bp)
-    # bp.set_time_scale()
+    bp.set_time_scale()
     # bp.sleep(5)
     element_btn = ResultPanel.wait_for_result(bp)
     ResultPanel.automatic_settlement(bp, element_btn=element_btn)

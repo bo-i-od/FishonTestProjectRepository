@@ -190,28 +190,6 @@ def set_time_scale(poco, time_scale):
 
 @sync_wrapper
 def fish(poco, execute_list):
-    scene_to_rod = {"400301": "500001",
-                    "400302": "500002",
-                    "400303": "500001",
-                    "400304": "500004",
-                    "400305": "500003",
-                    "400306": "500006",
-                    "400307": "500005",
-                    "400308": "500008",
-                    "400309": "500004",
-                    "400310": "500005",
-                    "400311": "500008",
-                    "400312": "500008",
-                    "400317": "500004",
-                    }
-    cur = 0
-    while cur < len(execute_list):
-        spot_id = execute_list[cur]["spotId"]
-        scene_id = spot_id[:6]
-        rod_id = scene_to_rod[scene_id]
-        execute_list[cur]["rodId"] = rod_id
-        cur += 1
-
     return poco.agent.c.call("Fish", execute_list)
 
 

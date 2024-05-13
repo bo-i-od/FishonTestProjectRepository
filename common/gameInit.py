@@ -1,12 +1,8 @@
 import os
 from threading import Thread
 from airtest.core.api import connect_device,  install, Template, start_app, shell, click, sleep, stop_app
-
 from airtest.core.helper import G
 from poco.drivers.android.uiautomation import AndroidUiautomationPoco
-
-from configs.elementsData import ElementsData
-from panelObjs.entryUpdateLoading import EntryUpdateLoading
 from panelObjs.loginPanel import LoginPanel
 from panelObjs.homePanel import HomePanel
 from panelObjs.loadingPanel import LoadingPanel
@@ -19,22 +15,23 @@ import time
 from tools import commonTools
 
 
-
-
 def login(bp: BasePage, username):
     # if not LoginPanel.is_panel_active(bp):
     #     EntryUpdateLoading.wait_for_EntryUpdateLoading(bp)
     # # 在登录界面出现前，点击tap to start
     # while not LoginPanel.is_panel_active(bp):
     #     EntryUpdateLoading.click_tap_to_start(bp)
-    # 选服务器
+    # 选服务器 输入名称 点击登录
     LoginPanel.set_server(bp, 4)
     LoginPanel.set_login_name(bp, username)
-
     LoginPanel.click_btn_login(bp)
     bp.sleep(2)
+
+    # 直到读条消失
     LoadingPanel.wait_until_panel_disappear(bp, is_wait_for_appear=False)
 
+
+# 设置摇杆
 def set_joystick(bp:BasePage, state="FLOATING"):
     if state == "FLOATING":
         bp.lua_console( "SettingMgr:Write(_G.FISH_SETTING_JOYSTICK.JOYSTICK_NAME, _G.FISH_SETTING_JOYSTICK.TYPE_FLOATING)")
@@ -43,6 +40,8 @@ def set_joystick(bp:BasePage, state="FLOATING"):
         bp.lua_console( "SettingMgr:Write(_G.FISH_SETTING_JOYSTICK.JOYSTICK_NAME, _G.FISH_SETTING_JOYSTICK.TYPE_FIXED)")
         return
 
+
+# 初始化账号
 def account_init(bp: BasePage, player_name, cmd_list):
     while not PlayerEditNamePanel.is_panel_active(bp):
         bp.sleep(0.1)
@@ -53,14 +52,14 @@ def account_init(bp: BasePage, player_name, cmd_list):
     PlayerEditNamePanel.click_confirm(bp)
 
 
-def login_to_hall(bp:BasePage, cmd_list=None):
+# 登录到大厅
+def login_to_hall(bp: BasePage, cmd_list=None):
     while not LoginPanel.is_btn_login_active(bp):
         bp.sleep(0.5)
     username = str(time.time()).split('.')[0]
     login(bp, username)
     account_init(bp, username, cmd_list)
     bp.sleep(1)
-
 
 
 def app_start_to_login(poco):
@@ -86,8 +85,6 @@ def tap_to_start():
     # print(img)
     match_pos = commonTools.get_img_position(query, img)
     return match_pos
-
-
 
 
 def get_basePage(serial_number=None):
@@ -122,13 +119,16 @@ def adb_command(cmd: str):
     #     output = ''  # 返回一个空串而不是None
     # return output
 
+
 def check_apk_installed(package: str):
     output = adb_command(f'adb shell pm list packages')
     return package in output
 
+
 def check_app_running(package: str):
     output = adb_command('adb shell dumpsys window | grep mCurrentFocus')
     return package in output
+
 
 def download_apk(apk_url:str, username:str, password:str):
     # Jenkins中的apk链接
@@ -150,8 +150,6 @@ def download_apk(apk_url:str, username:str, password:str):
     return apk_name
 
 
-
-
 def wait_for_authorize(poco, timeout):
     cur = 0
     while True:
@@ -161,6 +159,7 @@ def wait_for_authorize(poco, timeout):
             return
         time.sleep(1)
         cur += 1
+
 
 def authorize(poco):
     if not poco(type="android.widget.TextView").exists():
@@ -176,12 +175,14 @@ def authorize(poco):
         return True
     return False
 
+
 def find_allow_button_by_text(button_text):
     key_word_list = ["确定", "允许", "同意", "开启", "知道", "继续", "安装", "确认", "完成", "打开", "启动"]
     for key_word in key_word_list:
         if key_word in button_text:
             return True
     return False
+
 
 def install_monitor(poco):
     while run_install_monitor_thread:
@@ -198,7 +199,7 @@ def install_monitor(poco):
             break
 
 
-
+# 重启
 def restart_to_login(package):
     stop_app(package=package)
     sleep(1)
@@ -283,7 +284,6 @@ def start_time_test():
     LoginPanel.wait_for_btn_login(bp)
     end = time.time()  # 记录结束时间
     print('loading time: ', end - start)  # 两个时间差就是花费的时间
-
 
 
 if __name__ == '__main__':

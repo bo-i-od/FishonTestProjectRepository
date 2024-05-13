@@ -53,7 +53,7 @@ from panelObjs.gearEnhanceSuccesPanel import GearEnhanceSuccesPanel
 from panelObjs.gearEnhancePanel import GearEnhancePanel
 from panelObjs.fishCardPanel import FishCardPanel
 from panelObjs.fishCardUpgradePanel import FishCardUpgradePanel
-from panelObjs.fishCardGiftPackPanel import FishCardGiftPackPanel
+from panelObjs.fishCardGiftPackCustomizePanel import FishCardGiftPackPanel
 from panelObjs.achievementPanel import AchievementPanel
 from panelObjs.achievementGroupPanel import AchievementGroupPanel
 from panelObjs.achievementWantedPanel import AchievementWantedPanel

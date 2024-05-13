@@ -26,49 +26,55 @@ class BasePage:
     def __init__(self, serial_number=None):
         # unity窗口使用UnityEditorWindow()
         # 手机使用connect_device("android://127.0.0.1:5037/设备号")
+
+        # 是否在安卓手机
         self.is_android = False
+
+        # 是否测试会拉起支付的按钮
         self.is_pay = True
+
+        # 是否截图记录
         self.record = False
-        self.is_time_scale = True
-        #GGGGGGG
-        # make sure your poco-sdk in the game runtime listens on the following port.
+
+        # 是否开启战斗倍速
+        self.is_time_scale = False
+
+        # 是否打印日志
+        self.is_debug_log = False
+
         # 默认端口 5001
-        # IP is not used for now
         addr = ('', 5001)
         dev = self.get_device(serial_number=serial_number)
         self.poco = UnityPoco(addr, device=dev)
         self.screen_w, self.screen_h = self.poco.get_screen_size()  # 获取屏幕尺寸
-        self.is_debug_log = False
+
         if self.is_debug_log:
             print(self.screen_w, self.screen_h)
         self.warning_list = []
         self.erro_list = []
-        # current_dir = os.getcwd()
-        # self.excelTools = ExceTools(current_dir + "/tables/")
+
         # 获取当前工作目录
         current_dir = os.getcwd()
         # 获取父目录
         self.root_dir = os.path.abspath(os.path.dirname(current_dir))
-        # 获取当前工作目录
+        # 配置表的路径
         self.excelTools = ExceTools(self.root_dir + "/tables/")
 
-
     def get_device(self, serial_number=None):
-        if self.is_android:
-            try:
-                dev = G.DEVICE
-                return dev
-            except:
-                print("进行设备连接")
-            if serial_number is None:
-                serial_number = "127.0.0.1:21503"
-            dev = connect_device(f"android://127.0.0.1:5037/{serial_number}")
-            # dev = connect_device("android://127.0.0.1:5037/b6h65hd64p5pxcyh")
-            # dev = connect_device("android://127.0.0.1:5037/28cce18906027ece")
+        if not self.is_android:
+            dev = UnityEditorWindow()
             return dev
-        dev = UnityEditorWindow()
+        try:
+            dev = G.DEVICE
+            return dev
+        except:
+            print("进行设备连接")
+        if serial_number is None:
+            serial_number = "127.0.0.1:21503"
+        dev = connect_device(f"android://127.0.0.1:5037/{serial_number}")
+        # dev = connect_device("android://127.0.0.1:5037/b6h65hd64p5pxcyh")
+        # dev = connect_device("android://127.0.0.1:5037/28cce18906027ece")
         return dev
-
 
     # 开启调试打印再打印
     def debug_log(self, *msg):
@@ -172,7 +178,6 @@ class BasePage:
         text_list = rpcMethod.get_text(self.poco, element_data_copy)
         return text_list
 
-
     def get_text(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
         if object_id != 0:
             text_list = self.get_text_list(object_id=object_id, offspring_path=offspring_path)
@@ -275,7 +280,7 @@ class BasePage:
     def set_dropdown_value(self, element_data, index):
         rpcMethod.set_dropdown_value(self.poco, element_data, index)
 
-    # 获取尺寸
+    # 获取元素尺寸
     def get_size_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None,
                       offspring_path=""):
         if object_id_list is not None:
@@ -296,7 +301,7 @@ class BasePage:
         self.is_single_element(size_list)
         return size_list[0]
 
-    # 获取勾选
+    # 获取勾选状态
     def get_toggle_is_on_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None,
                               offspring_path=""):
         if object_id_list is not None:
@@ -362,12 +367,12 @@ class BasePage:
     def click_position_base(self, position):
         if not (0 <= position[0] <= 1) or not (0 <= position[1] <= 1):
             raise InvalidOperationError('Click position out of screen. pos={}'.format(repr(position)))
+        # 点击前进行截图保存
         if self.record:
             img = self.get_full_screen_shot()
             self.draw_circle(img, (position[0], position[1]))
             self.save_img(img)
         self.poco.agent.input.click(position[0], position[1])
-
 
     def draw_circle(self, img, center_coordinates):
         center_coordinates = (int(center_coordinates[0] * self.screen_w), int(center_coordinates[1] * self.screen_h))
@@ -382,8 +387,6 @@ class BasePage:
         cv2.circle(img, center_coordinates, 5, color, -1)
         cv2.circle(img, center_coordinates, radius0, color, thickness)
         cv2.circle(img, center_coordinates, radius1, color, thickness)
-
-
 
     def click_position(self, position, ignore_set=None):
         # 清除一遍弹窗
@@ -472,20 +475,20 @@ class BasePage:
             return
         # print(f"{object_id, element_data}元素不存在，没有进行点击")
 
-    # 尝试点击
-    # 如果点击失败就看是否有弹窗遮挡
-    # 关闭弹窗后会再次点击
-    def try_click_element(self, object_id: int = 0, element_data: dict = None):
-
-        try:
-            self.click_element(object_id=object_id, element_data=element_data)
-        except PluralElementError:
-            print("请检查元素的定位信息")
-        except FindNoElementError:
-            print("正在检查是否有弹窗遮挡")
-            self.clear_popup_once()
-            self.try_click_element(object_id=object_id, element_data=element_data)
-            return
+    # # 尝试点击
+    # # 如果点击失败就看是否有弹窗遮挡
+    # # 关闭弹窗后会再次点击
+    # def try_click_element(self, object_id: int = 0, element_data: dict = None):
+    #
+    #     try:
+    #         self.click_element(object_id=object_id, element_data=element_data)
+    #     except PluralElementError:
+    #         print("请检查元素的定位信息")
+    #     except FindNoElementError:
+    #         print("正在检查是否有弹窗遮挡")
+    #         self.clear_popup_once()
+    #         self.try_click_element(object_id=object_id, element_data=element_data)
+    #         return
 
     # 尝试进行一系列操作，若操作过程报错则尝试关闭弹窗再重试
     def try_actions(self, action_list):
@@ -527,6 +530,7 @@ class BasePage:
             self.clear_popup_once()
             self.sleep(0.5)
 
+    # 回到主界面
     def go_home(self, cur_panel=None):
         cur = 0
         at_home_flag = True
@@ -540,7 +544,7 @@ class BasePage:
             if cur_panel is not None:
                 at_home_flag = at_home_flag or self.exist(element_data=JumpData.panel_dict[cur_panel])
 
-
+    # 去指定界面
     def go_to_panel(self, panel):
         if self.exist(element_data=JumpData.panel_dict[panel]):
             return
@@ -551,6 +555,7 @@ class BasePage:
                 self.click_element_safe(element_data=element_data)
                 self.sleep(0.5)
 
+    # 关除了主界面的界面
     def clear_panel_except_home(self):
         panel_name_list = self.get_name_list(element_data=ElementsData.Panels)
         for panel_name in panel_name_list:
@@ -596,6 +601,7 @@ class BasePage:
         img = cv2.imdecode(img_array, cv2.COLOR_BGR2RGB)  # 转换Opencv格式
         return img
 
+    # 保存截图到report
     def save_img(self, img, img_name=""):
         path = f"{self.root_dir}/report"  # 输入文件夹地址
         num_png = len(os.listdir(path))  # 读入文件夹,统计文件夹中的文件个数
@@ -616,14 +622,6 @@ class BasePage:
         ui_w, ui_h = int(ui_w * self.screen_w), int(ui_h * self.screen_h)
         img = self.get_screen_shot(ui_x, ui_y, ui_w, ui_h)
         return img
-
-    # def draw_circle(self, img, center_x, center_y):
-    #     # 在指定像素点上绘制圆
-    #     color = (0, 255, 0)  # 圆的颜色，这里是红色
-    #
-    #     cv2.circle(img, (center_x * self.screen_w, center_y * self.screen_h), 10, color, 2)
-
-        # cv2.circle(img, (center_x * self.screen_w, center_y * self.screen_h), 3, color, 3)
 
     # 获取物品数量
     def get_item_count(self, item_name: str = "", item_icon_name: str = "", item_tpid: str = ""):
@@ -781,6 +779,7 @@ class BasePage:
     def ray_input(self, element_data:dict, target_name: str, kind: str):
         rpcMethod.ray_input(self.poco, element_data, target_name, kind)
 
+    # 设定节点激活状态
     def set_object_active_list(self, active,object_id=0, object_id_list: list = None, element_data: dict = None, offspring_path=""):
         if object_id_list is not None:
             rpcMethod.set_object_active_by_id(self.poco, object_id_list, offspring_path, active)
@@ -798,6 +797,7 @@ class BasePage:
         element_data_copy = self.get_element_data(element_data, offspring_path)
         rpcMethod.set_object_active(self.poco, element_data_copy, active)
 
+    # 设置时间缩放
     def set_time_scale(self, time_scale=5):
         if not self.is_time_scale:
             return
@@ -821,6 +821,8 @@ class BasePage:
 
 if __name__ == '__main__':
     bp = BasePage("192.168.111.77:20088")
+    a = bp.get_item_count(item_tpid="100200")
+    print(a)
     # bp.cmd("mode 400301 301013")
     # "mode 400312 390116"
     # bp.cmd("mode 400302 390015")

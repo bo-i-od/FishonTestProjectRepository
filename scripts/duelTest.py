@@ -200,40 +200,6 @@ def get_k(r0):
         return 112 - 0.04 * r0
     return 16
 
-def zhanbao_test(bp:BasePage):
-    login_name = f"ms0{1}"
-    while not LoginPanel.is_panel_active(bp):
-        pass
-    LoginPanel.set_login_name(bp, login_name=login_name)
-    LoginPanel.click_btn_login(bp)
-    bp.sleep(3)
-    while not PlayerEditNamePanel.is_panel_active(bp):
-        pass
-    PlayerEditNamePanel.set_player_name(bp, login_name)
-    bp.cmd("guideskip")
-    bp.cmd("add 1 100200 50000")
-    bp.sleep(1)
-    PlayerEditNamePanel.click_confirm(bp)
-    rank = 6
-    clear_duelcup(bp)
-    dc = random_duelcup(bp, rank)
-    print(login_name, dc)
-    bp.sleep(2)
-    bp.lua_console('PanelMgr:OpenPanel("HomePanel")')
-
-    action_list = [
-        lambda: bp.go_to_panel("PVPHallPanel"),
-        lambda:PVPHallPanel.click_btn_play(bp, rank)]
-    bp.try_actions(action_list=action_list)
-    pvp_fish(bp)
-    bp.sleep(2)
-    bp.get_full_screen_shot()
-    bp.sleep(1)
-    PVPResultPanel.click_tap_to_click(bp)
-    # PVPHallPanel.click_btn_close(bp)
-    # HomePanel.go_to_PlayerSettingPanel(bp)
-    # PlayerSettingPanel.click_tab_setting(bp)
-    # PlayerSettingPanel.click_btn_logout(bp)
 
 def division_test(bp:BasePage):
     # 进排行榜
