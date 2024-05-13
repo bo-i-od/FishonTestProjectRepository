@@ -1,4 +1,3 @@
-
 from common.basePage import BasePage
 import random
 
@@ -15,7 +14,7 @@ from panelObjs.rewardsPreviewPanel import RewardsPreviewPanel
 from panelObjs.loadingFisheryPanel import LoadingFisheryPanel
 from panelObjs.loadingPanel import LoadingPanel
 from common import resource
-from common import gameInit
+
 
 # 点击页面介绍测试
 def tips_test(bp:BasePage):

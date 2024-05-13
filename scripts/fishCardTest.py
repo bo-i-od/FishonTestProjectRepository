@@ -9,7 +9,7 @@ from panelObjs.fishCardPanel import FishCardPanel
 from panelObjs.fishCardUpgradePanel import FishCardUpgradePanel
 from panelObjs.homePanel import HomePanel
 from panelObjs.flashTipsPanel import FlashTipsPanel
-from panelObjs.fishCardGiftPackPanel import FishCardGiftPackCustomizePanel
+from panelObjs.fishCardGiftPackCustomizePanel import FishCardGiftPackCustomizePanel
 from panelObjs.playerLevelupPanel import PlayerLevelupPanel
 from panelObjs.rewardsPanel import RewardsPanel
 from panelObjs.itemTipsPanel import ItemTipsPanel
