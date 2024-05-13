@@ -12,8 +12,6 @@ from panelObjs.homePanel import HomePanel
 from panelObjs.playerEditNamePanel import PlayerEditNamePanel
 from panelObjs.tournamentsPanel import TournamentsPanel
 from scripts import battleTest
-from selenium import webdriver
-from selenium.webdriver.common.by import By
 from configs.elementsData import ElementsData
 import json
 
@@ -39,11 +37,11 @@ def login(bp:BasePage, name:str):
         pass
     LoginPanel.set_login_name(bp, name)
     LoginPanel.click_btn_login(bp)
-    bp.sleep(5)
+    bp.sleep(3)
     if not PlayerEditNamePanel.is_panel_active(bp):
         return
     while not PlayerEditNamePanel.is_panel_active(bp):
-        pass
+        bp.sleep(1)
     bp.cmd("guideskip")
     PlayerEditNamePanel.set_player_name(bp, name)
 
@@ -82,14 +80,15 @@ def tournament(bp:BasePage):
     bp.go_home()
 
 def ndays(bp:BasePage, count):
-    bp.cmd("levelupto 30")
+    # bp.cmd(f"setPlayerLayer {count}000")
+    # bp.cmd("levelupto 30")
     # bp.cmd(f"add 1 101200 {count}")
-    # bp.cmd(f"add 2 209012 {count}")
+    bp.cmd(f"add 2 209017 {2 * count}")
     # bp.cmd(f"monopolyscore {count}")
-    bp.cmd(f"add 2 209002 {count}")
-    bp.cmd(f"add 2 209006 {count}")
-    bp.cmd(f"add 2 209008 {count}")
-    bp.cmd(f"add 2 209010 {count}")
+    # bp.cmd(f"add 2 209002 {count}")
+    # bp.cmd(f"add 2 209006 {count}")
+    # bp.cmd(f"add 2 209008 {count}")
+    # bp.cmd(f"add 2 209010 {count}")
 
 def clone(bp:BasePage, name):
     bp.sleep(2)
@@ -98,18 +97,13 @@ def clone(bp:BasePage, name):
     print(cmd)
     bp.cmd(cmd)
 
-def auto_export():
-    driver = webdriver.Chrome()
-    driver.maximize_window()
-    driver.implicitly_wait(1)
-    driver.get("http://www.baidu.com")
 
 
 def main(bp):
-    cur = 1
-    limit = 11
+    cur = 11
+    limit = 16
     while cur < limit:
-        name = "zz" + str(cur)
+        name = "ywzb0" + str(cur)
         login(bp, name)
         bp.sleep(2)
         bp.clear_popup()

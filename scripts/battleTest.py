@@ -1,4 +1,6 @@
 import random
+
+import common.gameInit
 from common.basePage import BasePage
 from panelObjs.battlePreparePanel import BattlePreparePanel
 from panelObjs.resultPanel import ResultPanel
@@ -8,20 +10,22 @@ from panelObjs.tournamentsPanel import TournamentsPanel
 
 
 def fish_once(bp: BasePage, fishery_id="", fish_id="",is_quick=True):
-    bp.set_time_scale()
+    # bp.set_time_scale()
+    # bp.sleep(5)
     if fish_id != "":
         c = f"mode {fishery_id} {fish_id}"
         bp.cmd(c)
     BattlePreparePanel.click_btn_cast(bp)
     BattlePanel.hook(bp)
-    bp.set_time_scale()
+    # bp.set_time_scale()
     if BattlePanel.is_reel_active(bp):
         bp.custom_cmd("autofish")
         qteThread = Thread(target=BattlePanel.qte, args=[bp])
         qteThread.start()
     if is_quick:
         BattlePanel.reel_quick(bp)
-    bp.set_time_scale()
+    # bp.set_time_scale()
+    # bp.sleep(5)
     element_btn = ResultPanel.wait_for_result(bp)
     ResultPanel.automatic_settlement(bp, element_btn=element_btn)
     if fish_id != "":
@@ -29,12 +33,11 @@ def fish_once(bp: BasePage, fishery_id="", fish_id="",is_quick=True):
 
 
 
-def circulate_fish(bp: BasePage, fishery_id=None, is_monster=False, is_quick=False):
+def circulate_fish(bp: BasePage, fishery_id=None, is_monster=False, is_quick=False, times=10):
     cur = 1
-    limit = 60
     if fishery_id is not None:
-        limit = 16
-    while cur < limit:
+        times = 16
+    while cur < times:
         fish_id = ""
         # 指定鱼
         if fishery_id is not None:
@@ -44,12 +47,12 @@ def circulate_fish(bp: BasePage, fishery_id=None, is_monster=False, is_quick=Fal
             bp.sleep(1)
         bp.sleep(2)
         bp.clear_popup()
-        # if cur == 1:
-        #     select_rod(bp, 3)
-        # if cur == 5:g
-        #     select_rod(bp, 3)
-        # if cur == 9:
-        #     select_rod(bp, 2)
+        if cur == 1:
+            select_rod(bp, 3)
+        if cur == 5:
+            select_rod(bp, 3)
+        if cur == 9:
+            select_rod(bp, 2)
         fish_once(bp, fishery_id=fishery_id, fish_id=fish_id, is_quick=is_quick)
         print(f"第{cur}次钓鱼")
         cur += 1
@@ -81,26 +84,35 @@ def monster_all(bp: BasePage, fishery_id, is_quick=True):
         cur += 1
 
 def fish_all(bp: BasePage):
-    cur = 1
+    cur = 6
     while cur < 13:
         index = str(cur).zfill(2)
         fishery_id = f"4003{index}"
         TournamentsPanel.go_to_fishery_by_tpid(bp, fishery_id)
-        circulate_fish(bp, is_monster=True, fishery_id=fishery_id, is_quick=True)
+        circulate_fish(bp, is_monster=True, fishery_id=fishery_id, is_quick=False)
         BattlePreparePanel.click_btn_close(bp)
         bp.sleep(1)
         cur += 1
 
-
+def tournament(bp: BasePage):
+    bp.go_home()
+    bp.go_to_panel("TournamentsPanel")
+    TournamentsPanel.go_to_fishery_by_index(bp, 0)
+    circulate_fish(bp, is_quick=False)
+    bp.go_home()
+    bp.go_to_panel("TournamentsPanel")
+    TournamentsPanel.go_to_fishery_by_index(bp, 1)
+    circulate_fish(bp, is_quick=False)
 
 
 
 if __name__ == '__main__':
-    bp = BasePage()
+    bp = BasePage("192.168.111.77:20066")
     # circulate_fish(bp, is_quick=True,fishery_id="400317", is_monster=True)
     # monster_all(bp, is_quick=True, fishery_id="400317")
-
-    # circulate_fish(bp, is_quick=True)
+    # common.gameInit.set_joystick(bp)
+    # while True:
+    #     tournament(bp)
     # bp.set_item_count(target_count=72000,item_tpid="209013")
     fish_all(bp)
     # bp.cmd("mode 400301 390001")

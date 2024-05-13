@@ -19,11 +19,11 @@ def switch_tab_test(bp:BasePage):
     bp.sleep(1)
     MailPanel.switch_tab(bp, tab_position_list, 1)
     bp.sleep(1)
-    print("switch_tab_test切换标签测试通过")
+    bp.debug_log("switch_tab_test切换标签测试通过")
 
 def select_mail_test(bp:BasePage):
     if MailPanel.is_mail_empty(bp):
-        print("信箱为空，跳过测试")
+        bp.debug_log("信箱为空，跳过测试")
         return
     mail_viewport = MailPanel.get_mail_viewport(bp)
     mail_id_list = mail_viewport.item_id_list
@@ -35,12 +35,12 @@ def select_mail_test(bp:BasePage):
     mail_is_on_list = MailPanel.get_mail_is_on_list(bp)
     toggle_is_on_index = get_toggle_is_on_index(mail_is_on_list)
     compare(r, toggle_is_on_index)
-    print("select_mail_test选择信件测试通过")
+    bp.debug_log("select_mail_test选择信件测试通过")
 
 def click_icon_test(bp: BasePage):
     reward_icon_list = MailPanel.get_reward_icon_list(bp)
     if not reward_icon_list:
-        print("没有可以点击的图标，跳过测试")
+        bp.debug_log("没有可以点击的图标，跳过测试")
         return
     reward_icon_id_list = MailPanel.get_reward_icon_id_list(bp)
     mail_detail_viewport = MailPanel.get_mail_detail_viewport(bp, reward_icon_id_list)
@@ -59,12 +59,12 @@ def click_icon_test(bp: BasePage):
         bp.click_position_base([0.5, 0.9])
     elif BaitAndRodShowPanel.is_panel_active(bp):
         BaitAndRodShowPanel.click_tap_to_continue(bp)
-    print("click_icon_test点击图标测试通过")
+    bp.debug_log("click_icon_test点击图标测试通过")
 
 
 def click_btn_claim_test(bp:BasePage):
     if not MailPanel.is_claimable(bp):
-        print("没有可领取奖励跳过测试")
+        bp.debug_log("没有可领取奖励跳过测试")
         return
     btn_claim_id_list = MailPanel.get_btn_claim_id_list(bp)
     mail_detail_viewport = MailPanel.get_mail_detail_viewport(bp, btn_claim_id_list)
@@ -78,16 +78,15 @@ def click_btn_claim_test(bp:BasePage):
     bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
     if not MailPanel.is_claimed(bp):
-        raise FindNoElementError
-    print("奖励领取测试通过")
+        bp.debug_log("erro" , "if not MailPanel.is_claimed(bp)")
+
 
 def main(bp:BasePage):
     # 查询邮件的解锁等级
     unlock_lv = bp.excelTools.get_unlock_lv("邮件")
-    exp = bp.excelTools.get_exp_limit(unlock_lv)[1]
 
     # 进入大厅
-    cmd_list = ["guideskip", f"add 1 100200 {exp}"]
+    cmd_list = ["guideskip", f"levelupto {unlock_lv}"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
     # 关闭升级弹窗
     PlayerLevelupPanel.wait_for_panel_appear(bp)
@@ -103,5 +102,5 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.81:20012")
+    bp = BasePage("192.168.111.77:20052")
     main(bp)

@@ -39,11 +39,11 @@ def click_icon_buy_level_test(bp:BasePage):
     bp.click_position([0.5, 0.9])
     gear_position = BattlePassBuyLevelPanel.get_gear_position(bp)
     if gear_position is None:
-        print("click_icon_buy_level_test购买等级页面点击图标测试通过")
+        bp.debug_log("click_icon_buy_level_test购买等级页面点击图标测试通过")
         return
     bp.click_position(gear_position)
     BaitAndRodShowPanel.click_tap_to_continue(bp)
-    print("click_icon_buy_level_test购买等级页面点击图标测试通过")
+    bp.debug_log("click_icon_buy_level_test购买等级页面点击图标测试通过")
 
 
 def change_level_test(bp:BasePage):
@@ -63,7 +63,7 @@ def change_level_test(bp:BasePage):
     if new_level_0 < 60:
         new_level_0 += 1
     compare(new_level_0, new_level_1)
-    print("change_level_test改变购买等级测试通过")
+    bp.debug_log("change_level_test改变购买等级测试通过")
 
 
 def buy_level_test(bp:BasePage):
@@ -78,13 +78,13 @@ def buy_level_test(bp:BasePage):
         cash = BattlePassBuyLevelPanel.get_cash(bp)
         compare(cash_expect, cash)
         BattlePassBuyLevelPanel.click_btn_close(bp)
-        print("购买失败，buy_level_test反面测试通过")
+        bp.debug_log("购买失败，buy_level_test反面测试通过")
         return
     cash_expect = cash_expect - cost
     cash = BattlePassBuyLevelPanel.get_cash(bp)
     compare(cash_expect, cash)
     BattlePassRewardPanel.click_tap_to_continue(bp)
-    print("购买成功，buy_level_test正面测试通过")
+    bp.debug_log("购买成功，buy_level_test正面测试通过")
 
 
 def BattlePassBuyLevelPanel_test(bp:BasePage):
@@ -114,7 +114,7 @@ def jump_test(bp:BasePage):
     bp.sleep(1)
     BattlePassPanel.click_btn_i(bp)
     BattlePassIntroPanel.close_battlePassIntroPanel(bp)
-    print("jump_test跳转测试通过")
+    bp.debug_log("jump_test跳转测试通过")
 
 def buy_premium_test(bp:BasePage):
     # 买付费通行证
@@ -152,11 +152,11 @@ def BattlePassRewardPanel_test(bp:BasePage):
     BattlePassRewardPanel.click_tap_to_continue(bp)
     if BattlePassRewardPanel.is_panel_active(bp):
         raise FindElementError
-    print("BattlePassRewardPanel_test测试通过")
+    bp.debug_log("BattlePassRewardPanel_test测试通过")
 
 def BattlePassPopPanel_test(bp:BasePage):
     if not BattlePassPopPanel.is_panel_active(bp):
-        print("bp倒计时七日弹窗未弹出，BattlePassPopPanel_test跳过")
+        bp.debug_log("bp倒计时七日弹窗未弹出，BattlePassPopPanel_test跳过")
         return
     bp.sleep(1)
     icon_list, position_list = BattlePassPopPanel.get_clickable_icon_and_position_list(bp)
@@ -201,7 +201,7 @@ def random_collect_test(bp:BasePage, icon_list, quantity_list, status, viewport:
     collectable_list = status[1]
     collectable_list_len = len(collectable_list)
     if not collectable_list_len > 0:
-        print("没有可领取的奖励，random_collect_test跳过")
+        bp.debug_log("没有可领取的奖励，random_collect_test跳过")
         return
 
     # 随机选择一个进行领取
@@ -223,6 +223,7 @@ def random_collect_test(bp:BasePage, icon_list, quantity_list, status, viewport:
     RewardsPanel.click_tap_to_claim(bp)
     bp.sleep(1)
     # 验证图标和数量变化是否正确
+    print(icon_list)
     compare(reward_icon, icon_list[collectable_list[r]])
     compare(reward_quantity, quantity_list[collectable_list[r]])
     compare(item_count, item_count_expect)
@@ -384,7 +385,7 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.78:20085")
+    bp = BasePage("b6h65hd64p5pxcyh")
     main(bp)
     # cur = 0
     # while cur < 80:

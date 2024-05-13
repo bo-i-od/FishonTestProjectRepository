@@ -291,8 +291,9 @@ def collect_test(bp:BasePage):
     # compare(task_kind, "Daily")
 
 def main(bp: BasePage):
+
     # 登录到大厅
-    cmd_list = ["guideskip", "add 1 100200 12345678"]
+    cmd_list = ["guideskip", "levelupto 60"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     # # 关闭升级弹窗
@@ -308,7 +309,7 @@ def main(bp: BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.81:20021")
+    bp = BasePage("192.168.111.77:20059")
     # bp.set_item_count(target_count=60000, item_tpid="100200")
     main(bp)
 

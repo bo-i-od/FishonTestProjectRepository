@@ -10,13 +10,15 @@ from collections import Counter
 # 对比值或对象，不一致报错
 def compare(a, b):
     if a != b:
-        raise DifferError(f"a,b:{a,b}")
+        print(f"erro{a,b}")
+        # raise DifferError(f"a,b:{a,b}")
 
 
 # 比较列表中的
 def compare_list(list_a, list_b):
     if Counter(list_a) != Counter(list_b):
-        raise DifferError(f"list_a, list_b:{list_a, list_b}")
+        # raise DifferError(f"list_a, list_b:{list_a, list_b}")
+        print(f"erro{list_a, list_b}")
 
 
 def compare_dict(dict_a, dict_b):

@@ -108,5 +108,5 @@ def ray_input(poco:Poco, element: dict, target_name:str, kind:str)-> any:
 def set_time_scale(poco:Poco, time_scale:float)-> any:
     ...
 
-def fish(poco:Poco, spot_id:str, times:int)-> any:
+def fish(poco:Poco, execute_list:list)-> any:
     ...

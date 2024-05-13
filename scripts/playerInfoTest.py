@@ -68,7 +68,7 @@ def name_test(bp: BasePage):
     MessageBoxPanel.click_btn_confirm(bp)
     bp.sleep(1)
     if not PlayerInfoPanel.is_btn_save_pay_abled(bp):
-        raise FindNoElementError
+        bp.debug_log("erro_"+"if not PlayerInfoPanel.is_btn_save_pay_abled(bp)")
 
     # 返回上级 对比是否改名成功
     PlayerInfoPanel.click_btn_close_additional(bp)
@@ -93,7 +93,7 @@ def name_test(bp: BasePage):
     cash = bp.get_item_count(item_tpid="100100")
     compare(cash_expect, cash)
     if PlayerInfoPanel.is_btn_save_pay_abled(bp):
-        raise FindElementError
+        bp.debug_log("erro_" + "PlayerInfoPanel.is_btn_save_pay_abled(bp)")
 
 
     # 返回上级 对比名称

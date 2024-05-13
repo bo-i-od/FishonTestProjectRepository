@@ -71,9 +71,9 @@ class BasePage:
 
 
     # 开启调试打印再打印
-    def debug_log(self, *msg:object):
+    def debug_log(self, *msg):
         if self.is_debug_log:
-            print(msg)
+            print(*msg)
 
     # 判断列表是不是长度为1，不为1会报错
     @staticmethod
@@ -821,7 +821,7 @@ class BasePage:
 
 if __name__ == '__main__':
     bp = BasePage("192.168.111.77:20088")
-    bp.cmd("mode 400301 301013")
+    # bp.cmd("mode 400301 301013")
     # "mode 400312 390116"
     # bp.cmd("mode 400302 390015")
     # bp.cmd_list(["add 1 100200 1000000", ""])
@@ -847,11 +847,11 @@ if __name__ == '__main__':
     #     password += str(r)
     #     cur += 1
     # print(password)
-    lv = 1
-    while lv < 44:
-        a = bp.excelTools.get_exp_limit(lv)
-        print(lv, a)
-        lv += 1
+    # lv = 1
+    # while lv < 60:
+    #     a = bp.excelTools.get_exp_limit(lv)
+    #     print(lv, a)
+    #     lv += 1
 
 
     # bp.go_home(cur_panel="QuestionnairePanel")

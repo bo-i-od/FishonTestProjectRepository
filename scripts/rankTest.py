@@ -10,10 +10,9 @@ from common.basePage import BasePage
 def main(bp: BasePage):
     # 查询邮件的解锁等级
     unlock_lv = bp.excelTools.get_unlock_lv("鱼类排行榜")
-    exp = bp.excelTools.get_exp_limit(unlock_lv)[1]
 
     # 进入大厅
-    cmd_list = ["guideskip", f"add 1 100200 {exp}"]
+    cmd_list = ["guideskip", f"levelupto {unlock_lv}"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     # 关闭升级弹窗
@@ -24,7 +23,7 @@ def main(bp: BasePage):
 
     # 随机选择渔场
     fisheries_viewport = RankPanel.get_fisheries_viewport(bp)
-    r = random.randint(0, len(fisheries_viewport.item_id_list) - 1)
+    r = 0
     fisheries_viewport.move_until_appear(target_id=fisheries_viewport.item_id_list[r])
     fisheries_position_list = RankPanel.get_fisheries_position_list(bp)
     bp.click_position(fisheries_position_list[r])
@@ -44,6 +43,24 @@ def main(bp: BasePage):
     # 单鱼排行榜测试
     if data_list:
         leaderboard_test(bp, data_list)
+
+    r = len(fisheries_viewport.item_id_list) - 1
+    fisheries_viewport.move_until_appear(target_id=fisheries_viewport.item_id_list[r])
+    fisheries_position_list = RankPanel.get_fisheries_position_list(bp)
+    bp.click_position(fisheries_position_list[r])
+
+    # 随机选地区
+    area_position_list = RankPanel.get_tab_area_position_list(bp)
+    r = random.randint(0, len(area_position_list) - 1)
+    bp.click_position(area_position_list[r])
+
+    # 随机选时间
+    time_position_list = RankPanel.get_tab_time_position_list(bp)
+    r = random.randint(0, len(time_position_list) - 1)
+    bp.click_position(time_position_list[r])
+
+    # 随机选择有排行的鱼
+    data_list, no_data_list = RankPanel.get_photo_status(bp)
     #  点一个没排行的鱼
     if no_data_list:
         # 随机选没有排行的鱼
@@ -53,6 +70,8 @@ def main(bp: BasePage):
         bp.sleep(1)
         photo_position_list = RankPanel.get_photo_position_list(bp)
         bp.click_position(photo_position_list[no_data_list[r]])
+
+    bp.go_home()
 
     #
 # 单鱼排行榜测试
@@ -76,19 +95,15 @@ def leaderboard_test(bp: BasePage, data_list):
     RankFishLeaderboardPanel.click_btn_like(bp)
     bp.sleep(1)
     if RankFishLeaderboardPanel.is_btn_like_normal(bp):
-        raise FindElementError
+        bp.debug_log("erro_RankFishLeaderboardPanel.is_btn_like_normal(bp)")
     compare(like_value + 1, RankFishLeaderboardPanel.get_like_value(bp))
 
     # 返回上级界面
     RankFishLeaderboardPanel.click_btn_close(bp)
-
-
-
-    # 进行点击
-    bp.click_position(photo_position_list[data_list[r]])
+    bp.sleep(1)
 
 
 
 if __name__ == '__main__':
-    bp = BasePage()
+    bp = BasePage("192.168.111.77:20059")
     main(bp)
