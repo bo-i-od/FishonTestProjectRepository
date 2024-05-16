@@ -52,13 +52,15 @@ class BasePage:
             print(self.screen_w, self.screen_h)
         self.warning_list = []
         self.erro_list = []
-
-        # 获取当前工作目录
-        current_dir = os.getcwd()
+        file_path = os.path.join(os.path.dirname(__file__))
+        # print(file_path)
+        # # 获取当前工作目录
+        # current_dir = os.getcwd()
         # 获取父目录
-        self.root_dir = os.path.abspath(os.path.dirname(current_dir))
+        self.root_dir = os.path.abspath(os.path.dirname(file_path))
         # 配置表的路径
         self.excelTools = ExceTools(self.root_dir + "/tables/")
+
 
     def get_device(self, serial_number=None):
         if not self.is_android:

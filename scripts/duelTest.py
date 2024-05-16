@@ -314,8 +314,8 @@ def main(bp:BasePage, duelTest=None):
 
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.77:20059")
-    main(bp)
+    bp = BasePage("192.168.111.77:20006")
+    # main(bp)
     # bp.cmd("add 1 100200 1234569")
     # circulate_fish(bp, fishery_id="400301",is_quick=True, is_monster=True)
     # zhanbao_test(bp)
@@ -323,7 +323,10 @@ if __name__ == '__main__':
     # # bp.set_item_count(target_count=25000000, item_tpid="100200")
     # createUsers.main(bp)
     # clear_duelcup(bp)
-    # dc = random_duelcup(bp, 7)
+    # bp.cmd("mode 400302 390015")
+    bp.lua_console(command="GameRoot:GetFishingMatch().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
+    # bp.cmd("mode 400303 390025")
+    # dc = random_duelcup(bp, 1)
     # print(dc)
     # area = point_cal(210)
     # bp.cmd("duelcup 1008 27000")

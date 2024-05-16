@@ -340,8 +340,9 @@ class ElementsData:
         tips_lock = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list_tips>tips_lock"}
         text_100000 = {"locator": "UICanvas>Default>CareerPanel>panel_talent>top_res>ResourceBar>100000>value"}
         text_100400 = {"locator": "UICanvas>Default>CareerPanel>panel_talent>top_res>ResourceBar>100400>value"}
-        btn_add_100100 = {"locator": "UICanvas>Default>CareerPanel>panel_talent>top_res>ResourceBar>100000>btn_add>btn_normal"}
+        btn_add_100000 = {"locator": "UICanvas>Default>CareerPanel>panel_talent>top_res>ResourceBar>100000>btn_add>btn_normal"}
         describe = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list_tips>tips>describe"}
+        group_list = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list>panel_list_main>list>Viewport>Content>>"}
 
 
 
