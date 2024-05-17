@@ -52,6 +52,7 @@ def print_list(target_list,title=""):
     for i in target_list:
         print(i)
 
+# 仅限 非洪湖钓点，洪湖钓点id对不上有问题！！！！
 print("钓鱼次数：",total_num)
 print_list(boss_num,"rare,elite,monster 掉落数量和时机")
 print_list(yugu_num,"elite、monster鱼骨 掉落数量和时机")
