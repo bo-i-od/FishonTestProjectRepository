@@ -31,6 +31,7 @@ def get_thrift_data(file_name):
     return res
 
 
+# 根据thrift数据生成对应的py
 def gen_py(thrift_data):
     # 直接沿用thrift的名称
     file_name = thrift_data['file_name'] + '.py'
@@ -51,6 +52,7 @@ def gen_py(thrift_data):
         cur += 1
 
 
+# 根据结构体生成对应的方法
 def gen_py_function(struct):
     msg_name = struct['struct_name']
     struct_args = struct['struct_args']

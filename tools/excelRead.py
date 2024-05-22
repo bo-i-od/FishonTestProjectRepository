@@ -8,7 +8,8 @@ class ExceTools:
         self.root_path = root_path
 
     def get_worksheet(self, book_name, sheet_name):
-        workbook = load_workbook(self.root_path + book_name, data_only=True)
+        path = self.root_path + book_name
+        workbook = load_workbook(path, data_only=True)
         worksheet = workbook[sheet_name]
         return worksheet
     def get_column_index(self, worksheet, header):
