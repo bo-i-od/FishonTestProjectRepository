@@ -1,6 +1,7 @@
 import random
 
 import common.gameInit
+from common import gameInit
 from common.basePage import BasePage
 from panelObjs.battlePreparePanel import BattlePreparePanel
 from panelObjs.resultPanel import ResultPanel
@@ -84,7 +85,7 @@ def monster_all(bp: BasePage, fishery_id, is_quick=True):
         cur += 1
 
 def fish_all(bp: BasePage):
-    cur = 6
+    cur = 1
     while cur < 13:
         index = str(cur).zfill(2)
         fishery_id = f"4003{index}"
@@ -107,8 +108,10 @@ def tournament(bp: BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.77:20066")
-    # circulate_fish(bp, is_quick=True,fishery_id="400317", is_monster=True)
+    bp = BasePage("192.168.111.77:20030")
+    gameInit.set_joystick(bp)
+    # circulate_fish(bp, is_quick=True, fishery_id="400301", is_monster=True)
+    # fish_once(bp, is_quick=False)
     # monster_all(bp, is_quick=True, fishery_id="400317")
     # common.gameInit.set_joystick(bp)
     # while True:

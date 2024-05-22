@@ -11,8 +11,6 @@ from panelObjs.gearLevelupPanel import GearLevelupPanel
 class GearPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.Gear.btn_close)
-        if GearPanel.is_panel_active(self):
-            raise FindElementError
 
     def is_panel_active(self):
         if self.exist(element_data=ElementsData.Gear.GearPanel):

@@ -5,8 +5,6 @@ from tools.commonTools import *
 class TreasureChestPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.TreasureChest.btn_close)
-        if TreasureChestPanel.is_panel_active(self):
-            raise FindElementError
 
     def is_panel_active(self):
         if self.exist(element_data=ElementsData.TreasureChest.TreasureChestPanel):

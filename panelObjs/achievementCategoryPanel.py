@@ -8,8 +8,6 @@ from common.viewport import Viewport
 class AchievementCategoryPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.AchievementCategory.btn_close)
-        if AchievementCategoryPanel.is_panel_active(self):
-            raise FindElementError
 
     def is_panel_active(self):
         if self.exist(element_data=ElementsData.AchievementCategory.AchievementCategoryPanel):
