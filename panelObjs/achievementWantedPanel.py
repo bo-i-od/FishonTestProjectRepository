@@ -78,9 +78,6 @@ class AchievementWantedPanel(BasePage):
         self.sleep(1)
         AchievementWantedPanel.click_btn_close(self)
         self.sleep(1)
-        if AchievementPanel.is_tips_active(bp):
-            AchievementPanel.click_btn_i(bp)
-            bp.sleep(0.5)
         AchievementPanel.click_btn_close(self)
 
 

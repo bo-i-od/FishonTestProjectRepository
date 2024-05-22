@@ -15,9 +15,6 @@ from common import gameInit
 def unlock_test(bp: BasePage):
     bp.go_to_panel("AchievementPanel")
     bp.sleep(0.5)
-    if AchievementPanel.is_tips_active(bp):
-        AchievementPanel.click_btn_i(bp)
-        bp.sleep(0.5)
 
     # 切换到悬赏鱼页面
     AchievementPanel.switch_tab(bp, 2)
@@ -87,9 +84,7 @@ def category_test(bp: BasePage):
     # 去悬赏界面
     bp.go_to_panel("AchievementPanel")
     bp.sleep(0.5)
-    if AchievementPanel.is_tips_active(bp):
-        AchievementPanel.click_btn_i(bp)
-        bp.sleep(0.5)
+
     AchievementPanel.switch_tab(bp, 2)
     bp.sleep(0.5)
 

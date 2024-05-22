@@ -19,9 +19,7 @@ from common import resource, gameInit
 # 点击页面介绍测试
 def tips_test(bp:BasePage):
     bp.debug_log("点击页面介绍开始")
-    if AchievementPanel.is_tips_active(bp):
-        AchievementPanel.click_btn_i(bp)
-        bp.sleep(0.5)
+
     bp.sleep(0.5)
     AchievementPanel.click_btn_i(bp)
     bp.sleep(0.5)
