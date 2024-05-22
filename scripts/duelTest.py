@@ -236,7 +236,7 @@ def turntable_test(bp:BasePage):
 
     # 点击公示
     RoulettePanel.click_btn_announcement(bp)
-    bp.sleep(3)
+    CommonWebViewPanel.wait_for_btn_close_appear(bp)
     CommonWebViewPanel.click_btn_close(bp)
     bp.sleep(1)
 

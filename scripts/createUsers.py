@@ -81,10 +81,10 @@ def tournament(bp:BasePage):
 
 def ndays(bp:BasePage, count):
     # bp.cmd(f"setPlayerLayer {count}000")
-    bp.cmd("levelupto 30")
-    # bp.cmd(f"add 1 101200 {count}")
-    # bp.cmd(f"add 2 209017 {2 * count}")
-    bp.cmd(f"monopolyscore {count}")
+    bp.cmd(f"levelupto {count//2}")
+    bp.cmd(f"add 1 100400 {count}")
+    bp.cmd(f"add 1 101200 {count}")
+    # bp.cmd(f"monopolyscore {count}")
     # bp.cmd(f"add 2 209002 {count}")
     # bp.cmd(f"add 2 209006 {count}")
     # bp.cmd(f"add 2 209008 {count}")
@@ -100,17 +100,17 @@ def clone(bp:BasePage, name):
 
 
 def main(bp):
-    cur = 109
-    limit = 160
+    cur = 43
+    limit = 120
     while cur < limit:
-        name = "monopoly" + str(cur)
+        name = "aaaaa" + str(cur)
         login(bp, name)
         bp.sleep(2)
         bp.clear_popup()
         # go_leaderborad(bp)
         bp.go_home()
         # fish(bp)
-        ndays(bp, limit - cur)
+        ndays(bp, cur)
         logout(bp)
         cur += 1
 

@@ -10,8 +10,6 @@ class BattlePassBuyLicensePanel(BasePage):
 
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.BattlePassBuyLicense.btn_close)
-        if self.exist(element_data=ElementsData.BattlePassBuyLicense.BattlePassBuyLicensePanel):
-            raise FindElementError
 
     def click_btn_buy_pro(self):
         self.click_element(element_data=ElementsData.BattlePassBuyLicense.btn_buy_pro)

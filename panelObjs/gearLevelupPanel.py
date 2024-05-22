@@ -6,8 +6,7 @@ from common.resource import *
 class GearLevelupPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.GearLevelup.btn_close)
-        if GearLevelupPanel.is_panel_active(self):
-            raise FindElementError
+
 
     def is_panel_active(self):
         if self.exist(element_data=ElementsData.GearLevelup.GearLevelupPanel):

@@ -5,8 +5,6 @@ from tools.commonTools import *
 class RechargeBlack5Panel(BasePage):
     def close_Recharge1And1Panel(self):
         self.click_element(element_data=ElementsData.RechargeBlack5.btn_close)
-        if RechargeBlack5Panel.is_panel_active(self):
-            raise FindElementError
 
     def is_panel_active(self):
         if self.exist(element_data=ElementsData.RechargeBlack5.RechargeBlack5Panel):

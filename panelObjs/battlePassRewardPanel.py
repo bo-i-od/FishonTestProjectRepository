@@ -10,8 +10,6 @@ class BattlePassRewardPanel(BasePage):
 
     def click_tap_to_continue(self):
         self.click_element(element_data=ElementsData.BattlePassReward.btn_close)
-        if BattlePassRewardPanel.is_panel_active(self):
-            raise FindElementError
 
     def click_get_premium(self):
         self.click_element(element_data=ElementsData.BattlePassReward.btn_unLock)

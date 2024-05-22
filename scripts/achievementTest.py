@@ -13,13 +13,15 @@ from panelObjs.rewardsPanel import RewardsPanel
 from panelObjs.rewardsPreviewPanel import RewardsPreviewPanel
 from panelObjs.loadingFisheryPanel import LoadingFisheryPanel
 from panelObjs.loadingPanel import LoadingPanel
-from common import resource
+from common import resource, gameInit
 
 
 # 点击页面介绍测试
 def tips_test(bp:BasePage):
-    bp.go_to_panel("AchievementPanel")
     bp.debug_log("点击页面介绍开始")
+    if AchievementPanel.is_tips_active(bp):
+        AchievementPanel.click_btn_i(bp)
+        bp.sleep(0.5)
     bp.sleep(0.5)
     AchievementPanel.click_btn_i(bp)
     bp.sleep(0.5)
@@ -348,15 +350,15 @@ def click_icon_test(bp: BasePage):
 
 def main(bp:BasePage):
     # 登录到大厅
-    # cmd_list = ["guideskip", "add 1 100200 12345"]
-    # gameInit.login_to_hall(bp, cmd_list=cmd_list)
-    # # # 关闭升级弹窗
-    # # PlayerLevelupPanel.wait_for_panel_appear(bp)
-    #
-    # bp.go_to_panel("AchievementPanel")
-    # tips_test(bp)
-    # locked_test(bp)
-    # unlock_test(bp)
+    cmd_list = ["guideskip", "add 1 100200 12345"]
+    gameInit.login_to_hall(bp, cmd_list=cmd_list)
+    # # 关闭升级弹窗
+    # PlayerLevelupPanel.wait_for_panel_appear(bp)
+
+    bp.go_to_panel("AchievementPanel")
+    tips_test(bp)
+    locked_test(bp)
+    unlock_test(bp)
     minitask_test(bp)
     jump_all_test(bp)
     collect_test(bp)
@@ -367,6 +369,6 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.77:20059")
+    bp = BasePage("192.168.111.77:20030")
     main(bp)
 

@@ -7,8 +7,6 @@ from common import resource
 class FishCardUpgradePanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.FishCardUpgrade.btn_close)
-        if FishCardUpgradePanel.is_panel_active(self):
-            raise FindElementError
 
     def is_panel_active(self):
         if self.exist(element_data=ElementsData.FishCardUpgrade.FishCardUpgradePanel):

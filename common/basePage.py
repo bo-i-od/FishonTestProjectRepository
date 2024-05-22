@@ -2,7 +2,6 @@ import random
 
 from airtest.core.helper import G
 from poco.drivers.unity3d.device import UnityEditorWindow
-
 from tools.excelRead import ExceTools
 import time
 import pyautogui
@@ -823,8 +822,11 @@ class BasePage:
 
 if __name__ == '__main__':
     bp = BasePage("192.168.111.77:20088")
-    a = bp.get_item_count(item_tpid="100200")
-    print(a)
+
+    # bp.lua_console(lua_code)
+
+    # a = bp.get_item_count(item_tpid="100200")
+    # print(a)
     # bp.cmd("mode 400301 301013")
     # "mode 400312 390116"
     # bp.cmd("mode 400302 390015")

@@ -35,7 +35,7 @@ def fish_once(bp: BasePage, fishery_id="", fish_id="",is_quick=True):
 
 
 def circulate_fish(bp: BasePage, fishery_id=None, is_monster=False, is_quick=False, times=10):
-    cur = 16
+    cur = 1
     if fishery_id is not None:
         times = 16
     while cur < times:
@@ -48,12 +48,12 @@ def circulate_fish(bp: BasePage, fishery_id=None, is_monster=False, is_quick=Fal
             bp.sleep(1)
         bp.sleep(2)
         bp.clear_popup()
-        # if cur == 1:
-        #     select_rod(bp, 3)
-        # if cur == 5:
-        #     select_rod(bp, 3)
-        # if cur == 9:
-        #     select_rod(bp, 2)
+        if cur == 1:
+            select_rod(bp, 3)
+        if cur == 5:
+            select_rod(bp, 3)
+        if cur == 9:
+            select_rod(bp, 2)
         fish_once(bp, fishery_id=fishery_id, fish_id=fish_id, is_quick=is_quick)
         print(f"第{cur}次钓鱼")
         cur += 1
@@ -108,7 +108,7 @@ def tournament(bp: BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("b6h65hd64p5pxcyh")
+    bp = BasePage("192.168.111.77:20030")
     gameInit.set_joystick(bp)
     # circulate_fish(bp, is_quick=True, fishery_id="400301", is_monster=True)
     # fish_once(bp, is_quick=False)

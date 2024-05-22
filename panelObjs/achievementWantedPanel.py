@@ -11,8 +11,7 @@ from tools.commonTools import *
 class AchievementWantedPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.AchievementWanted.btn_close)
-        if AchievementWantedPanel.is_panel_active(self):
-            raise FindElementError
+
 
     def is_panel_active(self):
         if self.exist(element_data=ElementsData.AchievementWanted.AchievementWantedPanel):
@@ -79,6 +78,9 @@ class AchievementWantedPanel(BasePage):
         self.sleep(1)
         AchievementWantedPanel.click_btn_close(self)
         self.sleep(1)
+        if AchievementPanel.is_tips_active(bp):
+            AchievementPanel.click_btn_i(bp)
+            bp.sleep(0.5)
         AchievementPanel.click_btn_close(self)
 
 

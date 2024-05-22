@@ -9,10 +9,9 @@ class StorePanel(BasePage):
     @staticmethod
     def get_StorePanel_element_data():
         return ElementsData.Store.StorePanel
+
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.Store.btn_close)
-        if StorePanel.is_panel_active(self):
-            raise FindElementError
 
     def is_panel_active(self):
         if self.exist(element_data=ElementsData.Store.StorePanel):

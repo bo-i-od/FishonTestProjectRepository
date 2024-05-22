@@ -5,11 +5,14 @@ from netMsg import fishingMsg
 import sys
 
 if __name__ == '__main__':
-    bp = BasePage()
+    bp = BasePage("192.168.111.77:20030")
+    # bp.lua_console(command="GameRoot:GetFishingMatch().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
     bp.cmd("mode 0 0")
     bp.set_item_count(target_count=10000000, item_tpid="100500")
-    index =11
-    fishingMsg.fish(bp, [{"spot_id": f"40031204", "times": 1000, "energy_cost": 30, "targetIdList":[f"370{index}02"]}])
+    fishingMsg.fish(bp, [{"spot_id": f"40030803", "times": 8, "energy_cost": 50, "targetIdList":["399001"]}])
+
+    # index =2
+    # fishingMsg.fish(bp, [{"spot_id": f"40030203", "times": 3000, "energy_cost": 50, "targetIdList":[f"391011",f"391012", f"391013", f"391014", f"391015", f"391016"]}])
     # # [f"370{index}01",f"370{index}02", f"370{index}03", f"370{index}04"]
     # arg_list = []
     # cur = 11

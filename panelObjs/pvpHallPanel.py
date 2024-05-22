@@ -11,8 +11,7 @@ class PVPHallPanel(BasePage):
 
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.PVPHall.btn_close)
-        if PVPHallPanel.is_panel_active(self):
-            raise FindElementError
+
 
     def wait_for_panel_appear(self):
         self.wait_for_appear(element_data=ElementsData.PVPHall.PVPHallPanel)

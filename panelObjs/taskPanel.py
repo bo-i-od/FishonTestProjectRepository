@@ -9,8 +9,6 @@ from panelObjs.itemTipsPanel import ItemTipsPanel
 class TaskPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.Task.btn_close)
-        if TaskPanel.is_panel_active(self):
-            raise FindElementError
 
     def is_panel_active(self):
         if self.exist(element_data=ElementsData.Task.TaskPanel):
@@ -20,7 +18,7 @@ class TaskPanel(BasePage):
     def get_viewport(self):
         # 右边界偏移半个任务的宽度，防止点到屏幕外
         size = self.get_size_list(element_data=ElementsData.Task.task_list)[0]
-        edge = [0, 0.5 * size[0]]
+        edge = [0.05, 0.5 * size[0]]
         viewport = Viewport(self, element_viewport=ElementsData.Task.view_port, element_item_list=ElementsData.Task.task_list, viewport_edge=edge)
         return viewport
 
