@@ -2,6 +2,9 @@ import random
 
 from airtest.core.helper import G
 from poco.drivers.unity3d.device import UnityEditorWindow
+
+import netMsg.baitAndRod_cs
+import netMsg.achieveCategory_cs
 from tools.excelRead import ExceTools
 import time
 import pyautogui
@@ -58,7 +61,7 @@ class BasePage:
         # 获取父目录
         self.root_dir = os.path.abspath(os.path.dirname(file_path))
         # 配置表的路径
-        self.excelTools = ExceTools(self.root_dir + "/tables/")
+        self.excelTools = ExceTools(self.root_dir.replace("\\", "/") + "/tables/")
 
 
     def get_device(self, serial_number=None):
@@ -821,8 +824,14 @@ class BasePage:
 
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.77:20088")
 
+    bp = BasePage()
+    bp.get_position(element_data=ElementsData.Home.btn_add_100100)
+    # lua_code = netMsg.baitAndRod_cs.get_CSBaitAndRodLevelUpToMsg(targetLevel=100, tpId=500028, ioIdType=5)
+    lua_code = netMsg.achieveCategory_cs.get_CSAchieveCategoryRewardMsg()
+
+    print(lua_code)
+    bp.lua_console_list()
     # bp.lua_console(lua_code)
 
     # a = bp.get_item_count(item_tpid="100200")
