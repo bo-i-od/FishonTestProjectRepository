@@ -1,8 +1,9 @@
 import json
-import random
 
 from airtest.core.helper import G
 from poco.drivers.unity3d.device import UnityEditorWindow
+
+import netMsg.luaLog
 from tools.excelRead import ExceTools
 import time
 import pyautogui
@@ -19,7 +20,6 @@ import zlib
 import os
 from configs.elementsData import ElementsData
 from configs.jumpData import JumpData
-from poco.drivers.android.uiautomation import AndroidUiautomationPoco
 
 
 class BasePage:
@@ -28,7 +28,7 @@ class BasePage:
         # 手机使用connect_device("android://127.0.0.1:5037/设备号")
 
         # 是否在安卓手机
-        self.is_android = True
+        self.is_android = False
 
         # 是否测试会拉起支付的按钮
         self.is_pay = True
@@ -41,6 +41,12 @@ class BasePage:
 
         # 是否打印日志
         self.is_debug_log = False
+
+        # 是否监听Unity发来的log
+        self.listen_log_flag = True
+
+        # 是否让Unity发log
+        self.send_log_flag = True
 
         # 默认端口 5001
         addr = ('', 5001)
@@ -62,6 +68,11 @@ class BasePage:
         self.root_dir = os.path.abspath(os.path.dirname(file_path))
         # 配置表的路径
         self.excelTools = ExceTools(self.root_dir.replace("\\", "/") + "/tables/")
+
+        # 是否让Unity发log
+        self.set_send_log_flag(self.send_log_flag)
+
+        self.wait_msg()
 
 
     def get_device(self, serial_number=None):
@@ -823,34 +834,35 @@ class BasePage:
     def send_key(key: str):
         pyautogui.typewrite(key)
 
+    def circulate_update(self):
+        while True:
+            if not self.listen_log_flag:
+                self.sleep(1)
+                continue
+            # 每隔一段时间取一下接收区的消息
+            msg = self.poco_listen.agent.c.conn.recv()
+            for m in msg:
+                # 转格式加处理消息
+                data = json.loads(m)
+                netMsg.luaLog.deal_with_msg(data['msg'])
+                # 返回消息给C#
+                # poco.agent.c.conn.send("ok")
+            time.sleep(0.01)
 
-def circulate_update(poco):
-    while True:
-        msg = poco.agent.c.conn.recv()
-        for m in msg:
-            data = json.loads(m)
-            print(data)
-            # print(data['msg'])
-            # 返回消息给C#
-            # poco.agent.c.conn.send("ok")
-        time.sleep(0.01)
+    def wait_msg(self):
+        from threading import Thread
+        t = Thread(target=self.circulate_update, args=[])
+        t.daemon = True
+        t.start()
 
-def wait_msg(poco:UnityPoco):
-    from threading import Thread
-    t = Thread(target=circulate_update, args=[poco])
-    t.daemon = True
-    t.start()
-    # while True:
-    #     poco.agent.c.conn.recv()
-    #     time.sleep(0.002)
 
 
 
 
 if __name__ == '__main__':
     bp = BasePage()
-    wait_msg(bp.poco_listen)
-    bp.set_send_log_flag(True)
+
+
     while True:
         # a = bp.get_object_id_list(element_data=ElementsData.Login.btn_login)
         bp.sleep(1)
