@@ -37,12 +37,15 @@ def main(bp: BasePage):
     time_position_list = RankPanel.get_tab_time_position_list(bp)
     r = random.randint(0, len(time_position_list) - 1)
     bp.click_position(time_position_list[r])
+    is_like = False
+    if r < 2:
+        is_like = True
 
     # 随机选择有排行的鱼
     data_list, no_data_list = RankPanel.get_photo_status(bp)
     # 单鱼排行榜测试
     if data_list:
-        leaderboard_test(bp, data_list)
+        leaderboard_test(bp, data_list, is_like)
 
     r = len(fisheries_viewport.item_id_list) - 1
     fisheries_viewport.move_until_appear(target_id=fisheries_viewport.item_id_list[r])
@@ -75,7 +78,7 @@ def main(bp: BasePage):
 
     #
 # 单鱼排行榜测试
-def leaderboard_test(bp: BasePage, data_list):
+def leaderboard_test(bp: BasePage, data_list, is_like):
     photo_viewport = RankPanel.get_photo_viewport(bp)
 
     # 随机选择一条
@@ -91,6 +94,10 @@ def leaderboard_test(bp: BasePage, data_list):
     compare(rank_data, RankFishLeaderboardPanel.get_rank_data(bp))
 
     # 点赞
+    if not is_like:
+        # 返回上级界面
+        RankFishLeaderboardPanel.click_btn_close(bp)
+        bp.sleep(1)
     like_value = RankFishLeaderboardPanel.get_like_value(bp)
     RankFishLeaderboardPanel.click_btn_like(bp)
     bp.sleep(1)
@@ -104,6 +111,8 @@ def leaderboard_test(bp: BasePage, data_list):
 
 
 
+
+
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.77:20059")
+    bp = BasePage("192.168.111.77:20017")
     main(bp)

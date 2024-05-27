@@ -1,6 +1,6 @@
 from common.basePage import BasePage
 from common import rpcMethod
-import fishing_cs
+from netMsg.csMsg import fishing_cs
 
 
 def get_CSFishingSaveLimitedSpotEnergyCostIdMsg(bp:BasePage, energy_cost:int):
@@ -41,7 +41,7 @@ def fish(bp: BasePage, arg_list):
         if "ignoreIdList" in arg_list[cur]:
             execute_dict["ignoreIdList"] = arg_list[cur]["ignoreIdList"]
         if "energy_cost" in arg_list[cur]:
-            energy_cost =arg_list[cur]["energy_cost"]
+            energy_cost = arg_list[cur]["energy_cost"]
             table_data = bp.excelTools.get_table_data("FISH_ACTIVITY_SPOT_ENERGY.xlsm")
             energyCost_list = table_data['energyCost']
             tpId_list = table_data['tpId']

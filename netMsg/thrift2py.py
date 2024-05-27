@@ -1,8 +1,8 @@
 import os
 import re
+import keyword
 
-
-type_dict = {"i64": "int", "i32": "int", "i16": "int", "i8": "int", "string": "str", "bool": "bool", "double": "float"}
+type_dict = {"i64": "int", "i32": "int", "i16": "int", "i8": "int", "string": "str", "bool": "bool", "double": "float", "binary": "bytes"}
 
 # 把thrift文件需要的内容解析出来
 def get_thrift_data(file_name):
@@ -33,23 +33,27 @@ def get_thrift_data(file_name):
 
 # 根据thrift数据生成对应的py
 def gen_py(thrift_data):
+    file_path = "csMsg/"
+    code = ""
     # 直接沿用thrift的名称
     file_name = thrift_data['file_name'] + '.py'
+    file_path = file_path + file_name
     struct_list = thrift_data['struct_list']
     if not struct_list:
-        return
-    # 清空内容
-    with open(file_name, 'w') as f:
-        f.write("")
+        return code
 
     # 添加内容
     cur = 0
     while cur < len(struct_list):
         struct = struct_list[cur]
-        code = gen_py_function(struct)
-        with open(file_name, 'a') as f:
-            f.write(code)
+        code += gen_py_function(struct)
         cur += 1
+
+    # 添加内容
+    with open(file_path, 'w') as f:
+        f.write(code)
+
+    return code
 
 
 # 根据结构体生成对应的方法
@@ -58,7 +62,6 @@ def gen_py_function(struct):
     struct_args = struct['struct_args']
     arg_list = list(struct_args)
     args_str = ""
-    cmd_part = ""
     comment = ""
     ignore_check = "cmd_part = ''"
     cur = 0
@@ -123,23 +126,30 @@ def thrift_type_to_py_type(type_str):
         return "list"
     if "map" in type_str:
         return "dict"
+    if "set" in type_str:
+        return "set"
     if type_str in type_dict:
         return type_dict[type_str]
+    print(f"warning:{type_str}未处理")
     return None
 
 
-
-
-if __name__ == '__main__':
-    folder_path = 'C:\\trunkCHS\\tools\\gen-message\\messages\\'
+def main():
     file_list = os.listdir(folder_path)
-    type_set = set()
-    thrift_data_list = []
+    code = ""
     for file in file_list:
         if file[-9:] != "cs.thrift":
             continue
         thrift_data = get_thrift_data(file)
         print(thrift_data)
-        gen_py(thrift_data)
+        code += gen_py(thrift_data)
+    print(code)
+    with open("csMsgAll.py", 'w') as f:
+        f.write(code)
 
-        # print(file_list[file_list.index("backPack_cs.thrift")])
+
+
+if __name__ == '__main__':
+    folder_path = 'C:\\Dev\\tools\\gen-message\\messages\\'
+    main()
+

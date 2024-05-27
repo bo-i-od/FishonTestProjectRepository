@@ -38,10 +38,10 @@ def playerEditNamePanelTest(bp: BasePage):
     # 得到head_object_id和select_object_id，它俩应该有相同的parent
     head_object_id = PlayerEditNamePanel.get_head_object_id(bp, head_img_object_id)
     select_object_id = PlayerEditNamePanel.get_select_object_id(bp)
+    head_expect_object_id = bp.get_parent_id(select_object_id)
     # 看他们parent是不是相同
-
-    print(bp.get_parent_id(head_object_id), bp.get_parent_id(select_object_id))
-    # compare(bp.get_parent_id(head_object_id), bp.get_parent_id(select_object_id))
+    if head_object_id != head_expect_object_id:
+        bp.debug_log("erro_if head_object_id != head_expect_object_id")
     # 点击确认按钮
     PlayerEditNamePanel.click_confirm(bp)
     bp.sleep(1)
@@ -66,10 +66,10 @@ def hookTest(bp: BasePage):
     BattlePanel.hook_guide(bp)
 
 def main(bp:BasePage):
-    username = str(time.time()).split('.')[0]
-    gameInit.login(bp, username=username)
+    # username = str(time.time()).split('.')[0]
+    # gameInit.login(bp, username=username)
 
-    # 姓名头像测试
+    # # 姓名头像测试
     playerEditNamePanelTest(bp)
 
     # 新手引导

@@ -110,3 +110,9 @@ def set_time_scale(poco:Poco, time_scale:float)-> any:
 
 def fish(poco:Poco, execute_list:list)-> any:
     ...
+
+def get_scene_list(poco:Poco)-> list:
+    ...
+
+def set_send_log_flag(poco:Poco, send_log_flag:bool)-> any:
+    ...

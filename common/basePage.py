@@ -1,10 +1,8 @@
+import json
 import random
 
 from airtest.core.helper import G
 from poco.drivers.unity3d.device import UnityEditorWindow
-
-import netMsg.baitAndRod_cs
-import netMsg.achieveCategory_cs
 from tools.excelRead import ExceTools
 import time
 import pyautogui
@@ -30,7 +28,7 @@ class BasePage:
         # 手机使用connect_device("android://127.0.0.1:5037/设备号")
 
         # 是否在安卓手机
-        self.is_android = False
+        self.is_android = True
 
         # 是否测试会拉起支付的按钮
         self.is_pay = True
@@ -46,8 +44,10 @@ class BasePage:
 
         # 默认端口 5001
         addr = ('', 5001)
+        addr_listen = ('', 5002)
         dev = self.get_device(serial_number=serial_number)
         self.poco = UnityPoco(addr, device=dev)
+        self.poco_listen = UnityPoco(addr_listen, device=dev)
         self.screen_w, self.screen_h = self.poco.get_screen_size()  # 获取屏幕尺寸
 
         if self.is_debug_log:
@@ -106,7 +106,7 @@ class BasePage:
     # 元素若存在返回的列表不为空
     def exist(self, object_id=0, element_data=None, offspring_path=""):
         if object_id != 0:
-            return self.get_position_list(object_id_list=[object_id])
+            return self.get_position_list(object_id_list=[object_id], offspring_path=offspring_path)
         element_data_copy = self.get_element_data(element_data, offspring_path)
         return self.get_position_list(element_data=element_data_copy)
 
@@ -807,6 +807,12 @@ class BasePage:
             return
         rpcMethod.set_time_scale(self.poco, time_scale)
 
+    def get_scene_list(self):
+        return rpcMethod.get_scene_list(self.poco)
+
+    def set_send_log_flag(self, send_log_flag):
+        rpcMethod.set_send_log_flag(self.poco, send_log_flag)
+
     # 休息t秒
     @staticmethod
     def sleep(t: float):
@@ -818,21 +824,42 @@ class BasePage:
         pyautogui.typewrite(key)
 
 
+def circulate_update(poco):
+    while True:
+        msg = poco.agent.c.conn.recv()
+        for m in msg:
+            data = json.loads(m)
+            print(data)
+            # print(data['msg'])
+            # 返回消息给C#
+            # poco.agent.c.conn.send("ok")
+        time.sleep(0.01)
 
+def wait_msg(poco:UnityPoco):
+    from threading import Thread
+    t = Thread(target=circulate_update, args=[poco])
+    t.daemon = True
+    t.start()
+    # while True:
+    #     poco.agent.c.conn.recv()
+    #     time.sleep(0.002)
 
 
 
 
 if __name__ == '__main__':
-
     bp = BasePage()
-    bp.get_position(element_data=ElementsData.Home.btn_add_100100)
-    # lua_code = netMsg.baitAndRod_cs.get_CSBaitAndRodLevelUpToMsg(targetLevel=100, tpId=500028, ioIdType=5)
-    lua_code = netMsg.achieveCategory_cs.get_CSAchieveCategoryRewardMsg()
+    wait_msg(bp.poco_listen)
+    bp.set_send_log_flag(True)
+    while True:
+        # a = bp.get_object_id_list(element_data=ElementsData.Login.btn_login)
+        bp.sleep(1)
 
-    print(lua_code)
-    bp.lua_console_list()
+    # b = bp.poco2.agent.c.call("GetObjectId", ElementsData.Login.btn_login)
+
+    # lua_code = ""
     # bp.lua_console(lua_code)
+
 
     # a = bp.get_item_count(item_tpid="100200")
     # print(a)

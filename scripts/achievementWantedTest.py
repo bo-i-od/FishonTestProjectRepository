@@ -90,11 +90,10 @@ def wanted_test(bp: BasePage):
     # 选择对应的渔场
     target_icon = table_data["icon"][r]
     achievement_icon_list = AchievementPanel.get_achievement_icon_list(bp)
-    achievement_position_list = AchievementPanel.get_achievement_position_list(bp)
     index = achievement_icon_list.index(target_icon)
     viewport = AchievementPanel.get_viewport(bp)
     viewport.move_until_appear(viewport.item_id_list[index])
-    position_list = AchievementPanel.get_achievement_position_list(bp)
+    achievement_position_list = AchievementPanel.get_achievement_position_list(bp)
     bp.click_position(achievement_position_list[index])
 
     # 解锁

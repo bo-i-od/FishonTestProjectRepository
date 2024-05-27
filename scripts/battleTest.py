@@ -12,7 +12,7 @@ from panelObjs.tournamentsPanel import TournamentsPanel
 
 def fish_once(bp: BasePage, fishery_id="", fish_id="",is_quick=True):
     bp.set_time_scale()
-    # bp.sleep(5)
+    # bp.sleep(6)
     if fish_id != "":
         c = f"mode {fishery_id} {fish_id}"
         bp.cmd(c)
@@ -26,7 +26,7 @@ def fish_once(bp: BasePage, fishery_id="", fish_id="",is_quick=True):
     if is_quick:
         BattlePanel.reel_quick(bp)
     bp.set_time_scale()
-    # bp.sleep(5)
+    # bp.sleep(6)
     element_btn = ResultPanel.wait_for_result(bp)
     ResultPanel.automatic_settlement(bp, element_btn=element_btn)
     if fish_id != "":
@@ -48,12 +48,12 @@ def circulate_fish(bp: BasePage, fishery_id=None, is_monster=False, is_quick=Fal
             bp.sleep(1)
         bp.sleep(2)
         bp.clear_popup()
-        if cur == 1:
-            select_rod(bp, 3)
-        if cur == 5:
-            select_rod(bp, 3)
-        if cur == 9:
-            select_rod(bp, 2)
+        # if cur == 1:
+        #     select_rod(bp, 3)
+        # if cur == 5:
+        #     select_rod(bp, 3)
+        # if cur == 9:
+        #     select_rod(bp, 2)
         fish_once(bp, fishery_id=fishery_id, fish_id=fish_id, is_quick=is_quick)
         print(f"第{cur}次钓鱼")
         cur += 1
@@ -99,25 +99,24 @@ def tournament(bp: BasePage):
     bp.go_home()
     bp.go_to_panel("TournamentsPanel")
     TournamentsPanel.go_to_fishery_by_index(bp, 0)
-    circulate_fish(bp, is_quick=False)
+    circulate_fish(bp, is_quick=False, times=10)
     bp.go_home()
     bp.go_to_panel("TournamentsPanel")
     TournamentsPanel.go_to_fishery_by_index(bp, 1)
-    circulate_fish(bp, is_quick=False)
+    circulate_fish(bp, is_quick=False, times=18)
 
 
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.77:20030")
+    bp = BasePage("127.0.0.1:21523")
     gameInit.set_joystick(bp)
     # circulate_fish(bp, is_quick=False)
     # fish_once(bp, is_quick=False)
     # monster_all(bp, is_quick=True, fishery_id="400317")
-    # common.gameInit.set_joystick(bp)
-    # while True:
-    #     tournament(bp)
+    while True:
+        tournament(bp)
     # bp.set_item_count(target_count=72000,item_tpid="209013")
-    fish_all(bp, is_quick=False)
+    # fish_all(bp, is_quick=False)
     # bp.cmd("mode 400301 390001")
 
     # worksheet = bp.excelTools.get_worksheet(book_name="玩家信息采样.xlsx", sheet_name="Sheet1")
