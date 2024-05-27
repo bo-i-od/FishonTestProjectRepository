@@ -59,11 +59,18 @@ def get_fish_type(fish_id):
 
     return {'fish_size':fish_size,'fish_type':fish_type}
 
-if __name__ == '__main__':
-    numbers=load_file()
-    count=0
+def statistic_fish_size(numbers):
+    count = {}
     for i in numbers:
         fish_result=get_fish_type(i)
-        if fish_result['fish_size']=="Small":
-            count+=1
-    print(count/len(numbers))
+        if fish_result['fish_type'] in ['fish','boss']:
+            fish_size=fish_result['fish_size']
+            count.setdefault(fish_size,0)
+            count[fish_size]+=1
+    return count
+
+if __name__ == '__main__':
+    #
+    numbers=load_file()
+    count=statistic_fish_size(numbers)
+    print(len(numbers),count)

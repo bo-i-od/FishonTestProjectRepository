@@ -35,3 +35,8 @@ print("钓鱼次数：",len(numbers))
 print_list(boss_num,"rare,elite,monster 掉落数量和时机")
 print_list(yugu_num,"elite、monster鱼骨 掉落数量和时机")
 print_list(yugu_gold,"金色elite、monster鱼骨 掉落数量和时机")
+
+
+count=statistic_fish_size(numbers)
+print("完整鱼货统计：")
+print(len(numbers),count)
