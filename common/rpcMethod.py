@@ -192,5 +192,13 @@ def set_time_scale(poco, time_scale):
 def fish(poco, execute_list):
     return poco.agent.c.call("Fish", execute_list)
 
+@sync_wrapper
+def get_scene_list(poco):
+    return poco.agent.c.call("GetSceneList")
+
+@sync_wrapper
+def set_send_log_flag(poco, send_log_flag):
+    return poco.agent.c.call("SetSendLogFlag", send_log_flag)
+
 
 

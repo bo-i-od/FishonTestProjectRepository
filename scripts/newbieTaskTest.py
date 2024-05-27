@@ -216,8 +216,6 @@ def go_test(bp: BasePage):
     bp.sleep(1)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
     LoadingPanel.wait_until_panel_disappear(bp, is_wait_for_appear=False)
-    img = bp.get_full_screen_shot()
-    bp.save_img(img, "NewbieTaskPanel_jump_test")
     bp.go_to_panel("NewbieTaskPanel")
 
 

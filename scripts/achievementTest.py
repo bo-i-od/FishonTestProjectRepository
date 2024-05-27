@@ -237,10 +237,15 @@ def collect_all_test(bp: BasePage):
 
     reward_icon_list, reward_quantity_list = AchievementGroupPanel.get_box_reward(bp)
     item_dict = resource.make_item_dict(item_icon_list=reward_icon_list, item_quantity_list= reward_quantity_list)
+    # 在没领满之前一直领取
     while achievement_point != progress_denominator:
         achievement_point, progress_denominator = collect_once_test(bp)
+
+        # 进度条宝箱不可领取就进行下次点击
         if not AchievementGroupPanel.is_box_clickable(bp):
             continue
+
+        # 领取进度条宝箱 做数值方面验证
         item_stock_expect_list = bp.get_item_count_list(item_icon_name_list=reward_icon_list)
         cur = 0
         while cur < len(reward_icon_list):
@@ -265,11 +270,7 @@ def collect_all_test(bp: BasePage):
         reward_icon_list, reward_quantity_list = AchievementGroupPanel.get_box_reward(bp)
         item_dict = resource.make_item_dict(item_icon_list=reward_icon_list, item_quantity_list=reward_quantity_list)
     complete_numerator, complete_denominator = AchievementGroupPanel.get_complete(bp)
-    bp.debug_log(f"complete_numerator, complete_denominator:{complete_numerator, complete_denominator}")
-    bp.debug_log(f"achievement_point, progress_denominator:{achievement_point, progress_denominator}")
     compare(complete_numerator, complete_denominator)
-    img = bp.get_full_screen_shot()
-    bp.save_img(img,"collect_all")
 
 
 
