@@ -49,10 +49,9 @@ def gen_py(thrift_data):
         code += gen_py_function(struct)
         cur += 1
 
-    # 添加内容
+    # 写入所有内容
     with open(file_path, 'w') as f:
         f.write(code)
-
     return code
 
 
@@ -101,7 +100,7 @@ def get_{msg_name}({args_str}):
     # 不为空就给参数赋值
     code = rf"""
 
-# {comment}
+# # {comment}
 def get_{msg_name}({args_str}):
     {ignore_check}
     lua_code = ('local cmd = NetworkMgr:NewMsg("{msg_name}")\n'

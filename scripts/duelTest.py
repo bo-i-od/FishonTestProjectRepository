@@ -78,10 +78,10 @@ def pvp_fish(bp):
         BattlePanel.hook(bp)
         bp.sleep(1)
         if BattlePanel.is_reel_active(bp):
-            bp.custom_cmd("autofish")
+            # bp.custom_cmd("autofish")
             qteThread = Thread(target=BattlePanel.qte, args=[bp])
             qteThread.start()
-        BattlePanel.reel_quick(bp)
+        # BattlePanel.reel_quick(bp)
         element_btn = ResultPanel.wait_for_result(bp)
         ResultPanel.automatic_settlement(bp, element_btn)
         if PVPResultPanel.is_panel_active(bp):
@@ -314,7 +314,7 @@ def main(bp:BasePage, duelTest=None):
 
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.77:20006")
+    bp = BasePage("127.0.0.1:21523")
     # main(bp)
     # bp.cmd("add 1 100200 1234569")
     # circulate_fish(bp, fishery_id="400301",is_quick=True, is_monster=True)
@@ -342,16 +342,15 @@ if __name__ == '__main__':
     #     battleTest.tournament(bp)
     # bp.set_item_count(target_count=72000,item_tpid="209013")
 
-    # cur = 0
-    # while cur < 80:
-    #
-    #     # clear_duelcup(bp)
-    #     # dc = random_duelcup(bp, 4)
-    #     # print(dc)
-    #     r = random.randint(4, 7)
-    #     circulate_duel(bp, r)
-    #     cur += 1
-    #     print(f"第{cur}次钓鱼")
+    cur = 0
+    while cur < 2:
+
+        # clear_duelcup(bp)
+        # dc = random_duelcup(bp, 4)
+        # print(dc)
+        circulate_duel(bp, 1)
+        cur += 1
+        print(f"第{cur}次钓鱼")
 
 
     # # rank = random.randint(0, 7)

@@ -12,7 +12,7 @@ from panelObjs.tournamentsPanel import TournamentsPanel
 
 def fish_once(bp: BasePage, fishery_id="", fish_id="",is_quick=True):
     bp.set_time_scale()
-    # bp.sleep(6)
+    bp.sleep(6)
     if fish_id != "":
         c = f"mode {fishery_id} {fish_id}"
         bp.cmd(c)
@@ -26,7 +26,7 @@ def fish_once(bp: BasePage, fishery_id="", fish_id="",is_quick=True):
     if is_quick:
         BattlePanel.reel_quick(bp)
     bp.set_time_scale()
-    # bp.sleep(6)
+    bp.sleep(6)
     element_btn = ResultPanel.wait_for_result(bp)
     ResultPanel.automatic_settlement(bp, element_btn=element_btn)
     if fish_id != "":
