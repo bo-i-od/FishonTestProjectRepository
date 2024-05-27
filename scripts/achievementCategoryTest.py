@@ -84,6 +84,7 @@ def category_test(bp: BasePage):
     # 去悬赏界面
     bp.go_to_panel("AchievementPanel")
     bp.sleep(0.5)
+
     AchievementPanel.switch_tab(bp, 2)
     bp.sleep(0.5)
 

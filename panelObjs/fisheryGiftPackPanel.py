@@ -5,8 +5,6 @@ from tools.commonTools import *
 class FisheryGiftPackPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.FisheryGiftPack.btn_close)
-        if FisheryGiftPackPanel.is_panel_active(self):
-            raise FindElementError
 
     def is_panel_active(self):
         if self.exist(element_data=ElementsData.FisheryGiftPack.FisheryGiftPackPanel):

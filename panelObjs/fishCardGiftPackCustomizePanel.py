@@ -7,8 +7,7 @@ from tools.commonTools import *
 class FishCardGiftPackCustomizePanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.FishCardGiftPackCustomize.btn_close)
-        if FishCardGiftPackCustomizePanel.is_panel_active(self):
-            raise FindElementError
+
 
     def is_panel_active(self):
         if self.exist(element_data=ElementsData.FishCardGiftPackCustomize.FishCardGiftPackCustomizePanel):

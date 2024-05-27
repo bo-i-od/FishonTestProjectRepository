@@ -34,8 +34,8 @@ def fish_once(bp: BasePage, fishery_id="", fish_id="",is_quick=True):
 
 
 
-def circulate_fish(bp: BasePage, fishery_id=None, is_monster=False, is_quick=False, times=10):
-    cur = 16
+def circulate_fish(bp: BasePage, fishery_id=None, is_monster=False, is_quick=False, times=500):
+    cur = 1
     if fishery_id is not None:
         times = 16
     while cur < times:
@@ -48,12 +48,12 @@ def circulate_fish(bp: BasePage, fishery_id=None, is_monster=False, is_quick=Fal
             bp.sleep(1)
         bp.sleep(2)
         bp.clear_popup()
-        # if cur == 1:
-        #     select_rod(bp, 3)
-        # if cur == 5:
-        #     select_rod(bp, 3)
-        # if cur == 9:
-        #     select_rod(bp, 2)
+        if cur == 1:
+            select_rod(bp, 3)
+        if cur == 5:
+            select_rod(bp, 3)
+        if cur == 9:
+            select_rod(bp, 2)
         fish_once(bp, fishery_id=fishery_id, fish_id=fish_id, is_quick=is_quick)
         print(f"第{cur}次钓鱼")
         cur += 1
@@ -84,13 +84,13 @@ def monster_all(bp: BasePage, fishery_id, is_quick=True):
         fish_once(bp, fishery_id=fishery_id, fish_id=f"390{bais}{cur}", is_quick=is_quick)
         cur += 1
 
-def fish_all(bp: BasePage):
+def fish_all(bp: BasePage, is_quick=False):
     cur = 1
     while cur < 13:
         index = str(cur).zfill(2)
         fishery_id = f"4003{index}"
         TournamentsPanel.go_to_fishery_by_tpid(bp, fishery_id)
-        circulate_fish(bp, is_monster=True, fishery_id=fishery_id, is_quick=False)
+        circulate_fish(bp, is_monster=True, fishery_id=fishery_id, is_quick=is_quick)
         BattlePreparePanel.click_btn_close(bp)
         bp.sleep(1)
         cur += 1
@@ -108,16 +108,16 @@ def tournament(bp: BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("b6h65hd64p5pxcyh")
+    bp = BasePage("192.168.111.77:20030")
     gameInit.set_joystick(bp)
-    # circulate_fish(bp, is_quick=True, fishery_id="400301", is_monster=True)
+    # circulate_fish(bp, is_quick=False)
     # fish_once(bp, is_quick=False)
     # monster_all(bp, is_quick=True, fishery_id="400317")
     # common.gameInit.set_joystick(bp)
     # while True:
     #     tournament(bp)
     # bp.set_item_count(target_count=72000,item_tpid="209013")
-    fish_all(bp)
+    fish_all(bp, is_quick=False)
     # bp.cmd("mode 400301 390001")
 
     # worksheet = bp.excelTools.get_worksheet(book_name="玩家信息采样.xlsx", sheet_name="Sheet1")

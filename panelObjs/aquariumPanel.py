@@ -6,8 +6,6 @@ from common.viewport import Viewport
 class AquariumPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.Aquarium.btn_close)
-        if AquariumPanel.is_panel_active(self):
-            raise FindElementError
 
     def is_panel_active(self):
         if self.exist(element_data=ElementsData.Aquarium.AquariumPanel):

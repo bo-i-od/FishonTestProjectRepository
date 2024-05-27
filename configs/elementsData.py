@@ -27,7 +27,7 @@ class ElementsData:
         achievement_bg_list = {"locator": "UICanvas>Default>AchievementPanel>panel>List>Viewport>Content>>>groupbg"}
         btn_close = {"locator": "UICanvas>Default>AchievementPanel>panel>btn_close>img"}
         btn_i = {"locator": "UICanvas>Default>AchievementPanel>panel>title_group>content>btn_i>img"}
-        tips = {"locator": "UICanvas>Default>AchievementPanel>panel>title_group>btn_i>tips"}
+        tips = {"locator": "UICanvas>Default>AchievementPanel>panel>title_group>tips"}
         tips_unlock = {"locator": "UICanvas>Default>AchievementPanel>panel>List>Viewport>Content>>tips_unlock"}
         task_mini_icon = {"locator": "UICanvas>Default>AchievementPanel>panel>task_mini>icon"}
         viewport = {"locator": "UICanvas>Default>AchievementPanel>panel>List>Viewport", "focus": (0, 0)}
@@ -470,8 +470,8 @@ class ElementsData:
         res_value_list = {"locator": "UICanvas>Default>FishCardPanel>top_res>ResourceBar>>value"}
         btn_events = {"locator": "UICanvas>Default>FishCardPanel>btn_events>img"}
         sub_tab_list = {"locator": "UICanvas>Default>FishCardPanel>panel_normal>subTab>", "focus": (0, 0)}
-        rating = {"locator": "UICanvas>Default>FishCardPanel>panel_normal>gs>rating>num"}
-        rating_fisheries = {"locator": "UICanvas>Default>FishCardPanel>panel_normal>gs>rating_fisheries>num"}
+        rating = {"locator": "UICanvas>Default>FishCardPanel>gs>rating>num"}
+        rating_fisheries = {"locator": "UICanvas>Default>FishCardPanel>gs>rating_fisheries>num"}
     #
 
     class FishCardUpgrade:

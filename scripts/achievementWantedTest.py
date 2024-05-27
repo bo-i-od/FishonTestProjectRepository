@@ -19,6 +19,7 @@ def unlock_test(bp: BasePage):
     bp.go_to_panel("AchievementPanel")
     bp.sleep(0.5)
 
+
     # 切换到悬赏鱼页面
     AchievementPanel.switch_tab(bp, 1)
     bp.sleep(0.5)
@@ -82,6 +83,7 @@ def wanted_test(bp: BasePage):
     # 去悬赏界面
     bp.go_to_panel("AchievementPanel")
     bp.sleep(0.5)
+
     AchievementPanel.switch_tab(bp, 1)
     bp.sleep(0.5)
 

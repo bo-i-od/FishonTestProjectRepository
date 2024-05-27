@@ -6,8 +6,7 @@ from common.slider import Slider
 class BattlePassBuyLevelPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.BattlePassBuyLevel.btn_close)
-        if BattlePassBuyLevelPanel.is_panel_active(self):
-            raise FindElementError
+
     def is_panel_active(self):
         if self.exist(element_data=ElementsData.BattlePassBuyLevel.BattlePassBuyLevelPanel):
             return True

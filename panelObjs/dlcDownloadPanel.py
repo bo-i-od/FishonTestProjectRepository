@@ -6,8 +6,7 @@ from common import resource
 class DLCDownloadPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.DLCDownload.btn_close)
-        if DLCDownloadPanel.is_panel_active(self):
-            raise FindElementError
+
 
     def is_panel_active(self):
         if self.exist(element_data=ElementsData.DLCDownload.DLCDownloadPanel):

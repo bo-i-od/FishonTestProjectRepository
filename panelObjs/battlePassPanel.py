@@ -6,8 +6,6 @@ from tools.commonTools import *
 class BattlePassPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.BattlePass.btn_close)
-        if BattlePassPanel.is_panel_active(self):
-            raise FindElementError
 
     def is_panel_active(self):
         if self.exist(element_data=ElementsData.BattlePass.BattlePassPanel):

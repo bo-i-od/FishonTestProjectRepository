@@ -2,6 +2,8 @@ from typing import List
 
 import os
 
+import netMsg.achieve_cs
+
 
 def count_lines(file_path):
     with open(file_path, 'r', encoding='gbk', errors='ignore') as file:
@@ -57,9 +59,11 @@ if __name__ == '__main__':
     # res = ab(input)
     # print(res)
     # print(move(4, 4))
-    project_directory = 'D:\FishonTestProject'
-    code_line_count = count_code_lines(project_directory)
-    print(f"Total code lines: {code_line_count}")
+    # project_directory = 'D:\FishonTestProject'
+    # code_line_count = count_code_lines(project_directory)
+    # print(f"Total code lines: {code_line_count}")
+    pass
+
 
 
 
