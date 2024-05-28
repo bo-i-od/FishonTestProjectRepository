@@ -17,7 +17,8 @@ def deal_with_SCFishingHookMsg(msg):
     value1 = get_value(msg, key1, False)
     key2 = "color"
     value2 = get_value(msg, key2, False)
-    f = open("log.txt", "a")
+    print(f"{value1}  {value2}")
+    f = open("../statistics/log.txt", "a")
     f.write(f"{value1}  {value2}")
     f.close()
 
