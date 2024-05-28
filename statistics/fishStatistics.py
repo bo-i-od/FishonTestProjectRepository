@@ -1,6 +1,8 @@
 from base_func import *
+from load_log import load_log
 
-numbers=load_file()
+data = load_log()
+numbers = [int(i['fish_id']) for i in data]
 
 def init_list(num):
     return [[0,[]] for i in range(num)]
