@@ -10,5 +10,6 @@ for i in data:
         f_num = int(i['flash_card_num'])
         flash_card[f_fish_id]['flash_card_num'] += f_num
 sorted_dict = sorted(flash_card.items(), key=lambda x: x[0], reverse=False)
+print(len(data))
 for i in sorted_dict:
     print(i)
