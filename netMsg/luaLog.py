@@ -1,5 +1,3 @@
-import json
-import time
 
 
 def deal_with_msg(msg):
@@ -17,9 +15,15 @@ def deal_with_SCFishingHookMsg(msg):
     value1 = get_value(msg, key1, False)
     key2 = "color"
     value2 = get_value(msg, key2, False)
-    print(f"{value1}  {value2}")
+    key3 = "otherItems"
+    value3 = get_dict(msg, key3)
+    key3_1 = "count"
+    value3_1 = get_value(value3, key3_1, False)
+    key3_2 = "id"
+    value3_2 = get_value(value3, key3_2, False)
+    print(f"{key1}: {value1}, {key2}: {value2}, {key3_1}: {value3_1}, {key3_2}: {value3_2}")
     f = open("../statistics/log.txt", "a")
-    f.write(f"{value1}  {value2}")
+    f.write(f"{value1}  {value2}  {value3}")
     f.close()
 
 
@@ -41,5 +45,33 @@ def get_value(msg:str, key: str, is_str: bool):
             value = value.replace("\"", "")
         break
     return value
+
+def get_dict(msg: str, key:str):
+    left = msg.find(key)
+    right = left
+    cur = left
+    first_flag = True
+    count = 0
+    while cur < len(msg):
+        if msg[cur] == '{':
+            if first_flag:
+                left = cur
+                first_flag = False
+            count += 1
+            cur += 1
+            continue
+        if msg[cur] != '}':
+            cur += 1
+            continue
+        count -= 1
+        if count > 0:
+            cur += 1
+            continue
+        cur += 1
+        right = cur
+        break
+    res = msg[left:right]
+    return res
+
 
     
