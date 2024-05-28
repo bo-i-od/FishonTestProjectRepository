@@ -21,9 +21,10 @@ def deal_with_SCFishingHookMsg(msg):
     value3_1 = get_value(value3, key3_1, False)
     key3_2 = "id"
     value3_2 = get_value(value3, key3_2, False)
-    print(f"{key1}: {value1}, {key2}: {value2}, {key3_1}: {value3_1}, {key3_2}: {value3_2}")
+    string=f"fish_id: {value1}, color: {value2}, flash_card_num: {value3_1}, flash_card_id: {value3_2}"
+    print(string)
     f = open("../statistics/log.txt", "a")
-    f.write(f"{value1}  {value2}  {value3}")
+    f.write(string+"\n")
     f.close()
 
 
