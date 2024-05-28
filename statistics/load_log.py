@@ -17,7 +17,11 @@ def parse_data(file_path):
     return result
 
 def load_log():
-    # 使用示例
+    """
+    [{'fish_id': '302009', 'color': '10', 'flash_card_num': None, 'flash_card_id': None},
+    ...
+    ]
+    """
     file_path = "log.txt"  # 替换为您的文件路径
     parsed_data = parse_data(file_path)
     return parsed_data
