@@ -2,6 +2,7 @@ import time
 import traceback
 
 from common import gameInit
+from netMsg import csMsgAll
 from panelObjs.battlePanel import BattlePanel
 from panelObjs.battlePreparePanel import BattlePreparePanel
 from panelObjs.playerInfoPanel import PlayerInfoPanel
@@ -81,9 +82,13 @@ def tournament(bp:BasePage):
 
 def ndays(bp:BasePage, count):
     # bp.cmd(f"setPlayerLayer {count}000")
-    bp.cmd(f"levelupto {count//2}")
-    bp.cmd(f"add 1 100400 {count}")
-    bp.cmd(f"add 1 101200 {count}")
+    bp.cmd(f"levelupto 16")
+    bp.sleep(0.1)
+    guildSimpleId = 10000030
+    lua_code = csMsgAll.get_CSGuildApplyMsg(source=0, guildSimpleId=guildSimpleId)
+    bp.lua_console(lua_code)
+    # bp.cmd(f"add 1 100400 {count}")
+    # bp.cmd(f"add 1 101200 {count}")
     # bp.cmd(f"monopolyscore {count}")
     # bp.cmd(f"add 2 209002 {count}")
     # bp.cmd(f"add 2 209006 {count}")
@@ -100,10 +105,10 @@ def clone(bp:BasePage, name):
 
 
 def main(bp):
-    cur = 43
-    limit = 120
+    cur = 1
+    limit = 26
     while cur < limit:
-        name = "aaaaa" + str(cur)
+        name = "guildRobot" + str(cur)
         login(bp, name)
         bp.sleep(2)
         bp.clear_popup()
@@ -188,7 +193,7 @@ def read_data():
         cur += 1
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.77:20230")
+    bp = BasePage()
     # worksheet = bp.excelTools.get_worksheet(book_name="玩家信息采样.xlsx", sheet_name="Sheet1")
     # column_data = []
     # # 第六行开始
@@ -200,5 +205,7 @@ if __name__ == '__main__':
     #     b += 1
     # # auto_export()
     # # time.sleep(100)
-    main(bp)
+    # main(bp)
+
+
     # pass

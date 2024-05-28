@@ -48,6 +48,9 @@ class BasePage:
         # 是否让Unity发log
         self.send_log_flag = True
 
+        # 是否将Unity发来的log加到消息列表里
+        self.log_list_flag = False
+
         # 默认端口 5001
         addr = ('', 5001)
         addr_listen = ('', 5002)
@@ -69,10 +72,14 @@ class BasePage:
         # 配置表的路径
         self.excelTools = ExceTools(self.root_dir.replace("\\", "/") + "/tables/")
 
-        # 是否让Unity发log
+        # # 是否让Unity发log
         self.set_send_log_flag(self.send_log_flag)
 
         self.wait_msg()
+
+        # 消息储存队列
+        self.log_list = []
+
 
 
     def get_device(self, serial_number=None):
@@ -90,6 +97,10 @@ class BasePage:
         # dev = connect_device("android://127.0.0.1:5037/b6h65hd64p5pxcyh")
         # dev = connect_device("android://127.0.0.1:5037/28cce18906027ece")
         return dev
+
+    def connect_close(self):
+        self.poco.agent.c.conn.close()
+        self.poco_listen.agent.c.conn.close()
 
     # 开启调试打印再打印
     def debug_log(self, *msg):
@@ -481,13 +492,13 @@ class BasePage:
     # 判断元素存在后再点击
     def click_element_safe(self, object_id: int = 0, element_data: dict = None):
         position_list = self.exist(object_id=object_id, element_data=element_data)
-        if position_list:
-            try:
-                self.click_position_base(position_list[0])
-            except:
-                pass
-                # print("超出屏幕范围，没有进行点击")
+        if not position_list:
             return
+        try:
+            self.click_position_base(position_list[0])
+        except:
+            pass
+            # print("超出屏幕范围，没有进行点击")
         # print(f"{object_id, element_data}元素不存在，没有进行点击")
 
     # # 尝试点击
@@ -835,19 +846,25 @@ class BasePage:
         pyautogui.typewrite(key)
 
     def circulate_update(self):
-        while True:
-            if not self.listen_log_flag:
-                self.sleep(1)
-                continue
-            # 每隔一段时间取一下接收区的消息
-            msg = self.poco_listen.agent.c.conn.recv()
-            for m in msg:
-                # 转格式加处理消息
-                data = json.loads(m)
-                netMsg.luaLog.deal_with_msg(data['msg'])
-                # 返回消息给C#
-                # poco.agent.c.conn.send("ok")
-            time.sleep(0.01)
+            while True:
+                if not self.listen_log_flag:
+                    self.sleep(1)
+                    continue
+                # 每隔一段时间取一下接收区的消息
+                try:
+                    msg = self.poco_listen.agent.c.conn.recv()
+                except:
+                    break
+                for m in msg:
+                    # 转格式加处理消息
+                    data = json.loads(m)
+                    msg = data['msg']
+                    if self.log_list_flag:
+                        self.log_list.append(msg)
+                    netMsg.luaLog.deal_with_msg(msg)
+                    # 返回消息给C#
+                    # poco.agent.c.conn.send("ok")
+                time.sleep(0.01)
 
     def wait_msg(self):
         from threading import Thread
@@ -858,14 +875,14 @@ class BasePage:
 
 
 
-
 if __name__ == '__main__':
     bp = BasePage()
+    bp.connect_close()
 
 
-    while True:
-        # a = bp.get_object_id_list(element_data=ElementsData.Login.btn_login)
-        bp.sleep(1)
+    # while True:
+    #     # a = bp.get_object_id_list(element_data=ElementsData.Login.btn_login)
+    #     bp.sleep(1)
 
     # b = bp.poco2.agent.c.call("GetObjectId", ElementsData.Login.btn_login)
 
