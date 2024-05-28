@@ -1,3 +1,4 @@
+import random
 import time
 import traceback
 
@@ -82,11 +83,20 @@ def tournament(bp:BasePage):
 
 def ndays(bp:BasePage, count):
     # bp.cmd(f"setPlayerLayer {count}000")
-    bp.cmd(f"levelupto 16")
-    bp.sleep(0.1)
-    guildSimpleId = 10000030
-    lua_code = csMsgAll.get_CSGuildApplyMsg(source=0, guildSimpleId=guildSimpleId)
+    # bp.cmd(f"levelupto 16")
+    # bp.sleep(0.1)
+    # guildSimpleId = 10000030
+    # lua_code = csMsgAll.get_CSGuildApplyMsg(source=0, guildSimpleId=guildSimpleId)
+    # bp.lua_console(lua_code)
+
+    bp.cmd_list([f"levelupto 20", "add 1 100100 2000"])
+    bp.sleep(0.2)
+    r = random.randint(4, 7)
+    lua_code = csMsgAll.get_CSGameGuildCreateMsg(flag=5, joinType=(count % 2 + 1), joinLv=(r * 5), color=3, name=f"club{count}", introduce="欢迎大家加入俱乐部，一起欢乐钓鱼吧！", pattern=1)
+    print(lua_code)
     bp.lua_console(lua_code)
+
+
     # bp.cmd(f"add 1 100400 {count}")
     # bp.cmd(f"add 1 101200 {count}")
     # bp.cmd(f"monopolyscore {count}")
@@ -105,10 +115,10 @@ def clone(bp:BasePage, name):
 
 
 def main(bp):
-    cur = 1
+    cur = 4
     limit = 26
     while cur < limit:
-        name = "guildRobot" + str(cur)
+        name = "club" + str(cur)
         login(bp, name)
         bp.sleep(2)
         bp.clear_popup()
@@ -205,7 +215,8 @@ if __name__ == '__main__':
     #     b += 1
     # # auto_export()
     # # time.sleep(100)
-    # main(bp)
+    main(bp)
+    bp.connect_close()
 
 
     # pass
