@@ -32,17 +32,17 @@ def get_fish_type(fish_id):
         fish_type = "gold_yugu"
         if fish_num in [1,2]:
             fish_size="Elite"
-        elif fish_num in [3,4]:
+        elif fish_num in [3,4,5,6,7]:
             fish_size="Monster"
     elif fish_id>391000:
         fish_type = "yugu"
         if fish_num in [1,2]:
             fish_size="Elite"
-        elif fish_num in [3,4]:
+        elif fish_num in [3,4,5,6,7]:
             fish_size="Monster"
     elif 391000>fish_id>390000:
         fish_type='boss'
-        if fish_num in [5,6]:
+        if fish_num in [5,6,7,8,9]:
             fish_size="Monster"
         elif fish_num in [3,4]:
             fish_size="Elite"
