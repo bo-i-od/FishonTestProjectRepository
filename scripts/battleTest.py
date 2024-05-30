@@ -12,7 +12,7 @@ from panelObjs.tournamentsPanel import TournamentsPanel
 
 def fish_once(bp: BasePage, fishery_id="", fish_id="",is_quick=True):
     bp.set_time_scale()
-    bp.sleep(6)
+    # bp.sleep(6)
     if fish_id != "":
         c = f"mode {fishery_id} {fish_id}"
         bp.cmd(c)
@@ -26,7 +26,7 @@ def fish_once(bp: BasePage, fishery_id="", fish_id="",is_quick=True):
     if is_quick:
         BattlePanel.reel_quick(bp)
     bp.set_time_scale()
-    bp.sleep(6)
+    # bp.sleep(6)
     element_btn = ResultPanel.wait_for_result(bp)
     ResultPanel.automatic_settlement(bp, element_btn=element_btn)
     if fish_id != "":
@@ -79,7 +79,7 @@ def select_location(bp: BasePage, index):
 
 def monster_all(bp: BasePage, fishery_id, is_quick=True):
     cur = 1
-    while cur < 7:
+    while cur < 10:
         bais = str(int(fishery_id[-2:]) - 1).zfill(2)
         fish_once(bp, fishery_id=fishery_id, fish_id=f"390{bais}{cur}", is_quick=is_quick)
         cur += 1
@@ -108,13 +108,15 @@ def tournament(bp: BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21523")
+    bp = BasePage("192.168.111.80:20053")
     gameInit.set_joystick(bp)
-    # circulate_fish(bp, is_quick=False)
+    bp.cmd("mode 400302 302014")
+    circulate_fish(bp, is_quick=True)
+
     # fish_once(bp, is_quick=False)
     # monster_all(bp, is_quick=True, fishery_id="400317")
-    while True:
-        tournament(bp)
+    # while True:
+    #     tournament(bp)
     # bp.set_item_count(target_count=72000,item_tpid="209013")
     # fish_all(bp, is_quick=False)
     # bp.cmd("mode 400301 390001")

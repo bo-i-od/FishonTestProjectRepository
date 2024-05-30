@@ -80,7 +80,10 @@ def gen_py_function(struct):
         # lua cmd.部分
         ignore_check += rf"""
     if {arg_list[cur]} is not None:
-        cmd_part += f'cmd.{arg_list[cur]} = {{{arg_list[cur]}}}\n'
+        arg = {arg_list[cur]}
+        if isinstance({arg_list[cur]}, str):
+            arg = f'"{{{arg_list[cur]}}}"'
+        cmd_part += f'cmd.{arg_list[cur]} = {{arg}}\n'
         """
         # cmd_part += rf"f'cmd.{arg_list[cur]} = {{{arg_list[cur]}}}\n'"
         cur += 1
@@ -122,7 +125,7 @@ def get_{msg_name}({args_str}):
 def thrift_type_to_py_type(type_str):
     if "list" in type_str:
         # result = re.findall(r"list<(.+?)>", type_str)
-        return "list"
+        return "str"
     if "map" in type_str:
         return "dict"
     if "set" in type_str:

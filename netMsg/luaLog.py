@@ -9,6 +9,16 @@ def deal_with_msg(msg):
         deal_with_SCFishingCastMsg(msg)
         return
 
+    if "SCHiddenTreasureFreeShovelProgressChangedMsg" in msg:
+        deal_with_SCHiddenTreasureFreeShovelProgressChangedMsg(msg)
+        return
+
+    if "SCMonopolyFreeDiceProgressChangedMsg" in msg:
+        deal_with_SCMonopolyFreeDiceProgressChangedMsg(msg)
+        return
+
+
+
 
 def deal_with_SCFishingHookMsg(msg):
     print(msg)
@@ -45,6 +55,29 @@ def deal_with_SCFishingCastMsg(msg):
     f.write(string+"\n")
     f.close()
     pass
+
+def deal_with_SCHiddenTreasureFreeShovelProgressChangedMsg(msg):
+    key1 = "addProgress"
+    value1 = get_value(msg, key1, False)
+    key2 = "addShovelCount"
+    value2 = get_value(msg, key2, False)
+    f = open("../statistics/log.txt", "a")
+    res = f"{key1}:{value1}, {key2}:{value2}, "
+    print(res)
+    f.write(res)
+    f.close()
+
+def deal_with_SCMonopolyFreeDiceProgressChangedMsg(msg):
+    key1 = "addProgress"
+    value1 = get_value(msg, key1, False)
+    key2 = "addDiceCount"
+    value2 = get_value(msg, key2, False)
+    f = open("../statistics/log.txt", "a")
+    res = f"{key1}:{value1}, {key2}:{value2}, "
+    print(res)
+    f.write(res)
+    f.close()
+
 
 
 def get_value(msg:str, key: str, is_str: bool):
