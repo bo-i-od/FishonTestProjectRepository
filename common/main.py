@@ -9,7 +9,9 @@ if __name__ == '__main__':
     # 设置体力
     bp.set_item_count(target_count=1000000, item_tpid="100500")
     # 重置清空log
-    with open("../statistics/log.txt", "w") as file:
+    with open("../statistics/hook_log.txt", "w") as file:
+        pass  # 不做任何操作,关闭文件即可清空内容
+    with open("../statistics/cast_log.txt", "w") as file:
         pass  # 不做任何操作,关闭文件即可清空内容
     fishingMsg.fish(bp, [
         {"spot_id": f"40030201", "times": 1000, "energy_cost": 50},
