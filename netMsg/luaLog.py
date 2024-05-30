@@ -11,6 +11,7 @@ def deal_with_msg(msg):
 
 
 def deal_with_SCFishingHookMsg(msg):
+    print(msg)
     key1 = "tpId"
     value1 = get_value(msg, key1, False)
     key2 = "color"
@@ -22,13 +23,27 @@ def deal_with_SCFishingHookMsg(msg):
     key3_2 = "id"
     value3_2 = get_value(value3, key3_2, False)
     string=f"fish_id:{value1}, color:{value2}, flash_card_num:{value3_1}, flash_card_id:{value3_2}"
-    print(string)
-    f = open("../statistics/log.txt", "a")
+    # print(string)
+    if value3_1:
+        print(msg)
+    f = open("../statistics/hook_log.txt", "a")
     f.write(string+"\n")
     f.close()
 
 
 def deal_with_SCFishingCastMsg(msg):
+    print(msg)
+    key1 = "debugInfos"
+    value1 = get_dict(msg, key1)
+    key1_list=['isFishState','isTimeLimitedSpot','protectiveId','energyCostGroup','isInDoubleWeek','energyCost']
+
+    string=''
+    for i in key1_list:
+        value = get_value(value1, i, False)
+        string+=(i+':'+value+', ')
+    f = open("../statistics/cast_log.txt", "a")
+    f.write(string+"\n")
+    f.close()
     pass
 
 
