@@ -158,6 +158,6 @@ class AchievementGroupPanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    a = bp.exist(element_data=ElementsData.AchievementGroup.achievement_list)
+    a = bp.click_element(element_data=ElementsData.FlashCardReceive.btn_close)
     # a = AchievementGroupPanel.get_status_list(bp)
     print(a)

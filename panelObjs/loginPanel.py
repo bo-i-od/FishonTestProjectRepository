@@ -17,7 +17,7 @@ class LoginPanel(BasePage):
             self.sleep(0.5)
 
     def click_btn_login(self):
-        self.click_until_disappear(element_data=ElementsData.Login.btn_login)
+        self.click_until_disappear(element_data=ElementsData.Login.btn_login, interval=2)
 
     def set_login_name(self, login_name):
         self.set_text(element_data=ElementsData.Login.InputField_UserName, text=login_name)

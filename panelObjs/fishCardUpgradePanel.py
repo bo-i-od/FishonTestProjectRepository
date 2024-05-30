@@ -108,8 +108,6 @@ class FishCardUpgradePanel(BasePage):
 
     def click_btn_add_100000(self):
         self.click_element(element_data=ElementsData.FishCardUpgrade.btn_add_100000)
-        if not self.exist(element_data=ElementsData.Store.panel_resource):
-            raise FindNoElementError
 
     def click_btn_next(self):
         self.click_element(element_data=ElementsData.FishCardUpgrade.btn_next)

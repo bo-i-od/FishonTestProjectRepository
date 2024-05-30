@@ -354,6 +354,9 @@ class ElementsData:
         cost_icon_list = {"locator":"UICanvas>Default>CareerPanel>panel_talent>panel_list_tips>btns>cost>>icon"}
         cost_quantity_list = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list_tips>btns>cost>>icon"}
 
+    class ClubApply:
+        ClubApplyPanel = {"locator":"UICanvas>Default>ClubApplyPanel"}
+        btn_close = {"locator":"UICanvas>Default>ClubApplyPanel>panel>btn_close>img"}
 
     class CommonItemGet:
         CommonItemGetPanel = {"locator":"UICanvas>Default>CommonItemGetPanel"}
@@ -474,6 +477,12 @@ class ElementsData:
         rating_fisheries = {"locator": "UICanvas>Default>FishCardPanel>gs>rating_fisheries>num"}
     #
 
+    class FlashCardReceive:
+        FishCardPanel = {"locator": "UICanvas>Default>FlashCardReceivePanel"}
+        btn_close = {"locator": "UICanvas>Default>FlashCardReceivePanel>panel_flashcard>btn_close>tip"}
+
+
+
     class FishCardUpgrade:
         FishCardUpgradePanel = {"locator": "UICanvas>Default>FishCardUpgradePanel"}
         btn_close = {"locator": "UICanvas>Default>FishCardUpgradePanel>btn_close>img"}
@@ -485,14 +494,14 @@ class ElementsData:
         level_next = {"locator": "UICanvas>Default>FishCardUpgradePanel>panel_upgrade>Content>level>next"}
         cost_value_list = {"locator": "UICanvas>Default>FishCardUpgradePanel>panel_upgrade>Content>cost>bg>>value_cost"}
         cost_icon_list = {"locator": "UICanvas>Default>FishCardUpgradePanel>panel_upgrade>Content>cost>bg>>icon"}
-        fisheries_name_selected = {"locator": "UICanvas>Default>FishCardUpgradePanel>panel>FishCard>>name"}
-        fish_name_selected = {"locator": "UICanvas>Default>FishCardUpgradePanel>panel_upgrade>cotent_fishcard>fishcard>>frame>name"}
-        progress_selected = {"locator": "UICanvas>Default>FishCardUpgradePanel>panel>FishCard>>kind_02>progress>text"}
-        level_selected = {"locator": "UICanvas>Default>FishCardUpgradePanel>panel_upgrade>cotent_fishcard>fishcard>>kind_02>level>number"}
-        rating_card = {"locator": "UICanvas>Default>FishCardUpgradePanel>panel_upgrade>cotent_fishcard>fishcard>>kind_02>talent>text"}
+        fisheries_name_selected = {"locator": "UICanvas>Default>FishCardUpgradePanel>panel_upgrade>cotent_fishcard>card>Fishcard_group>card_group>fishcard_1>>fisheries_bg>fisheries"}
+        fish_name_selected = {"locator": "UICanvas>Default>FishCardUpgradePanel>panel_upgrade>cotent_fishcard>card>Fishcard_group>card_group>fishcard_1>>frame>name"}
+        # progress_selected = {"locator": "UICanvas>Default>FishCardUpgradePanel>panel_upgrade>Content>progress>text"}
+        level_selected = {"locator": "UICanvas>Default>FishCardUpgradePanel>panel_upgrade>cotent_fishcard>card>Fishcard_group>card_group>fishcard_1>>kind_02>level>number"}
+        rating_card = {"locator": "UICanvas>Default>FishCardUpgradePanel>panel_upgrade>cotent_fishcard>card>Fishcard_group>card_group>fishcard_1>>kind_02>talent>text"}
         rating_fisheries = {"locator": "UICanvas>Default>FishCardUpgradePanel>rating_fisheries>num"}
         rating = {"locator": "UICanvas>Default>FishCardUpgradePanel>rating>num"}
-        title_bg_selected = {"locator": "UICanvas>Default>FishCardUpgradePanel>panel>FishCard>>title_bg"}
+        # title_bg_selected = {"locator": "UICanvas>Default>FishCardUpgradePanel>panel>FishCard>>title_bg"}
         btn_add_100000 = {"locator": "UICanvas>Default>FishCardUpgradePanel>top_res>ResourceBar>100000>btn_add"}
         text_100000 = {"locator": "UICanvas>Default>FishCardUpgradePanel>top_res>ResourceBar>100000>value"}
         btn_next = {"locator": "UICanvas>Default>FishCardUpgradePanel>panel_upgrade>cotent_fishcard>arrow>btn_next", "focus": (1, 0.5)}
@@ -820,6 +829,11 @@ class ElementsData:
         NBG_fishing_fail_6 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_fishing_fail_6(Clone)>Guide_Highlight>ep_UI_novice guide"}
         NBG_fishing_fail_7 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_fishing_fail_7(Clone)>Guide_Highlight>ep_UI_novice guide"}
 
+        # 俱乐部引导
+        NBG_system_click_Club = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_system_click_Club(Clone)>Guide_VirtualBtn", "focus": (1, 1) }
+        NBG_system_club_apply = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_system_club_apply(Clone)"}
+
+
 
     class NewbieTask:
         NewbieTaskPanel = {"locator": "UICanvas>Default>NewbieTaskPanel"}
@@ -876,7 +890,7 @@ class ElementsData:
         btn_close_additional = {"locator": "UICanvas>Default>PlayerInfoPanel>>Panel>btn_close>img"}
         btn_setting = {"locator": "UICanvas>Default>PlayerInfoPanel>panel>Panel_PlayerCard>panel>btn>btn_setting>icon"}
         btn_logout = {"locator": "UICanvas>Default>PlayerInfoPanel>Panel_Popups_Edit>Panel>panel_setting>btns>btn_logout>icon"}
-        btn_tag = {"locator": "UICanvas>Default>PlayerInfoPanel>panel>Panel_PlayerCard>panel>btn>btn_tag>icon"}
+        btn_tag = {"locator": "UICanvas>Default>PlayerInfoPanel>panel>Panel_PlayerCard>panel>btn>btn_tag>text"}
         btn_edit_achievement = {"locator": "UICanvas>Default>PlayerInfoPanel>panel>Panel_PlayerCard>panel>panel_playerinfo>panel_left>content>btn_edit>icon"}
         btn_confirm = {"locator": "UICanvas>Default>PlayerInfoPanel>panel>Popups_Edit_badge>btns>btn_confirm"}
         viewport_badge_show = {"locator": "UICanvas>Default>PlayerInfoPanel>panel>Panel_PlayerCard>panel>panel_playerinfo>panel_right>badgewallinfo>player_badge>Viewport", "focus": (0, 0) }

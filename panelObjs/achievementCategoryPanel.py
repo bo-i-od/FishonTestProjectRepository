@@ -74,5 +74,6 @@ class AchievementCategoryPanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    a = AchievementCategoryPanel.get_category_table_data(bp)
+    a = bp.click_element(element_data=ElementsData.NewbieGuide.NBG_system_club_apply)
     print(a)
+    bp.connect_close()

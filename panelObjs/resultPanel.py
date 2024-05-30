@@ -20,7 +20,7 @@ class ResultPanel(BasePage):
             btn_cast_again = self.exist(element_data=ElementsData.BattleFailed.btn_again)
             if btn_cast_again:
                 return ElementsData.BattleFailed.btn_again
-            self.sleep(0.1)
+            self.sleep(0.5)
 
     def automatic_settlement(self, element_btn):
         # f_flag = True
