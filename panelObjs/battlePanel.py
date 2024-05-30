@@ -54,6 +54,7 @@ class BattlePanel(BasePage):
     # unity上才能用
     def reel_quick(self):
         while not self.exist(element_data=ElementsData.Result.ResultPanel):
+            self.clear_popup_once()
             self.lua_console(command="GameRoot:GetFishingMatch().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
             self.sleep(1)
 

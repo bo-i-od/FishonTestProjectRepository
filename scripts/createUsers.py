@@ -3,7 +3,7 @@ import time
 import traceback
 
 from common import gameInit
-from netMsg import csMsgAll
+from netMsg import csMsgAll, fishingMsg
 from panelObjs.battlePanel import BattlePanel
 from panelObjs.battlePreparePanel import BattlePreparePanel
 from panelObjs.playerInfoPanel import PlayerInfoPanel
@@ -17,15 +17,14 @@ from scripts import battleTest
 from configs.elementsData import ElementsData
 import json
 
-from scripts.duelTest import clear_duelcup, random_duelcup
 
 
 def logout(bp:BasePage):
-    while not HomePanel.is_panel_active(bp):
-        pass
-    HomePanel.go_to_panel(bp, "PlayerInfoPanel")
+    # while not HomePanel.is_panel_active(bp):
+    #     pass
+    # HomePanel.go_to_panel(bp, "PlayerInfoPanel")
     PlayerInfoPanel.click_btn_setting(bp)
-    bp.sleep(1)
+    bp.sleep(0.5)
     # PlayerSettingPanel.click_tab_settings(bp)
 
 
@@ -39,15 +38,15 @@ def login(bp:BasePage, name:str):
         pass
     LoginPanel.set_login_name(bp, name)
     LoginPanel.click_btn_login(bp)
-    bp.sleep(3)
+    bp.sleep(2.5)
     if not PlayerEditNamePanel.is_panel_active(bp):
         return
     while not PlayerEditNamePanel.is_panel_active(bp):
-        bp.sleep(1)
+        bp.sleep(0.5)
     bp.cmd("guideskip")
     PlayerEditNamePanel.set_player_name(bp, name)
 
-    bp.sleep(1)
+    bp.sleep(0.5)
     PlayerEditNamePanel.click_confirm(bp)
 
 def go_leaderborad(bp:BasePage):
@@ -60,10 +59,18 @@ def go_leaderborad(bp:BasePage):
 
 
 def fish(bp:BasePage):
-    bp.go_to_panel("TournamentsPanel")
-    TournamentsPanel.go_to_first_location(bp)
-    battleTest.fish_once(bp, fishery_id="400301", fish_id="301001")
-    bp.go_home()
+    pass
+    # bp.cmd_list(["levelupto 20"])
+    # bp.sleep(0.1)
+    # fishingMsg.fish(bp, [{"spot_id": f"40030213", "times": 1, "energy_cost": 50}])
+    # bp.sleep(0.1)
+    # bp.cmd("mode 400302 390018")
+    # fishingMsg.fish(bp, [{"spot_id": f"40030213", "times": 1, "energy_cost": 50}])
+    # bp.sleep(0.1)
+    # bp.cmd("mode 400302 390019")
+    # fishingMsg.fish(bp, [{"spot_id": f"40030213", "times": 1, "energy_cost": 50}])
+    # bp.sleep(0.1)
+
 
 def tournament(bp:BasePage):
     bp.sleep(3)
@@ -81,20 +88,30 @@ def tournament(bp:BasePage):
     bp.sleep(1)
     bp.go_home()
 
-def ndays(bp:BasePage, count):
-    # bp.cmd(f"setPlayerLayer {count}000")
-    # bp.cmd(f"levelupto 16")
-    # bp.sleep(0.1)
-    # guildSimpleId = 10000030
-    # lua_code = csMsgAll.get_CSGuildApplyMsg(source=0, guildSimpleId=guildSimpleId)
-    # bp.lua_console(lua_code)
-
-    bp.cmd_list([f"levelupto 20", "add 1 100100 2000"])
+def hidden_treasure(bp:BasePage):
+    bp.cmd_list([f"levelupto 20", "add 1 101500 20"])
     bp.sleep(0.2)
-    r = random.randint(4, 7)
-    lua_code = csMsgAll.get_CSGameGuildCreateMsg(flag=5, joinType=(count % 2 + 1), joinLv=(r * 5), color=3, name=f"club{count}", introduce="欢迎大家加入俱乐部，一起欢乐钓鱼吧！", pattern=1)
+    dy = "{[1] = 1,}"
+    dx = "{[1] = 1,}"
+    lua_code = csMsgAll.get_CSHiddenTreasureDigMsg(digYs=dy, roomId=2000298, groupId=6000001, stageId=1, digXs=dx)
     print(lua_code)
     bp.lua_console(lua_code)
+
+
+def ndays(bp:BasePage, count):
+    # bp.cmd(f"setPlayerLayer {count}000")
+    bp.cmd(f"levelupto 16")
+    bp.sleep(0.1)
+    guildSimpleId = 10000001
+    lua_code = csMsgAll.get_CSGuildApplyMsg(source=0, guildSimpleId=guildSimpleId)
+    bp.lua_console(lua_code)
+
+    # bp.cmd_list([f"levelupto 20", "add 1 100100 2000"])
+    # bp.sleep(0.2)
+    # r = random.randint(4, 7)
+    # lua_code = csMsgAll.get_CSGameGuildCreateMsg(flag=5, joinType=(count % 2 + 1), joinLv=(r * 5), color=3, name=f"club{count}", introduce="欢迎大家加入俱乐部，一起欢乐钓鱼吧！", pattern=1)
+    # print(lua_code)
+    # bp.lua_console(lua_code)
 
 
     # bp.cmd(f"add 1 100400 {count}")
@@ -115,17 +132,19 @@ def clone(bp:BasePage, name):
 
 
 def main(bp):
-    cur = 4
-    limit = 26
+    cur = 1
+    limit = 10
     while cur < limit:
-        name = "club" + str(cur)
+        name = "qwe" + str(cur)
         login(bp, name)
-        bp.sleep(2)
-        bp.clear_popup()
+        # bp.sleep(2)
+        # bp.clear_popup()
         # go_leaderborad(bp)
-        bp.go_home()
-        # fish(bp)
-        ndays(bp, cur)
+        bp.lua_console('PanelMgr:OpenPanel("PlayerInfoPanel")')
+        # bp.go_home()
+        fish(bp)
+        # hidden_treasure(bp)
+        # ndays(bp, cur)
         logout(bp)
         cur += 1
 
@@ -203,18 +222,8 @@ def read_data():
         cur += 1
 
 if __name__ == '__main__':
-    bp = BasePage()
-    # worksheet = bp.excelTools.get_worksheet(book_name="玩家信息采样.xlsx", sheet_name="Sheet1")
-    # column_data = []
-    # # 第六行开始
-    # b = 3
-    # column_index = 3
-    # while worksheet.cell(b, 2).value is not None:
-    #     index = column_index - 1
-    #     column_data.append(worksheet.cell(b, column_index).value)
-    #     b += 1
-    # # auto_export()
-    # # time.sleep(100)
+    bp = BasePage("192.168.111.80:20038")
+
     main(bp)
     bp.connect_close()
 

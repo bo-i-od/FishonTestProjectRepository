@@ -9,6 +9,16 @@ def deal_with_msg(msg):
         deal_with_SCFishingCastMsg(msg)
         return
 
+    if "SCHiddenTreasureFreeShovelProgressChangedMsg" in msg:
+        deal_with_SCHiddenTreasureFreeShovelProgressChangedMsg(msg)
+        return
+
+    if "SCMonopolyFreeDiceProgressChangedMsg" in msg:
+        deal_with_SCMonopolyFreeDiceProgressChangedMsg(msg)
+        return
+
+
+
 
 def deal_with_SCFishingHookMsg(msg):
     key1 = "tpId"
@@ -21,14 +31,38 @@ def deal_with_SCFishingHookMsg(msg):
     value3_1 = get_value(value3, key3_1, False)
     key3_2 = "id"
     value3_2 = get_value(value3, key3_2, False)
-    print(f"{key1}: {value1}, {key2}: {value2}, {key3_1}: {value3_1}, {key3_2}: {value3_2}")
+    string=f"fish_id:{value1}, color:{value2}, flash_card_num:{value3_1}, flash_card_id:{value3_2}"
+    print(string)
     f = open("../statistics/log.txt", "a")
-    f.write(f"{value1}  {value2}  {value3}")
+    f.write(string+"\n")
     f.close()
 
 
 def deal_with_SCFishingCastMsg(msg):
     pass
+
+def deal_with_SCHiddenTreasureFreeShovelProgressChangedMsg(msg):
+    key1 = "addProgress"
+    value1 = get_value(msg, key1, False)
+    key2 = "addShovelCount"
+    value2 = get_value(msg, key2, False)
+    f = open("../statistics/log.txt", "a")
+    res = f"{key1}:{value1}, {key2}:{value2}, "
+    print(res)
+    f.write(res)
+    f.close()
+
+def deal_with_SCMonopolyFreeDiceProgressChangedMsg(msg):
+    key1 = "addProgress"
+    value1 = get_value(msg, key1, False)
+    key2 = "addDiceCount"
+    value2 = get_value(msg, key2, False)
+    f = open("../statistics/log.txt", "a")
+    res = f"{key1}:{value1}, {key2}:{value2}, "
+    print(res)
+    f.write(res)
+    f.close()
+
 
 
 def get_value(msg:str, key: str, is_str: bool):

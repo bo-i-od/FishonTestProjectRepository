@@ -7,10 +7,12 @@ class JumpData:
         "ChampointshipResultPopup",
         "DailyTipsPanel",
         "DivisionChangePanel",
+        "EventSignSevenDayPanel",
         "FishAlbumPreviewPanel",
         "FishBagPanel",
         "FisheryGiftPackPanel",
         "FisheryUnlockPanel",
+        "FlashCardReceivePanel",
         "LeaderBoardPopResultPanel",
         # "NBG_prepare_2_album_01(Clone)",
         "PlayerLevelupPanel",
@@ -19,7 +21,6 @@ class JumpData:
         "Recharge1And1Panel",
         "BattleTreasureMapPanel",
         "MessageBoxPanel",
-        "EventSignSevenDayPanel"
     }
 
     panel_close_dict = {
@@ -56,6 +57,7 @@ class JumpData:
         "FishBagPanel": [ElementsData.FishBag.btn_close, ElementsData.FishBag.btn_next],
         "FishCardGiftPackCustomizePanel": [ElementsData.FishCardGiftPackCustomize.btn_close],
         "FishCardPanel": [ElementsData.FishCard.btn_close],
+        "FlashCardReceivePanel": [ElementsData.FlashCardReceive.btn_close],
         "FisheryGiftPackPanel": [ElementsData.FisheryGiftPack.btn_close],
         "FisheryUnlockPanel": [ElementsData.FisheryUnlock.btn_close],
         "FishCardUpgradePanel": [ElementsData.FishCardUpgrade.btn_close],

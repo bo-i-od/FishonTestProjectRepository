@@ -12,7 +12,7 @@ from common import resource, gameInit
 
 def gift_pack_test(bp:BasePage):
     # 切换到 gift pack
-    StorePanel.change_tab(bp, 0)
+    StorePanel.change_tab(bp, 1)
 
     # 点击图标
     gift_pack_click_icon_test(bp)
@@ -92,7 +92,7 @@ def gift_pack_buy_once_test(bp:BasePage, gift_pack_dict, btn_position):
 
 def cash_test(bp:BasePage):
     # 切换到cash
-    StorePanel.change_tab(bp, 3)
+    StorePanel.change_tab(bp, 4)
 
     # 点击图标测试
     cash_click_icon_test(bp)
@@ -171,7 +171,7 @@ def cash_buy_once_test(bp:BasePage, cash_icon, cash_quantity, btn_position):
     RewardsPanel.click_tap_to_claim(bp)
 
 def gear_test(bp:BasePage):
-    StorePanel.change_tab(bp, 1)
+    StorePanel.change_tab(bp, 2)
     bp.sleep(1)
     StorePanel.change_resource_tab(bp, 0)
     item_tpid_list = ["100000", "100100"]
@@ -271,7 +271,7 @@ def gear_buy_once_test(bp:BasePage, gear_icon, price,btn_icon, btn_position):
 
 
 def fish_card_test(bp:BasePage):
-    StorePanel.change_tab(bp, 1)
+    StorePanel.change_tab(bp, 2)
     bp.sleep(1)
     StorePanel.change_resource_tab(bp, 1)
     # 得到第一个鱼卡包的价格，差一块钱
@@ -488,7 +488,7 @@ def booster2_buy_test(bp:BasePage):
         compare(cash_expect, cash)
 
 def materials_test(bp: BasePage):
-    StorePanel.change_tab(bp, 1)
+    StorePanel.change_tab(bp, 2)
     bp.sleep(1)
     StorePanel.change_resource_tab(bp, 2)
     materials_click_icon_test(bp)
@@ -648,7 +648,7 @@ def materials_buy_once_test(bp: BasePage):
     RewardsPanel.click_tap_to_claim(bp)
 
 def box_test(bp: BasePage):
-    StorePanel.change_tab(bp, 2)
+    StorePanel.change_tab(bp, 3)
     bp.sleep(1)
     box_id_list = StorePanel.get_box_id_list(bp)
     btn_position_list = StorePanel.get_btn_position_list(bp, box_id_list)

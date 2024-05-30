@@ -37,7 +37,7 @@ class BasePage:
         self.record = False
 
         # 是否开启战斗倍速
-        self.is_time_scale = False
+        self.is_time_scale = True
 
         # 是否打印日志
         self.is_debug_log = False
@@ -457,15 +457,15 @@ class BasePage:
             cur += 1
 
     # 在b元素消失前一直尝试点击a元素
-    def click_a_until_b_disappear(self, element_data_a: dict, element_data_b: dict):
+    def click_a_until_b_disappear(self, element_data_a: dict, element_data_b: dict, interval: float = 0.5):
         self.wait_for_appear(element_data_b, is_click=False)
         while self.exist(element_data=element_data_b):
             self.click_element_safe(element_data=element_data_a)
-            self.sleep(0.5)
+            self.sleep(interval)
 
     # 在a元素消失前一直尝试点击a元素
-    def click_until_disappear(self, element_data: dict = None):
-        self.click_a_until_b_disappear(element_data_a=element_data, element_data_b=element_data)
+    def click_until_disappear(self, element_data: dict = None, interval: float = 0.5):
+        self.click_a_until_b_disappear(element_data_a=element_data, element_data_b=element_data, interval=interval)
 
     # 等待指定元素出现
     def wait_for_appear(self, element_data: dict, is_click: bool = False, interval: float = 0.2, timeout=120):

@@ -6,6 +6,7 @@ from common.basePage import BasePage
 from panelObjs.achievementWantedPanel import AchievementWantedPanel
 from panelObjs.aquariumPanel import AquariumPanel
 from panelObjs.battlePreparePanel import BattlePreparePanel
+from panelObjs.clubApplyPanel import ClubApplyPanel
 from panelObjs.fishAlbum3DPanel import FishAlbum3DPanel
 from panelObjs.fishCardPanel import FishCardPanel
 from panelObjs.gearPanel import GearPanel
@@ -66,8 +67,8 @@ def hookTest(bp: BasePage):
     BattlePanel.hook_guide(bp)
 
 def main(bp:BasePage):
-    # username = str(time.time()).split('.')[0]
-    # gameInit.login(bp, username=username)
+    username = str(time.time()).split('.')[0]
+    gameInit.login(bp, username=username)
 
     # # 姓名头像测试
     playerEditNamePanelTest(bp)
@@ -92,6 +93,10 @@ def main(bp:BasePage):
     bp.go_to_panel("AquariumPanel")
     AquariumPanel.guide(bp)
     bp.go_home()
+
+    # 俱乐部引导
+    ClubApplyPanel.guide(bp)
+    ClubApplyPanel.click_btn_close(bp)
 
     # 鱼卡引导
     FishCardPanel.guide(bp)

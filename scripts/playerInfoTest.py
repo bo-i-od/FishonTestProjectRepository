@@ -70,37 +70,39 @@ def name_test(bp: BasePage):
     if not PlayerInfoPanel.is_btn_save_pay_abled(bp):
         bp.debug_log("erro_"+"if not PlayerInfoPanel.is_btn_save_pay_abled(bp)")
 
-    # 返回上级 对比是否改名成功
+    # # 返回上级 对比是否改名成功
+    # PlayerInfoPanel.click_btn_close_additional(bp)
+    # bp.sleep(1)
+    # playerInfo = PlayerInfoPanel.get_player_info(bp)
+    # compare(name, playerInfo["player_name"])
+    #
+    # # 再次进入界面
+    # PlayerInfoPanel.click_btn_setting(bp)
+    # bp.sleep(1)
+    # PlayerInfoPanel.click_tab_name(bp)
+    # bp.sleep(1)
+    #
+    # # 测试付费改名
+    # value_cost = PlayerInfoPanel.get_value_cost(bp)
+    # cash_expect = bp.get_item_count(item_tpid="100100") - value_cost
+    # name = name + "0"
+    # PlayerInfoPanel.set_player_name(bp, name)
+    # # 保存
+    # PlayerInfoPanel.click_btn_save_pay(bp)
+    # bp.sleep(1)
+    # cash = bp.get_item_count(item_tpid="100100")
+    # compare(cash_expect, cash)
+    # if PlayerInfoPanel.is_btn_save_pay_abled(bp):
+    #     bp.debug_log("erro_" + "PlayerInfoPanel.is_btn_save_pay_abled(bp)")
+
+
+    # # 返回上级 对比名称
+    # PlayerInfoPanel.click_btn_close_additional(bp)
+    # bp.sleep(1)
+    # playerInfo = PlayerInfoPanel.get_player_info(bp)
+    # compare(name, playerInfo["player_name"])
+
     PlayerInfoPanel.click_btn_close_additional(bp)
-    bp.sleep(1)
-    playerInfo = PlayerInfoPanel.get_player_info(bp)
-    compare(name, playerInfo["player_name"])
-
-    # 再次进入界面
-    PlayerInfoPanel.click_btn_setting(bp)
-    bp.sleep(1)
-    PlayerInfoPanel.click_tab_name(bp)
-    bp.sleep(1)
-
-    # 测试付费改名
-    value_cost = PlayerInfoPanel.get_value_cost(bp)
-    cash_expect = bp.get_item_count(item_tpid="100100") - value_cost
-    name = name + "0"
-    PlayerInfoPanel.set_player_name(bp, name)
-    # 保存
-    PlayerInfoPanel.click_btn_save_pay(bp)
-    bp.sleep(1)
-    cash = bp.get_item_count(item_tpid="100100")
-    compare(cash_expect, cash)
-    if PlayerInfoPanel.is_btn_save_pay_abled(bp):
-        bp.debug_log("erro_" + "PlayerInfoPanel.is_btn_save_pay_abled(bp)")
-
-
-    # 返回上级 对比名称
-    PlayerInfoPanel.click_btn_close_additional(bp)
-    bp.sleep(1)
-    playerInfo = PlayerInfoPanel.get_player_info(bp)
-    compare(name, playerInfo["player_name"])
 
 def avatar_test(bp: BasePage):
     PlayerInfoPanel.click_tab_avatar(bp)

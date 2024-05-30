@@ -71,8 +71,6 @@ def achieve_test(bp: BasePage):
 
 
 
-
-
 if __name__ == '__main__':
     bp = BasePage()
     key_sc = '<==== [Lua] Receive Net Msg "SC'

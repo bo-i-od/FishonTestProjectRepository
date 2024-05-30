@@ -1,3 +1,4 @@
+from load_log import load_log
 S=1
 M=2
 L=3
@@ -7,18 +8,7 @@ Rare=11
 Elite=12
 Monster=13
 
-def load_file():
-    """读桌面 txt"""
-    numbers = []
-    data = []
-    with open("C:/Users/TU/desktop/log.txt", 'r') as f:
-        lines = f.readlines()
-        for line in lines:
-            items = tuple(line.strip().split())
-            if items:
-                data.append(items)
-                numbers.append(int(items[0]))
-    return numbers
+
 
 def get_fish_type(fish_id):
     """根据id最后1-2位确定fish类型，注：洪湖 和 最后两个渔场 少鱼，类型对不上！！！"""
@@ -42,17 +32,17 @@ def get_fish_type(fish_id):
         fish_type = "gold_yugu"
         if fish_num in [1,2]:
             fish_size="Elite"
-        elif fish_num in [3,4]:
+        elif fish_num in [3,4,5,6,7]:
             fish_size="Monster"
     elif fish_id>391000:
         fish_type = "yugu"
         if fish_num in [1,2]:
             fish_size="Elite"
-        elif fish_num in [3,4]:
+        elif fish_num in [3,4,5,6,7]:
             fish_size="Monster"
     elif 391000>fish_id>390000:
         fish_type='boss'
-        if fish_num in [5,6]:
+        if fish_num in [5,6,7,8,9]:
             fish_size="Monster"
         elif fish_num in [3,4]:
             fish_size="Elite"
@@ -74,6 +64,7 @@ def statistic_fish_size(numbers):
 
 if __name__ == '__main__':
     # 测试
-    numbers=load_file()
+    data=load_log()
+    numbers=[int(i['fish_id']) for i in data]
     count=statistic_fish_size(numbers)
     print(len(numbers),count)
