@@ -78,7 +78,7 @@ def main(bp: BasePage):
     # 去渔场
     bp.go_to_panel("TournamentsPanel")
     bp.sleep(1)
-    TournamentsPanel.go_to_fishery_by_index(bp, 0)
+    TournamentsPanel.go_to_fishery_by_tpid(bp, "400301")
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
 
     # 领取跳转应该不在备战界面了

@@ -93,7 +93,7 @@ def hidden_treasure(bp:BasePage):
     bp.sleep(0.2)
     dy = "{[1] = 1,}"
     dx = "{[1] = 1,}"
-    lua_code = csMsgAll.get_CSHiddenTreasureDigMsg(digYs=dy, roomId=2000298, groupId=6000001, stageId=1, digXs=dx)
+    lua_code = csMsgAll.get_CSHiddenTreasureDigMsg(digYs=dy, roomId=1000298, groupId=6000001, stageId=1, digXs=dx)
     print(lua_code)
     bp.lua_console(lua_code)
 
@@ -132,8 +132,8 @@ def clone(bp:BasePage, name):
 
 
 def main(bp):
-    cur = 1
-    limit = 10
+    cur = 193
+    limit = 1000
     while cur < limit:
         name = "qwe" + str(cur)
         login(bp, name)
@@ -142,8 +142,8 @@ def main(bp):
         # go_leaderborad(bp)
         bp.lua_console('PanelMgr:OpenPanel("PlayerInfoPanel")')
         # bp.go_home()
-        fish(bp)
-        # hidden_treasure(bp)
+        # fish(bp)
+        hidden_treasure(bp)
         # ndays(bp, cur)
         logout(bp)
         cur += 1
@@ -222,7 +222,7 @@ def read_data():
         cur += 1
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.80:20038")
+    bp = BasePage("192.168.111.80:20086")
 
     main(bp)
     bp.connect_close()

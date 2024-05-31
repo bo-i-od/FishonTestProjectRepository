@@ -18,18 +18,29 @@ class TournamentsPanel(BasePage):
         # entrance_list[random.randint(0, 2)].click()
 
     def get_fishery_tpid_list(self):
+        table_data = self.excelTools.get_table_data("FISHERIES.xlsm")
         bg_list = self.get_icon_list(element_data=ElementsData.Tournaments.bg_list)
         cur = 0
         while cur < len(bg_list):
             bg_list[cur] = "icon_fisheries_" + bg_list[cur].split('_')[2]
             cur += 1
-        worksheet = self.excelTools.get_worksheet("FISHERIES.xlsm", "模板数据")
-        tpid_list = self.excelTools.same_row_different_column_convert_list(worksheet, "displayicon", "tpId", bg_list)
+
+        tpId_list = table_data["tpId"]
+        res_list = []
+        displayicon_list = table_data["displayicon"]
+
         cur = 0
-        while cur < len(tpid_list):
-            tpid_list[cur] = str(tpid_list[cur])
+        while cur < len(bg_list):
+            if bg_list[cur] not in displayicon_list:
+                res_list.append("")
+                cur += 1
+                continue
+            index = displayicon_list.index(bg_list[cur])
+            tpId = tpId_list[index]
+            res_list.append(str(tpId))
             cur += 1
-        return tpid_list
+            continue
+        return res_list
 
     def get_entrance_viewport(self):
         size = self.get_size(element_data=ElementsData.Tournaments.panel_sidebar_bg)
@@ -60,8 +71,7 @@ class TournamentsPanel(BasePage):
 if __name__ == "__main__":
     bp = BasePage("b6h65hd64p5pxcyh")
     # TournamentsPanel.get_fishery_list(bp)
-    entrance_viewport = TournamentsPanel.get_entrance_viewport(bp)
-    entrance_viewport.move_until_appear(entrance_viewport.item_id_list[3])
+    TournamentsPanel.get_fishery_tpid_list(bp)
 
 
 
