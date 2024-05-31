@@ -1,7 +1,7 @@
 from base_func import *
 from load_log import load_log
 
-data = load_log()
+data = load_log('hook_log.txt')
 numbers = [int(i['fish_id']) for i in data]
 
 def init_list(num):

@@ -16,14 +16,14 @@ def parse_data(file_path):
 
     return result
 
-def load_log():
+def load_log(file_name):
     """
     [{'fish_id': '302009', 'color': '10', 'flash_card_num': None, 'flash_card_id': None},
     ...
     ]
     """
-    file_path = "log.txt"  # 替换为您的文件路径
-    parsed_data = parse_data(file_path)
+    # file_path = "log.txt"  # 替换为您的文件路径
+    parsed_data = parse_data(file_name)
     return parsed_data
 
 if __name__ == '__main__':

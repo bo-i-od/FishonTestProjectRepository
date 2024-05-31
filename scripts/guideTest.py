@@ -61,7 +61,7 @@ def newbieGuidePanelTest(bp: BasePage):
         NewbieGuidePanel.do_guide_6(bp)
 
 def hookTest(bp: BasePage):
-    TournamentsPanel.go_to_fishery_by_index(bp, index=0)
+    TournamentsPanel.go_to_fishery_by_tpid(bp, fishery_tpid="400301")
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
     BattlePreparePanel.click_btn_cast(bp)
     BattlePanel.hook_guide(bp)
@@ -94,13 +94,15 @@ def main(bp:BasePage):
     AquariumPanel.guide(bp)
     bp.go_home()
 
+    # 鱼卡引导
+    FishCardPanel.guide(bp)
+    bp.go_home()
+
     # 俱乐部引导
     ClubApplyPanel.guide(bp)
     ClubApplyPanel.click_btn_close(bp)
 
-    # 鱼卡引导
-    FishCardPanel.guide(bp)
-    bp.go_home()
+
 
     # 刺鱼引导
     bp.go_to_panel("TournamentsPanel")
@@ -134,5 +136,5 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.77:20030")
+    bp = BasePage("192.168.111.80:20086")
     main(bp)

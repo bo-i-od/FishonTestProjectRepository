@@ -70,7 +70,7 @@ class BasePage:
         # 获取父目录
         self.root_dir = os.path.abspath(os.path.dirname(file_path))
         # 配置表的路径
-        self.excelTools = ExceTools(self.root_dir.replace("\\", "/") + "/tables/")
+        self.excelTools = ExceTools("C:/trunkCHS/datapool/策划模板导出工具/")
 
         # # 是否让Unity发log
         self.set_send_log_flag(self.send_log_flag)
