@@ -334,15 +334,28 @@ class ElementsData:
         cost_quantity_list = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list_tips>btns>cost>>value"}
         rating = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list_tips>tips>top>rating>num"}
         rating_total = {"locator": "UICanvas>Default>CareerPanel>panel_talent>rating>num"}
-        item_icon = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list_tips>tips>item>item_model>icon_bg>icon"}
+        item_icon = {
+            "locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list_tips>tips>item>item_model>icon_bg>icon"}
+        rating_tips = {"locator": "UICanvas>Default>RatingTipsPanel>panel>Content>text_child"}
+        rating_child = {"locator": "UICanvas>Default>RatingTipsPanel>panel>Content>rating_child>num"}
         item_lv = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list_tips>tips>item>item_model>text"}
         item_lock = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list_tips>tips>item>item_model>lock"}
         tips_lock = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list_tips>tips_lock"}
+        tips_max = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list_tips>tips_max"}
         text_100000 = {"locator": "UICanvas>Default>CareerPanel>panel_talent>top_res>ResourceBar>100000>value"}
         text_100400 = {"locator": "UICanvas>Default>CareerPanel>panel_talent>top_res>ResourceBar>100400>value"}
-        btn_add_100000 = {"locator": "UICanvas>Default>CareerPanel>panel_talent>top_res>ResourceBar>100000>btn_add>btn_normal"}
+        btn_add_100000 = {
+            "locator": "UICanvas>Default>CareerPanel>panel_talent>top_res>ResourceBar>100000>btn_add>btn_normal"}
         describe = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list_tips>tips>describe"}
-        group_list = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list>panel_list_main>list>Viewport>Content>>"}
+        group_list = {
+            "locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list>panel_list_main>list>Viewport>Content>>"}
+        career_viewport = {
+            "locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list>panel_list_main>list>Viewport",
+            "focus": (0, 0)}
+        page_item_middle_list = {
+            "locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list>panel_list_main>list>Viewport>Content>>>item_Middle>"}
+        list_lockbg_mask = {
+            "locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list>list_lockbg_mask>img_back1"}
 
 
 
