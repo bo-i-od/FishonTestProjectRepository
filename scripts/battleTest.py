@@ -3,6 +3,7 @@ import random
 import common.gameInit
 from common import gameInit
 from common.basePage import BasePage
+from netMsg import csMsgAll
 from panelObjs.battlePreparePanel import BattlePreparePanel
 from panelObjs.resultPanel import ResultPanel
 from panelObjs.battlePanel import BattlePanel
@@ -10,7 +11,7 @@ from threading import Thread
 from panelObjs.tournamentsPanel import TournamentsPanel
 
 
-def fish_once(bp: BasePage, fishery_id="", fish_id="",is_quick=True):
+def fish_once(bp: BasePage, fishery_id="", fish_id="", is_quick=True):
     bp.set_time_scale()
     # bp.sleep(6)
     if fish_id != "":
@@ -34,18 +35,17 @@ def fish_once(bp: BasePage, fishery_id="", fish_id="",is_quick=True):
 
 
 
-def circulate_fish(bp: BasePage, fishery_id=None, is_monster=False, is_quick=False, times=500):
-    cur = 1
+def circulate_fish(bp: BasePage, fishery_id=None, is_quick=False, times=500):
+    fish_list = []
+    cur = 0
     if fishery_id is not None:
-        times = 16
+        fish_list = TournamentsPanel.get_fish_list(bp, fishery_id)
+        times = len(fish_list)
     while cur < times:
         fish_id = ""
         # 指定鱼
-        if fishery_id is not None:
-            index = str(cur).zfill(2)
-            # r = random.randint(1, 6)
-            fish_id = f"{fishery_id[-3:]}0{index}"
-            bp.sleep(1)
+        if fish_list:
+            fish_id = fish_list[cur]
         bp.sleep(2)
         bp.clear_popup()
         # if cur == 1:
@@ -57,9 +57,7 @@ def circulate_fish(bp: BasePage, fishery_id=None, is_monster=False, is_quick=Fal
         fish_once(bp, fishery_id=fishery_id, fish_id=fish_id, is_quick=is_quick)
         print(f"第{cur}次钓鱼")
         cur += 1
-    if not is_monster:
-        return
-    monster_all(bp, fishery_id=fishery_id, is_quick=is_quick)
+
 
 def select_rod(bp: BasePage, index):
     BattlePreparePanel.click_gears(bp)
@@ -77,12 +75,6 @@ def select_location(bp: BasePage, index):
 
 
 
-def monster_all(bp: BasePage, fishery_id, is_quick=True):
-    cur = 1
-    while cur < 10:
-        bais = str(int(fishery_id[-2:]) - 1).zfill(2)
-        fish_once(bp, fishery_id=fishery_id, fish_id=f"390{bais}{cur}", is_quick=is_quick)
-        cur += 1
 
 def fish_all(bp: BasePage, is_quick=False):
     cur = 1
@@ -90,7 +82,7 @@ def fish_all(bp: BasePage, is_quick=False):
         index = str(cur).zfill(2)
         fishery_id = f"4003{index}"
         TournamentsPanel.go_to_fishery_by_tpid(bp, fishery_id)
-        circulate_fish(bp, is_monster=True, fishery_id=fishery_id, is_quick=is_quick)
+        circulate_fish(bp, fishery_id=fishery_id, is_quick=is_quick)
         BattlePreparePanel.click_btn_close(bp)
         bp.sleep(1)
         cur += 1
@@ -108,17 +100,32 @@ def tournament(bp: BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.80:20053")
-    gameInit.set_joystick(bp)
-    bp.cmd("mode 400302 302014")
-    circulate_fish(bp, is_quick=True)
+    bp = BasePage("127.0.0.1:21523")
+    bp.cmd_list(["add 1 100000 113245464"])
+    # fish_once(bp)
+    #
+    # cur = 1
+    # while cur < 9:
+    #     lua_code = csMsgAll.get_CSBaitAndRodLevelUpToMsg(tpId=(500010 + cur), targetLevel=30, ioIdType=5)
+    #     bp.lua_console(lua_code)
+    #     bp.sleep(0.5)
+    #     cur += 1
 
-    # fish_once(bp, is_quick=False)
+
+
+
+    # gameInit.set_joystick(bp)
+    # bp.cmd("levelupto 50")
+    circulate_fish(bp, is_quick=False, fishery_id="400301")
+
+    # fish_all(bp, is_quick=False)
     # monster_all(bp, is_quick=True, fishery_id="400317")
     # while True:
     #     tournament(bp)
     # bp.set_item_count(target_count=72000,item_tpid="209013")
-    # fish_all(bp, is_quick=False)
+    # cur = 0
+    # while cur < 10:
+    #     circulate_fish(bp, is_quick=True, fishery_id="400302")
     # bp.cmd("mode 400301 390001")
 
     # worksheet = bp.excelTools.get_worksheet(book_name="玩家信息采样.xlsx", sheet_name="Sheet1")

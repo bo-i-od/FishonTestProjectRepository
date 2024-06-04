@@ -154,6 +154,7 @@ class ElementsData:
         tip_slide = {"locator": "UICanvas>Default>BattlePanel>btn_cast>tip_slide"}
         progress = {"locator": "UICanvas>Default>BattlePanel>hook>progress>bg"}
         arrow = {"locator": "UICanvas>Default>BattlePanel>hook>progress>arrow"}
+        qte_list = {"locator": "UICanvas>Default>BattlePanel>FishHUD>>qte"}
         qte_left = {"locator": "UICanvas>Default>BattlePanel>FishHUD>qte_left>qte"}
         qte_right = {"locator": "UICanvas>Default>BattlePanel>FishHUD>qte_right>qte"}
         qte_jump_left = {"locator": "UICanvas>Default>BattlePanel>FishHUD>qte_left_fishJump>qte"}
