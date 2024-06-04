@@ -37,7 +37,7 @@ class BasePage:
         self.record = False
 
         # 是否开启战斗倍速
-        self.is_time_scale = True
+        self.is_time_scale = False
 
         # 是否打印日志
         self.is_debug_log = False

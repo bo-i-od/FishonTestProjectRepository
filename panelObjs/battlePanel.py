@@ -1,3 +1,5 @@
+import time
+
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from threading import Thread
@@ -14,32 +16,42 @@ class BattlePanel(BasePage):
         return False
 
     def qte(self):
-        qte_flag_left = False
-        qte_flag_right = False
-        while not self.exist(element_data=ElementsData.Result.ResultPanel):
-            if self.exist(element_data=ElementsData.Battle.tip_slide):
-                BattlePanel.unleash_power(self)
+        while True:
+            qte_id_list = self.get_parent_id_list(element_data=ElementsData.Battle.qte_list)
+            name_list = self.get_name_list(object_id_list=qte_id_list)
+            # print(name_list)
+            if not name_list:
+                if self.exist(element_data=ElementsData.Battle.tip_slide):
+                    BattlePanel.unleash_power(self)
+                    continue
+                if self.exist(element_data=ElementsData.Result.ResultPanel):
+                    break
                 continue
-            if self.exist(element_data=ElementsData.Battle.qte_left) or self.exist(element_data=ElementsData.Battle.qte_jump_left):
-                if not qte_flag_left:
-                    BattlePanel.slide(self,"left")
-                    continue
-            else:
-                qte_flag_left = False
-            if self.exist(element_data=ElementsData.Battle.qte_right) or self.exist(element_data=ElementsData.Battle.qte_jump_right):
-                if not qte_flag_right:
-                    BattlePanel.slide(self,"right")
-                    continue
-            else:
-                qte_flag_right = False
+            if "left" in name_list[0]:
+                BattlePanel.slide(self, "left")
+                continue
+            if "right" in name_list[0]:
+                BattlePanel.slide(self, "right")
+                continue
+            if "up" in name_list[0]:
+                continue
+
 
 
 
     def slide(self, dir):
         if dir == "left":
             self.swipe(point_start=[0.3, 0.7], point_end=[0.2, 0.7], t=0.1)
+            return
         if dir == "right":
             self.swipe(point_start=[0.3, 0.7], point_end=[0.4, 0.7], t=0.1)
+            return
+        if dir == "up":
+            self.swipe(point_start=[0.3, 0.7], point_end=[0.3, 0.6], t=0.1)
+            return
+        if dir == "down":
+            self.swipe(point_start=[0.3, 0.7], point_end=[0.3, 0.8], t=0.1)
+            return
 
     def release_btn_reel(self):
         self.ray_input(element_data=ElementsData.Battle.btn_reel, target_name="btn_cast", kind="up")
