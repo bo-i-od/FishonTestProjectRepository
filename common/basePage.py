@@ -707,7 +707,7 @@ class BasePage:
             return
         self.cmd(f"add {item_tpid[0]} {item_tpid} {target_count - item_count}")
 
-    def set_item_count_list(self, target_count_list, item_name_list:list=None, item_icon_name_list:list=None, item_tpid_list:list=None):
+    def set_item_count_list(self, target_count_list, item_name_list: list=None, item_icon_name_list: list=None, item_tpid_list: list=None):
         if item_tpid_list is None:
             item_tpid_list = self.get_tpid_list(item_name_list=item_name_list, item_icon_name_list=item_icon_name_list)
         item_count_list = self.get_item_count_list(item_tpid_list=item_tpid_list)

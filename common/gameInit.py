@@ -58,6 +58,7 @@ def login_to_hall(bp: BasePage, cmd_list=None):
         bp.sleep(0.5)
     username = str(time.time()).split('.')[0]
     login(bp, username)
+
     account_init(bp, username, cmd_list)
     bp.sleep(1)
 

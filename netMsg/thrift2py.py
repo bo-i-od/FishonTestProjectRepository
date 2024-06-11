@@ -83,6 +83,10 @@ def gen_py_function(struct):
         arg = {arg_list[cur]}
         if isinstance({arg_list[cur]}, str):
             arg = f'"{{{arg_list[cur]}}}"'
+        if isinstance({arg_list[cur]}, bool):
+            arg = str({arg_list[cur]}).lower()
+        # if isinstance({arg_list[cur]}, dict):
+        #     arg = 
         cmd_part += f'cmd.{arg_list[cur]} = {{arg}}\n'
         """
         # cmd_part += rf"f'cmd.{arg_list[cur]} = {{{arg_list[cur]}}}\n'"

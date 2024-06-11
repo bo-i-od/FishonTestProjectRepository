@@ -23,6 +23,7 @@ def logout(bp:BasePage):
     # while not HomePanel.is_panel_active(bp):
     #     pass
     # HomePanel.go_to_panel(bp, "PlayerInfoPanel")
+
     PlayerInfoPanel.click_btn_setting(bp)
     bp.sleep(0.5)
     # PlayerSettingPanel.click_tab_settings(bp)
@@ -38,7 +39,7 @@ def login(bp:BasePage, name:str):
         pass
     LoginPanel.set_login_name(bp, name)
     LoginPanel.click_btn_login(bp)
-    bp.sleep(2.5)
+    bp.sleep(3)
     if not PlayerEditNamePanel.is_panel_active(bp):
         return
     while not PlayerEditNamePanel.is_panel_active(bp):
@@ -71,6 +72,17 @@ def fish(bp:BasePage):
     # fishingMsg.fish(bp, [{"spot_id": f"40030213", "times": 1, "energy_cost": 50}])
     # bp.sleep(0.1)
 
+def dragon_boat(bp: BasePage, index):
+    bp.cmd_list(["levelupto 20", "add 1 100500 100000", "add 1 100100 3000"])
+    bp.sleep(0.2)
+    lua_code = csMsgAll.get_CSGameGuildCreateMsg(flag=5, joinType=1, joinLv=0, color=3, name=f"c_{index}", introduce="一起欢乐钓鱼吧！", pattern=1)
+    bp.lua_console(lua_code)
+    # fishingMsg.fish(bp, [
+    #     {"spot_id": f"40030203", "times": index},
+    # ])
+    # bp.sleep(index * 0.2)
+
+
 
 def tournament(bp:BasePage):
     bp.sleep(3)
@@ -102,7 +114,7 @@ def ndays(bp:BasePage, count):
     # bp.cmd(f"setPlayerLayer {count}000")
     bp.cmd(f"levelupto 16")
     bp.sleep(0.1)
-    guildSimpleId = 10000001
+    guildSimpleId = 10000082
     lua_code = csMsgAll.get_CSGuildApplyMsg(source=0, guildSimpleId=guildSimpleId)
     bp.lua_console(lua_code)
 
@@ -129,21 +141,28 @@ def clone(bp:BasePage, name):
     print(cmd)
     bp.cmd(cmd)
 
+def add_gu(bp: BasePage, index):
+    bp.cmd(f"globalgm dragonAddPoint {index}")
 
 
 def main(bp):
-    cur = 193
-    limit = 1000
+    cur = 710
+    limit = 712
     while cur < limit:
-        name = "qwe" + str(cur)
+        name = "c_" + str(cur)
         login(bp, name)
         # bp.sleep(2)
         # bp.clear_popup()
         # go_leaderborad(bp)
+        bp.lua_console('PanelMgr:ClosePanel("EventSignSevenDayPanel")')
         bp.lua_console('PanelMgr:OpenPanel("PlayerInfoPanel")')
         # bp.go_home()
         # fish(bp)
-        hidden_treasure(bp)
+        # add_gu(bp, cur)
+        dragon_boat(bp, cur)
+        bp.sleep(2)
+        add_gu(bp, cur * 100)
+        # hidden_treasure(bp)
         # ndays(bp, cur)
         logout(bp)
         cur += 1
@@ -222,7 +241,7 @@ def read_data():
         cur += 1
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.80:20086")
+    bp = BasePage("127.0.0.1:21523")
 
     main(bp)
     bp.connect_close()

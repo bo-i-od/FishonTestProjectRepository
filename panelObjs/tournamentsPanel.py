@@ -88,6 +88,9 @@ class TournamentsPanel(BasePage):
     def click_btn_leaderboard(self):
         self.click_element(element_data=ElementsData.Tournaments.btn_leaderboard)
 
+    def get_tournaments_info_position_list(self):
+        return self.get_position_list(element_data=ElementsData.Tournaments.tournaments_info_list)
+
 
 if __name__ == "__main__":
     bp = BasePage("b6h65hd64p5pxcyh")

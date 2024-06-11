@@ -7,6 +7,8 @@ from common.basePage import BasePage
 from panelObjs.commonWebViewPanel import CommonWebViewPanel
 from panelObjs.divisionLeaderboardPanel import DivisionLeaderboardPanel
 from panelObjs.divisionListPanel import DivisionListPanel
+from panelObjs.loadingFisheryPanel import LoadingFisheryPanel
+from panelObjs.loadingPanel import LoadingPanel
 from panelObjs.messageBoxPanel import MessageBoxPanel
 from panelObjs.pvpBattleHUDPanel import PVPBattleHUDPanel
 from panelObjs.pvpHallPanel import PVPHallPanel
@@ -21,7 +23,9 @@ from panelObjs.playerSettingPanel import PlayerSettingPanel
 from panelObjs.loginPanel import LoginPanel
 from panelObjs.battleFailedPanel import BattleFailedPanel
 from panelObjs.roulettePanel import RoulettePanel
+from panelObjs.tournamentsPanel import TournamentsPanel
 from scripts import battleTest, createUsers
+from scripts.battleTest import circulate_fish
 
 
 def random_duelcup(bp:BasePage, rank):
@@ -78,7 +82,7 @@ def pvp_fish(bp):
         BattlePanel.hook(bp)
         bp.sleep(1)
         if BattlePanel.is_reel_active(bp):
-            # bp.custom_cmd("autofish")
+            bp.custom_cmd("autofish")
             qteThread = Thread(target=BattlePanel.qte, args=[bp])
             qteThread.start()
         # BattlePanel.reel_quick(bp)
@@ -200,6 +204,41 @@ def get_k(r0):
         return 112 - 0.04 * r0
     return 16
 
+def get_bp():
+    bp = gameInit.restart_to_login("com.xuejing.smallfish.official")
+    bp.sleep(7)
+    LoginPanel.click_btn_login_cn(bp)
+    bp.sleep(2)
+    LoadingPanel.wait_until_panel_disappear(bp, is_wait_for_appear=False)
+    bp.sleep(5)
+    return bp
+
+def reset_bp():
+    try:
+        bp = get_bp()
+    except:
+        bp = reset_bp()
+    return bp
+
+def champointship(bp, index, times):
+    try:
+        gameInit.set_joystick(bp)
+        bp.clear_popup()
+        bp.go_to_panel("TournamentsPanel")
+        bp.sleep(1)
+        tournaments_info_position_list = TournamentsPanel.get_tournaments_info_position_list(bp)
+        if not tournaments_info_position_list:
+            return
+        if len(tournaments_info_position_list) < 2:
+            index = 0
+        bp.click_position(tournaments_info_position_list[index])
+        LoadingFisheryPanel.wait_until_panel_disappear(bp)
+        circulate_fish(bp, times=times, is_quick=False)
+        bp.go_home()
+    except Exception as e:
+        print(e)
+        bp = reset_bp()
+    return bp
 
 def division_test(bp:BasePage):
     # 进排行榜
@@ -314,11 +353,21 @@ def main(bp:BasePage, duelTest=None):
 
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.77:20075")
-    createUsers.main(bp)
+    base_page = BasePage("127.0.0.1:21533")
+    # cur = 0
+    # while cur < 3:
+    #
+    #     circulate_duel(base_page, 1)
+    #     cur += 1
+    #     print(f"第{cur}次钓鱼")
+
+    while True:
+        base_page = champointship(base_page, 1, 5)
+        base_page = champointship(base_page, 0, 5)
+
 
     # dc = random_duelcup(bp, 7)
-    bp.connect_close()
+
     # main(bp)
     # bp.cmd("add 1 100200 1234569")
     # circulate_fish(bp, fishery_id="400301",is_quick=True, is_monster=True)
@@ -330,7 +379,7 @@ if __name__ == '__main__':
     # bp.cmd("mode 400302 390015")
     # bp.lua_console(command="GameRoot:GetFishingMatch().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
     # bp.cmd("mode 400303 390025")
-    # dc = random_duelcup(bp, 7)
+    # dc = random_duelcup(base_page, 3)
     # print(dc)
     # area = point_cal(210)
     # bp.cmd("duelcup 1008 27000")
@@ -346,15 +395,7 @@ if __name__ == '__main__':
     #     battleTest.tournament(bp)
     # bp.set_item_count(target_count=72000,item_tpid="209013")
 
-    # cur = 0
-    # while cur < 2:
-    #
-    #     # clear_duelcup(bp)
-    #     # dc = random_duelcup(bp, 4)
-    #     # print(dc)
-    #     circulate_duel(bp, 1)
-    #     cur += 1
-    #     print(f"第{cur}次钓鱼")
+
 
 
     # # rank = random.randint(0, 7)

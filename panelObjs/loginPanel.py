@@ -7,8 +7,9 @@ class LoginPanel(BasePage):
         if self.exist(element_data=ElementsData.Login.LoginPanel):
             return True
         return False
+
     def is_btn_login_active(self):
-        if self.exist(element_data=ElementsData.Login.btn_login):
+        if self.exist(element_data=ElementsData.Login.btn_login) or self.exist(element_data=ElementsData.Login.btn_login_cn) :
             return True
         return False
 
@@ -18,6 +19,9 @@ class LoginPanel(BasePage):
 
     def click_btn_login(self):
         self.click_until_disappear(element_data=ElementsData.Login.btn_login, interval=2)
+
+    def click_btn_login_cn(self):
+        self.click_until_disappear(element_data=ElementsData.Login.btn_login_cn)
 
     def set_login_name(self, login_name):
         self.set_text(element_data=ElementsData.Login.InputField_UserName, text=login_name)

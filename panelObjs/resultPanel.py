@@ -11,6 +11,7 @@ class ResultPanel(BasePage):
 
     def wait_for_result(self):
         while True:
+            self.clear_popup_once()
             btn_claim = self.exist(element_data=ElementsData.Result.btn_claim)
             if btn_claim:
                 return ElementsData.Result.btn_claim

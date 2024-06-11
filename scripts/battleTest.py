@@ -11,9 +11,9 @@ from threading import Thread
 from panelObjs.tournamentsPanel import TournamentsPanel
 
 
-def fish_once(bp: BasePage, fishery_id="", fish_id="", is_quick=True):
+def fish_once(bp: BasePage, fishery_id="", fish_id="", is_quick=False):
     bp.set_time_scale()
-    # bp.sleep(6)
+    # bp.sleep(7)
     if fish_id != "":
         c = f"mode {fishery_id} {fish_id}"
         bp.cmd(c)
@@ -46,7 +46,7 @@ def circulate_fish(bp: BasePage, fishery_id=None, is_quick=False, times=500):
         # 指定鱼
         if fish_list:
             fish_id = fish_list[cur]
-        bp.sleep(2)
+        bp.sleep(1)
         bp.clear_popup()
         # if cur == 1:
         #     select_rod(bp, 3)
@@ -101,7 +101,7 @@ def tournament(bp: BasePage):
 
 if __name__ == '__main__':
     bp = BasePage("127.0.0.1:21523")
-    bp.cmd_list(["add 1 100000 113245464"])
+    # bp.cmd_list(["add 1 100000 113245464"])
     # fish_once(bp)
     #
     # cur = 1
