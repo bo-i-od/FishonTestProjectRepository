@@ -207,7 +207,8 @@ def get_k(r0):
 def get_bp():
     bp = gameInit.restart_to_login("com.xuejing.smallfish.official")
     bp.sleep(7)
-    LoginPanel.click_btn_login_cn(bp)
+    LoginPanel.wait_for_btn_login(bp)
+    LoginPanel.click_btn_login(bp)
     bp.sleep(2)
     LoadingPanel.wait_until_panel_disappear(bp, is_wait_for_appear=False)
     bp.sleep(5)
@@ -362,8 +363,8 @@ if __name__ == '__main__':
     #     print(f"第{cur}次钓鱼")
 
     while True:
-        base_page = champointship(base_page, 1, 5)
-        base_page = champointship(base_page, 0, 5)
+        base_page = champointship(base_page, 1, 10)
+        base_page = champointship(base_page, 0, 8)
 
 
     # dc = random_duelcup(bp, 7)

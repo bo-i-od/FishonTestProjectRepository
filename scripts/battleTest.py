@@ -116,7 +116,7 @@ if __name__ == '__main__':
 
     # gameInit.set_joystick(bp)
     # bp.cmd("levelupto 50")
-    circulate_fish(bp, is_quick=False, fishery_id="400301")
+    circulate_fish(bp, is_quick=False, fishery_id="400302")
 
     # fish_all(bp, is_quick=False)
     # monster_all(bp, is_quick=True, fishery_id="400317")

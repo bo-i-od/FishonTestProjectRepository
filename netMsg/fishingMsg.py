@@ -39,10 +39,13 @@ def fish(bp: BasePage, arg_list):
         rod_id = get_rod_id(scene_id)
         times = arg_list[cur]["times"]
         execute_dict = {"spotId": spot_id, "times": times, "rodId": rod_id}
-        if "targetIdList" in arg_list[cur]:
-            execute_dict["targetIdList"] = arg_list[cur]["targetIdList"]
-        if "ignoreIdList" in arg_list[cur]:
-            execute_dict["ignoreIdList"] = arg_list[cur]["ignoreIdList"]
+        if "target_id_list" in arg_list[cur]:
+            execute_dict["targetIdList"] = arg_list[cur]["target_id_list"]
+        if "ignore_id_list" in arg_list[cur]:
+            execute_dict["ignoreIdList"] = arg_list[cur]["ignore_id_list"]
+        execute_dict["isActivitySpot"] = False
+        if "is_activity_spot" in arg_list[cur]:
+            execute_dict["isActivitySpot"] = arg_list[cur]["is_activity_spot"]
         if "energy_cost" in arg_list[cur]:
             energy_cost = arg_list[cur]["energy_cost"]
             table_data = bp.excelTools.get_table_data("FISH_ACTIVITY_SPOT_ENERGY.xlsm")

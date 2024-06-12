@@ -14,7 +14,7 @@ if __name__ == '__main__':
     with open("../statistics/cast_log.txt", "w") as file:
         pass  # 不做任何操作,关闭文件即可清空内容
     fishingMsg.fish(bp, [
-        {"spot_id": f"40030201", "times": 1000, "energy_cost": 50},
+        {"spot_id": "40030911", "times": 10, "energy_cost": 50, "is_activity_spot": True},
         # {"spot_id": f"40030214", "times": 1000, "energy_cost": 50},
     ])
 

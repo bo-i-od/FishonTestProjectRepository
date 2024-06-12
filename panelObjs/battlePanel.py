@@ -19,21 +19,26 @@ class BattlePanel(BasePage):
         while True:
             qte_id_list = self.get_parent_id_list(element_data=ElementsData.Battle.qte_list)
             name_list = self.get_name_list(object_id_list=qte_id_list)
-            # print(name_list)
             if not name_list:
-                if self.exist(element_data=ElementsData.Battle.tip_slide):
+                hud_power_list = self.get_object_id_list(element_data=ElementsData.Battle.hud_power_list)
+                if len(hud_power_list) > 2:
                     BattlePanel.unleash_power(self)
+                    self.sleep(0.5)
                     continue
                 if self.exist(element_data=ElementsData.Result.ResultPanel):
                     break
                 continue
             if "left" in name_list[0]:
                 BattlePanel.slide(self, "left")
+                self.sleep(0.5)
                 continue
             if "right" in name_list[0]:
                 BattlePanel.slide(self, "right")
+                self.sleep(0.5)
                 continue
             if "up" in name_list[0]:
+                BattlePanel.slide(self, "up")
+                self.sleep(0.5)
                 continue
 
 

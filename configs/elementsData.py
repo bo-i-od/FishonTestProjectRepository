@@ -161,6 +161,7 @@ class ElementsData:
         qte_jump_right = {"locator": "UICanvas>Default>BattlePanel>FishHUD>qte_right_fishJump>qte"}
         m_value = {"locator": "UICanvas>Default>BattlePanel>FishHUD>m_value"}
         warning = {"locator": "UICanvas>Default>BattlePanel>Warning"}
+        hud_power_list = {"locator":"UICanvas>Default>BattlePanel>hud_power>barPanel>list>>baseParticle"}
 
     class BattlePassBuyLevel:
         BattlePassBuyLevelPanel = {"locator": "UICanvas>Default>BattlePassBuyLevelPanel"}

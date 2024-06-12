@@ -54,8 +54,7 @@ def account_init(bp: BasePage, player_name, cmd_list):
 
 # 登录到大厅
 def login_to_hall(bp: BasePage, cmd_list=None):
-    while not LoginPanel.is_btn_login_active(bp):
-        bp.sleep(0.5)
+    LoginPanel.wait_for_btn_login(bp)
     username = str(time.time()).split('.')[0]
     login(bp, username)
 

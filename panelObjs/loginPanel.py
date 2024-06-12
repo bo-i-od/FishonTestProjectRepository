@@ -17,11 +17,18 @@ class LoginPanel(BasePage):
         while not LoginPanel.is_btn_login_active(self):
             self.sleep(0.5)
 
-    def click_btn_login(self):
-        self.click_until_disappear(element_data=ElementsData.Login.btn_login, interval=2)
 
-    def click_btn_login_cn(self):
-        self.click_until_disappear(element_data=ElementsData.Login.btn_login_cn)
+    def click_btn_login(self):
+        btn_login_element = ElementsData.Login.btn_login
+        if self.exist(element_data=ElementsData.Login.btn_login_cn):
+            btn_login_element = ElementsData.Login.btn_login_cn
+        self.click_until_disappear(element_data=btn_login_element, interval=2)
+
+
+    def is_InputField_UserName_active(self):
+        if self.exist(element_data=ElementsData.Login.InputField_UserName):
+            return True
+        return False
 
     def set_login_name(self, login_name):
         self.set_text(element_data=ElementsData.Login.InputField_UserName, text=login_name)
