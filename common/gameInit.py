@@ -287,8 +287,10 @@ def start_time_test():
 
 
 if __name__ == '__main__':
+    response = requests.get('http://192.168.30.113:8090/autoRegisterLogin?accountName=121212&password=123')
+    print(response)
     # bp = BasePage("127.0.0.1:21503")
-    start_time_test()
+    # start_time_test()
     # LoginPanel.wait_for_btn_login(bp)
 
     # if not LoginPanel.is_panel_active(bp):

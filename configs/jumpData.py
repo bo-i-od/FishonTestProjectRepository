@@ -137,7 +137,7 @@ class JumpData:
         "BattlePassPanel": ElementsData.BattlePass.BattlePassPanel,
         "BaitAndRodAlbumPanel": ElementsData.BaitAndRodAlbum.BaitAndRodAlbumPanel,
         "BuyEnergyPanel": ElementsData.BuyEnergy.BuyEnergyPanel,
-        "DivisionLeaderboardPanel":ElementsData.DivisionLeaderboard.DivisionLeaderboardPanel,
+        "DivisionLeaderboardPanel": ElementsData.DivisionLeaderboard.DivisionLeaderboardPanel,
         "DLCDownloadPanel": ElementsData.DLCDownload.DLCDownloadPanel,
         "FishAlbum3DPanel": ElementsData.FishAlbum3D.FishAlbum3DPanel,
         "FishCardPanel": ElementsData.FishCard.FishCardPanel,

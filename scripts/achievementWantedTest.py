@@ -74,10 +74,12 @@ def wanted_test(bp: BasePage):
     # 读表格数据
     table_data = AchievementWantedPanel.get_wanted_table_data(bp)
 
-    # 随机选一个有悬赏鱼的钓场完成
+    # 随机选一个有悬赏鱼的钓场完成, 并且不是黄金的
     table_open_index_list = AchievementWantedPanel.get_table_open_index_list(bp, table_data=table_data)
     r = random.randint(0, len(table_open_index_list) - 1)
-    AchievementWantedPanel.do_wanted(bp, table_data=table_data, index=r)
+    tpid = table_data["TPID"][r]
+    bp.cmd(f'wantedComplete {tpid}')
+    # AchievementWantedPanel.do_wanted(bp, table_data=table_data, index=r)
     bp.go_home()
 
     # 去悬赏界面
@@ -88,9 +90,10 @@ def wanted_test(bp: BasePage):
     bp.sleep(0.5)
 
     # 选择对应的渔场
-    target_icon = table_data["icon"][r]
-    achievement_icon_list = AchievementPanel.get_achievement_icon_list(bp)
-    index = achievement_icon_list.index(target_icon)
+    # target_icon = table_data["icon"][r]
+    # achievement_icon_list = AchievementPanel.get_achievement_icon_list(bp)
+    # index = achievement_icon_list.index(target_icon)
+    index = int(table_data["order"][r]) - 1
     viewport = AchievementPanel.get_viewport(bp)
     viewport.move_until_appear(viewport.item_id_list[index])
     achievement_position_list = AchievementPanel.get_achievement_position_list(bp)

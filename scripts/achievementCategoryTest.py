@@ -78,7 +78,8 @@ def category_test(bp: BasePage):
     print(table_open_index_list)
     # r = random.randint(0, len(table_open_index_list) - 1)
     r = 7
-    AchievementCategoryPanel.do_category(bp, table_data=table_data, index=r)
+    bp.cmd(f'categoryComplete {table_data["TPID"][r]}')
+    # AchievementCategoryPanel.do_category(bp, table_data=table_data, index=r)
     bp.go_home()
 
     # 去悬赏界面
@@ -94,6 +95,7 @@ def category_test(bp: BasePage):
     achievement_position_list = AchievementPanel.get_achievement_position_list(bp)
     index = achievement_icon_list.index(target_icon)
     bp.click_position(achievement_position_list[index])
+    bp.sleep(0.5)
 
     # 解锁
     category_viewport = AchievementCategoryPanel.get_category_viewport(bp)

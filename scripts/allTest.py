@@ -10,11 +10,13 @@ from common import gameInit
 
 def main():
     connect_device(f"android://127.0.0.1:5037/{serial_number}")
-    test_list = [playerInfoTest, battlePassTest, dlcDownloadTest, energyTest, fishCardTest, gearTest, guideTest, mailTest, minitaskTest, storeTest,  newbieTaskTest, treasureChestTest, taskTest,  achievementCategoryTest, achievementWantedTest, achievementTest, duelTest, rankTest]
+    test_list = [achievementCategoryTest, achievementWantedTest, rankTest, playerInfoTest, battlePassTest, dlcDownloadTest, energyTest, fishCardTest, gearTest, guideTest, mailTest, minitaskTest, storeTest,  newbieTaskTest, treasureChestTest, taskTest, achievementTest, duelTest]
+    # test_list = [ battlePassTest, fishCardTest, gearTest, guideTest,
+    #              mailTest, minitaskTest, storeTest, newbieTaskTest, treasureChestTest, taskTest,
+    #              achievementCategoryTest, achievementWantedTest, achievementTest, duelTest, rankTest]
 
-    # test_list = [guideTest, minitaskTest,  newbieTaskTest, achievementWantedTest, achievementTest]
     print(f"当前测试模块共计{len(test_list)}个")
-    cur = 0
+    cur = 17
     res_list = []
     retry_dict = {}
 
@@ -26,10 +28,12 @@ def main():
             print(cur + 1, ":", test_list[cur], "执行成功")
             res_list.append("成功")
         except Exception as e:
+            print(e)
             traceback.print_exc()
             retry_dict[str(cur + 1)] = test_list[cur]
             print(cur + 1, ":", test_list[cur], "执行失败")
             res_list.append("失败")
+        bp.connect_close()
         cur += 1
     print(res_list)
     retry_list = list(retry_dict)
@@ -49,7 +53,7 @@ def main():
 
 
 if __name__ == '__main__':
-    serial_number = "127.0.0.1:21523"
+    serial_number = "192.168.111.77:20089"
     main()
 
 

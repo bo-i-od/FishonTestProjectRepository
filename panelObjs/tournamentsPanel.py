@@ -45,7 +45,7 @@ class TournamentsPanel(BasePage):
     def get_entrance_viewport(self):
         size = self.get_size(element_data=ElementsData.Tournaments.panel_sidebar_bg)
         edge_left = 0.75 * size[0]
-        entrance_viewport = Viewport(self, element_viewport=ElementsData.Tournaments.entrance_viewport, element_item_list=ElementsData.Tournaments.btn_enter_list, )
+        entrance_viewport = Viewport(self, element_viewport=ElementsData.Tournaments.entrance_viewport, element_item_list=ElementsData.Tournaments.btn_enter_list)
         entrance_viewport.viewport_range = [entrance_viewport.viewport_range[0], 1]
         entrance_viewport.viewport_edge = [edge_left, 0.05]
         entrance_viewport.viewport_range_shift()
@@ -83,7 +83,9 @@ class TournamentsPanel(BasePage):
         entrance_viewport = TournamentsPanel.get_entrance_viewport(self)
         entrance_viewport.move_until_appear(entrance_viewport.item_id_list[index])
         entrance_position = self.get_position(object_id=entrance_viewport.item_id_list[index])
-        self.click_position(entrance_position)
+        while self.exist(object_id=entrance_viewport.item_id_list[index]):
+            self.click_position(entrance_position)
+            self.sleep(0.2)
 
     def click_btn_leaderboard(self):
         self.click_element(element_data=ElementsData.Tournaments.btn_leaderboard)
@@ -93,9 +95,10 @@ class TournamentsPanel(BasePage):
 
 
 if __name__ == "__main__":
-    bp = BasePage("b6h65hd64p5pxcyh")
+    bp = BasePage("192.168.111.77:20086")
     # TournamentsPanel.get_fishery_list(bp)
-    a = TournamentsPanel.get_fish_list(bp, "400302")
+    a = TournamentsPanel.go_to_fishery_by_tpid(bp, "400301")
+
     print(a)
 
 

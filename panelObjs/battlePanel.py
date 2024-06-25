@@ -2,7 +2,6 @@ import time
 
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from threading import Thread
 from tools.commonTools import *
 class BattlePanel(BasePage):
     def is_panel_active(self):
@@ -23,39 +22,61 @@ class BattlePanel(BasePage):
                 hud_power_list = self.get_object_id_list(element_data=ElementsData.Battle.hud_power_list)
                 if len(hud_power_list) > 2:
                     BattlePanel.unleash_power(self)
-                    self.sleep(0.5)
+                    # self.sleep(0.5)
                     continue
                 if self.exist(element_data=ElementsData.Result.ResultPanel):
                     break
                 continue
             if "left" in name_list[0]:
                 BattlePanel.slide(self, "left")
-                self.sleep(0.5)
                 continue
             if "right" in name_list[0]:
                 BattlePanel.slide(self, "right")
-                self.sleep(0.5)
                 continue
             if "up" in name_list[0]:
                 BattlePanel.slide(self, "up")
-                self.sleep(0.5)
                 continue
 
-
-
+    # def qte(self):
+    #     while True:
+    #         try:
+    #             if self.qte_queue is None:
+    #                 self.sleep(0.1)
+    #                 continue
+    #             item = self.qte_queue.get_nowait()
+    #             if item == 0:
+    #                 BattlePanel.slide(self, "up")
+    #             elif item == 1:
+    #                 BattlePanel.slide(self, "left")
+    #             elif item == 2:
+    #                 BattlePanel.slide(self, "right")
+    #             elif item == 3:
+    #                 BattlePanel.slide(self, "left")
+    #             elif item == 4:
+    #                 BattlePanel.slide(self, "right")
+    #             elif item == 5:
+    #                 BattlePanel.unleash_power(self)
+    #             self.sleep(0.2)
+    #             # self.qte_check = item
+    #         except:
+    #             try:
+    #                 if self.exist(element_data=ElementsData.Result.ResultPanel):
+    #                     break
+    #             except:
+    #                 break
 
     def slide(self, dir):
         if dir == "left":
-            self.swipe(point_start=[0.3, 0.7], point_end=[0.2, 0.7], t=0.1)
+            self.swipe(point_start=[0.4, 0.6], point_end=[0.2, 0.6], t=0.05)
             return
         if dir == "right":
-            self.swipe(point_start=[0.3, 0.7], point_end=[0.4, 0.7], t=0.1)
+            self.swipe(point_start=[0.4, 0.6], point_end=[0.6, 0.6], t=0.05)
             return
         if dir == "up":
-            self.swipe(point_start=[0.3, 0.7], point_end=[0.3, 0.6], t=0.1)
+            self.swipe(point_start=[0.4, 0.6], point_end=[0.4, 0.4], t=0.05)
             return
         if dir == "down":
-            self.swipe(point_start=[0.3, 0.7], point_end=[0.3, 0.8], t=0.1)
+            self.swipe(point_start=[0.4, 0.6], point_end=[0.4, 0.8], t=0.05)
             return
 
     def release_btn_reel(self):

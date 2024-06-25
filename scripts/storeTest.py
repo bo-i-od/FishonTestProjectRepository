@@ -12,7 +12,7 @@ from common import resource, gameInit
 
 def gift_pack_test(bp:BasePage):
     # 切换到 gift pack
-    StorePanel.change_tab(bp, 1)
+    StorePanel.change_tab(bp, 2)
 
     # 点击图标
     gift_pack_click_icon_test(bp)
@@ -92,33 +92,33 @@ def gift_pack_buy_once_test(bp:BasePage, gift_pack_dict, btn_position):
 
 def cash_test(bp:BasePage):
     # 切换到cash
-    StorePanel.change_tab(bp, 4)
-
-    # 点击图标测试
-    cash_click_icon_test(bp)
-
-    # 购买测试
-    cash_buy_test(bp)
-
-
-def cash_click_icon_test(bp:BasePage):
-    # 有浮窗先消去浮窗
-    if ItemTipsPanel.is_panel_active(bp):
-        bp.click_position([0.5, 0.1])
+    StorePanel.change_tab(bp, 5)
 
     # 得到图标及其位置
     cash_icon_list = StorePanel.get_cash_icon_list(bp)
     cash_position_list = StorePanel.get_cash_position_list(bp)
 
+    # 点击图标测试
+    goods_click_icon_test(bp, cash_icon_list, cash_position_list)
+
+    # 购买测试
+    cash_buy_test(bp)
+
+
+def goods_click_icon_test(bp:BasePage, icon_list, position_list):
+    # # 有浮窗先消去浮窗
+    # if ItemTipsPanel.is_panel_active(bp):
+    #     bp.click_position([0.5, 0.1])
+
     # 随机点击一个图标
-    r = random.randint(0, len(cash_position_list) - 1)
-    bp.click_position(cash_position_list[r])
+    r = random.randint(0, len(position_list) - 1)
+    bp.click_position(position_list[r])
 
     # 得到浮窗图标
     item_icon = ItemTipsPanel.get_item_icon(bp)
 
     # 对比浮窗图标和物品图标
-    compare(item_icon, cash_icon_list[r])
+    compare(item_icon, icon_list[r])
 
     # 关闭浮窗
     bp.click_position([0.5, 0.1])
@@ -141,12 +141,13 @@ def cash_buy_test(bp:BasePage):
             cash_quantity_list[cur] *= 2
 
         # 购买
-        cash_buy_once_test(bp, cash_icon_list[cur], cash_quantity_list[cur], btn_position_list[cur])
+        goods_buy_once_test(bp, cash_icon_list[cur], cash_quantity_list[cur], btn_position_list[cur])
         cur += 1
 
-def cash_buy_once_test(bp:BasePage, cash_icon, cash_quantity, btn_position):
+
+def goods_buy_once_test(bp:BasePage, icon, quantity, btn_position):
     # 得到钞票库存
-    item_count_expect = bp.get_item_count(item_icon_name=cash_icon)
+    item_count_expect = bp.get_item_count(item_icon_name=icon)
 
     # 点击购买
     bp.click_position(btn_position)
@@ -154,13 +155,13 @@ def cash_buy_once_test(bp:BasePage, cash_icon, cash_quantity, btn_position):
 
     # 对比商品数量和实际获取物品数量
     reward_quantity_list = RewardsPanel.get_reward_quantity_list(bp)
-    compare(cash_quantity, reward_quantity_list[0])
+    compare(quantity, reward_quantity_list[0])
 
     # 期望库存
-    item_count_expect += cash_quantity
+    item_count_expect += quantity
 
     # 实际库存
-    item_count = bp.get_item_count(item_icon_name=cash_icon)
+    item_count = bp.get_item_count(item_icon_name=icon)
 
     # 对比期望库存和实际库存
     compare(item_count_expect, item_count)
@@ -170,8 +171,97 @@ def cash_buy_once_test(bp:BasePage, cash_icon, cash_quantity, btn_position):
     bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
 
+
+
+def month_card_1_quantity_test(bp:BasePage):
+    position_list = StorePanel.get_month_card_1_position_list(bp)
+
+
+
+
+
+def month_card_test(bp:BasePage):
+    StorePanel.change_tab(bp, 1)
+    bp.sleep(1)
+
+    # 得到图标及其位置
+    month_card_1_icon_list = StorePanel.get_month_card_1_icon_list(bp)
+    month_card_1_position_list = StorePanel.get_month_card_1_position_list(bp)
+    month_card_1_quantity_list = StorePanel.get_month_card_1_quantity_list(bp)
+
+    # 点击图标测试
+    goods_click_icon_test(bp, month_card_1_icon_list, month_card_1_position_list)
+
+    # 验证数量是否正确
+    total = month_card_1_quantity_list[0] * 30 + month_card_1_quantity_list[1]
+    month_card_1_quantity_total = StorePanel.get_month_card_1_quantity_total(bp)
+    compare(total, month_card_1_quantity_total)
+
+    # 获取购买按钮位置
+    month_model_1_id_list = StorePanel.get_month_model_1_id_list(bp)
+    btn_position_list = StorePanel.get_btn_position_list(bp, month_model_1_id_list)
+
+    # 购买测试
+    goods_buy_once_test(bp, icon=month_card_1_icon_list[1], quantity=month_card_1_quantity_list[1], btn_position=btn_position_list[0])
+
+    bp.sleep(1)
+
+    # 看领取状态
+    collected_list = StorePanel.get_month_card_2_collected_list(bp)
+    compare_list(list_a=collected_list, list_b=[1])
+
+    month_card_2_icon_list = StorePanel.get_month_card_2_icon_list(bp)
+    month_card_2_position_list = StorePanel.get_month_card_2_position_list(bp)
+    month_card_2_quantity_list = StorePanel.get_month_card_2_quantity_list(bp)
+
+    # 点击图标测试
+    goods_click_icon_test(bp, month_card_2_icon_list, month_card_2_position_list)
+
+    # 验证数量是否正确
+
+    month_card_2_quantity_total_list = StorePanel.get_month_card_2_quantity_total_list(bp)
+    daily = month_card_2_quantity_list[0]
+    once = month_card_2_quantity_list[1]
+    total = daily * 30 + once
+    compare(month_card_2_quantity_total_list[0], total)
+    daily = month_card_2_quantity_list[2]
+    once = month_card_2_quantity_list[3]
+    total = daily * 30 + once
+    compare(month_card_2_quantity_total_list[1], total)
+    # 获取购买按钮位置
+    month_model_2_id_list = StorePanel.get_month_model_2_id_list(bp)
+    btn_position_list = StorePanel.get_btn_position_list(bp, month_model_2_id_list)
+
+    # 购买测试
+    goods_buy_once_test(bp, icon=month_card_2_icon_list[3], quantity=month_card_2_quantity_list[3],
+                        btn_position=btn_position_list[1])
+    bp.sleep(1)
+
+    # 看领取状态
+    collected_list = StorePanel.get_month_card_2_collected_list(bp)
+    compare_list(collected_list, [1, 3])
+
+    # 领取普通月卡
+    goods_buy_once_test(bp, icon=month_card_2_icon_list[0], quantity=month_card_2_quantity_list[0],
+                        btn_position=btn_position_list[0])
+
+    # 看领取状态
+    collected_list = StorePanel.get_month_card_2_collected_list(bp)
+    compare_list(collected_list, [0, 1, 3])
+
+    # 领取豪华月卡
+    goods_buy_once_test(bp, icon=month_card_2_icon_list[2], quantity=month_card_2_quantity_list[2],
+                        btn_position=btn_position_list[1])
+
+    # 看领取状态
+    collected_list = StorePanel.get_month_card_2_collected_list(bp)
+    compare_list(collected_list, [0, 1, 2, 3])
+
+
+
+
 def gear_test(bp:BasePage):
-    StorePanel.change_tab(bp, 2)
+    StorePanel.change_tab(bp, 3)
     bp.sleep(1)
     StorePanel.change_resource_tab(bp, 0)
     item_tpid_list = ["100000", "100100"]
@@ -271,7 +361,7 @@ def gear_buy_once_test(bp:BasePage, gear_icon, price,btn_icon, btn_position):
 
 
 def fish_card_test(bp:BasePage):
-    StorePanel.change_tab(bp, 2)
+    StorePanel.change_tab(bp, 3)
     bp.sleep(1)
     StorePanel.change_resource_tab(bp, 1)
     # 得到第一个鱼卡包的价格，差一块钱
@@ -488,7 +578,7 @@ def booster2_buy_test(bp:BasePage):
         compare(cash_expect, cash)
 
 def materials_test(bp: BasePage):
-    StorePanel.change_tab(bp, 2)
+    StorePanel.change_tab(bp, 3)
     bp.sleep(1)
     StorePanel.change_resource_tab(bp, 2)
     materials_click_icon_test(bp)
@@ -648,7 +738,7 @@ def materials_buy_once_test(bp: BasePage):
     RewardsPanel.click_tap_to_claim(bp)
 
 def box_test(bp: BasePage):
-    StorePanel.change_tab(bp, 3)
+    StorePanel.change_tab(bp, 4)
     bp.sleep(1)
     box_id_list = StorePanel.get_box_id_list(bp)
     btn_position_list = StorePanel.get_btn_position_list(bp, box_id_list)
@@ -673,9 +763,9 @@ def box_test(bp: BasePage):
         if refresh_cost > StorePanel.get_cash(bp):
             box_refresh_test(bp, box_id_list)
             # StorePanel.click_btn_refresh(bp)
-            StorePanel.change_tab(bp, 3)
+            StorePanel.change_tab(bp, 5)
             bp.set_item_count(target_count=20000, item_tpid="100100")
-            StorePanel.change_tab(bp, 2)
+            StorePanel.change_tab(bp, 4)
 
     # 全买一遍
     cur = 0
@@ -788,6 +878,9 @@ def main(bp: BasePage):
     bp.debug_log(f"当前分层{layer}")
     bp.cmd_list([f"setPlayerLayer {layer}", "refreshshop"])
     cash_test(bp)
+
+    month_card_test(bp)
+
     gear_test(bp)
     fish_card_test(bp)
     materials_test(bp)
@@ -795,6 +888,6 @@ def main(bp: BasePage):
     bp.go_home()
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.77:20059")
-    main(bp)
-    # box_test(bp)
+    bp = BasePage("192.168.111.77:20089")
+    # main(bp)
+    month_card_test(bp)

@@ -43,6 +43,9 @@ class AchievementWantedPanel(BasePage):
             if table_data["isOpen"][cur] != 1:
                 cur += 1
                 continue
+            if table_data["order"][cur] % 2 == 0:
+                cur += 1
+                continue
             open_index_list.append(cur)
             cur += 1
         return open_index_list

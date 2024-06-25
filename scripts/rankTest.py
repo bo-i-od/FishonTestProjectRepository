@@ -98,6 +98,7 @@ def leaderboard_test(bp: BasePage, data_list, is_like):
         # 返回上级界面
         RankFishLeaderboardPanel.click_btn_close(bp)
         bp.sleep(1)
+        return
     like_value = RankFishLeaderboardPanel.get_like_value(bp)
     RankFishLeaderboardPanel.click_btn_like(bp)
     bp.sleep(1)

@@ -4,6 +4,7 @@ from threading import Thread
 import common
 from common import gameInit
 from common.basePage import BasePage
+from common.error import FindNoElementError
 from panelObjs.commonWebViewPanel import CommonWebViewPanel
 from panelObjs.divisionLeaderboardPanel import DivisionLeaderboardPanel
 from panelObjs.divisionListPanel import DivisionListPanel
@@ -27,7 +28,7 @@ from panelObjs.tournamentsPanel import TournamentsPanel
 from scripts import battleTest, createUsers
 from scripts.battleTest import circulate_fish
 
-
+# 0-7分别对应 0新手 1青铜 2白银 3黄金 4白金 5钻石 6冠军 7传奇
 def random_duelcup(bp:BasePage, rank):
     duelcup = random.randint(0,5)
     bp.cmd(f"duelcup 1001 {duelcup}")
@@ -71,8 +72,7 @@ def clear_duelcup(bp:BasePage):
         bp.cmd(f"duelcup 100{8-cur} 0")
         cur += 1
 
-def pvp_fish(bp):
-    # BattlePreparePanel.click_btn_quick_switch(bp)
+def pvp_fish(bp, is_quick=False):
     while True:
         BattlePreparePanel.click_btn_cast(bp)
         bp.sleep(3)
@@ -85,7 +85,8 @@ def pvp_fish(bp):
             bp.custom_cmd("autofish")
             qteThread = Thread(target=BattlePanel.qte, args=[bp])
             qteThread.start()
-        # BattlePanel.reel_quick(bp)
+        if is_quick:
+            BattlePanel.reel_quick(bp)
         element_btn = ResultPanel.wait_for_result(bp)
         ResultPanel.automatic_settlement(bp, element_btn)
         if PVPResultPanel.is_panel_active(bp):
@@ -149,7 +150,7 @@ def point_cal(duelcup):
     end = 0.2 * duelcup + 3600
     return int(start), int(end)
 
-def circulate_duel(bp:BasePage, rank):
+def duel_once(bp:BasePage, rank):
     # rank = random.randint(4, 5)
     # # rank = 0
     # clear_duelcup(bp)
@@ -168,8 +169,8 @@ def circulate_duel(bp:BasePage, rank):
     # bp.try_actions(action_list=action_list)
     pvp_fish(bp)
     bp.sleep(5)
-    PVPResultPanel.click_btn_open(bp)
-    bp.sleep(1)
+    # PVPResultPanel.click_btn_open(bp)
+    # bp.sleep(1)
     # result_right = PVPResultPanel.get_result_right(bp)
     # print("钓了：",len(result_right),"条鱼")
     # print(result_right)
@@ -227,17 +228,24 @@ def champointship(bp, index, times):
         bp.clear_popup()
         bp.go_to_panel("TournamentsPanel")
         bp.sleep(1)
-        tournaments_info_position_list = TournamentsPanel.get_tournaments_info_position_list(bp)
-        if not tournaments_info_position_list:
-            return
-        if len(tournaments_info_position_list) < 2:
-            index = 0
-        bp.click_position(tournaments_info_position_list[index])
-        LoadingFisheryPanel.wait_until_panel_disappear(bp)
+
+        # if not tournaments_info_position_list:
+        #     raise FindNoElementError
+
+        while True:
+            tournaments_info_position_list = TournamentsPanel.get_tournaments_info_position_list(bp)
+            if not tournaments_info_position_list:
+                break
+            if len(tournaments_info_position_list) < 2:
+                index = 0
+            bp.click_position(tournaments_info_position_list[index])
+            bp.sleep(0.5)
+        # LoadingFisheryPanel.wait_until_panel_disappear(bp)
         circulate_fish(bp, times=times, is_quick=False)
         bp.go_home()
     except Exception as e:
         print(e)
+        # bp.connect_close()
         bp = reset_bp()
     return bp
 
@@ -271,7 +279,7 @@ def turntable_test(bp:BasePage):
     # 点击i
     RoulettePanel.click_btn_i(bp)
     bp.sleep(1)
-    bp.click_position([0.5, 0.1])
+    bp.click_position([0.5, 0.9])
     bp.sleep(1)
 
     # 点击公示
@@ -355,16 +363,21 @@ def main(bp:BasePage, duelTest=None):
 
 if __name__ == '__main__':
     base_page = BasePage("127.0.0.1:21533")
+    # base_page = BasePage("b6h65hd64p5pxcyh")
     # cur = 0
     # while cur < 3:
-    #
-    #     circulate_duel(base_page, 1)
+    #     duel_once(base_page, 1)
     #     cur += 1
     #     print(f"第{cur}次钓鱼")
-
+    # circulate_fish(base_page, is_quick=False, times=50)
     while True:
-        base_page = champointship(base_page, 1, 10)
-        base_page = champointship(base_page, 0, 8)
+        base_page = champointship(base_page, 0, 20)
+        base_page = champointship(base_page, 1, 20)
+
+
+
+
+
 
 
     # dc = random_duelcup(bp, 7)

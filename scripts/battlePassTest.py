@@ -18,7 +18,7 @@ from panelObjs.rodMoreToOnePanel import RodMoreToOnePanel
 from common.resource import *
 from common.basePage import BasePage
 from common.viewport import Viewport
-from scripts.duelTest import random_duelcup, circulate_duel
+from scripts.duelTest import random_duelcup, duel_once
 
 
 def click_icon_buy_level_test(bp:BasePage):
@@ -205,7 +205,7 @@ def random_collect_test(bp:BasePage, icon_list, quantity_list, status, viewport:
         return
 
     # 随机选择一个进行领取
-    r = random.randint(0, collectable_list_len - 1)
+    r = random.randint(collectable_list_len - 10, collectable_list_len - 1)
     icon_selected = icon_list[collectable_list[r]]
     icon_selected_id = viewport.item_id_list[collectable_list[r]]
     item_count = bp.get_item_count(item_icon_name=icon_selected)
@@ -387,6 +387,7 @@ def main(bp:BasePage):
 if __name__ == '__main__':
     bp = BasePage("b6h65hd64p5pxcyh")
     main(bp)
+    bp.connect_close()
     # cur = 0
     # while cur < 80:
     #

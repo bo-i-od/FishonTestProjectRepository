@@ -3,6 +3,7 @@ from configs.elementsData import ElementsData
 from scripts.createUsers import login, fish, logout
 from tools.commonTools import *
 from common import resource
+from common.viewport import Viewport
 
 
 class StorePanel(BasePage):
@@ -26,6 +27,10 @@ class StorePanel(BasePage):
         self.click_position(position)
 
     def change_tab(self, index):
+        edge = [0.01, 0.01]
+        viewport_tab = Viewport(self, element_viewport=ElementsData.Store.viewport_tab, element_item_list=ElementsData.Store.tab_list, viewport_edge=edge)
+        viewport_tab.move_until_appear(viewport_tab.item_id_list[index])
+        self.sleep(0.5)
         position_list = self.get_position_list(element_data=ElementsData.Store.tab_list)
         self.click_position(position_list[index])
 
@@ -157,8 +162,12 @@ class StorePanel(BasePage):
             if text_sellout_id:
                 btn_position_list.append(self.get_position(object_id=text_sellout_id[0]))
                 continue
-            btn_buy_id = self.get_offspring_id("btn_buy>text", object_id=item_id)
-            btn_position_list.append(self.get_position(object_id=btn_buy_id))
+            btn_buy_id = self.get_offspring_id_list("btn_buy>text", object_id=item_id)
+            if btn_buy_id:
+                btn_position_list.append(self.get_position(object_id=btn_buy_id[0]))
+            btn_get_id = self.get_offspring_id_list("btn_get>text", object_id=item_id)
+            if btn_get_id:
+                btn_position_list.append(self.get_position(object_id=btn_get_id[0]))
         return btn_position_list
 
 
@@ -406,15 +415,73 @@ class StorePanel(BasePage):
         resource_tab_position_list = self.get_position_list(element_data=ElementsData.Store.Resource.resource_tab_list)
         self.click_position(resource_tab_position_list[index])
 
+    def get_month_model_1_id_list(self):
+        return self.get_object_id_list(element_data=ElementsData.Store.MonthCard.month_model_1)
+
+    def get_month_card_1_icon_list(self):
+        icon_list = self.get_icon_list(element_data=ElementsData.Store.MonthCard.month_card_1_icon_list)
+        return icon_list
+
+    def get_month_card_1_position_list(self):
+        position_list = self.get_position_list(element_data=ElementsData.Store.MonthCard.month_card_1_icon_list)
+        return position_list
+
+    def get_month_card_1_quantity_list(self):
+        quantity_list = self.get_text_list(element_data=ElementsData.Store.MonthCard.month_card_1_quantity_list)
+        str_to_int_list(quantity_list)
+        return quantity_list
+
+    def get_month_card_1_quantity_total(self):
+        quantity = self.get_text(element_data=ElementsData.Store.MonthCard.month_card_1_quantity_total)
+        quantity = str_to_int(quantity)
+        return quantity
+
+    def get_month_model_2_id_list(self):
+        return self.get_object_id_list(element_data=ElementsData.Store.MonthCard.month_model_2_list)
+
+    def get_month_card_2_icon_list(self):
+        icon_list = self.get_icon_list(element_data=ElementsData.Store.MonthCard.month_card_2_icon_list)
+        return icon_list
+
+    def get_month_card_2_position_list(self):
+        position_list = self.get_position_list(element_data=ElementsData.Store.MonthCard.month_card_2_icon_list)
+        return position_list
+
+    def get_month_card_2_quantity_list(self):
+        quantity_list = self.get_text_list(element_data=ElementsData.Store.MonthCard.month_card_2_quantity_list)
+        str_to_int_list(quantity_list)
+        return quantity_list
+
+    def get_month_card_2_quantity_total_list(self):
+        quantity_list = self.get_text_list(element_data=ElementsData.Store.MonthCard.month_card_2_quantity_total_list)
+        str_to_int_list(quantity_list)
+        return quantity_list
+
+    def get_month_card_2_collected_list(self):
+        item_model_id_list = self.get_object_id_list(element_data=ElementsData.Store.MonthCard.month_card_2_item_model_list)
+        collected_list = []
+        cur = 0
+        while cur < len(item_model_id_list):
+            collected = self.get_offspring_id_list(object_id=item_model_id_list[cur], offspring_path="collected")
+            if not collected:
+                cur += 1
+                continue
+            collected_list.append(cur)
+            cur += 1
+        return collected_list
+
+
+
 
 
 
 if __name__ == '__main__':
     bp = BasePage()
-    cur = 301
-    while cur <= 400:
-        name = f"player0"
-        login(bp, name, cur)
-        fish(bp)
-        logout(bp, cur)
-        cur += 1
+    StorePanel.change_tab(bp, 0)
+    # cur = 301
+    # while cur <= 400:
+    #     name = f"player0"
+    #     login(bp, name, cur)
+    #     fish(bp)
+    #     logout(bp, cur)
+    #     cur += 1

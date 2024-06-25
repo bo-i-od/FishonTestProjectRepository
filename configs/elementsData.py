@@ -462,7 +462,7 @@ class ElementsData:
         btn_close = {"locator": "UICanvas>Default>FishCardPanel>btn_close>img"}
         btn_i = {"locator": "UICanvas>Default>FishCardPanel>title_group>btn_i>img"}
         tips_cardbonus = {"locator": "UICanvas>Default>FishCardPanel>tips_cardbonus"}
-        btn_upgrade = {"locator": "UICanvas>Default>FishCardPanel>panel>panel_ehhance>upgrade>normal>btn_upgrade", "focus": (0.5, 0.5)}
+        btn_upgrade = {"locator": "UICanvas>Default>FishCardPanel>btn_upgrade"}
         talent_now_list = {"locator": "UICanvas>Default>FishCardPanel>panel>panel_ehhance>upgrade>normal>detail_list>Viewport>Content>>now>title"}
         talent_next_list = {"locator": "UICanvas>Default>FishCardPanel>panel>panel_ehhance>upgrade>normal>detail_list>Viewport>Content>>next>title"}
         main_name = {"locator": "UICanvas>Default>FishCardPanel>panel>panel_ehhance>content>name>name"}
@@ -490,11 +490,19 @@ class ElementsData:
         sub_tab_list = {"locator": "UICanvas>Default>FishCardPanel>panel_normal>subTab>", "focus": (0, 0)}
         rating = {"locator": "UICanvas>Default>FishCardPanel>gs>rating>num"}
         rating_fisheries = {"locator": "UICanvas>Default>FishCardPanel>gs>rating_fisheries>num"}
-    #
+
+
+    class FishCardMultipleLevelUp:
+        FishCardMultipleLevelUpPanel = {"locator": "UICanvas>Default>FishCardMultipleLevelUpPanel"}
+        btn_close = {"locator": "UICanvas>Default>FishCardMultipleLevelUpPanel>Panel>btn_close>img"}
+        btn_draw = {"locator": "UICanvas>Default>FishCardMultipleLevelUpPanel>Panel>content_fishcard>btns>btn_draw"}
+        choice_all = {"locator": "UICanvas>Default>FishCardMultipleLevelUpPanel>Panel>content_fishcard>choice>choice>Toggle>Background"}
+        choice_list = {"locator": "UICanvas>Default>FishCardMultipleLevelUpPanel>Panel>content_fishcard>fishcard_list>Viewport>Content>>group>level>Toggle>Background"}
+
 
     class FlashCardReceive:
         FishCardPanel = {"locator": "UICanvas>Default>FlashCardReceivePanel"}
-        btn_close = {"locator": "UICanvas>Default>FlashCardReceivePanel>panel_flashcard>btn_close>tip"}
+        btn_close = {"locator": "UICanvas>Default>FlashCardReceivePanel>>btn_close>tip"}
 
 
 
@@ -511,6 +519,7 @@ class ElementsData:
         cost_icon_list = {"locator": "UICanvas>Default>FishCardUpgradePanel>panel_upgrade>Content>cost>bg>>icon"}
         fisheries_name_selected = {"locator": "UICanvas>Default>FishCardUpgradePanel>panel_upgrade>cotent_fishcard>card>Fishcard_group>card_group>fishcard_1>>fisheries_bg>fisheries"}
         fish_name_selected = {"locator": "UICanvas>Default>FishCardUpgradePanel>panel_upgrade>cotent_fishcard>card>Fishcard_group>card_group>fishcard_1>>frame>name"}
+
         # progress_selected = {"locator": "UICanvas>Default>FishCardUpgradePanel>panel_upgrade>Content>progress>text"}
         level_selected = {"locator": "UICanvas>Default>FishCardUpgradePanel>panel_upgrade>cotent_fishcard>card>Fishcard_group>card_group>fishcard_1>>kind_02>level>number"}
         rating_card = {"locator": "UICanvas>Default>FishCardUpgradePanel>panel_upgrade>cotent_fishcard>card>Fishcard_group>card_group>fishcard_1>>kind_02>talent>text"}
@@ -1204,6 +1213,7 @@ class ElementsData:
 
     class Store:
         StorePanel = {"locator": "UICanvas>Default>StorePanel"}
+        viewport_tab = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab>content>TabList>Viewport", "focus":(0, 0)}
         tab_list = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab>content>TabList>Viewport>Content>", "focus":(0, 0.5)}
         panel_gift_pack = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_1"}
         panel_resource = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_2"}
@@ -1263,6 +1273,17 @@ class ElementsData:
             cash_icon_list = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_3>content>>group>icon"}
             cash_quantity_list = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_3>content>>group>quantity>value"}
 
+        class MonthCard:
+            month_model_1 = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_7>panel_month_01>content>"}
+            month_card_1_icon_list = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_7>panel_month_01>content>month_model_1>group_rewards>>item_icon>item_model_mini(Clone)>icon"}
+            month_card_1_quantity_list = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_7>panel_month_01>content>month_model_1>group_rewards>>item_icon>item_model_mini(Clone)>quantity>value"}
+            month_card_1_quantity_total = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_7>panel_month_01>content>month_model_1>value>text"}
+            month_model_2_list = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_7>panel_month_02>content>"}
+            month_card_2_icon_list = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_7>panel_month_02>content>>group_rewards>>item_icon>item_model_mini(Clone)>icon"}
+            month_card_2_quantity_list = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_7>panel_month_02>content>>group_rewards>>item_icon>item_model_mini(Clone)>quantity>value"}
+            month_card_2_quantity_total_list = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_7>panel_month_02>content>>value>text"}
+            month_card_2_item_model_list = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_7>panel_month_02>content>>group_rewards>>item_icon>item_model_mini(Clone)"}
+
     class TaskFishingCareer:
         TaskFishingCareerPanel = {"locator": "UICanvas>Default>TaskFishingCareerPanel"}
         btn_close = {"locator": "UICanvas>Default>TaskFishingCareerPanel>Panel>btn_close>img"}
@@ -1321,7 +1342,7 @@ class ElementsData:
     class Tournaments:
         TournamentsPanel = {"locator": "UICanvas>Default>TournamentsPanel"}
         btn_close = {"locator": "UICanvas>Default>TournamentsPanel>panel>btn_close>img"}
-        btn_enter_list = {"locator": "UICanvas>Default>TournamentsPanel>panel>panel_entrance>List>Viewport>Content>>model>btn_enter", "focus":(0.5, 1)}
+        btn_enter_list = {"locator": "UICanvas>Default>TournamentsPanel>panel>panel_entrance>List>Viewport>Content>>model>btn_enter>text"}
         time_list = {"locator": "UICanvas>Default>TournamentsPanel>panel>panel_entrance>List>Viewport>Content>>model>tournaments_info>time>text"}
         bg_list = {"locator": "UICanvas>Default>TournamentsPanel>panel>panel_entrance>List>Viewport>Content>>model>bg"}
         entrance_viewport = {"locator": "UICanvas>Default>TournamentsPanel>panel>panel_entrance>List>Viewport", "focus": (0, 0)}

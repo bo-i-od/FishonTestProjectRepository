@@ -4,7 +4,7 @@ import re
 from common.basePage import BasePage
 import hashlib
 
-from netMsg import csMsgAll, netMsgTest, luaLog, fishingMsg
+from netMsg import  netMsgTest, luaLog, fishingMsg
 
 
 def md5(string):

@@ -1,4 +1,6 @@
 import json
+from importlib import import_module
+from queue import Queue
 
 from airtest.core.helper import G
 from poco.drivers.unity3d.device import UnityEditorWindow
@@ -10,10 +12,9 @@ import pyautogui
 import base64
 import cv2
 import numpy as np
-
 from poco.drivers.unity3d import UnityPoco
 from airtest.core.api import connect_device
-from common import rpcMethod, resource
+from common import rpcMethodRequest, resource
 from common.error import *
 import zlib
 
@@ -27,7 +28,7 @@ class BasePage:
         # unity窗口使用UnityEditorWindow()
         # 手机使用connect_device("android://127.0.0.1:5037/设备号")
 
-        # 是否在安卓手机
+        # 是否在安卓手机, Unity需要改为False
         self.is_android = False
 
         # 是否测试会拉起支付的按钮
@@ -45,11 +46,10 @@ class BasePage:
         # 是否监听Unity发来的log
         self.listen_log_flag = True
 
-        # 是否让Unity发log
-        self.send_log_flag = True
-
         # 是否将Unity发来的log加到消息列表里
         self.log_list_flag = False
+
+        self._send_log_flag = False
 
         # 默认端口 5001
         addr = ('', 5001)
@@ -72,24 +72,28 @@ class BasePage:
         # 配置表的路径
         self.excelTools = ExceTools("C:/trunkCHS/datapool/策划模板导出工具/")
 
-        # # 是否让Unity发log
-        self.set_send_log_flag(self.send_log_flag)
-
-        self.wait_msg()
+        # 是否让Unity发log
+        self.set_send_log_flag(True)
 
         # 消息储存队列
         self.log_list = []
 
-
+        # qte执行队列
+        self.qte_queue = None
 
     def get_device(self, serial_number=None):
+        # pc端
         if not self.is_android:
             dev = UnityEditorWindow()
             return dev
+
+        # 已连接
         try:
             dev = G.DEVICE
             return dev
-        except:
+        # 未连接，新建连接
+        except Exception as e:
+            print(e)
             print("进行设备连接")
         if serial_number is None:
             serial_number = "127.0.0.1:21503"
@@ -98,9 +102,12 @@ class BasePage:
         # dev = connect_device("android://127.0.0.1:5037/28cce18906027ece")
         return dev
 
+    # 断开poco连接
     def connect_close(self):
+        self._send_log_flag = False
         self.poco.agent.c.conn.close()
         self.poco_listen.agent.c.conn.close()
+
 
     # 开启调试打印再打印
     def debug_log(self, *msg):
@@ -135,7 +142,7 @@ class BasePage:
     # 得到元素的Instance Id列表
     def get_object_id_list(self, element_data: dict, offspring_path=""):
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        object_id_list = rpcMethod.get_object_id(self.poco, element_data_copy)
+        object_id_list = rpcMethodRequest.get_object_id(self.poco, element_data_copy)
         return object_id_list
 
     # 得到元素的Instance Id
@@ -154,8 +161,8 @@ class BasePage:
     #             child_id_list += child_id_list_temp
     #         return child_id_list
     #     if object_id != 0:
-    #         return rpcMethod.get_child_id_by_id(self.poco, object_id, child_name)
-    #     return rpcMethod.get_child_id(self.poco, element_data, child_name)
+    #         return rpcMethodRequest.get_child_id_by_id(self.poco, object_id, child_name)
+    #     return rpcMethodRequest.get_child_id(self.poco, element_data, child_name)
     #
     # def get_child_id(self, child_name="",object_id=0, element_data=None):
     #     child_id_list = self.get_child_id_list(child_name, object_id=object_id, element_data=element_data)
@@ -165,11 +172,11 @@ class BasePage:
     # 得到后代的Instance Id
     def get_offspring_id_list(self, offspring_path, object_id=0, object_id_list=None, element_data=None):
         if object_id_list is not None:
-            return rpcMethod.get_offspring_id_by_id(self.poco, object_id_list, offspring_path)
+            return rpcMethodRequest.get_offspring_id_by_id(self.poco, object_id_list, offspring_path)
         if object_id != 0:
             return self.get_offspring_id_list(object_id_list=[object_id], offspring_path=offspring_path)
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        return rpcMethod.get_object_id(self.poco, element_data_copy)
+        return rpcMethodRequest.get_object_id(self.poco, element_data_copy)
 
     def get_offspring_id(self, offspring_path, object_id=0, element_data=None):
         offspring_id_list = self.get_offspring_id_list(offspring_path, object_id=object_id, element_data=element_data)
@@ -179,12 +186,11 @@ class BasePage:
     # 得到指定元素/元素列表的父节点
     def get_parent_id_list(self, object_id=0, object_id_list=None, element_data=None, offspring_path=""):
         if object_id_list is not None:
-            return rpcMethod.get_parent_id_by_id(self.poco, object_id_list, offspring_path)
+            return rpcMethodRequest.get_parent_id_by_id(self.poco, object_id_list, offspring_path)
         if object_id != 0:
             return self.get_parent_id_list(object_id_list=[object_id], offspring_path=offspring_path)
-        return rpcMethod.get_parent_id(self.poco, element_data)
+        return rpcMethodRequest.get_parent_id(self.poco, element_data)
 
-    # 输入是定位信息时，请保证定位信息是单数的
     def get_parent_id(self, object_id=0, element_data=None, offspring_path=""):
         if object_id != 0:
             parent_id_list = self.get_parent_id_list(object_id=object_id, offspring_path=offspring_path)
@@ -197,11 +203,11 @@ class BasePage:
     # 获得文本
     def get_text_list(self, object_id=0, object_id_list: list = None, element_data: dict = None, offspring_path=""):
         if object_id_list is not None:
-            return rpcMethod.get_text_by_id(self.poco, object_id_list, offspring_path)
+            return rpcMethodRequest.get_text_by_id(self.poco, object_id_list, offspring_path)
         if object_id != 0:
             return self.get_text_list(object_id_list=[object_id], offspring_path=offspring_path)
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        text_list = rpcMethod.get_text(self.poco, element_data_copy)
+        text_list = rpcMethodRequest.get_text(self.poco, element_data_copy)
         return text_list
 
     def get_text(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
@@ -218,31 +224,31 @@ class BasePage:
     def set_text_list(self, object_id=0, object_id_list: list = None, element_data: dict = None, text="",
                       offspring_path=""):
         if object_id_list is not None:
-            rpcMethod.set_text_by_id(self.poco, object_id_list, offspring_path, text)
+            rpcMethodRequest.set_text_by_id(self.poco, object_id_list, offspring_path, text)
             return
         if object_id != 0:
             self.set_text_list(object_id_list=[object_id], offspring_path=offspring_path, text=text)
             return
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        rpcMethod.set_text(self.poco, element_data_copy, text)
+        rpcMethodRequest.set_text(self.poco, element_data_copy, text)
 
     def set_text(self, object_id: int = 0, element_data: dict = None, text="", offspring_path=""):
         if object_id != 0:
             self.set_text_list(object_id=object_id, offspring_path=offspring_path, text=text)
             return
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        rpcMethod.set_text(self.poco, element_data_copy, text)
+        rpcMethodRequest.set_text(self.poco, element_data_copy, text)
 
     # 获取图标名
     def get_icon_list(self, object_id=0, object_id_list: list = None, element_data: dict = None, offspring_path=""):
         if object_id_list is not None:
-            icon_list = rpcMethod.get_img_name_by_id(self.poco, object_id_list, offspring_path)
+            icon_list = rpcMethodRequest.get_img_name_by_id(self.poco, object_id_list, offspring_path)
             resource.check_icon_list(icon_list)
             return icon_list
         if object_id != 0:
             return self.get_icon_list(object_id_list=[object_id], offspring_path=offspring_path)
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        icon_list = rpcMethod.get_img_name(self.poco, element_data_copy)
+        icon_list = rpcMethodRequest.get_img_name(self.poco, element_data_copy)
         resource.check_icon_list(icon_list)
         return icon_list
 
@@ -261,11 +267,11 @@ class BasePage:
     def get_name_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None,
                       offspring_path=""):
         if object_id_list is not None:
-            return rpcMethod.get_name_by_id(self.poco, object_id_list, offspring_path)
+            return rpcMethodRequest.get_name_by_id(self.poco, object_id_list, offspring_path)
         if object_id != 0:
             return self.get_name_list(object_id_list=[object_id], offspring_path=offspring_path)
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        name_list = rpcMethod.get_name(self.poco, element_data_copy)
+        name_list = rpcMethodRequest.get_name(self.poco, element_data_copy)
         return name_list
 
     def get_name(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
@@ -282,11 +288,11 @@ class BasePage:
     def get_slider_value_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None,
                               offspring_path=""):
         if object_id_list is not None:
-            return rpcMethod.get_slider_value_by_id(self.poco, object_id_list, offspring_path)
+            return rpcMethodRequest.get_slider_value_by_id(self.poco, object_id_list, offspring_path)
         if object_id != 0:
             return self.get_slider_value_list(object_id_list=[object_id], offspring_path=offspring_path)
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        return rpcMethod.get_slider_value(self.poco, element_data_copy)
+        return rpcMethodRequest.get_slider_value(self.poco, element_data_copy)
 
     # 获取到的滑条值是float类型，值在0~1
     def get_slider_value(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
@@ -301,20 +307,20 @@ class BasePage:
 
     # 获取下拉列表当前值
     def get_dropdown_value(self, element_data):
-        return rpcMethod.get_dropdown_value(self.poco, element_data)
+        return rpcMethodRequest.get_dropdown_value(self.poco, element_data)
 
     def set_dropdown_value(self, element_data, index):
-        rpcMethod.set_dropdown_value(self.poco, element_data, index)
+        rpcMethodRequest.set_dropdown_value(self.poco, element_data, index)
 
     # 获取元素尺寸
     def get_size_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None,
                       offspring_path=""):
         if object_id_list is not None:
-            return rpcMethod.get_size_by_id(self.poco, object_id_list, offspring_path)
+            return rpcMethodRequest.get_size_by_id(self.poco, object_id_list, offspring_path)
         if object_id != 0:
             return self.get_size_list(object_id_list=[object_id], offspring_path=offspring_path)
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        size_list = rpcMethod.get_size(self.poco, element_data_copy)
+        size_list = rpcMethodRequest.get_size(self.poco, element_data_copy)
         return size_list
 
     def get_size(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
@@ -331,11 +337,11 @@ class BasePage:
     def get_toggle_is_on_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None,
                               offspring_path=""):
         if object_id_list is not None:
-            return rpcMethod.get_toggle_is_on_by_id(self.poco, object_id_list, offspring_path)
+            return rpcMethodRequest.get_toggle_is_on_by_id(self.poco, object_id_list, offspring_path)
         if object_id != 0:
             return self.get_toggle_is_on_list(object_id_list=[object_id], offspring_path=offspring_path)
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        toggle_is_on_list = rpcMethod.get_toggle_is_on(self.poco, element_data_copy)
+        toggle_is_on_list = rpcMethodRequest.get_toggle_is_on(self.poco, element_data_copy)
         return toggle_is_on_list
 
     def get_toggle_is_on(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
@@ -351,13 +357,13 @@ class BasePage:
     # 获取位置
     def get_position_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None, offspring_path=""):
         if object_id_list is not None:
-            return rpcMethod.get_position_by_id(self.poco, object_id_list, offspring_path)
+            return rpcMethodRequest.get_position_by_id(self.poco, object_id_list, offspring_path)
         if object_id != 0:
             return self.get_position_list(object_id_list=[object_id], offspring_path=offspring_path)
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        position_list = rpcMethod.get_position(self.poco, element_data_copy)
+        position_list = rpcMethodRequest.get_position(self.poco, element_data_copy)
         if "focus" in element_data_copy:
-            size_list = rpcMethod.get_size(self.poco, element_data_copy)
+            size_list = rpcMethodRequest.get_size(self.poco, element_data_copy)
             bias_x = 0.5 - element_data_copy["focus"][0]
             bias_y = 0.5 - element_data_copy["focus"][1]
             cur = 0
@@ -369,7 +375,7 @@ class BasePage:
 
     def get_position(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
         if object_id != 0:
-            position_list = rpcMethod.get_position_by_id(self.poco, [object_id], offspring_path)
+            position_list = rpcMethodRequest.get_position_by_id(self.poco, [object_id], offspring_path)
             self.is_single_element(position_list)
             return position_list[0]
         element_data_copy = self.get_element_data(element_data, offspring_path)
@@ -616,7 +622,7 @@ class BasePage:
     # x,y为坐标
     # w,h为宽高
     def get_screen_shot(self, x, y, w, h):
-        img_b64encode, fmt = rpcMethod.screen_shot(self.poco, x, y, w, h)
+        img_b64encode, fmt = rpcMethodRequest.screen_shot(self.poco, x, y, w, h)
         if fmt.endswith('.deflate'):
             fmt = fmt[:-len('.deflate')]
             imgdata = base64.b64decode(img_b64encode)
@@ -741,10 +747,10 @@ class BasePage:
     # 根据图标得到物品数量列表
     def get_item_count_list(self, item_name_list=None, item_icon_name_list=None, item_tpid_list=None):
         if item_tpid_list is not None:
-            item_count_list = rpcMethod.get_item_count(self.poco, item_tpid_list)
+            item_count_list = rpcMethodRequest.get_item_count(self.poco, item_tpid_list)
             return item_count_list
         item_tpid_list = self.get_tpid_list(item_name_list=item_name_list, item_icon_name_list=item_icon_name_list)
-        item_count_list = rpcMethod.get_item_count(self.poco, item_tpid_list)
+        item_count_list = rpcMethodRequest.get_item_count(self.poco, item_tpid_list)
         return item_count_list
 
     # 得到消耗后的物品数量列表
@@ -756,6 +762,13 @@ class BasePage:
             cur += 1
         return item_count_list
 
+    def cmd_list(self, command_list):
+        if not command_list:
+            return
+        if command_list is None:
+            return
+        rpcMethodRequest.cmd(self.poco, command_list)
+
     def cmd(self, command):
         if command == "":
             return
@@ -763,19 +776,12 @@ class BasePage:
             return
         self.cmd_list(command_list=[command])
 
-    def cmd_list(self, command_list):
-        if not command_list:
-            return
-        if command_list is None:
-            return
-        rpcMethod.cmd(self.poco, command_list)
-
     def lua_console_list(self, command_list):
         if not command_list:
             return
         if command_list is None:
             return
-        rpcMethod.lua_console(self.poco, command_list)
+        rpcMethodRequest.lua_console(self.poco, command_list)
 
     def lua_console(self, command):
         if command == "":
@@ -789,7 +795,7 @@ class BasePage:
             return
         if command_list is None:
             return
-        rpcMethod.custom_cmd(self.poco, command_list)
+        rpcMethodRequest.custom_cmd(self.poco, command_list)
 
     def custom_cmd(self, command):
         if command == "":
@@ -799,41 +805,44 @@ class BasePage:
         self.custom_cmd_list([command])
 
     def click_button(self, element_data:dict):
-        rpcMethod.click_button(self.poco, element_data)
+        rpcMethodRequest.click_button(self.poco, element_data)
 
     # kind包含up，down，click
     def ray_input(self, element_data:dict, target_name: str, kind: str):
-        rpcMethod.ray_input(self.poco, element_data, target_name, kind)
+        rpcMethodRequest.ray_input(self.poco, element_data, target_name, kind)
 
     # 设定节点激活状态
     def set_object_active_list(self, active,object_id=0, object_id_list: list = None, element_data: dict = None, offspring_path=""):
         if object_id_list is not None:
-            rpcMethod.set_object_active_by_id(self.poco, object_id_list, offspring_path, active)
+            rpcMethodRequest.set_object_active_by_id(self.poco, object_id_list, offspring_path, active)
             return
         if object_id != 0:
             self.set_object_active_list(object_id_list=[object_id], offspring_path=offspring_path, active=active)
             return
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        rpcMethod.set_object_active(self.poco, element_data_copy, active)
+        rpcMethodRequest.set_object_active(self.poco, element_data_copy, active)
 
     def set_object_active(self,active, object_id: int = 0, element_data: dict = None, offspring_path=""):
         if object_id != 0:
             self.set_object_active_list(active=active, object_id=object_id, offspring_path=offspring_path)
             return
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        rpcMethod.set_object_active(self.poco, element_data_copy, active)
+        rpcMethodRequest.set_object_active(self.poco, element_data_copy, active)
 
     # 设置时间缩放
     def set_time_scale(self, time_scale=5):
         if not self.is_time_scale:
             return
-        rpcMethod.set_time_scale(self.poco, time_scale)
+        rpcMethodRequest.set_time_scale(self.poco, time_scale)
 
     def get_scene_list(self):
-        return rpcMethod.get_scene_list(self.poco)
+        return rpcMethodRequest.get_scene_list(self.poco)
 
     def set_send_log_flag(self, send_log_flag):
-        rpcMethod.set_send_log_flag(self.poco, send_log_flag)
+        self._send_log_flag = send_log_flag
+        rpcMethodRequest.set_send_log_flag(self.poco, send_log_flag)
+        if send_log_flag:
+            self.wait_msg()
 
     # 休息t秒
     @staticmethod
@@ -845,26 +854,41 @@ class BasePage:
     def send_key(key: str):
         pyautogui.typewrite(key)
 
+    # 接收C#传来的消息
     def circulate_update(self):
-            while True:
-                if not self.listen_log_flag:
-                    self.sleep(1)
-                    continue
-                # 每隔一段时间取一下接收区的消息
-                try:
-                    msg = self.poco_listen.agent.c.conn.recv()
-                except:
-                    break
-                for m in msg:
-                    # 转格式加处理消息
-                    data = json.loads(m)
-                    msg = data['msg']
-                    if self.log_list_flag:
-                        self.log_list.append(msg)
-                    netMsg.luaLog.deal_with_msg(msg)
-                    # 返回消息给C#
-                    # poco.agent.c.conn.send("ok")
-                time.sleep(0.01)
+        while self._send_log_flag:
+            if not self.listen_log_flag:
+                self.sleep(0.1)
+                continue
+            # 每隔一段时间取一下接收区的消息
+            try:
+                rec = self.poco_listen.agent.c.conn.recv()
+            except:
+                # print(e)
+                break
+            for m in rec:
+                # 转格式加处理消息
+                data = json.loads(m)
+                self.handle_message(data)
+                self.handle_request(data)
+                # 返回消息给C#
+                # poco.agent.c.conn.send("ok")
+            time.sleep(0.01)
+
+    def handle_message(self, data):
+        if 'msg' not in data:
+            return
+        msg = data['msg']
+        if self.log_list_flag:
+            self.log_list.append(msg)
+        netMsg.luaLog.deal_with_msg(msg)
+
+    def handle_request(self, data):
+        if 'method' not in data:
+            return
+        method = data['method']
+        params = data['params']
+        self.call_function("common.rpcMethodResponse", method, self, params)
 
     def wait_msg(self):
         from threading import Thread
@@ -872,14 +896,23 @@ class BasePage:
         t.daemon = True
         t.start()
 
+    @staticmethod
+    def call_function(module_name, function_name, *args, **kwargs):
+        # 动态导入模块
+        module = import_module(module_name)
+        # 获取函数
+        function = getattr(module, function_name)
+        # 调用函数并返回结果
+        return function(*args, **kwargs)
+
 
 
 
 if __name__ == '__main__':
     bp = BasePage()
+    bp.clear_popup_once()
+
     bp.connect_close()
-
-
     # while True:
     #     # a = bp.get_object_id_list(element_data=ElementsData.Login.btn_login)
     #     bp.sleep(1)
@@ -945,7 +978,7 @@ if __name__ == '__main__':
     # target_count_list = [100]
     # item_tpid_list = ["100100"]
     # bp.set_item_count_list(target_count_list=target_count_list, item_tpid_list=item_tpid_list)
-    # rpcMethod.set_btn_enabled(bp.poco, element=ElementsData.FishCardUpgrade.FishCardUpgradePanel,
+    # rpcMethodRequest.set_btn_enabled(bp.poco, element=ElementsData.FishCardUpgrade.FishCardUpgradePanel,
     # enabled=True)
     # screen_h = bp.screen_h
     # screen_w = bp.screen_w

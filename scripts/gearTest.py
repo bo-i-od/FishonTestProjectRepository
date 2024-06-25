@@ -6,7 +6,6 @@ from common import resource, gameInit
 from panelObjs.gearPanel import GearPanel
 from panelObjs.gearLevelupPanel import GearLevelupPanel
 from panelObjs.gearEnhancePanel import GearEnhancePanel
-from panelObjs.baitAndRodAlbumPanel import BaitAndRodAlbumPanel
 from panelObjs.storePanel import StorePanel
 from panelObjs.gearSkillTipsPanel import GearSkillTipsPanel
 from panelObjs.gearEnhanceSuccesPanel import GearEnhanceSuccesPanel

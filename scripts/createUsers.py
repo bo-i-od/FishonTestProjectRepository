@@ -23,23 +23,18 @@ def logout(bp:BasePage):
     # while not HomePanel.is_panel_active(bp):
     #     pass
     # HomePanel.go_to_panel(bp, "PlayerInfoPanel")
-
+    bp.sleep(0.5)
     PlayerInfoPanel.click_btn_setting(bp)
     bp.sleep(0.5)
-    # PlayerSettingPanel.click_tab_settings(bp)
-
-
-    # if FisheryGiftPackPanel.is_panel_active(bp):
-    #     FisheryGiftPackPanel.click_btn_close(bp)
     PlayerInfoPanel.click_btn_logout(bp)
 
 def login(bp:BasePage, name:str):
     # name = name + str(index)
     while not LoginPanel.is_panel_active(bp):
-        pass
+        bp.sleep(0.5)
     LoginPanel.set_login_name(bp, name)
     LoginPanel.click_btn_login(bp)
-    bp.sleep(3)
+    bp.sleep(5)
     if not PlayerEditNamePanel.is_panel_active(bp):
         return
     while not PlayerEditNamePanel.is_panel_active(bp):
@@ -56,21 +51,18 @@ def go_leaderborad(bp:BasePage):
     TournamentsPanel.click_btn_leaderboard(bp)
     bp.sleep(1)
 
-
-
-
-def fish(bp:BasePage):
-    pass
-    # bp.cmd_list(["levelupto 20"])
-    # bp.sleep(0.1)
-    # fishingMsg.fish(bp, [{"spot_id": f"40030213", "times": 1, "energy_cost": 50}])
-    # bp.sleep(0.1)
-    # bp.cmd("mode 400302 390018")
-    # fishingMsg.fish(bp, [{"spot_id": f"40030213", "times": 1, "energy_cost": 50}])
-    # bp.sleep(0.1)
-    # bp.cmd("mode 400302 390019")
-    # fishingMsg.fish(bp, [{"spot_id": f"40030213", "times": 1, "energy_cost": 50}])
-    # bp.sleep(0.1)
+def fish(bp: BasePage):
+    bp.cmd_list(["levelupto 30"])
+    bp.sleep(0.1)
+    bp.cmd("mode 400309 390087")
+    fishingMsg.fish(bp, [{"spot_id": f"40030913", "times": 1, "energy_cost": 50}])
+    bp.sleep(0.1)
+    bp.cmd("mode 400309 390088")
+    fishingMsg.fish(bp, [{"spot_id": f"40030913", "times": 1, "energy_cost": 50}])
+    bp.sleep(0.1)
+    bp.cmd("mode 400309 390089")
+    fishingMsg.fish(bp, [{"spot_id": f"40030913", "times": 1, "energy_cost": 50}])
+    bp.sleep(0.1)
 
 def dragon_boat(bp: BasePage, index):
     bp.cmd_list(["levelupto 20", "add 1 100500 100000", "add 1 100100 3000"])
@@ -109,6 +101,16 @@ def hidden_treasure(bp:BasePage):
     print(lua_code)
     bp.lua_console(lua_code)
 
+def apply_guild(bp:BasePage):
+    bp.cmd(f"levelupto 16")
+    bp.sleep(1)
+    guildSimpleId = 10000363
+    lua_code = csMsgAll.get_CSGuildApplyMsg(source=0, guildSimpleId=guildSimpleId)
+    bp.lua_console(lua_code)
+    # bp.sleep(0.5)
+    # lua_code = csMsgAll.get_CSGameGuildRewardRedEnvelopeMsg(source=0, guildSimpleId=guildSimpleId, redEnvelopeId=1)
+    # bp.lua_console(lua_code)
+    # bp.sleep(0.5)
 
 def ndays(bp:BasePage, count):
     # bp.cmd(f"setPlayerLayer {count}000")
@@ -146,26 +148,16 @@ def add_gu(bp: BasePage, index):
 
 
 def main(bp):
-    cur = 710
-    limit = 712
+    cur = 152
+    limit = 170
     while cur < limit:
-        name = "c_" + str(cur)
+        name = "gld_" + str(cur)
         login(bp, name)
-        # bp.sleep(2)
-        # bp.clear_popup()
-        # go_leaderborad(bp)
-        bp.lua_console('PanelMgr:ClosePanel("EventSignSevenDayPanel")')
+        apply_guild(bp)
         bp.lua_console('PanelMgr:OpenPanel("PlayerInfoPanel")')
-        # bp.go_home()
-        # fish(bp)
-        # add_gu(bp, cur)
-        dragon_boat(bp, cur)
-        bp.sleep(2)
-        add_gu(bp, cur * 100)
-        # hidden_treasure(bp)
-        # ndays(bp, cur)
         logout(bp)
         cur += 1
+
 
 
 
@@ -241,7 +233,7 @@ def read_data():
         cur += 1
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21523")
+    bp = BasePage("127.0.0.1:21503")
 
     main(bp)
     bp.connect_close()

@@ -7,9 +7,7 @@ from panelObjs.treasureChestPanel import TreasureChestPanel
 from panelObjs.storePanel import StorePanel
 from panelObjs.treasureChestRewardsPanel import TreasureChestRewardsPanel
 from panelObjs.treasureChestGearsShardsPanel import TreasureChestGearsShardsPanel
-from panelObjs.homePanel import HomePanel
 from panelObjs.itemTipsPanel import ItemTipsPanel
-from panelObjs.baitAndRodAlbumPanel import BaitAndRodAlbumPanel
 from tools.commonTools import *
 
 # 随机生成0，1~10，11~20 数量的箱子

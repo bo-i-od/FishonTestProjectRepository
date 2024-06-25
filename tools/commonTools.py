@@ -129,15 +129,15 @@ def str_to_int_list(count_list:list):
         if len(count_list[cur]) > 2 and count_list[cur][-3:] == 'min':
             count_list[cur] = 0
         elif count_list[cur][-1:] == 'K':
-            count_list[cur] = int(count_list[cur][:-1]) * 1000
+            count_list[cur] = int(float(count_list[cur][:-1]) * 1000)
         elif count_list[cur][-1:] == 'M':
-            count_list[cur] = int(count_list[cur][:-1]) * 1000000
+            count_list[cur] = int(float(count_list[cur][:-1]) * 1000000)
         elif count_list[cur][-1:] == '万':
-            count_list[cur] = int(count_list[cur][:-1]) * 10000
+            count_list[cur] = int(float(count_list[cur][:-1]) * 10000)
         elif count_list[cur][-1:] == '亿':
-            count_list[cur] = int(count_list[cur][:-1]) * 100000000
+            count_list[cur] = int(float(count_list[cur][:-1]) * 100000000)
         else:
-            count_list[cur] = int(count_list[cur])
+            count_list[cur] = int(float(count_list[cur]))
         cur += 1
 
 

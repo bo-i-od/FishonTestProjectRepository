@@ -1,19 +1,23 @@
 
 
 def deal_with_msg(msg):
-    if "SCFishingHookMsg" in msg:
+    # if '<==== [Lua] Receive Net Msg "SC' in msg:
+    #     print(msg)
+
+    # print(msg)
+    if '<==== [Lua] Receive Net Msg "SCFishingHookMsg" ====>' in msg:
         deal_with_SCFishingHookMsg(msg)
         return
 
-    if "SCFishingCastMsg" in msg:
+    if '<==== [Lua] Receive Net Msg "SCFishingCastMsg" ====>' in msg:
         deal_with_SCFishingCastMsg(msg)
         return
 
-    if "SCHiddenTreasureFreeShovelProgressChangedMsg" in msg:
+    if '<==== [Lua] Receive Net Msg "SCHiddenTreasureFreeShovelProgressChangedMsg" ====>' in msg:
         deal_with_SCHiddenTreasureFreeShovelProgressChangedMsg(msg)
         return
 
-    if "SCMonopolyFreeDiceProgressChangedMsg" in msg:
+    if '<==== [Lua] Receive Net Msg "SCMonopolyFreeDiceProgressChangedMsg" ====>' in msg:
         deal_with_SCMonopolyFreeDiceProgressChangedMsg(msg)
         return
 
@@ -32,10 +36,12 @@ def deal_with_SCFishingHookMsg(msg):
     value3_1 = get_value(value3, key3_1, False)
     key3_2 = "id"
     value3_2 = get_value(value3, key3_2, False)
-    string=f"fish_id:{value1}, color:{value2}, flash_card_num:{value3_1}, flash_card_id:{value3_2}"
-    # print(string)
-    if value3_1:
-        print(msg)
+    key4 = "point"
+    value4 = get_value(msg, key4, False)
+    string=f"fish_id:{value1}, color:{value2}, flash_card_num:{value3_1}, flash_card_id:{value3_2}, point:{value4}"
+    # print(value1)
+    # if value3_1:
+    #     print(msg)
     f = open("../statistics/hook_log.txt", "a")
     f.write(string+"\n")
     f.close()
@@ -74,10 +80,9 @@ def deal_with_SCMonopolyFreeDiceProgressChangedMsg(msg):
     value2 = get_value(msg, key2, False)
     f = open("../statistics/log.txt", "a")
     res = f"{key1}:{value1}, {key2}:{value2}, "
-    print(res)
+    # print(res)
     f.write(res)
     f.close()
-
 
 
 def get_value(msg:str, key: str, is_str: bool):

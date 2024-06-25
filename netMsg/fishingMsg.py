@@ -1,5 +1,5 @@
 from common.basePage import BasePage
-from common import rpcMethod
+from common import rpcMethodRequest
 from netMsg.csMsg import fishing_cs
 
 
@@ -55,5 +55,5 @@ def fish(bp: BasePage, arg_list):
             execute_dict["energyCostId"] = tpId_list[index]
         execute_list.append(execute_dict)
         cur += 1
-    rpcMethod.fish(bp.poco, execute_list)
+    rpcMethodRequest.fish(bp.poco, execute_list)
 

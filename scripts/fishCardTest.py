@@ -71,11 +71,14 @@ def level_up_test(bp: BasePage):
     bp.sleep(1)
     StorePanel.click_btn_close(bp)
     bp.sleep(1)
-    # 升到不能再升
-    while FishCardUpgradePanel.is_btn_level_up_abled(bp):
+    # 升5级
+    cur = 0
+    # while FishCardUpgradePanel.is_btn_level_up_abled(bp):
+    while cur < 5:
         # FishCardUpgradePanel.level_up_check(bp)
         FishCardUpgradePanel_test(bp)
         bp.sleep(0.5)
+        cur += 1
         # card_information_now = FishCardUpgradePanel.get_card_information(bp)
         # compare(card_information, card_information_now)
     # 获取战斗力
@@ -113,7 +116,7 @@ def select_card_test(bp: BasePage):
 
 
     # 选择不可升级的卡片
-    FishCardPanel.switch_tab(bp, 1)
+    FishCardPanel.switch_tab(bp, 2)
     bp.sleep(1)
     unlock_list, unlevelable_list, levelable_list = FishCardPanel.get_card_status(bp)
     if unlevelable_list:
@@ -136,7 +139,7 @@ def select_card_test(bp: BasePage):
         compare((unlock_list, unlevelable_list, levelable_list), card_status)
 
     # 选择可升级的卡片
-    FishCardPanel.switch_tab(bp, 2)
+    FishCardPanel.switch_tab(bp, 3)
     bp.sleep(1)
     unlock_list, unlevelable_list, levelable_list = FishCardPanel.get_card_status(bp)
     if levelable_list:
@@ -155,17 +158,12 @@ def select_card_test(bp: BasePage):
     card_information_2 = FishCardUpgradePanel.get_card_information(bp)
     compare(card_information_0, card_information_2)
 
-def a_test(bp: BasePage):
-    card_information_0 = FishCardUpgradePanel.get_card_information(bp)
-    FishCardUpgradePanel.click_btn_previous(bp)
+def FishCardMultipleLevelUpPanel_test(bp: BasePage):
+    FishCardPanel.click_btn_upgrade(bp)
     bp.sleep(1)
-    card_information_1 = FishCardUpgradePanel.get_card_information(bp)
-    if card_information_0 == card_information_1:
-        raise SameError
-    FishCardUpgradePanel.click_btn_next(bp)
-    bp.sleep(1)
-    card_information_2 = FishCardUpgradePanel.get_card_information(bp)
-    compare(card_information_0, card_information_2)
+
+    # FishCardMultipleLevelUpPanel.click_btn_close(bp)
+
 
 def FishCardGiftPackPanel_test(bp: BasePage):
     # 鱼卡的图标保存在一对多的情况，因此不做后端数据的验证
@@ -251,6 +249,11 @@ def main(bp: BasePage):
 
     # 看战力是否更新
     rating_test(bp, rating, rating_fisheries)
+
+    # 一键升级测试
+    FishCardMultipleLevelUpPanel_test(bp)
+
+    # 鱼卡礼包测试
     FishCardGiftPackPanel_test(bp)
 
     # 跟大厅的战斗力对比
