@@ -93,6 +93,9 @@ class TournamentsPanel(BasePage):
     def get_tournaments_info_position_list(self):
         return self.get_position_list(element_data=ElementsData.Tournaments.tournaments_info_list)
 
+    def get_tournaments_info_icon_list(self):
+        return self.get_icon_list(element_data=ElementsData.Tournaments.tournaments_info_list)
+
 
 if __name__ == "__main__":
     bp = BasePage("192.168.111.77:20086")

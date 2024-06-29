@@ -1,49 +1,68 @@
-import random
-import time
-import traceback
-
-from common import gameInit
 from netMsg import csMsgAll, fishingMsg
-from panelObjs.battlePanel import BattlePanel
 from panelObjs.battlePreparePanel import BattlePreparePanel
-from panelObjs.playerInfoPanel import PlayerInfoPanel
-from panelObjs.playerSettingPanel import PlayerSettingPanel
+from panelObjs.loadingPanel import LoadingPanel
 from panelObjs.loginPanel import LoginPanel
 from common.basePage import BasePage
 from panelObjs.homePanel import HomePanel
-from panelObjs.playerEditNamePanel import PlayerEditNamePanel
 from panelObjs.tournamentsPanel import TournamentsPanel
 from scripts import battleTest
-from configs.elementsData import ElementsData
 import json
 
 
-
-def logout(bp:BasePage):
-    # while not HomePanel.is_panel_active(bp):
-    #     pass
-    # HomePanel.go_to_panel(bp, "PlayerInfoPanel")
-    bp.sleep(0.5)
-    PlayerInfoPanel.click_btn_setting(bp)
-    bp.sleep(0.5)
-    PlayerInfoPanel.click_btn_logout(bp)
-
-def login(bp:BasePage, name:str):
-    # name = name + str(index)
-    while not LoginPanel.is_panel_active(bp):
-        bp.sleep(0.5)
-    LoginPanel.set_login_name(bp, name)
-    LoginPanel.click_btn_login(bp)
-    bp.sleep(5)
-    if not PlayerEditNamePanel.is_panel_active(bp):
+def init(bp: BasePage):
+    if LoginPanel.is_panel_active(bp):
         return
-    while not PlayerEditNamePanel.is_panel_active(bp):
-        bp.sleep(0.5)
-    bp.cmd("guideskip")
-    PlayerEditNamePanel.set_player_name(bp, name)
+    logout(bp)
 
-    bp.sleep(0.5)
-    PlayerEditNamePanel.click_confirm(bp)
+
+# def sdk(accountName):
+#     response = requests.get(f'http://{ip}:{port_autosdk}/autoRegisterLogin?accountName={accountName}&password=123')
+#     data = json.loads(response.text)
+#     accountId = data["accountId"]
+#     sessionId = data["sessionId"]
+#     return accountId, sessionId
+
+# _G.NetworkMgr.registerSDKRetInfo.accountId = "{accountId}"
+# _G.NetworkMgr.registerSDKRetInfo.sessionId = "{token}"
+# _G.NetworkMgr.registerSDKRetInfo.accountName = "{accountName}"
+# local Login_Token_Key = "Login_Token"
+# _G.SettingMgr:Write(Login_Token_Key, "{token}")
+# _G.NetworkMgr:Connect("{ip}", {port}, function() _G.NetworkMgr:NetworkConnectCallback() end)
+
+def connect(bp: BasePage, accountName):
+    lua_code = f"""
+_G.NetworkMgr:SDKLogin("{accountName}")
+    """
+    bp.lua_console(lua_code)
+
+
+def disconnect(bp: BasePage):
+    lua_code = f"""
+_G.CURRENT_SDK_MANUAL_LOGIN = true
+PanelMgr:CloseAllOpend()
+Global_ClearCacheData()
+Global_SendLogout()
+_G.NetworkMgr:StopTimeOutTimer()
+_G.NetworkMgr:Disconnect()
+UIFacade.Reset()
+--Util.GoToLogin()
+EventMgr:SendEvent(GameMsg.CHANGE_GAME_STATE, GAME_STATE_ENUM.Login, true)
+        """
+    bp.lua_console(lua_code)
+
+
+def login(bp: BasePage, name):
+    LoginPanel.wait_for_panel_appear(bp)
+    connect(bp, name)
+    LoadingPanel.wait_until_panel_disappear(bp)
+    bp.cmd("guideskip")
+
+
+def logout(bp: BasePage):
+    bp.sleep(1)
+    disconnect(bp)
+
+
 
 def go_leaderborad(bp:BasePage):
     bp.go_to_panel("TournamentsPanel")
@@ -67,10 +86,10 @@ def fish(bp: BasePage):
 def dragon_boat(bp: BasePage, index):
     bp.cmd_list(["levelupto 20", "add 1 100500 100000", "add 1 100100 3000"])
     bp.sleep(0.2)
-    lua_code = csMsgAll.get_CSGameGuildCreateMsg(flag=5, joinType=1, joinLv=0, color=3, name=f"c_{index}", introduce="一起欢乐钓鱼吧！", pattern=1)
+    lua_code = csMsgAll.get_CSGameGuildCreateMsg(flag=5, joinType=1, joinLv=0, color=3, name=f"d_{index}", introduce="一起欢乐钓鱼吧！", pattern=1)
     bp.lua_console(lua_code)
     # fishingMsg.fish(bp, [
-    #     {"spot_id": f"40030203", "times": index},
+    #     {"spot_id": f"40030103", "times": index}
     # ])
     # bp.sleep(index * 0.2)
 
@@ -101,16 +120,20 @@ def hidden_treasure(bp:BasePage):
     print(lua_code)
     bp.lua_console(lua_code)
 
+
 def apply_guild(bp:BasePage):
-    bp.cmd(f"levelupto 16")
+    bp.cmd(f"levelupto 21")
     bp.sleep(1)
-    guildSimpleId = 10000363
+    guildSimpleId = 10000009
     lua_code = csMsgAll.get_CSGuildApplyMsg(source=0, guildSimpleId=guildSimpleId)
     bp.lua_console(lua_code)
+
+    # # 领公会红包
     # bp.sleep(0.5)
     # lua_code = csMsgAll.get_CSGameGuildRewardRedEnvelopeMsg(source=0, guildSimpleId=guildSimpleId, redEnvelopeId=1)
     # bp.lua_console(lua_code)
     # bp.sleep(0.5)
+
 
 def ndays(bp:BasePage, count):
     # bp.cmd(f"setPlayerLayer {count}000")
@@ -146,48 +169,52 @@ def clone(bp:BasePage, name):
 def add_gu(bp: BasePage, index):
     bp.cmd(f"globalgm dragonAddPoint {index}")
 
+def championshipsclear(bp: BasePage):
+
+    bp.go_to_panel("TournamentsPanel")
+    bp.sleep(0.5)
+    bp.cmd("championshipsclear")
+    icon_list = TournamentsPanel.get_tournaments_info_icon_list(bp)
+    with open("../statistics/log.txt", "a") as file:
+        for icon in icon_list:
+            file.write(icon)
+            print(icon)
+        file.write("\n")
+    bp.sleep(2)
+
 
 def main(bp):
-    cur = 152
-    limit = 170
+    # 登录号前缀
+    prefix = "a"
+    init(bp)
+    cur = 0
+    limit = 100
     while cur < limit:
-        name = "gld_" + str(cur)
+        name = prefix + str(cur)
         login(bp, name)
-        apply_guild(bp)
+
+        # 你要执行的初始化账号操作
+        # add_gu(bp, cur)
+        # dragon_boat(bp, cur)
+        # apply_guild(bp)
+        fish(bp)
+
+        logout(bp)
+        cur += 1
+
+def main2(bp):
+    cur = 3
+    limit = 15
+    while cur < limit:
+        name = "1000002002"
+        login(bp, name)
+        championshipsclear(bp)
+        # apply_guild(bp)
         bp.lua_console('PanelMgr:OpenPanel("PlayerInfoPanel")')
         logout(bp)
         cur += 1
 
-
-
-
-
-def main2(column_data):
-    cur = 62
-    retry_times = 0
-    while cur < len(column_data):
-        if retry_times > 2:
-            retry_times = 0
-            cur += 1
-            continue
-
-        # 重启
-        bp = gameInit.restart_to_login("com.xuejing.smallfish.official")
-        try:
-            get_player_data(bp, cur, column_data)
-        except:
-            retry_times += 1
-            continue
-        retry_times = 0
-        cur += 1
-
-
-
-
-
-
 def get_player_data(bp:BasePage, index, column_data):
-
     name = column_data[index]
     login(bp, str(name), index)
     # fish(bp)
@@ -232,11 +259,8 @@ def read_data():
         print(res[cur])
         cur += 1
 
+
 if __name__ == '__main__':
     bp = BasePage("127.0.0.1:21503")
-
     main(bp)
     bp.connect_close()
-
-
-    # pass

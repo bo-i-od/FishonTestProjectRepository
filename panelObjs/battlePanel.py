@@ -67,16 +67,16 @@ class BattlePanel(BasePage):
 
     def slide(self, dir):
         if dir == "left":
-            self.swipe(point_start=[0.4, 0.6], point_end=[0.2, 0.6], t=0.05)
+            self.swipe(point_start=[0.4, 0.6], point_end=[0.2, 0.6], t=0.1)
             return
         if dir == "right":
-            self.swipe(point_start=[0.4, 0.6], point_end=[0.6, 0.6], t=0.05)
+            self.swipe(point_start=[0.4, 0.6], point_end=[0.6, 0.6], t=0.1)
             return
         if dir == "up":
-            self.swipe(point_start=[0.4, 0.6], point_end=[0.4, 0.4], t=0.05)
+            self.swipe(point_start=[0.4, 0.6], point_end=[0.4, 0.4], t=0.1)
             return
         if dir == "down":
-            self.swipe(point_start=[0.4, 0.6], point_end=[0.4, 0.8], t=0.05)
+            self.swipe(point_start=[0.4, 0.6], point_end=[0.4, 0.8], t=0.1)
             return
 
     def release_btn_reel(self):

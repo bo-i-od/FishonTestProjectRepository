@@ -55,7 +55,7 @@ def account_init(bp: BasePage, player_name, cmd_list):
 # 登录到大厅
 def login_to_hall(bp: BasePage, cmd_list=None):
     LoginPanel.wait_for_btn_login(bp)
-    username = str(time.time()).split('.')[0]
+    username = "t" + str(time.time()).split('.')[0]
     login(bp, username)
 
     account_init(bp, username, cmd_list)
@@ -287,8 +287,8 @@ def start_time_test():
 
 
 if __name__ == '__main__':
-    response = requests.get('http://192.168.30.113:8090/autoRegisterLogin?accountName=121212&password=123')
-    print(response)
+    pass
+
     # bp = BasePage("127.0.0.1:21503")
     # start_time_test()
     # LoginPanel.wait_for_btn_login(bp)

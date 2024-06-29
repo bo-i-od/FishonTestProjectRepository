@@ -8,6 +8,9 @@ class LoginPanel(BasePage):
             return True
         return False
 
+    def wait_for_panel_appear(self):
+        self.wait_for_appear(element_data=ElementsData.Login.LoginPanel)
+
     def is_btn_login_active(self):
         if self.exist(element_data=ElementsData.Login.btn_login) or self.exist(element_data=ElementsData.Login.btn_login_cn) :
             return True

@@ -10,13 +10,13 @@ from common import gameInit
 
 def main():
     connect_device(f"android://127.0.0.1:5037/{serial_number}")
-    test_list = [achievementCategoryTest, achievementWantedTest, rankTest, playerInfoTest, battlePassTest, dlcDownloadTest, energyTest, fishCardTest, gearTest, guideTest, mailTest, minitaskTest, storeTest,  newbieTaskTest, treasureChestTest, taskTest, achievementTest, duelTest]
+    test_list = [achievementCategoryTest, achievementWantedTest, rankTest, playerInfoTest, battlePassTest, dlcDownloadTest, energyTest, fishCardTest, gearTest, guideTest, mailTest, minitaskTest, storeTest,  newbieTaskTest, treasureChestTest, duelTest, achievementTest,  taskTest]
     # test_list = [ battlePassTest, fishCardTest, gearTest, guideTest,
     #              mailTest, minitaskTest, storeTest, newbieTaskTest, treasureChestTest, taskTest,
     #              achievementCategoryTest, achievementWantedTest, achievementTest, duelTest, rankTest]
 
     print(f"当前测试模块共计{len(test_list)}个")
-    cur = 17
+    cur = 6
     res_list = []
     retry_dict = {}
 
@@ -53,7 +53,7 @@ def main():
 
 
 if __name__ == '__main__':
-    serial_number = "192.168.111.77:20089"
+    serial_number = "192.168.111.37:20075"
     main()
 
 

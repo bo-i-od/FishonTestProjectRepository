@@ -9,6 +9,9 @@ class PlayerEditNamePanel(BasePage):
             return True
         return False
 
+    def wait_for_panel_appear(self):
+        self.wait_for_appear(element_data=ElementsData.PlayerEditName.PlayerEditNamePanel, is_click=False)
+
     def get_player_name(self):
         return self.get_text(element_data=ElementsData.PlayerEditName.Input_PlayerName)
 

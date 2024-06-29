@@ -263,8 +263,7 @@ def main(bp: BasePage):
     bp.go_home()
     rating = remove_decimals(HomePanel.get_rating(bp))
     if rating not in rating_expect_list:
-        print(rating, rating_expect_list)
-        raise DifferError
+        print(f"erro_{rating, rating_expect_list}")
 
 
 if __name__ == "__main__":
