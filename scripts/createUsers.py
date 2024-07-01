@@ -5,6 +5,7 @@ from panelObjs.loginPanel import LoginPanel
 from common.basePage import BasePage
 from panelObjs.homePanel import HomePanel
 from panelObjs.tournamentsPanel import TournamentsPanel
+from panelObjs.friendPanel import FriendPanel
 from scripts import battleTest
 import json
 
@@ -181,6 +182,12 @@ def championshipsclear(bp: BasePage):
             print(icon)
         file.write("\n")
     bp.sleep(2)
+
+def add_friend(bp: BasePage,target_id):
+    bp.cmd(f"levelupto 10")
+    HomePanel.go_to_panel(bp,"FriendPanel")
+    # bp.sleep(1)
+    FriendPanel.add_friend(bp,target_id)
 
 
 def main(bp):
