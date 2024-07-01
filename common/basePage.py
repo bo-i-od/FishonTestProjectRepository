@@ -29,7 +29,7 @@ class BasePage:
         # 手机使用connect_device("android://127.0.0.1:5037/设备号")
 
         # 是否在安卓手机, Unity需要改为False
-        self.is_android = False
+        self.is_android = True
 
         # 是否测试会拉起支付的按钮
         self.is_pay = True
@@ -70,7 +70,7 @@ class BasePage:
         # 获取父目录
         self.root_dir = os.path.abspath(os.path.dirname(file_path))
         # 配置表的路径
-        self.excelTools = ExceTools("C:/trunkCHS/datapool/策划模板导出工具/")
+        self.excelTools = ExceTools("C:/Users/TU/Desktop/trunkCHS/datapool/策划模板导出工具/")
 
         # 是否让Unity发log
         self.set_send_log_flag(True)

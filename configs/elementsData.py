@@ -551,6 +551,17 @@ class ElementsData:
         FlashTipsPanel = {"locator": "UICanvas>Important>FlashTipsPanel"}
 
 
+    class Friend:
+        FriendPanel = {"locator": "UICanvas>Default>FriendPanel"}
+        btn_close = {"locator": "UICanvas>Default>HomePanel>panel>panel_giftpack>list>Viewport>Content>btn_store"}
+        btn_friend = {"locator": "UICanvas>Default>FriendPanel>panel>panel_tab>content>TabList>Viewport>Content>tab_1>title"}
+        btn_add_friend = {"locator": "UICanvas>Default>FriendPanel>panel>panel_tab>content>TabList>Viewport>Content>tab_2>title"}
+        input_search = {"locator": "UICanvas>Default>FriendPanel>panel>panel_info>panel_top>search>Input_search"}
+        btn_search = {"locator": "UICanvas>Default>FriendPanel>panel>panel_info>panel_top>search>btn_search>icon"}
+        btn_add = {"locator": "UICanvas>Default>FriendPanel>panel>panel_info>panel_List>list>Viewport>Content>list(Clone)>add_info>btns>btn_add>text"}
+
+
+
     class Gear:
         GearPanel = {"locator": "UICanvas>Default>GearPanel"}
         btn_close = {"locator": "UICanvas>Default>GearPanel>btn_close>img"}
@@ -661,6 +672,7 @@ class ElementsData:
         btn_download = {"locator": "UICanvas>Default>HomePanel>panel>panel_player_info>btns>btn_download>icon"}
         btn_code = {"locator": "UICanvas>Default>HomePanel>panel>panel_player_info>btns>btn_code"}
         btn_exp_buff = {"locator": "UICanvas>Default>HomePanel>panel>panel_player_info>btn_exp_buff>icon"}
+        btn_friend = {"locator": "UICanvas>Default>HomePanel>panel>panel_player_info>btns>btn_friend>icon"}
         Panel_tip = {"locator": "UICanvas>Default>HomePanel>panel>panel_player_info>btn_exp_buff>Panel_tip"}
         player_info = {"locator": "UICanvas>Default>HomePanel>panel>panel_player_info>player_info>bg"}
         player_name = {"locator": "UICanvas>Default>HomePanel>panel>panel_player_info>player_info>player_name"}  # text
