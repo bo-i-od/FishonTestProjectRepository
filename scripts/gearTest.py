@@ -371,6 +371,8 @@ def full_level(bp: BasePage, tpId=None, table_data=None):
         specify_level(bp, maxLevel_list[index], tpId=tpId, table_data=table_data)
         return
 
+    bp.set_item_count(target_count=100000000000, item_tpid="100000")
+    bp.set_item_count(target_count=100000000, item_tpid="200300")
     cur = 0
     while cur < len(tpId_list):
         full_level(bp, tpId=tpId_list[cur], table_data=table_data)
@@ -436,4 +438,7 @@ def one_star(bp: BasePage, tpId=None, table_data=None):
 if __name__ == "__main__":
     bp = BasePage("192.168.111.77:20052")
     full_star(bp)
+    full_level(bp)
+    full_level(bp, tpId=500001)
+    specify_level(bp, target_level=20, tpId=500001)
     bp.connect_close()
