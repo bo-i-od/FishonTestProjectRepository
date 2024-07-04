@@ -29,7 +29,7 @@ class BasePage:
         # 手机使用connect_device("android://127.0.0.1:5037/设备号")
 
         # 是否在安卓手机, Unity需要改为False
-        self.is_android = True
+        self.is_android = False
 
         # 是否测试会拉起支付的按钮
         self.is_pay = True
@@ -910,7 +910,8 @@ class BasePage:
 
 if __name__ == '__main__':
     bp = BasePage()
-    bp.clear_popup_once()
+    bp.cmd("uptable")
+    # bp.clear_popup_once()
 
     bp.connect_close()
     # while True:
