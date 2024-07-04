@@ -1,63 +1,77 @@
-from common import gameInit
+import random
 from common.basePage import BasePage
+from common.viewport import Viewport
 from panelObjs.careerPanel import CareerPanel
 from panelObjs.messageBoxPanel import MessageBoxPanel
-from panelObjs.storePanel import StorePanel
 
-
-def enhance_test(bp: BasePage):
-    res = True
-    cost_dict = CareerPanel.get_cost_dict(bp)
-    cost_icon_list = list(cost_dict)
-    item_count_list = bp.get_item_count_list(item_icon_name_list=cost_icon_list)
-    stock_expect_list = item_count_list.copy()
-    # 计算期望数量
-    cur = 0
-    while cur < len(cost_icon_list):
-        if cost_dict[cost_icon_list[cur]] > item_count_list[cur]:
-            res = False
-            break
-        cur += 1
-        # 计算期望库存
-        stock_expect_list[cur] -= cost_dict[cost_icon_list[cur]]
-        cur += 1
-
-    #
-    rating = CareerPanel.get_rating(bp)
-    rating_total = CareerPanel.get_rating_total(bp)
-    lv = CareerPanel.get_item_lv(bp)
-
-    # 点击突破
-    CareerPanel.click_btn_enhance(bp)
+# 检查标题tips
+def tips_test(bp:BasePage):
+    bp.go_to_panel("CareerPanel")
+    bp.debug_log("测试页面介绍开始")
     bp.sleep(0.5)
-    if not res:
-        stock_expect_list = item_count_list.copy()
-        MessageBoxPanel.click_btn_confirm(bp)
-        bp.sleep(0.5)
-
-
-
-def main(bp: BasePage):
-    # 登录到大厅
-    cmd_list = ["guideskip", "levelupto 10"]
-    gameInit.login_to_hall(bp, cmd_list=cmd_list)
-
-    # 点击？
     CareerPanel.click_btn_i(bp)
     bp.sleep(0.5)
     if not CareerPanel.is_tips_active(bp):
-        bp.debug_log("erro_", "if not CareerPanel.is_tips_active(bp)")
-    bp.click_position([0.5, 0.1])
+        bp.debug_log("erro_if not CareerPanel.is_tips_active(bp)")
+        return
+    bp.sleep(0.5)
+    CareerPanel.click_btn_i(bp)
     bp.sleep(0.5)
 
-    # 点击金币+
-    CareerPanel.click_btn_add_100000(bp)
+# 检查天赋tips
+def rating_tips_test(bp:BasePage):
+    bp.go_to_panel("CareerPanel")
+    bp.debug_log("测试天赋介绍开始")
     bp.sleep(0.5)
-    StorePanel.click_btn_close(bp)
+    CareerPanel.click_rating_panel(bp)
+    bp.sleep(0.5)
+    if not CareerPanel.is_rating_tips_active(bp):
+        bp.debug_log("erro_if not CareerPanel.is_rating_tips_active(bp)")
+        return
+    bp.sleep(0.5)
+    if not CareerPanel.compare_rating_total(bp):
+        bp.debug_log("erro_if not CareerPanel.compare_rating_total(bp)")
+        return
+    bp.sleep(0.5)
+    CareerPanel.click_btn_i(bp)
     bp.sleep(0.5)
 
-    # 点击突破
+# 检查节点突破资源不足情况
+def failure_enhance_test(bp:BasePage):
+    bp.go_to_panel("CareerPanel")
+    bp.debug_log("测试突破资源不足开始")
+    bp.sleep(0.5)
+    cash_value = CareerPanel.get_cash_value(bp)
+    points_value = CareerPanel.get_points_value(bp)
+    cost_qulity_list = CareerPanel.get_cost_qulity_list(bp)
+    cost_cash_value = cost_qulity_list[1]
+    cost_points_value = cost_qulity_list[0]
+    if cash_value>=cost_cash_value & points_value>=cost_cash_value:
+        bp.debug_log("erro_if cash_value>=cost_cash_value & points_value>=cost_cash_value")
+        return
+    bp.sleep(0.5)
+    CareerPanel.click_btn_enhance(bp)
+    bp.sleep(0.5)
+    if not MessageBoxPanel.is_panel_active(bp):
+        bp.debug_log("erro:messagebox is not exist")
+        return
+    MessageBoxPanel.click_btn_confirm(bp)
+    bp.sleep(0.5)
+    if MessageBoxPanel.is_panel_active(bp):
+        bp.debug_log("erro:messagebox can not close")
+        return
+    bp.sleep(0.5)
 
 
-if __name__ == '__main__':
-    bp = BasePage("192.168.111.77:20066")
+# 随机突破至某天赋节点
+def enhance_item(bp:BasePage):
+    page_item_middle_id_list = CareerPanel.get_page_item_id_list(bp)
+    index = random.randint(1,len(page_item_middle_id_list))
+    bp.cmd("add 1 100000 10000")
+    bp.cmd("add 1 100400 10000")
+    CareerPanel.enhance_until_item_exist(bp,index)
+
+
+# 检查未解锁节点
+# 检查解锁节点
+# 检查节点达到满级
