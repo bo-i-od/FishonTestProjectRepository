@@ -72,7 +72,7 @@ def unlock_test(bp: BasePage):
 
 def wanted_test(bp: BasePage):
     # 读表格数据
-    table_data = AchievementWantedPanel.get_wanted_table_data(bp)
+    table_data = AchievementWantedPanel.get_achievement_wanted_table_data(bp)
 
     # 随机选一个有悬赏鱼的钓场完成, 并且不是黄金的
     table_open_index_list = AchievementWantedPanel.get_table_open_index_list(bp, table_data=table_data)

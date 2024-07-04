@@ -43,7 +43,7 @@ class AchievementCategoryPanel(BasePage):
         return open_index_list
 
     # 获得表数据
-    def get_category_table_data(self):
+    def get_achievement_category_table_data(self):
         table_data = self.excelTools.get_table_data("ACHIEVEMENT_CATEGORY.xlsm")
         return table_data
 

@@ -71,7 +71,7 @@ def unlock_test(bp: BasePage):
 
 def category_test(bp: BasePage):
     # 读表格数据
-    table_data = AchievementCategoryPanel.get_category_table_data(bp)
+    table_data = AchievementCategoryPanel.get_achievement_category_table_data(bp)
 
     # 随机选一个鱼种完成
     table_open_index_list = AchievementCategoryPanel.get_table_open_index_list(bp, table_data=table_data)

@@ -170,6 +170,10 @@ class GearPanel(BasePage):
         self.sleep(1)
         BattlePreparePanel.click_btn_apply(self)
 
+    def get_fishing_rod_table_data(self):
+        table_data = self.excelTools.get_table_data("FISHING_ROD.xlsm")
+        return table_data
+
 
 
 

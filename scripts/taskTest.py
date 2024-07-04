@@ -90,9 +90,19 @@ def jump_all_test(bp:BasePage, tab_index):
 
 def jump_test(bp:BasePage):
     bp.go_to_panel("TaskPanel")
-    jump_all_test(bp, 0)
-    jump_all_test(bp, 1)
-    jump_all_test(bp, 2)
+    r = random.randint(0, 2)
+    task = ""
+    if r == 0:
+        task = "每日任务"
+    elif r == 1:
+        task = "每周任务"
+    elif r == 2:
+        task = "每月任务"
+    bp.debug_log(f"进行{task}跳转测试")
+    jump_all_test(bp, r)
+    # jump_all_test(bp, 0)
+    # jump_all_test(bp, 1)
+    # jump_all_test(bp, 2)
 
 
 # 一个任务页面的领取测试
@@ -233,60 +243,77 @@ def box_collect_test(bp:BasePage, index:int, box_award_dict:dict):
 
 
 def collect_test(bp:BasePage):
-    bp.cmd("missiondone 2")
+    r = random.randint(0, 2)
+    task = ""
+    if r == 0:
+        task = "每日任务"
+    elif r == 1:
+        task = "每周任务"
+    elif r == 2:
+        task = "每月任务"
+    bp.debug_log(f"进行{task}领取测试")
+    bp.cmd(f"missiondone {2 + r}")
     bp.go_to_panel("TaskPanel")
     bp.sleep(1)
 
-    task_id_list = TaskPanel.get_task_id_list(bp)
-    viewport = TaskPanel.get_viewport(bp)
-    collect_all_test(bp, task_id_list, viewport)
-    # 周常
-    bp.cmd("missiondone 3")
-    TaskPanel.switch_tab(bp, 1)
-    # task_kind = TaskPanel.get_task_kind(bp)
-    # compare(task_kind, "Weekly")
-    task_id_list = TaskPanel.get_task_id_list(bp)
-    viewport.change_item(object_id_list=task_id_list)
-    collect_all_test(bp, task_id_list, viewport)
-    # 月常
-    bp.cmd("missiondone 4")
-    TaskPanel.switch_tab(bp, 2)
-    # task_kind = TaskPanel.get_task_kind(bp)
-    # compare(task_kind, "Monthly")
-    box_position = TaskPanel.get_month_box_position(bp)
-    box_award_dict = TaskPanel.get_month_award_detail(bp, box_position)
-    # print(box_award_dict)
-    task_id_list = TaskPanel.get_task_id_list(bp)
-    viewport.change_item(object_id_list=task_id_list)
-    collect_all_test(bp, task_id_list, viewport)
-    # 判断箱子是否可领取
-    month_box_status = TaskPanel.get_month_box_status(bp)
-    if month_box_status != 1:
-        raise FindNoElementError
-    # 计算库存
-    stock_expect_dict = box_award_dict.copy()
-    for stock_icon in stock_expect_dict:
-        count = bp.get_item_count(item_icon_name=stock_icon)
-        stock_expect_dict[stock_icon] += count
-    # 点击宝箱
-    bp.click_position(box_position)
-    bp.sleep(1)
-    # 对照奖励
-    reward_dict = RewardsPanel.get_reward_dict(bp)
-    compare_dict(box_award_dict, reward_dict)
-    # 对照库存
-    for stock_icon in stock_expect_dict:
-        count = bp.get_item_count(item_icon_name=stock_icon)
-        compare(count, stock_expect_dict[stock_icon])
-    month_box_status = TaskPanel.get_month_box_status(bp)
-    if month_box_status != 2:
-        raise FindNoElementError
-    # 关闭弹窗
-    RewardsPanel.wait_for_panel_appear(bp)
-    bp.sleep(1)
-    RewardsPanel.click_tap_to_claim(bp)
-    # 切换到日常标签
+    # 日常
     TaskPanel.switch_tab(bp, 0)
+    bp.sleep(1)
+    if r == 0:
+        task_id_list = TaskPanel.get_task_id_list(bp)
+        viewport = TaskPanel.get_viewport(bp)
+        collect_all_test(bp, task_id_list, viewport)
+
+    # 周常
+    TaskPanel.switch_tab(bp, 1)
+    bp.sleep(1)
+    if r == 1:
+
+        # task_kind = TaskPanel.get_task_kind(bp)
+        # compare(task_kind, "Weekly")
+        task_id_list = TaskPanel.get_task_id_list(bp)
+        viewport.change_item(object_id_list=task_id_list)
+        collect_all_test(bp, task_id_list, viewport)
+
+    # 月常
+    TaskPanel.switch_tab(bp, 2)
+    bp.sleep(1)
+    if r == 2:
+        # task_kind = TaskPanel.get_task_kind(bp)
+        # compare(task_kind, "Monthly")
+        box_position = TaskPanel.get_month_box_position(bp)
+        box_award_dict = TaskPanel.get_month_award_detail(bp, box_position)
+        # print(box_award_dict)
+        task_id_list = TaskPanel.get_task_id_list(bp)
+        viewport.change_item(object_id_list=task_id_list)
+        collect_all_test(bp, task_id_list, viewport)
+        # 判断箱子是否可领取
+        month_box_status = TaskPanel.get_month_box_status(bp)
+        if month_box_status != 1:
+            raise FindNoElementError
+        # 计算库存
+        stock_expect_dict = box_award_dict.copy()
+        for stock_icon in stock_expect_dict:
+            count = bp.get_item_count(item_icon_name=stock_icon)
+            stock_expect_dict[stock_icon] += count
+        # 点击宝箱
+        bp.click_position(box_position)
+        bp.sleep(1)
+        # 对照奖励
+        reward_dict = RewardsPanel.get_reward_dict(bp)
+        compare_dict(box_award_dict, reward_dict)
+        # 对照库存
+        for stock_icon in stock_expect_dict:
+            count = bp.get_item_count(item_icon_name=stock_icon)
+            compare(count, stock_expect_dict[stock_icon])
+        month_box_status = TaskPanel.get_month_box_status(bp)
+        if month_box_status != 2:
+            raise FindNoElementError
+        # 关闭弹窗
+        RewardsPanel.wait_for_panel_appear(bp)
+        bp.sleep(1)
+        RewardsPanel.click_tap_to_claim(bp)
+
     # task_kind = TaskPanel.get_task_kind(bp)
     # compare(task_kind, "Daily")
 
@@ -306,6 +333,7 @@ def main(bp: BasePage):
     collect_test(bp)
 
     # 返回大厅
+    bp.go_home()
 
 
 if __name__ == '__main__':

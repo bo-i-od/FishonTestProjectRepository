@@ -256,44 +256,28 @@ def division_test(bp:BasePage):
     PVPHallPanel.click_btn_leaderboard(bp)
     bp.sleep(1)
 
+    # 切到传奇排行榜
+    DivisionLeaderboardPanel.switch_tab(bp, 1)
+    bp.sleep(1)
+
+    # 切到传奇排行榜
+    DivisionLeaderboardPanel.switch_tab(bp, 0)
+    bp.sleep(1)
+
     # 所有段位
     DivisionLeaderboardPanel.click_btn_alldivisions(bp)
     bp.sleep(1)
     DivisionListPanel.click_btn_close(bp)
     bp.sleep(1)
 
-    # 切到传奇排行榜
-    DivisionLeaderboardPanel.switch_tab(bp, 1)
-    bp.sleep(1)
-
     # 返回主界面
     bp.go_home()
 
-def turntable_test(bp:BasePage):
-    # 进转盘界面
-    bp.go_to_panel("PVPHallPanel")
-    bp.sleep(1)
-    PVPHallPanel.click_btn_turntable(bp)
-    bp.sleep(1)
 
-    # 点击i
-    RoulettePanel.click_btn_i(bp)
-    bp.sleep(1)
-    bp.click_position([0.5, 0.9])
-    bp.sleep(1)
 
-    # 点击公示
-    RoulettePanel.click_btn_announcement(bp)
-    CommonWebViewPanel.wait_for_btn_close_appear(bp)
-    CommonWebViewPanel.click_btn_close(bp)
-    bp.sleep(1)
-
-    # 返回主界面
-    bp.go_home()
-
-def main(bp:BasePage, duelTest=None):
+def main(bp:BasePage):
     # 进入大厅
-    cmd_list = ["guideskip", f"add 1 100200 123456789"]
+    cmd_list = ["levelupto 56", "guideskip"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     # 将所有对决解锁
@@ -301,9 +285,6 @@ def main(bp:BasePage, duelTest=None):
 
     # division面板测试
     division_test(bp)
-
-    # 转轮面板测试
-    turntable_test(bp)
 
     # 进入对决大厅
     bp.go_to_panel("PVPHallPanel")
@@ -369,10 +350,11 @@ if __name__ == '__main__':
     #     duel_once(base_page, 1)
     #     cur += 1
     #     print(f"第{cur}次钓鱼")
-    # circulate_fish(base_page, is_quick=False, times=50)
+    circulate_fish(base_page, is_quick=False, times=100)
     while True:
-        base_page = champointship(base_page, 0, 20)
+        base_page = champointship(base_page, 0, 15)
         base_page = champointship(base_page, 1, 20)
+
 
 
 

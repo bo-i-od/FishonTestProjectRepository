@@ -11,12 +11,6 @@ class TournamentsPanel(BasePage):
         self.click_element(element_data=ElementsData.Tournaments.btn_close)
 
 
-    def go_to_first_location(self):
-        position_list = self.get_position_list(element_data=ElementsData.Tournaments.btn_enter_list)
-        self.click_position(position_list[0])
-        # entrance_list = self.get_element(ElementsData.Tournaments.entrance_list)
-        # entrance_list[random.randint(0, 2)].click()
-
     def get_fishery_tpid_list(self):
         table_data = self.excelTools.get_table_data("FISHERIES.xlsm")
         bg_list = self.get_icon_list(element_data=ElementsData.Tournaments.bg_list)

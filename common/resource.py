@@ -59,17 +59,13 @@ def make_item_dict(item_icon_list: list, item_quantity_list: list, item_dict: di
     if item_dict is None:
         item_dict = {}
     while cur < item_quantity_list_len:
+        try:
+            item_quantity = int(item_quantity_list[cur])
+        except:
+            item_quantity = 1
         if item_icon_list[cur] in item_dict:
-            try:
-                item_quantity = int(item_quantity_list[cur])
-            except:
-                item_quantity = 1
             item_dict[item_icon_list[cur]] += item_quantity
         else:
-            try:
-                item_quantity = int(item_quantity_list[cur])
-            except:
-                item_quantity = 1
             item_dict[item_icon_list[cur]] = item_quantity
         cur += 1
     return item_dict

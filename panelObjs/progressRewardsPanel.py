@@ -23,6 +23,9 @@ class ProgressRewardsPanel(BasePage):
     def click_btn_go(self):
         self.click_element(element_data=ElementsData.ProgressRewards.btn_go)
 
+    def click_btn_i(self):
+        self.click_element(element_data=ElementsData.ProgressRewards.btn_i)
+
     # 点击领取按钮
     def click_btn_claim(self):
         self.click_element(element_data=ElementsData.ProgressRewards.btn_claim)

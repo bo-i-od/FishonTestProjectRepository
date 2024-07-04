@@ -51,11 +51,9 @@ class AchievementWantedPanel(BasePage):
         return open_index_list
 
     # 获得表数据
-    def get_wanted_table_data(self):
+    def get_achievement_wanted_table_data(self):
         table_data = self.excelTools.get_table_data("ACHIEVEMENT_WANTED.xlsm")
         return table_data
-
-
 
     # 去渔场钓悬赏鱼
     def do_wanted(self, table_data, index):
@@ -86,6 +84,6 @@ class AchievementWantedPanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage("192.168.111.78:20009")
-    a = AchievementWantedPanel.get_wanted_table_data(bp)
+    a = AchievementWantedPanel.get_achievement_wanted_table_data(bp)
     print(a)
 

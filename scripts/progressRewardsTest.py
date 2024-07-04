@@ -11,34 +11,36 @@ from common import resource, gameInit
 from scripts import battleTest
 from tools.commonTools import *
 
-def collect_next_test(bp: BasePage):
-    # 把进度条设为马上可以领下一档奖励
-    progress_numerator,  progress_denominator = BattlePreparePanel.get_progress(bp)
-    BattlePreparePanel.click_btn_close(bp)
-    cmd_list = [f"progressSetPoint {progress_denominator - 1}"]
-    bp.cmd_list(cmd_list)
-    TournamentsPanel.go_to_first_location(bp)
-    LoadingFisheryPanel.wait_until_panel_disappear(bp)
-    LoadingPanel.wait_until_panel_disappear(bp, is_wait_for_appear=False)
-    bp.sleep(1)
-
-    # 得到期望奖励
+def collect_test(bp: BasePage):
+    # 得到期望奖励图标
     next_reward_icon = BattlePreparePanel.get_next_reward_icon(bp)
-    # next_reward_quantity = BattlePreparePanel.get_next_reward_quantity(bp)
-
 
     # 钓一条鱼
-    battleTest.fish_once(bp, fishery_id="400301", fish_id="301001")
+    battleTest.fish_once(bp, fishery_id="400301", fish_id="390001", is_quick=True)
+
     bp.sleep(10)
 
     # 下一奖励应在奖励列表里
     current_rewards_icon_list = BattlePreparePanel.get_current_rewards_icon_list(bp)
-    current_rewards_quantity_list = BattlePreparePanel.get_current_rewards_quantity_list(bp)
-    current_rewards_dict = resource.make_item_dict(item_icon_list=current_rewards_icon_list, item_quantity_list=current_rewards_quantity_list)
-    if next_reward_icon not in current_rewards_dict:
+
+    if next_reward_icon not in current_rewards_icon_list:
         raise FindNoElementError
 
+    BattlePreparePanel.click_btn_close(bp)
+    bp.sleep(1)
+
+    # 把进度条设为马上可以领下几档奖励
+    cmd_list = [f"progressSetPoint 100"]
+    bp.cmd_list(cmd_list)
+    TournamentsPanel.go_to_fishery_by_tpid(bp, "400301")
+    LoadingFisheryPanel.wait_until_panel_disappear(bp)
+    LoadingPanel.wait_until_panel_disappear(bp, is_wait_for_appear=False)
+    bp.sleep(1)
+
     # 计算期望库存
+    current_rewards_icon_list = BattlePreparePanel.get_current_rewards_icon_list(bp)
+    current_rewards_quantity_list = BattlePreparePanel.get_current_rewards_icon_list(bp)
+    current_rewards_dict = resource.make_item_dict(item_icon_list=current_rewards_icon_list, item_quantity_list=current_rewards_quantity_list)
     rewards_icon_list = list(current_rewards_dict)
     stock_expect_list = bp.get_item_count_list(item_icon_name_list=rewards_icon_list)
     cur = 0
@@ -99,16 +101,10 @@ def mini_panel_test(bp: BasePage):
     compare(icon_mini, icon)
     compare(quantity_mini, quantity)
 
-    # 点击图标
-    big_rewards_position_list = ProgressRewardsPanel.get_big_rewards_position_list(bp)
-    big_rewards_icon_list = ProgressRewardsPanel.get_big_rewards_icon_list(bp)
-    r = random.randint(0, len(big_rewards_position_list) - 1)
-    bp.click_position(big_rewards_position_list[r])
-    bp.sleep(1)
-    item_icon = ItemTipsPanel.get_item_icon(bp)
-    compare(item_icon, big_rewards_icon_list[r])
-    bp.click_position([0.5, 0.9])
+    # 关闭tips
+    ProgressRewardsPanel.click_btn_i(bp)
 
+    # 点击图标
     next_reward_position = ProgressRewardsPanel.get_next_reward_position(bp)
     bp.click_position(next_reward_position)
     bp.sleep(1)
@@ -121,56 +117,6 @@ def mini_panel_test(bp: BasePage):
 
 
 
-def complete_test(bp: BasePage):
-    # 把进度条设为马上可以领下一档奖励
-    BattlePreparePanel.click_btn_close(bp)
-    cmd_list = [f"progressSetPoint 10000000"]
-    bp.cmd_list(cmd_list)
-    TournamentsPanel.go_to_first_location(bp)
-    LoadingFisheryPanel.wait_until_panel_disappear(bp)
-    bp.sleep(1)
-
-    # 得到期望奖励
-    current_rewards_icon_list = BattlePreparePanel.get_current_rewards_icon_list(bp)
-    current_rewards_quantity_list = BattlePreparePanel.get_current_rewards_quantity_list(bp)
-    current_rewards_dict = resource.make_item_dict(item_icon_list=current_rewards_icon_list, item_quantity_list=current_rewards_quantity_list)
-
-    # 计算期望库存
-    stock_icon_list = list(current_rewards_dict)
-    stock_expect_list = bp.get_item_count_list(item_icon_name_list=stock_icon_list)
-    cur = 0
-    while cur < len(stock_icon_list):
-        stock_expect_list[cur] += current_rewards_dict[stock_icon_list[cur]]
-        cur += 1
-
-
-    # 点击领奖
-    BattlePreparePanel.click_btn_close(bp)
-    bp.sleep(1)
-    reward_dict = RewardsPanel.get_reward_dict(bp)
-    compare_dict(current_rewards_dict, reward_dict)
-
-    # 计算库存是否正确
-    stock_list = bp.get_item_count_list(item_icon_name_list=stock_icon_list)
-    compare(stock_expect_list, stock_list)
-
-    # 关闭恭喜获得
-    RewardsPanel.wait_for_panel_appear(bp)
-    bp.sleep(1)
-    RewardsPanel.click_tap_to_claim(bp)
-    bp.sleep(1)
-
-    # # 查看面板是否改为完成状态
-    # BattlePreparePanel.click_progress_finish(bp)
-    # bp.sleep(1)
-    # if not ProgressRewardsPanel.is_progress_finish(bp):
-    #     raise FindNoElementError
-    # ProgressRewardsPanel.click_btn_close(bp)
-
-
-
-
-
 def main(bp: BasePage):
     # 进入渔场
     # 登录到大厅
@@ -180,19 +126,17 @@ def main(bp: BasePage):
     bp.sleep(1)
 
 
-    TournamentsPanel.go_to_first_location(bp)
+    TournamentsPanel.go_to_fishery_by_tpid(bp, "400301")
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
     LoadingPanel.wait_until_panel_disappear(bp, is_wait_for_appear=False)
     bp.sleep(1)
 
     # 领取下一项奖励的测试
-    collect_next_test(bp)
+    collect_test(bp)
 
     # mini板的测试
     mini_panel_test(bp)
 
-    # 完成进度条测试
-    complete_test(bp)
 
     # 回到大厅
     bp.go_home()

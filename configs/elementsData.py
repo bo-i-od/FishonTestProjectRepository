@@ -1033,15 +1033,15 @@ class ElementsData:
         ProgressRewardsPanel = {"locator": "UICanvas>Default>ProgressRewardsPanel"}
         btn_close = {"locator": "UICanvas>Default>ProgressRewardsPanel>Panel>btn_close>img"}
         btn_go = {"locator": "UICanvas>Default>ProgressRewardsPanel>Panel>AD>btn_go"}
+        btn_i = {"locator": "UICanvas>Default>ProgressRewardsPanel>Panel>AD>progress_info>btn_i>img"}
         big_rewards_icon_list = {"locator": "UICanvas>Default>ProgressRewardsPanel>Panel>AD>big_rewards>>icon"}
-        progress_cur = {"locator": "UICanvas>Default>ProgressRewardsPanel>Panel>progress_info>progress>progressValueLayout>cur"}
-        progress_max = {"locator": "UICanvas>Default>ProgressRewardsPanel>Panel>progress_info>progress>progressValueLayout>max"}
-        next_reward_icon = {"locator": "UICanvas>Default>ProgressRewardsPanel>Panel>progress_info>reward>reward_1>item_model_mini>icon"}
-        next_reward_quantity = {"locator": "UICanvas>Default>ProgressRewardsPanel>Panel>progress_info>reward>reward_1>item_model_mini>quantity>value"}
+        progress_cur = {"locator": "UICanvas>Default>ProgressRewardsPanel>Panel>AD>progress_info>progress>progressValueLayout>cur"}
+        progress_max = {"locator": "UICanvas>Default>ProgressRewardsPanel>Panel>AD>progress_info>progress>progressValueLayout>max"}
+        next_reward_icon = {"locator": "UICanvas>Default>ProgressRewardsPanel>Panel>AD>progress_info>reward>reward_1>item_model_mini>icon"}
+        next_reward_quantity = {"locator": "UICanvas>Default>ProgressRewardsPanel>Panel>AD>progress_info>reward>reward_1>item_model_mini>quantity>value"}
         current_rewards_icon_list = {"locator": "UICanvas>Default>ProgressRewardsPanel>Panel>AD>big_rewards>>icon"}
         current_rewards_quantity_list = {"locator": "UICanvas>Default>ProgressRewardsPanel>Panel>AD>big_rewards>>quantity>value"}
         btn_claim = {"locator": "UICanvas>Default>ProgressRewardsPanel>Panel>current_rewards>btn_claim"}
-        progress_finish = {"locator": "UICanvas>Default>ProgressRewardsPanel>Panel>progress_finish"}
 
     class PVENewbieGiftPack:
         PVENewbieGiftPackPanel = {"locator": "UICanvas>Default>PVENewbieGiftPackPanel"}
