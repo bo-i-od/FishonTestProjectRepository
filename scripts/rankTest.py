@@ -17,6 +17,7 @@ def main(bp: BasePage):
 
     # 关闭升级弹窗
     PlayerLevelupPanel.wait_for_panel_appear(bp)
+    bp.clear_popup()
 
     # 进入排行榜界面
     bp.go_to_panel("RankPanel")

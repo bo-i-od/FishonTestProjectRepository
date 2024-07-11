@@ -2,6 +2,7 @@ import random
 from common.basePage import BasePage
 from netMsg import csMsgAll
 from panelObjs.commonItemGetPanel import CommonItemGetPanel
+from panelObjs.playerLevelupPanel import PlayerLevelupPanel
 from tools.commonTools import *
 from common import resource, gameInit
 from panelObjs.gearPanel import GearPanel
@@ -350,8 +351,6 @@ def main(bp: BasePage):
     cmd_list = ["guideskip"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
     bp.set_item_count(target_count=0, item_tpid="100000")
-
-
     # 进入装备界面
     bp.go_to_panel("GearPanel")
     lock_test(bp)
@@ -371,8 +370,6 @@ def full_level(bp: BasePage, tpId=None, table_data=None):
         specify_level(bp, maxLevel_list[index], tpId=tpId, table_data=table_data)
         return
 
-    bp.set_item_count(target_count=100000000000, item_tpid="100000")
-    bp.set_item_count(target_count=100000000, item_tpid="200300")
     cur = 0
     while cur < len(tpId_list):
         full_level(bp, tpId=tpId_list[cur], table_data=table_data)
@@ -381,7 +378,6 @@ def full_level(bp: BasePage, tpId=None, table_data=None):
 
 
 def specify_level(bp: BasePage, target_level, tpId=None, table_data=None):
-    bp.sleep(0.5)
     if table_data is None:
         table_data = GearPanel.get_fishing_rod_table_data(bp)
     tpId_list = table_data["tpId"]
@@ -391,8 +387,6 @@ def specify_level(bp: BasePage, target_level, tpId=None, table_data=None):
         bp.lua_console(lua_code)
         return
 
-    bp.set_item_count(target_count=100000000000, item_tpid="100000")
-    bp.set_item_count(target_count=100000000, item_tpid="200300")
     cur = 0
     while cur < len(tpId_list):
         specify_level(bp, target_level, tpId=tpId_list[cur], table_data=table_data)
@@ -436,9 +430,13 @@ def one_star(bp: BasePage, tpId=None, table_data=None):
 
 
 if __name__ == "__main__":
-    bp = BasePage("192.168.111.77:20052")
-    full_star(bp)
+    bp = BasePage("127.0.0.1:21503")
+    # full_star(bp)
+    bp.cmd("allrod 1")
+    bp.cmd("allrod 1000")
+    bp.set_item_count(target_count=100000000000, item_tpid="100000")
+    bp.set_item_count(target_count=100000000, item_tpid="200300")
+    bp.sleep(1)
     full_level(bp)
-    full_level(bp, tpId=500001)
-    specify_level(bp, target_level=20, tpId=500001)
+    # specify_level(bp, target_level=80, tpId=500028)
     bp.connect_close()

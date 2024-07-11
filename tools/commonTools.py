@@ -111,17 +111,17 @@ def remove_decimals(value_with_unit):
 
 def str_to_int(count:str):
     if count[-1:] == 'K':
-        return int(count[:-1]) * 1000
+        return int(float(count[:-1]) * 1000)
     elif count[-1:] == 'M':
-        return int(count[:-1]) * 1000000
+        return int(float(count[:-1]) * 1000000)
     elif count[-1:] == 'B':
-        return int(count[:-1]) * 1000000000
+        return int(float(count[:-1]) * 1000000000)
     elif count[-1:] == '万':
-        return int(count[:-1]) * 10000
+        return int(float(count[:-1]) * 10000)
     elif count[-1:] == '亿':
-        return int(count[:-1]) * 100000000
+        return int(float(count[:-1]) * 100000000)
     else:
-        return int(count)
+        return int(float(count))
 
 def str_to_int_list(count_list:list):
     cur = 0

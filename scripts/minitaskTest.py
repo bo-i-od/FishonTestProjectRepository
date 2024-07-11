@@ -78,7 +78,7 @@ def main(bp: BasePage):
     # 去渔场
     bp.go_to_panel("TournamentsPanel")
     bp.sleep(1)
-    TournamentsPanel.go_to_fishery_by_tpid(bp, "400301")
+    TournamentsPanel.go_to_fishery_by_tpid(bp, '400301')
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
 
     # 领取跳转应该不在备战界面了
@@ -114,5 +114,5 @@ def recommend_test(bp: BasePage):
     return text_task_1
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.77:20090")
+    bp = BasePage("b6h65hd64p5pxcyh")
     main(bp)

@@ -43,7 +43,7 @@ class CareerPanel(BasePage):
 
     #获取顶部栏金币、积分
     def get_cash_value(self):
-        cash_value=self.get_text(element_data=ElementsData.Career.text_100000)
+        cash_value = self.get_text(element_data=ElementsData.Career.text_100000)
         return str_to_int(cash_value)
 
     def get_points_value(self):
@@ -62,7 +62,7 @@ class CareerPanel(BasePage):
         return page_item_middle_id_list
 
     #突破至某节点出现
-    def enhance_until_item_exist(self,index):
+    def enhance_until_item_exist(self, index):
 
         page_item_middle_id_list = CareerPanel.get_page_item_id_list(self)
 
@@ -125,8 +125,8 @@ class CareerPanel(BasePage):
         #print(cost_qulity_list)
         cost_cash_value = cost_qulity_list[1]
         cost_points_value = cost_qulity_list[0]
-        bp.cmd(f"add 1 100000 {cost_cash_value}")
-        bp.cmd(f"add 1 100400 {cost_points_value}")
+        self.cmd(f"add 1 100000 {cost_cash_value}")
+        self.cmd(f"add 1 100400 {cost_points_value}")
         CareerPanel.click_btn_enhance(self)
         self.sleep(0.5)
 

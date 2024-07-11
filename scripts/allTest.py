@@ -6,11 +6,12 @@ import achievementTest, achievementCategoryTest, achievementWantedTest, battlePa
     energyTest, fishCardTest, gearTest, guideTest, mailTest, minitaskTest, progressRewardsTest, \
     storeTest, taskTest, treasureChestTest, newbieTaskTest, duelTest, rankTest, playerInfoTest
 from common import gameInit
-from scripts import rouletteTest
+from scripts import rouletteTest, fishAlbumTest, careerTest
 
 
 def main():
     connect_device(f"android://127.0.0.1:5037/{serial_number}")
+    content_all = ["成就鱼种", "成就照片墙", "渔获排行榜", "玩家信息、设置", "通行证", "dlc下载", "体力", "鱼卡", "鱼册", "装备", "新手、鱼册、刺鱼、成就墙、俱乐部、装备升级引导", "邮箱", "minitask", "商城", "新手7天", "鱼箱", "对决、对决排行榜", "成就", "任务", "转盘", "珍珠、贝壳进度条", "天赋"]
     en2ch = {achievementCategoryTest: "成就鱼种",
              achievementWantedTest: "成就照片墙",
              rankTest: "渔获排行榜",
@@ -19,25 +20,28 @@ def main():
              dlcDownloadTest: "dlc下载",
              energyTest: "体力",
              fishCardTest: "鱼卡",
+             fishAlbumTest:"鱼册",
              gearTest: "装备",
-             guideTest: "引导系列",
+             guideTest: "新手、鱼册、刺鱼、成就墙、俱乐部、装备升级引导",
              mailTest: "邮箱",
              minitaskTest: "minitask",
              storeTest: "商城",
              newbieTaskTest: "新手7天",
              treasureChestTest: "鱼箱",
-             duelTest: "对决",
+             duelTest: "对决、对决排行榜",
              achievementTest: "成就",
              taskTest: "任务",
              rouletteTest: "转盘",
+             progressRewardsTest: "珍珠、贝壳进度条",
+             careerTest: "天赋"
              }
-    test_list = [achievementCategoryTest, achievementWantedTest, rankTest, playerInfoTest, battlePassTest, dlcDownloadTest, energyTest, fishCardTest, gearTest, guideTest, rouletteTest, mailTest, minitaskTest, storeTest, treasureChestTest, duelTest, achievementTest, taskTest]
+    test_list = [achievementCategoryTest, mailTest, treasureChestTest, achievementWantedTest, rankTest, playerInfoTest, battlePassTest, dlcDownloadTest, energyTest, fishCardTest, gearTest, guideTest, rouletteTest, progressRewardsTest, newbieTaskTest,  minitaskTest, duelTest, fishAlbumTest,  storeTest,  achievementTest, taskTest, careerTest]
     # test_list = [ battlePassTest, fishCardTest, gearTest, guideTest,
     #              mailTest, minitaskTest, storeTest, newbieTaskTest, treasureChestTest, taskTest,
     #              achievementCategoryTest, achievementWantedTest, achievementTest, duelTest, rankTest]
 
     print(f"当前测试模块共计{len(test_list)}个")
-    cur = 15
+    cur = 0
     pass_list = []
     retry_list = []
 
@@ -80,7 +84,7 @@ def main():
 
 
 if __name__ == '__main__':
-    serial_number = "192.168.111.37:20028"
+    serial_number = "b6h65hd64p5pxcyh"
     main()
 
 

@@ -272,7 +272,7 @@ def collect_test(bp:BasePage):
         # task_kind = TaskPanel.get_task_kind(bp)
         # compare(task_kind, "Weekly")
         task_id_list = TaskPanel.get_task_id_list(bp)
-        viewport.change_item(object_id_list=task_id_list)
+        viewport = TaskPanel.get_viewport(bp)
         collect_all_test(bp, task_id_list, viewport)
 
     # 月常
@@ -285,7 +285,7 @@ def collect_test(bp:BasePage):
         box_award_dict = TaskPanel.get_month_award_detail(bp, box_position)
         # print(box_award_dict)
         task_id_list = TaskPanel.get_task_id_list(bp)
-        viewport.change_item(object_id_list=task_id_list)
+        viewport = TaskPanel.get_viewport(bp)
         collect_all_test(bp, task_id_list, viewport)
         # 判断箱子是否可领取
         month_box_status = TaskPanel.get_month_box_status(bp)
@@ -320,11 +320,12 @@ def collect_test(bp:BasePage):
 def main(bp: BasePage):
 
     # 登录到大厅
-    cmd_list = ["guideskip", "levelupto 60"]
+    cmd_list = ["guideskip", "levelupto 56"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     # # 关闭升级弹窗
-    # PlayerLevelupPanel.wait_for_panel_appear(bp)
+    PlayerLevelupPanel.wait_for_panel_appear(bp)
+    bp.clear_popup()
 
     # 跳转测试
     jump_test(bp)

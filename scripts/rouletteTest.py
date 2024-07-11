@@ -1,13 +1,20 @@
 from common.basePage import BasePage
 from panelObjs.commonWebViewPanel import CommonWebViewPanel
+from panelObjs.playerLevelupPanel import PlayerLevelupPanel
 from panelObjs.rewardsPanel import RewardsPanel
 from panelObjs.roulettePanel import RoulettePanel
 from tools.commonTools import *
-from common import resource
-
+from common import resource, gameInit
 
 
 def main(bp: BasePage):
+    # 进入大厅
+    cmd_list = ["guideskip", "levelupto 21", "add 2 201001 10000"]
+    gameInit.login_to_hall(bp, cmd_list=cmd_list)
+
+    PlayerLevelupPanel.wait_for_panel_appear(bp)
+    bp.clear_popup()
+
     bp.go_to_panel("RoulettePanel")
     bp.sleep(1)
 
@@ -45,4 +52,5 @@ def main(bp: BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
+    main(bp)
 

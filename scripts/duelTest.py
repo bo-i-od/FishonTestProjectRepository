@@ -11,6 +11,7 @@ from panelObjs.divisionListPanel import DivisionListPanel
 from panelObjs.loadingFisheryPanel import LoadingFisheryPanel
 from panelObjs.loadingPanel import LoadingPanel
 from panelObjs.messageBoxPanel import MessageBoxPanel
+from panelObjs.playerLevelupPanel import PlayerLevelupPanel
 from panelObjs.pvpBattleHUDPanel import PVPBattleHUDPanel
 from panelObjs.pvpHallPanel import PVPHallPanel
 from panelObjs.homePanel import HomePanel
@@ -277,8 +278,11 @@ def division_test(bp:BasePage):
 
 def main(bp:BasePage):
     # 进入大厅
-    cmd_list = ["levelupto 56", "guideskip"]
+    cmd_list = ["guideskip", "levelupto 56"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
+
+    PlayerLevelupPanel.wait_for_panel_appear(bp)
+    bp.clear_popup()
 
     # 将所有对决解锁
     random_duelcup(bp, 7)
@@ -350,10 +354,12 @@ if __name__ == '__main__':
     #     duel_once(base_page, 1)
     #     cur += 1
     #     print(f"第{cur}次钓鱼")
-    circulate_fish(base_page, is_quick=False, times=100)
+
     while True:
-        base_page = champointship(base_page, 0, 15)
-        base_page = champointship(base_page, 1, 20)
+        base_page = champointship(base_page, 0, 30)
+        base_page = champointship(base_page, 1, 30)
+
+
 
 
 

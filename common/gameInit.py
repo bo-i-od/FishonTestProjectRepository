@@ -45,11 +45,15 @@ def set_joystick(bp:BasePage, state="FLOATING"):
 def account_init(bp: BasePage, player_name, cmd_list):
     while not PlayerEditNamePanel.is_panel_active(bp):
         bp.sleep(0.1)
-    PlayerEditNamePanel.set_player_name(bp, player_name)
     bp.cmd_list(cmd_list)
     set_joystick(bp)
-    bp.sleep(1)
-    PlayerEditNamePanel.click_confirm(bp)
+    while True:
+        PlayerEditNamePanel.set_player_name(bp, player_name)
+        PlayerEditNamePanel.click_confirm(bp)
+        bp.sleep(1)
+        if not PlayerEditNamePanel.is_panel_active(bp):
+            break
+        player_name = "t" + str(time.time()).split('.')[0]
 
 
 # 登录到大厅
@@ -59,7 +63,6 @@ def login_to_hall(bp: BasePage, cmd_list=None):
     login(bp, username)
 
     account_init(bp, username, cmd_list)
-    bp.sleep(1)
 
 
 def app_start_to_login(poco):

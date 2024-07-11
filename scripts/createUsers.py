@@ -1,9 +1,12 @@
-from netMsg import csMsgAll, fishingMsg
+import time
+
+from netMsg import csMsgAll, fishingMsg, luaLog
 from panelObjs.battlePreparePanel import BattlePreparePanel
 from panelObjs.loadingPanel import LoadingPanel
 from panelObjs.loginPanel import LoginPanel
 from common.basePage import BasePage
 from panelObjs.homePanel import HomePanel
+from panelObjs.playerEditNamePanel import PlayerEditNamePanel
 from panelObjs.tournamentsPanel import TournamentsPanel
 from panelObjs.friendPanel import FriendPanel
 from scripts import battleTest
@@ -53,10 +56,26 @@ EventMgr:SendEvent(GameMsg.CHANGE_GAME_STATE, GAME_STATE_ENUM.Login, true)
 
 
 def login(bp: BasePage, name):
+    # 清空消息列表 开始收消息
+    bp.log_list.clear()
+    bp.log_list_flag = True
+
     LoginPanel.wait_for_panel_appear(bp)
     connect(bp, name)
     LoadingPanel.wait_until_panel_disappear(bp)
+    bp.log_list_flag = False
+    if not PlayerEditNamePanel.is_panel_active(bp):
+        return
     bp.cmd("guideskip")
+    while True:
+        PlayerEditNamePanel.set_player_name(bp, name)
+        PlayerEditNamePanel.click_confirm(bp)
+        bp.sleep(1)
+        if not PlayerEditNamePanel.is_panel_active(bp):
+            break
+        name = "t" + str(time.time()).split('.')[0]
+
+
 
 
 def logout(bp: BasePage):
@@ -72,17 +91,18 @@ def go_leaderborad(bp:BasePage):
     bp.sleep(1)
 
 def fish(bp: BasePage):
-    bp.cmd_list(["levelupto 30"])
+    # bp.cmd_list(["levelupto 30"])
+    # bp.sleep(0.1)
+    bp.cmd("mode 400301 390004")
     bp.sleep(0.1)
-    bp.cmd("mode 400309 390087")
-    fishingMsg.fish(bp, [{"spot_id": f"40030913", "times": 1, "energy_cost": 50}])
-    bp.sleep(0.1)
-    bp.cmd("mode 400309 390088")
-    fishingMsg.fish(bp, [{"spot_id": f"40030913", "times": 1, "energy_cost": 50}])
-    bp.sleep(0.1)
-    bp.cmd("mode 400309 390089")
-    fishingMsg.fish(bp, [{"spot_id": f"40030913", "times": 1, "energy_cost": 50}])
-    bp.sleep(0.1)
+    fishingMsg.fish(bp, [{"spot_id": f"40030101", "times": 1, "energy_cost": 50}])
+    bp.sleep(2)
+    # bp.cmd("mode 400309 390088")
+    # fishingMsg.fish(bp, [{"spot_id": f"40030913", "times": 1, "energy_cost": 50}])
+    # bp.sleep(0.1)
+    # bp.cmd("mode 400309 390089")
+    # fishingMsg.fish(bp, [{"spot_id": f"40030913", "times": 1, "energy_cost": 50}])
+    # bp.sleep(0.1)
 
 def dragon_boat(bp: BasePage, index):
     bp.cmd_list(["levelupto 20", "add 1 100500 100000", "add 1 100100 3000"])
@@ -94,6 +114,26 @@ def dragon_boat(bp: BasePage, index):
     # ])
     # bp.sleep(index * 0.2)
 
+def friend(bp: BasePage):
+    # 在最近收集的消息列表中筛出目标消息
+    key_sc = '<==== [Lua] Receive Net Msg "SC'
+    msg_name = "LoginMsg"
+    msg_key = key_sc + msg_name
+    target_log = ""
+    for log in bp.log_list:
+        if msg_key not in log:
+            continue
+        target_log = log
+        break
+    charSimpleId = 0
+    if target_log != "":
+        # 根据键拿到值
+        charSimpleId = int(luaLog.get_value(msg=target_log, key="charSimpleId", is_str=False))
+
+    bp.cmd_list(["levelupto 20"])
+    bp.sleep(0.2)
+    lua_code = csMsgAll.get_CSGlobalFriendsApplyMsg(targetSimpleId=10024003, source=0, type=2, targetCharId="6691566044dbc56b472d7338", simpleId=charSimpleId)
+    bp.lua_console(lua_code)
 
 
 def tournament(bp:BasePage):
@@ -125,7 +165,7 @@ def hidden_treasure(bp:BasePage):
 def apply_guild(bp:BasePage):
     bp.cmd(f"levelupto 21")
     bp.sleep(1)
-    guildSimpleId = 10000009
+    guildSimpleId = 10000509
     lua_code = csMsgAll.get_CSGuildApplyMsg(source=0, guildSimpleId=guildSimpleId)
     bp.lua_console(lua_code)
 
@@ -192,10 +232,10 @@ def add_friend(bp: BasePage,target_id):
 
 def main(bp):
     # 登录号前缀
-    prefix = "a"
+    prefix = "msg"
     init(bp)
-    cur = 0
-    limit = 100
+    cur = 3
+    limit = 33
     while cur < limit:
         name = prefix + str(cur)
         login(bp, name)
@@ -203,8 +243,8 @@ def main(bp):
         # 你要执行的初始化账号操作
         # add_gu(bp, cur)
         # dragon_boat(bp, cur)
-        # apply_guild(bp)
-        fish(bp)
+        friend(bp)
+        # fish(bp)
 
         logout(bp)
         cur += 1

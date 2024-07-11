@@ -16,7 +16,7 @@ class PartySalePanel(BasePage):
 
     # 点击购买
     def click_btn_buy(self):
-        self.click_element(element_data=ElementsData.PartySale.btn_buy)
+        self.click_element(element_data=ElementsData.PartySale.btn_buy, ignore_set={"PartySalePanel"})
 
     # 获取图标
     def get_item_icon_list(self):

@@ -61,7 +61,7 @@ def newbieGuidePanelTest(bp: BasePage):
         NewbieGuidePanel.do_guide_6(bp)
 
 def hookTest(bp: BasePage):
-    TournamentsPanel.go_to_fishery_by_tpid(bp, fishery_tpid="400301")
+    TournamentsPanel.go_to_fishery_by_tpid(bp, fishery_tpid='400301')
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
     BattlePreparePanel.click_btn_cast(bp)
     BattlePanel.hook_guide(bp)

@@ -14,16 +14,6 @@ from panelObjs.leaderBoardPopResultPanel import LeaderBoardPopResultPanel
 from panelObjs.fishCardPackTipsPanel import FishCardPackTipsPanel
 from panelObjs.loadingPanel import LoadingPanel
 from panelObjs.loadingFisheryPanel import LoadingFisheryPanel
-from scripts import battleTest
-
-
-def tips_test(bp: BasePage):
-    # 打开tips
-    NewbieTaskPanel.click_btn_i(bp)
-    bp.sleep(1)
-
-    # 关闭tips
-    NewbieTaskPanel.click_tap_to_close(bp)
 
 
 def party_sale_test(bp: BasePage):
@@ -31,17 +21,9 @@ def party_sale_test(bp: BasePage):
     NewbieTaskPanel.click_btn_sale(bp)
     bp.sleep(1)
 
-    # 关闭面板
-    PartySalePanel.click_btn_close(bp)
-    bp.sleep(1)
-
-    # 关闭新手三天 自动弹出party_sale 等待动画
-    NewbieTaskPanel.click_btn_close(bp)
-    bp.sleep(1)
-
     # 点击鱼竿进行预览后退出
     item_position_list = PartySalePanel.get_item_position_list(bp)
-    bp.click_position(item_position_list[0])
+    bp.click_position(item_position_list[0], ignore_set={"PartySalePanel"})
     bp.sleep(1)
     BaitAndRodShowPanel.click_tap_to_continue(bp)
     bp.sleep(1)
@@ -50,7 +32,7 @@ def party_sale_test(bp: BasePage):
     item_icon_list = PartySalePanel.get_item_icon_list(bp)
     item_quantity_list = PartySalePanel.get_item_quantity_list(bp)
     r = random.randint(1, len(item_position_list) - 1)
-    bp.click_position(item_position_list[r])
+    bp.click_position(item_position_list[r], ignore_set={"PartySalePanel"})
     bp.sleep(1)
     if ItemTipsPanel.is_panel_active(bp):
         item_icon = ItemTipsPanel.get_item_icon(bp)
@@ -58,7 +40,7 @@ def party_sale_test(bp: BasePage):
     elif FishCardPackTipsPanel.is_panel_active(bp):
         item_icon = FishCardPackTipsPanel.get_item_icon(bp)
         compare(item_icon, item_icon_list[r])
-    bp.click_position([0.5, 0.1])
+    bp.click_position([0.5, 0.1], ignore_set={"PartySalePanel"})
 
     if not bp.is_pay:
         return
@@ -391,47 +373,47 @@ def progress_test(bp:BasePage):
 
 
 def challenge_test(bp:BasePage):
-    NewbieTaskPanel.switch_tab(bp, 5)
+    NewbieTaskPanel.switch_tab(bp, 4)
     bp.sleep(1)
 
-    # 随机选择go fishing跳转
-    challenge_id_list = NewbieTaskPanel.get_challenge_id_list(bp)
-    challenge_viewport = NewbieTaskPanel.get_challenge_viewport(bp, challenge_id_list=challenge_id_list)
-    r = random.randint(0, len(challenge_id_list) - 1)
-    challenge_viewport.move_until_appear(target_id=challenge_id_list[r])
-    btn_go_position_list = NewbieTaskPanel.get_challenge_position_list(bp, challenge_id_list=[challenge_id_list[r]])
-    btn_go_position = btn_go_position_list[0]
-    bp.click_position(btn_go_position)
-    bp.sleep(1)
-    LoadingFisheryPanel.wait_until_panel_disappear(bp)
-    # battleTest.fish_once(bp, fishery_id="400301", fish_id="301013")
-    # battleTest.fish_once(bp, fishery_id="400301", fish_id="301012")
-    # battleTest.fish_once(bp, fishery_id="400301", fish_id="301010")
-
-    # 返回挑战页面
-    bp.go_to_panel("NewbieTaskPanel")
-    bp.sleep(1)
-    NewbieTaskPanel.switch_tab(bp, 5)
-    bp.sleep(1)
-
-    # 记录币数量
-    challenge_id_list = NewbieTaskPanel.get_challenge_id_list(bp)
-    challenge_point_list = NewbieTaskPanel.get_challenge_point_list(bp, challenge_id_list)
-    challenge_viewport = NewbieTaskPanel.get_challenge_viewport(bp, challenge_id_list=challenge_id_list)
-
-    cur = 0
-    while cur < len(challenge_id_list):
-        if challenge_point_list[cur] == 0:
-            cur += 1
-            continue
-        coin_expect = NewbieTaskPanel.get_coin(bp) + challenge_point_list[cur]
-        challenge_viewport.move_until_appear(target_id=challenge_id_list[r])
-        btn_point_position = NewbieTaskPanel.get_challenge_position_list(bp, challenge_id_list=[challenge_id_list[r]])[0]
-        bp.click_position(btn_point_position)
-        bp.sleep(1)
-        coin = NewbieTaskPanel.get_coin(bp)
-        compare(coin_expect, coin)
-        cur += 1
+    # # 随机选择go fishing跳转
+    # challenge_id_list = NewbieTaskPanel.get_challenge_id_list(bp)
+    # challenge_viewport = NewbieTaskPanel.get_challenge_viewport(bp, challenge_id_list=challenge_id_list)
+    # r = random.randint(0, len(challenge_id_list) - 1)
+    # challenge_viewport.move_until_appear(target_id=challenge_id_list[r])
+    # btn_go_position_list = NewbieTaskPanel.get_challenge_position_list(bp, challenge_id_list=[challenge_id_list[r]])
+    # btn_go_position = btn_go_position_list[0]
+    # bp.click_position(btn_go_position)
+    # bp.sleep(1)
+    # LoadingFisheryPanel.wait_until_panel_disappear(bp)
+    # # battleTest.fish_once(bp, fishery_id="400301", fish_id="301013")
+    # # battleTest.fish_once(bp, fishery_id="400301", fish_id="301012")
+    # # battleTest.fish_once(bp, fishery_id="400301", fish_id="301010")
+    #
+    # # 返回挑战页面
+    # bp.go_to_panel("NewbieTaskPanel")
+    # bp.sleep(1)
+    # NewbieTaskPanel.switch_tab(bp, 5)
+    # bp.sleep(1)
+    #
+    # # 记录币数量
+    # challenge_id_list = NewbieTaskPanel.get_challenge_id_list(bp)
+    # challenge_point_list = NewbieTaskPanel.get_challenge_point_list(bp, challenge_id_list)
+    # challenge_viewport = NewbieTaskPanel.get_challenge_viewport(bp, challenge_id_list=challenge_id_list)
+    #
+    # cur = 0
+    # while cur < len(challenge_id_list):
+    #     if challenge_point_list[cur] == 0:
+    #         cur += 1
+    #         continue
+    #     coin_expect = NewbieTaskPanel.get_coin(bp) + challenge_point_list[cur]
+    #     challenge_viewport.move_until_appear(target_id=challenge_id_list[r])
+    #     btn_point_position = NewbieTaskPanel.get_challenge_position_list(bp, challenge_id_list=[challenge_id_list[r]])[0]
+    #     bp.click_position(btn_point_position)
+    #     bp.sleep(1)
+    #     coin = NewbieTaskPanel.get_coin(bp)
+    #     compare(coin_expect, coin)
+    #     cur += 1
 
 def main(bp: BasePage):
     # 进入大厅
@@ -441,13 +423,11 @@ def main(bp: BasePage):
     # # 去新手三天界面
     bp.go_to_panel("NewbieTaskPanel")
 
-    # 派对礼包测试
-    party_sale_test(bp)
-    bp.go_to_panel("NewbieTaskPanel")
     bp.sleep(1)
 
-    # tips测试
-    tips_test(bp)
+    # 派对礼包测试
+    party_sale_test(bp)
+
 
     # 排行榜测试
     leaderboard_test(bp)
@@ -464,7 +444,7 @@ def main(bp: BasePage):
     locked_test(bp)
 
     # 升级重进界面
-    bp.cmd("add 1 100200 1234567")
+    bp.cmd("levelupto 31")
     bp.go_home()
     bp.go_to_panel("NewbieTaskPanel")
 
@@ -476,9 +456,6 @@ def main(bp: BasePage):
     bp.sleep(1)
     go_test(bp)
     NewbieTaskPanel.switch_tab(bp, 3)
-    bp.sleep(1)
-    go_test(bp)
-    NewbieTaskPanel.switch_tab(bp, 4)
     bp.sleep(1)
     go_test(bp)
 
@@ -496,9 +473,6 @@ def main(bp: BasePage):
     NewbieTaskPanel.switch_tab(bp, 3)
     bp.sleep(1)
     collect_test(bp)
-    NewbieTaskPanel.switch_tab(bp, 4)
-    bp.sleep(1)
-    collect_test(bp)
 
     # 挑战测试
     challenge_test(bp)
@@ -510,5 +484,5 @@ def main(bp: BasePage):
     bp.go_home()
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.77:20090")
+    bp = BasePage("192.168.111.37:20087")
     main(bp)

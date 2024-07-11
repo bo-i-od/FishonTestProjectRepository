@@ -88,8 +88,10 @@ def main(bp:BasePage):
     # 进入大厅
     cmd_list = ["guideskip", f"levelupto {unlock_lv}"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
+
     # 关闭升级弹窗
     PlayerLevelupPanel.wait_for_panel_appear(bp)
+    bp.clear_popup()
 
     bp.go_to_panel("MailPanel")
     bp.sleep(1)

@@ -1,11 +1,14 @@
-
+from common import gameInit
 from common.basePage import BasePage
 
 from panelObjs.battlePreparePanel import BattlePreparePanel
+from panelObjs.loadingPanel import LoadingPanel
+from panelObjs.loginPanel import LoginPanel
 from panelObjs.resultPanel import ResultPanel
 from panelObjs.battlePanel import BattlePanel
 from threading import Thread
 from panelObjs.tournamentsPanel import TournamentsPanel
+
 
 
 def fish_once(bp: BasePage, fishery_id="", fish_id="", is_quick=False):
@@ -34,7 +37,7 @@ def fish_once(bp: BasePage, fishery_id="", fish_id="", is_quick=False):
 
 def circulate_fish(bp: BasePage, fishery_id=None, is_quick=False, times=500):
     fish_list = []
-    cur = 0
+    cur = 8
     if fishery_id is not None:
         fish_list = TournamentsPanel.get_fish_list(bp, fishery_id)
         times = len(fish_list)
@@ -74,7 +77,7 @@ def select_location(bp: BasePage, index):
 
 
 def fish_all(bp: BasePage, is_quick=False):
-    cur = 1
+    cur = 4
     while cur < 13:
         index = str(cur).zfill(2)
         fishery_id = f"4003{index}"
@@ -94,17 +97,65 @@ def tournament(bp: BasePage):
     TournamentsPanel.go_to_fishery_by_index(bp, 1)
     circulate_fish(bp, is_quick=False, times=18)
 
+def get_bp():
+    bp = gameInit.restart_to_login("com.xuejing.smallfish.official")
+    bp.sleep(7)
+    LoginPanel.wait_for_btn_login(bp)
+    LoginPanel.click_btn_login(bp)
+    bp.sleep(2)
+    LoadingPanel.wait_until_panel_disappear(bp, is_wait_for_appear=False)
+    bp.sleep(5)
+    return bp
+
+def reset_bp():
+    try:
+        bp = get_bp()
+    except:
+        bp = reset_bp()
+    return bp
+
+def champointship(bp, times):
+    try:
+        gameInit.set_joystick(bp)
+        bp.clear_popup()
+        bp.go_to_panel("TournamentsPanel")
+        bp.sleep(1)
+
+        # if not tournaments_info_position_list:
+        #     raise FindNoElementError
+
+        TournamentsPanel.go_to_fishery_by_tpid(bp, "400302")
+        # LoadingFisheryPanel.wait_until_panel_disappear(bp)
+        circulate_fish(bp, times=times, is_quick=False)
+        bp.go_home()
+    except Exception as e:
+        print(e)
+        # bp.connect_close()
+        bp = reset_bp()
+    return bp
+
 
 
 if __name__ == '__main__':
     # 连接设备号为127.0.0.1:21533的设备
-    bp = BasePage("127.0.0.1:21503")
+    bp = BasePage("127.0.0.1:21653")
+    # gameInit.set_joystick(bp)
+    # # 按渔场id从小到大，再按鱼从小到大钓一遍
+    # fish_all(bp,  is_quick=True)
+    # fish_all(bp, is_quick=False)
+    l = ["390011","390013", "390014", "390017", "390018"]
+    cur = 0
+    while cur < len(l):
+    #     champointship(bp, 10000)
+    # # fish_once(bp, is_quick=False, fishery_id="400306", fish_id="370807")
+        fish_once(bp, is_quick=False, fishery_id="400302", fish_id=l[cur])
+        cur += 1
+    #
+    # # 断开连接
+    # bp.connect_close()
+    #
+    # createUsers.main2()
 
-    # 按渔场id从小到大，再按鱼从小到大钓一遍
-    fish_once(bp, is_quick=True)
-
-    # 断开连接
-    bp.connect_close()
 
 
 

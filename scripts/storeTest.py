@@ -173,12 +173,6 @@ def goods_buy_once_test(bp:BasePage, icon, quantity, btn_position):
 
 
 
-def month_card_1_quantity_test(bp:BasePage):
-    position_list = StorePanel.get_month_card_1_position_list(bp)
-
-
-
-
 
 def month_card_test(bp:BasePage):
     StorePanel.change_tab(bp, 1)
@@ -871,7 +865,8 @@ def main(bp: BasePage):
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     # # 关闭升级弹窗
-    # PlayerLevelupPanel.wait_for_panel_appear(bp)
+    PlayerLevelupPanel.wait_for_panel_appear(bp)
+    bp.clear_popup()
 
     bp.go_to_panel("StorePanel")
     gift_pack_test(bp)

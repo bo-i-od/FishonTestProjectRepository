@@ -143,8 +143,8 @@ def main(bp: BasePage):
     cmd_list = ["guideskip", "levelupto 60", "add 1 100500 1234"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
-    # # 关闭升级弹窗
-    # PlayerLevelupPanel.wait_for_panel_appear(bp)
+    PlayerLevelupPanel.wait_for_panel_appear(bp)
+    bp.clear_popup()
 
     # 升级
     unlock_test(bp)

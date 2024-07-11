@@ -137,7 +137,6 @@ def main(bp: BasePage):
     # mini板的测试
     mini_panel_test(bp)
 
-
     # 回到大厅
     bp.go_home()
 

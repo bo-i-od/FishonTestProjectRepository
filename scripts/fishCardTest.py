@@ -232,10 +232,11 @@ def main(bp: BasePage):
     r2 = random.randint(23, 37)
     r3 = random.randint(1, 5)
     print(f"付费分层{r3}000")
-    cmd_list = ["guideskip", "add 1 100000 1234567890", "levelupto 15", f"add 10 1000{str(r1).zfill(3)} 1", f"add 10 1000{str(r2).zfill(3)} 500000", f"setPlayerLayer {r3}000"]
+    cmd_list = [ "guideskip", f"add 10 1000{str(r1).zfill(3)} 1", f"add 10 1000{str(r2).zfill(3)} 500000", f"setPlayerLayer {r3}000", "add 1 100000 1234567890", "levelupto 15"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
-    # # 关闭升级弹窗
-    # PlayerLevelupPanel.wait_for_panel_appear(bp)
+
+    PlayerLevelupPanel.wait_for_panel_appear(bp)
+    bp.clear_popup()
 
     # 进入鱼卡系统
     bp.go_to_panel("FishCardPanel")

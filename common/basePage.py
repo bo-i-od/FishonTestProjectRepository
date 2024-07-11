@@ -1,6 +1,5 @@
 import json
 from importlib import import_module
-from queue import Queue
 
 from airtest.core.helper import G
 from poco.drivers.unity3d.device import UnityEditorWindow
@@ -47,7 +46,7 @@ class BasePage:
         self.listen_log_flag = True
 
         # 是否将Unity发来的log加到消息列表里
-        self.log_list_flag = False
+        self.log_list_flag = True
 
         self._send_log_flag = False
 
@@ -70,7 +69,7 @@ class BasePage:
         # 获取父目录
         self.root_dir = os.path.abspath(os.path.dirname(file_path))
         # 配置表的路径
-        self.excelTools = ExceTools("C:/Users/TU/Desktop/trunkCHS/datapool/策划模板导出工具/")
+        self.excelTools = ExceTools("C:/trunkCHS/datapool/策划模板导出工具/")
 
         # 是否让Unity发log
         self.set_send_log_flag(True)
@@ -545,6 +544,9 @@ class BasePage:
         if not pop_window_set:
             return True
         for panel_name in pop_window_set:
+            if panel_name == "FishBagPanel":
+                self.click_position_base([0.5, 0.5])
+                self.sleep(0.5)
             for close_element in JumpData.panel_close_dict[panel_name]:
                 self.click_element_safe(element_data=close_element)
                 self.sleep(1)

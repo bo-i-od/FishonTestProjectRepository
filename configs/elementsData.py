@@ -55,6 +55,10 @@ class ElementsData:
         reward_quantity_list = {"locator": "UICanvas>Default>AchievementWantedPanel>panel>btn_rewards>item_list>>quantity>value"}
         btn_rewards = {"locator": "UICanvas>Default>AchievementWantedPanel>panel>btn_rewards>bg"}
 
+    class ActivityCenter:
+        ActivityCenterPanel = {"locator": "UICanvas>Important>ActivityCenterPanel"}
+        btn_close = {"locator": "UICanvas>Important>ActivityCenterPanel>panel>btn_close>img"}
+
     class Aquarium:
         AquariumPanel = {"locator": "UICanvas>Default>AquariumPanel"}
         btn_close = {"locator": "UICanvas>Default>AquariumPanel>panel>btn_close>img"}
@@ -369,6 +373,12 @@ class ElementsData:
         cost_icon_list = {"locator":"UICanvas>Default>CareerPanel>panel_talent>panel_list_tips>btns>cost>>icon"}
         cost_quantity_list = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list_tips>btns>cost>>icon"}
 
+    class Chat:
+        ChatPanel = {"locator":"UICanvas>Default>ChatPanel"}
+        btn_close = {"locator": "UICanvas>Default>ChatPanel>panel>btn_close"}
+        Input_enter = {"locator":"UICanvas>Default>ChatPanel>panel>panel_info>panel_info>panel_down>chat_enter>Input_enter"}
+        btn_enter = {"locator":"UICanvas>Default>ChatPanel>panel>panel_info>panel_info>panel_down>chat_enter>btn_enter"}
+
     class ClubApply:
         ClubApplyPanel = {"locator":"UICanvas>Default>ClubApplyPanel"}
         btn_close = {"locator":"UICanvas>Default>ClubApplyPanel>panel>btn_close>img"}
@@ -421,13 +431,24 @@ class ElementsData:
 
     class EventSignSevenDay:
         EventSignSevenDayPanel = {"locator": "UICanvas>Default>EventSignSevenDayPanel"}
-        btn_receive = {"locator":"UICanvas>Default>EventSignSevenDayPanel>panel>btn_receive"}
+        btn_receive = {"locator": "UICanvas>Default>EventSignSevenDayPanel>panel>btn_receive"}
 
     class FishAlbum3D:
         FishAlbum3DPanel = {"locator": "UICanvas>Default>FishAlbum3DPanel"}
         btn_close = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_album>btn_close>img"}
         btn_share = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_album>panel_left>btn_share>btn_normal"}
         btn_switch = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_album>panel_left>btn_switch>btn_normal"}
+        reward_icon = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_album>panel_left>photo_paper>rewards>reward>item_model_mini>icon"}
+        btn_preview = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_album>panel_left>photo_paper>btn_preview>icon"}
+        btn_i = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_album>panel_left>photo_paper>rewards>btn_i>img"}
+        panel_rewards_tip = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_album>panel_left>panel_rewards_tip"}
+        panel_fisheries = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_fisheries"}
+        fisheries_list_viewport = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_fisheries>panel>FisheriesList>Viewport", "focus": (0, 0)}
+        fisheries_list = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_fisheries>panel>FisheriesList>Viewport>Content>", "focus": (0, 0.5)}
+        progress_cur_list = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_album>panel_top>>progress_value>ValueLayout>cur"}
+        photo_name = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_album>panel_left>photo_paper>detail>name"}
+        photo_bg = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_album>panel_left>photo_paper>img_mask>img"}
+        star_list = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_album>panel_left>photo_paper>detail>stars>"}
 
     class FishAlbumPreview:
         FishAlbumPreviewPanel ={"locator": "UICanvas>Default>FishAlbumPreviewPanel"}
@@ -656,7 +677,7 @@ class ElementsData:
         # panel_events
         HomePanel = {"locator": "UICanvas>Default>HomePanel"}
         btn_globa_progress = {"locator": "UICanvas>Default>HomePanel>panel>panel_left>list>Viewport>Content>btn_globa_progress"}
-        btn_roulette = {"locator": "UICanvas>Default>HomePanel>panel>panel_left>list>Viewport>Content>btn_roulette"}
+        btn_center_new = {"locator": "UICanvas>Default>HomePanel>panel>panel_left>list>Viewport>Content>btn_center_new"}
         btn_iaa = {"locator": "UICanvas>Default>HomePanel>panel>panel_events>events_list>Viewport>Content>btn_iaa>img"}
         btn_endless = {"locator": "UICanvas>Default>HomePanel>panel>panel_events>events_list>Viewport>Content>btn_endless>img"}
         btn_1add1 = {"locator": "UICanvas>Default>HomePanel>panel>panel_events>events_list>Viewport>Content>btn_1add1>img"}
@@ -702,6 +723,7 @@ class ElementsData:
         btn_chest = {"locator": "HomeCanvas>Home3DPanel>panel>chest>btn_chest", "camera": "Camera3D"}
         btn_pve = {"locator": "HomeCanvas>Home3DPanel>panel>panel_entrance>btn_pve>text", "camera": "Camera3D"}
         btn_pvp = {"locator": "HomeCanvas>Home3DPanel>panel>panel_entrance>btn_pvp", "camera": "Camera3D"}
+
 
         class Minitask:
             # minitask

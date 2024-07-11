@@ -351,8 +351,10 @@ def main(bp:BasePage):
     # 登录到大厅
     cmd_list = ["guideskip", "add 1 100200 12345"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
+
     # # 关闭升级弹窗
-    # PlayerLevelupPanel.wait_for_panel_appear(bp)
+    PlayerLevelupPanel.wait_for_panel_appear(bp)
+    bp.clear_popup()
 
     bp.go_to_panel("AchievementPanel")
     tips_test(bp)
