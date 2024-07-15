@@ -1,6 +1,5 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from scripts.createUsers import login, fish, logout
 from tools.commonTools import *
 from common import resource
 from common.viewport import Viewport

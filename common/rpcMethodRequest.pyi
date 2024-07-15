@@ -1,72 +1,66 @@
 from poco.pocofw import Poco
 
 
-def set_text(poco:Poco, element: dict, text: str) -> any:
+def set_text(poco:Poco, element: list, text: str) -> any:
     ...
 
 def set_text_by_id(poco:Poco, id_list: list, offspring_path:str, text: str) -> any:
     ...
 
-def get_text(poco:Poco, element: dict) -> list:
+def get_text(poco:Poco, element: list) -> list:
     ...
 
 def get_text_by_id(poco:Poco, id_list: list, offspring_path:str) -> list:
     ...
 
-def get_slider_value(poco:Poco, element: dict) -> list:
+def get_slider_value(poco:Poco, element: list) -> list:
     ...
 
 def get_slider_value_by_id(poco:Poco, id_list: list, offspring_path:str) -> list:
     ...
 
-def get_img_name(poco:Poco, element: dict) -> list:
+def get_img_name(poco:Poco, element: list) -> list:
     ...
 
 def get_img_name_by_id(poco:Poco, id_list: list, offspring_path:str) -> list:
     ...
 
-def get_name(poco:Poco, element: dict) -> list:
+def get_name(poco:Poco, element: list) -> list:
     ...
 
 def get_name_by_id(poco:Poco, id_list: list, offspring_path:str) -> list:
     ...
 
-def get_position(poco:Poco, element: dict) -> list:
+def get_position(poco:Poco, element: list) -> list:
     ...
 
 def get_position_by_id(poco:Poco, id_list: list, offspring_path:str) -> list:
     ...
 
-def get_size(poco:Poco, element: dict) -> list:
+def get_size(poco:Poco, element: list) -> list:
     ...
 
 def get_size_by_id(poco:Poco, id_list: list, offspring_path:str) -> list:
     ...
 
-def get_object_id(poco:Poco, element: dict) -> list:
+def get_object_id(poco:Poco, element: list) -> list:
     ...
 
 
 def get_offspring_id_by_id(poco:Poco, id_list: list, offspring_path: str) -> list:
     ...
 
-def get_parent_id(poco:Poco, element: dict) -> list:
+def get_parent_id(poco:Poco, element: list) -> list:
     ...
 
 def get_parent_id_by_id(poco:Poco, id_list: list, offspring_path:str) -> list:
-    ...
-
-def get_children_id(poco:Poco, element: dict) -> list:
-    ...
-
-def get_children_id_by_id(poco:Poco, id_list: list, offspring_path:str) -> list:
     ...
 
 def get_item_count(poco:Poco, tpid_list: list) -> list:
     ...
 
 
-def get_toggle_is_on(poco:Poco, element: dict)-> list:
+def get_toggle_is_on(poco:Poco, element: list)-> list:
     ...
 
 def get_toggle_is_on_by_id(poco:Poco, id_list: list, offspring_path:str)-> list:
@@ -75,10 +69,10 @@ def get_toggle_is_on_by_id(poco:Poco, id_list: list, offspring_path:str)-> list:
 def screen_shot(poco:Poco, ui_x:int, ui_y:int, ui_w:int, ui_h:int)-> (str, str):
     ...
 
-def get_dropdown_value(poco:Poco, element: dict)-> int:
+def get_dropdown_value(poco:Poco, element: list)-> int:
     ...
 
-def set_dropdown_value(poco:Poco, element: dict, index:int)-> any:
+def set_dropdown_value(poco:Poco, element: list, index:int)-> any:
     ...
 
 def cmd(poco:Poco, command: list)-> any:
@@ -90,19 +84,19 @@ def lua_console(poco:Poco, command: list)-> any:
 def custom_cmd(poco:Poco, command_list:list):
     ...
 
-def set_btn_enabled(poco:Poco, element: dict, enabled: bool)-> any:
+def set_btn_enabled(poco:Poco, element: list, enabled: bool)-> any:
     ...
 
-def set_object_active(poco:Poco, element: dict, active: bool)-> any:
+def set_object_active(poco:Poco, element: list, active: bool)-> any:
     ...
 
 def set_object_active_by_id(poco:Poco, id_list: list, offspring_path:str, active: bool) -> any:
     ...
 
-def click_button(poco:Poco, element: dict)-> any:
+def click_button(poco:Poco, element: list)-> any:
     ...
 
-def ray_input(poco:Poco, element: dict, target_name:str, kind:str)-> any:
+def ray_input(poco:Poco, element: list, target_name:str, kind:str)-> any:
     ...
 
 def set_time_scale(poco:Poco, time_scale:float)-> any:

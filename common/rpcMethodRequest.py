@@ -113,20 +113,10 @@ def get_parent_id(poco, element):
 def get_parent_id_by_id(poco, id_list, offspring_path):
     return poco.agent.c.call("GetParentIdById", id_list, offspring_path)
 
-@sync_wrapper
-def get_children_id(poco, element):
-    return poco.agent.c.call("GetChildrenId", element)
-
-
-@sync_wrapper
-def get_children_id_by_id(poco, id_list, offspring_path):
-    return poco.agent.c.call("GetChildrenIdById", id_list, offspring_path)
-
 
 @sync_wrapper
 def get_item_count(poco, tpid_list):
     return poco.agent.c.call("GetItemCount", tpid_list)
-
 
 
 @sync_wrapper

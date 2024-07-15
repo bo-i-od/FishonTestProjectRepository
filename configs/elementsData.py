@@ -166,6 +166,7 @@ class ElementsData:
         m_value = {"locator": "UICanvas>Default>BattlePanel>FishHUD>m_value"}
         warning = {"locator": "UICanvas>Default>BattlePanel>Warning"}
         hud_power_list = {"locator":"UICanvas>Default>BattlePanel>hud_power>barPanel>list>>baseParticle"}
+        hud_escaping = {"locator":"UICanvas>Default>BattlePanel>FishHUD>fish_HP>m_value>hud_escaping>text"}
 
     class BattlePassBuyLevel:
         BattlePassBuyLevelPanel = {"locator": "UICanvas>Default>BattlePassBuyLevelPanel"}

@@ -37,7 +37,7 @@ def fish_once(bp: BasePage, fishery_id="", fish_id="", is_quick=False):
 
 def circulate_fish(bp: BasePage, fishery_id=None, is_quick=False, times=500):
     fish_list = []
-    cur = 8
+    cur = 0
     if fishery_id is not None:
         fish_list = TournamentsPanel.get_fish_list(bp, fishery_id)
         times = len(fish_list)
@@ -77,7 +77,7 @@ def select_location(bp: BasePage, index):
 
 
 def fish_all(bp: BasePage, is_quick=False):
-    cur = 4
+    cur = 1
     while cur < 13:
         index = str(cur).zfill(2)
         fishery_id = f"4003{index}"
@@ -139,17 +139,19 @@ def champointship(bp, times):
 if __name__ == '__main__':
     # 连接设备号为127.0.0.1:21533的设备
     bp = BasePage("127.0.0.1:21653")
+    bp.set_send_log_flag(False)
+    circulate_fish(bp, is_quick=False)
     # gameInit.set_joystick(bp)
     # # 按渔场id从小到大，再按鱼从小到大钓一遍
     # fish_all(bp,  is_quick=True)
     # fish_all(bp, is_quick=False)
-    l = ["390011","390013", "390014", "390017", "390018"]
-    cur = 0
-    while cur < len(l):
-    #     champointship(bp, 10000)
-    # # fish_once(bp, is_quick=False, fishery_id="400306", fish_id="370807")
-        fish_once(bp, is_quick=False, fishery_id="400302", fish_id=l[cur])
-        cur += 1
+    # l = ["390011","390013", "390014", "390017", "390018"]
+    # cur = 0
+    # while cur < 50:
+    # #     champointship(bp, 10000)
+    # # # fish_once(bp, is_quick=False, fishery_id="400306", fish_id="370807")
+    #     fish_once(bp, is_quick=False)
+    #     cur += 1
     #
     # # 断开连接
     # bp.connect_close()

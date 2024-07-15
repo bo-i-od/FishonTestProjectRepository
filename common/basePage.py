@@ -132,17 +132,20 @@ class BasePage:
 
     # 判断元素是否存在
     # 元素若存在返回的列表不为空
-    def exist(self, object_id=0, element_data=None, offspring_path=""):
+    def exist(self, object_id=0, element_data=None, element_data_list: list = None, offspring_path=""):
         if object_id != 0:
             return self.get_position_list(object_id_list=[object_id], offspring_path=offspring_path)
+        if element_data_list is not None:
+            return self.get_position_list(element_data_list=element_data_list)
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        return self.get_position_list(element_data=element_data_copy)
+        return self.exist(element_data_list=[element_data_copy])
 
     # 得到元素的Instance Id列表
-    def get_object_id_list(self, element_data: dict, offspring_path=""):
+    def get_object_id_list(self, element_data: dict = None, element_data_list: list = None, offspring_path=""):
+        if element_data_list is not None:
+            return rpcMethodRequest.get_object_id(self.poco, element_data_list)
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        object_id_list = rpcMethodRequest.get_object_id(self.poco, element_data_copy)
-        return object_id_list
+        return self.get_object_id_list(element_data_list=[element_data_copy])
 
     # 得到元素的Instance Id
     def get_object_id(self, element_data: dict, offspring_path=""):
@@ -169,13 +172,21 @@ class BasePage:
     #     return child_id_list[0]
 
     # 得到后代的Instance Id
-    def get_offspring_id_list(self, offspring_path, object_id=0, object_id_list=None, element_data=None):
+    def get_offspring_id_list(self, offspring_path, object_id=0, object_id_list=None, element_data=None, element_data_list: list = None):
         if object_id_list is not None:
             return rpcMethodRequest.get_offspring_id_by_id(self.poco, object_id_list, offspring_path)
         if object_id != 0:
             return self.get_offspring_id_list(object_id_list=[object_id], offspring_path=offspring_path)
+        if element_data_list is not None:
+            element_data_copy_list = []
+            cur = 0
+            while cur < len(element_data_list):
+                element_data_copy = self.get_element_data(element_data_list[cur], offspring_path)
+                element_data_copy_list.append(element_data_copy)
+                cur += 1
+            return self.get_object_id_list(element_data_list=element_data_copy_list)
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        return rpcMethodRequest.get_object_id(self.poco, element_data_copy)
+        return self.get_object_id_list(element_data_list=[element_data_copy])
 
     def get_offspring_id(self, offspring_path, object_id=0, element_data=None):
         offspring_id_list = self.get_offspring_id_list(offspring_path, object_id=object_id, element_data=element_data)
@@ -183,31 +194,35 @@ class BasePage:
         return offspring_id_list[0]
 
     # 得到指定元素/元素列表的父节点
-    def get_parent_id_list(self, object_id=0, object_id_list=None, element_data=None, offspring_path=""):
+    def get_parent_id_list(self, object_id=0, object_id_list=None, element_data=None, element_data_list: list = None, offspring_path=""):
         if object_id_list is not None:
             return rpcMethodRequest.get_parent_id_by_id(self.poco, object_id_list, offspring_path)
         if object_id != 0:
             return self.get_parent_id_list(object_id_list=[object_id], offspring_path=offspring_path)
-        return rpcMethodRequest.get_parent_id(self.poco, element_data)
+        if element_data_list is not None:
+            return rpcMethodRequest.get_parent_id(self.poco, element_data_list)
+        element_data_copy = self.get_element_data(element_data, offspring_path)
+        return self.get_parent_id_list(element_data_list=[element_data_copy])
 
     def get_parent_id(self, object_id=0, element_data=None, offspring_path=""):
         if object_id != 0:
             parent_id_list = self.get_parent_id_list(object_id=object_id, offspring_path=offspring_path)
             self.is_single_element(parent_id_list)
             return parent_id_list[0]
-        parent_id_list = self.get_parent_id_list(element_data=element_data)
+        parent_id_list = self.get_parent_id_list(element_data=element_data, offspring_path=offspring_path)
         self.is_single_element(parent_id_list)
         return parent_id_list[0]
 
     # 获得文本
-    def get_text_list(self, object_id=0, object_id_list: list = None, element_data: dict = None, offspring_path=""):
+    def get_text_list(self, object_id=0, object_id_list: list = None, element_data: dict = None, element_data_list: list = None, offspring_path=""):
         if object_id_list is not None:
             return rpcMethodRequest.get_text_by_id(self.poco, object_id_list, offspring_path)
         if object_id != 0:
             return self.get_text_list(object_id_list=[object_id], offspring_path=offspring_path)
+        if element_data_list is not None:
+            return rpcMethodRequest.get_text(self.poco, element_data_list)
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        text_list = rpcMethodRequest.get_text(self.poco, element_data_copy)
-        return text_list
+        return self.get_text_list(element_data_list=[element_data_copy])
 
     def get_text(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
         if object_id != 0:
@@ -220,7 +235,7 @@ class BasePage:
         return text_list[0]
 
     # 修改文本
-    def set_text_list(self, object_id=0, object_id_list: list = None, element_data: dict = None, text="",
+    def set_text_list(self, object_id=0, object_id_list: list = None, element_data: dict = None, element_data_list: list = None, text="",
                       offspring_path=""):
         if object_id_list is not None:
             rpcMethodRequest.set_text_by_id(self.poco, object_id_list, offspring_path, text)
@@ -228,28 +243,33 @@ class BasePage:
         if object_id != 0:
             self.set_text_list(object_id_list=[object_id], offspring_path=offspring_path, text=text)
             return
+        if element_data_list is not None:
+            rpcMethodRequest.set_text(self.poco, element_data_list, text)
+            return
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        rpcMethodRequest.set_text(self.poco, element_data_copy, text)
+        self.set_text_list(element_data_list=[element_data_copy], text=text)
 
     def set_text(self, object_id: int = 0, element_data: dict = None, text="", offspring_path=""):
         if object_id != 0:
             self.set_text_list(object_id=object_id, offspring_path=offspring_path, text=text)
             return
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        rpcMethodRequest.set_text(self.poco, element_data_copy, text)
+        self.set_text_list(element_data=element_data_copy, text=text)
 
     # 获取图标名
-    def get_icon_list(self, object_id=0, object_id_list: list = None, element_data: dict = None, offspring_path=""):
+    def get_icon_list(self, object_id=0, object_id_list: list = None, element_data: dict = None, element_data_list: list = None, offspring_path=""):
         if object_id_list is not None:
             icon_list = rpcMethodRequest.get_img_name_by_id(self.poco, object_id_list, offspring_path)
             resource.check_icon_list(icon_list)
             return icon_list
         if object_id != 0:
             return self.get_icon_list(object_id_list=[object_id], offspring_path=offspring_path)
+        if element_data_list is not None:
+            icon_list = rpcMethodRequest.get_img_name(self.poco, element_data_list)
+            resource.check_icon_list(icon_list)
+            return icon_list
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        icon_list = rpcMethodRequest.get_img_name(self.poco, element_data_copy)
-        resource.check_icon_list(icon_list)
-        return icon_list
+        return self.get_icon_list(element_data_list=[element_data_copy])
 
     def get_icon(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
         if object_id != 0:
@@ -263,15 +283,15 @@ class BasePage:
         return icon_list[0]
 
     # 获取节点名称
-    def get_name_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None,
-                      offspring_path=""):
+    def get_name_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None, element_data_list: list = None, offspring_path=""):
         if object_id_list is not None:
             return rpcMethodRequest.get_name_by_id(self.poco, object_id_list, offspring_path)
         if object_id != 0:
             return self.get_name_list(object_id_list=[object_id], offspring_path=offspring_path)
+        if element_data_list is not None:
+            return rpcMethodRequest.get_name(self.poco, element_data_list)
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        name_list = rpcMethodRequest.get_name(self.poco, element_data_copy)
-        return name_list
+        return self.get_name_list(element_data_list=[element_data_copy])
 
     def get_name(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
         if object_id != 0:
@@ -284,14 +304,15 @@ class BasePage:
         return name_list[0]
 
     # 获取滑条值
-    def get_slider_value_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None,
-                              offspring_path=""):
+    def get_slider_value_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None, element_data_list: list = None, offspring_path=""):
         if object_id_list is not None:
             return rpcMethodRequest.get_slider_value_by_id(self.poco, object_id_list, offspring_path)
         if object_id != 0:
             return self.get_slider_value_list(object_id_list=[object_id], offspring_path=offspring_path)
+        if element_data_list is not None:
+            return rpcMethodRequest.get_slider_value(self.poco, element_data_list)
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        return rpcMethodRequest.get_slider_value(self.poco, element_data_copy)
+        return self.get_slider_value_list(element_data_list=[element_data_copy])
 
     # 获取到的滑条值是float类型，值在0~1
     def get_slider_value(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
@@ -306,21 +327,21 @@ class BasePage:
 
     # 获取下拉列表当前值
     def get_dropdown_value(self, element_data):
-        return rpcMethodRequest.get_dropdown_value(self.poco, element_data)
+        return rpcMethodRequest.get_dropdown_value(self.poco, [element_data])
 
     def set_dropdown_value(self, element_data, index):
-        rpcMethodRequest.set_dropdown_value(self.poco, element_data, index)
+        rpcMethodRequest.set_dropdown_value(self.poco, [element_data], index)
 
     # 获取元素尺寸
-    def get_size_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None,
-                      offspring_path=""):
+    def get_size_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None, element_data_list: list = None, offspring_path=""):
         if object_id_list is not None:
             return rpcMethodRequest.get_size_by_id(self.poco, object_id_list, offspring_path)
         if object_id != 0:
             return self.get_size_list(object_id_list=[object_id], offspring_path=offspring_path)
+        if element_data_list is not None:
+            return rpcMethodRequest.get_size(self.poco, element_data_list)
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        size_list = rpcMethodRequest.get_size(self.poco, element_data_copy)
-        return size_list
+        return self.get_size_list(element_data_list=[element_data_copy])
 
     def get_size(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
         if object_id != 0:
@@ -333,15 +354,15 @@ class BasePage:
         return size_list[0]
 
     # 获取勾选状态
-    def get_toggle_is_on_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None,
-                              offspring_path=""):
+    def get_toggle_is_on_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None, element_data_list: list = None, offspring_path=""):
         if object_id_list is not None:
             return rpcMethodRequest.get_toggle_is_on_by_id(self.poco, object_id_list, offspring_path)
         if object_id != 0:
             return self.get_toggle_is_on_list(object_id_list=[object_id], offspring_path=offspring_path)
+        if element_data_list is not None:
+            return rpcMethodRequest.get_toggle_is_on(self.poco, element_data_list)
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        toggle_is_on_list = rpcMethodRequest.get_toggle_is_on(self.poco, element_data_copy)
-        return toggle_is_on_list
+        return self.get_toggle_is_on_list(element_data_list=[element_data_copy])
 
     def get_toggle_is_on(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
         if object_id != 0:
@@ -354,23 +375,15 @@ class BasePage:
         return toggle_is_on_list[0]
 
     # 获取位置
-    def get_position_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None, offspring_path=""):
+    def get_position_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None, element_data_list: list = None, offspring_path=""):
         if object_id_list is not None:
             return rpcMethodRequest.get_position_by_id(self.poco, object_id_list, offspring_path)
         if object_id != 0:
             return self.get_position_list(object_id_list=[object_id], offspring_path=offspring_path)
+        if element_data_list is not None:
+            return rpcMethodRequest.get_position(self.poco, element_data_list)
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        position_list = rpcMethodRequest.get_position(self.poco, element_data_copy)
-        if "focus" in element_data_copy:
-            size_list = rpcMethodRequest.get_size(self.poco, element_data_copy)
-            bias_x = 0.5 - element_data_copy["focus"][0]
-            bias_y = 0.5 - element_data_copy["focus"][1]
-            cur = 0
-            while cur < len(position_list):
-                position_list[cur][0] += size_list[cur][0] * bias_x
-                position_list[cur][1] += size_list[cur][1] * bias_y
-                cur += 1
-        return position_list
+        return self.get_position_list(element_data_list=[element_data_copy])
 
     def get_position(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
         if object_id != 0:
@@ -806,25 +819,35 @@ class BasePage:
             return
         self.custom_cmd_list([command])
 
-    def click_button(self, element_data:dict):
-        rpcMethodRequest.click_button(self.poco, element_data)
+    def click_button(self, element_data: dict = None, element_data_list: list = None):
+        if element_data_list is not None:
+            rpcMethodRequest.click_button(self.poco, element_data_list)
+            return
+        self.click_button(element_data_list=[element_data])
 
     # kind包含up，down，click
-    def ray_input(self, element_data:dict, target_name: str, kind: str):
-        rpcMethodRequest.ray_input(self.poco, element_data, target_name, kind)
+    def ray_input(self, target_name: str, kind: str, element_data:dict = None,element_data_list: list = None):
+        if element_data_list is not None:
+            rpcMethodRequest.ray_input(self.poco, element_data_list, target_name, kind)
+            return
+        self.ray_input(target_name=target_name, kind=kind,element_data_list=[element_data])
 
-    # 设定节点激活状态
-    def set_object_active_list(self, active,object_id=0, object_id_list: list = None, element_data: dict = None, offspring_path=""):
+
+            # 设定节点激活状态
+    def set_object_active_list(self, active, object_id=0, object_id_list: list = None, element_data: dict = None,element_data_list: list = None, offspring_path=""):
         if object_id_list is not None:
             rpcMethodRequest.set_object_active_by_id(self.poco, object_id_list, offspring_path, active)
             return
         if object_id != 0:
-            self.set_object_active_list(object_id_list=[object_id], offspring_path=offspring_path, active=active)
+            self.set_object_active_list(active=active, object_id_list=[object_id], offspring_path=offspring_path)
+            return
+        if element_data_list is not None:
+            rpcMethodRequest.set_object_active(self.poco, element_data_list, active)
             return
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        rpcMethodRequest.set_object_active(self.poco, element_data_copy, active)
+        self.set_object_active_list(active=active, element_data_list=[element_data_copy])
 
-    def set_object_active(self,active, object_id: int = 0, element_data: dict = None, offspring_path=""):
+    def set_object_active(self, active, object_id: int = 0, element_data: dict = None, offspring_path=""):
         if object_id != 0:
             self.set_object_active_list(active=active, object_id=object_id, offspring_path=offspring_path)
             return
