@@ -136,11 +136,11 @@ class BasePage:
                 return True
             return False
         if element_data_list is not None:
-            if self.get_offspring_id_list(element_data_list=element_data_list, offspring_path=offspring_path):
-                return True
-            return False
+            return self.get_offspring_id_list(element_data_list=element_data_list, offspring_path=offspring_path)
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        return self.exist(element_data_list=[element_data_copy])[0]
+        if self.exist(element_data_list=[element_data_copy])[0]:
+            return True
+        return False
 
 
     # 得到元素的Instance Id列表
