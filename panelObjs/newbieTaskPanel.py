@@ -7,9 +7,7 @@ from tools.commonTools import *
 class NewbieTaskPanel(BasePage):
     # 面板是否存在
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.NewbieTask.NewbieTaskPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.NewbieTask.NewbieTaskPanel)
 
     # 点击关闭按钮
     def click_btn_close(self):

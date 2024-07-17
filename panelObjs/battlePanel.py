@@ -5,16 +5,12 @@ from configs.elementsData import ElementsData
 from tools.commonTools import *
 class BattlePanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.Battle.BattlePanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Battle.BattlePanel)
 
     def is_reel_active(self):
-        if self.exist(element_data=ElementsData.Battle.btn_reel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Battle.btn_reel)
 
-    def qte(self):
+    def qte0(self):
         while True:
             qte_id_list = self.get_parent_id_list(element_data=ElementsData.Battle.qte_list)
             name_list = self.get_name_list(object_id_list=qte_id_list)
@@ -37,46 +33,51 @@ class BattlePanel(BasePage):
                 BattlePanel.slide(self, "up")
                 continue
 
-    # def qte(self):
-    #     while True:
-    #         try:
-    #             if self.qte_queue is None:
-    #                 self.sleep(0.1)
-    #                 continue
-    #             item = self.qte_queue.get_nowait()
-    #             if item == 0:
-    #                 BattlePanel.slide(self, "up")
-    #             elif item == 1:
-    #                 BattlePanel.slide(self, "left")
-    #             elif item == 2:
-    #                 BattlePanel.slide(self, "right")
-    #             elif item == 3:
-    #                 BattlePanel.slide(self, "left")
-    #             elif item == 4:
-    #                 BattlePanel.slide(self, "right")
-    #             elif item == 5:
-    #                 BattlePanel.unleash_power(self)
-    #             self.sleep(0.2)
-    #             # self.qte_check = item
-    #         except:
-    #             try:
-    #                 if self.exist(element_data=ElementsData.Result.ResultPanel):
-    #                     break
-    #             except:
-    #                 break
+    def qte(self):
+        element_data_list = [ElementsData.Battle.qte_left, ElementsData.Battle.qte_right, ElementsData.Battle.qte_up, ElementsData.Battle.qte_jump_left, ElementsData.Battle.qte_jump_right, ElementsData.Battle.hud_power_list, ElementsData.Result.ResultPanel]
+        qte_left_index = element_data_list.index(ElementsData.Battle.qte_left)
+        qte_right_index = element_data_list.index(ElementsData.Battle.qte_right)
+        qte_up_index = element_data_list.index(ElementsData.Battle.qte_up)
+        qte_jump_left_index = element_data_list.index(ElementsData.Battle.qte_jump_left)
+        qte_jump_right_index = element_data_list.index(ElementsData.Battle.qte_jump_right)
+        hud_power_list_index = element_data_list.index(ElementsData.Battle.hud_power_list)
+        ResultPanel_index = element_data_list.index(ElementsData.Result.ResultPanel)
+        while True:
+            object_id_list = self.get_object_id_list(element_data_list=element_data_list)
+            if len(object_id_list[hud_power_list_index]) > 2:
+                BattlePanel.unleash_power(self)
+                continue
+            if object_id_list[qte_up_index]:
+                BattlePanel.slide(self, "up")
+                continue
+            if object_id_list[qte_jump_left_index]:
+                BattlePanel.slide(self, "left")
+                continue
+            if object_id_list[qte_jump_right_index]:
+                BattlePanel.slide(self, "right")
+                continue
+            if object_id_list[qte_left_index]:
+                BattlePanel.slide(self, "left")
+                continue
+            if object_id_list[qte_right_index]:
+                BattlePanel.slide(self, "right")
+                continue
+            if object_id_list[ResultPanel_index]:
+                break
+
 
     def slide(self, dir):
         if dir == "left":
-            self.swipe(point_start=[0.4, 0.6], point_end=[0.2, 0.6], t=0.1)
+            self.swipe(point_start=[0.4, 0.6], point_end=[0.2, 0.6], t=0.15)
             return
         if dir == "right":
-            self.swipe(point_start=[0.4, 0.6], point_end=[0.6, 0.6], t=0.1)
+            self.swipe(point_start=[0.4, 0.6], point_end=[0.6, 0.6], t=0.15)
             return
         if dir == "up":
-            self.swipe(point_start=[0.4, 0.6], point_end=[0.4, 0.4], t=0.1)
+            self.swipe(point_start=[0.4, 0.6], point_end=[0.4, 0.4], t=0.15)
             return
         if dir == "down":
-            self.swipe(point_start=[0.4, 0.6], point_end=[0.4, 0.8], t=0.1)
+            self.swipe(point_start=[0.4, 0.6], point_end=[0.4, 0.8], t=0.15)
             return
 
     def release_btn_reel(self):
@@ -145,12 +146,16 @@ class BattlePanel(BasePage):
         return float(m)
 
     def is_warning_active(self):
-        if self.exist(element_data=ElementsData.Battle.warning):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Battle.warning)
 
 
 
 if __name__ == '__main__':
     bp = BasePage()
-    bp.set_object_active(element_data=ElementsData.Login.LoginPanel, active=True)
+    while True:
+        hud_escaping = bp.get_text_list(element_data=ElementsData.Battle.hud_escaping)
+        if not hud_escaping:
+            bp.sleep(0.1)
+            continue
+        print(hud_escaping[0][:-1])
+        bp.sleep(0.1)

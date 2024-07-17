@@ -10,9 +10,8 @@ class AchievementCategoryPanel(BasePage):
         self.click_element(element_data=ElementsData.AchievementCategory.btn_close)
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.AchievementCategory.AchievementCategoryPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.AchievementCategory.AchievementCategoryPanel)
+
 
     def get_category_position_list(self):
         return self.get_position_list(element_data=ElementsData.AchievementCategory.item_list)

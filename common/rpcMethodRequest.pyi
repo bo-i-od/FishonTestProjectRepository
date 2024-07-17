@@ -69,7 +69,7 @@ def get_toggle_is_on_by_id(poco:Poco, id_list: list, offspring_path:str)-> list:
 def screen_shot(poco:Poco, ui_x:int, ui_y:int, ui_w:int, ui_h:int)-> (str, str):
     ...
 
-def get_dropdown_value(poco:Poco, element: list)-> int:
+def get_dropdown_value(poco:Poco, element: list)-> list:
     ...
 
 def set_dropdown_value(poco:Poco, element: list, index:int)-> any:

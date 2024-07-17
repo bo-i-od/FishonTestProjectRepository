@@ -5,9 +5,7 @@ from common import resource
 class ProgressRewardsPanel(BasePage):
     # 面板是否存在
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.ProgressRewards.ProgressRewardsPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.ProgressRewards.ProgressRewardsPanel)
 
 
     # 点击关闭按钮
@@ -15,9 +13,7 @@ class ProgressRewardsPanel(BasePage):
         self.click_element(element_data=ElementsData.ProgressRewards.btn_close)
 
     def is_btn_go_active(self):
-        if self.exist(element_data=ElementsData.ProgressRewards.btn_go):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.ProgressRewards.btn_go)
 
     # 点击跳转按钮
     def click_btn_go(self):
@@ -73,9 +69,7 @@ class ProgressRewardsPanel(BasePage):
         return quantity_list
 
     def is_progress_finish(self):
-        if self.exist(element_data=ElementsData.ProgressRewards.progress_finish):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.ProgressRewards.progress_finish)
 
 if __name__ == '__main__':
     bp = BasePage("b6h65hd64p5pxcyh")

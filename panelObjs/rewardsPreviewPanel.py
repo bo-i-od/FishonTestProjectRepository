@@ -4,9 +4,7 @@ from tools.commonTools import *
 
 class RewardsPreviewPanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.RewardsPreview.RewardsPreviewPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.RewardsPreview.RewardsPreviewPanel)
 
     def get_reward_icon_list(self):
         reward_icon_list = self.get_icon_list(element_data=ElementsData.RewardsPreview.reward_icon_list)

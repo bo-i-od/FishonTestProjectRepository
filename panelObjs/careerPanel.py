@@ -13,9 +13,7 @@ class CareerPanel(BasePage):
             return FindElementError
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.Career.CareerPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Career.CareerPanel)
 
     def click_btn_i(self):
         self.click_element(element_data=ElementsData.Career.btn_i)

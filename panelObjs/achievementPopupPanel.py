@@ -4,9 +4,7 @@ from tools.commonTools import *
 
 class AchievementPopupPanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.AchievementPopup.AchievementPopupPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.AchievementPopup.AchievementPopupPanel)
 
     def wait_for_panel_disappear(self):
         while AchievementPopupPanel.is_panel_active(self):

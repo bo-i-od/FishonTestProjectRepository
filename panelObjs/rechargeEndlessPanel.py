@@ -6,9 +6,7 @@ class RechargeEndlessPanel(BasePage):
         self.click_element(element_data=ElementsData.RechargeEndless.btn_close)
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.RechargeEndless.RechargeEndlessPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.RechargeEndless.RechargeEndlessPanel)
 
     # 点击并返回价格文本
     def click_btn_buy(self, index):

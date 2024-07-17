@@ -4,9 +4,7 @@ from tools.commonTools import *
 
 class LeaderBoardPopResultPanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.LeaderBoardPopResult.LeaderBoardPopResultPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.LeaderBoardPopResult.LeaderBoardPopResultPanel)
 
     def wait_for_LeaderBoardPopResultPanel(self):
         while not LeaderBoardPopResultPanel.is_panel_active(self):

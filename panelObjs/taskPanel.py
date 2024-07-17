@@ -212,14 +212,10 @@ class TaskPanel(BasePage):
                 raise FindNoElementError
 
     def is_award_detail_active(self):
-        if self.exist(element_data=ElementsData.Task.award_detail):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Task.award_detail)
 
     def is_month_award_detail_active(self):
-        if self.exist(element_data=ElementsData.Task.month_award_detail):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Task.month_award_detail)
 
     def get_box_award_icon_list(self):
         award_icon_list = self.get_icon_list(element_data=ElementsData.Task.award_icon_list)

@@ -5,9 +5,7 @@ from common import resource
 
 class FishCardPackTipsPanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.FishCardPackTips.FishCardPackTipsPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.FishCardPackTips.FishCardPackTipsPanel)
 
     def get_item_icon(self):
         item_icon = self.get_icon(element_data=ElementsData.FishCardPackTips.item_icon)

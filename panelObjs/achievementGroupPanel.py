@@ -10,9 +10,8 @@ class AchievementGroupPanel(BasePage):
         self.click_element(element_data=ElementsData.AchievementGroup.btn_close)
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.AchievementGroup.AchievementGroupPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.AchievementGroup.AchievementGroupPanel)
+
 
     @staticmethod
     def get_panel_element():
@@ -78,9 +77,8 @@ class AchievementGroupPanel(BasePage):
         self.click_element(element_data=ElementsData.AchievementGroup.box)
 
     def is_box_clickable(self):
-        if self.exist(element_data=ElementsData.AchievementGroup.box_collectable):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.AchievementGroup.box_collectable)
+
 
     def get_resource_100000(self):
         return resource.get_resource(self, item_tpid="100000", element_data=ElementsData.AchievementGroup.text_100000)

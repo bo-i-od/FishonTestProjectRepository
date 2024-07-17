@@ -4,9 +4,7 @@ from tools.commonTools import *
 
 class BattlePassBuyLicensePanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.BattlePassBuyLicense.BattlePassBuyLicensePanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.BattlePassBuyLicense.BattlePassBuyLicensePanel)
 
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.BattlePassBuyLicense.btn_close)

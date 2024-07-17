@@ -4,9 +4,8 @@ from tools.commonTools import *
 
 class PVPResultPanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.PVPResult.PVPResultPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.PVPResult.PVPResultPanel)
+
     def click_tap_to_click(self):
         self.click_until_disappear(element_data=ElementsData.PVPResult.tap_to_close)
 

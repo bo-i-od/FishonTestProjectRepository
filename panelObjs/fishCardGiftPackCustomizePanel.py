@@ -10,9 +10,7 @@ class FishCardGiftPackCustomizePanel(BasePage):
 
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.FishCardGiftPackCustomize.FishCardGiftPackCustomizePanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.FishCardGiftPackCustomize.FishCardGiftPackCustomizePanel)
 
     def get_item_quantity_list(self):
         quantity_list = self.get_text_list(element_data=ElementsData.FishCardGiftPackCustomize.quantity_list)

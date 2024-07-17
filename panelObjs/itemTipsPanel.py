@@ -4,9 +4,8 @@ from configs.elementsData import ElementsData
 
 class ItemTipsPanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.ItemTips.ItemTipsPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.ItemTips.ItemTipsPanel)
+
     def get_item_icon(self):
         return self.get_icon(element_data=ElementsData.ItemTips.icon)
 

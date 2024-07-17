@@ -8,9 +8,7 @@ class AquariumPanel(BasePage):
         self.click_element(element_data=ElementsData.Aquarium.btn_close)
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.Aquarium.AquariumPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Aquarium.AquariumPanel)
 
     def click_btn_add_100100(self):
         self.click_element(element_data=ElementsData.Aquarium.btn_add_100100)

@@ -13,19 +13,13 @@ class GearPanel(BasePage):
         self.click_element(element_data=ElementsData.Gear.btn_close)
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.Gear.GearPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Gear.GearPanel)
 
     def is_upgrade_max_active(self):
-        if self.exist(element_data=ElementsData.Gear.upgrade_max):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Gear.upgrade_max)
 
     def is_enhance_max_active(self):
-        if self.exist(element_data=ElementsData.Gear.enhance_max):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Gear.enhance_max)
 
     def click_btn_upgrade(self):
         self.click_element(element_data=ElementsData.Gear.btn_upgrade)
@@ -131,9 +125,7 @@ class GearPanel(BasePage):
         self.click_element(element_data=ElementsData.Gear.btn_filter)
 
     def is_tip_filter_rod_active(self):
-        if self.exist(element_data=ElementsData.Gear.tip_filter_rod):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Gear.tip_filter_rod)
 
     def click_btn_apply(self):
         self.click_element(element_data=ElementsData.Gear.btn_apply)

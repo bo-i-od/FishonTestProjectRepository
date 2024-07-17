@@ -163,6 +163,7 @@ class ElementsData:
         qte_right = {"locator": "UICanvas>Default>BattlePanel>FishHUD>qte_right>qte"}
         qte_jump_left = {"locator": "UICanvas>Default>BattlePanel>FishHUD>qte_left_fishJump>qte"}
         qte_jump_right = {"locator": "UICanvas>Default>BattlePanel>FishHUD>qte_right_fishJump>qte"}
+        qte_up = {"locator": "UICanvas>Default>BattlePanel>FishHUD>qte_up>qte"}
         m_value = {"locator": "UICanvas>Default>BattlePanel>FishHUD>m_value"}
         warning = {"locator": "UICanvas>Default>BattlePanel>Warning"}
         hud_power_list = {"locator":"UICanvas>Default>BattlePanel>hud_power>barPanel>list>>baseParticle"}

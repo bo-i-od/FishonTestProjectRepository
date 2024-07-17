@@ -7,9 +7,7 @@ class BattlePassPopPanel(BasePage):
         self.click_element(element_data=ElementsData.BattlePassPop.btn_close)
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.BattlePassPop.BattlePassPopPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.BattlePassPop.BattlePassPopPanel)
 
     def click_get_premium(self):
         self.click_element(element_data=ElementsData.BattlePassPop.btn_confirm)

@@ -8,9 +8,7 @@ class BattlePassPanel(BasePage):
         self.click_element(element_data=ElementsData.BattlePass.btn_close)
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.BattlePass.BattlePassPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.BattlePass.BattlePassPanel)
 
     # 点击鱼竿进入预览
     def click_btn_detail(self):
@@ -23,9 +21,7 @@ class BattlePassPanel(BasePage):
         self.click_element(element_data=ElementsData.BattlePass.btn_i_goldbank)
 
     def is_Tip_goldbank_active(self):
-        if self.exist(element_data=ElementsData.BattlePass.Tip_goldbank):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.BattlePass.Tip_goldbank)
 
     def click_btn_task(self):
         self.click_element(element_data=ElementsData.BattlePass.btn_task)

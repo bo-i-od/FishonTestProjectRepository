@@ -4,9 +4,8 @@ from tools.commonTools import *
 
 class PVPBattleHUDPanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.PVPBattleHUD.PVPBattleHUDPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.PVPBattleHUD.PVPBattleHUDPanel)
+
     def click_btn_chat(self):
         self.click_element(element_data=ElementsData.PVPBattleHUD.btn_chat)
 

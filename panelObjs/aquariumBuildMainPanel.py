@@ -7,9 +7,7 @@ class AquariumBuildMainPanel(BasePage):
         self.click_element(element_data=ElementsData.AquariumBuildMain.btn_close)
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.AquariumBuildMain.AquariumBuildMainPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.AquariumBuildMain.AquariumBuildMainPanel)
 
     def get_tip_levelup_bubble_position_list(self):
         return self.get_position_list(element_data=ElementsData.AquariumBuildMain.tip_levelup_bubble_list)

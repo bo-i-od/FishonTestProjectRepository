@@ -14,16 +14,17 @@ class StorePanel(BasePage):
         self.click_element(element_data=ElementsData.Store.btn_close)
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.Store.StorePanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Store.StorePanel)
 
     def click_btn_refresh(self):
-        if self.exist(element_data=ElementsData.Store.Box.btn_refresh_text):
-            position = self.get_position(element_data=ElementsData.Store.Box.btn_refresh_text)
-        else:
-            position = self.get_position(element_data=ElementsData.Store.Box.btn_refresh_value)
+        position_list = self.get_position_list(element_data=ElementsData.Store.Box.btn_refresh_text)
+        if position_list:
+            position = position_list[0]
+            self.click_position(position)
+            return
+        position = self.get_position(element_data=ElementsData.Store.Box.btn_refresh_value)
         self.click_position(position)
+
 
     def change_tab(self, index):
         edge = [0.01, 0.01]

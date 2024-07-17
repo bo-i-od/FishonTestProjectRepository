@@ -4,9 +4,7 @@ from configs.elementsData import ElementsData
 
 class RodMoreToOnePanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.RodMoreToOne.RodMoreToOnePanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.RodMoreToOne.RodMoreToOnePanel)
 
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.RodMoreToOne.btn_close)

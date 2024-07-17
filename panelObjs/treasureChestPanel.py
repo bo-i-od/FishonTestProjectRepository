@@ -7,9 +7,7 @@ class TreasureChestPanel(BasePage):
         self.click_element(element_data=ElementsData.TreasureChest.btn_close)
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.TreasureChest.TreasureChestPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.TreasureChest.TreasureChestPanel)
 
     """
     输出箱子点的分子和分母

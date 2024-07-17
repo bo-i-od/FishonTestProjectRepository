@@ -5,9 +5,7 @@ from common.viewport import Viewport
 
 class PlayerEditNamePanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.PlayerEditName.PlayerEditNamePanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.PlayerEditName.PlayerEditNamePanel)
 
     def wait_for_panel_appear(self):
         self.wait_for_appear(element_data=ElementsData.PlayerEditName.PlayerEditNamePanel, is_click=False)

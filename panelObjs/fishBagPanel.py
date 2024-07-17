@@ -4,9 +4,7 @@ from configs.elementsData import ElementsData
 
 class FishBagPanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.FishBag.FishBagPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.FishBag.FishBagPanel)
 
     def click_tap_to_continue(self):
         while FishBagPanel.is_panel_active(self):

@@ -14,9 +14,7 @@ class AchievementWantedPanel(BasePage):
 
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.AchievementWanted.AchievementWantedPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.AchievementWanted.AchievementWantedPanel)
 
     # 悬赏图位置
     def get_wanted_position_list(self):

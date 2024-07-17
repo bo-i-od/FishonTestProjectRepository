@@ -13,6 +13,7 @@ from scripts import battleTest
 import json
 
 
+
 def init(bp: BasePage):
     if LoginPanel.is_panel_active(bp):
         return
@@ -90,13 +91,60 @@ def go_leaderborad(bp:BasePage):
     TournamentsPanel.click_btn_leaderboard(bp)
     bp.sleep(1)
 
-def fish(bp: BasePage):
-    # bp.cmd_list(["levelupto 30"])
+def fish(bp: BasePage, index):
+    bp.cmd_list(["levelupto 30", "add 1 100500 1000"])
     # bp.sleep(0.1)
-    bp.cmd("mode 400301 390004")
-    bp.sleep(0.1)
-    fishingMsg.fish(bp, [{"spot_id": f"40030101", "times": 1, "energy_cost": 50}])
+    # cur = 1
+    # while cur < 13:
+    #     if cur == index or cur == 6 + index:
+    #         cur += 1
+    #         continue
+    #     id = str(cur).zfill(2)
+    #     bp.cmd(f"mode 400312 3120{id}")
+    #     bp.sleep(0.1)
+    #     fishingMsg.fish(bp, [{"spot_id": f"40031211", "times": 1, "is_activity_spot": True}])
+    #     cur += 1
+    # bp.cmd(f"mode 400312 39011{index}")
+    # bp.sleep(0.1)
+    # fishingMsg.fish(bp, [{"spot_id": f"40031211", "times": 1, "is_activity_spot": True}])
+    #
+    # bp.sleep(2)
+
+    # cur不钓 cur+6钓
+
+    # bp.cmd("fishscenestarset 400312 9")
+    # bp.sleep(1)
+    #
+    cur = 1
+    while cur < 13:
+        if cur > 10:
+            cur += 1
+            continue
+        id = str(cur).zfill(2)
+        bp.cmd(f"mode 400312 3120{id}")
+        bp.sleep(0.1)
+        fishingMsg.fish(bp, [{"spot_id": f"40031211", "times": 1, "is_activity_spot": True}])
+        cur += 1
+
+    # bp.cmd(f"mode 400312 390117")
+    # bp.sleep(0.1)
+    # fishingMsg.fish(bp, [{"spot_id": f"40031211", "times": 1, "is_activity_spot": True}])
+    # bp.cmd(f"mode 400312 390118")
+    # bp.sleep(0.1)
+    # fishingMsg.fish(bp, [{"spot_id": f"40031211", "times": 1, "is_activity_spot": True}])
+    # bp.cmd(f"mode 400312 390119")
+    # bp.sleep(0.1)
+    # fishingMsg.fish(bp, [{"spot_id": f"40031211", "times": 1, "is_activity_spot": True}])
+    # bp.cmd(f"mode 400312 39011{index}")
+    # bp.sleep(0.1)
+    # fishingMsg.fish(bp, [{"spot_id": f"40031211", "times": 1, "is_activity_spot": True}])
+    # bp.cmd(f"mode 400312 39011{index + 3}")
+    # bp.sleep(0.1)
+    # fishingMsg.fish(bp, [{"spot_id": f"40031211", "times": 1, "is_activity_spot": True}])
+
     bp.sleep(2)
+
+
     # bp.cmd("mode 400309 390088")
     # fishingMsg.fish(bp, [{"spot_id": f"40030913", "times": 1, "energy_cost": 50}])
     # bp.sleep(0.1)
@@ -230,12 +278,13 @@ def add_friend(bp: BasePage,target_id):
     FriendPanel.add_friend(bp,target_id)
 
 
+
 def main(bp):
     # 登录号前缀
-    prefix = "msg"
+    prefix = "hd"
     init(bp)
-    cur = 3
-    limit = 33
+    cur = 1
+    limit = 4
     while cur < limit:
         name = prefix + str(cur)
         login(bp, name)
@@ -243,8 +292,8 @@ def main(bp):
         # 你要执行的初始化账号操作
         # add_gu(bp, cur)
         # dragon_boat(bp, cur)
-        friend(bp)
-        # fish(bp)
+        # friend(bp)
+        fish(bp, cur)
 
         logout(bp)
         cur += 1

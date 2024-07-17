@@ -4,9 +4,7 @@ from common.resource import *
 
 class RewardsPanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.Rewards.RewardsPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Rewards.RewardsPanel)
 
     def click_tap_to_claim(self):
         self.click_element(element_data=ElementsData.Rewards.tap_to_claim)

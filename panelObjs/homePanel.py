@@ -5,9 +5,7 @@ from configs.elementsData import ElementsData
 
 class HomePanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.Home.HomePanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Home.HomePanel)
 
     # 获取玩家经验值
     def get_exp_val(self):
@@ -44,9 +42,7 @@ class HomePanel(BasePage):
         return rating
 
     def is_btn_questionnaire_exist(self):
-        if self.exist(element_data=ElementsData.Home.btn_questionnaire):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Home.btn_questionnaire)
 
     def get_level(self):
         player_lv = self.get_text(element_data=ElementsData.Home.player_lv)

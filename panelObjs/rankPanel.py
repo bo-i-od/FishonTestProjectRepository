@@ -7,9 +7,7 @@ class RankPanel(BasePage):
         self.click_element(element_data=ElementsData.Rank.btn_close)
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.Rank.RankPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Rank.RankPanel)
 
     def get_fisheries_position_list(self):
         return self.get_position_list(element_data=ElementsData.Rank.fisheries_list)
@@ -29,9 +27,7 @@ class RankPanel(BasePage):
         return tab_time_position_list
 
     def is_time_active(self):
-        if self.exist(element_data=ElementsData.Rank.time):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Rank.time)
 
     def get_photo_viewport(self):
         edge = [0.05, 0.05]

@@ -8,9 +8,7 @@ class BattlePassBuyLevelPanel(BasePage):
         self.click_element(element_data=ElementsData.BattlePassBuyLevel.btn_close)
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.BattlePassBuyLevel.BattlePassBuyLevelPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.BattlePassBuyLevel.BattlePassBuyLevelPanel)
 
     def click_add_level(self):
         self.click_element(element_data=ElementsData.BattlePassBuyLevel.btn_add)

@@ -348,16 +348,16 @@ def main(bp:BasePage):
 
 if __name__ == '__main__':
     base_page = BasePage("127.0.0.1:21533")
-    # base_page = BasePage("b6h65hd64p5pxcyh")
+    base_page.set_send_log_flag(False)
     # cur = 0
     # while cur < 3:
     #     duel_once(base_page, 1)
     #     cur += 1
     #     print(f"第{cur}次钓鱼")
-
+    # circulate_fish(base_page, is_quick=False, times=120)
     while True:
-        base_page = champointship(base_page, 0, 30)
-        base_page = champointship(base_page, 1, 30)
+        base_page = champointship(base_page, 0, 15)
+        base_page = champointship(base_page, 1, 9)
 
 
 

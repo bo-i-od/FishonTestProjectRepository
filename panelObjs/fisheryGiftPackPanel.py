@@ -7,9 +7,7 @@ class FisheryGiftPackPanel(BasePage):
         self.click_element(element_data=ElementsData.FisheryGiftPack.btn_close)
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.FisheryGiftPack.FisheryGiftPackPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.FisheryGiftPack.FisheryGiftPackPanel)
 
     def get_item_quantity_list(self):
         quantity_list = self.get_text_list(element_data=ElementsData.FisheryGiftPack.quantity_list)

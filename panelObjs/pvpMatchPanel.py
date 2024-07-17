@@ -5,9 +5,7 @@ from common.viewport import Viewport
 
 class PVPMatchPanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.PVPMatch.PVPMatchPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.PVPMatch.PVPMatchPanel)
 
     def click_btn_cancel(self):
         self.click_element(element_data=ElementsData.PVPMatch.btn_cancel)

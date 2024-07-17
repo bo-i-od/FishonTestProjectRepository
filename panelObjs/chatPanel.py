@@ -12,9 +12,7 @@ class ChatPanel(BasePage):
             return FindElementError
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.Chat.ChatPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Chat.ChatPanel)
 
     def input_text(self, text):
         self.set_text(element_data=ElementsData.Chat.Input_enter, text=text)

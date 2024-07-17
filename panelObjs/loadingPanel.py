@@ -4,9 +4,7 @@ from configs.elementsData import ElementsData
 
 class LoadingPanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.Loading.LoadingPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Loading.LoadingPanel)
 
     def wait_until_panel_disappear(self, is_wait_for_appear=True):
         if is_wait_for_appear:

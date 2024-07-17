@@ -9,14 +9,10 @@ class GearEnhancePanel(BasePage):
 
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.GearEnhance.GearEnhancePanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.GearEnhance.GearEnhancePanel)
 
     def is_max_active(self):
-        if self.exist(element_data=ElementsData.GearEnhance.max):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.GearEnhance.max)
 
     def get_stars_now(self):
         stars_list = self.get_icon_list(element_data=ElementsData.GearEnhance.stars_now)

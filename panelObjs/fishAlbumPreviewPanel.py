@@ -10,6 +10,4 @@ class FishAlbumPreviewPanel(BasePage):
 
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.FishAlbumPreview.FishAlbumPreviewPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.FishAlbumPreview.FishAlbumPreviewPanel)

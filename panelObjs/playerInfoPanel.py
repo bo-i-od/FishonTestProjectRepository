@@ -8,9 +8,7 @@ from tools.commonTools import get_toggle_is_on_index, compare
 
 class PlayerInfoPanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.PlayerInfo.PlayerInfoPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.PlayerInfo.PlayerInfoPanel)
 
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.PlayerInfo.btn_close)
@@ -259,9 +257,7 @@ class PlayerInfoPanel(BasePage):
         self.click_element(element_data=ElementsData.PlayerInfo.btn_save_pay)
 
     def is_btn_save_pay_abled(self):
-        if self.exist(element_data=ElementsData.PlayerInfo.btn_save_pay, offspring_path="btn_disabled"):
-            return False
-        return True
+        return self.exist(element_data=ElementsData.PlayerInfo.btn_save_pay, offspring_path="btn_disabled")
 
     def get_avatar_id_list(self):
         return self.get_object_id_list(element_data=ElementsData.PlayerInfo.avatar_list)

@@ -6,9 +6,7 @@ from common import resource
 class PartySalePanel(BasePage):
     # 面板是否存在
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.PartySale.PartySalePanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.PartySale.PartySalePanel)
 
     # 点击关闭按钮
     def click_btn_close(self):

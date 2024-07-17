@@ -10,6 +10,4 @@ class MessageBoxPanel(BasePage):
         self.click_element(element_data=ElementsData.MessageBox.btn_confirm, ignore_set={"MessageBoxPanel"})
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.MessageBox.MessageBoxPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.MessageBox.MessageBoxPanel)

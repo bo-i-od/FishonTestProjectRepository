@@ -4,9 +4,7 @@ from configs.elementsData import ElementsData
 
 class BattlePassIntroPanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.BattlePassIntro.BattlePassIntroPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.BattlePassIntro.BattlePassIntroPanel)
 
     def close_battlePassIntroPanel(self, is_test=True):
         if is_test:

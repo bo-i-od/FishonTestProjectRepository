@@ -10,9 +10,7 @@ class GearEnhanceSuccesPanel(BasePage):
             raise FindElementError
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.GearEnhanceSucces.GearEnhanceSuccesPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.GearEnhanceSucces.GearEnhanceSuccesPanel)
 
     def wait_for_panel_appear(self):
         while not GearEnhanceSuccesPanel.is_panel_active(self):

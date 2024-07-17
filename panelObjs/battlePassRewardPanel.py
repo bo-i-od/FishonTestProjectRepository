@@ -4,9 +4,7 @@ from common.basePage import BasePage
 from common.error import *
 class BattlePassRewardPanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.BattlePassReward.BattlePassRewardPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.BattlePassReward.BattlePassRewardPanel)
 
     def click_tap_to_continue(self):
         self.click_element(element_data=ElementsData.BattlePassReward.btn_close)

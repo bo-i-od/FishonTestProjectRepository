@@ -8,9 +8,7 @@ class RankFishLeaderboardPanel(BasePage):
         self.click_element(element_data=ElementsData.RankFishLeaderboard.btn_close)
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.RankFishLeaderboard.RankFishLeaderboardPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.RankFishLeaderboard.RankFishLeaderboardPanel)
 
     def get_rank_data(self):
         photo_id = self.get_object_id(element_data=ElementsData.RankFishLeaderboard.photo)

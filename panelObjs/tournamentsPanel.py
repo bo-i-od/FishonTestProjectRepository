@@ -4,9 +4,8 @@ from common.viewport import Viewport
 
 class TournamentsPanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.Tournaments.TournamentsPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Tournaments.TournamentsPanel)
+
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.Tournaments.btn_close)
 
@@ -75,9 +74,9 @@ class TournamentsPanel(BasePage):
     # 跳转指定索引渔场
     def go_to_fishery_by_index(self, index):
         entrance_viewport = TournamentsPanel.get_entrance_viewport(self)
-        entrance_viewport.move_until_appear(entrance_viewport.item_id_list[index])
-        entrance_position = self.get_position(object_id=entrance_viewport.item_id_list[index])
         while self.exist(object_id=entrance_viewport.item_id_list[index]):
+            entrance_viewport.move_until_appear(entrance_viewport.item_id_list[index])
+            entrance_position = self.get_position(object_id=entrance_viewport.item_id_list[index])
             self.click_position(entrance_position)
             self.sleep(0.2)
 

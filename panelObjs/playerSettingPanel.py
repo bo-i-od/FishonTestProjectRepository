@@ -6,19 +6,13 @@ from panelObjs.homePanel import HomePanel
 
 class PlayerSettingPanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.PlayerSetting.PlayerSettingPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.PlayerSetting.PlayerSettingPanel)
 
     def is_btn_giftcode_active(self):
-        if self.exist(element_data=ElementsData.PlayerSetting.btn_giftcode):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.PlayerSetting.btn_giftcode)
 
     def is_Panel_Popups_Edit_active(self):
-        if self.exist(element_data=ElementsData.PlayerSetting.Panel_Popups_Edit):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.PlayerSetting.Panel_Popups_Edit)
 
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.PlayerSetting.btn_close)
@@ -233,9 +227,7 @@ class PlayerSettingPanel(BasePage):
         self.click_element(element_data=ElementsData.PlayerSetting.btn_save_language)
 
     def is_btn_saved_language_active(self):
-        if self.exist(element_data=ElementsData.PlayerSetting.btn_saved_language):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.PlayerSetting.btn_saved_language)
 
     def get_language_title_position_list(self):
         return self.get_position_list(element_data=ElementsData.PlayerSetting.language_title_list)

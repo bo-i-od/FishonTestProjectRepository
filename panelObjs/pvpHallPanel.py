@@ -5,9 +5,7 @@ from common.viewport import Viewport
 
 class PVPHallPanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.PVPHall.PVPHallPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.PVPHall.PVPHallPanel)
 
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.PVPHall.btn_close)

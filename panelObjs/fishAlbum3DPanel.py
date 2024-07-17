@@ -10,9 +10,7 @@ class FishAlbum3DPanel(BasePage):
         self.click_until_disappear(element_data=ElementsData.FishAlbum3D.btn_close)
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.FishAlbum3D.FishAlbum3DPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.FishAlbum3D.FishAlbum3DPanel)
 
     def guide(self):
         perform_list = [ElementsData.NewbieGuide.NBG_album_01, ElementsData.NewbieGuide.NBG_album_02, ElementsData.NewbieGuide.NBG_album_03,ElementsData.Home.HomePanel]
@@ -34,14 +32,10 @@ class FishAlbum3DPanel(BasePage):
         self.click_element(element_data=ElementsData.FishAlbum3D.btn_i)
 
     def is_panel_rewards_tip_active(self):
-        if self.exist(element_data=ElementsData.FishAlbum3D.panel_rewards_tip):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.FishAlbum3D.panel_rewards_tip)
 
     def is_panel_fisheries_active(self):
-        if self.exist(element_data=ElementsData.FishAlbum3D.panel_fisheries):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.FishAlbum3D.panel_fisheries)
 
     def switch_tab(self, index):
         target_id = self.get_object_id_list(element_data=ElementsData.FishAlbum3D.fisheries_list)[index]

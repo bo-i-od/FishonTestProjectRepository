@@ -4,9 +4,7 @@ from common.viewport import Viewport
 
 class TournamentsInfoPanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.TournamentsInfo.TournamentsInfoPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.TournamentsInfo.TournamentsInfoPanel)
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.TournamentsInfo.btn_close)
 

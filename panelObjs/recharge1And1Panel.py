@@ -7,9 +7,8 @@ class Recharge1And1Panel(BasePage):
         self.click_element(element_data=ElementsData.Recharge1And1.btn_close)
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.Recharge1And1.Recharge1And1Panel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Recharge1And1.Recharge1And1Panel)
+
     def click_btn_buy(self):
         self.click_element(element_data=ElementsData.Recharge1And1.btn_buy)
     def is_btn_buy_clickable(self):

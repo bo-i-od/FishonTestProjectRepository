@@ -8,6 +8,4 @@ class QuestionnairePanel(BasePage):
 
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.Questionnaire.QuestionnairePanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Questionnaire.QuestionnairePanel)

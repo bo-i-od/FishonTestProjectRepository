@@ -10,9 +10,7 @@ class FishCardPanel(BasePage):
         self.click_element(element_data=ElementsData.FishCard.btn_close)
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.FishCard.FishCardPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.FishCard.FishCardPanel)
 
     def click_btn_upgrade(self):
         self.click_element(element_data=ElementsData.FishCard.btn_upgrade)
@@ -140,9 +138,7 @@ class FishCardPanel(BasePage):
         self.click_element(element_data=ElementsData.FishCard.btn_i)
 
     def is_tips_cardbonus_active(self):
-        if self.exist(element_data=ElementsData.FishCard.tips_cardbonus):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.FishCard.tips_cardbonus)
 
     def get_rating(self):
         rating = int(self.get_text(element_data=ElementsData.FishCard.rating))

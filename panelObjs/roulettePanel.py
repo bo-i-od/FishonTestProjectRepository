@@ -7,9 +7,7 @@ class RoulettePanel(BasePage):
         self.click_until_disappear(element_data=ElementsData.Roulette.btn_close)
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.Roulette.RoulettePanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Roulette.RoulettePanel)
 
     def click_btn_spin(self):
         self.click_element(element_data=ElementsData.Roulette.btn_spin)

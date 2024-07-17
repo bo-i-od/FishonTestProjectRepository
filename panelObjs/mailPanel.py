@@ -7,9 +7,7 @@ class MailPanel(BasePage):
         self.click_element(element_data=ElementsData.Mail.btn_close)
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.Mail.MailPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Mail.MailPanel)
 
     def get_tab_position_list(self):
         position_list = self.get_position_list(element_data=ElementsData.Mail.tab_list)
@@ -23,9 +21,7 @@ class MailPanel(BasePage):
         compare(index, toggle_is_on_index)
 
     def is_mail_empty(self):
-        if self.exist(element_data=ElementsData.Mail.EmptyMailTip):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Mail.EmptyMailTip)
 
     def get_mail_position_list(self):
         position_list = self.get_position_list(element_data=ElementsData.Mail.mail_list)

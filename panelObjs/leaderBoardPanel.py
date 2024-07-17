@@ -4,9 +4,8 @@ from common import resource
 
 class LeaderBoardPanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.LeaderBoard.LeaderBoardPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.LeaderBoard.LeaderBoardPanel)
+
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.LeaderBoard.btn_close)
 

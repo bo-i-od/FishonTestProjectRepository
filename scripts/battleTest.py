@@ -138,9 +138,9 @@ def champointship(bp, times):
 
 if __name__ == '__main__':
     # 连接设备号为127.0.0.1:21533的设备
-    bp = BasePage("127.0.0.1:21653")
+    bp = BasePage("127.0.0.1:21503")
     bp.set_send_log_flag(False)
-    circulate_fish(bp, is_quick=False)
+    circulate_fish(bp)
     # gameInit.set_joystick(bp)
     # # 按渔场id从小到大，再按鱼从小到大钓一遍
     # fish_all(bp,  is_quick=True)

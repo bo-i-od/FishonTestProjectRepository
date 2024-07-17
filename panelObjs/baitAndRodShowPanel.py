@@ -7,9 +7,7 @@ class BaitAndRodShowPanel(BasePage):
         self.click_element(element_data=ElementsData.BaitAndRodShow.tap_to_continue, ignore_set={"BaitAndRodShowPanel"})
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.BaitAndRodShow.BaitAndRodShowPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.BaitAndRodShow.BaitAndRodShowPanel)
 
     def wait_for_panel_appear(self):
         self.wait_for_appear(element_data=ElementsData.BaitAndRodShow.BaitAndRodShowPanel)

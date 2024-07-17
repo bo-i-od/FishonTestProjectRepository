@@ -4,6 +4,4 @@ from tools.commonTools import *
 
 class WaitHintPanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.WaitHint.WaitHintPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.WaitHint.WaitHintPanel)

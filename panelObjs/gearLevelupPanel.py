@@ -9,14 +9,10 @@ class GearLevelupPanel(BasePage):
 
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.GearLevelup.GearLevelupPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.GearLevelup.GearLevelupPanel)
 
     def is_max_active(self):
-        if self.exist(element_data=ElementsData.GearLevelup.max):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.GearLevelup.max)
 
     def get_level(self):
         lv_str = self.get_text(element_data=ElementsData.GearLevelup.lv)

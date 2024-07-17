@@ -7,9 +7,7 @@ class RechargeBlack5Panel(BasePage):
         self.click_element(element_data=ElementsData.RechargeBlack5.btn_close)
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.RechargeBlack5.RechargeBlack5Panel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.RechargeBlack5.RechargeBlack5Panel)
 
     def click_btn_buy(self):
         self.click_element(element_data=ElementsData.RechargeBlack5.btn_buy)

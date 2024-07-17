@@ -8,9 +8,8 @@ class AchievementPanel(BasePage):
         self.click_element(element_data=ElementsData.Achievement.btn_close)
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.Achievement.AchievementPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.Achievement.AchievementPanel)
+
 
     def is_unlock_tips_active(self):
         return self.exist(element_data=ElementsData.Achievement.tips_unlock)

@@ -4,9 +4,7 @@ from configs.elementsData import ElementsData
 
 class PlayerLevelupPanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.PlayerLevelup.PlayerLevelupPanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.PlayerLevelup.PlayerLevelupPanel)
 
     def wait_for_panel_appear(self):
         self.wait_for_appear(element_data=ElementsData.PlayerLevelup.PlayerLevelupPanel, is_click=False)

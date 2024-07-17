@@ -8,9 +8,7 @@ from tools.commonTools import *
 
 class BattlePreparePanel(BasePage):
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.BattlePrepare.BattlePreparePanel):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.BattlePrepare.BattlePreparePanel)
 
     # 点击关闭
     def click_btn_close(self):
@@ -94,9 +92,7 @@ class BattlePreparePanel(BasePage):
         self.click_element(element_data=ElementsData.BattlePrepare.GlobalProgress.progress_info)
 
     def is_progress_finish(self):
-        if self.exist(element_data=ElementsData.BattlePrepare.GlobalProgress.progress_finish):
-            return True
-        return False
+        return self.exist(element_data=ElementsData.BattlePrepare.GlobalProgress.progress_finish)
 
     def click_progress_finish(self):
         self.click_element(element_data=ElementsData.BattlePrepare.GlobalProgress.progress_finish)
