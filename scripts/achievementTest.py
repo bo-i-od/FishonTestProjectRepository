@@ -319,6 +319,7 @@ def click_icon_test(bp: BasePage):
     bp.debug_log(f"r:{r}")
     item_icon_expect = item_icon_list[r]
     bp.click_position(item_position_list[r])
+    bp.sleep(0.5)
     item_icon = ItemTipsPanel.get_item_icon(bp)
     bp.debug_log(f"item_icon_expect, item_icon:{item_icon_expect, item_icon}")
     compare(item_icon_expect, item_icon)

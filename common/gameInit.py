@@ -22,7 +22,7 @@ def login(bp: BasePage, username):
     # while not LoginPanel.is_panel_active(bp):
     #     EntryUpdateLoading.click_tap_to_start(bp)
     # 选服务器 输入名称 点击登录
-    LoginPanel.set_server(bp, 7)
+    LoginPanel.set_server(bp, 9)
     LoginPanel.set_login_name(bp, username)
     LoginPanel.click_btn_login(bp)
     bp.sleep(2)
@@ -65,7 +65,7 @@ def login_to_hall(bp: BasePage, cmd_list=None):
     account_init(bp, username, cmd_list)
 
 
-def app_start_to_login(poco):
+def app_start_to_login(dev=None):
     cur = 0
     bp = None
     while cur < 300:
@@ -73,7 +73,7 @@ def app_start_to_login(poco):
         #     authorize(poco)
         # except:
         #     pass
-        bp = get_basePage()
+        bp = get_basePage(dev=dev)
         if bp is not None:
             break
         time.sleep(1)
@@ -90,9 +90,9 @@ def tap_to_start():
     return match_pos
 
 
-def get_basePage(serial_number=None):
+def get_basePage(serial_number=None, dev=None):
     try:
-        bp = BasePage(serial_number=serial_number)
+        bp = BasePage(serial_number=serial_number, dev=dev)
         return bp
     except:
         return None
@@ -203,13 +203,12 @@ def install_monitor(poco):
 
 
 # 重启
-def restart_to_login(package):
-    stop_app(package=package)
+def restart_to_login(dev, package):
+    dev.stop_app(package=package)
     sleep(1)
-    start_app(package=package)
+    dev.start_app(package=package)
     # poco_uiautomation = AndroidUiautomationPoco(device=G.DEVICE)
-    poco_uiautomation= None
-    bp = app_start_to_login(poco_uiautomation)
+    bp = app_start_to_login(dev=dev)
     return bp
 
 
@@ -261,12 +260,12 @@ def main():
     # wait_for_authorize(poco_uiautomation, timeout=5)
     # time.sleep(5)
 
-    bp = app_start_to_login(poco_uiautomation)
+    bp = app_start_to_login()
     login_to_hall(bp)
 
 
 def start_time_test():
-    connect_device(f"android://127.0.0.1:5037/FMR0223830025758")
+    dev = connect_device(f"android://127.0.0.1:5037/FMR0223830025758")
 
     stop_app("com.xuejing.smallfish.official")
     sleep(1)
@@ -282,7 +281,7 @@ def start_time_test():
         break
     print('start time: ', end - start)  # 两个时间差就是花费的时间
     start = time.time()
-    bp = get_basePage()
+    bp = get_basePage(dev=dev)
     # EntryUpdateLoading.click_tap_to_start(bp)
     LoginPanel.wait_for_btn_login(bp)
     end = time.time()  # 记录结束时间

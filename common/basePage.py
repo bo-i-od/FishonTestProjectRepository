@@ -23,7 +23,7 @@ from configs.jumpData import JumpData
 
 
 class BasePage:
-    def __init__(self, serial_number=None):
+    def __init__(self, serial_number=None, dev=None):
         # unity窗口使用UnityEditorWindow()
         # 手机使用connect_device("android://127.0.0.1:5037/设备号")
 
@@ -53,7 +53,11 @@ class BasePage:
         # 默认端口 5001
         addr = ('', 5001)
         addr_listen = ('', 5002)
-        dev = self.get_device(serial_number=serial_number)
+        self.dev = dev
+        if self.dev is None:
+            print("self.dev is None")
+            self.dev = self.get_device(serial_number=serial_number)
+
         self.poco = UnityPoco(addr, device=dev)
         self.poco_listen = UnityPoco(addr_listen, device=dev)
         self.screen_w, self.screen_h = self.poco.get_screen_size()  # 获取屏幕尺寸

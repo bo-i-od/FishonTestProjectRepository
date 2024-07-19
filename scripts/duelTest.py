@@ -1,4 +1,5 @@
 import random
+import traceback
 from threading import Thread
 
 import common
@@ -206,8 +207,8 @@ def get_k(r0):
         return 112 - 0.04 * r0
     return 16
 
-def get_bp():
-    bp = gameInit.restart_to_login("com.xuejing.smallfish.official")
+def get_bp(dev):
+    bp = gameInit.restart_to_login(dev,"com.xuejing.smallfish.official")
     bp.sleep(7)
     LoginPanel.wait_for_btn_login(bp)
     LoginPanel.click_btn_login(bp)
@@ -216,11 +217,12 @@ def get_bp():
     bp.sleep(5)
     return bp
 
-def reset_bp():
+def reset_bp(dev):
     try:
-        bp = get_bp()
+        bp = get_bp(dev)
     except:
-        bp = reset_bp()
+        traceback.print_exc()
+        bp = reset_bp(dev)
     return bp
 
 def champointship(bp, index, times):
@@ -247,7 +249,7 @@ def champointship(bp, index, times):
     except Exception as e:
         print(e)
         # bp.connect_close()
-        bp = reset_bp()
+        bp = reset_bp(bp.dev)
     return bp
 
 def division_test(bp:BasePage):
@@ -354,10 +356,10 @@ if __name__ == '__main__':
     #     duel_once(base_page, 1)
     #     cur += 1
     #     print(f"第{cur}次钓鱼")
-    # circulate_fish(base_page, is_quick=False, times=120)
+    # circulate_fish(base_page, is_quick=False, times=50)
     while True:
-        base_page = champointship(base_page, 0, 15)
-        base_page = champointship(base_page, 1, 9)
+        base_page = champointship(base_page, 1, 20)
+        base_page = champointship(base_page, 0, 20)
 
 
 
@@ -381,7 +383,8 @@ if __name__ == '__main__':
     # bp.cmd("mode 400302 390015")
     # bp.lua_console(command="GameRoot:GetFishingMatch().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
     # bp.cmd("mode 400303 390025")
-    # dc = random_duelcup(base_page, 3)
+    base_page.cmd("levelupto 56")
+    dc = random_duelcup(base_page, 7)
     # print(dc)
     # area = point_cal(210)
     # bp.cmd("duelcup 1008 27000")

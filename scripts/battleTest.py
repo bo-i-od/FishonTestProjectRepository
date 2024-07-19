@@ -97,42 +97,6 @@ def tournament(bp: BasePage):
     TournamentsPanel.go_to_fishery_by_index(bp, 1)
     circulate_fish(bp, is_quick=False, times=18)
 
-def get_bp():
-    bp = gameInit.restart_to_login("com.xuejing.smallfish.official")
-    bp.sleep(7)
-    LoginPanel.wait_for_btn_login(bp)
-    LoginPanel.click_btn_login(bp)
-    bp.sleep(2)
-    LoadingPanel.wait_until_panel_disappear(bp, is_wait_for_appear=False)
-    bp.sleep(5)
-    return bp
-
-def reset_bp():
-    try:
-        bp = get_bp()
-    except:
-        bp = reset_bp()
-    return bp
-
-def champointship(bp, times):
-    try:
-        gameInit.set_joystick(bp)
-        bp.clear_popup()
-        bp.go_to_panel("TournamentsPanel")
-        bp.sleep(1)
-
-        # if not tournaments_info_position_list:
-        #     raise FindNoElementError
-
-        TournamentsPanel.go_to_fishery_by_tpid(bp, "400302")
-        # LoadingFisheryPanel.wait_until_panel_disappear(bp)
-        circulate_fish(bp, times=times, is_quick=False)
-        bp.go_home()
-    except Exception as e:
-        print(e)
-        # bp.connect_close()
-        bp = reset_bp()
-    return bp
 
 
 

@@ -1,91 +1,112 @@
-import sys
+import multiprocessing
 import traceback
-
+import importlib
 from airtest.core.api import connect_device
-import achievementTest, achievementCategoryTest, achievementWantedTest, battlePassTest, dlcDownloadTest, \
-    energyTest, fishCardTest, gearTest, guideTest, mailTest, minitaskTest, progressRewardsTest, \
-    storeTest, taskTest, treasureChestTest, newbieTaskTest, duelTest, rankTest, playerInfoTest
 from common import gameInit
-from scripts import rouletteTest, fishAlbumTest, careerTest
 
 
-def main():
-    connect_device(f"android://127.0.0.1:5037/{serial_number}")
-    content_all = ["成就鱼种", "成就照片墙", "渔获排行榜", "玩家信息、设置", "通行证", "dlc下载", "体力", "鱼卡", "鱼册", "装备", "新手、鱼册、刺鱼、成就墙、俱乐部、装备升级引导", "邮箱", "minitask", "商城", "新手7天", "鱼箱", "对决、对决排行榜", "成就", "任务", "转盘", "珍珠、贝壳进度条", "天赋"]
-    en2ch = {achievementCategoryTest: "成就鱼种",
-             achievementWantedTest: "成就照片墙",
-             rankTest: "渔获排行榜",
-             playerInfoTest: "玩家信息、设置",
-             battlePassTest: "通行证",
-             dlcDownloadTest: "dlc下载",
-             energyTest: "体力",
-             fishCardTest: "鱼卡",
-             fishAlbumTest:"鱼册",
-             gearTest: "装备",
-             guideTest: "新手、鱼册、刺鱼、成就墙、俱乐部、装备升级引导",
-             mailTest: "邮箱",
-             minitaskTest: "minitask",
-             storeTest: "商城",
-             newbieTaskTest: "新手7天",
-             treasureChestTest: "鱼箱",
-             duelTest: "对决、对决排行榜",
-             achievementTest: "成就",
-             taskTest: "任务",
-             rouletteTest: "转盘",
-             progressRewardsTest: "珍珠、贝壳进度条",
-             careerTest: "天赋"
-             }
-    test_list = [achievementCategoryTest, mailTest, treasureChestTest, achievementWantedTest, rankTest, playerInfoTest, battlePassTest, dlcDownloadTest, energyTest, fishCardTest, gearTest, guideTest, rouletteTest, progressRewardsTest, newbieTaskTest,  minitaskTest, duelTest, fishAlbumTest,  storeTest,  achievementTest, taskTest, careerTest]
-    # test_list = [ battlePassTest, fishCardTest, gearTest, guideTest,
-    #              mailTest, minitaskTest, storeTest, newbieTaskTest, treasureChestTest, taskTest,
-    #              achievementCategoryTest, achievementWantedTest, achievementTest, duelTest, rankTest]
+def worker(serial_number, task_list, retry_list, pass_list, fail_list, task_lock, contents):
+    dev = connect_device(f"android://127.0.0.1:5037/{serial_number}")
+    while True:
+        task_lock.acquire()
+        if task_list:
+            task_name = task_list.pop(0)
+            task_lock.release()
+            module = importlib.import_module(task_name)
+            print(dev, module, "执行测试")
+            do_test(dev, module, 0, task_list, retry_list, pass_list, fail_list, task_lock, contents)
+            continue
 
-    print(f"当前测试模块共计{len(test_list)}个")
-    cur = 0
-    pass_list = []
-    retry_list = []
+        if retry_list:
+            task_name = retry_list.pop(0)
+            task_lock.release()
+            module = importlib.import_module(task_name)
+            print(dev, module, "执行测试")
+            do_test(dev, module, 1, task_list, retry_list, pass_list, fail_list, task_lock, contents)
+            continue
 
-    while cur < len(test_list):
-        # 重启
-        bp = gameInit.restart_to_login("com.xuejing.smallfish.official")
-        try:
-            test_list[cur].main(bp)
-            print(cur, ":", en2ch[test_list[cur]], "执行成功")
-            pass_list.append(test_list[cur])
-        except Exception as e:
-            print(e)
-            traceback.print_exc()
-            print(cur, ":", en2ch[test_list[cur]], "执行失败")
-            retry_list.append(test_list[cur])
+        task_lock.release()
+        break
 
-        bp.connect_close()
-        cur += 1
-    print(f"通过用例{len(pass_list)}个: {pass_list}")
-    print(f"需重试用例{len(retry_list)}个: {retry_list}")
 
-    if len(retry_list) < 1:
-        return
-    fail_list = []
-    cur = 0
-    while cur < len(retry_list):
-        # 重启
-        bp = gameInit.restart_to_login("com.xuejing.smallfish.official")
-        try:
-            retry_list[cur].main(bp)
-            print(en2ch[retry_list[cur]], "执行成功")
-            pass_list.append(retry_list[cur])
-        except Exception as e:
-            traceback.print_exc()
-            print(en2ch[retry_list[cur]], "执行失败")
-            fail_list.append(retry_list[cur])
-        cur += 1
-    print(f"通过用例{len(pass_list)}个: {pass_list}")
-    print(f"失败用例{len(fail_list)}个: {fail_list}")
+def do_test(dev, task, kind, task_list, retry_list, pass_list, fail_list, task_lock, contents):
+    bp = gameInit.restart_to_login(dev=dev, package="com.xuejing.smallfish.official")
+    print("bp连接成功", dev)
+    try:
+        task.main(bp)
+        print(contents[task.__name__]["name"], "执行成功")
+        task_lock.acquire()
+        pass_list.append(task.__name__)
+        task_lock.release()
+    except Exception as e:
+        print(e)
+        traceback.print_exc()
+        print(contents[task.__name__]["name"], "执行失败")
+        task_lock.acquire()
+        if kind == 0:
+            retry_list.append(task.__name__)
+        else:
+            fail_list.append(task.__name__)
+        task_lock.release()
+    bp.connect_close()
 
 
 if __name__ == '__main__':
-    serial_number = "b6h65hd64p5pxcyh"
-    main()
+    manager = multiprocessing.Manager()
 
+    contents = manager.dict({
+        "achievementCategoryTest": {"name": "成就鱼种", "active": True},
+        "achievementWantedTest": {"name": "成就照片墙", "active": True},
+        "rankTest": {"name": "渔获排行榜", "active": True},
+        "playerInfoTest": {"name": "玩家信息、设置", "active": True},
+        "battlePassTest": {"name": "通行证", "active": True},
+        "dlcDownloadTest": {"name": "dlc下载", "active": True},
+        "energyTest": {"name": "体力", "active": True},
+        "fishCardTest": {"name": "鱼卡", "active": True},
+        "fishAlbumTest": {"name": "鱼册", "active": True},
+        "gearTest": {"name": "装备", "active": True},
+        "guideTest": {"name": "新手、鱼册、刺鱼、成就墙、俱乐部、装备升级引导", "active": True},
+        "mailTest": {"name": "邮箱", "active": True},
+        "minitaskTest": {"name": "minitask", "active": True},
+        "storeTest": {"name": "商城", "active": True},
+        "newbieTaskTest": {"name": "新手7天", "active": True},
+        "treasureChestTest": {"name": "鱼箱", "active": True},
+        "duelTest": {"name": "对决、对决排行榜", "active": True},
+        "achievementTest": {"name": "成就", "active": True},
+        "taskTest": {"name": "任务", "active": True},
+        "rouletteTest": {"name": "转盘", "active": True},
+        "progressRewardsTest": {"name": "珍珠、贝壳进度条", "active": True},
+        "careerTest": {"name": "天赋", "active": True},
+    })
 
+    task_list = manager.list()
+    pass_list = manager.list()
+    retry_list = manager.list()
+    fail_list = manager.list()
+    task_lock = manager.Lock()
 
+    for module_name, content in contents.items():
+        if content["active"]:
+            task_list.append(module_name)
+            print(f'测试模块：{content["name"]} - {module_name}')
+
+    print(f"当前测试模块共计 {len(task_list)} 个")
+
+    # 设备列表
+    serial_number_list = ["127.0.0.1:21503", "192.168.111.32:20084", "192.168.111.37:20093"]
+    dev_list = serial_number_list
+
+    print(f"当前连接设备 {len(dev_list)} 个")
+
+    process_list = []
+    for dev in dev_list:
+        p = multiprocessing.Process(target=worker,
+                                    args=(dev, task_list, retry_list, pass_list, fail_list, task_lock, contents))
+        p.start()
+        process_list.append(p)
+
+    for p in process_list:
+        p.join()
+
+    print(f"通过用例 {len(pass_list)} 个: {list(pass_list)}")
+    print(f"失败用例 {len(fail_list)} 个: {list(fail_list)}")
