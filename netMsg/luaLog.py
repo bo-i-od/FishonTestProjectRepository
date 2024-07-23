@@ -21,11 +21,20 @@ def deal_with_msg(msg):
         deal_with_SCMonopolyFreeDiceProgressChangedMsg(msg)
         return
 
+    if '<==== [Lua] Receive Net Msg "SCCooperateSpinMsg" ====>' in msg:
+        deal_with_SCCooperateSpinMsg(msg)
+        return
+
+    # if '<==== [Lua] Receive Net Msg "SCEnterGameMsg" ====>' in msg:
+    #     print(msg)
+    #     return
+
+
 
 
 
 def deal_with_SCFishingHookMsg(msg):
-    print(msg)
+    # print(msg)
     key1 = "tpId"
     value1 = get_value(msg, key1, False)
     key2 = "color"
@@ -38,7 +47,11 @@ def deal_with_SCFishingHookMsg(msg):
     value3_2 = get_value(value3, key3_2, False)
     key4 = "point"
     value4 = get_value(msg, key4, False)
-    string=f"fish_id:{value1}, color:{value2}, flash_card_num:{value3_1}, flash_card_id:{value3_2}, point:{value4}"
+    key5 = "weight"
+    value5 = get_value(msg, key5, False)
+    key6 = "star"
+    value6 = get_value(msg, key6, False)
+    string=f"fish_id:{value1}, color:{value2}, flash_card_num:{value3_1}, flash_card_id:{value3_2}, point:{value4}, weight:{value5}, star:{value6}"
     # print(value1)
     # if value3_1:
     #     print(msg)
@@ -48,7 +61,7 @@ def deal_with_SCFishingHookMsg(msg):
 
 
 def deal_with_SCFishingCastMsg(msg):
-    print(msg)
+    # print(msg)
     key1 = "debugInfos"
     value1 = get_dict(msg, key1)
     key1_list=['isFishState','isTimeLimitedSpot','protectiveId','energyCostGroup','isInDoubleWeek','energyCost']
@@ -69,7 +82,7 @@ def deal_with_SCHiddenTreasureFreeShovelProgressChangedMsg(msg):
     value2 = get_value(msg, key2, False)
     f = open("../statistics/log.txt", "a")
     res = f"{key1}:{value1}, {key2}:{value2}, "
-    print(res)
+    # print(res)
     f.write(res)
     f.close()
 
@@ -83,6 +96,15 @@ def deal_with_SCMonopolyFreeDiceProgressChangedMsg(msg):
     # print(res)
     f.write(res)
     f.close()
+
+def deal_with_SCCooperateSpinMsg(msg):
+    key1 = "spinIndex"
+    value1 = get_value(msg, key1, False)
+    f = open("../statistics/spin_log.txt", "a")
+    res = f"{key1}:{value1}\n"
+    f.write(res)
+    f.close()
+
 
 
 def get_value(msg:str, key: str, is_str: bool):
