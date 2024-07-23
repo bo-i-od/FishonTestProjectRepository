@@ -28,6 +28,7 @@ def spin_test(bp: BasePage):
 
     # 等待消息接收完毕
     bp.sleep(10)
+    print("转盘模拟结束")
 
 
 
