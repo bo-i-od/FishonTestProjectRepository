@@ -21,6 +21,7 @@ import os
 from configs.elementsData import ElementsData
 from configs.jumpData import JumpData
 
+from configs.path_config import EXCEL_PATH
 
 class BasePage:
     def __init__(self, serial_number=None, dev=None):
@@ -73,7 +74,7 @@ class BasePage:
         # 获取父目录
         self.root_dir = os.path.abspath(os.path.dirname(file_path))
         # 配置表的路径
-        self.excelTools = ExceTools("C:/trunkCHS/datapool/策划模板导出工具/")
+        self.excelTools = ExceTools(EXCEL_PATH)
 
         # 是否让Unity发log
         self.set_send_log_flag(True)

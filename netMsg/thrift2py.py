@@ -2,6 +2,8 @@ import os
 import re
 import keyword
 
+from configs.path_config import thrift2py_folder_path
+
 type_dict = {"i64": "int", "i32": "int", "i16": "int", "i8": "int", "string": "str", "bool": "bool", "double": "float", "binary": "bytes"}
 
 # 把thrift文件需要的内容解析出来
@@ -250,6 +252,6 @@ def main(self):
 
 
 if __name__ == '__main__':
-    folder_path = 'C:\\Dev\\tools\\gen-message\\messages\\'
+    folder_path = thrift2py_folder_path
     main()
 
