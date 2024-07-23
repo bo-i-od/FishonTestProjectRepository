@@ -11,8 +11,8 @@ for index,i in enumerate(data1):
 
 flash_card={}
 card_num=[15,6,3]
-per_cost = 50
-per_print_cast = 50
+per_cost = 10
+per_print_cast = 20
 def get_card_level(num):
     total=0
     for index,i in enumerate(card_num):
@@ -35,7 +35,7 @@ for index,i in enumerate(data2):
     f_fish_id = i['fish_id']
     if f_fish_id:
         f_fish_id=int(f_fish_id)
-        if (300000<f_fish_id<320000) or (390000<f_fish_id<391000):
+        if 1:  # 注释代表仅看鱼(300000<f_fish_id<320000) or (390000<f_fish_id<391000):
             flash_card.setdefault(f_fish_id, {'fish_num': 0, 'flash_card_num': 0, 'flash_card_times':0,'first_collect_index':0,'all_index':[],'f_id':0})
             flash_card[f_fish_id]['fish_num'] += 1
             flash_card[f_fish_id]['all_index'].append(index)

@@ -1,4 +1,6 @@
 from load_log import load_log
+from tools.excelRead import ExceTools
+from configs.pathConfig import EXCEL_PATH
 S=1
 M=2
 L=3
@@ -8,46 +10,61 @@ Rare=11
 Elite=12
 Monster=13
 
+excelTools =  ExceTools(EXCEL_PATH)
+
+fish_table_data=excelTools.get_table_data("FISH.xlsm")
+fish_tpId_list = fish_table_data['tpId']
+fishType_list = fish_table_data['fishType']
+fishClass_list = fish_table_data['fishClass']
+
+mission_condition_data=excelTools.get_table_data("MISSION_CONDITION.xlsm")
+triggerKeyS=mission_condition_data["triggerKeyS"]
+missionConditionID=mission_condition_data["missionConditionID"]
+
+fish_state_data=excelTools.get_table_data("FISH_STATE.xlsm")
+startConditionId=fish_state_data["startConditionId"]
+fishChange=fish_state_data["fishChange"][0]['fish']
+
+def get_fish_type_class(fish_id):
+    index=fish_tpId_list.index(fish_id)
+    return fishType_list[index],fishClass_list[index]
+
+def get_yugu_data(yugu_id):
+    index=triggerKeyS.index(yugu_id)
+    m_c_id=missionConditionID[index]
+
+    index=startConditionId.index(m_c_id)
+    fish=fishChange[index]
+    return fish
+
+def get_yugu_type(yugu_id):
+    fish_id=get_yugu_data(yugu_id)
+    fish_data=get_fish_type_class(fish_id)
+    return fish_data[1]
+
+def get_fish_size(fish_type,fish_class):
+    fish_size = ["Special","Common","Rare","Elite","Monster"][fish_class]
+    if fish_size=="Common":
+        fish_size=["Small","Median","Large","Huge","Giant"][fish_type-1]
+    return fish_size
 
 
 def get_fish_type(fish_id):
-    """根据id最后1-2位确定fish类型，注：洪湖 和 最后两个渔场 少鱼，类型对不上！！！"""
-    fish_num = fish_id %10
-    fish_size=""
-    fish_type="fish"
+    fish_type,fish_class=get_fish_type_class(fish_id)
 
-    if fish_id <370000:
-        fish_num = fish_id % 100
-        if fish_num in [1,2,3,4]:
-            fish_size="Small"
-        elif fish_num in [5,6,7,8]:
-            fish_size="Median"
-        elif fish_num in [9,10,11,12]:
-            fish_size="Large"
-        elif fish_num in [13,14]:
-            fish_size="Huge"
-        elif fish_num in [15]:
-            fish_size="Giant"
-    elif 380000>fish_id>370000:
+    fish_type='fish'
+
+
+    if 380000>fish_id>370000:
         fish_type = "gold_yugu"
-        if fish_num in [1,2]:
-            fish_size="Elite"
-        elif fish_num in [3,4,5,6,7]:
-            fish_size="Monster"
-    elif fish_id>391000:
+    elif 392000>fish_id>391000:
         fish_type = "yugu"
-        if fish_num in [1,2]:
-            fish_size="Elite"
-        elif fish_num in [3,4,5,6,7]:
-            fish_size="Monster"
     elif 391000>fish_id>390000:
         fish_type='boss'
-        if fish_num in [5,6,7,8,9]:
-            fish_size="Monster"
-        elif fish_num in [3,4]:
-            fish_size="Elite"
-        elif fish_num in [1,2]:
-            fish_size="Rare"
+
+    if fish_type in ["gold_yugu","yugu"]:
+        fish_id=get_yugu_data(fish_id)
+    fish_size=get_fish_size(*get_fish_type_class(fish_id))
 
     return {'fish_size':fish_size,'fish_type':fish_type}
 
