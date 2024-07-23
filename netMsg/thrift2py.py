@@ -2,7 +2,7 @@ import os
 import re
 import keyword
 
-from configs.path_config import thrift2py_folder_path
+from configs.pathConfig import thrift2py_folder_path
 
 type_dict = {"i64": "int", "i32": "int", "i16": "int", "i8": "int", "string": "str", "bool": "bool", "double": "float", "binary": "bytes"}
 

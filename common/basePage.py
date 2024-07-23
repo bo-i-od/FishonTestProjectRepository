@@ -21,7 +21,7 @@ import os
 from configs.elementsData import ElementsData
 from configs.jumpData import JumpData
 
-from configs.path_config import EXCEL_PATH
+from configs.pathConfig import EXCEL_PATH
 
 class BasePage:
     def __init__(self, serial_number=None, dev=None):
