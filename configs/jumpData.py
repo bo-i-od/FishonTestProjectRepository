@@ -3,6 +3,7 @@ from configs.elementsData import ElementsData
 class JumpData:
     pop_window_set = {
         "AquariumCommonFishChangePanel",
+        "AvatarSkinPopPanel",
         "BaitAndRodShowPanel",
         "ChampointshipResultPopup",
         "DailyTipsPanel",
@@ -22,6 +23,7 @@ class JumpData:
         "Recharge1And1Panel",
         "BattleTreasureMapPanel",
         "MessageBoxPanel",
+        "MonthCardPopPanel",
     }
 
     panel_close_dict = {
@@ -33,6 +35,8 @@ class JumpData:
         "AquariumPanel": [ElementsData.Aquarium.btn_close],
         "AquariumCommonFishChangePanel": [ElementsData.AquariumCommonFishChange.btn_close],
         "AquariumFishPanel":[ElementsData.AquariumFish.btn_close],
+        "AvatarMainPanel":[ElementsData.AvatarMain.btn_close],
+        "AvatarSkinPopPanel":[ElementsData.AvatarSkinPop.btn_close],
         "BaitAndRodAlbumPanel": [ElementsData.BaitAndRodAlbum.btn_close],
         "BaitAndRodShowPanel": [ElementsData.BaitAndRodShow.tap_to_continue],
         "BattleExplainPanel": [ElementsData.BattleExplain.close],
@@ -74,6 +78,7 @@ class JumpData:
         "LeaderBoardPopResultPanel": [ElementsData.LeaderBoardPopResult.btn_claim],
         "MailPanel": [ElementsData.Mail.btn_close],
         "MessageBoxPanel": [ElementsData.MessageBox.btn_confirm],
+        "MonthCardPopPanel": [ElementsData.MonthCardPop.btn_close],
         # "NBG_prepare_2_album_01(Clone)": [ElementsData.NewbieGuide.NBG_prepare_2_album_01, ElementsData.NewbieGuide.NBG_prepare_2_album_02, ElementsData.NewbieGuide.NBG_prepare_2_album_03, ElementsData.NewbieGuide.NBG_album_01, ElementsData.NewbieGuide.NBG_album_02, ElementsData.NewbieGuide.NBG_album_03, ElementsData.NewbieGuide.NBG_prepare_weak_01],
         "PartySalePanel":[ElementsData.PartySale.btn_close],
         "PlayerInfoPanel": [ElementsData.PlayerInfo.btn_close_additional, ElementsData.PlayerInfo.btn_confirm, ElementsData.PlayerInfo.btn_close],
@@ -82,7 +87,7 @@ class JumpData:
         "PVPBoosterGiftPackPanel": [ElementsData.PVPBoosterGiftPack.btn_close],
         "ProgressRewardsPanel":[ElementsData.ProgressRewards.btn_close],
         "PVENewbieGiftPackPanel":[ElementsData.PVENewbieGiftPack.btn_close],
-        "PVPHallPanel": [ElementsData.PVPHall.btn_close],
+        "PVPHallPanel": [ElementsData.NewbieGuide.NBG_friend_duel_1_1, ElementsData.PVPHall.btn_close],
         "PVPResultPanel": [ElementsData.PVPResult.tap_to_close],
         "PVPRuleTipsPanel": [ElementsData.PVPRuleTips.btn_close],
         "QuestionnairePanel": [ElementsData.Questionnaire.btn_close],
@@ -122,9 +127,9 @@ class JumpData:
         "MailPanel": [ElementsData.Home.btn_mail],
         "NewbieTaskPanel": [ElementsData.Home.btn_rookie3days],
         "PlayerSettingPanel": [ElementsData.Home.player_info, ElementsData.PlayerInfo.btn_setting],
-        "PlayerInfoPanel":[ElementsData.Home.player_info],
+        "PlayerInfoPanel": [ElementsData.Home.player_info],
         "ProgressRewardsPanel": [ElementsData.Home.btn_globa_progress],
-        "PVPHallPanel": [ElementsData.Home.btn_pvp],
+        "PVPHallPanel": [ElementsData.Home.btn_pvp, ElementsData.NewbieGuide.NBG_friend_duel_1_1],
         "QuestionnairePanel": [ElementsData.Home.btn_questionnaire],
         "RankPanel": [ElementsData.Home.btn_fishranking],
         "Recharge1And1Panel": [ElementsData.Home.btn_1add1],

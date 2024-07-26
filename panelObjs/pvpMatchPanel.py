@@ -11,7 +11,7 @@ class PVPMatchPanel(BasePage):
         self.click_element(element_data=ElementsData.PVPMatch.btn_cancel)
 
     def wait_for_panel_appear(self):
-        self.wait_for_appear(element_data=ElementsData.PVPMatch.PVPMatchPanel)
+        self.wait_for_appear(element_data=ElementsData.PVPMatch.PVPMatchPanel, ignore_set={"PVPMatchPanel"})
 
 if __name__ == '__main__':
     bp = BasePage("R5CT22NJ44H")

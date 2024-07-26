@@ -115,6 +115,21 @@ class ElementsData:
         tab_list = {"locator": "UICanvas>Default>AquariumFishPanel>panel>panel_fish>tab>"}
         Viewport = {"locator": "UICanvas>Default>AquariumFishPanel>panel>panel_fish>List>Viewport"}
         fish_model_list = {"locator": "UICanvas>Default>AquariumFishPanel>panel>panel_fish>List>Viewport>Content>"}
+
+    class AvatarSelect:
+        AvatarSelectPanel = {"locator": "UICanvas>Default>AvatarSelectPanel"}
+        gender_icon_list = {"locator": "UICanvas>Default>AvatarSelectPanel>panel_edit>panel_tab>content>TabList>Viewport>Content>>icon" }
+        btn_start = {"locator": "UICanvas>Default>AvatarSelectPanel>panel_edit>btn_start", "focus": (1, 1)}
+
+    class AvatarSkinPop:
+        AvatarSkinPopPanel = {"locator": "UICanvas>Default>AvatarSkinPopPanel"}
+        btn_close = {"locator": "UICanvas>Default>AvatarSkinPopPanel>panel>btn_close>img"}
+        btn_enter = {"locator": "UICanvas>Default>AvatarSkinPopPanel>panel>btn_enter"}
+
+    class AvatarMain:
+        AvatarMainPanel = {"locator": "UICanvas>Default>AvatarMainPanel"}
+        btn_close = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>btn_close>img"}
+
     class BaitAndRodAlbum:
         BaitAndRodAlbumPanel = {"locator": "UICanvas>Default>BaitAndRodAlbumPanel"}
         btn_close = {"locator": "UICanvas>Default>BaitAndRodAlbumPanel>panel>btn_close>img"}
@@ -803,6 +818,12 @@ class ElementsData:
         btn_cancel = {"locator": "UICanvas>Important>MessageBoxPanel>Panel>btns>btn_cancel>btn_normal"}
         btn_confirm = {"locator": "UICanvas>Important>MessageBoxPanel>Panel>btns>btn_confirm>btn_normal"}
 
+    class MonthCardPop:
+        MonthCardPopPanel = {"locator": "UICanvas>Default>MonthCardPopPanel"}
+        btn_close = {"locator": "UICanvas>Default>MonthCardPopPanel>panel>btn_close>img"}
+        btn_go = {"locator": "UICanvas>Default>MonthCardPopPanel>panel>btn_go", "focus": (1, 1)}
+
+
     class NewbieGuide:
         NewbieGuidePanel_1 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_rookie_1(Clone)"}
         NewbieGuidePanel_2 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_rookie_10(Clone)"}
@@ -893,6 +914,9 @@ class ElementsData:
         NBG_system_click_Club = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_system_click_Club(Clone)>Guide_VirtualBtn", "focus": (1, 1) }
         NBG_system_club_apply = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_system_club_apply(Clone)"}
 
+        # 对决引导
+        NBG_friend_duel_1_1 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_friend_duel_1_1(Clone)>Guide_Highlight>ep_UI_novice guide"}
+
 
 
     class NewbieTask:
@@ -958,14 +982,17 @@ class ElementsData:
         badge_show_list = {"locator": "UICanvas>Default>PlayerInfoPanel>panel>Panel_PlayerCard>panel>panel_playerinfo>panel_right>badgewallinfo>player_badge>Viewport>Content>go>"}
         badge_select_list = {"locator": "UICanvas>Default>PlayerInfoPanel>panel>Popups_Edit_badge>list>Viewport>Content>"}
 
-        options_music = {"locator": "UICanvas>Default>PlayerInfoPanel>Panel_Popups_Edit>Panel>panel_setting>options_music>slider"}
-        options_sound = {"locator": "UICanvas>Default>PlayerInfoPanel>Panel_Popups_Edit>Panel>panel_setting>options_sound>slider"}
-        options_graphics_list = {"locator": "UICanvas>Default>PlayerInfoPanel>Panel_Popups_Edit>Panel>panel_setting>options_graphics>btn_switch>>text"}
-        options_joystick_list = {"locator": "UICanvas>Default>PlayerInfoPanel>Panel_Popups_Edit>Panel>panel_setting>options_joystick>btn_switch>>text"}
-        options_frame_list = {"locator": "UICanvas>Default>PlayerInfoPanel>Panel_Popups_Edit>Panel>panel_setting>options_frame>btn_switch>>text"}
-        options_vibration_list = {"locator": "UICanvas>Default>PlayerInfoPanel>Panel_Popups_Edit>Panel>panel_setting>options_vibration>btn_switch>>text"}
-        options_gyro_list = {"locator": "UICanvas>Default>PlayerInfoPanel>Panel_Popups_Edit>Panel>panel_setting>options_gyro>btn_switch>>text"}
-        options_id = {"locator": "UICanvas>Default>PlayerInfoPanel>Panel_Popups_Edit>Panel>panel_setting>options_id>value"}
+        options_music = {"locator": "UICanvas>Default>PlayerInfoPanel>Panel_Popups_Edit>Panel>panel_setting>Scroll View>Viewport>Content>options_music>slider"}
+        options_sound = {"locator": "UICanvas>Default>PlayerInfoPanel>Panel_Popups_Edit>Panel>panel_setting>Scroll View>Viewport>Content>options_sound>slider"}
+        options_graphics_list = {"locator": "UICanvas>Default>PlayerInfoPanel>Panel_Popups_Edit>Panel>panel_setting>Scroll View>Viewport>Content>options>options_graphics>btn_switch>>text"}
+        options_joystick_list = {"locator": "UICanvas>Default>PlayerInfoPanel>Panel_Popups_Edit>Panel>panel_setting>Scroll View>Viewport>Content>options>options_joystick>btn_switch>>text"}
+        options_frame_list = {"locator": "UICanvas>Default>PlayerInfoPanel>Panel_Popups_Edit>Panel>panel_setting>Scroll View>Viewport>Content>options>options_frame>btn_switch>>text"}
+        options_vibration_list = {"locator": "UICanvas>Default>PlayerInfoPanel>Panel_Popups_Edit>Panel>panel_setting>Scroll View>Viewport>Content>options>options_vibration>btn_switch>>text"}
+        options_gyro_list = {"locator": "UICanvas>Default>PlayerInfoPanel>Panel_Popups_Edit>Panel>panel_setting>Scroll View>Viewport>Content>options>options_gyro>btn_switch>>text"}
+        options_id = {"locator": "UICanvas>Default>PlayerInfoPanel>Panel_Popups_Edit>Panel>panel_setting>Scroll View>Viewport>Content>options>options_id>value"}
+        options_invite_list = {"locator": "UICanvas>Default>PlayerInfoPanel>Panel_Popups_Edit>Panel>panel_setting>Scroll View>Viewport>Content>options>options_invite>btn_switch>>text"}
+
+
 
         tab_avatar = {"locator": "UICanvas>Default>PlayerInfoPanel>Panel_Popups_Edit>Panel>panel_tab>TabList>Viewport>Content>tab_1>bg"}
         tab_name = {"locator": "UICanvas>Default>PlayerInfoPanel>Panel_Popups_Edit>Panel>panel_tab>TabList>Viewport>Content>tab_3>bg"}

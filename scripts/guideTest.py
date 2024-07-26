@@ -5,6 +5,7 @@ from common import gameInit
 from common.basePage import BasePage
 from panelObjs.achievementWantedPanel import AchievementWantedPanel
 from panelObjs.aquariumPanel import AquariumPanel
+from panelObjs.avatarSelectPanel import AvatarSelectPanel
 from panelObjs.battlePreparePanel import BattlePreparePanel
 from panelObjs.clubApplyPanel import ClubApplyPanel
 from panelObjs.fishAlbum3DPanel import FishAlbum3DPanel
@@ -72,6 +73,15 @@ def main(bp:BasePage):
 
     # # 姓名头像测试
     playerEditNamePanelTest(bp)
+
+    # 随机选择性别
+    r = random.randint(0, 1)
+    gender_icon_position_list = AvatarSelectPanel.get_gender_icon_position_list(bp)
+    bp.click_position(gender_icon_position_list[r])
+    bp.sleep(0.5)
+
+    AvatarSelectPanel.click_btn_start(bp)
+    bp.sleep(0.5)
 
     # 新手引导
     newbieGuidePanelTest(bp)

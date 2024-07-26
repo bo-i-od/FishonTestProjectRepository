@@ -1,6 +1,8 @@
 import time
 
+import scripts
 from netMsg import csMsgAll, fishingMsg, luaLog
+from panelObjs.avatarSelectPanel import AvatarSelectPanel
 from panelObjs.battlePreparePanel import BattlePreparePanel
 from panelObjs.loadingPanel import LoadingPanel
 from panelObjs.loginPanel import LoginPanel
@@ -11,6 +13,7 @@ from panelObjs.tournamentsPanel import TournamentsPanel
 from panelObjs.friendPanel import FriendPanel
 from scripts import battleTest
 import json
+
 
 
 
@@ -52,6 +55,7 @@ _G.NetworkMgr:Disconnect()
 UIFacade.Reset()
 --Util.GoToLogin()
 EventMgr:SendEvent(GameMsg.CHANGE_GAME_STATE, GAME_STATE_ENUM.Login, true)
+AvatarMgr:ReleasePool()
         """
     bp.lua_console(lua_code)
 
@@ -68,6 +72,7 @@ def login(bp: BasePage, name):
     if not PlayerEditNamePanel.is_panel_active(bp):
         return
     bp.cmd("guideskip")
+    bp.sleep(1)
     while True:
         PlayerEditNamePanel.set_player_name(bp, name)
         PlayerEditNamePanel.click_confirm(bp)
@@ -75,6 +80,15 @@ def login(bp: BasePage, name):
         if not PlayerEditNamePanel.is_panel_active(bp):
             break
         name = "t" + str(time.time()).split('.')[0]
+
+    # 随机选择性别
+    r = 0
+    gender_icon_position_list = AvatarSelectPanel.get_gender_icon_position_list(bp)
+    bp.click_position(gender_icon_position_list[r])
+    bp.sleep(0.5)
+
+    AvatarSelectPanel.click_btn_start(bp)
+
 
 
 
@@ -116,25 +130,23 @@ def fish(bp: BasePage, index):
     # bp.sleep(1)
     #
     cur = 1
-    while cur < 13:
-        if cur > 10:
-            cur += 1
-            continue
+    while cur < 16:
+
         id = str(cur).zfill(2)
         bp.cmd(f"mode 400312 3120{id}")
         bp.sleep(0.1)
         fishingMsg.fish(bp, [{"spot_id": f"40031211", "times": 1, "is_activity_spot": True}])
         cur += 1
 
-    # bp.cmd(f"mode 400312 390117")
-    # bp.sleep(0.1)
-    # fishingMsg.fish(bp, [{"spot_id": f"40031211", "times": 1, "is_activity_spot": True}])
-    # bp.cmd(f"mode 400312 390118")
-    # bp.sleep(0.1)
-    # fishingMsg.fish(bp, [{"spot_id": f"40031211", "times": 1, "is_activity_spot": True}])
-    # bp.cmd(f"mode 400312 390119")
-    # bp.sleep(0.1)
-    # fishingMsg.fish(bp, [{"spot_id": f"40031211", "times": 1, "is_activity_spot": True}])
+    bp.cmd(f"mode 400312 390117")
+    bp.sleep(0.1)
+    fishingMsg.fish(bp, [{"spot_id": f"40031211", "times": 1, "is_activity_spot": True}])
+    bp.cmd(f"mode 400312 390118")
+    bp.sleep(0.1)
+    fishingMsg.fish(bp, [{"spot_id": f"40031211", "times": 1, "is_activity_spot": True}])
+    bp.cmd(f"mode 400312 390119")
+    bp.sleep(0.1)
+    fishingMsg.fish(bp, [{"spot_id": f"40031211", "times": 1, "is_activity_spot": True}])
     # bp.cmd(f"mode 400312 39011{index}")
     # bp.sleep(0.1)
     # fishingMsg.fish(bp, [{"spot_id": f"40031211", "times": 1, "is_activity_spot": True}])
@@ -180,7 +192,7 @@ def friend(bp: BasePage):
 
     bp.cmd_list(["levelupto 20"])
     bp.sleep(0.2)
-    lua_code = csMsgAll.get_CSGlobalFriendsApplyMsg(targetSimpleId=10024003, source=0, type=2, targetCharId="6691566044dbc56b472d7338", simpleId=charSimpleId)
+    lua_code = csMsgAll.get_CSGlobalFriendsApplyMsg(targetSimpleId=20018852, source=0, type=2, targetCharId="66a0ea35be3a1671c3c9fe59", simpleId=charSimpleId)
     bp.lua_console(lua_code)
 
 
@@ -205,7 +217,7 @@ def hidden_treasure(bp:BasePage):
     bp.sleep(0.2)
     dy = "{[1] = 1,}"
     dx = "{[1] = 1,}"
-    lua_code = csMsgAll.get_CSHiddenTreasureDigMsg(digYs=dy, roomId=1000298, groupId=6000001, stageId=1, digXs=dx)
+    lua_code = csMsgAll.get_CSHiddenTreasureDigMsg(digYs=dy, roomId=1000340, groupId=6000001, stage=1, digXs=dx)
     print(lua_code)
     bp.lua_console(lua_code)
 
@@ -213,7 +225,7 @@ def hidden_treasure(bp:BasePage):
 def apply_guild(bp:BasePage):
     bp.cmd(f"levelupto 21")
     bp.sleep(1)
-    guildSimpleId = 10000509
+    guildSimpleId = 10000001
     lua_code = csMsgAll.get_CSGuildApplyMsg(source=0, guildSimpleId=guildSimpleId)
     bp.lua_console(lua_code)
 
@@ -226,11 +238,8 @@ def apply_guild(bp:BasePage):
 
 def ndays(bp:BasePage, count):
     # bp.cmd(f"setPlayerLayer {count}000")
-    bp.cmd(f"levelupto 16")
-    bp.sleep(0.1)
-    guildSimpleId = 10000082
-    lua_code = csMsgAll.get_CSGuildApplyMsg(source=0, guildSimpleId=guildSimpleId)
-    bp.lua_console(lua_code)
+    bp.cmd(f"levelupto 66")
+
 
     # bp.cmd_list([f"levelupto 20", "add 1 100100 2000"])
     # bp.sleep(0.2)
@@ -239,14 +248,57 @@ def ndays(bp:BasePage, count):
     # print(lua_code)
     # bp.lua_console(lua_code)
 
+    bp.cmd(f"add 2 209001 {count}")
+    bp.sleep(0.1)
+    bp.cmd(f"add 2 209002 {count}")
+    bp.sleep(0.1)
+    bp.cmd(f"add 2 209003 {count}")
+    bp.sleep(0.1)
+    bp.cmd(f"add 2 209004 {count}")
+    bp.sleep(0.1)
+    bp.cmd(f"add 2 209005 {count}")
+    bp.sleep(0.1)
+    bp.cmd(f"add 2 209006 {count}")
+    bp.sleep(0.1)
+    bp.cmd(f"add 2 209007 {count}")
+    bp.sleep(0.1)
+    bp.cmd(f"add 2 209008 {count}")
+    bp.sleep(0.1)
+    bp.cmd(f"add 2 209009 {count}")
+    bp.sleep(0.1)
+    bp.cmd(f"add 2 209010 {count}")
+    bp.sleep(0.1)
+    bp.cmd(f"add 2 209011 {count}")
+    bp.sleep(0.1)
+    bp.cmd(f"add 2 209012 {count}")
+    bp.sleep(0.1)
+    bp.cmd(f"add 2 209013 {count}")
+    bp.sleep(0.1)
+    bp.cmd(f"add 2 209101 {count}")
+    bp.sleep(0.1)
+    bp.cmd(f"add 2 209102 {count}")
+    bp.sleep(0.1)
+    bp.cmd(f"add 2 209103 {count}")
+    bp.sleep(0.1)
+    bp.cmd(f"add 2 209104 {count}")
+    bp.sleep(0.1)
+    bp.cmd(f"add 2 209105 {count}")
+    bp.sleep(0.1)
+    bp.cmd(f"add 2 209106 {count}")
+    bp.sleep(0.1)
+    bp.cmd(f"add 2 209107 {count}")
+    bp.sleep(0.1)
+    bp.cmd(f"add 2 209108 {count}")
+    bp.sleep(0.1)
+    bp.cmd(f"add 2 209014 {count}")
+    bp.sleep(0.1)
+    bp.cmd(f"add 2 209015 {count}")
+    bp.sleep(0.1)
+    bp.cmd(f"add 2 209016 {count}")
+    bp.sleep(0.1)
+    bp.cmd(f"add 2 209017 {count}")
+    bp.sleep(0.1)
 
-    # bp.cmd(f"add 1 100400 {count}")
-    # bp.cmd(f"add 1 101200 {count}")
-    # bp.cmd(f"monopolyscore {count}")
-    # bp.cmd(f"add 2 209002 {count}")
-    # bp.cmd(f"add 2 209006 {count}")
-    # bp.cmd(f"add 2 209008 {count}")
-    # bp.cmd(f"add 2 209010 {count}")
 
 def clone(bp:BasePage, name):
     bp.sleep(2)
@@ -277,14 +329,22 @@ def add_friend(bp: BasePage,target_id):
     # bp.sleep(1)
     FriendPanel.add_friend(bp,target_id)
 
+def relogin(bp):
+    name = "1000002002"
+    bp.cmd("clone 1000002002")
+    logout(bp)
+    login(bp, name)
+
+
 
 
 def main(bp):
     # 登录号前缀
-    prefix = "hd"
+    prefix = "ndays"
+    # prefix_list = ["a", "b", "c", "d", "e"]
     init(bp)
-    cur = 1
-    limit = 4
+    cur = 106
+    limit = 110
     while cur < limit:
         name = prefix + str(cur)
         login(bp, name)
@@ -292,9 +352,11 @@ def main(bp):
         # 你要执行的初始化账号操作
         # add_gu(bp, cur)
         # dragon_boat(bp, cur)
+        # apply_guild(bp)
         # friend(bp)
-        fish(bp, cur)
-
+        ndays(bp, cur)
+        # fish(bp, cur)
+        # hidden_treasure(bp)
         logout(bp)
         cur += 1
 
@@ -306,6 +368,7 @@ def main2(bp):
         login(bp, name)
         championshipsclear(bp)
         # apply_guild(bp)
+
         bp.lua_console('PanelMgr:OpenPanel("PlayerInfoPanel")')
         logout(bp)
         cur += 1
@@ -357,6 +420,6 @@ def read_data():
 
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21503")
+    bp = BasePage("192.168.111.37:20028")
     main(bp)
     bp.connect_close()

@@ -7,7 +7,7 @@ class PVPResultPanel(BasePage):
         return self.exist(element_data=ElementsData.PVPResult.PVPResultPanel)
 
     def click_tap_to_click(self):
-        self.click_until_disappear(element_data=ElementsData.PVPResult.tap_to_close)
+        self.click_until_disappear(element_data=ElementsData.PVPResult.tap_to_close, ignore_set={"PVPResultPanel"})
 
     def get_points_enemy(self):
         points_enemy = self.get_text(element_data=ElementsData.PVPResult.points_enemy)

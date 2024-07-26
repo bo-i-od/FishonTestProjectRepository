@@ -11,7 +11,7 @@ class FishBagPanel(BasePage):
             self.click_element_safe(element_data=ElementsData.FishBag.btn_close)
 
     def wait_for_panel_appear(self):
-        self.wait_for_appear(element_data=ElementsData.FishBag.FishBagPanel)
+        self.wait_for_appear(element_data=ElementsData.FishBag.FishBagPanel, ignore_set={"FishBagPanel"})
 
 
 

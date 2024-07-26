@@ -104,7 +104,9 @@ if __name__ == '__main__':
     # 连接设备号为127.0.0.1:21533的设备
     bp = BasePage("127.0.0.1:21503")
     bp.set_send_log_flag(False)
-    circulate_fish(bp)
+    # bp.custom_cmd("setTension 0.1")
+    bp.is_time_scale = True
+    circulate_fish(bp, is_quick=True)
     # gameInit.set_joystick(bp)
     # # 按渔场id从小到大，再按鱼从小到大钓一遍
     # fish_all(bp,  is_quick=True)

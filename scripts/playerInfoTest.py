@@ -49,7 +49,8 @@ def settings_test(bp: BasePage):
     PlayerInfoPanel.set_options_frame(bp, random.randint(0, 1))
     PlayerInfoPanel.set_options_joystick(bp, random.randint(0, 1))
     PlayerInfoPanel.set_options_vibration(bp, random.randint(0, 1))
-    # PlayerInfoPanel.set_options_gyro(bp, random.randint(0, 1))
+    PlayerInfoPanel.set_options_gyro(bp, random.randint(0, 1))
+    PlayerInfoPanel.set_options_invite(bp, random.randint(0, 1))
 
 def name_test(bp: BasePage):
     PlayerInfoPanel.click_tab_name(bp)
@@ -57,7 +58,7 @@ def name_test(bp: BasePage):
     bp.set_item_count(target_count=300, item_tpid="100100")
     # 将名字改为当前时间
     now = datetime.datetime.now()
-    name = now.strftime("%y%m%d%H%M%S")
+    name = 't' + now.strftime("%y%m%d%H%M%S")
     PlayerInfoPanel.set_player_name(bp, name)
 
     # 保存
@@ -186,5 +187,5 @@ def main(bp:BasePage):
 
 if __name__ == '__main__':
     bp = BasePage("192.168.111.81:20012")
-
     main(bp)
+    bp.connect_close()

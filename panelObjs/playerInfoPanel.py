@@ -238,6 +238,18 @@ class PlayerInfoPanel(BasePage):
         toggle_is_on_index = get_toggle_is_on_index(toggle_is_on_list)
         compare(index, toggle_is_on_index)
 
+    def get_options_invite_position_list(self):
+        position_list = self.get_position_list(element_data=ElementsData.PlayerInfo.options_invite_list)
+        return position_list
+
+    def set_options_invite(self, index):
+        position_list = PlayerInfoPanel.get_options_invite_position_list(self)
+        self.click_position(position_list[index])
+        tab_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerInfo.options_invite_list)
+        toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
+        toggle_is_on_index = get_toggle_is_on_index(toggle_is_on_list)
+        compare(index, toggle_is_on_index)
+
     def click_tab_name(self):
         self.click_element(element_data=ElementsData.PlayerInfo.tab_name)
 

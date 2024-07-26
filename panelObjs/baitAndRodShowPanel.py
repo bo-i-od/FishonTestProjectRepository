@@ -10,7 +10,7 @@ class BaitAndRodShowPanel(BasePage):
         return self.exist(element_data=ElementsData.BaitAndRodShow.BaitAndRodShowPanel)
 
     def wait_for_panel_appear(self):
-        self.wait_for_appear(element_data=ElementsData.BaitAndRodShow.BaitAndRodShowPanel)
+        self.wait_for_appear(element_data=ElementsData.BaitAndRodShow.BaitAndRodShowPanel, ignore_set={"BaitAndRodShowPanel"})
 
     def open_and_close_talent(self):
         position = self.click_element(element_data=ElementsData.BaitAndRodShow.talent)

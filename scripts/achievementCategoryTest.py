@@ -119,7 +119,6 @@ def category_test(bp: BasePage):
         stock_expect_list[cur] += reward_quantity_list[cur]
         cur += 1
 
-
     # 领取奖励 对比奖励数量
     AchievementCategoryPanel.click_btn_rewards(bp)
     RewardsPanel.wait_for_panel_appear(bp)
@@ -150,7 +149,9 @@ def main(bp: BasePage):
     unlock_test(bp)
     category_test(bp)
 
+
 if __name__ == '__main__':
-    bp = BasePage("b6h65hd64p5pxcyh")
+    bp = BasePage("127.0.0.1:21503")
     main(bp)
+    bp.connect_close()
 

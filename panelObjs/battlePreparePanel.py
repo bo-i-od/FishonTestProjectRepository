@@ -43,7 +43,7 @@ class BattlePreparePanel(BasePage):
     # 点击抛竿
     def click_btn_cast(self):
         self.wait_for_appear(element_data=ElementsData.BattlePrepare.btn_cast, is_click=False)
-        self.click_until_disappear(element_data=ElementsData.BattlePrepare.btn_cast)
+        self.click_until_disappear(element_data=ElementsData.BattlePrepare.btn_cast, ignore_set={"BattlePreparePanel"})
 
     # 点击快速换装
     def click_btn_quick_switch(self):

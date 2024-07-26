@@ -18,7 +18,6 @@ from panelObjs.rodMoreToOnePanel import RodMoreToOnePanel
 from common.resource import *
 from common.basePage import BasePage
 from common.viewport import Viewport
-from scripts.duelTest import random_duelcup, duel_once
 
 
 def click_icon_buy_level_test(bp:BasePage):

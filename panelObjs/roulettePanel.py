@@ -4,7 +4,7 @@ from tools.commonTools import *
 
 class RoulettePanel(BasePage):
     def click_btn_close(self):
-        self.click_until_disappear(element_data=ElementsData.Roulette.btn_close)
+        self.click_until_disappear(element_data=ElementsData.Roulette.btn_close, ignore_set={"RoulettePanel"})
 
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.Roulette.RoulettePanel)

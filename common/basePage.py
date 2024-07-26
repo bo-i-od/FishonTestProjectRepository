@@ -24,12 +24,12 @@ from configs.jumpData import JumpData
 from configs.pathConfig import EXCEL_PATH
 
 class BasePage:
-    def __init__(self, serial_number=None, dev=None):
+    def __init__(self, serial_number=None, dev=None, is_android=True):
         # unity窗口使用UnityEditorWindow()
         # 手机使用connect_device("android://127.0.0.1:5037/设备号")
 
         # 是否在安卓手机, Unity需要改为False
-        self.is_android = False
+        self.is_android = is_android
 
         # 是否测试会拉起支付的按钮
         self.is_pay = True
@@ -487,21 +487,23 @@ class BasePage:
             cur += 1
 
     # 在b元素消失前一直尝试点击a元素
-    def click_a_until_b_disappear(self, element_data_a: dict, element_data_b: dict, interval: float = 0.5):
+    def click_a_until_b_disappear(self, element_data_a: dict, element_data_b: dict, interval: float = 0.5, ignore_set=None):
         self.wait_for_appear(element_data_b, is_click=False)
         while self.exist(element_data=element_data_b):
+            self.clear_popup_once(ignore_set=ignore_set)
             self.click_element_safe(element_data=element_data_a)
             self.sleep(interval)
 
     # 在a元素消失前一直尝试点击a元素
-    def click_until_disappear(self, element_data: dict = None, interval: float = 0.5):
-        self.click_a_until_b_disappear(element_data_a=element_data, element_data_b=element_data, interval=interval)
+    def click_until_disappear(self, element_data: dict = None, interval: float = 0.5, ignore_set=None):
+        self.click_a_until_b_disappear(element_data_a=element_data, element_data_b=element_data, interval=interval, ignore_set=ignore_set)
 
     # 等待指定元素出现
-    def wait_for_appear(self, element_data: dict, is_click: bool = False, interval: float = 0.2, timeout=120):
+    def wait_for_appear(self, element_data: dict, is_click: bool = False, interval: float = 0.2, timeout=120, ignore_set=None):
         cur = 0
         position = []
         while cur < timeout:
+            self.clear_popup_once(ignore_set=ignore_set)
             position = self.get_position_list(element_data=element_data)
             if position:
                 break
@@ -514,8 +516,9 @@ class BasePage:
         self.click_position(position[0])
 
     # 等待指定元素消失
-    def wait_for_disappear(self, element_data: dict, interval: float = 0.1):
+    def wait_for_disappear(self, element_data: dict, interval: float = 0.1, ignore_set=None):
         while self.exist(element_data=element_data):
+            self.clear_popup_once(ignore_set=ignore_set)
             self.sleep(interval)
 
     # 安全点击
@@ -945,8 +948,16 @@ class BasePage:
 
 
 if __name__ == '__main__':
-    bp = BasePage()
-    bp.cmd("uptable")
+    bp = BasePage("127.0.0.1:21503")
+    a = bp.get_item_count(item_tpid="100200")
+    print(a)
+    a = bp.get_item_count(item_tpid="100500")
+    print(a)
+    a = bp.get_item_count(item_tpid="101200")
+    print(a)
+    a = bp.get_item_count(item_tpid="201001")
+    print(a)
+    bp.set_item_count(target_count=21, item_tpid="100500")
     # bp.clear_popup_once()
 
     bp.connect_close()

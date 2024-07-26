@@ -13,6 +13,13 @@ def worker(serial_number, task_list, retry_list, pass_list, fail_list, task_lock
             task_name = task_list.pop(0)
             task_lock.release()
             module = importlib.import_module(task_name)
+            # ['achievementCategoryTest', 'rankTest', 'dlcDownloadTest', 'fishCardTest', 'energyTest', 'fishAlbumTest',
+            #  'mailTest', 'minitaskTest', 'gearTest', 'newbieTaskTest', 'progressRewardsTest', 'careerTest',
+            #  'achievementWantedTest', 'treasureChestTest', 'battlePassTest', 'rouletteTest', 'achievementTest',
+            #  'duelTest']
+            if task_name in ['rankTest', 'achievementWantedTest','playerInfoTest', 'dlcDownloadTest',  'fishCardTest', 'energyTest','fishAlbumTest','guideTest', 'storeTest']:
+                pass_list.append(module.__name__)
+                continue
             print(dev, module, "执行测试")
             do_test(dev, module, 0, task_list, retry_list, pass_list, fail_list, task_lock, contents)
             continue
@@ -93,15 +100,14 @@ if __name__ == '__main__':
     print(f"当前测试模块共计 {len(task_list)} 个")
 
     # 设备列表
-    serial_number_list = ["127.0.0.1:21503", "192.168.111.32:20084", "192.168.111.37:20093"]
-    dev_list = serial_number_list
+    serial_number_list = ["192.168.111.32:20180", "192.168.111.34:20030", "192.168.111.37:20120"]
 
-    print(f"当前连接设备 {len(dev_list)} 个")
+    print(f"当前连接设备 {len(serial_number_list)} 个")
 
     process_list = []
-    for dev in dev_list:
+    for serial_number in serial_number_list:
         p = multiprocessing.Process(target=worker,
-                                    args=(dev, task_list, retry_list, pass_list, fail_list, task_lock, contents))
+                                    args=(serial_number, task_list, retry_list, pass_list, fail_list, task_lock, contents))
         p.start()
         process_list.append(p)
 

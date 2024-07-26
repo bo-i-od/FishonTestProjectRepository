@@ -1,8 +1,11 @@
 import os
+import random
 from threading import Thread
 from airtest.core.api import connect_device,  install, Template, start_app, shell, click, sleep, stop_app
 from airtest.core.helper import G
 from poco.drivers.android.uiautomation import AndroidUiautomationPoco
+
+from panelObjs.avatarSelectPanel import AvatarSelectPanel
 from panelObjs.loginPanel import LoginPanel
 from panelObjs.homePanel import HomePanel
 from panelObjs.loadingPanel import LoadingPanel
@@ -22,7 +25,7 @@ def login(bp: BasePage, username):
     # while not LoginPanel.is_panel_active(bp):
     #     EntryUpdateLoading.click_tap_to_start(bp)
     # 选服务器 输入名称 点击登录
-    LoginPanel.set_server(bp, 9)
+    LoginPanel.set_server(bp, 8)
     LoginPanel.set_login_name(bp, username)
     LoginPanel.click_btn_login(bp)
     bp.sleep(2)
@@ -54,6 +57,14 @@ def account_init(bp: BasePage, player_name, cmd_list):
         if not PlayerEditNamePanel.is_panel_active(bp):
             break
         player_name = "t" + str(time.time()).split('.')[0]
+
+    # 随机选择性别
+    r = random.randint(0, 1)
+    gender_icon_position_list = AvatarSelectPanel.get_gender_icon_position_list(bp)
+    bp.click_position(gender_icon_position_list[r])
+    bp.sleep(0.5)
+
+    AvatarSelectPanel.click_btn_start(bp)
 
 
 # 登录到大厅

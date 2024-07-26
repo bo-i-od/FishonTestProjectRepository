@@ -1076,6 +1076,7 @@ if __name__ == '__main__':
     print(false_keys)
     bp.connect_close()
 
+
     # a = chara_test(bp)
     # print(a)
 

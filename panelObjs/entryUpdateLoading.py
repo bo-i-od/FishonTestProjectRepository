@@ -21,4 +21,4 @@ class EntryUpdateLoading(BasePage):
         return progress_label_update[0]
 
     def click_tap_to_start(self):
-        self.click_until_disappear(element_data=ElementsData.EntryUpdateLoading.tap_to_start)
+        self.click_until_disappear(element_data=ElementsData.EntryUpdateLoading.tap_to_start, ignore_set={"EntryUpdateLoading"})

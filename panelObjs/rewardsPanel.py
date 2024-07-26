@@ -11,7 +11,7 @@ class RewardsPanel(BasePage):
 
 
     def wait_for_panel_appear(self):
-        self.wait_for_appear(element_data=ElementsData.Rewards.tap_to_claim, is_click=False)
+        self.wait_for_appear(element_data=ElementsData.Rewards.tap_to_claim, is_click=False, ignore_set={"RewardsPanel"})
 
     def get_reward_dict(self):
         reward_icon_list = self.get_icon_list(element_data=ElementsData.Rewards.reward_icon_list)

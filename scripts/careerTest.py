@@ -81,7 +81,6 @@ def main(bp:BasePage):
     # 进入天赋
     bp.go_to_panel("CareerPanel")
 
-
     tips_test(bp)
 
     rating_tips_test(bp)

@@ -37,10 +37,10 @@ class ResultPanel(BasePage):
 
 
     def click_btn_claim(self):
-        self.click_until_disappear(element_data=ElementsData.Result.btn_claim)
+        self.click_until_disappear(element_data=ElementsData.Result.btn_claim, ignore_set={"ResultPanel"})
 
     def click_btn_claim_token_fish(self):
-        self.click_until_disappear(element_data=ElementsData.Result.btn_claim_token_fish)
+        self.click_until_disappear(element_data=ElementsData.Result.btn_claim_token_fish, ignore_set={"ResultPanel"})
 
 
     def duel_sundries(self):

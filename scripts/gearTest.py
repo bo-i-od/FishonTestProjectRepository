@@ -432,7 +432,6 @@ def one_star(bp: BasePage, tpId=None, table_data=None):
 if __name__ == "__main__":
     bp = BasePage("127.0.0.1:21503")
     # full_star(bp)
-    bp.cmd("allrod 1")
     bp.cmd("allrod 1000")
     bp.set_item_count(target_count=100000000000, item_tpid="100000")
     bp.set_item_count(target_count=100000000, item_tpid="200300")

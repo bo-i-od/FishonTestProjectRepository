@@ -7,7 +7,7 @@ from tools.commonTools import *
 
 class FishAlbum3DPanel(BasePage):
     def click_btn_close(self):
-        self.click_until_disappear(element_data=ElementsData.FishAlbum3D.btn_close)
+        self.click_until_disappear(element_data=ElementsData.FishAlbum3D.btn_close, ignore_set={"FishAlbum3DPanel"})
 
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.FishAlbum3D.FishAlbum3DPanel)
@@ -17,7 +17,7 @@ class FishAlbum3DPanel(BasePage):
         self.click_a_until_b_appear_list(perform_list=perform_list)
 
     def click_btn_share(self):
-        self.click_until_disappear(element_data=ElementsData.FishAlbum3D.btn_share)
+        self.click_until_disappear(element_data=ElementsData.FishAlbum3D.btn_share, ignore_set={"FishAlbum3DPanel"})
 
     def click_btn_switch(self):
         self.click_element(element_data=ElementsData.FishAlbum3D.btn_switch)

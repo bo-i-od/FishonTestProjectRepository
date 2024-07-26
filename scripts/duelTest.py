@@ -356,24 +356,33 @@ if __name__ == '__main__':
     #     duel_once(base_page, 1)
     #     cur += 1
     #     print(f"第{cur}次钓鱼")
-    # circulate_fish(base_page, is_quick=False, times=50)
+    # circulate_fish(base_page, is_quick=False, times=90)
     while True:
-        base_page = champointship(base_page, 1, 20)
-        base_page = champointship(base_page, 0, 20)
+        base_page = champointship(base_page, 1, 15)
+        base_page = champointship(base_page, 0, 15)
+
+    # clear_duelcup(base_page)
+    # while True:
+    #     base_page.go_home()
+    #     # r = random.randint(0, 7)
+    #     r = 0
+    #     print(r)
+    #     clear_duelcup(base_page)
+    #     dc = random_duelcup(base_page, rank=r)
+    #     base_page.go_to_panel("PVPHallPanel")
+    #     base_page.sleep(1)
+    #     duel_once(base_page, r)
 
 
 
 
 
 
-
-
-
-
-    # dc = random_duelcup(bp, 7)
+    #
+    # dc = random_duelcup(base_page, 7)
 
     # main(bp)
-    # bp.cmd("add 1 100200 1234569")
+
     # circulate_fish(bp, fishery_id="400301",is_quick=True, is_monster=True)
     # zhanbao_test(bp)
     # bp.set_item_count(target_count=10000, item_tpid="100500")
@@ -383,8 +392,8 @@ if __name__ == '__main__':
     # bp.cmd("mode 400302 390015")
     # bp.lua_console(command="GameRoot:GetFishingMatch().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
     # bp.cmd("mode 400303 390025")
-    base_page.cmd("levelupto 56")
-    dc = random_duelcup(base_page, 7)
+    # base_page.cmd("levelupto 56")
+    # dc = random_duelcup(base_page, 7)
     # print(dc)
     # area = point_cal(210)
     # bp.cmd("duelcup 1008 27000")

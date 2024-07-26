@@ -13,10 +13,10 @@ class PVPBattleHUDPanel(BasePage):
         self.click_element(element_data=ElementsData.PVPBattleHUD.btn_surrender)
 
     def wait_for_panel_appear(self):
-        self.wait_for_appear(element_data=ElementsData.PVPBattleHUD.PVPBattleHUDPanel)
+        self.wait_for_appear(element_data=ElementsData.PVPBattleHUD.PVPBattleHUDPanel, ignore_set={"PVPBattleHUDPanel"})
 
     def wait_for_btn_chat_appear(self):
-        self.wait_for_appear(element_data=ElementsData.PVPBattleHUD.btn_chat)
+        self.wait_for_appear(element_data=ElementsData.PVPBattleHUD.btn_chat, ignore_set={"PVPBattleHUDPanel"})
 
 
     def get_emoji_position_list(self):

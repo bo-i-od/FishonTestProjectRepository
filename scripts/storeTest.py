@@ -869,7 +869,7 @@ def main(bp: BasePage):
     bp.clear_popup()
 
     bp.go_to_panel("StorePanel")
-    gift_pack_test(bp)
+    # gift_pack_test(bp)
     bp.debug_log(f"当前分层{layer}")
     bp.cmd_list([f"setPlayerLayer {layer}", "refreshshop"])
     cash_test(bp)
@@ -884,5 +884,5 @@ def main(bp: BasePage):
 
 if __name__ == '__main__':
     bp = BasePage("192.168.111.77:20089")
-    # main(bp)
-    month_card_test(bp)
+    main(bp)
+    bp.connect_close()

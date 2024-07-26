@@ -7,7 +7,7 @@ class LoginPanel(BasePage):
         return self.exist(element_data=ElementsData.Login.LoginPanel)
 
     def wait_for_panel_appear(self):
-        self.wait_for_appear(element_data=ElementsData.Login.LoginPanel)
+        self.wait_for_appear(element_data=ElementsData.Login.LoginPanel, ignore_set={"LoginPanel"})
 
     def is_btn_login_active(self):
         if self.get_object_id_list(element_data=ElementsData.Login.btn_login):
@@ -24,7 +24,7 @@ class LoginPanel(BasePage):
         btn_login_element = ElementsData.Login.btn_login
         if self.exist(element_data=ElementsData.Login.btn_login_cn):
             btn_login_element = ElementsData.Login.btn_login_cn
-        self.click_until_disappear(element_data=btn_login_element, interval=2)
+        self.click_until_disappear(element_data=btn_login_element, interval=2, ignore_set={"LoginPanel"})
 
     def is_InputField_UserName_active(self):
         return self.exist(element_data=ElementsData.Login.InputField_UserName)
