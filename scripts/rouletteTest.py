@@ -69,8 +69,6 @@ def draw_msg_test(bp: BasePage, lv, times):
     count_list = []
     res_list = []
     while cur < times:
-        p = format(cur / times, ".1%")
-        sys.stdout.write(f"\r进度: {p}")
         # 清空消息列表 开始收消息
         bp.log_list.clear()
         bp.log_list_flag = True
@@ -98,6 +96,9 @@ def draw_msg_test(bp: BasePage, lv, times):
             n = 0
         res_list.append(gotIndex)
         cur += 1
+        p = format(cur / times, ".1%")
+        sys.stdout.write(f"\r进度: {p}")
+
     print(f"\ncount_list:{count_list}")
     print(f"res_list:{res_list}")
     result_dict = {}
