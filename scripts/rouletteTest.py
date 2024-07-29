@@ -60,14 +60,21 @@ def extract_number(text):
         numbers = re.findall(r'\d+', text)
         return int(numbers[0]) if numbers else text
 
+
 def draw_msg_test(bp: BasePage, lv, times):
+    # 初始化
     bp.set_item_count(target_count=times * 500, item_tpid="201001")
     bp.cmd(f"roulettesetlv {lv}")
     lua_code = csMsgAll.get_CSRouletteDrawMsg(lv=lv, groupId=1)
+    table_data = bp.excelTools.get_table_data("ROULETTE.xlsm")
+
+
+    # 进行times次实验
     cur = 0
     n = 0
     count_list = []
     res_list = []
+    res_dict = {}
     while cur < times:
         # 清空消息列表 开始收消息
         bp.log_list.clear()
@@ -88,36 +95,54 @@ def draw_msg_test(bp: BasePage, lv, times):
 
         key2 = "gotIndex"
         gotIndex = luaLog.get_value(msg=target_log, key=key2, is_str=False)
-
+        index = table_data["level"].index(lv)
+        reward = table_data["rewards"][int(gotIndex)]
+        tpid = reward["tpId"][index]
+        count = reward["count"][index]
         n += 1
         if newLv != "-1":
             count_list.append(n)
             bp.cmd(f"roulettesetlv {lv}")
             n = 0
         res_list.append(gotIndex)
+        if tpid in res_dict:
+            res_dict[tpid] += int(count)
+        else:
+            res_dict[tpid] = int(count)
+
         cur += 1
         p = format(cur / times, ".1%")
         sys.stdout.write(f"\r进度: {p}")
 
+    # 输出结果
     print(f"\ncount_list:{count_list}")
     print(f"res_list:{res_list}")
-    result_dict = {}
+    print(f"res_dict:{res_dict}")
+
+
+
+
+def draw_to_level_once(bp: BasePage, lv, n):
+    # 初始化
+    bp.set_item_count(target_count=n * 1000000, item_tpid="201001")
+
     cur = 0
-    while cur < len(res_list):
-        if res_list[cur] not in result_dict:
-            result_dict[res_list[cur]] = 1
-            cur += 1
-            continue
-        result_dict[res_list[cur]] += 1
+    while cur < n:
+        bp.cmd(f"roulettesetlv {lv}")
+        lua_code = csMsgAll.get_CSRouletteDrawMsg(lv=lv, groupId=1)
         cur += 1
-    # 按键的数值部分排序并生成新字典
-    sorted_dict = dict(sorted(result_dict.items(), key=lambda item: extract_number(item[0])))
-    print(f"result_dict:{sorted_dict}")
-    # 转成百分比结果
-    result_percentage = {}
-    for r in sorted_dict:
-        result_percentage[r] = format(sorted_dict[r] / times, ".2%")
-    print(f"result_percentage:{result_percentage}")
+
+
+def draw_to_level(bp: BasePage, lv, n):
+    # 初始化
+    bp.set_item_count(target_count=n * 1000000, item_tpid="201001")
+
+    cur = 0
+    while cur < n:
+        bp.cmd(f"roulettesetlv {lv}")
+        lua_code = csMsgAll.get_CSRouletteDrawMsg(lv=lv, groupId=1)
+        cur += 1
+
 
 
 
@@ -127,5 +152,6 @@ def draw_msg_test(bp: BasePage, lv, times):
 
 if __name__ == '__main__':
     bp = BasePage()
-    draw_msg_test(bp, 8, 10)
+    draw_msg_test(bp, 3, 50)
+    bp.connect_close()
 
