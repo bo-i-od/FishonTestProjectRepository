@@ -336,30 +336,6 @@ def relogin(bp):
     login(bp, name)
 
 
-
-
-def main(bp):
-    # 登录号前缀
-    prefix = "ndays"
-    # prefix_list = ["a", "b", "c", "d", "e"]
-    init(bp)
-    cur = 106
-    limit = 110
-    while cur < limit:
-        name = prefix + str(cur)
-        login(bp, name)
-
-        # 你要执行的初始化账号操作
-        # add_gu(bp, cur)
-        # dragon_boat(bp, cur)
-        # apply_guild(bp)
-        # friend(bp)
-        ndays(bp, cur)
-        # fish(bp, cur)
-        # hidden_treasure(bp)
-        logout(bp)
-        cur += 1
-
 def main2(bp):
     cur = 3
     limit = 15
@@ -418,8 +394,30 @@ def read_data():
         print(res[cur])
         cur += 1
 
+def main(bp):
+    # 登录号前缀
+    prefix = "ndays"
+    # prefix_list = ["a", "b", "c", "d", "e"]
+    init(bp)
+    cur = 250
+    limit = 350
+    while cur < limit:
+        name = prefix + str(cur)
+        login(bp, name)
+
+        # 你要执行的初始化账号操作
+        # add_gu(bp, cur)
+        # dragon_boat(bp, cur)
+        # apply_guild(bp)
+        # friend(bp)
+        ndays(bp, cur)
+        # fish(bp, cur)
+        # hidden_treasure(bp)
+        logout(bp)
+        cur += 1
+
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.37:20028")
-    main(bp)
+    bp = BasePage("192.168.111.37:20031")
+    relogin(bp)
     bp.connect_close()

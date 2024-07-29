@@ -63,25 +63,19 @@ def worker(serial_number):
         key_sc = '<==== [Lua] Receive Net Msg "SC'
         msg_name = "CooperateSpinMsg"
         msg_key = key_sc + msg_name
-        target_log = get_target_log(bp, msg_key)
+        target_log = bp.get_target_log(msg_key)
         print(target_log)
-        if target_log != "":
-            # 根据键拿到值
-            res = luaLog.get_value(msg=target_log, key="msg", is_str=True)
-            if res == "success":
-                success_count += 1
-                continue
-            print(target_log)
+        if target_log == "":
+            return
+        # 根据键拿到值
+        res = luaLog.get_value(msg=target_log, key="msg", is_str=True)
+        if res == "success":
+            success_count += 1
+            continue
+        print(target_log)
     print(f"{serial_number}:{success_count}")
 
-def get_target_log(bp, msg_key):
-    target_log = ""
-    for log in bp.log_list:
-        if msg_key not in log:
-            continue
-        target_log = log
-        break
-    return target_log
+
 def spin_together_test():
     # 设备列表
     serial_number_list = ["127.0.0.1:21503", "127.0.0.1:21653"]

@@ -24,7 +24,7 @@ from configs.jumpData import JumpData
 from configs.pathConfig import EXCEL_PATH
 
 class BasePage:
-    def __init__(self, serial_number=None, dev=None, is_android=True):
+    def __init__(self, serial_number=None, dev=None, is_android=False):
         # unity窗口使用UnityEditorWindow()
         # 手机使用connect_device("android://127.0.0.1:5037/设备号")
 
@@ -943,6 +943,30 @@ class BasePage:
         function = getattr(module, function_name)
         # 调用函数并返回结果
         return function(*args, **kwargs)
+
+    def get_target_log(self, msg_key):
+        target_log = ""
+        for log in self.log_list:
+            if msg_key not in log:
+                continue
+            target_log = log
+            break
+        return target_log
+
+    def receive_until_get_msg(self, msg_name, timeout=5):
+        cur = 0
+        while cur < timeout:
+            cur += 0.1
+            self.sleep(0.1)
+            # 在最近收集的消息列表中筛出目标消息
+            key_sc = '<==== [Lua] Receive Net Msg "SC'
+            msg_key = key_sc + msg_name
+            target_log = self.get_target_log(msg_key)
+            if target_log == "":
+                continue
+            return target_log
+        return None
+
 
 
 

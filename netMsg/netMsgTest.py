@@ -259,7 +259,7 @@ class NetMsgTest():
         key_sc = '<==== [Lua] Receive Net Msg "SC'
         msg_name = "LoginMsg"
         msg_key = key_sc + msg_name
-        target_log = self.get_target_log(msg_key)
+        target_log = self.bp.get_target_log(msg_key)
         if target_log != "":
             # 根据键拿到值
             self.charSimpleId = luaLog.get_value(msg=target_log, key="charSimpleId", is_str=False)
@@ -267,7 +267,7 @@ class NetMsgTest():
             self.userId = luaLog.get_value(msg=target_log, key="userId", is_str=True)
         msg_name = "DivisionBatchDataMsg"
         msg_key = key_sc + msg_name
-        target_log = self.get_target_log(msg_key)
+        target_log = self.bp.get_target_log(msg_key)
         if target_log != "":
             self.roomId_division = luaLog.get_value(msg=target_log, key="roomId", is_str=False)
 
@@ -278,7 +278,7 @@ class NetMsgTest():
         # 在最近收集的消息列表中筛出目标消息
         key_sc = '<==== [Lua] Receive Net Msg "SC'
         msg_key = key_sc + msg_name
-        target_log = self.get_target_log(msg_key)
+        target_log = self.bp.get_target_log(msg_key)
         if target_log == "":
             return False
 
@@ -291,14 +291,7 @@ class NetMsgTest():
         return True
 
     # 根据消息键查找值
-    def get_target_log(self, msg_key):
-        target_log = ""
-        for log in self.bp.log_list:
-            if msg_key not in log:
-                continue
-            target_log = log
-            break
-        return target_log
+
 
 
 
