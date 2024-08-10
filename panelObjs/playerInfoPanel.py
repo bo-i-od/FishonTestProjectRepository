@@ -13,6 +13,13 @@ class PlayerInfoPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.PlayerInfo.btn_close)
 
+    def click_btn_changecamera(self):
+        self.click_element(element_data=ElementsData.PlayerInfo.btn_changecamera)
+
+    def switch_tab(self, index):
+        position_list = self.get_position_list(element_data=ElementsData.PlayerInfo.tab_list)
+        self.click_position(position_list[index])
+
     def click_btn_setting(self):
         self.click_element(element_data=ElementsData.PlayerInfo.btn_setting)
 
@@ -45,9 +52,6 @@ class PlayerInfoPanel(BasePage):
     def click_btn_i_rod(self):
         self.click_element(element_data=ElementsData.PlayerInfo.btn_i_rod)
 
-    def click_btn_tag(self):
-        self.click_element(element_data=ElementsData.PlayerInfo.btn_tag)
-
     def click_btn_confirm(self):
         self.click_element(element_data=ElementsData.PlayerInfo.btn_confirm)
 
@@ -56,7 +60,7 @@ class PlayerInfoPanel(BasePage):
 
     def get_player_info(self):
         lv_str = self.get_text(element_data=ElementsData.PlayerInfo.lv)
-        lv = int(re.search(r'(\d+)级', lv_str).group(1))
+        lv = int(lv_str)
         rating = int(self.get_text(element_data=ElementsData.PlayerInfo.rating))
         player_info = {
         "player_name": self.get_text(element_data=ElementsData.PlayerInfo.player_name),
@@ -250,11 +254,20 @@ class PlayerInfoPanel(BasePage):
         toggle_is_on_index = get_toggle_is_on_index(toggle_is_on_list)
         compare(index, toggle_is_on_index)
 
+    def click_btn_copy_id(self):
+        self.click_element(element_data=ElementsData.PlayerInfo.btn_copy_id)
+
+    def get_id(self):
+        self.get_text(element_data=ElementsData.PlayerInfo.options_id)
+
     def click_tab_name(self):
         self.click_element(element_data=ElementsData.PlayerInfo.tab_name)
 
     def click_tab_avatar(self):
         self.click_element(element_data=ElementsData.PlayerInfo.tab_avatar)
+
+    def click_tab_head_frame(self):
+        self.click_element(element_data=ElementsData.PlayerInfo.tab_head_frame)
 
     def click_tab_setting(self):
         self.click_element(element_data=ElementsData.PlayerInfo.tab_setting)

@@ -281,6 +281,7 @@ def glod_bank_test(bp:BasePage):
 def RodMoreToOnePanel_test(bp:BasePage):
     cur = 0
     while not RodMoreToOnePanel.is_panel_active(bp):
+        bp.clear_popup_once()
         bp.sleep(1)
         cur += 1
         if cur > 20:

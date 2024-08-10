@@ -13,13 +13,10 @@ def worker(serial_number, task_list, retry_list, pass_list, fail_list, task_lock
             task_name = task_list.pop(0)
             task_lock.release()
             module = importlib.import_module(task_name)
-            # ['achievementCategoryTest', 'rankTest', 'dlcDownloadTest', 'fishCardTest', 'energyTest', 'fishAlbumTest',
-            #  'mailTest', 'minitaskTest', 'gearTest', 'newbieTaskTest', 'progressRewardsTest', 'careerTest',
-            #  'achievementWantedTest', 'treasureChestTest', 'battlePassTest', 'rouletteTest', 'achievementTest',
-            #  'duelTest']
-            if task_name in ['rankTest', 'achievementWantedTest','playerInfoTest', 'dlcDownloadTest',  'fishCardTest', 'energyTest','fishAlbumTest','guideTest', 'storeTest']:
-                pass_list.append(module.__name__)
-                continue
+
+            # if task_name in ['achievementCategoryTest', 'achievementWantedTest', 'rankTest', 'dlcDownloadTest', 'battlePassTest', 'energyTest', 'fishAlbumTest', 'mailTest', 'minitaskTest', 'treasureChestTest', 'newbieTaskTest', 'duelTest', 'taskTest', 'rouletteTest', 'progressRewardsTest', 'careerTest']:
+            #     pass_list.append(module.__name__)
+            #     continue
             print(dev, module, "执行测试")
             do_test(dev, module, 0, task_list, retry_list, pass_list, fail_list, task_lock, contents)
             continue
@@ -100,7 +97,7 @@ if __name__ == '__main__':
     print(f"当前测试模块共计 {len(task_list)} 个")
 
     # 设备列表
-    serial_number_list = ["192.168.111.32:20180", "192.168.111.34:20030", "192.168.111.37:20120"]
+    serial_number_list = ["192.168.111.37:20080", "192.168.111.36:20028", "192.168.111.32:20063"]
 
     print(f"当前连接设备 {len(serial_number_list)} 个")
 

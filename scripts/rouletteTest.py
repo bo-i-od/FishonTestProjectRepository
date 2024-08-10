@@ -4,6 +4,7 @@ from common.basePage import BasePage
 from netMsg import csMsgAll, luaLog
 from panelObjs.commonWebViewPanel import CommonWebViewPanel
 from panelObjs.playerLevelupPanel import PlayerLevelupPanel
+from panelObjs.pvpHallPanel import PVPHallPanel
 from panelObjs.rewardsPanel import RewardsPanel
 from panelObjs.roulettePanel import RoulettePanel
 from tools.commonTools import *
@@ -45,7 +46,10 @@ def main(bp: BasePage):
     PlayerLevelupPanel.wait_for_panel_appear(bp)
     bp.clear_popup()
 
-    bp.go_to_panel("RoulettePanel")
+    # 去转盘界面
+    bp.go_to_panel("PVPHallPanel")
+    bp.sleep(1)
+    PVPHallPanel.click_btn_turntable(bp)
     bp.sleep(1)
 
     # 点击玩法说明
@@ -102,6 +106,8 @@ def draw_msg_test(bp: BasePage, lv, times):
     count_list = []
     res_list = []
     res_dict = {}
+    p = format(cur / times, ".1%")
+    sys.stdout.write(f"\r进度: {p}")
     while cur < times:
         # 清空消息列表 开始收消息
         bp.log_list.clear()
@@ -193,6 +199,8 @@ def draw_to_level(bp: BasePage, lv, n):
     res_list = []
     get_list = []
     cur = 0
+    p = format(cur / n, ".1%")
+    sys.stdout.write(f"\r进度: {p}")
     while cur < n:
         # 初始化
         bp.set_item_count(target_count=count_init, item_tpid="201001")

@@ -34,17 +34,22 @@ class BattlePanel(BasePage):
                 continue
 
     def qte(self):
-        element_data_list = [ElementsData.Battle.qte_left, ElementsData.Battle.qte_right, ElementsData.Battle.qte_up, ElementsData.Battle.qte_jump_left, ElementsData.Battle.qte_jump_right, ElementsData.Battle.hud_power_list, ElementsData.Result.ResultPanel]
+        element_data_list = [ElementsData.Battle.qte_left, ElementsData.Battle.qte_right, ElementsData.Battle.qte_up, ElementsData.Battle.qte_jump_left, ElementsData.Battle.qte_jump_right, ElementsData.Battle.hud_power_list, ElementsData.Battle.hud_power_list_old, ElementsData.Result.ResultPanel]
         qte_left_index = element_data_list.index(ElementsData.Battle.qte_left)
         qte_right_index = element_data_list.index(ElementsData.Battle.qte_right)
         qte_up_index = element_data_list.index(ElementsData.Battle.qte_up)
         qte_jump_left_index = element_data_list.index(ElementsData.Battle.qte_jump_left)
         qte_jump_right_index = element_data_list.index(ElementsData.Battle.qte_jump_right)
         hud_power_list_index = element_data_list.index(ElementsData.Battle.hud_power_list)
+        hud_power_list_old_index = element_data_list.index(ElementsData.Battle.hud_power_list_old)
         ResultPanel_index = element_data_list.index(ElementsData.Result.ResultPanel)
+
         while True:
             object_id_list = self.get_object_id_list(element_data_list=element_data_list)
             if len(object_id_list[hud_power_list_index]) > 2:
+                BattlePanel.unleash_power(self)
+                continue
+            if len(object_id_list[hud_power_list_old_index]) > 2:
                 BattlePanel.unleash_power(self)
                 continue
             if object_id_list[qte_up_index]:

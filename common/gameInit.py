@@ -56,7 +56,8 @@ def account_init(bp: BasePage, player_name, cmd_list):
         bp.sleep(1)
         if not PlayerEditNamePanel.is_panel_active(bp):
             break
-        player_name = "t" + str(time.time()).split('.')[0]
+        t = str(time.time()).split('.')
+        player_name = "t" +t[0][-2:]+ t[1]
 
     # 随机选择性别
     r = random.randint(0, 1)
@@ -70,7 +71,8 @@ def account_init(bp: BasePage, player_name, cmd_list):
 # 登录到大厅
 def login_to_hall(bp: BasePage, cmd_list=None):
     LoginPanel.wait_for_btn_login(bp)
-    username = "t" + str(time.time()).split('.')[0]
+    t = str(time.time()).split('.')
+    username = "t" +t[0][-2:]+ t[1]
     login(bp, username)
 
     account_init(bp, username, cmd_list)

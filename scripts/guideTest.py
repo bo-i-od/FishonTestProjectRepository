@@ -70,6 +70,7 @@ def hookTest(bp: BasePage):
 def main(bp:BasePage):
     username = str(time.time()).split('.')[0]
     gameInit.login(bp, username=username)
+    bp.cmd("fishcardall 10")
 
     # # 姓名头像测试
     playerEditNamePanelTest(bp)
@@ -146,5 +147,6 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.77:20086")
+    bp = BasePage("192.168.111.37:20097")
     main(bp)
+    bp.connect_close()

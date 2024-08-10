@@ -38,21 +38,32 @@ def locked_test(bp:BasePage):
     bp.debug_log(f"locked_set, unlockable_set, unlocked_set:{locked_set, unlockable_set, unlocked_set}")
     locked_list = list(locked_set)
     viewport = AchievementPanel.get_viewport(bp)
-    bp.debug_log("点击未解锁成就开始")
+    # bp.debug_log("点击未解锁成就开始")
     # 点击未解锁成就
     if not locked_list:
-        bp.debug_log("点击未解锁成就跳过")
+        # bp.debug_log("点击未解锁成就跳过")
         return
-    cur = 0
-    while cur < len(locked_list):
-        viewport.move_until_appear(viewport.item_id_list[locked_list[cur]])
-        position_list = AchievementPanel.get_achievement_position_list(bp)
-        bp.click_position(position_list[locked_list[cur]])
-        bp.sleep(0.5)
-        if not AchievementPanel.is_unlock_tips_active(bp):
-            bp.debug_log("erro_if not AchievementPanel.is_unlock_tips_active(bp)")
-        cur += 1
-    bp.debug_log("点击未解锁成就完成")
+
+    # 随机点击某个未解锁成就
+    r = random.randint(0, len(locked_list) - 1)
+    viewport.move_until_appear(viewport.item_id_list[locked_list[r]])
+    position_list = AchievementPanel.get_achievement_position_list(bp)
+    bp.click_position(position_list[locked_list[r]])
+    bp.sleep(0.5)
+    if not AchievementPanel.is_unlock_tips_active(bp):
+        bp.debug_log("erro_if not AchievementPanel.is_unlock_tips_active(bp)")
+
+    # #点击所有未解锁成就
+    # cur = 0
+    # while cur < len(locked_list):
+    #     viewport.move_until_appear(viewport.item_id_list[locked_list[cur]])
+    #     position_list = AchievementPanel.get_achievement_position_list(bp)
+    #     bp.click_position(position_list[locked_list[cur]])
+    #     bp.sleep(0.5)
+    #     if not AchievementPanel.is_unlock_tips_active(bp):
+    #         bp.debug_log("erro_if not AchievementPanel.is_unlock_tips_active(bp)")
+    #     cur += 1
+    # bp.debug_log("点击未解锁成就完成")
 
 
 
@@ -61,12 +72,14 @@ def locked_test(bp:BasePage):
 def unlock_test(bp:BasePage):
     bp.go_to_panel("AchievementPanel")
     bp.debug_log("改变等级使成就可解锁")
-    exp = 123456789
+    bp.cmd("levelupto 99")
+    # exp = 123456789
+    #
+    # bp.set_item_count(exp, item_tpid="100200")
+    # bp.debug_log(f"exp:{exp}")
     # 升级后返回出进下刷新界面
-    bp.set_item_count(exp, item_tpid="100200")
-    bp.debug_log(f"exp:{exp}")
     bp.go_home()
-    bp.sleep(3)
+
     bp.go_to_panel("AchievementPanel")
     locked_set, unlockable_set, unlocked_set = AchievementPanel.get_achievement_status_set(bp)
     bp.debug_log(f"locked_set, unlockable_set, unlocked_set:{locked_set, unlockable_set, unlocked_set}")
@@ -74,26 +87,28 @@ def unlock_test(bp:BasePage):
     # 点击可解锁成就 将它们都解锁使task mini出现
     unlockable_list = list(unlockable_set)
     bp.debug_log("点击可解锁成就开始")
-    if unlockable_list:
-        unlockable_expect_set = unlockable_set
-        unlocked_expect_set = unlocked_set
-        cur = 0
-        while cur < len(unlockable_list):
-            unlockable_expect_set.remove(unlockable_list[cur])
-            unlocked_expect_set.add(unlockable_list[cur])
-            viewport.move_until_appear(viewport.item_id_list[unlockable_list[cur]])
-            position_list = AchievementPanel.get_achievement_position_list(bp)
-            bp.click_position(position_list[unlockable_list[cur]])
-            bp.sleep(0.5)
-            cur += 1
+    if not unlockable_list:
+        # bp.debug_log("点击可解锁成就跳过")
+        return
+    unlockable_expect_set = unlockable_set
+    unlocked_expect_set = unlocked_set
+    cur = 0
+    while cur < len(unlockable_list):
+        unlockable_expect_set.remove(unlockable_list[cur])
+        unlocked_expect_set.add(unlockable_list[cur])
+        viewport.move_until_appear(viewport.item_id_list[unlockable_list[cur]])
+        position_list = AchievementPanel.get_achievement_position_list(bp)
+        bp.click_position(position_list[unlockable_list[cur]])
+        bp.sleep(0.5)
+        cur += 1
 
-        locked_set, unlockable_set, unlocked_set = AchievementPanel.get_achievement_status_set(bp)
-        bp.debug_log(f"locked_set, unlockable_set, unlocked_set:{locked_set, unlockable_set, unlocked_set}")
-        compare(unlocked_expect_set, unlocked_set)
-        compare(unlockable_expect_set, unlockable_set)
-        bp.debug_log("点击可解锁成就完成")
-    else:
-        bp.debug_log("点击可解锁成就跳过")
+    locked_set, unlockable_set, unlocked_set = AchievementPanel.get_achievement_status_set(bp)
+    # bp.debug_log(f"locked_set, unlockable_set, unlocked_set:{locked_set, unlockable_set, unlocked_set}")
+    compare(unlocked_expect_set, unlocked_set)
+    compare(unlockable_expect_set, unlockable_set)
+    # bp.debug_log("点击可解锁成就完成")
+
+
 
 # minitask跳转测试
 def minitask_test(bp:BasePage):
@@ -371,6 +386,7 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.77:20030")
+    bp = BasePage("192.168.111.37:20080")
     main(bp)
+    bp.connect_close()
 

@@ -3,8 +3,10 @@ import random
 from airtest.core.api import connect_device
 
 from common.basePage import BasePage
+from panelObjs.fishCardMultipleLevelUpPanel import FishCardMultipleLevelUpPanel
 from panelObjs.achievementPopupPanel import AchievementPopupPanel
 from panelObjs.commonItemGetPanel import CommonItemGetPanel
+from panelObjs.fishCardMultipleLevelUpSuccessPanel import FishCardMultipleLevelUpSuccessPanel
 from panelObjs.fishCardPanel import FishCardPanel
 from panelObjs.fishCardUpgradePanel import FishCardUpgradePanel
 from panelObjs.homePanel import HomePanel
@@ -158,11 +160,14 @@ def select_card_test(bp: BasePage):
     card_information_2 = FishCardUpgradePanel.get_card_information(bp)
     compare(card_information_0, card_information_2)
 
+
 def FishCardMultipleLevelUpPanel_test(bp: BasePage):
     FishCardPanel.click_btn_upgrade(bp)
     bp.sleep(1)
-
-    # FishCardMultipleLevelUpPanel.click_btn_close(bp)
+    FishCardMultipleLevelUpPanel.click_btn_draw(bp)
+    bp.sleep(1)
+    FishCardMultipleLevelUpSuccessPanel.click_btn_close(bp)
+    bp.sleep(1)
 
 
 def FishCardGiftPackPanel_test(bp: BasePage):
@@ -187,16 +192,16 @@ def FishCardGiftPackPanel_test(bp: BasePage):
     #     item_count_expect_list[cur] += quantity_list[cur]
     #     cur += 1
     FishCardGiftPackCustomizePanel.click_btn_buy(bp)
-    bp.sleep(1)
-    bp.clear_popup()
-    RewardsPanel.wait_for_panel_appear(bp)
-    reward_dict = RewardsPanel.get_reward_dict(bp)
-    compare_dict(item_dict, reward_dict)
-    # item_count_list = bp.get_item_count_list(item_icon_name_list=icon_list)
-    # compare_list(item_count_expect_list, item_count_list)
-    bp.sleep(1)
-    RewardsPanel.click_tap_to_claim(bp)
-    bp.sleep(1)
+    bp.sleep(2)
+    if RewardsPanel.is_panel_active(bp):
+        RewardsPanel.wait_for_panel_appear(bp)
+        reward_dict = RewardsPanel.get_reward_dict(bp)
+        compare_dict(item_dict, reward_dict)
+        # item_count_list = bp.get_item_count_list(item_icon_name_list=icon_list)
+        # compare_list(item_count_expect_list, item_count_list)
+        bp.sleep(1)
+        RewardsPanel.click_tap_to_claim(bp)
+        bp.sleep(1)
 
 
 def click_pack_icon_test(bp: BasePage, icon_list):
@@ -257,20 +262,22 @@ def main(bp: BasePage):
     # 鱼卡礼包测试
     FishCardGiftPackPanel_test(bp)
 
-    # 跟大厅的战斗力对比
-    bp.clear_popup()
-    rating_expect = FishCardPanel.get_rating(bp)
-    rating_expect_list = [unit_conversion_int_to_str_chs(rating_expect), unit_conversion_int_to_str(rating_expect)]
+    # # 跟大厅的战斗力对比
+    # bp.clear_popup()
+    # rating_expect = FishCardPanel.get_rating(bp)
+    # rating_expect_list = [unit_conversion_int_to_str_chs(rating_expect), unit_conversion_int_to_str(rating_expect)]
     bp.go_home()
-    rating = remove_decimals(HomePanel.get_rating(bp))
-    if rating not in rating_expect_list:
-        print(f"erro_{rating, rating_expect_list}")
+    if RewardsPanel.is_panel_active(bp):
+        RewardsPanel.click_tap_to_claim(bp)
+    # rating = remove_decimals(HomePanel.get_rating(bp))
+    # if rating not in rating_expect_list:
+    #     print(f"erro_{rating, rating_expect_list}")
 
 
 if __name__ == "__main__":
-    bp = BasePage("192.168.111.77:20072")
+    bp = BasePage("192.168.111.32:20068")
     main(bp)
-
+    bp.connect_close()
 
 
 

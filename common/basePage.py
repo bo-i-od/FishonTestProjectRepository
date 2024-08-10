@@ -22,9 +22,12 @@ from configs.elementsData import ElementsData
 from configs.jumpData import JumpData
 
 from configs.pathConfig import EXCEL_PATH
+import logging
 
 class BasePage:
     def __init__(self, serial_number=None, dev=None, is_android=False):
+        # 不打印airtest日志
+        logging.getLogger("airtest").setLevel(logging.ERROR)
         # unity窗口使用UnityEditorWindow()
         # 手机使用connect_device("android://127.0.0.1:5037/设备号")
 
@@ -83,6 +86,7 @@ class BasePage:
         self.log_list = []
 
 
+
     def get_device(self, serial_number=None):
         # pc端
         if not self.is_android:
@@ -98,7 +102,7 @@ class BasePage:
             print(e)
             print("进行设备连接")
         if serial_number is None:
-            serial_number = "127.0.0.1:21503"
+            serial_number = "127.0.0.1:21513"
         dev = connect_device(f"android://127.0.0.1:5037/{serial_number}")
         # dev = connect_device("android://127.0.0.1:5037/b6h65hd64p5pxcyh")
         # dev = connect_device("android://127.0.0.1:5037/28cce18906027ece")
@@ -971,17 +975,10 @@ class BasePage:
 
 
 
+
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21503")
-    a = bp.get_item_count(item_tpid="100200")
-    print(a)
-    a = bp.get_item_count(item_tpid="100500")
-    print(a)
-    a = bp.get_item_count(item_tpid="101200")
-    print(a)
-    a = bp.get_item_count(item_tpid="201001")
-    print(a)
-    bp.set_item_count(target_count=21, item_tpid="100500")
+    bp = BasePage("127.0.0.1:21513")
+    # bp.cmd("mode 400301 390004")
     # bp.clear_popup_once()
 
     bp.connect_close()

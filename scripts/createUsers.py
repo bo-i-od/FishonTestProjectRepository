@@ -45,7 +45,7 @@ _G.NetworkMgr:SDKLogin("{accountName}")
 
 
 def disconnect(bp: BasePage):
-    lua_code = f"""
+    lua_code = """
 _G.CURRENT_SDK_MANUAL_LOGIN = true
 PanelMgr:CloseAllOpend()
 Global_ClearCacheData()
@@ -55,8 +55,35 @@ _G.NetworkMgr:Disconnect()
 UIFacade.Reset()
 --Util.GoToLogin()
 EventMgr:SendEvent(GameMsg.CHANGE_GAME_STATE, GAME_STATE_ENUM.Login, true)
-AvatarMgr:ReleasePool()
-        """
+
+    """
+#     lua_code = """
+# ---@type TYSDK.LoginSDK
+# local loginSdkInst = TYSDK.LoginSDK.Instanc
+# --FIXME:兼容C#部分
+# local function pcallloginSdkInstLogOutfunc()
+#     if loginSdkInst.LogOut then
+#         loginSdkInst:LogOut(true)
+#     end
+# end
+# xpcall(pcallloginSdkInstLogOutfunc, function() end)
+# local Login_Token_Key = "Login_Token"
+# SettingMgr:Write(Login_Token_Key, "")
+# _G.GAME_SDK_AUTHDATA_CACHE = nil
+# local NetworkMgr = UIFacade.Get('NetworkMgr')
+# _G.CURRENT_SDK_MANUAL_LOGIN = true
+# PanelMgr:CloseAllOpend()
+# GameRoot:GetFishingCamera().fsm:ChangeState(FishingCamera_FSM_STATE.GAME)
+#
+# Global_ClearCacheData()
+# Global_SendLogout()
+# NetworkMgr.channelPurl = nil
+# NetworkMgr:StopTimeOutTimer()
+# NetworkMgr:Disconnect()
+# UIFacade.Reset()
+# --Util.GoToLogin()
+# EventMgr:SendEvent(GameMsg.CHANGE_GAME_STATE, GAME_STATE_ENUM.Login, true)
+# """
     bp.lua_console(lua_code)
 
 
@@ -81,13 +108,13 @@ def login(bp: BasePage, name):
             break
         name = "t" + str(time.time()).split('.')[0]
 
-    # 随机选择性别
-    r = 0
-    gender_icon_position_list = AvatarSelectPanel.get_gender_icon_position_list(bp)
-    bp.click_position(gender_icon_position_list[r])
-    bp.sleep(0.5)
-
-    AvatarSelectPanel.click_btn_start(bp)
+    # # 随机选择性别
+    # r = 0
+    # gender_icon_position_list = AvatarSelectPanel.get_gender_icon_position_list(bp)
+    # bp.click_position(gender_icon_position_list[r])
+    # bp.sleep(0.5)
+    #
+    # AvatarSelectPanel.click_btn_start(bp)
 
 
 
@@ -106,63 +133,11 @@ def go_leaderborad(bp:BasePage):
     bp.sleep(1)
 
 def fish(bp: BasePage, index):
-    bp.cmd_list(["levelupto 30", "add 1 100500 1000"])
-    # bp.sleep(0.1)
-    # cur = 1
-    # while cur < 13:
-    #     if cur == index or cur == 6 + index:
-    #         cur += 1
-    #         continue
-    #     id = str(cur).zfill(2)
-    #     bp.cmd(f"mode 400312 3120{id}")
-    #     bp.sleep(0.1)
-    #     fishingMsg.fish(bp, [{"spot_id": f"40031211", "times": 1, "is_activity_spot": True}])
-    #     cur += 1
-    # bp.cmd(f"mode 400312 39011{index}")
-    # bp.sleep(0.1)
-    # fishingMsg.fish(bp, [{"spot_id": f"40031211", "times": 1, "is_activity_spot": True}])
-    #
-    # bp.sleep(2)
-
-    # cur不钓 cur+6钓
-
-    # bp.cmd("fishscenestarset 400312 9")
-    # bp.sleep(1)
-    #
-    cur = 1
-    while cur < 16:
-
-        id = str(cur).zfill(2)
-        bp.cmd(f"mode 400312 3120{id}")
-        bp.sleep(0.1)
-        fishingMsg.fish(bp, [{"spot_id": f"40031211", "times": 1, "is_activity_spot": True}])
-        cur += 1
-
-    bp.cmd(f"mode 400312 390117")
-    bp.sleep(0.1)
-    fishingMsg.fish(bp, [{"spot_id": f"40031211", "times": 1, "is_activity_spot": True}])
-    bp.cmd(f"mode 400312 390118")
-    bp.sleep(0.1)
-    fishingMsg.fish(bp, [{"spot_id": f"40031211", "times": 1, "is_activity_spot": True}])
-    bp.cmd(f"mode 400312 390119")
-    bp.sleep(0.1)
-    fishingMsg.fish(bp, [{"spot_id": f"40031211", "times": 1, "is_activity_spot": True}])
-    # bp.cmd(f"mode 400312 39011{index}")
-    # bp.sleep(0.1)
-    # fishingMsg.fish(bp, [{"spot_id": f"40031211", "times": 1, "is_activity_spot": True}])
-    # bp.cmd(f"mode 400312 39011{index + 3}")
-    # bp.sleep(0.1)
-    # fishingMsg.fish(bp, [{"spot_id": f"40031211", "times": 1, "is_activity_spot": True}])
-
-    bp.sleep(2)
+    bp.cmd_list(["levelupto 61", f"add 1 100500 {index * 500}"])
+    fishingMsg.fish(bp, [{"spot_id": f"40030103", "times": index}, {"spot_id": f"40030203", "times": index}, {"spot_id": f"40030303", "times": index}, {"spot_id": f"40030403", "times": index}, {"spot_id": f"40030503", "times": index}, {"spot_id": f"40030603", "times": index}, {"spot_id": f"40030703", "times": index}, {"spot_id": f"40030803", "times": index}, {"spot_id": f"40030903", "times": index}, {"spot_id": f"40031003", "times": index}, {"spot_id": f"40031103", "times": index}, {"spot_id": f"40031203", "times": index}, {"spot_id": f"40031703", "times": index}])
+    bp.sleep(index * 4)
 
 
-    # bp.cmd("mode 400309 390088")
-    # fishingMsg.fish(bp, [{"spot_id": f"40030913", "times": 1, "energy_cost": 50}])
-    # bp.sleep(0.1)
-    # bp.cmd("mode 400309 390089")
-    # fishingMsg.fish(bp, [{"spot_id": f"40030913", "times": 1, "energy_cost": 50}])
-    # bp.sleep(0.1)
 
 def dragon_boat(bp: BasePage, index):
     bp.cmd_list(["levelupto 20", "add 1 100500 100000", "add 1 100100 3000"])
@@ -238,7 +213,7 @@ def apply_guild(bp:BasePage):
 
 def ndays(bp:BasePage, count):
     # bp.cmd(f"setPlayerLayer {count}000")
-    bp.cmd(f"levelupto 66")
+    bp.cmd(f"levelupto 16")
 
 
     # bp.cmd_list([f"levelupto 20", "add 1 100100 2000"])
@@ -248,56 +223,56 @@ def ndays(bp:BasePage, count):
     # print(lua_code)
     # bp.lua_console(lua_code)
 
-    bp.cmd(f"add 2 209001 {count}")
-    bp.sleep(0.1)
-    bp.cmd(f"add 2 209002 {count}")
-    bp.sleep(0.1)
-    bp.cmd(f"add 2 209003 {count}")
-    bp.sleep(0.1)
-    bp.cmd(f"add 2 209004 {count}")
-    bp.sleep(0.1)
-    bp.cmd(f"add 2 209005 {count}")
-    bp.sleep(0.1)
-    bp.cmd(f"add 2 209006 {count}")
-    bp.sleep(0.1)
-    bp.cmd(f"add 2 209007 {count}")
-    bp.sleep(0.1)
-    bp.cmd(f"add 2 209008 {count}")
-    bp.sleep(0.1)
-    bp.cmd(f"add 2 209009 {count}")
-    bp.sleep(0.1)
-    bp.cmd(f"add 2 209010 {count}")
-    bp.sleep(0.1)
-    bp.cmd(f"add 2 209011 {count}")
-    bp.sleep(0.1)
-    bp.cmd(f"add 2 209012 {count}")
-    bp.sleep(0.1)
-    bp.cmd(f"add 2 209013 {count}")
-    bp.sleep(0.1)
-    bp.cmd(f"add 2 209101 {count}")
-    bp.sleep(0.1)
-    bp.cmd(f"add 2 209102 {count}")
-    bp.sleep(0.1)
-    bp.cmd(f"add 2 209103 {count}")
-    bp.sleep(0.1)
-    bp.cmd(f"add 2 209104 {count}")
-    bp.sleep(0.1)
-    bp.cmd(f"add 2 209105 {count}")
-    bp.sleep(0.1)
-    bp.cmd(f"add 2 209106 {count}")
-    bp.sleep(0.1)
-    bp.cmd(f"add 2 209107 {count}")
-    bp.sleep(0.1)
-    bp.cmd(f"add 2 209108 {count}")
-    bp.sleep(0.1)
-    bp.cmd(f"add 2 209014 {count}")
-    bp.sleep(0.1)
-    bp.cmd(f"add 2 209015 {count}")
-    bp.sleep(0.1)
-    bp.cmd(f"add 2 209016 {count}")
-    bp.sleep(0.1)
-    bp.cmd(f"add 2 209017 {count}")
-    bp.sleep(0.1)
+    # bp.cmd(f"add 2 209001 {count}")
+    # bp.sleep(0.1)
+    # bp.cmd(f"add 2 209002 {count}")
+    # bp.sleep(0.1)
+    # bp.cmd(f"add 2 209003 {count}")
+    # bp.sleep(0.1)
+    # bp.cmd(f"add 2 209004 {count}")
+    # bp.sleep(0.1)
+    # bp.cmd(f"add 2 209005 {count}")
+    # bp.sleep(0.1)
+    # bp.cmd(f"add 2 209006 {count}")
+    # bp.sleep(0.1)
+    # bp.cmd(f"add 2 209007 {count}")
+    # bp.sleep(0.1)
+    # bp.cmd(f"add 2 209008 {count}")
+    # bp.sleep(0.1)
+    # bp.cmd(f"add 2 209009 {count}")
+    # bp.sleep(0.1)
+    # bp.cmd(f"add 2 209010 {count}")
+    # bp.sleep(0.1)
+    # bp.cmd(f"add 2 209011 {count}")
+    # bp.sleep(0.1)
+    # bp.cmd(f"add 2 209012 {count}")
+    # bp.sleep(0.1)
+    # bp.cmd(f"add 2 209013 {count}")
+    # bp.sleep(0.1)
+    # bp.cmd(f"add 2 209101 {count}")
+    # bp.sleep(0.1)
+    # bp.cmd(f"add 2 209102 {count}")
+    # bp.sleep(0.1)
+    # bp.cmd(f"add 2 209103 {count}")
+    # bp.sleep(0.1)
+    # bp.cmd(f"add 2 209104 {count}")
+    # bp.sleep(0.1)
+    # bp.cmd(f"add 2 209105 {count}")
+    # bp.sleep(0.1)
+    # bp.cmd(f"add 2 209106 {count}")
+    # bp.sleep(0.1)
+    # bp.cmd(f"add 2 209107 {count}")
+    # bp.sleep(0.1)
+    # bp.cmd(f"add 2 209108 {count}")
+    # bp.sleep(0.1)
+    # bp.cmd(f"add 2 209014 {count}")
+    # bp.sleep(0.1)
+    # bp.cmd(f"add 2 209015 {count}")
+    # bp.sleep(0.1)
+    # bp.cmd(f"add 2 209016 {count}")
+    # bp.sleep(0.1)
+    # bp.cmd(f"add 2 209017 {count}")
+    # bp.sleep(0.1)
 
 
 def clone(bp:BasePage, name):
@@ -328,6 +303,25 @@ def add_friend(bp: BasePage,target_id):
     HomePanel.go_to_panel(bp,"FriendPanel")
     # bp.sleep(1)
     FriendPanel.add_friend(bp,target_id)
+
+def rank(bp: BasePage):
+    bp.set_item_count(target_count=10000, item_tpid="100500")
+    table_data = bp.excelTools.get_table_data("FISHERIES.xlsm")
+    i = 0
+    while i < 2:
+        tpid_fishery = table_data["tpId"][i]
+        cur = 0
+        while cur < len(table_data["fish"]):
+            tpid_fish = table_data["fish"][cur][i]
+            if tpid_fish == 0 or tpid_fish == "0":
+                cur += 1
+                continue
+            cmd = f"mode {tpid_fishery} {tpid_fish}"
+            bp.cmd(cmd)
+            bp.sleep(0.5)
+            fishingMsg.fish(bp, [{"spot_id": f"{tpid_fishery}03", "times": 1}])
+            cur += 1
+        i += 1
 
 def relogin(bp):
     name = "1000002002"
@@ -394,24 +388,26 @@ def read_data():
         print(res[cur])
         cur += 1
 
-def main(bp):
+
+def main(bp: BasePage):
     # 登录号前缀
-    prefix = "ndays"
+    prefix = "v"
     # prefix_list = ["a", "b", "c", "d", "e"]
     init(bp)
-    cur = 250
-    limit = 350
+    cur = 71
+    limit = 120
     while cur < limit:
         name = prefix + str(cur)
         login(bp, name)
-
+        bp.cmd("selfranksetip 12.34.56.78")
+        bp.cmd("levelupto 61")
         # 你要执行的初始化账号操作
         # add_gu(bp, cur)
         # dragon_boat(bp, cur)
         # apply_guild(bp)
         # friend(bp)
-        ndays(bp, cur)
-        # fish(bp, cur)
+        # ndays(bp, cur)
+        rank(bp)
         # hidden_treasure(bp)
         logout(bp)
         cur += 1
@@ -419,5 +415,5 @@ def main(bp):
 
 if __name__ == '__main__':
     bp = BasePage("192.168.111.37:20031")
-    relogin(bp)
+    main(bp)
     bp.connect_close()

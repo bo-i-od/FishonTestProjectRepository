@@ -4,11 +4,14 @@ import random
 from common import gameInit
 from common.resource import *
 from panelObjs.playerInfoPanel import PlayerInfoPanel
+from panelObjs.playerLevelupPanel import PlayerLevelupPanel
 from panelObjs.playerSettingPanel import PlayerSettingPanel
 from common.basePage import BasePage
 from panelObjs.messageBoxPanel import MessageBoxPanel
 from panelObjs.rewardsPanel import RewardsPanel
 from panelObjs.homePanel import HomePanel
+
+
 
 def gift_code_test(bp: BasePage):
     if not PlayerSettingPanel.is_btn_giftcode_active(bp):
@@ -39,6 +42,8 @@ def gift_code_test(bp: BasePage):
 def settings_test(bp: BasePage):
     PlayerInfoPanel.click_tab_avatar(bp)
     bp.sleep(1)
+    PlayerInfoPanel.click_tab_head_frame(bp)
+    bp.sleep(1)
     PlayerInfoPanel.click_tab_name(bp)
     bp.sleep(1)
     PlayerInfoPanel.click_tab_setting(bp)
@@ -51,6 +56,7 @@ def settings_test(bp: BasePage):
     PlayerInfoPanel.set_options_vibration(bp, random.randint(0, 1))
     PlayerInfoPanel.set_options_gyro(bp, random.randint(0, 1))
     PlayerInfoPanel.set_options_invite(bp, random.randint(0, 1))
+    PlayerInfoPanel.click_btn_copy_id(bp)
 
 def name_test(bp: BasePage):
     PlayerInfoPanel.click_tab_name(bp)
@@ -71,12 +77,12 @@ def name_test(bp: BasePage):
     if not PlayerInfoPanel.is_btn_save_pay_abled(bp):
         bp.debug_log("erro_"+"if not PlayerInfoPanel.is_btn_save_pay_abled(bp)")
 
-    # # 返回上级 对比是否改名成功
-    # PlayerInfoPanel.click_btn_close_additional(bp)
-    # bp.sleep(1)
-    # playerInfo = PlayerInfoPanel.get_player_info(bp)
-    # compare(name, playerInfo["player_name"])
-    #
+    # 返回上级 对比是否改名成功
+    PlayerInfoPanel.click_btn_close_additional(bp)
+    bp.sleep(1)
+    playerInfo = PlayerInfoPanel.get_player_info(bp)
+    compare(name, playerInfo["player_name"])
+
     # # 再次进入界面
     # PlayerInfoPanel.click_btn_setting(bp)
     # bp.sleep(1)
@@ -103,7 +109,8 @@ def name_test(bp: BasePage):
     # playerInfo = PlayerInfoPanel.get_player_info(bp)
     # compare(name, playerInfo["player_name"])
 
-    PlayerInfoPanel.click_btn_close_additional(bp)
+    # PlayerInfoPanel.click_btn_close_additional(bp)
+    # bp.sleep(1)
 
 def avatar_test(bp: BasePage):
     PlayerInfoPanel.click_tab_avatar(bp)
@@ -127,16 +134,56 @@ def avatar_test(bp: BasePage):
     player_info = PlayerInfoPanel.get_player_info(bp)
     compare(avatar, player_info["head_img"])
 
+def head_frame_test(bp: BasePage):
+    pass
+
 def main(bp:BasePage):
     # 登录到大厅
-    cmd_list = ["guideskip"]
+    cmd_list = ["guideskip", "levelupto 16"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
+
+    PlayerLevelupPanel.wait_for_panel_appear(bp)
+    bp.clear_popup()
 
     bp.go_to_panel("PlayerInfoPanel")
     bp.sleep(1)
 
-    # 点击复制姓名
-    PlayerInfoPanel.click_btn_copy(bp)
+    PlayerInfoPanel.switch_tab(bp, 1)
+    bp.sleep(1)
+
+    # 点击鱼竿详情
+    PlayerInfoPanel.click_btn_i_rod(bp)
+    bp.sleep(1)
+    bp.click_position([0.1, 0.5])
+
+    # 点击勋章再退出
+    PlayerInfoPanel.click_btn_edit_achievement(bp)
+    bp.sleep(1)
+    PlayerInfoPanel.click_btn_confirm(bp)
+    bp.sleep(1)
+
+    # 切换到数据
+    PlayerInfoPanel.switch_tab(bp, 2)
+    bp.sleep(1)
+
+    # 点击礼包码
+    gift_code_test(bp)
+
+
+    # 点击设置
+    PlayerInfoPanel.click_btn_setting(bp)
+    bp.sleep(1)
+    settings_test(bp)
+    PlayerInfoPanel.click_btn_close_additional(bp)
+    bp.sleep(1)
+
+    # 切换信息
+    PlayerInfoPanel.switch_tab(bp, 0)
+    bp.sleep(1)
+
+    PlayerInfoPanel.click_btn_changecamera(bp)
+    bp.sleep(1)
+    PlayerInfoPanel.click_btn_changecamera(bp)
     bp.sleep(1)
 
     # 点击战力详情
@@ -144,30 +191,11 @@ def main(bp:BasePage):
     bp.sleep(1)
     bp.click_position([0.1, 0.5])
 
-    # 点击鱼竿详情
-    PlayerInfoPanel.click_btn_i_rod(bp)
-    bp.sleep(1)
-    bp.click_position([0.1, 0.5])
-
-    # 点击礼包码
-    gift_code_test(bp)
-
-    # 点击我的记录和我的勋章切换
-    PlayerInfoPanel.click_btn_tag(bp)
-    bp.sleep(1)
-    PlayerInfoPanel.click_btn_tag(bp)
-    bp.sleep(1)
-
-    # 点击设置
-    PlayerInfoPanel.click_btn_setting(bp)
-    bp.sleep(1)
-    settings_test(bp)
-    PlayerInfoPanel.click_btn_close_additional(bp)
-
     # 改名测试
     PlayerInfoPanel.click_btn_edit_player_info(bp)
     bp.sleep(1)
     name_test(bp)
+
 
     # 换头像测试
     PlayerInfoPanel.click_btn_edit_player_info(bp)
@@ -176,8 +204,15 @@ def main(bp:BasePage):
     bp.sleep(1)
     avatar_test(bp)
 
-    #
+    # 获取玩家信息
     playerInfo = PlayerInfoPanel.get_player_info(bp)
+
+    # 点击复制姓名
+    PlayerInfoPanel.click_btn_copy(bp)
+    bp.sleep(1)
+
+
+    # 与大厅信息对比
     bp.go_home()
     playerInfo_home = HomePanel.get_player_info(bp)
     compare(playerInfo, playerInfo_home)

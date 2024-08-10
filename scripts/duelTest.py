@@ -349,26 +349,26 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    base_page = BasePage("127.0.0.1:21533")
+    base_page = BasePage("127.0.0.1:21503")
     base_page.set_send_log_flag(False)
+    gameInit.set_joystick(base_page)
     # cur = 0
     # while cur < 3:
     #     duel_once(base_page, 1)
     #     cur += 1
     #     print(f"第{cur}次钓鱼")
-    # circulate_fish(base_page, is_quick=False, times=90)
     while True:
-        base_page = champointship(base_page, 1, 15)
-        base_page = champointship(base_page, 0, 15)
+        base_page = champointship(base_page, 1, 30)
+        base_page = champointship(base_page, 0, 30)
 
     # clear_duelcup(base_page)
     # while True:
     #     base_page.go_home()
-    #     # r = random.randint(0, 7)
-    #     r = 0
-    #     print(r)
-    #     clear_duelcup(base_page)
-    #     dc = random_duelcup(base_page, rank=r)
+    #     r = random.randint(0, 7)
+    #     # r = 0
+    #     # print(r)
+    #     # clear_duelcup(base_page)
+    #     # dc = random_duelcup(base_page, rank=r)
     #     base_page.go_to_panel("PVPHallPanel")
     #     base_page.sleep(1)
     #     duel_once(base_page, r)

@@ -35,9 +35,9 @@ def fish_once(bp: BasePage, fishery_id="", fish_id="", is_quick=False):
 
 
 
-def circulate_fish(bp: BasePage, fishery_id=None, is_quick=False, times=500):
+def circulate_fish(bp: BasePage, fishery_id=None, is_quick=False, times=500, start=0):
     fish_list = []
-    cur = 0
+    cur = start
     if fishery_id is not None:
         fish_list = TournamentsPanel.get_fish_list(bp, fishery_id)
         times = len(fish_list)
@@ -46,6 +46,9 @@ def circulate_fish(bp: BasePage, fishery_id=None, is_quick=False, times=500):
         # 指定鱼
         if fish_list:
             fish_id = fish_list[cur]
+            if fish_id == "0" or fish_id == 0:
+                cur += 1
+                continue
         # bp.sleep(1)
         bp.clear_popup()
         # if cur == 1:
@@ -77,10 +80,14 @@ def select_location(bp: BasePage, index):
 
 
 def fish_all(bp: BasePage, is_quick=False):
-    cur = 1
-    while cur < 13:
-        index = str(cur).zfill(2)
-        fishery_id = f"4003{index}"
+    table_data = bp.excelTools.get_table_data("FISHERIES.xlsm")
+    tpid_fishery_list = table_data["tpId"]
+    cur = 0
+    while cur < len(tpid_fishery_list):
+        fishery_id = str(tpid_fishery_list[cur])
+        if table_data["enabled"][cur] != 1:
+            cur += 1
+            continue
         TournamentsPanel.go_to_fishery_by_tpid(bp, fishery_id)
         circulate_fish(bp, fishery_id=fishery_id, is_quick=is_quick)
         BattlePreparePanel.click_btn_close(bp)
@@ -102,27 +109,25 @@ def tournament(bp: BasePage):
 
 if __name__ == '__main__':
     # 连接设备号为127.0.0.1:21533的设备
-    bp = BasePage("127.0.0.1:21503")
+    bp = BasePage("127.0.0.1:21513")
     bp.set_send_log_flag(False)
-    # bp.custom_cmd("setTension 0.1")
-    bp.is_time_scale = True
-    circulate_fish(bp, is_quick=True)
-    # gameInit.set_joystick(bp)
+    gameInit.set_joystick(bp)
+    bp.is_time_scale = False
+    bp.custom_cmd("setTension 0.9")
+    circulate_fish(bp, is_quick=False,times=120)
+    # fish_once(bp)
     # # 按渔场id从小到大，再按鱼从小到大钓一遍
     # fish_all(bp,  is_quick=True)
-    # fish_all(bp, is_quick=False)
+    # fish_all(bp, is_quick=True)
     # l = ["390011","390013", "390014", "390017", "390018"]
-    # cur = 0
-    # while cur < 50:
-    # #     champointship(bp, 10000)
-    # # # fish_once(bp, is_quick=False, fishery_id="400306", fish_id="370807")
-    #     fish_once(bp, is_quick=False)
+    # cur = 1
+    # while cur < 6:
+    #     fish_once(bp, is_quick=False, fishery_id="400301", fish_id=f"39000{cur}")
     #     cur += 1
     #
-    # # 断开连接
-    # bp.connect_close()
-    #
-    # createUsers.main2()
+    # 断开连接
+    bp.connect_close()
+
 
 
 

@@ -235,7 +235,7 @@ def main(bp: BasePage):
 
     # 切换到settings
     PlayerSettingPanel.click_tab_settings(bp)
-    bp.sleep(2)
+    bp.sleep(1)
     settings_test(bp)
 
     PlayerSettingPanel.click_tab_player(bp)
@@ -253,7 +253,6 @@ def main(bp: BasePage):
 
     PlayerSettingPanel.open_edit_profile(bp)
     badge_test(bp)
-
 
     # 语言测试
     # PlayerSettingPanel.click_tab_language(bp)
