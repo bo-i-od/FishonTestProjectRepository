@@ -5,9 +5,10 @@ data2=load_log('hook_log.txt')
 # print(data1)
 for index,i in enumerate(data1):
     pid=i['protectiveId']
-    pid=int(eval(pid))
-    if pid>0:
-        print("special_protect",index,i['protectiveId'])
+    if pid:
+        pid=int(eval(pid))
+        if pid>0:
+            print("special_protect",index,i['protectiveId'])
 
 flash_card={}
 card_num=[15,6,3]
