@@ -1,4 +1,6 @@
+import ast
 import random
+import re
 import traceback
 from threading import Thread
 
@@ -92,8 +94,14 @@ def pvp_fish(bp, is_quick=False):
             first_cast_flag = False
             # 提取hook消息
             target_log = bp.get_target_log(msg_key="SCGmCommandMsg")
-            output = luaLog.get_value(msg=target_log, key="output", is_str=True)
-            print(f"预期体型列表：{output}")
+            output_match = re.search(r'\["output"\] = "(\[.*?\])"', target_log)
+
+
+            output_str = output_match.group(1)
+            # 使用ast.literal_eval将字符串转换为列表
+            output_list = ast.literal_eval(output_str)
+
+            print(f"预期体型列表：{output_list}")
 
 
         bp.sleep(3)
@@ -355,7 +363,7 @@ if __name__ == '__main__':
     gameInit.set_joystick(bp)
     cur = 1
     # 指定对决次数
-    times = 10
+    times = 200
     while cur <= times:
         print(f"<=====第{cur}次好友对决开始=====>")
         duel_once_friend(bp, is_quick=True)
