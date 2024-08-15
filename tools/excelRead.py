@@ -58,12 +58,38 @@ class ExceTools:
         value = int(table_data[header_value][index])
         return value
 
-    def get_fish_type(self, fish_list):
-        tpid = "tpId"
-        fishtype = "fishType"
-        worksheet = self.get_worksheet("FISH.xlsm", "模板数据")
-        res_list = self.same_row_different_column_convert_list(worksheet=worksheet, source_header=tpid, target_header=fishtype, source_list=fish_list)
-        return res_list
+    def get_fish_type(self, fish, table_data):
+        index = table_data["tpId"].index(int(fish))
+
+        if table_data["fishClass"][index] == 1:
+            if table_data["fishType"][index] == 1:
+                return "小"
+            if table_data["fishType"][index] == 2:
+                return "中"
+            if table_data["fishType"][index] == 3:
+                return "大"
+            if table_data["fishType"][index] == 4:
+                return "特大"
+            if table_data["fishType"][index] == 5:
+                return "超巨"
+        if table_data["fishClass"][index] == 2:
+            return "奇珍"
+        if table_data["fishClass"][index] == 3:
+            return "超奇珍"
+        if table_data["fishClass"][index] == 4:
+            return "典藏"
+        return "其它"
+
+
+    def get_fish_type_list(self, fish_list):
+        fish_type_list = []
+        table_data = self.get_table_data(book_name="FISH.xlsm")
+        cur = 0
+        while cur < len(fish_list):
+            fish_type = self.get_fish_type(fish=fish_list[cur], table_data=table_data)
+            fish_type_list.append(fish_type)
+            cur += 1
+        return fish_type_list
 
     def get_book_list(self):
         book_list = [{"book_name": "RESOURCE.xlsm", "name": "name", "id": "resourceID", "icon": "itemIcon"},

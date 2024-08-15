@@ -978,8 +978,9 @@ class BasePage:
 
 if __name__ == '__main__':
     bp = BasePage("127.0.0.1:21513")
-    # bp.cmd("mode 400301 390004")
-    # bp.clear_popup_once()
+    fish_list = ["301001", "390001"]
+    res = bp.excelTools.get_fish_type_list(fish_list)
+    print(res)
 
     bp.connect_close()
     # while True:
