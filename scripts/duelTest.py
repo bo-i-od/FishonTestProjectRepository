@@ -78,6 +78,7 @@ def clear_duelcup(bp:BasePage):
 
 
 def pvp_fish(bp, is_quick=False):
+    first_cast_flag = True
     tpid_list = []
     while True:
         # 清空消息列表 开始收消息
@@ -85,6 +86,16 @@ def pvp_fish(bp, is_quick=False):
         bp.log_list_flag = True
 
         BattlePreparePanel.click_btn_cast(bp)
+        if first_cast_flag:
+            bp.cmd("duel queryFish")
+            bp.sleep(1)
+            first_cast_flag = False
+            # 提取hook消息
+            target_log = bp.get_target_log(msg_key="SCGmCommandMsg")
+            output = luaLog.get_value(msg=target_log, key="output", is_str=True)
+            print(f"预期体型列表：{output}")
+
+
         bp.sleep(3)
         if PVPResultPanel.is_panel_active(bp):
             bp.log_list_flag = False
@@ -108,6 +119,7 @@ def pvp_fish(bp, is_quick=False):
         target_log = bp.get_target_log(msg_key="SCFishingHookMsg")
         tpid = luaLog.get_value(msg=target_log, key="tpId", is_str=False)
         tpid_list.append(tpid)
+
         bp.log_list_flag = False
         if PVPResultPanel.is_panel_active(bp):
             print(f"出鱼列表：{tpid_list}")
