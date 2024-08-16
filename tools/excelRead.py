@@ -59,6 +59,8 @@ class ExceTools:
         return value
 
     def get_fish_type(self, fish, table_data):
+        if fish == '':
+            return "钓鱼失败"
         index = table_data["tpId"].index(int(fish))
 
         if table_data["fishClass"][index] == 1:

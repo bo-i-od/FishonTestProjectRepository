@@ -12,14 +12,12 @@ class ResultPanel(BasePage):
     def wait_for_result(self):
         while True:
             self.clear_popup()
-            btn_claim = self.exist(element_data=ElementsData.Result.btn_claim)
-            if btn_claim:
+            position_list = self.get_position_list(element_data_list=[ElementsData.Result.btn_claim, ElementsData.Result.btn_claim_token_fish, ElementsData.BattleFailed.btn_again])
+            if position_list[0]:
                 return ElementsData.Result.btn_claim
-            btn_claim_token_fish = self.exist(element_data=ElementsData.Result.btn_claim_token_fish)
-            if btn_claim_token_fish:
+            if position_list[1]:
                 return ElementsData.Result.btn_claim_token_fish
-            btn_cast_again = self.exist(element_data=ElementsData.BattleFailed.btn_again)
-            if btn_cast_again:
+            if position_list[2]:
                 return ElementsData.BattleFailed.btn_again
             self.sleep(0.5)
 
@@ -58,9 +56,6 @@ class ResultPanel(BasePage):
         return
 
 
-
-    def goto_HomePanel(self):
-        self.click_a_until_b_appear(element_data_a=ElementsData.Result.pve_result.btn_gohome, element_data_b=ElementsData.Home.HomePanel)
 
 if __name__ == '__main__':
     bp = BasePage()
