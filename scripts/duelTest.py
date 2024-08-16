@@ -95,13 +95,12 @@ def pvp_fish(bp, is_quick=False):
             # 提取hook消息
             target_log = bp.get_target_log(msg_key="SCGmCommandMsg")
             output_match = re.search(r'\["output"\] = "(\[.*?\])"', target_log)
+            if output_match:
+                output_str = output_match.group(1)
+                # 使用ast.literal_eval将字符串转换为列表
+                output_list = ast.literal_eval(output_str)
 
-
-            output_str = output_match.group(1)
-            # 使用ast.literal_eval将字符串转换为列表
-            output_list = ast.literal_eval(output_str)
-
-            print(f"预期体型列表：{output_list}")
+                print(f"预期体型列表：{output_list}")
 
 
         bp.sleep(3)
@@ -358,7 +357,7 @@ def main(bp:BasePage):
 
 if __name__ == '__main__':
     serial_number = "127.0.0.1:21523"
-    bp = BasePage(serial_number=serial_number, is_android=False)
+    bp = BasePage(serial_number=serial_number, is_android=True)
     print(serial_number)
     gameInit.set_joystick(bp)
     cur = 1
