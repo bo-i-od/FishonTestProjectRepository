@@ -78,30 +78,41 @@ def clear_duelcup(bp:BasePage):
         bp.cmd(f"duelcup 100{8-cur} 0")
         cur += 1
 
+def get_toDrops(bp):
+    # 清空消息列表 开始收消息
+    bp.log_list.clear()
+    bp.log_list_flag = True
+
+    bp.cmd("duel queryFish")
+    bp.sleep(1)
+    # 提取hook消息
+    target_log = bp.get_target_log(msg_key="SCGmCommandMsg")
+    output_match = re.search(r'toDrops=(\[.*?\])', target_log)
+    if not output_match:
+        bp.log_list_flag = False
+        return
+    output_str = output_match.group(1)
+    # 使用ast.literal_eval将字符串转换为列表
+    output_list = ast.literal_eval(output_str)
+    print(f"预期体型列表：{output_list}")
+    bp.log_list_flag = False
+
+
 
 def pvp_fish(bp, is_quick=False):
     first_cast_flag = True
     tpid_list = []
     while True:
+        BattlePreparePanel.click_btn_cast(bp)
+
+        # 获得掉落列表
+        if first_cast_flag:
+            get_toDrops(bp)
+            first_cast_flag = False
+
         # 清空消息列表 开始收消息
         bp.log_list.clear()
         bp.log_list_flag = True
-
-        BattlePreparePanel.click_btn_cast(bp)
-        if first_cast_flag:
-            bp.cmd("duel queryFish")
-            bp.sleep(1)
-            first_cast_flag = False
-            # 提取hook消息
-            target_log = bp.get_target_log(msg_key="SCGmCommandMsg")
-            output_match = re.search(r'\["output"\] = "(\[.*?\])"', target_log)
-            if output_match:
-                output_str = output_match.group(1)
-                # 使用ast.literal_eval将字符串转换为列表
-                output_list = ast.literal_eval(output_str)
-
-                print(f"预期体型列表：{output_list}")
-
 
         bp.sleep(3)
         if PVPResultPanel.is_panel_active(bp):
@@ -356,7 +367,7 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    serial_number = "127.0.0.1:21523"
+    serial_number = "127.0.0.1:21533"
     bp = BasePage(serial_number=serial_number, is_android=True)
     print(serial_number)
     gameInit.set_joystick(bp)
@@ -365,7 +376,7 @@ if __name__ == '__main__':
     times = 200
     while cur <= times:
         print(f"<=====第{cur}次好友对决开始=====>")
-        duel_once_friend(bp, is_quick=True)
+        duel_once_friend(bp, is_quick=False)
         print(f"<=====对决结束=====>\n")
         cur += 1
 
