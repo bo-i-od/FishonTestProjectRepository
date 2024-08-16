@@ -37,10 +37,10 @@ def login(bp: BasePage, username):
 # 设置摇杆
 def set_joystick(bp:BasePage, state="FLOATING"):
     if state == "FLOATING":
-        bp.lua_console( "SettingMgr:Write(_G.FISH_SETTING_JOYSTICK.JOYSTICK_NAME, _G.FISH_SETTING_JOYSTICK.TYPE_FLOATING)")
+        bp.lua_console("SettingMgr:Write(_G.FISH_SETTING_JOYSTICK.JOYSTICK_NAME, _G.FISH_SETTING_JOYSTICK.TYPE_FLOATING)")
         return
     if state == "FIXED":
-        bp.lua_console( "SettingMgr:Write(_G.FISH_SETTING_JOYSTICK.JOYSTICK_NAME, _G.FISH_SETTING_JOYSTICK.TYPE_FIXED)")
+        bp.lua_console("SettingMgr:Write(_G.FISH_SETTING_JOYSTICK.JOYSTICK_NAME, _G.FISH_SETTING_JOYSTICK.TYPE_FIXED)")
         return
 
 
@@ -304,7 +304,8 @@ def start_time_test():
 if __name__ == '__main__':
     pass
 
-    # bp = BasePage("127.0.0.1:21503")
+
+
     # start_time_test()
     # LoginPanel.wait_for_btn_login(bp)
 
