@@ -78,7 +78,7 @@ def clear_duelcup(bp:BasePage):
         bp.cmd(f"duelcup 100{8-cur} 0")
         cur += 1
 
-def get_toDrops(bp):
+def get_toDrops(bp, is_print_id=True):
     # 清空消息列表 开始收消息
     bp.log_list.clear()
     bp.log_list_flag = True
@@ -87,8 +87,9 @@ def get_toDrops(bp):
     bp.sleep(1)
     # 提取hook消息
     target_log = bp.get_target_log(msg_key="SCGmCommandMsg")
-    fishBalanceTpId = luaLog.get_value(msg=target_log, key="fishBalanceTpId", is_str=False)
-    print(fishBalanceTpId)
+    if is_print_id:
+        fishBalanceTpId = luaLog.get_value(msg=target_log, key="fishBalanceTpId", is_str=False)
+        print(fishBalanceTpId)
     output_match = re.search(r'toDrops=(\[.*?\])', target_log)
     if not output_match:
         bp.log_list_flag = False
@@ -102,20 +103,18 @@ def get_toDrops(bp):
 
 
 def pvp_fish(bp, is_quick=False):
-    first_cast_flag = True
     tpid_list = []
+    while not BattlePreparePanel.is_panel_active(bp):
+        bp.sleep(1)
+    # 获取掉落列表
+    get_toDrops(bp, is_print_id=True)
+
     while True:
         BattlePreparePanel.click_btn_cast(bp)
-
-        # 获得掉落列表
-        if first_cast_flag:
-            get_toDrops(bp)
-            first_cast_flag = False
-
+        get_toDrops(bp, is_print_id=False)
         # 清空消息列表 开始收消息
         bp.log_list.clear()
         bp.log_list_flag = True
-
         bp.sleep(3)
         if PVPResultPanel.is_panel_active(bp):
             bp.log_list_flag = False
@@ -369,7 +368,7 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    serial_number = "127.0.0.1:21523"
+    serial_number = "127.0.0.1:21533"
     bp = BasePage(serial_number=serial_number, is_android=True)
     print(serial_number)
     gameInit.set_joystick(bp)
@@ -378,7 +377,7 @@ if __name__ == '__main__':
     times = 200
     while cur <= times:
         print(f"<=====第{cur}次好友对决开始=====>")
-        duel_once_friend(bp, is_quick=False)
+        duel_once_friend(bp, is_quick=True)
         print(f"<=====对决结束=====>\n")
         cur += 1
 
