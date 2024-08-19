@@ -492,7 +492,7 @@ class BasePage:
 
     # 在b元素消失前一直尝试点击a元素
     def click_a_until_b_disappear(self, element_data_a: dict, element_data_b: dict, interval: float = 0.5, ignore_set=None):
-        self.wait_for_appear(element_data_b, is_click=False)
+        self.wait_for_appear(element_data=element_data_b, is_click=False)
         while self.exist(element_data=element_data_b):
             self.clear_popup_once(ignore_set=ignore_set)
             self.click_element_safe(element_data=element_data_a)
@@ -503,12 +503,26 @@ class BasePage:
         self.click_a_until_b_disappear(element_data_a=element_data, element_data_b=element_data, interval=interval, ignore_set=ignore_set)
 
     # 等待指定元素出现
-    def wait_for_appear(self, element_data: dict, is_click: bool = False, interval: float = 0.2, timeout=120, ignore_set=None):
+    def wait_for_appear(self, element_data: dict=None, element_data_list=None,is_click: bool = False, interval: float = 0.2, timeout=120, ignore_set=None):
+        def is_position(p_list):
+            p = []
+            i = 0
+            while i < len(p_list):
+                if not p_list[i]:
+                    i += 1
+                    continue
+                p = p_list[i]
+                break
+            return p
+        if element_data_list is None:
+            self.wait_for_appear(element_data_list=[element_data], is_click=is_click, interval=interval, timeout=timeout, ignore_set=ignore_set)
+            return
         cur = 0
         position = []
         while cur < timeout:
             self.clear_popup_once(ignore_set=ignore_set)
-            position = self.get_position_list(element_data=element_data)
+            position_list = self.get_position_list(element_data_list=element_data_list)
+            position = is_position(position_list)
             if position:
                 break
             self.sleep(interval)
@@ -518,6 +532,9 @@ class BasePage:
         if not is_click:
             return
         self.click_position(position[0])
+
+
+
 
     # 等待指定元素消失
     def wait_for_disappear(self, element_data: dict, interval: float = 0.1, ignore_set=None):

@@ -87,6 +87,8 @@ def get_toDrops(bp):
     bp.sleep(1)
     # 提取hook消息
     target_log = bp.get_target_log(msg_key="SCGmCommandMsg")
+    fishBalanceTpId = luaLog.get_value(msg=target_log, key="fishBalanceTpId", is_str=False)
+    print(fishBalanceTpId)
     output_match = re.search(r'toDrops=(\[.*?\])', target_log)
     if not output_match:
         bp.log_list_flag = False
@@ -367,7 +369,7 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    serial_number = "127.0.0.1:21533"
+    serial_number = "127.0.0.1:21523"
     bp = BasePage(serial_number=serial_number, is_android=True)
     print(serial_number)
     gameInit.set_joystick(bp)

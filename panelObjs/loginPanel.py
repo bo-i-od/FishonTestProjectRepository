@@ -10,15 +10,13 @@ class LoginPanel(BasePage):
         self.wait_for_appear(element_data=ElementsData.Login.LoginPanel, ignore_set={"LoginPanel"})
 
     def is_btn_login_active(self):
-        if self.get_object_id_list(element_data=ElementsData.Login.btn_login):
-            return True
-        if self.get_object_id_list(element_data=ElementsData.Login.btn_login_cn):
+        object_id_list = self.get_object_id_list(element_data_list=[ElementsData.Login.btn_login,ElementsData.Login.btn_login_cn])
+        if object_id_list[0] or object_id_list[1]:
             return True
         return False
 
     def wait_for_btn_login(self):
-        while not LoginPanel.is_btn_login_active(self):
-            self.sleep(0.5)
+        self.wait_for_appear(element_data_list=[ElementsData.Login.btn_login, ElementsData.Login.btn_login_cn],timeout=20)
 
     def click_btn_login(self):
         btn_login_element = ElementsData.Login.btn_login
@@ -40,8 +38,8 @@ class LoginPanel(BasePage):
         self.set_dropdown_value(element_data=ElementsData.Login.Dropdown, index=index)
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21533")
-    a = bp.get_position_list(element_data=ElementsData.Login.LoginPanel)
+    bp = BasePage("127.0.0.1:21503",is_android=True)
+    a = bp.get_position_list(element_data_list=[ElementsData.Login.btn_login, ElementsData.Login.btn_login_cn])
     print(a)
 
     bp.connect_close()

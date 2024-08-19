@@ -81,6 +81,7 @@ class JumpData:
         "GearEnhanceSuccesPanel":[ElementsData.GearEnhanceSucces.btn_close],
         "IAAPanel": [ElementsData.IAA.btn_close],
         "LeaderBoardPopResultPanel": [ElementsData.LeaderBoardPopResult.btn_claim],
+        "LoginPanel": [ElementsData.Login.btn_login_cn, ElementsData.Login.btn_login],
         "MailPanel": [ElementsData.Mail.btn_close],
         "MessageBoxPanel": [ElementsData.MessageBox.btn_confirm],
         "MonthCardPopPanel": [ElementsData.MonthCardPop.btn_close],

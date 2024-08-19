@@ -90,6 +90,8 @@ def app_start_to_login(dev=None):
         if bp is not None:
             break
         time.sleep(1)
+        cur += 1
+    time.sleep(5)
     # EntryUpdateLoading.click_tap_to_start(bp)
     LoginPanel.wait_for_btn_login(bp)
     return bp
@@ -216,10 +218,16 @@ def install_monitor(poco):
 
 
 # 重启
-def restart_to_login(dev, package):
-    dev.stop_app(package=package)
-    sleep(1)
-    dev.start_app(package=package)
+def restart_to_login(dev, package=None, package_list=None):
+    if package_list is None:
+        return restart_to_login(dev, package_list=[package])
+    for p in package_list:
+        try:
+            dev.stop_app(package=p)
+            sleep(1)
+            dev.start_app(package=p)
+        except:
+            continue
     # poco_uiautomation = AndroidUiautomationPoco(device=G.DEVICE)
     bp = app_start_to_login(dev=dev)
     return bp
