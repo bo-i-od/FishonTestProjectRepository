@@ -23,7 +23,12 @@ class ResultPanel(BasePage):
 
     def automatic_settlement(self, element_btn):
         # f_flag = True
-        while self.exist(element_data=element_btn):
+        while True:
+            try:
+                if not self.exist(element_data=element_btn):
+                    break
+            except:
+                pass
             # if f_flag:
             #     img = self.get_full_screen_shot()
             #     self.save_img(img)

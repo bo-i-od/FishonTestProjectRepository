@@ -4,6 +4,8 @@ import re
 import traceback
 from threading import Thread
 
+from pywinauto import keyboard
+
 import common
 from common import gameInit
 from common.basePage import BasePage
@@ -132,6 +134,7 @@ def pvp_fish(bp, is_quick=False):
         if is_quick:
             BattlePanel.reel_quick(bp)
         element_btn = ResultPanel.wait_for_result(bp)
+        bp.sleep(1)
         ResultPanel.automatic_settlement(bp, element_btn)
 
         # 提取hook消息
@@ -364,11 +367,8 @@ def main(bp:BasePage):
 
 
 
-
-
-
 if __name__ == '__main__':
-    serial_number = "127.0.0.1:21533"
+    serial_number = "127.0.0.1:21523"
     bp = BasePage(serial_number=serial_number, is_android=True)
     print(serial_number)
     gameInit.set_joystick(bp)
