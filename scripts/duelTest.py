@@ -111,7 +111,7 @@ def pvp_fish(bp, is_quick=False):
 
     while True:
         BattlePreparePanel.click_btn_cast(bp)
-        get_toDrops(bp, is_print_id=False)
+        # get_toDrops(bp, is_print_id=False)
         # 清空消息列表 开始收消息
         bp.log_list.clear()
         bp.log_list_flag = True
