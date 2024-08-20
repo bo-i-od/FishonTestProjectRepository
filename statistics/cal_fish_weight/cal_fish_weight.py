@@ -25,21 +25,25 @@ def random_num_max_list(num1,num2,add_num=0):
 
 final_tables=[
     [10,0],
-    [20,50],
-    [50,100],
-    [100,150],
-    [200,200],
-    [500,250],
-    [1000,300],
-    [2000,350]
+    [20,30],
+    [30,45],
+    [50,80],
+    [100,120],
+    [150,140],
+    [200,160],
+    [300,180],
+    [500,210],
+    [1000,260],
+    [2000,320]
 ]
 
 start_power=10000
-test_times=50
+test_times=200
 
 print("每次消耗:",start_power,"体力,每组试验次数:",test_times)
 for i in final_tables:
     fish_num=int(start_power/i[0])
     add_num=i[1]
-    print(i[0],"体力：",random_num_max_list(test_times,fish_num,add_num))
+    result = random_num_max_list(test_times,fish_num,add_num)
+    print(i[0],"体力： 平均最大鱼重：",result[0],"  每次实验的最大鱼重结果：",result[1] )
 
