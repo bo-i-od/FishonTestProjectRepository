@@ -139,6 +139,25 @@ class ElementsData:
     class AvatarMain:
         AvatarMainPanel = {"locator": "UICanvas>Default>AvatarMainPanel"}
         btn_close = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>btn_close>img"}
+        tab_avatar = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_tab>tab>1>bg"}
+        tab_rod = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_tab>tab>2>bg"}
+        tab_bag = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_tab>tab>3>bg"}
+        btn_changesex = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Avatar>left>panel_btns_change>btn_changesex"}
+        btn_changecamera =  {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Avatar>left>panel_btns_change>btn_changecamera"}
+        avatar_tab_list = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Avatar>right>panel_tab>TabList>Viewport>Content>>bg"}
+        btn_confirm_avatar = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Avatar>right>panel_list>btn_confirm", "focus": (0.5, 1)}
+        tip_avatar = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Avatar>right>panel_list>tip"}
+        btn_confirm_rod = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_list>btn_confirm", "focus": (0.5, 1)}
+        tip_rod = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_list>tip"}
+        toggle_own = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Avatar>right>panel_list>panel_top>title_avatar>online>option>Toggle"}
+        tab_rod_list = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_tab>TabList>Viewport>Content>>bg"}
+        viewport_tab_rod = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_tab>TabList>Viewport", "focus": (0, 0)}
+        btn_bobox = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_tab>tab_bobox>btn_bobox>text"}
+        rod_list = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_list>list>Viewport>Content>>item_model_square>bg"}
+        viewport_rod = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_list>list>Viewport", "focus": (0, 0)}
+        tab_skin = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_list>panel_top>rod_tab>tabs>tab_1"}
+        tab_attach = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_list>panel_top>rod_tab>tabs>tab_2"}
+        bobox_on_list = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_tab>tab_bobox>bobox_on_list>>text"}
 
     class BaitAndRodAlbum:
         BaitAndRodAlbumPanel = {"locator": "UICanvas>Default>BaitAndRodAlbumPanel"}
@@ -755,6 +774,7 @@ class ElementsData:
         btn_chest = {"locator": "HomeCanvas>Home3DPanel>panel>chest>btn_chest", "camera": "Camera3D"}
         btn_pve = {"locator": "HomeCanvas>Home3DPanel>panel>panel_entrance>btn_pve>text", "camera": "Camera3D"}
         btn_pvp = {"locator": "HomeCanvas>Home3DPanel>panel>panel_entrance>btn_pvp", "camera": "Camera3D"}
+        btn_avatar = {"locator": "HomeCanvas>Home3DPanel>panel>panel_avatar>btn_avatar", "camera": "Camera3D"}
 
 
         class Minitask:
@@ -1024,15 +1044,6 @@ class ElementsData:
         viewport_avatar = {"locator": "UICanvas>Default>PlayerInfoPanel>Panel_Popups_Edit>Panel>panel_avatar>HeadList>Viewport", "focus": (0, 0)}
 
 
-
-
-
-
-
-
-
-
-
     class PlayerLevelup:
         PlayerLevelupPanel = {"locator":"UICanvas>Default>PlayerLevelupPanel"}
         tap_to_continue = {"locator":"UICanvas>Default>PlayerLevelupPanel>panel>text"}
@@ -1169,6 +1180,11 @@ class ElementsData:
         PVPRoomInvitePanel = {"locator": "UICanvas>Important>PVPRoomInvitePanel"}
         btn_cancel = {"locator": "UICanvas>Important>PVPRoomInvitePanel>Panel>btns>btn_cancel", "focus":(0, 0)}
         btn_confirm = {"locator": "UICanvas>Important>PVPRoomInvitePanel>Panel>btns>btn_confirm", "focus":(0, 0)}
+
+    class PVPRoom:
+        PVPRoomPanel = {"locator": "UICanvas>Default>PVPRoomPanel"}
+        btn_close = {"locator": "UICanvas>Default>PVPRoomPanel>panel>btn_close>img"}
+        btn_start = {"locator":"UICanvas>Default>PVPRoomPanel>panel>btn_start"}
 
     class PVPRuleTips:
         PVPRuleTipsPanel = {"locator": "UICanvas>Default>PVPRuleTipsPanel"}

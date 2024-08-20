@@ -1,11 +1,16 @@
+import ast
 import random
+import re
 import traceback
 from threading import Thread
+
+from pywinauto import keyboard
 
 import common
 from common import gameInit
 from common.basePage import BasePage
 from common.error import FindNoElementError
+from netMsg import luaLog
 from panelObjs.commonWebViewPanel import CommonWebViewPanel
 from panelObjs.divisionLeaderboardPanel import DivisionLeaderboardPanel
 from panelObjs.divisionListPanel import DivisionListPanel
@@ -20,6 +25,7 @@ from panelObjs.battlePreparePanel import BattlePreparePanel
 from panelObjs.pvpMatchPanel import PVPMatchPanel
 from panelObjs.pvpResultPanel import PVPResultPanel
 from panelObjs.battlePanel import BattlePanel
+from panelObjs.pvpRoomPanel import PVPRoomPanel
 from panelObjs.resultPanel import ResultPanel
 from panelObjs.playerEditNamePanel import PlayerEditNamePanel
 from panelObjs.playerSettingPanel import PlayerSettingPanel
@@ -74,11 +80,49 @@ def clear_duelcup(bp:BasePage):
         bp.cmd(f"duelcup 100{8-cur} 0")
         cur += 1
 
+def get_toDrops(bp, is_print_id=True):
+    # 清空消息列表 开始收消息
+    bp.log_list.clear()
+    bp.log_list_flag = True
+
+    bp.cmd("duel queryFish")
+    bp.sleep(1)
+    # 提取hook消息
+    target_log = bp.get_target_log(msg_key="SCGmCommandMsg")
+    if is_print_id:
+        fishBalanceTpId = luaLog.get_value(msg=target_log, key="fishBalanceTpId", is_str=False)
+        print(fishBalanceTpId)
+    output_match = re.search(r'toDrops=(\[.*?\])', target_log)
+    if not output_match:
+        bp.log_list_flag = False
+        return
+    output_str = output_match.group(1)
+    # 使用ast.literal_eval将字符串转换为列表
+    output_list = ast.literal_eval(output_str)
+    print(f"预期体型列表：{output_list}")
+    bp.log_list_flag = False
+
+
+
 def pvp_fish(bp, is_quick=False):
+    tpid_list = []
+    while not BattlePreparePanel.is_panel_active(bp):
+        bp.sleep(1)
+    # 获取掉落列表
+    get_toDrops(bp, is_print_id=True)
+
     while True:
         BattlePreparePanel.click_btn_cast(bp)
+        # get_toDrops(bp, is_print_id=False)
+        # 清空消息列表 开始收消息
+        bp.log_list.clear()
+        bp.log_list_flag = True
         bp.sleep(3)
         if PVPResultPanel.is_panel_active(bp):
+            bp.log_list_flag = False
+            print(f"出鱼列表：{tpid_list}")
+            fish_type_list = bp.excelTools.get_fish_type_list(fish_list=tpid_list)
+            print(f"体型列表：{fish_type_list}")
             bp.sleep(3)
             break
         BattlePanel.hook(bp)
@@ -90,10 +134,23 @@ def pvp_fish(bp, is_quick=False):
         if is_quick:
             BattlePanel.reel_quick(bp)
         element_btn = ResultPanel.wait_for_result(bp)
+        bp.sleep(1)
         ResultPanel.automatic_settlement(bp, element_btn)
+
+        # 提取hook消息
+        target_log = bp.get_target_log(msg_key="SCFishingHookMsg")
+        tpid = luaLog.get_value(msg=target_log, key="tpId", is_str=False)
+        tpid_list.append(tpid)
+
+        bp.log_list_flag = False
         if PVPResultPanel.is_panel_active(bp):
+            print(f"出鱼列表：{tpid_list}")
+            fish_type_list = bp.excelTools.get_fish_type_list(fish_list=tpid_list)
+            print(f"体型列表：{fish_type_list}")
             bp.sleep(3)
             break
+
+
 
 def fish_once(bp: BasePage):
     BattlePreparePanel.click_btn_quick_switch(bp)
@@ -207,50 +264,6 @@ def get_k(r0):
         return 112 - 0.04 * r0
     return 16
 
-def get_bp(dev):
-    bp = gameInit.restart_to_login(dev,"com.xuejing.smallfish.official")
-    bp.sleep(7)
-    LoginPanel.wait_for_btn_login(bp)
-    LoginPanel.click_btn_login(bp)
-    bp.sleep(2)
-    LoadingPanel.wait_until_panel_disappear(bp, is_wait_for_appear=False)
-    bp.sleep(5)
-    return bp
-
-def reset_bp(dev):
-    try:
-        bp = get_bp(dev)
-    except:
-        traceback.print_exc()
-        bp = reset_bp(dev)
-    return bp
-
-def champointship(bp, index, times):
-    try:
-        gameInit.set_joystick(bp)
-        bp.clear_popup()
-        bp.go_to_panel("TournamentsPanel")
-        bp.sleep(1)
-
-        # if not tournaments_info_position_list:
-        #     raise FindNoElementError
-
-        while True:
-            tournaments_info_position_list = TournamentsPanel.get_tournaments_info_position_list(bp)
-            if not tournaments_info_position_list:
-                break
-            if len(tournaments_info_position_list) < 2:
-                index = 0
-            bp.click_position(tournaments_info_position_list[index])
-            bp.sleep(0.5)
-        # LoadingFisheryPanel.wait_until_panel_disappear(bp)
-        circulate_fish(bp, times=times, is_quick=False)
-        bp.go_home()
-    except Exception as e:
-        print(e)
-        # bp.connect_close()
-        bp = reset_bp(bp.dev)
-    return bp
 
 def division_test(bp:BasePage):
     # 进排行榜
@@ -276,6 +289,15 @@ def division_test(bp:BasePage):
     # 返回主界面
     bp.go_home()
 
+
+def duel_once_friend(bp: BasePage, is_quick=False):
+    while PVPRoomPanel.is_panel_active(bp):
+        PVPRoomPanel.click_btn_start(bp)
+        bp.sleep(2)
+    pvp_fish(bp, is_quick=is_quick)
+    bp.sleep(5)
+    PVPResultPanel.click_tap_to_click(bp)
+    bp.sleep(1)
 
 
 def main(bp:BasePage):
@@ -345,75 +367,24 @@ def main(bp:BasePage):
 
 
 
-
-
-
 if __name__ == '__main__':
-    base_page = BasePage("127.0.0.1:21503")
-    base_page.set_send_log_flag(False)
-    gameInit.set_joystick(base_page)
-    # cur = 0
-    # while cur < 3:
-    #     duel_once(base_page, 1)
-    #     cur += 1
-    #     print(f"第{cur}次钓鱼")
-    while True:
-        base_page = champointship(base_page, 1, 30)
-        base_page = champointship(base_page, 0, 30)
-
-    # clear_duelcup(base_page)
-    # while True:
-    #     base_page.go_home()
-    #     r = random.randint(0, 7)
-    #     # r = 0
-    #     # print(r)
-    #     # clear_duelcup(base_page)
-    #     # dc = random_duelcup(base_page, rank=r)
-    #     base_page.go_to_panel("PVPHallPanel")
-    #     base_page.sleep(1)
-    #     duel_once(base_page, r)
+    serial_number = "127.0.0.1:21523"
+    bp = BasePage(serial_number=serial_number, is_android=True)
+    print(serial_number)
+    gameInit.set_joystick(bp)
+    cur = 1
+    # 指定对决次数
+    times = 200
+    while cur <= times:
+        print(f"<=====第{cur}次好友对决开始=====>")
+        duel_once_friend(bp, is_quick=True)
+        print(f"<=====对决结束=====>\n")
+        cur += 1
 
 
 
 
 
-
-    #
-    # dc = random_duelcup(base_page, 7)
-
-    # main(bp)
-
-    # circulate_fish(bp, fishery_id="400301",is_quick=True, is_monster=True)
-    # zhanbao_test(bp)
-    # bp.set_item_count(target_count=10000, item_tpid="100500")
-    # # bp.set_item_count(target_count=25000000, item_tpid="100200")
-    # createUsers.main(bp)
-    # clear_duelcup(bp)
-    # bp.cmd("mode 400302 390015")
-    # bp.lua_console(command="GameRoot:GetFishingMatch().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
-    # bp.cmd("mode 400303 390025")
-    # base_page.cmd("levelupto 56")
-    # dc = random_duelcup(base_page, 7)
-    # print(dc)
-    # area = point_cal(210)
-    # bp.cmd("duelcup 1008 27000")
-    # print(f"当前杯数:{0}，分数范围:{area}")
-    # bp.cmd("add 5 500021 1")
-
-    # PlayerEditNamePanel.click_confirm(bp)
-    # bp.sleep(3)
-    # bp.go_to_panel("PVPHallPanel")
-    # bp.cmd("autofish")
-    # common.gameInit.set_joystick(bp)
-    # while True:
-    #     battleTest.tournament(bp)
-    # bp.set_item_count(target_count=72000,item_tpid="209013")
-
-
-
-
-    # # rank = random.randint(0, 7)
-    # print(dc)
 
 
 

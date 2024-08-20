@@ -328,6 +328,12 @@ def relogin(bp):
     bp.cmd("clone 1000002002")
     logout(bp)
     login(bp, name)
+    bp.go_to_panel("ActivityCenterPanel")
+    position_list = bp.get_position_list(element_data={"locator": "UICanvas>Important>ActivityCenterPanel>panel>panel_tab>content>TabList>Viewport>Content>EventsHall_tab_list_4>items>>icon"})
+    bp.click_position(position_list[1])
+    bp.sleep(1)
+    bp.click_element(element_data={"locator": "UICanvas>Default>HiddenTreasureCenterPopupPanel>panel>panel_info>panel_main>button", "focus": (0.5, 1)})
+
 
 
 def main2(bp):
@@ -414,6 +420,7 @@ def main(bp: BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.37:20031")
-    main(bp)
+    bp = BasePage("127.0.0.1:21513", is_android=False)
+    relogin(bp)
+    # main(bp)
     bp.connect_close()

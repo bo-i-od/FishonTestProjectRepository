@@ -99,7 +99,7 @@ class BattlePanel(BasePage):
     def reel_quick(self):
         while not self.exist(element_data=ElementsData.Result.ResultPanel):
             self.clear_popup_once()
-            self.lua_console(command="GameRoot:GetFishingMatch().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
+            self.lua_console(command="GameRoot:GetFishingMatch():GetPlayer().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
             self.sleep(1)
 
 
