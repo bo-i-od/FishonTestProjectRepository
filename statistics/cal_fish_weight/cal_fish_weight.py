@@ -14,6 +14,8 @@ def random_num_max(num,add_num=0):
         result=random_with_weight()+add_num
         if result>max_weight:
             max_weight=result
+    if max_weight>11147:
+        max_weight=11147
     return max_weight
 
 def random_num_max_list(num1,num2,add_num=0):
@@ -24,9 +26,9 @@ def random_num_max_list(num1,num2,add_num=0):
 
 
 final_tables=[
-    [10,0],
-    [20,30],
-    [30,45],
+    # [10,0],
+    # [20,30],
+    # [30,45],
     [50,80],
     [100,120],
     [150,140],
@@ -38,7 +40,7 @@ final_tables=[
 ]
 
 start_power=10000
-test_times=200
+test_times=100
 
 print("每次消耗:",start_power,"体力,每组试验次数:",test_times)
 for i in final_tables:
