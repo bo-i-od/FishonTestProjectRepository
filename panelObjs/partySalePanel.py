@@ -1,6 +1,7 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from common import resource
+from tools.commonTools import *
 
 
 class PartySalePanel(BasePage):
@@ -15,6 +16,14 @@ class PartySalePanel(BasePage):
     # 点击购买
     def click_btn_buy(self):
         self.click_element(element_data=ElementsData.PartySale.btn_buy, ignore_set={"PartySalePanel"})
+
+    def get_cost_icon(self):
+        return self.get_icon(element_data=ElementsData.PartySale.cost_icon)
+
+    def get_cost_quantity(self):
+        cost_quantity = self.get_text(element_data=ElementsData.PartySale.cost_quantity)
+        cost_quantity = str_to_int(cost_quantity)
+        return cost_quantity
 
     # 获取图标
     def get_item_icon_list(self):

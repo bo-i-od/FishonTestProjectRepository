@@ -46,6 +46,7 @@ class PlayerEditNamePanel(BasePage):
     def click_confirm(self):
         self.click_element(element_data=ElementsData.PlayerEditName.btn_confirm)
 
+
 if __name__ == "__main__":
     bp = BasePage()
     head_id_list = PlayerEditNamePanel.get_head_id_list(bp)

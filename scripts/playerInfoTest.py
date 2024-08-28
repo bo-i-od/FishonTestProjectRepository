@@ -59,9 +59,6 @@ def settings_test(bp: BasePage):
     PlayerInfoPanel.click_btn_copy_id(bp)
 
 def name_test(bp: BasePage):
-    PlayerInfoPanel.click_tab_name(bp)
-    bp.sleep(1)
-    bp.set_item_count(target_count=300, item_tpid="100100")
     # 将名字改为当前时间
     now = datetime.datetime.now()
     name = 't' + now.strftime("%y%m%d%H%M%S")
@@ -113,8 +110,6 @@ def name_test(bp: BasePage):
     # bp.sleep(1)
 
 def avatar_test(bp: BasePage):
-    PlayerInfoPanel.click_tab_avatar(bp)
-    bp.sleep(1)
     # 排除当前选中的头像
     avatar_id_list = PlayerInfoPanel.get_avatar_id_list(bp)
     selected_avatar_index = PlayerInfoPanel.get_selected_icon_index(bp, avatar_id_list)
@@ -135,11 +130,21 @@ def avatar_test(bp: BasePage):
     compare(avatar, player_info["head_img"])
 
 def head_frame_test(bp: BasePage):
-    pass
+    # 排除当前选中的头像
+    head_frame_id_list = PlayerInfoPanel.get_head_frame_id_list(bp)
+    # 选择第二个头像进行点击
+    random_num = 1
+    PlayerInfoPanel.select_head_frame(bp, head_frame_id_list=head_frame_id_list, index=random_num)
+    head_frame = PlayerInfoPanel.get_head_frame(bp, head_frame_id=head_frame_id_list[random_num])
+    PlayerInfoPanel.click_btn_save_head_frame(bp)
+    bp.sleep(1)
+    PlayerInfoPanel.click_btn_close_additional(bp)
+    player_info = PlayerInfoPanel.get_player_info(bp)
+    compare(head_frame, player_info["head_frame"])
 
 def main(bp:BasePage):
     # 登录到大厅
-    cmd_list = ["guideskip", "levelupto 16"]
+    cmd_list = ["guideskip", "levelupto 16", "add 1 100100 300"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     PlayerLevelupPanel.wait_for_panel_appear(bp)
@@ -194,8 +199,16 @@ def main(bp:BasePage):
     # 改名测试
     PlayerInfoPanel.click_btn_edit_player_info(bp)
     bp.sleep(1)
+    PlayerInfoPanel.click_tab_name(bp)
+    bp.sleep(1)
     name_test(bp)
 
+    # 换头像框测试
+    PlayerInfoPanel.click_btn_edit_player_info(bp)
+    bp.sleep(1)
+    PlayerInfoPanel.click_tab_head_frame(bp)
+    bp.sleep(1)
+    head_frame_test(bp)
 
     # 换头像测试
     PlayerInfoPanel.click_btn_edit_player_info(bp)
@@ -221,6 +234,6 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.81:20012")
+    bp = BasePage("127.0.0.1:21523", is_android=False)
     main(bp)
     bp.connect_close()

@@ -123,6 +123,22 @@ def str_to_int(count:str):
     else:
         return int(float(count))
 
+
+def extract_number(text):
+    # 使用正则表达式来匹配数字模式
+    number_pattern = r'[-+]?\d*\.?\d+'
+
+    # 使用 search() 方法来找到第一个符合这个模式的子字符串
+    match = re.search(number_pattern, text)
+
+    if match:
+        # 获取匹配的字符串
+        number_str = match.group(0)
+        return number_str
+    else:
+        # 如果没有找到符合的数字，返回 None 或抛出异常
+        return None
+
 def str_to_int_list(count_list:list):
     cur = 0
     while cur < len(count_list):

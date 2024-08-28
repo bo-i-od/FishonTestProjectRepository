@@ -7,9 +7,13 @@ class PlayerLevelupPanel(BasePage):
         return self.exist(element_data=ElementsData.PlayerLevelup.PlayerLevelupPanel)
 
     def wait_for_panel_appear(self):
+        cur = 0
         while not self.exist(element_data=ElementsData.PlayerLevelup.PlayerLevelupPanel):
             self.clear_popup_once(ignore_set={"PlayerLevelupPanel"})
-            self.sleep(0.5)
+            self.sleep(1)
+            cur += 1
+            if cur > 20:
+                break
 
     def click_tap_to_continue(self):
         self.click_element(element_data=ElementsData.PlayerLevelup.tap_to_continue)

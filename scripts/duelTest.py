@@ -121,7 +121,7 @@ def pvp_fish(bp, is_quick=False):
         if PVPResultPanel.is_panel_active(bp):
             bp.log_list_flag = False
             print(f"出鱼列表：{tpid_list}")
-            fish_type_list = bp.excelTools.get_fish_type_list(fish_list=tpid_list)
+            fish_type_list = bp.get_fish_type_list(fish_list=tpid_list)
             print(f"体型列表：{fish_type_list}")
             bp.sleep(3)
             break
@@ -145,7 +145,7 @@ def pvp_fish(bp, is_quick=False):
         bp.log_list_flag = False
         if PVPResultPanel.is_panel_active(bp):
             print(f"出鱼列表：{tpid_list}")
-            fish_type_list = bp.excelTools.get_fish_type_list(fish_list=tpid_list)
+            fish_type_list = bp.get_fish_type_list(fish_list=tpid_list)
             print(f"体型列表：{fish_type_list}")
             bp.sleep(3)
             break
@@ -369,17 +369,21 @@ def main(bp:BasePage):
 
 if __name__ == '__main__':
     serial_number = "127.0.0.1:21523"
-    bp = BasePage(serial_number=serial_number, is_android=True)
-    print(serial_number)
-    gameInit.set_joystick(bp)
-    cur = 1
-    # 指定对决次数
-    times = 200
-    while cur <= times:
-        print(f"<=====第{cur}次好友对决开始=====>")
-        duel_once_friend(bp, is_quick=True)
-        print(f"<=====对决结束=====>\n")
-        cur += 1
+    bp = BasePage(serial_number=serial_number, is_android=False)
+    # bp.cmd("globalgm duelScene 400315")
+    # while True:
+    #     duel_once(bp, rank=random.randint(0, 7))
+    random_duelcup(bp, rank=7)
+    # print(serial_number)
+    # gameInit.set_joystick(bp)
+    # cur = 1
+    # # 指定对决次数
+    # times = 4
+    # while cur <= times:
+    #     print(f"<=====第{cur}次好友对决开始=====>")
+    #     duel_once_friend(bp, is_quick=False)
+    #     print(f"<=====对决结束=====>\n")
+    #     cur += 1
 
 
 

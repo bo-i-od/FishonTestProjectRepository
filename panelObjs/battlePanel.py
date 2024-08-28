@@ -2,6 +2,8 @@ import time
 
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
+from panelObjs.flashCardReceivePanel import FlashCardReceivePanel
+from panelObjs.resultPanel import ResultPanel
 from tools.commonTools import *
 class BattlePanel(BasePage):
     def is_panel_active(self):
@@ -34,7 +36,7 @@ class BattlePanel(BasePage):
                 continue
 
     def qte(self):
-        element_data_list = [ElementsData.Battle.qte_left, ElementsData.Battle.qte_right, ElementsData.Battle.qte_up, ElementsData.Battle.qte_jump_left, ElementsData.Battle.qte_jump_right, ElementsData.Battle.hud_power_list, ElementsData.Battle.hud_power_list_old, ElementsData.Result.ResultPanel]
+        element_data_list = [ElementsData.Battle.qte_left, ElementsData.Battle.qte_right, ElementsData.Battle.qte_up, ElementsData.Battle.qte_jump_left, ElementsData.Battle.qte_jump_right, ElementsData.Battle.hud_power_list, ElementsData.Battle.hud_power_list_old, ElementsData.Result.ResultPanel, ElementsData.FlashCardReceive.FlashCardReceivePanel]
         qte_left_index = element_data_list.index(ElementsData.Battle.qte_left)
         qte_right_index = element_data_list.index(ElementsData.Battle.qte_right)
         qte_up_index = element_data_list.index(ElementsData.Battle.qte_up)
@@ -43,6 +45,7 @@ class BattlePanel(BasePage):
         hud_power_list_index = element_data_list.index(ElementsData.Battle.hud_power_list)
         hud_power_list_old_index = element_data_list.index(ElementsData.Battle.hud_power_list_old)
         ResultPanel_index = element_data_list.index(ElementsData.Result.ResultPanel)
+        FlashCardReceivePanel_index = element_data_list.index(ElementsData.FlashCardReceive.FlashCardReceivePanel)
 
         while True:
             object_id_list = self.get_object_id_list(element_data_list=element_data_list)
@@ -68,6 +71,8 @@ class BattlePanel(BasePage):
                 BattlePanel.slide(self, "right")
                 continue
             if object_id_list[ResultPanel_index]:
+                break
+            if object_id_list[FlashCardReceivePanel_index]:
                 break
 
 
@@ -95,11 +100,19 @@ class BattlePanel(BasePage):
     def click_btn_reel(self):
         self.click_element(element_data=ElementsData.Battle.btn_reel)
 
+
     # unity上才能用
     def reel_quick(self):
-        while not self.exist(element_data=ElementsData.Result.ResultPanel):
-            self.clear_popup_once()
-            self.lua_console(command="GameRoot:GetFishingMatch():GetPlayer().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
+        while not ResultPanel.is_panel_active(self):
+            # if FlashCardReceivePanel.is_panel_active(self):
+            #     self.sleep(6)
+            #     img = self.get_full_screen_shot()
+            #     self.save_img(img)
+            #     self.clear_popup()
+            #     self.cur += 1
+            self.clear_popup()
+            # self.lua_console(command="GameRoot:GetFishingMatch():GetPlayer().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
+            self.lua_console(command="GameRoot:GetFishingMatch().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
             self.sleep(1)
 
 

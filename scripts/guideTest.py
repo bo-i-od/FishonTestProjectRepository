@@ -75,6 +75,8 @@ def main(bp:BasePage):
     # # 姓名头像测试
     playerEditNamePanelTest(bp)
 
+    AvatarSelectPanel.wait_for_panel_appear(bp)
+
     # 随机选择性别
     r = random.randint(0, 1)
     gender_icon_position_list = AvatarSelectPanel.get_gender_icon_position_list(bp)
@@ -88,7 +90,7 @@ def main(bp:BasePage):
     newbieGuidePanelTest(bp)
 
     # 查询水族箱的解锁等级
-    unlock_lv = bp.excelTools.get_unlock_lv("水族箱")
+    unlock_lv = bp.get_unlock_lv("水族箱")
     exp = bp.excelTools.get_exp_limit(unlock_lv)[1]
     bp.cmd(f"add 1 100200 {exp}")
 
@@ -100,13 +102,13 @@ def main(bp:BasePage):
     PlayerLevelupPanel.wait_for_panel_appear(bp)
     bp.clear_popup()
 
+    # 鱼卡引导
+    FishCardPanel.guide(bp)
+    bp.go_home()
+
     # 水族馆引导
     bp.go_to_panel("AquariumPanel")
     AquariumPanel.guide(bp)
-    bp.go_home()
-
-    # 鱼卡引导
-    FishCardPanel.guide(bp)
     bp.go_home()
 
     # 俱乐部引导

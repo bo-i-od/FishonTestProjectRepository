@@ -1,3 +1,4 @@
+import random
 import time
 
 import scripts
@@ -14,7 +15,41 @@ from panelObjs.friendPanel import FriendPanel
 from scripts import battleTest
 import json
 
-
+def random_duelcup(bp:BasePage, rank):
+    duelcup = random.randint(0,5)
+    bp.cmd(f"duelcup 1001 {duelcup}")
+    duelcup_all = duelcup
+    if rank > 0:
+        bp.cmd(f"duelcup 1001 {5}")
+        duelcup_all = 5
+        duelcup = random.randint(15 - duelcup_all, 20)
+        bp.cmd(f"duelcup 1002 {duelcup}")
+        duelcup_all += duelcup
+    if rank > 1:
+        duelcup = random.randint(80 - duelcup_all, 80)
+        bp.cmd(f"duelcup 1003 {duelcup}")
+        duelcup_all += duelcup
+    if rank > 2:
+        duelcup = random.randint(200 - duelcup_all, 160)
+        bp.cmd(f"duelcup 1004 {duelcup}")
+        duelcup_all += duelcup
+    if rank > 3:
+        duelcup = random.randint(600 - duelcup_all, 480)
+        bp.cmd(f"duelcup 1005 {duelcup}")
+        duelcup_all += duelcup
+    if rank > 4:
+        duelcup = random.randint(1200 - duelcup_all, 960)
+        bp.cmd(f"duelcup 1006 {duelcup}")
+        duelcup_all += duelcup
+    if rank > 5:
+        duelcup = random.randint(2100 - duelcup_all, 1920)
+        bp.cmd(f"duelcup 1007 {duelcup}")
+        duelcup_all += duelcup
+    if rank > 6:
+        duelcup = random.randint(0, 3000)
+        bp.cmd(f"duelcup 1008 {duelcup}")
+        duelcup_all += duelcup
+    return duelcup_all
 
 
 def init(bp: BasePage):
@@ -38,6 +73,7 @@ def init(bp: BasePage):
 # _G.NetworkMgr:Connect("{ip}", {port}, function() _G.NetworkMgr:NetworkConnectCallback() end)
 
 def connect(bp: BasePage, accountName):
+    bp.clear_popup()
     lua_code = f"""
 _G.NetworkMgr:SDKLogin("{accountName}")
     """
@@ -46,8 +82,20 @@ _G.NetworkMgr:SDKLogin("{accountName}")
 
 def disconnect(bp: BasePage):
     lua_code = """
+# ---@type TYSDK.LoginSDK
+# local loginSdkInst = TYSDK.LoginSDK.Instanc
+# --FIXME:兼容C#部分
+# local function pcallloginSdkInstLogOutfunc()
+#     if loginSdkInst.LogOut then
+#         loginSdkInst:LogOut(true)
+#     end
+# end
+# xpcall(pcallloginSdkInstLogOutfunc, function() end)
+# local Login_Token_Key = "Login_Token"
+# SettingMgr:Write(Login_Token_Key, "")
 _G.CURRENT_SDK_MANUAL_LOGIN = true
 PanelMgr:CloseAllOpend()
+GameRoot:GetFishingCamera().fsm:ChangeState(FishingCamera_FSM_STATE.GAME)
 Global_ClearCacheData()
 Global_SendLogout()
 _G.NetworkMgr:StopTimeOutTimer()
@@ -55,7 +103,7 @@ _G.NetworkMgr:Disconnect()
 UIFacade.Reset()
 --Util.GoToLogin()
 EventMgr:SendEvent(GameMsg.CHANGE_GAME_STATE, GAME_STATE_ENUM.Login, true)
-
+AvatarMgr:ReleasePool()
     """
 #     lua_code = """
 # ---@type TYSDK.LoginSDK
@@ -83,6 +131,7 @@ EventMgr:SendEvent(GameMsg.CHANGE_GAME_STATE, GAME_STATE_ENUM.Login, true)
 # UIFacade.Reset()
 # --Util.GoToLogin()
 # EventMgr:SendEvent(GameMsg.CHANGE_GAME_STATE, GAME_STATE_ENUM.Login, true)
+#     AvatarMgr: ReleasePool()
 # """
     bp.lua_console(lua_code)
 
@@ -96,9 +145,9 @@ def login(bp: BasePage, name):
     connect(bp, name)
     LoadingPanel.wait_until_panel_disappear(bp)
     bp.log_list_flag = False
+    bp.cmd("guideskip")
     if not PlayerEditNamePanel.is_panel_active(bp):
         return
-    bp.cmd("guideskip")
     bp.sleep(1)
     while True:
         PlayerEditNamePanel.set_player_name(bp, name)
@@ -110,11 +159,11 @@ def login(bp: BasePage, name):
 
     # # 随机选择性别
     # r = 0
-    # gender_icon_position_list = AvatarSelectPanel.get_gender_icon_position_list(bp)
-    # bp.click_position(gender_icon_position_list[r])
-    # bp.sleep(0.5)
-    #
-    # AvatarSelectPanel.click_btn_start(bp)
+    gender_icon_position_list = AvatarSelectPanel.get_gender_icon_position_list(bp)
+    bp.click_position(gender_icon_position_list[1])
+    bp.sleep(0.5)
+
+    AvatarSelectPanel.click_btn_start(bp)
 
 
 
@@ -323,6 +372,9 @@ def rank(bp: BasePage):
             cur += 1
         i += 1
 
+def cup(bp):
+    random_duelcup(bp, rank=7)
+
 def relogin(bp):
     name = "1000002002"
     bp.cmd("clone 1000002002")
@@ -397,30 +449,32 @@ def read_data():
 
 def main(bp: BasePage):
     # 登录号前缀
-    prefix = "v"
+    prefix = "user"
     # prefix_list = ["a", "b", "c", "d", "e"]
     init(bp)
-    cur = 71
-    limit = 120
+    cur = 1
+    limit = 10
     while cur < limit:
         name = prefix + str(cur)
         login(bp, name)
-        bp.cmd("selfranksetip 12.34.56.78")
-        bp.cmd("levelupto 61")
+        bp.cmd(f"selfranksetip 180.175.{cur}.{cur}")
+        bp.cmd("levelupto 5")
         # 你要执行的初始化账号操作
         # add_gu(bp, cur)
         # dragon_boat(bp, cur)
         # apply_guild(bp)
         # friend(bp)
         # ndays(bp, cur)
-        rank(bp)
+        # rank(bp)
         # hidden_treasure(bp)
+        # cup(bp)
+        # bp.sleep(2)
         logout(bp)
         cur += 1
 
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21513", is_android=False)
-    relogin(bp)
-    # main(bp)
+    bp = BasePage("127.0.0.1:21503", is_android=False)
+    # relogin(bp)
+    main(bp)
     bp.connect_close()

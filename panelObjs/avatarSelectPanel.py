@@ -6,6 +6,10 @@ class AvatarSelectPanel(BasePage):
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.AvatarSelect.AvatarSelectPanel)
 
+    def wait_for_panel_appear(self):
+        while not AvatarSelectPanel.is_panel_active(self):
+            self.sleep(1)
+
     def click_btn_start(self):
         self.click_element(element_data=ElementsData.AvatarSelect.btn_start)
 

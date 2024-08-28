@@ -92,7 +92,7 @@ def gift_pack_buy_once_test(bp:BasePage, gift_pack_dict, btn_position):
 
 def cash_test(bp:BasePage):
     # 切换到cash
-    StorePanel.change_tab(bp, 5)
+    StorePanel.change_tab(bp, 6)
 
     # 得到图标及其位置
     cash_icon_list = StorePanel.get_cash_icon_list(bp)
@@ -103,6 +103,31 @@ def cash_test(bp:BasePage):
 
     # 购买测试
     cash_buy_test(bp)
+
+def coupons_test(bp:BasePage):
+    # 切换到coupons
+    StorePanel.change_tab(bp, 6)
+
+    if not bp.is_pay:
+        return
+    # 得到图标、数量、首次x2、按钮位置
+    coupons_icon = "coin_coupons"
+    coupons_id_list = StorePanel.get_coupons_id_list(bp)
+    btn_position_list = StorePanel.get_btn_position_list(bp, coupons_id_list)
+
+    # 依次购买
+    cur = 0
+    while cur < len(btn_position_list):
+        coupons_quantity_list = StorePanel.get_coupons_quantity_list(bp)
+        # cash_first_time_list = StorePanel.get_cash_first_time_list(bp)
+        # # 计算首次翻倍后的实际数量
+        # if cash_first_time_list[cur]:
+        #     cash_quantity_list[cur] *= 2
+
+        # 购买
+        goods_buy_once_test(bp, coupons_icon, coupons_quantity_list[cur], btn_position_list[cur])
+        cur += 1
+
 
 
 def goods_click_icon_test(bp:BasePage, icon_list, position_list):
@@ -855,7 +880,7 @@ def box_refresh_test(bp: BasePage, box_id_list: list):
 
 def main(bp: BasePage):
     # 查询商城的解锁等级
-    unlock_lv = bp.excelTools.get_unlock_lv("商店")
+    unlock_lv = bp.get_unlock_lv("商店")
 
     # 进入大厅
     # 设置分层
@@ -884,5 +909,5 @@ def main(bp: BasePage):
 
 if __name__ == '__main__':
     bp = BasePage("192.168.111.77:20089")
-    main(bp)
+    coupons_test(bp)
     bp.connect_close()

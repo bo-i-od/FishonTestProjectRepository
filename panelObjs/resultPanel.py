@@ -1,9 +1,13 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from panelObjs.battleFailedPanel import BattleFailedPanel
+from panelObjs.flashCardReceivePanel import FlashCardReceivePanel
 from panelObjs.rewardsPanel import RewardsPanel
 
+
 class ResultPanel(BasePage):
+    def is_panel_active(self):
+        return self.exist(element_data=ElementsData.Result.ResultPanel)
 
     def get_exp(self):
         exp_str = self.get_text(element_data=ElementsData.Result.exp)
@@ -12,6 +16,12 @@ class ResultPanel(BasePage):
     def wait_for_result(self):
         while True:
             self.clear_popup()
+            # if FlashCardReceivePanel.is_panel_active(self):
+            #     self.sleep(6)
+            #     img = self.get_full_screen_shot()
+            #     self.save_img(img)
+            #     self.clear_popup()
+            #     self.cur += 1
             position_list = self.get_position_list(element_data_list=[ElementsData.Result.btn_claim, ElementsData.Result.btn_claim_token_fish, ElementsData.BattleFailed.btn_again])
             if position_list[0]:
                 return ElementsData.Result.btn_claim
@@ -19,22 +29,20 @@ class ResultPanel(BasePage):
                 return ElementsData.Result.btn_claim_token_fish
             if position_list[2]:
                 return ElementsData.BattleFailed.btn_again
-            self.sleep(0.5)
+            self.sleep(1)
 
     def automatic_settlement(self, element_btn):
         # f_flag = True
         while True:
-            try:
-                if not self.exist(element_data=element_btn):
-                    break
-            except:
-                pass
+            if not self.exist(element_data=element_btn):
+                break
             # if f_flag:
             #     img = self.get_full_screen_shot()
             #     self.save_img(img)
             #     f_flag = False
+
             self.clear_popup_once()
-            self.sleep(0.5)
+            self.sleep(1)
             self.click_element_safe(element_data=element_btn)
 
 
@@ -64,4 +72,6 @@ class ResultPanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    ResultPanel.click_btn_claim(bp)
+    ResultPanel.wait_for_result(bp)
+    print(bp.cur)
+    bp.connect_close()

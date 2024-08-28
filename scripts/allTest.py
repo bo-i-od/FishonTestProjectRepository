@@ -14,8 +14,11 @@ def worker(serial_number, task_list, retry_list, pass_list, fail_list, task_lock
             task_lock.release()
             module = importlib.import_module(task_name)
 
-            # if task_name in ['achievementCategoryTest', 'achievementWantedTest', 'rankTest', 'dlcDownloadTest', 'battlePassTest', 'energyTest', 'fishAlbumTest', 'mailTest', 'minitaskTest', 'treasureChestTest', 'newbieTaskTest', 'duelTest', 'taskTest', 'rouletteTest', 'progressRewardsTest', 'careerTest']:
+            # if task_name in ['achievementCategoryTest', 'rankTest', 'dlcDownloadTest', 'fishAlbumTest', 'mailTest', 'minitaskTest', 'taskTest', 'duelTest', 'rouletteTest', 'progressRewardsTest', 'careerTest', 'gearTest', 'treasureChestTest', 'achievementTest', 'fishCardTest', 'energyTest', 'newbieTaskTest']:
             #     pass_list.append(module.__name__)
+            #     continue
+            # if task_name in ['achievementWantedTest', 'storeTest']:
+            #     fail_list.append(module.__name__)
             #     continue
             print(dev, module, "执行测试")
             do_test(dev, module, 0, task_list, retry_list, pass_list, fail_list, task_lock, contents)
@@ -72,7 +75,7 @@ if __name__ == '__main__':
         "guideTest": {"name": "新手、鱼册、刺鱼、成就墙、俱乐部、装备升级引导", "active": True},
         "mailTest": {"name": "邮箱", "active": True},
         "minitaskTest": {"name": "minitask", "active": True},
-        "storeTest": {"name": "商城", "active": True},
+        "storeTest": {"name": "商城", "active": False},
         "newbieTaskTest": {"name": "新手7天", "active": True},
         "treasureChestTest": {"name": "鱼箱", "active": True},
         "duelTest": {"name": "对决、对决排行榜", "active": True},
@@ -97,7 +100,7 @@ if __name__ == '__main__':
     print(f"当前测试模块共计 {len(task_list)} 个")
 
     # 设备列表
-    serial_number_list = ["192.168.111.37:20080", "192.168.111.36:20028", "192.168.111.32:20063"]
+    serial_number_list = ["127.0.0.1:21523", "127.0.0.1:21533"]
 
     print(f"当前连接设备 {len(serial_number_list)} 个")
 

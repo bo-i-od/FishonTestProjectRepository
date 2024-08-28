@@ -110,5 +110,6 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage()
+    bp = BasePage("192.168.111.36:20028")
     main(bp)
+    bp.connect_close()

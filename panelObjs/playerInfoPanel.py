@@ -65,6 +65,7 @@ class PlayerInfoPanel(BasePage):
         player_info = {
         "player_name": self.get_text(element_data=ElementsData.PlayerInfo.player_name),
         "head_img": self.get_icon(element_data=ElementsData.PlayerInfo.head_img),
+        "head_frame": self.get_icon(element_data=ElementsData.PlayerInfo.head_frame),
         "lv": lv,
         "rating": rating,
         }
@@ -275,6 +276,9 @@ class PlayerInfoPanel(BasePage):
     def set_player_name(self, name):
         self.set_text(element_data=ElementsData.PlayerInfo.Input_PlayerName, text=name)
 
+    def click_btn_save_head_frame(self):
+        self.click_element(element_data=ElementsData.PlayerInfo.btn_save_head_frame)
+
     def click_btn_save(self):
         self.click_element(element_data=ElementsData.PlayerInfo.btn_save_profile)
 
@@ -287,6 +291,9 @@ class PlayerInfoPanel(BasePage):
     def get_avatar_id_list(self):
         return self.get_object_id_list(element_data=ElementsData.PlayerInfo.avatar_list)
 
+    def get_head_frame_id_list(self):
+        return self.get_object_id_list(element_data=ElementsData.PlayerInfo.head_frame_list)
+
     def get_avatar_viewport(self, avatar_id_list):
         size_list = self.get_size_list(object_id_list=avatar_id_list)
         h = 0
@@ -295,12 +302,26 @@ class PlayerInfoPanel(BasePage):
         avatar_viewport = Viewport(self, element_viewport=ElementsData.PlayerInfo.viewport_avatar, item_id_list=avatar_id_list,viewport_direction="column", viewport_edge=[0, 0.5 * h])
         return avatar_viewport
 
+    def get_head_framer_viewport(self, head_frame_id_list):
+        size_list = self.get_size_list(object_id_list=head_frame_id_list)
+        h = 0
+        if size_list:
+            h = size_list[0][1]
+        head_frame_viewport = Viewport(self, element_viewport=ElementsData.PlayerInfo.viewport_head_frame, item_id_list=head_frame_id_list,viewport_direction="column", viewport_edge=[0, 0.5 * h])
+        return head_frame_viewport
+
     def select_avatar(self, avatar_id_list, index):
         avatar_viewport = PlayerInfoPanel.get_avatar_viewport(self, avatar_id_list)
         avatar_viewport.move_until_appear(target_id=avatar_id_list[index])
         self.click_element(object_id=avatar_id_list[index], focus=[0, 0.5])
         selected_avatar_index = PlayerInfoPanel.get_selected_icon_index(self, avatar_id_list)
         compare(index, selected_avatar_index)
+
+    def select_head_frame(self, head_frame_id_list, index):
+        head_framer_viewport = PlayerInfoPanel.get_head_framer_viewport(self, head_frame_id_list)
+        head_framer_viewport.move_until_appear(target_id=head_frame_id_list[index])
+        self.click_element(object_id=head_frame_id_list[index], focus=[0, 0.5])
+
 
     def get_selected_icon_index(self, icon_id_list):
         select_id_list = self.get_offspring_id_list(object_id_list=icon_id_list, offspring_path="select")
@@ -311,6 +332,9 @@ class PlayerInfoPanel(BasePage):
     def get_avatar(self, avatar_id):
         head_img_id = self.get_offspring_id(object_id=avatar_id, offspring_path="head>head_mask>head_img")
         return self.get_icon(object_id=head_img_id)
+
+    def get_head_frame(self, head_frame_id):
+        return self.get_icon(object_id=head_frame_id)
 
 
 

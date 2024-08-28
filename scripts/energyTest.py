@@ -119,7 +119,7 @@ def energy_cash_usd_test(bp:BasePage):
 
 def main(bp: BasePage):
     # 登录到大厅
-    cmd_list = ["guideskip"]
+    cmd_list = ["guideskip", "add 1 101900 100000"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     # 喝饮料测试
@@ -136,8 +136,9 @@ def main(bp: BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.81:20012")
+    bp = BasePage("127.0.0.1:21533", is_android=True)
     main(bp)
+    bp.connect_close()
 
 
 

@@ -23,6 +23,9 @@ class AchievementPanel(BasePage):
     def get_achievement_icon_list(self):
         return self.get_icon_list(element_data=ElementsData.Achievement.achievement_icon_list)
 
+    def get_achievement_icon_id_list(self):
+        return self.get_object_id_list(element_data=ElementsData.Achievement.achievement_icon_list)
+
     def click_task_mini(self):
         self.click_element(element_data=ElementsData.Achievement.task_mini_icon)
 

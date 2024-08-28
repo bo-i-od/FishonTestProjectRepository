@@ -24,16 +24,23 @@ def unlock_test(bp: BasePage):
     locked_set, unlockable_set, unlocked_set = AchievementPanel.get_achievement_status_set(bp)
     viewport = AchievementPanel.get_viewport(bp)
     unlockable_list = list(unlockable_set)
-    cur = 0
-    while cur < len(unlockable_list):
-        viewport.move_until_appear(viewport.item_id_list[unlockable_list[cur]])
-        position_list = AchievementPanel.get_achievement_position_list(bp)
-        bp.click_position(position_list[unlockable_list[cur]])
-        cur += 1
-        bp.sleep(0.5)
-        if cur < len(unlockable_list):
-            continue
-        bp.sleep(0.5)
+    r = random.randint(0, len(unlockable_list) - 1)
+    viewport.move_until_appear(viewport.item_id_list[unlockable_list[r]])
+    position_list = AchievementPanel.get_achievement_position_list(bp)
+    bp.click_position(position_list[unlockable_list[r]])
+    bp.sleep(1)
+
+    # 全解锁
+    # cur = 0
+    # while cur < len(unlockable_list):
+    #     viewport.move_until_appear(viewport.item_id_list[unlockable_list[cur]])
+    #     position_list = AchievementPanel.get_achievement_position_list(bp)
+    #     bp.click_position(position_list[unlockable_list[cur]])
+    #     cur += 1
+    #     bp.sleep(0.5)
+    #     if cur < len(unlockable_list):
+    #         continue
+    #     bp.sleep(0.5)
 
     # 随机点击一个
     locked_set, unlockable_set, unlocked_set = AchievementPanel.get_achievement_status_set(bp)
@@ -66,19 +73,18 @@ def unlock_test(bp: BasePage):
     # bp.click_position([0.9, 0.1])
     # bp.sleep(0.5)
 
-    # 关闭
-    bp.go_home()
+    AchievementCategoryPanel.click_btn_close(bp)
 
 def category_test(bp: BasePage):
+    achievement_icon_list = AchievementPanel.get_achievement_icon_list(bp)
+    r = random.randint(0, len(achievement_icon_list) - 1)
+    achievement_icon = achievement_icon_list[r]
     # 读表格数据
     table_data = AchievementCategoryPanel.get_achievement_category_table_data(bp)
 
     # 随机选一个鱼种完成
-    table_open_index_list = AchievementCategoryPanel.get_table_open_index_list(bp, table_data=table_data)
-    print(table_open_index_list)
-    # r = random.randint(0, len(table_open_index_list) - 1)
-    r = 7
-    bp.cmd(f'categoryComplete {table_data["TPID"][r]}')
+    index = table_data["icon"].index(achievement_icon)
+    bp.cmd(f'categoryComplete {table_data["TPID"][index]}')
     # AchievementCategoryPanel.do_category(bp, table_data=table_data, index=r)
     bp.go_home()
 
@@ -90,12 +96,12 @@ def category_test(bp: BasePage):
     bp.sleep(0.5)
 
     # 选择对应的渔场
-    target_icon = table_data["icon"][r]
-    achievement_icon_list = AchievementPanel.get_achievement_icon_list(bp)
-    achievement_position_list = AchievementPanel.get_achievement_position_list(bp)
-    index = achievement_icon_list.index(target_icon)
-    bp.click_position(achievement_position_list[index])
-    bp.sleep(0.5)
+    achievement_icon_id_list = AchievementPanel.get_achievement_icon_id_list(bp)
+    viewport = AchievementPanel.get_viewport(bp)
+    viewport.move_until_appear(achievement_icon_id_list[r])
+    achievement_icon_position = bp.get_position(object_id=achievement_icon_id_list[r])
+    bp.click_position(achievement_icon_position)
+    bp.sleep(1)
 
     # 解锁
     category_viewport = AchievementCategoryPanel.get_category_viewport(bp)
@@ -151,7 +157,7 @@ def main(bp: BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21503")
+    bp = BasePage("127.0.0.1:21533", is_android=True)
     main(bp)
     bp.connect_close()
 

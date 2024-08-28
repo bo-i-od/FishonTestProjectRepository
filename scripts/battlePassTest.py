@@ -120,16 +120,28 @@ def buy_premium_test(bp:BasePage):
     r = random.randint(0, 1)
     BattlePassPanel.click_btn_get_premium(bp)
     bp.sleep(1)
-    if r == 0:
-        BattlePassBuyLicensePanel.click_btn_buy_standard(bp)
-    else:
-        BattlePassBuyLicensePanel.click_btn_buy_pro(bp)
+
+    # 获得价格信息
+    cost_icon_list = BattlePassBuyLicensePanel.get_cost_icon_list(bp)
+    cost_quantity_list = BattlePassBuyLicensePanel.get_cost_quantity_list(bp)
+    cost_icon = cost_icon_list[r]
+    cost_quantity = cost_quantity_list[r]
+    cost_expect = bp.get_item_count(item_icon_name=cost_icon) - cost_quantity
+
+    # 随机点一个
+    btn_buy_list = BattlePassBuyLicensePanel.get_btn_buy_list(bp)
+    bp.click_position(btn_buy_list[r])
+
     BattlePassBuyLicensePanel.wait_for_pay_result(bp)
     bp.sleep(1)
-    if r == 1:
-        RewardsPanel.wait_for_panel_appear(bp)
-        bp.sleep(1)
-        RewardsPanel.click_tap_to_claim(bp)
+
+    # 对比点券数量变化
+    cost = bp.get_item_count(item_icon_name=cost_icon)
+    compare(cost_expect, cost)
+    # if r == 1:
+    #     RewardsPanel.wait_for_panel_appear(bp)
+    #     bp.sleep(1)
+    #     RewardsPanel.click_tap_to_claim(bp)
 
 
 def BattlePassRewardPanel_test(bp:BasePage):
@@ -312,7 +324,7 @@ def RodMoreToOnePanel_test(bp:BasePage):
 
 def main(bp:BasePage):
     # 登录到大厅
-    cmd_list = ["guideskip", "levelupto 56"]
+    cmd_list = ["guideskip", "levelupto 56", "add 1 101900 10000"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
     # # 关闭升级弹窗
     PlayerLevelupPanel.wait_for_panel_appear(bp)
@@ -354,15 +366,8 @@ def main(bp:BasePage):
     BattlePassPanel.click_btn_buy_levels(bp)
     buy_level_test(bp)
 
-
-    # 买付费通行证
-    if bp.is_pay:
-        buy_premium_test(bp)
-    else:
-        BattlePassPanel.click_btn_get_premium(bp)
-        bp.sleep(1)
-        BattlePassBuyLicensePanel.click_btn_close(bp)
-        bp.sleep(1)
+    # 购买通行证
+    buy_premium_test(bp)
 
     # 绿钞足购买等级
     bp.set_item_count(target_count=10000, item_tpid="100100")
@@ -386,7 +391,7 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("b6h65hd64p5pxcyh")
+    bp = BasePage("127.0.0.1:21533", is_android=False)
     main(bp)
     bp.connect_close()
     # cur = 0

@@ -42,12 +42,11 @@ class NewbieTaskPanel(BasePage):
 
     def get_progress_reward_viewport(self, progress_reward_id_list):
         size = self.get_size(object_id=progress_reward_id_list[0])
-        progress_reward_viewport = Viewport(self, element_viewport=ElementsData.NewbieTask.progress_reward_viewport, item_id_list=progress_reward_id_list, viewport_edge=[0, size[0]])
+        progress_reward_viewport = Viewport(self, element_viewport=ElementsData.NewbieTask.progress_reward_viewport, item_id_list=progress_reward_id_list, viewport_edge=[0, 0.1])
         return progress_reward_viewport
 
     def get_progress_reward_position_list(self, progress_reward_id_list):
         return self.get_position_list(object_id_list=progress_reward_id_list, offspring_path="item>item_model_mini(Clone)>icon")
-
 
     # 得到进度条奖励图标
     def get_progress_reward_icon_list(self, progress_reward_id_list):

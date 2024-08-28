@@ -31,7 +31,6 @@ class BattlePreparePanel(BasePage):
         return self.get_position_list(element_data=ElementsData.BattlePrepare.rod_model_list)
 
 
-
     # 点击抛竿
     def cast(self):
         self.wait_for_appear(element_data=ElementsData.BattlePrepare.btn_cast, is_click=False)
@@ -152,6 +151,12 @@ class BattlePreparePanel(BasePage):
 
     def click_gears(self):
         self.click_element(element_data=ElementsData.BattlePrepare.gears)
+
+    def click_panel_tip_location_newtreasure(self):
+        self.click_element(element_data=ElementsData.BattlePrepare.panel_tip_location_newtreasure)
+
+    def is_panel_tip_location_active(self):
+        return self.exist(element_data=ElementsData.BattlePrepare.panel_tip_location_newtreasure)
 
     class Minitask(BasePage):
         def click_btn_recommend(self):

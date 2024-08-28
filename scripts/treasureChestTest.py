@@ -168,7 +168,7 @@ def box_store_test(bp: BasePage):
         raise FindElementError
 
     # 查询商城的解锁等级
-    unlock_lv = bp.excelTools.get_unlock_lv("商店")
+    unlock_lv = bp.get_unlock_lv("商店")
     bp.cmd(f"levelupto {unlock_lv}")
 
     # 返回大厅

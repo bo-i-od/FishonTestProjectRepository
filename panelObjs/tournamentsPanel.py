@@ -44,27 +44,6 @@ class TournamentsPanel(BasePage):
         entrance_viewport.viewport_range_shift()
         return entrance_viewport
 
-    def get_fisheries_table_data(self):
-        table_data = self.excelTools.get_table_data("FISHERIES.xlsm")
-        return table_data
-
-    def get_fish_list(self, fishery_id):
-        table_data = TournamentsPanel.get_fisheries_table_data(self)
-        tpId_list = table_data["tpId"]
-        index = tpId_list.index(int(fishery_id))
-        fish_list = table_data["fish"]
-        res_list = []
-        cur = 0
-        while cur < len(fish_list):
-            fish_id = fish_list[cur][index]
-            if fish_id in [0, "0", ""]:
-                cur += 1
-                continue
-            res_list.append(str(fish_id))
-            cur += 1
-        return res_list
-
-
     # 跳转指定tpid渔场
     def go_to_fishery_by_tpid(self, fishery_tpid):
         fishery_tpid_list = TournamentsPanel.get_fishery_tpid_list(self)

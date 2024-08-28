@@ -1,11 +1,13 @@
-import json
-from importlib import import_module
+
 
 from airtest.core.helper import G
 from poco.drivers.unity3d.device import UnityEditorWindow
-
 import netMsg.luaLog
+import json
+from importlib import import_module
+from configs.pathConfig import EXCEL_PATH
 from tools.excelRead import ExceTools
+
 import time
 import pyautogui
 import base64
@@ -21,10 +23,10 @@ import os
 from configs.elementsData import ElementsData
 from configs.jumpData import JumpData
 
-from configs.pathConfig import EXCEL_PATH
 import logging
 
-class BasePage:
+
+class BasePageMain:
     def __init__(self, serial_number=None, dev=None, is_android=False):
         # 不打印airtest日志
         logging.getLogger("airtest").setLevel(logging.ERROR)
@@ -34,25 +36,14 @@ class BasePage:
         # 是否在安卓手机, Unity需要改为False
         self.is_android = is_android
 
-        # 是否测试会拉起支付的按钮
-        self.is_pay = True
-
         # 是否截图记录
         self.record = False
-
-        # 是否开启战斗倍速
-        self.is_time_scale = False
 
         # 是否打印日志
         self.is_debug_log = False
 
-        # 是否监听Unity发来的log
-        self.listen_log_flag = True
-
-        # 是否将Unity发来的log加到消息列表里
-        self.log_list_flag = True
-
-        self._send_log_flag = False
+        # 是否开启战斗倍速
+        self.is_time_scale = False
 
         # 默认端口 5001
         addr = ('', 5001)
@@ -76,14 +67,11 @@ class BasePage:
         # current_dir = os.getcwd()
         # 获取父目录
         self.root_dir = os.path.abspath(os.path.dirname(file_path))
-        # 配置表的路径
-        self.excelTools = ExceTools(EXCEL_PATH)
 
-        # 是否让Unity发log
-        self.set_send_log_flag(True)
 
-        # 消息储存队列
-        self.log_list = []
+        self.element_data_home = ElementsData.Home.HomePanel
+
+        # BasePageExt(self)
 
 
 
@@ -504,6 +492,7 @@ class BasePage:
 
     # 等待指定元素出现
     def wait_for_appear(self, element_data: dict=None, element_data_list=None,is_click: bool = False, interval: float = 0.2, timeout=120, ignore_set=None):
+        # 是否找到目标位置
         def is_position(p_list):
             p = []
             i = 0
@@ -514,9 +503,12 @@ class BasePage:
                 p = p_list[i]
                 break
             return p
+
+        # element_data转为element_data_list
         if element_data_list is None:
             self.wait_for_appear(element_data_list=[element_data], is_click=is_click, interval=interval, timeout=timeout, ignore_set=ignore_set)
             return
+
         cur = 0
         position = []
         while cur < timeout:
@@ -527,10 +519,16 @@ class BasePage:
                 break
             self.sleep(interval)
             cur += interval
+
+        # 没找到直接返回
         if not position:
             return
+
+        # 找到后不点击
         if not is_click:
             return
+
+        # 找到后点击
         self.click_position(position[0])
 
 
@@ -590,9 +588,12 @@ class BasePage:
             ignore_set = set()
         panel_name_list = self.get_name_list(element_data=ElementsData.Panels)
         pop_window_set = set(panel_name_list) & JumpData.pop_window_set - ignore_set
+
+        # 没有弹窗
         if not pop_window_set:
             return True
         for panel_name in pop_window_set:
+            # 开鱼卡特殊处理，进行一次点击跳过动画
             if panel_name == "FishBagPanel":
                 self.click_position_base([0.5, 0.5])
                 self.sleep(0.5)
@@ -601,6 +602,7 @@ class BasePage:
                 self.sleep(1)
         return False
 
+    # 清除干净弹窗
     def clear_popup(self, ignore_set=None):
         while True:
             res = self.clear_popup_once(ignore_set)
@@ -623,7 +625,7 @@ class BasePage:
             cur += 1
             if cur > 30:
                 raise FindNoElementError
-            at_home_flag = (not self.exist(element_data=ElementsData.Home.HomePanel))
+            at_home_flag = (not self.exist(element_data=self.element_data_home))
             if cur_panel is not None:
                 at_home_flag = at_home_flag or self.exist(element_data=JumpData.panel_dict[cur_panel])
 
@@ -675,7 +677,7 @@ class BasePage:
     def get_screen_shot(self, x, y, w, h):
         img_b64encode, fmt = rpcMethodRequest.screen_shot(self.poco, x, y, w, h)
         if fmt.endswith('.deflate'):
-            fmt = fmt[:-len('.deflate')]
+            # fmt = fmt[:-len('.deflate')]
             imgdata = base64.b64decode(img_b64encode)
             imgdata = zlib.decompress(imgdata)
             img_b64encode = base64.b64encode(imgdata)
@@ -687,6 +689,11 @@ class BasePage:
     # 保存截图到report
     def save_img(self, img, img_name=""):
         path = f"{self.root_dir}/report"  # 输入文件夹地址
+
+        # 不存在就创建
+        if not os.path.exists(path):
+            os.makedirs(path, exist_ok=True)
+
         num_png = len(os.listdir(path))  # 读入文件夹,统计文件夹中的文件个数
         cur = num_png
         cv2.imwrite(path + f'/{img_name}{cur}.jpg', img)
@@ -706,35 +713,146 @@ class BasePage:
         img = self.get_screen_shot(ui_x, ui_y, ui_w, ui_h)
         return img
 
-    # 获取物品数量
-    def get_item_count(self, item_name: str = "", item_icon_name: str = "", item_tpid: str = ""):
-        if item_tpid != "":
-            item_count_list = self.get_item_count_list(item_tpid_list=[item_tpid])
-            self.is_single_element(item_count_list)
-            return item_count_list[0]
-        item_tpid = self.get_tpid(item_name, item_icon_name)
-        tpid_list = [item_tpid]
-        item_count_list = self.get_item_count_list(item_tpid_list=tpid_list)
-        self.is_single_element(item_count_list)
-        return item_count_list[0]
+
+    def click_button(self, element_data: dict = None, element_data_list: list = None):
+        if element_data_list is not None:
+            rpcMethodRequest.click_button(self.poco, element_data_list)
+            return
+        self.click_button(element_data_list=[element_data])
+
+    # kind包含up，down，click
+    def ray_input(self, target_name: str, kind: str, element_data:dict = None,element_data_list: list = None):
+        if element_data_list is not None:
+            rpcMethodRequest.ray_input(self.poco, element_data_list, target_name, kind)
+            return
+        self.ray_input(target_name=target_name, kind=kind,element_data_list=[element_data])
+
+    # 设定节点激活状态
+    def set_object_active_list(self, active, object_id=0, object_id_list: list = None, element_data: dict = None,element_data_list: list = None, offspring_path=""):
+        if object_id_list is not None:
+            rpcMethodRequest.set_object_active_by_id(self.poco, object_id_list, offspring_path, active)
+            return
+        if object_id != 0:
+            self.set_object_active_list(active=active, object_id_list=[object_id], offspring_path=offspring_path)
+            return
+        if element_data_list is not None:
+            rpcMethodRequest.set_object_active(self.poco, element_data_list, active)
+            return
+        element_data_copy = self.get_element_data(element_data, offspring_path)
+        self.set_object_active_list(active=active, element_data_list=[element_data_copy])
+
+    def set_object_active(self, active, object_id: int = 0, element_data: dict = None, offspring_path=""):
+        if object_id != 0:
+            self.set_object_active_list(active=active, object_id=object_id, offspring_path=offspring_path)
+            return
+        element_data_copy = self.get_element_data(element_data, offspring_path)
+        rpcMethodRequest.set_object_active(self.poco, element_data_copy, active)
+
+    # 设置时间缩放
+    def set_time_scale(self, time_scale=5):
+        if not self.is_time_scale:
+            return
+        rpcMethodRequest.set_time_scale(self.poco, time_scale)
+
+    # 休息t秒
+    @staticmethod
+    def sleep(t: float):
+        time.sleep(t)
+
+    # 键盘输入
+    @staticmethod
+    def send_key(key: str):
+        pyautogui.typewrite(key)
+
+
+class BasePage(BasePageMain):
+    def __init__(self, serial_number=None, dev=None, is_android=False):
+        super().__init__(serial_number, dev, is_android)
+        # 是否测试会拉起支付的按钮
+        self.is_pay = True
+
+        # 全局变量
+        self.cur = 0
+
+        # 是否监听Unity发来的log
+        self.listen_log_flag = True
+
+        # 是否将Unity发来的log加到消息列表里
+        self.log_list_flag = True
+
+        self.send_log_flag = False
+
+        # 消息储存队列
+        self.log_list = []
+
+        # self._extend_base_page()
+
+        # 是否让Unity发log
+        self.set_send_log_flag(True)
+
+        # 配置表的路径
+        self.excelTools = ExceTools(EXCEL_PATH)
+
+    def get_fish_list(self, fishery_id):
+        table_data = self.excelTools.get_table_data("FISHERIES.xlsm")
+        tpId_list = table_data["tpId"]
+        index = tpId_list.index(int(fishery_id))
+        fish_list = table_data["fish"]
+        res_list = []
+        cur = 0
+        while cur < len(fish_list):
+            fish_id = fish_list[cur][index]
+            if fish_id in [0, "0", ""]:
+                cur += 1
+                continue
+            res_list.append(str(fish_id))
+            cur += 1
+        return res_list
+
+    def get_item_tpid_list(self, icon):
+        table_data = self.excelTools.get_table_data("ITEM_MAIN.xlsm")
+        icon_list = table_data['iconName']
+        tpid_list = table_data['itemTpId']
+        res_list = []
+        cur = 0
+        while cur < len(icon_list):
+            if icon_list[cur] != icon:
+                cur += 1
+                continue
+            res_list.append(tpid_list[cur])
+            cur += 1
+        return res_list
 
     def get_tpid(self, item_name: str = "", item_icon_name: str = ""):
         item_tpid = ""
-        book_list = self.excelTools.get_book_list()
+        book_list = [{"book_name": "RESOURCE.xlsm", "name": "name", "id": "resourceID", "icon": "itemIcon"},
+                     {"book_name": "ITEM_MAIN.xlsm", "name": "name", "id": "itemTpId", "icon": "iconName"}]
         for book_dict in book_list:
-            worksheet = self.excelTools.get_worksheet(book_dict["book_name"], "模板数据")
+            book_name = book_dict["book_name"]
+            table_data = self.excelTools.get_table_data(book_name=book_name)
+            # worksheet = self.excelTools.get_worksheet(book_dict["book_name"], "模板数据")
             if item_name != "":
-                res = self.excelTools.same_row_different_column_convert(worksheet, book_dict["name"], book_dict["id"],
-                                                                        item_name)
-                if res is not None:
-                    item_tpid = res
+                if item_name in table_data[book_dict["name"]]:
+                    index = table_data[book_dict["name"]].index(item_name)
+                    item_tpid = table_data[book_dict["id"]][index]
                     break
+                # res = self.excelTools.same_row_different_column_convert(worksheet, book_dict["name"], book_dict["id"],
+                #                                                         item_name)
+                # if res is not None:
+                #     item_tpid = res
+                #     break
             if item_icon_name != "":
-                res = self.excelTools.same_row_different_column_convert(worksheet, book_dict["icon"], book_dict["id"],
-                                                                        item_icon_name)
-                if res is not None:
-                    item_tpid = res
+                # res = self.excelTools.same_row_different_column_convert(worksheet, book_dict["icon"], book_dict["id"],
+                #                                                         item_icon_name)
+                # if res is not None:
+                #     item_tpid = res
+                #     break
+
+                if item_icon_name in table_data[book_dict["icon"]]:
+                    index = table_data[book_dict["icon"]].index(item_icon_name)
+                    item_tpid = table_data[book_dict["id"]][index]
                     break
+
         return str(item_tpid)
 
     def get_tpid_list(self, item_name_list=None, item_icon_name_list=None):
@@ -751,6 +869,61 @@ class BasePage:
             cur += 1
         return item_tpid_list
 
+    def get_unlock_lv(self, system_name):
+        table_data = self.excelTools.get_table_data("UNLOCK_SYSTEM.xlsm")
+        self.excelTools.get_value_from_key(table_data, header_key='name', header_value='content', key=system_name)
+        index = table_data['name'].index(system_name)
+        unlock_lv = int(table_data['content'][index])
+        return unlock_lv
+
+    def get_fish_type(self, fish, table_data=None):
+        if table_data is None:
+            table_data = self.excelTools.get_table_data(book_name="FISH.xlsm")
+        if fish == '':
+            return "钓鱼失败"
+        index = table_data["tpId"].index(int(fish))
+
+        if table_data["fishClass"][index] == 1:
+            if table_data["fishType"][index] == 1:
+                return "小"
+            if table_data["fishType"][index] == 2:
+                return "中"
+            if table_data["fishType"][index] == 3:
+                return "大"
+            if table_data["fishType"][index] == 4:
+                return "特大"
+            if table_data["fishType"][index] == 5:
+                return "超巨"
+        if table_data["fishClass"][index] == 2:
+            return "奇珍"
+        if table_data["fishClass"][index] == 3:
+            return "超奇珍"
+        if table_data["fishClass"][index] == 4:
+            return "典藏"
+        return "其它"
+
+    def get_fish_type_list(self, fish_list):
+        fish_type_list = []
+        table_data = self.excelTools.get_table_data(book_name="FISH.xlsm")
+        cur = 0
+        while cur < len(fish_list):
+            fish_type = self.get_fish_type(fish=fish_list[cur], table_data=table_data)
+            fish_type_list.append(fish_type)
+            cur += 1
+        return fish_type_list
+
+    # 获取物品数量
+    def get_item_count(self, item_name: str = "", item_icon_name: str = "", item_tpid: str = ""):
+        if item_tpid != "":
+            item_count_list = self.get_item_count_list(item_tpid_list=[item_tpid])
+            self.is_single_element(item_count_list)
+            return item_count_list[0]
+        item_tpid = self.get_tpid(item_name, item_icon_name)
+        tpid_list = [item_tpid]
+        item_count_list = self.get_item_count_list(item_tpid_list=tpid_list)
+        self.is_single_element(item_count_list)
+        return item_count_list[0]
+
     # 设置物品数量
     def set_item_count(self, target_count, item_name: str = "", item_icon_name: str = "", item_tpid: str = ""):
         # 参数给的是icon_name或item_name就转换为tpid
@@ -764,7 +937,8 @@ class BasePage:
             return
         self.cmd(f"add {item_tpid[0]} {item_tpid} {target_count - item_count}")
 
-    def set_item_count_list(self, target_count_list, item_name_list: list=None, item_icon_name_list: list=None, item_tpid_list: list=None):
+    def set_item_count_list(self, target_count_list, item_name_list: list = None, item_icon_name_list: list = None,
+                            item_tpid_list: list = None):
         if item_tpid_list is None:
             item_tpid_list = self.get_tpid_list(item_name_list=item_name_list, item_icon_name_list=item_icon_name_list)
         item_count_list = self.get_item_count_list(item_tpid_list=item_tpid_list)
@@ -805,7 +979,7 @@ class BasePage:
         return item_count_list
 
     # 得到消耗后的物品数量列表
-    def get_cosumed_item_count_list(self, icon_list, count_list):
+    def get_consumed_item_count_list(self, icon_list, count_list):
         item_count_list = self.get_item_count_list(item_icon_name_list=icon_list)
         cur = 0
         while cur < len(item_count_list):
@@ -855,70 +1029,43 @@ class BasePage:
             return
         self.custom_cmd_list([command])
 
-    def click_button(self, element_data: dict = None, element_data_list: list = None):
-        if element_data_list is not None:
-            rpcMethodRequest.click_button(self.poco, element_data_list)
-            return
-        self.click_button(element_data_list=[element_data])
-
-    # kind包含up，down，click
-    def ray_input(self, target_name: str, kind: str, element_data:dict = None,element_data_list: list = None):
-        if element_data_list is not None:
-            rpcMethodRequest.ray_input(self.poco, element_data_list, target_name, kind)
-            return
-        self.ray_input(target_name=target_name, kind=kind,element_data_list=[element_data])
-
-    # 设定节点激活状态
-    def set_object_active_list(self, active, object_id=0, object_id_list: list = None, element_data: dict = None,element_data_list: list = None, offspring_path=""):
-        if object_id_list is not None:
-            rpcMethodRequest.set_object_active_by_id(self.poco, object_id_list, offspring_path, active)
-            return
-        if object_id != 0:
-            self.set_object_active_list(active=active, object_id_list=[object_id], offspring_path=offspring_path)
-            return
-        if element_data_list is not None:
-            rpcMethodRequest.set_object_active(self.poco, element_data_list, active)
-            return
-        element_data_copy = self.get_element_data(element_data, offspring_path)
-        self.set_object_active_list(active=active, element_data_list=[element_data_copy])
-
-    def set_object_active(self, active, object_id: int = 0, element_data: dict = None, offspring_path=""):
-        if object_id != 0:
-            self.set_object_active_list(active=active, object_id=object_id, offspring_path=offspring_path)
-            return
-        element_data_copy = self.get_element_data(element_data, offspring_path)
-        rpcMethodRequest.set_object_active(self.poco, element_data_copy, active)
-
-    # 设置时间缩放
-    def set_time_scale(self, time_scale=5):
-        if not self.is_time_scale:
-            return
-        rpcMethodRequest.set_time_scale(self.poco, time_scale)
-
     def get_scene_list(self):
         return rpcMethodRequest.get_scene_list(self.poco)
 
+    def get_target_log(self, msg_key):
+        target_log = ""
+        for log in self.log_list:
+            if msg_key not in log:
+                continue
+            target_log = log
+            break
+        return target_log
+
+    def receive_until_get_msg(self, msg_name, timeout=5):
+        cur = 0
+        while cur < timeout:
+            cur += 0.1
+            self.sleep(0.1)
+            # 在最近收集的消息列表中筛出目标消息
+            key_sc = '<==== [Lua] Receive Net Msg "SC'
+            msg_key = key_sc + msg_name
+            target_log = self.get_target_log(msg_key)
+            if target_log == "":
+                continue
+            return target_log
+        return None
+
     def set_send_log_flag(self, send_log_flag):
-        self._send_log_flag = send_log_flag
+        self.send_log_flag = send_log_flag
         rpcMethodRequest.set_send_log_flag(self.poco, send_log_flag)
         if send_log_flag:
             self.wait_msg()
 
-    # 休息t秒
-    @staticmethod
-    def sleep(t: float):
-        time.sleep(t)
-
-    # 键盘输入
-    @staticmethod
-    def send_key(key: str):
-        pyautogui.typewrite(key)
-
     # 接收C#传来的消息
     def circulate_update(self):
-        while self._send_log_flag:
+        while self.send_log_flag:
             if not self.listen_log_flag:
-                self.sleep(0.1)
+                time.sleep(0.1)
                 continue
             # 每隔一段时间取一下接收区的消息
             try:
@@ -965,28 +1112,69 @@ class BasePage:
         # 调用函数并返回结果
         return function(*args, **kwargs)
 
-    def get_target_log(self, msg_key):
-        target_log = ""
-        for log in self.log_list:
-            if msg_key not in log:
-                continue
-            target_log = log
-            break
-        return target_log
+    def get_drop_item_id_list(self, spot_id):
+        table_data = self.excelTools.get_table_data("FISH_SPOT.xlsm")
 
-    def receive_until_get_msg(self, msg_name, timeout=5):
-        cur = 0
-        while cur < timeout:
-            cur += 0.1
-            self.sleep(0.1)
-            # 在最近收集的消息列表中筛出目标消息
-            key_sc = '<==== [Lua] Receive Net Msg "SC'
-            msg_key = key_sc + msg_name
-            target_log = self.get_target_log(msg_key)
-            if target_log == "":
+        # 获取10倍钓点所在的行
+        spot_id_list = table_data['tpId']
+        try:
+            index = spot_id_list.index(int(spot_id))
+        except ValueError:
+            index = spot_id_list.index(str(spot_id))
+        # 拿到对应钓点的DropID列表
+        drop_id_list = []
+        for fishDropInfo in table_data['fishDropInfo']:
+            drop_id = fishDropInfo["DropID"][index]
+            if drop_id == 0 or drop_id == "0":
                 continue
-            return target_log
-        return None
+            drop_id_list.append(drop_id)
+
+        # 将DropID列表转为DropID列表
+        table_data = self.excelTools.get_table_data("DROP_PACK.xlsm")
+        drop_pack_id_list = []
+        for target_id in drop_id_list:
+            # DROP_PACK.xlsm表从dropId找到对应的dropPackId
+            for index, drop_id in enumerate(table_data["dropId"]):
+                if drop_id != target_id:
+                    continue
+                enable = table_data["enabled"][index]
+                if enable == 0 or enable == "0":
+                    continue
+                drop_pack_id = table_data["dropPackId"][index]
+                drop_pack_id_list.append(drop_pack_id)
+
+        item_id_list = []
+        table_data = self.excelTools.get_table_data("DROP_ENTITY.xlsm")
+        for drop_pack_id in drop_pack_id_list:
+            try:
+                index = table_data["dropPackId"].index(int(drop_pack_id))
+            except ValueError:
+                index = table_data["dropPackId"].index(str(drop_pack_id))
+            enable = table_data["enabled"][index]
+            if enable == 0 or enable == "0":
+                continue
+            item_id_list.append(table_data["itemID"][index])
+        return item_id_list
+
+    def fish_bone_to_fish(self, fish_bone_id):
+        # 鱼骨tpid转missionConditionID
+        table_data = self.excelTools.get_table_data("MISSION_CONDITION.xlsm")
+        try:
+            index = table_data["triggerKeyS"].index(int(fish_bone_id))
+        except ValueError:
+            index = table_data["triggerKeyS"].index(str(fish_bone_id))
+        mission_condition_id = table_data["missionConditionID"][index]
+
+        # missionConditionID转鱼id
+        table_data = self.excelTools.get_table_data("FISH_STATE.xlsm")
+        try:
+            index = table_data["startConditionId"].index(int(mission_condition_id))
+        except ValueError:
+            index = table_data["startConditionId"].index(str(mission_condition_id))
+        fish_id = table_data["fishChange"][0]["fish"][index]
+        return str(fish_id)
+
+
 
 
 
@@ -995,9 +1183,6 @@ class BasePage:
 
 if __name__ == '__main__':
     bp = BasePage("127.0.0.1:21513")
-    fish_list = ["301001", "390001"]
-    res = bp.excelTools.get_fish_type_list(fish_list)
-    print(res)
 
     bp.connect_close()
     # while True:

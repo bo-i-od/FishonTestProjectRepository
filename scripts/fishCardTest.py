@@ -3,6 +3,7 @@ import random
 from airtest.core.api import connect_device
 
 from common.basePage import BasePage
+from panelObjs.eventsGiftCenterPanel import EventsGiftCenterPanel
 from panelObjs.fishCardMultipleLevelUpPanel import FishCardMultipleLevelUpPanel
 from panelObjs.achievementPopupPanel import AchievementPopupPanel
 from panelObjs.commonItemGetPanel import CommonItemGetPanel
@@ -92,8 +93,8 @@ def level_up_test(bp: BasePage):
     bp.sleep(1)
 
     # 关闭鱼卡礼包弹窗
-    if FishCardGiftPackCustomizePanel.is_panel_active(bp):
-        FishCardGiftPackCustomizePanel.click_btn_close(bp)
+    if EventsGiftCenterPanel.is_panel_active(bp):
+        EventsGiftCenterPanel.click_btn_close(bp)
         bp.sleep(1)
     return rating, rating_fisheries
 
@@ -237,7 +238,7 @@ def main(bp: BasePage):
     r2 = random.randint(23, 37)
     r3 = random.randint(1, 5)
     print(f"付费分层{r3}000")
-    cmd_list = [ "guideskip", f"add 10 1000{str(r1).zfill(3)} 1", f"add 10 1000{str(r2).zfill(3)} 500000", f"setPlayerLayer {r3}000", "add 1 100000 1234567890", "levelupto 15"]
+    cmd_list = [ "guideskip", f"add 10 1000{str(r1).zfill(3)} 1", f"add 10 1000{str(r2).zfill(3)} 500000", f"setPlayerLayer {r3}000", "add 1 100000 1234567890", "levelupto 15", "add 1 101900 1000"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     PlayerLevelupPanel.wait_for_panel_appear(bp)
@@ -275,7 +276,7 @@ def main(bp: BasePage):
 
 
 if __name__ == "__main__":
-    bp = BasePage("192.168.111.32:20068")
+    bp = BasePage("127.0.0.1:21533", is_android=False)
     main(bp)
     bp.connect_close()
 

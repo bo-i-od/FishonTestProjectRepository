@@ -83,7 +83,7 @@ def click_btn_claim_test(bp:BasePage):
 
 def main(bp:BasePage):
     # 查询邮件的解锁等级
-    unlock_lv = bp.excelTools.get_unlock_lv("邮件")
+    unlock_lv = bp.get_unlock_lv("邮件")
 
     # 进入大厅
     cmd_list = ["guideskip", f"levelupto {unlock_lv}"]

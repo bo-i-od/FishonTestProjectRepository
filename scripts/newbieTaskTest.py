@@ -1,6 +1,7 @@
 import random
 
 from common import resource, gameInit
+from panelObjs.playerLevelupPanel import PlayerLevelupPanel
 
 from tools.commonTools import *
 from common.basePage import BasePage
@@ -53,6 +54,11 @@ def party_sale_test(bp: BasePage):
     item_dict = resource.make_item_dict(item_icon_list=item_icon_list, item_quantity_list=item_quantity_list)
     stock_expect_list = bp.get_item_count_list(item_icon_name_list=item_icon_list)
 
+    # 点卷数量
+    cost_icon = PartySalePanel.get_cost_icon(bp)
+    cost_quantity = PartySalePanel.get_cost_quantity(bp)
+    cost_expect = bp.get_item_count(item_icon_name=cost_icon) - cost_quantity
+
     # 点击购买
     PartySalePanel.click_btn_buy(bp)
     RewardsPanel.wait_for_panel_appear(bp)
@@ -67,6 +73,10 @@ def party_sale_test(bp: BasePage):
     stock_list = bp.get_item_count_list(item_icon_name_list=item_icon_list)
     print(stock_expect_list, stock_list)
     # compare_list(stock_expect_list, stock_list)
+
+    # 对比点券数量变化
+    cost = bp.get_item_count(item_icon_name=cost_icon)
+    compare(cost_expect, cost)
 
     RewardsPanel.wait_for_panel_appear(bp)
     bp.sleep(1)
@@ -224,7 +234,7 @@ def collect_test(bp:BasePage):
     task_reward_tpid_list = bp.get_tpid_list(item_icon_name_list=task_reward_icon_list)
     cur = 0
     while cur < len(task_reward_tpid_list):
-        item_tpid_list = bp.excelTools.get_item_tpid_list(icon=task_reward_icon_list[cur])
+        item_tpid_list = bp.get_item_tpid_list(icon=task_reward_icon_list[cur])
         if 209012 not in item_tpid_list:
             task_reward_tpid_list[cur] = task_reward_tpid_list[cur]
             cur += 1
@@ -417,7 +427,7 @@ def challenge_test(bp:BasePage):
 
 def main(bp: BasePage):
     # 进入大厅
-    cmd_list = ["guideskip"]
+    cmd_list = ["guideskip", "add 1 101900 10000"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     # # 去新手三天界面
@@ -484,5 +494,6 @@ def main(bp: BasePage):
     bp.go_home()
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.37:20087")
+    bp = BasePage("127.0.0.1:21523", is_android=True)
     main(bp)
+    bp.connect_close()

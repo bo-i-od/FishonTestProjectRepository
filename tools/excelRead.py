@@ -45,58 +45,12 @@ class ExceTools:
             cur += 1
         return exp_limit, exp_limit_all
 
-    def get_unlock_lv(self, system_name):
-        table_data = self.get_table_data("UNLOCK_SYSTEM.xlsm")
-        self.get_value_from_key(table_data, header_key='name', header_value='content', key=system_name)
-        index = table_data['name'].index(system_name)
-        unlock_lv = int(table_data['content'][index])
-        return unlock_lv
 
     @staticmethod
     def get_value_from_key(table_data, header_key, header_value, key):
         index = table_data[header_key].index(key)
         value = int(table_data[header_value][index])
         return value
-
-    def get_fish_type(self, fish, table_data):
-        if fish == '':
-            return "钓鱼失败"
-        index = table_data["tpId"].index(int(fish))
-
-        if table_data["fishClass"][index] == 1:
-            if table_data["fishType"][index] == 1:
-                return "小"
-            if table_data["fishType"][index] == 2:
-                return "中"
-            if table_data["fishType"][index] == 3:
-                return "大"
-            if table_data["fishType"][index] == 4:
-                return "特大"
-            if table_data["fishType"][index] == 5:
-                return "超巨"
-        if table_data["fishClass"][index] == 2:
-            return "奇珍"
-        if table_data["fishClass"][index] == 3:
-            return "超奇珍"
-        if table_data["fishClass"][index] == 4:
-            return "典藏"
-        return "其它"
-
-
-    def get_fish_type_list(self, fish_list):
-        fish_type_list = []
-        table_data = self.get_table_data(book_name="FISH.xlsm")
-        cur = 0
-        while cur < len(fish_list):
-            fish_type = self.get_fish_type(fish=fish_list[cur], table_data=table_data)
-            fish_type_list.append(fish_type)
-            cur += 1
-        return fish_type_list
-
-    def get_book_list(self):
-        book_list = [{"book_name": "RESOURCE.xlsm", "name": "name", "id": "resourceID", "icon": "itemIcon"},
-                {"book_name": "ITEM_MAIN.xlsm", "name": "name", "id": "itemTpId", "icon": "iconName"}]
-        return book_list
 
 
     def same_row_different_column_convert(self, worksheet, source_header, target_header, source):
@@ -201,19 +155,7 @@ class ExceTools:
             cur += 1
         return column_data
 
-    def get_item_tpid_list(self, icon):
-        table_data = self.get_table_data("ITEM_MAIN.xlsm")
-        icon_list = table_data['iconName']
-        tpid_list = table_data['itemTpId']
-        res_list = []
-        cur = 0
-        while cur < len(icon_list):
-            if icon_list[cur] != icon:
-                cur += 1
-                continue
-            res_list.append(tpid_list[cur])
-            cur += 1
-        return res_list
+
 
 
 

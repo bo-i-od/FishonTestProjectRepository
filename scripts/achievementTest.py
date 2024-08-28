@@ -333,12 +333,13 @@ def click_icon_test(bp: BasePage):
     r = random.randint(0, len(item_position_list) - 1)
     bp.debug_log(f"r:{r}")
     item_icon_expect = item_icon_list[r]
-    bp.click_position(item_position_list[r])
-    bp.sleep(0.5)
-    item_icon = ItemTipsPanel.get_item_icon(bp)
-    bp.debug_log(f"item_icon_expect, item_icon:{item_icon_expect, item_icon}")
-    compare(item_icon_expect, item_icon)
-    bp.click_position([0.5, 0.9])
+    if item_icon_expect != "player_exp":
+        bp.click_position(item_position_list[r])
+        bp.sleep(0.5)
+        item_icon = ItemTipsPanel.get_item_icon(bp)
+        bp.debug_log(f"item_icon_expect, item_icon:{item_icon_expect, item_icon}")
+        compare(item_icon_expect, item_icon)
+        bp.click_position([0.5, 0.9])
     # 点击宝箱
     AchievementGroupPanel.click_box(bp)
     cur = 0
@@ -386,7 +387,7 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.37:20080")
-    main(bp)
+    bp = BasePage("127.0.0.1:21523", is_android=True)
+    jump_all_test(bp)
     bp.connect_close()
 

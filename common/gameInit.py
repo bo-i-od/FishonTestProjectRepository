@@ -25,7 +25,7 @@ def login(bp: BasePage, username):
     # while not LoginPanel.is_panel_active(bp):
     #     EntryUpdateLoading.click_tap_to_start(bp)
     # 选服务器 输入名称 点击登录
-    LoginPanel.set_server(bp, 8)
+    LoginPanel.set_server(bp, 6)
     LoginPanel.set_login_name(bp, username)
     LoginPanel.click_btn_login(bp)
     bp.sleep(2)
@@ -35,7 +35,7 @@ def login(bp: BasePage, username):
 
 
 # 设置摇杆
-def set_joystick(bp:BasePage, state="FLOATING"):
+def set_joystick(bp: BasePage, state="FLOATING"):
     if state == "FLOATING":
         bp.lua_console("SettingMgr:Write(_G.FISH_SETTING_JOYSTICK.JOYSTICK_NAME, _G.FISH_SETTING_JOYSTICK.TYPE_FLOATING)")
         return
@@ -51,13 +51,13 @@ def account_init(bp: BasePage, player_name, cmd_list):
     bp.cmd_list(cmd_list)
     set_joystick(bp)
     while True:
-        PlayerEditNamePanel.set_player_name(bp, player_name)
+        # PlayerEditNamePanel.set_player_name(bp, player_name)
         PlayerEditNamePanel.click_confirm(bp)
         bp.sleep(1)
         if not PlayerEditNamePanel.is_panel_active(bp):
             break
-        t = str(time.time()).split('.')
-        player_name = "t" +t[0][-2:]+ t[1]
+        # t = str(time.time()).split('.')
+        # player_name = "t" +t[0][-2:]+ t[1]
 
     # 随机选择性别
     r = random.randint(0, 1)
@@ -69,7 +69,7 @@ def account_init(bp: BasePage, player_name, cmd_list):
 
 
 # 登录到大厅
-def login_to_hall(bp: BasePage, cmd_list=None):
+def login_to_hall(bp: BasePage,cmd_list=None):
     LoginPanel.wait_for_btn_login(bp)
     t = str(time.time()).split('.')
     username = "t" +t[0][-2:]+ t[1]
@@ -91,7 +91,7 @@ def app_start_to_login(dev=None):
             break
         time.sleep(1)
         cur += 1
-    time.sleep(5)
+    time.sleep(10)
     # EntryUpdateLoading.click_tap_to_start(bp)
     LoginPanel.wait_for_btn_login(bp)
     return bp
@@ -282,7 +282,7 @@ def main():
     # time.sleep(5)
 
     bp = app_start_to_login()
-    login_to_hall(bp)
+    login_to_hall(bp, server=6)
 
 
 def start_time_test():
@@ -310,7 +310,8 @@ def start_time_test():
 
 
 if __name__ == '__main__':
-    pass
+    # connect_device(f"android://127.0.0.1:5037/{serial_number}")
+    start_app("com.xuejing.smallfish.official")
 
 
 

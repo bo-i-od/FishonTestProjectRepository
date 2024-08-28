@@ -403,6 +403,23 @@ class StorePanel(BasePage):
         str_to_int_list(cash_quantity_list)
         return cash_quantity_list
 
+    def get_coupons_id_list(self):
+        coupons_id_list = self.get_object_id_list(element_data=ElementsData.Store.Coupons.coupons_list)
+        return coupons_id_list
+
+    def get_coupons_icon_list(self):
+        coupons_icon_list = self.get_icon_list(element_data=ElementsData.Store.Coupons.coupons_icon_list)
+        return coupons_icon_list
+
+    def get_coupons_quantity_list(self):
+        coupons_quantity_list = self.get_text_list(element_data=ElementsData.Store.Coupons.coupons_quantity_list)
+        cur = 0
+        while cur < len(coupons_quantity_list):
+            coupons_quantity_list[cur] = extract_number(coupons_quantity_list[cur])
+            cur += 1
+        str_to_int_list(coupons_quantity_list)
+        return coupons_quantity_list
+
     def get_cash_first_time_list(self):
         cash_id_list = self.get_object_id_list(element_data=ElementsData.Store.Cash.cash_list)
         cash_first_time_list = []
