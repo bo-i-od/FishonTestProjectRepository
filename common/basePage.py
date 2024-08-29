@@ -27,14 +27,14 @@ import logging
 
 
 class BasePageMain:
-    def __init__(self, serial_number=None, dev=None, is_android=False):
+    def __init__(self, serial_number=None, dev=None, is_mobile_device=False):
         # 不打印airtest日志
         logging.getLogger("airtest").setLevel(logging.ERROR)
         # unity窗口使用UnityEditorWindow()
         # 手机使用connect_device("android://127.0.0.1:5037/设备号")
 
-        # 是否在安卓手机, Unity需要改为False
-        self.is_android = is_android
+        # 是否在手机, Unity需要改为False
+        self.is_mobile_device = is_mobile_device
 
         # 是否截图记录
         self.record = False
@@ -67,17 +67,13 @@ class BasePageMain:
         # current_dir = os.getcwd()
         # 获取父目录
         self.root_dir = os.path.abspath(os.path.dirname(file_path))
-
-
         self.element_data_home = ElementsData.Home.HomePanel
 
         # BasePageExt(self)
 
-
-
     def get_device(self, serial_number=None):
         # pc端
-        if not self.is_android:
+        if not self.is_mobile_device:
             dev = UnityEditorWindow()
             return dev
 
@@ -90,7 +86,8 @@ class BasePageMain:
             print(e)
             print("进行设备连接")
         if serial_number is None:
-            serial_number = "127.0.0.1:21513"
+            dev = connect_device(f"ios:///http://127.0.0.1:8100")
+            return dev
         dev = connect_device(f"android://127.0.0.1:5037/{serial_number}")
         # dev = connect_device("android://127.0.0.1:5037/b6h65hd64p5pxcyh")
         # dev = connect_device("android://127.0.0.1:5037/28cce18906027ece")
