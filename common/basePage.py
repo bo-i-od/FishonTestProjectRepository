@@ -42,6 +42,8 @@ class BasePageMain:
         # 是否打印日志
         self.is_debug_log = False
 
+        self.send_log_flag = False
+
         # 是否开启战斗倍速
         self.is_time_scale = False
 
@@ -95,7 +97,7 @@ class BasePageMain:
 
     # 断开poco连接
     def connect_close(self):
-        self._send_log_flag = False
+        self.send_log_flag = False
         self.poco.agent.c.conn.close()
         self.poco_listen.agent.c.conn.close()
 
@@ -763,8 +765,8 @@ class BasePageMain:
 
 
 class BasePage(BasePageMain):
-    def __init__(self, serial_number=None, dev=None, is_android=False):
-        super().__init__(serial_number, dev, is_android)
+    def __init__(self, serial_number=None, dev=None, is_mobile_device=False):
+        super().__init__(serial_number, dev, is_mobile_device)
         # 是否测试会拉起支付的按钮
         self.is_pay = True
 
@@ -776,8 +778,6 @@ class BasePage(BasePageMain):
 
         # 是否将Unity发来的log加到消息列表里
         self.log_list_flag = True
-
-        self.send_log_flag = False
 
         # 消息储存队列
         self.log_list = []
@@ -1180,7 +1180,7 @@ class BasePage(BasePageMain):
 
 if __name__ == '__main__':
     bp = BasePage("127.0.0.1:21513")
-
+    bp.set_item_count(target_count=500000, item_tpid="100500")
     bp.connect_close()
     # while True:
     #     # a = bp.get_object_id_list(element_data=ElementsData.Login.btn_login)

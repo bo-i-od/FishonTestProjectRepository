@@ -208,8 +208,8 @@ def flashcard_all(bp: BasePage, fishery_id):
                 bp.save_img(img)
                 bp.clear_popup()
                 cur += 1
-            # self.lua_console(command="GameRoot:GetFishingMatch():GetPlayer().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
-            bp.lua_console(command="GameRoot:GetFishingMatch().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
+            bp.lua_console(command="GameRoot:GetFishingMatch():GetPlayer().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
+            # bp.lua_console(command="GameRoot:GetFishingMatch().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
             bp.sleep(1)
         element_btn = ResultPanel.wait_for_result(bp)
         ResultPanel.automatic_settlement(bp, element_btn=element_btn)
@@ -258,14 +258,14 @@ def main(bp, fishery_id, is_double_week=False):
 
 if __name__ == '__main__':
     # 连接设备号为127.0.0.1:21533的设备
-    bp = BasePage("127.0.0.1:21523", is_android=True)
+    bp = BasePage("127.0.0.1:21523", is_android=False)
 
     gameInit.set_joystick(bp)
     bp.is_time_scale = False
     bp.custom_cmd("setTension 0.9")
-    main(bp, fishery_id="400312", is_double_week=True)
+    # main(bp, fishery_id="400318", is_double_week=True)
     # goldfish_all(bp, fishery_id="400306")
-    # circulate_fish(bp, fishery_id="400302", is_quick=True)
+    circulate_fish(bp, fishery_id="400318", is_quick=True)
     # flashcard_all(bp, "400306")
     # fishbone_all(bp, "400306")
     # while True:

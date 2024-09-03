@@ -15,7 +15,13 @@ class PlayerEditNamePanel(BasePage):
 
     # 编辑名称
     def set_player_name(self, name: str):
-        self.set_text(element_data=ElementsData.PlayerEditName.Input_PlayerName, text=name)
+        object_id_list = self.get_object_id_list(element_data_list=[ElementsData.PlayerEditName.Input_PlayerName, ElementsData.PlayerEditName.Input_PlayerName_oversea])
+        if object_id_list[0]:
+            self.set_text(element_data=ElementsData.PlayerEditName.Input_PlayerName, text=name)
+            return
+        if object_id_list[1]:
+            self.set_text(element_data=ElementsData.PlayerEditName.Input_PlayerName_oversea, text=name)
+            return
 
     def get_head_viewport(self, head_id_list):
         head_viewport = Viewport(self, element_viewport=ElementsData.PlayerEditName.head_viewport, item_id_list=head_id_list, viewport_direction="column")
@@ -44,7 +50,13 @@ class PlayerEditNamePanel(BasePage):
 
     # 点击确认按钮
     def click_confirm(self):
-        self.click_element(element_data=ElementsData.PlayerEditName.btn_confirm)
+        position_list = self.get_position_list(element_data_list=[ElementsData.PlayerEditName.btn_confirm, ElementsData.PlayerEditName.btn_confirm_oversea])
+        if position_list[0]:
+            self.click_position(position_list[0][0])
+            return
+        if position_list[1]:
+            self.click_position(position_list[1][0])
+            return
 
 
 if __name__ == "__main__":
