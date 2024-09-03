@@ -131,11 +131,19 @@ def lua_list_to_python_list(lua_str, list_name):
 
 def main(bp: BasePage):
     cur = 0
+    # 实验次数
     times = 10
+
     while cur < times:
+        # 重置
         bp.cmd("Lottery reset")
         bp.sleep(0.5)
+
+        # target_index代表目标是1-5哪个大奖
         lottery_draw(bp, 4)
+
+        # 不填的话就不设目标
+        # lottery_draw(bp)
         cur += 1
 
 
