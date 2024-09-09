@@ -1,4 +1,5 @@
 import re
+import sys
 
 from netMsg import csMsgAll, luaLog
 from common.basePage import BasePage
@@ -84,7 +85,7 @@ def lottery_draw(bp: BasePage, target_index=None):
                     continue
                 reward_all_dict[reward] = reward_dict[reward]
             p = get_price(bp)
-            print(p[-1], target_index)
+            # print(p[-1], target_index)
             if p[-1] == target_index:
                 res["总大奖"] = p
                 break
@@ -104,7 +105,7 @@ def lottery_draw(bp: BasePage, target_index=None):
     cost = count_init - count_cur
     res["总奖励"] = sort_dict_recursively(reward_all_dict)
     res["总消耗"] = cost
-    print(res)
+    return res
 
 
 def lua_list_to_python_list(lua_str, list_name):
@@ -132,19 +133,44 @@ def lua_list_to_python_list(lua_str, list_name):
 def main(bp: BasePage):
     cur = 0
     # 实验次数
-    times = 10
-
+    times = 100
+    cost_max = 0
+    cost_min = sys.maxsize
+    small_reward_all = {}
+    big_reward_all = {}
+    cost_all = 0
     while cur < times:
         # 重置
         bp.cmd("Lottery reset")
         bp.sleep(0.5)
 
         # target_index代表目标是1-5哪个大奖
-        lottery_draw(bp, 4)
+        res = lottery_draw(bp)
+        print(res)
+        if res["总消耗"] > cost_max:
+            cost_max = res["总消耗"]
+        if res["总消耗"] < cost_min:
+            cost_min = res["总消耗"]
+        cost_all += res["总消耗"]
+        for reward in res["总奖励"]:
+            if reward in small_reward_all:
+                small_reward_all[reward] += res["总奖励"][reward]
+                continue
+            small_reward_all[reward] = res["总奖励"][reward]
 
+        for reward in res["总大奖"]:
+            if reward in big_reward_all:
+                big_reward_all[reward] += 1
+                continue
+            big_reward_all[reward] = 1
         # 不填的话就不设目标
         # lottery_draw(bp)
         cur += 1
+        if cur % 10 == 0:
+            print("---------------------------")
+            print(f"{cur}次实验,总计消耗{cost_all}，总计奖励{small_reward_all},总计大奖{sort_dict_recursively(big_reward_all)}")
+            print(f"总消耗最小{cost_min}，最大{cost_max}")
+            print("---------------------------")
 
 
 if __name__ == '__main__':

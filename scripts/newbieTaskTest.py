@@ -494,6 +494,6 @@ def main(bp: BasePage):
     bp.go_home()
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21523", is_android=True)
+    bp = BasePage("127.0.0.1:21523", is_mobile_device=True)
     main(bp)
     bp.connect_close()

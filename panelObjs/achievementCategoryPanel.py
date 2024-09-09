@@ -67,7 +67,6 @@ class AchievementCategoryPanel(BasePage):
         category_viewport = Viewport(self, element_viewport=ElementsData.AchievementCategory.category_viewport, element_item_list=ElementsData.AchievementCategory.item_list,viewport_direction="column")
         return category_viewport
 
-
     def click_btn_rewards(self):
         self.click_element(element_data=ElementsData.AchievementCategory.btn_rewards)
 

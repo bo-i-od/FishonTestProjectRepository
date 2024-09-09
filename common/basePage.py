@@ -1041,8 +1041,8 @@ class BasePage(BasePageMain):
     def receive_until_get_msg(self, msg_name, timeout=5):
         cur = 0
         while cur < timeout:
-            cur += 0.1
-            self.sleep(0.1)
+            cur += 0.05
+            self.sleep(0.05)
             # 在最近收集的消息列表中筛出目标消息
             key_sc = '<==== [Lua] Receive Net Msg "SC'
             msg_key = key_sc + msg_name
@@ -1179,8 +1179,8 @@ class BasePage(BasePageMain):
 
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21513")
-    bp.set_item_count(target_count=500000, item_tpid="100500")
+    bp = BasePage("127.0.0.1:21523", is_mobile_device=True)
+    bp.set_item_count(target_count=2500, item_tpid="100500")
     bp.connect_close()
     # while True:
     #     # a = bp.get_object_id_list(element_data=ElementsData.Login.btn_login)

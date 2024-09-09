@@ -28,9 +28,11 @@ def get_rod_id(scene_id):
                     "400317": "500004",
                     "400313": "500007",
                     "400314": "500008",
+                    "400315": "500007",
                     "400318": "500006",
                     }
-    return scene_to_rod[scene_id]
+    rod_id = scene_to_rod[scene_id]
+    return rod_id
 
 
 def fish(bp: BasePage, arg_list):
@@ -54,8 +56,11 @@ def fish(bp: BasePage, arg_list):
             table_data = bp.excelTools.get_table_data("FISH_ACTIVITY_SPOT_ENERGY.xlsm")
             energyCost_list = table_data['energyCost']
             tpId_list = table_data['tpId']
-            index = energyCost_list.index(energy_cost)
-            execute_dict["energyCostId"] = tpId_list[index]
+            try:
+                index = energyCost_list.index(energy_cost)
+                execute_dict["energyCostId"] = tpId_list[index]
+            except ValueError:
+                pass
         execute_list.append(execute_dict)
         cur += 1
     rpcMethodRequest.fish(bp.poco, execute_list)

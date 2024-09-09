@@ -112,6 +112,10 @@ def pvp_fish(bp, is_quick=False):
     get_toDrops(bp, is_print_id=True)
 
     while True:
+        # try:
+        #     emoji(bp)
+        # except:
+        #     pass
         BattlePreparePanel.click_btn_cast(bp)
         # get_toDrops(bp, is_print_id=False)
         # 清空消息列表 开始收消息
@@ -133,6 +137,10 @@ def pvp_fish(bp, is_quick=False):
             qteThread.start()
         if is_quick:
             BattlePanel.reel_quick(bp)
+        # try:
+        #     emoji(bp)
+        # except:
+        #     pass
         element_btn = ResultPanel.wait_for_result(bp)
         bp.sleep(1)
         ResultPanel.automatic_settlement(bp, element_btn)
@@ -300,6 +308,15 @@ def duel_once_friend(bp: BasePage, is_quick=False):
     bp.sleep(1)
 
 
+def emoji(bp: BasePage):
+    PVPBattleHUDPanel.wait_for_btn_chat_appear(bp)
+    PVPBattleHUDPanel.click_btn_chat(bp)
+    bp.sleep(1)
+    emoji_position_list = PVPBattleHUDPanel.get_emoji_position_list(bp)
+    r = random.randint(0, len(emoji_position_list) - 1)
+    bp.click_position(emoji_position_list[r])
+    bp.sleep(1)
+
 def main(bp:BasePage):
     # 进入大厅
     cmd_list = ["guideskip", "levelupto 56"]
@@ -331,13 +348,7 @@ def main(bp:BasePage):
     PVPHallPanel.click_btn_play(bp, r)
 
     # 随机点击表情
-    PVPBattleHUDPanel.wait_for_btn_chat_appear(bp)
-    PVPBattleHUDPanel.click_btn_chat(bp)
-    bp.sleep(1)
-    emoji_position_list = PVPBattleHUDPanel.get_emoji_position_list(bp)
-    r = random.randint(0, len(emoji_position_list) - 1)
-    bp.click_position(emoji_position_list[r])
-    bp.sleep(1)
+    emoji(bp)
 
     # 点击投降
     PVPBattleHUDPanel.wait_for_btn_chat_appear(bp)
@@ -368,22 +379,24 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    serial_number = "127.0.0.1:21523"
-    bp = BasePage(serial_number=serial_number, is_android=False)
+    serial_number = "127.0.0.1:21533"
+    bp = BasePage(serial_number=serial_number, is_mobile_device=False)
+    # random_duelcup(bp, rank=7)
+    gameInit.set_joystick(bp)
     # bp.cmd("globalgm duelScene 400315")
     # while True:
-    #     duel_once(bp, rank=random.randint(0, 7))
-    random_duelcup(bp, rank=7)
+    #     duel_once(bp, rank=7)
+    # random_duelcup(bp, rank=7)
     # print(serial_number)
-    # gameInit.set_joystick(bp)
-    # cur = 1
-    # # 指定对决次数
-    # times = 4
-    # while cur <= times:
-    #     print(f"<=====第{cur}次好友对决开始=====>")
-    #     duel_once_friend(bp, is_quick=False)
-    #     print(f"<=====对决结束=====>\n")
-    #     cur += 1
+
+    cur = 1
+    # 指定对决次数
+    times = 1
+    while cur <= times:
+        print(f"<=====第{cur}次好友对决开始=====>")
+        duel_once_friend(bp, is_quick=False)
+        print(f"<=====对决结束=====>\n")
+        cur += 1
 
 
 

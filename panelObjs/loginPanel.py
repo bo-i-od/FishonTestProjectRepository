@@ -38,7 +38,7 @@ class LoginPanel(BasePage):
         self.set_dropdown_value(element_data=ElementsData.Login.Dropdown, index=index)
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21503",is_android=True)
+    bp = BasePage("127.0.0.1:21503", is_mobile_device=True)
     a = bp.get_position_list(element_data_list=[ElementsData.Login.btn_login, ElementsData.Login.btn_login_cn])
     print(a)
 

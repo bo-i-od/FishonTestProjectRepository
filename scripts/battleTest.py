@@ -243,7 +243,7 @@ def fishbone_all(bp: BasePage, fishery_id, is_gold=False, is_double_week=False):
 def main(bp, fishery_id, is_double_week=False):
     bp.set_item_count(target_count=1000000000, item_tpid="100500")
     # # 渔场全部闪卡
-    # flashcard_all(bp, fishery_id)
+    flashcard_all(bp, fishery_id)
 
     # 渔场全部普通鱼骨
     fishbone_all(bp, fishery_id, is_gold=False, is_double_week=is_double_week)
@@ -258,14 +258,14 @@ def main(bp, fishery_id, is_double_week=False):
 
 if __name__ == '__main__':
     # 连接设备号为127.0.0.1:21533的设备
-    bp = BasePage("127.0.0.1:21523", is_android=False)
+    bp = BasePage("127.0.0.1:21523", is_mobile_device=False)
 
     gameInit.set_joystick(bp)
     bp.is_time_scale = False
     bp.custom_cmd("setTension 0.9")
     # main(bp, fishery_id="400318", is_double_week=True)
     # goldfish_all(bp, fishery_id="400306")
-    circulate_fish(bp, fishery_id="400318", is_quick=True)
+    circulate_fish(bp, fishery_id="400318", is_quick=False)
     # flashcard_all(bp, "400306")
     # fishbone_all(bp, "400306")
     # while True:

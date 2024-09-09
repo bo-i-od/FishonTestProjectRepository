@@ -15,7 +15,7 @@ from panelObjs.friendPanel import FriendPanel
 from scripts import battleTest
 import json
 
-def random_duelcup(bp:BasePage, rank):
+def set_duelcup_random(bp:BasePage, rank):
     duelcup = random.randint(0,5)
     bp.cmd(f"duelcup 1001 {duelcup}")
     duelcup_all = duelcup
@@ -51,6 +51,43 @@ def random_duelcup(bp:BasePage, rank):
         duelcup_all += duelcup
     return duelcup_all
 
+def set_duelcup(bp:BasePage, duelcup):
+    if duelcup <= 5:
+        bp.cmd(f"duelcup 1001 {duelcup}")
+        return
+    bp.cmd(f"duelcup 1001 {5}")
+
+    if duelcup <= 25:
+        bp.cmd(f"duelcup 1002 {duelcup - 5}")
+        return
+    bp.cmd(f"duelcup 1002 {20}")
+
+    if duelcup <= 105:
+        bp.cmd(f"duelcup 1003 {duelcup - 25}")
+        return
+    bp.cmd(f"duelcup 1003 {80}")
+
+    if duelcup <= 265:
+        bp.cmd(f"duelcup 1004 {duelcup - 105}")
+        return
+    bp.cmd(f"duelcup 1004 {160}")
+
+    if duelcup <= 745:
+        bp.cmd(f"duelcup 1005 {duelcup - 265}")
+        return
+    bp.cmd(f"duelcup 1005 {480}")
+
+    if duelcup <= 1705:
+        bp.cmd(f"duelcup 1006 {duelcup - 745}")
+        return
+    bp.cmd(f"duelcup 1006 {960}")
+
+    if duelcup <= 3625:
+        bp.cmd(f"duelcup 1007 {duelcup - 1705}")
+        return
+    bp.cmd(f"duelcup 1007 {1920}")
+    bp.cmd(f"duelcup 1008 {duelcup - 3625}")
+
 
 def init(bp: BasePage):
     if LoginPanel.is_panel_active(bp):
@@ -82,22 +119,24 @@ _G.NetworkMgr:SDKLogin("{accountName}")
 
 def disconnect(bp: BasePage):
     lua_code = """
-# ---@type TYSDK.LoginSDK
-# local loginSdkInst = TYSDK.LoginSDK.Instanc
-# --FIXME:兼容C#部分
-# local function pcallloginSdkInstLogOutfunc()
-#     if loginSdkInst.LogOut then
-#         loginSdkInst:LogOut(true)
-#     end
-# end
-# xpcall(pcallloginSdkInstLogOutfunc, function() end)
-# local Login_Token_Key = "Login_Token"
-# SettingMgr:Write(Login_Token_Key, "")
+---@type TYSDK.LoginSDK
+local loginSdkInst = TYSDK.LoginSDK.Instance
+--FIXME:兼容C#部分
+local function pcallloginSdkInstLogOutfunc()
+    if loginSdkInst.LogOut then
+        loginSdkInst:LogOut(true)
+    end
+end
+xpcall(pcallloginSdkInstLogOutfunc, function() end)
+local Login_Token_Key = "Login_Token"
+SettingMgr:Write(Login_Token_Key, "")
+_G.GAME_SDK_AUTHDATA_CACHE = nil
 _G.CURRENT_SDK_MANUAL_LOGIN = true
 PanelMgr:CloseAllOpend()
 GameRoot:GetFishingCamera().fsm:ChangeState(FishingCamera_FSM_STATE.GAME)
 Global_ClearCacheData()
 Global_SendLogout()
+_G.NetworkMgr.channelPurl = nil
 _G.NetworkMgr:StopTimeOutTimer()
 _G.NetworkMgr:Disconnect()
 UIFacade.Reset()
@@ -106,32 +145,15 @@ EventMgr:SendEvent(GameMsg.CHANGE_GAME_STATE, GAME_STATE_ENUM.Login, true)
 AvatarMgr:ReleasePool()
     """
 #     lua_code = """
-# ---@type TYSDK.LoginSDK
-# local loginSdkInst = TYSDK.LoginSDK.Instanc
-# --FIXME:兼容C#部分
-# local function pcallloginSdkInstLogOutfunc()
-#     if loginSdkInst.LogOut then
-#         loginSdkInst:LogOut(true)
-#     end
-# end
-# xpcall(pcallloginSdkInstLogOutfunc, function() end)
-# local Login_Token_Key = "Login_Token"
-# SettingMgr:Write(Login_Token_Key, "")
-# _G.GAME_SDK_AUTHDATA_CACHE = nil
-# local NetworkMgr = UIFacade.Get('NetworkMgr')
 # _G.CURRENT_SDK_MANUAL_LOGIN = true
 # PanelMgr:CloseAllOpend()
-# GameRoot:GetFishingCamera().fsm:ChangeState(FishingCamera_FSM_STATE.GAME)
-#
 # Global_ClearCacheData()
 # Global_SendLogout()
-# NetworkMgr.channelPurl = nil
-# NetworkMgr:StopTimeOutTimer()
-# NetworkMgr:Disconnect()
+# _G.NetworkMgr:StopTimeOutTimer()
+# _G.NetworkMgr:Disconnect()
 # UIFacade.Reset()
 # --Util.GoToLogin()
 # EventMgr:SendEvent(GameMsg.CHANGE_GAME_STATE, GAME_STATE_ENUM.Login, true)
-#     AvatarMgr: ReleasePool()
 # """
     bp.lua_console(lua_code)
 
@@ -150,13 +172,16 @@ def login(bp: BasePage, name):
         return
     bp.sleep(1)
     while True:
-        PlayerEditNamePanel.set_player_name(bp, name)
+        # PlayerEditNamePanel.set_player_name(bp, name)
         PlayerEditNamePanel.click_confirm(bp)
         bp.sleep(1)
         if not PlayerEditNamePanel.is_panel_active(bp):
             break
-        name = "t" + str(time.time()).split('.')[0]
+        # name = "t" + str(time.time()).split('.')[0]
 
+    bp.sleep(1)
+    if not AvatarSelectPanel.is_panel_active(bp):
+        return
     # # 随机选择性别
     # r = 0
     gender_icon_position_list = AvatarSelectPanel.get_gender_icon_position_list(bp)
@@ -182,9 +207,53 @@ def go_leaderborad(bp:BasePage):
     bp.sleep(1)
 
 def fish(bp: BasePage, index):
-    bp.cmd_list(["levelupto 61", f"add 1 100500 {index * 500}"])
-    fishingMsg.fish(bp, [{"spot_id": f"40030103", "times": index}, {"spot_id": f"40030203", "times": index}, {"spot_id": f"40030303", "times": index}, {"spot_id": f"40030403", "times": index}, {"spot_id": f"40030503", "times": index}, {"spot_id": f"40030603", "times": index}, {"spot_id": f"40030703", "times": index}, {"spot_id": f"40030803", "times": index}, {"spot_id": f"40030903", "times": index}, {"spot_id": f"40031003", "times": index}, {"spot_id": f"40031103", "times": index}, {"spot_id": f"40031203", "times": index}, {"spot_id": f"40031703", "times": index}])
-    bp.sleep(index * 4)
+    bp.cmd_list(["levelupto 16"])
+    # bp.cmd("mode 400302 390017")
+    # bp.sleep(0.5)
+    # fishingMsg.fish(bp, [{"spot_id": f"40030213", "times": 1, "is_activity_spot":True}])
+    # bp.sleep(0.5)
+    # bp.cmd("mode 400302 390018")
+    # bp.sleep(0.5)
+    # fishingMsg.fish(bp, [{"spot_id": f"40030213", "times": 1, "is_activity_spot":True}])
+    # bp.sleep(0.5)
+    # bp.cmd("mode 400302 390019")
+    # bp.sleep(0.5)
+    # fishingMsg.fish(bp, [{"spot_id": f"40030213", "times": 1, "is_activity_spot":True}])
+
+    bp.cmd("mode 400309 390087")
+    bp.sleep(0.5)
+    fishingMsg.fish(bp, [{"spot_id": f"40030913", "times": 1, "is_activity_spot":True}])
+    bp.sleep(0.5)
+    bp.cmd("mode 400309 390088")
+    bp.sleep(0.5)
+    fishingMsg.fish(bp, [{"spot_id": f"40030913", "times": 1, "is_activity_spot":True}])
+    bp.sleep(0.5)
+    bp.cmd("mode 400309 390089")
+    bp.sleep(0.5)
+    fishingMsg.fish(bp, [{"spot_id": f"40030913", "times": 1, "is_activity_spot":True}])
+
+    # bp.cmd("mode 400301 390005")
+    # bp.sleep(0.5)
+    # fishingMsg.fish(bp, [{"spot_id": f"40030103", "times": 1, "is_activity_spot": False}])
+    #
+    # bp.cmd("mode 400303 390026")
+    # bp.sleep(0.5)
+    # fishingMsg.fish(bp, [{"spot_id": f"40030303", "times": 1, "is_activity_spot": False}])
+    #
+    # bp.cmd("mode 400303 390025")
+    # bp.sleep(0.5)
+    # fishingMsg.fish(bp, [{"spot_id": f"40030303", "times": 1, "is_activity_spot": False}])
+    #
+    # bp.cmd("mode 400302 390016")
+    # bp.sleep(0.5)
+    # fishingMsg.fish(bp, [{"spot_id": f"40030203", "times": 1, "is_activity_spot": False}])
+    #
+    # bp.cmd("mode 400309 390086")
+    # bp.sleep(0.5)
+    # fishingMsg.fish(bp, [{"spot_id": f"40030903", "times": 1, "is_activity_spot": False}])
+
+
+
 
 
 
@@ -372,8 +441,8 @@ def rank(bp: BasePage):
             cur += 1
         i += 1
 
-def cup(bp):
-    random_duelcup(bp, rank=7)
+def cup(bp, cur):
+    set_duelcup(bp, duelcup=3625 + cur)
 
 def relogin(bp):
     name = "1000002002"
@@ -449,16 +518,16 @@ def read_data():
 
 def main(bp: BasePage):
     # 登录号前缀
-    prefix = "user"
+    prefix = "钓手"
     # prefix_list = ["a", "b", "c", "d", "e"]
     init(bp)
     cur = 1
-    limit = 10
+    limit = 80
     while cur < limit:
         name = prefix + str(cur)
         login(bp, name)
-        bp.cmd(f"selfranksetip 180.175.{cur}.{cur}")
-        bp.cmd("levelupto 5")
+        # bp.cmd(f"selfranksetip 180.175.{cur}.{cur}")
+        bp.cmd("levelupto 66")
         # 你要执行的初始化账号操作
         # add_gu(bp, cur)
         # dragon_boat(bp, cur)
@@ -467,14 +536,16 @@ def main(bp: BasePage):
         # ndays(bp, cur)
         # rank(bp)
         # hidden_treasure(bp)
-        # cup(bp)
+        cup(bp, cur)
         # bp.sleep(2)
+        # fish(bp, cur)
         logout(bp)
         cur += 1
 
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21503", is_android=False)
+    bp = BasePage("127.0.0.1:21523", is_mobile_device=True)
     # relogin(bp)
+    # fish(bp, 5)
     main(bp)
     bp.connect_close()

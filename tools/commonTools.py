@@ -1,5 +1,4 @@
-from airtest.core.helper import G
-from airtest.core.android.android import Android as cls
+from slpp import slpp
 from common.error import *
 import ctypes
 import inspect
@@ -179,6 +178,13 @@ def get_img_position(query,img):
         return
     match_pos = query.match_in(img)
     return match_pos
+
+
+def lua_dict_to_python_dict(lua_string):
+    lua_string = lua_string.split("\n", 1)[1]
+    # 解析 Lua 字符串并装换为 Python dict
+    data = slpp.decode(lua_string)
+    return data
 
 
 

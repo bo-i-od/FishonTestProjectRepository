@@ -105,8 +105,8 @@ def cash_test(bp:BasePage):
     cash_buy_test(bp)
 
 def coupons_test(bp:BasePage):
-    # 切换到coupons
-    StorePanel.change_tab(bp, 6)
+    # # 切换到coupons
+    # StorePanel.change_tab(bp, 6)
 
     if not bp.is_pay:
         return
@@ -118,14 +118,16 @@ def coupons_test(bp:BasePage):
     # 依次购买
     cur = 0
     while cur < len(btn_position_list):
-        coupons_quantity_list = StorePanel.get_coupons_quantity_list(bp)
-        # cash_first_time_list = StorePanel.get_cash_first_time_list(bp)
-        # # 计算首次翻倍后的实际数量
-        # if cash_first_time_list[cur]:
-        #     cash_quantity_list[cur] *= 2
-
-        # 购买
-        goods_buy_once_test(bp, coupons_icon, coupons_quantity_list[cur], btn_position_list[cur])
+        bp.click_position(btn_position_list[cur])
+        bp.sleep(0.5)
+        # coupons_quantity_list = StorePanel.get_coupons_quantity_list(bp)
+        # # cash_first_time_list = StorePanel.get_cash_first_time_list(bp)
+        # # # 计算首次翻倍后的实际数量
+        # # if cash_first_time_list[cur]:
+        # #     cash_quantity_list[cur] *= 2
+        #
+        # # 购买
+        # goods_buy_once_test(bp, coupons_icon, coupons_quantity_list[cur], btn_position_list[cur])
         cur += 1
 
 
