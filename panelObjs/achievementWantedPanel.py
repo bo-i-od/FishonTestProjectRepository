@@ -76,8 +76,8 @@ class AchievementWantedPanel(BasePage):
         self.click_until_disappear(element_data=ElementsData.NewbieGuide.NBG_fishphoto_3)
         self.sleep(1)
         AchievementWantedPanel.click_btn_close(self)
-        self.sleep(1)
-        AchievementPanel.click_btn_close(self)
+        # self.sleep(1)
+        # AchievementPanel.click_btn_close(self)
 
 
 if __name__ == '__main__':

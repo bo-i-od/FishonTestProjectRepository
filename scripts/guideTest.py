@@ -91,8 +91,7 @@ def main(bp:BasePage):
 
     # 查询水族箱的解锁等级
     unlock_lv = bp.get_unlock_lv("水族箱")
-    exp = bp.excelTools.get_exp_limit(unlock_lv)[1]
-    bp.cmd(f"add 1 100200 {exp}")
+    bp.cmd(f"levelupto {unlock_lv}")
 
     # 鱼册引导
     bp.go_to_panel("FishAlbum3DPanel")
@@ -102,13 +101,13 @@ def main(bp:BasePage):
     PlayerLevelupPanel.wait_for_panel_appear(bp)
     bp.clear_popup()
 
-    # 鱼卡引导
-    FishCardPanel.guide(bp)
-    bp.go_home()
-
     # 水族馆引导
     bp.go_to_panel("AquariumPanel")
     AquariumPanel.guide(bp)
+    bp.go_home()
+
+    # 鱼卡引导
+    FishCardPanel.guide(bp)
     bp.go_home()
 
     # 俱乐部引导

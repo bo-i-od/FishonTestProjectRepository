@@ -150,6 +150,8 @@ class FishCardPanel(BasePage):
     def guide(self):
         self.click_a_until_b_appear(element_data_a=ElementsData.NewbieGuide.NBG_fishcard_1, element_data_b=ElementsData.NewbieGuide.NBG_fishcard_2)
         self.click_until_disappear(element_data=ElementsData.NewbieGuide.NBG_fishcard_2)
+        self.sleep(1)
+        self.clear_popup()
         perform_list = [ElementsData.NewbieGuide.NBG_fishcard_5, ElementsData.NewbieGuide.NBG_fishcard_3,
                         ElementsData.NewbieGuide.NBG_fishcard_4]
         self.click_a_until_b_appear_list(perform_list=perform_list)

@@ -25,7 +25,7 @@ def login(bp: BasePage, username):
     # while not LoginPanel.is_panel_active(bp):
     #     EntryUpdateLoading.click_tap_to_start(bp)
     # 选服务器 输入名称 点击登录
-    LoginPanel.set_server(bp, 6)
+    LoginPanel.set_server(bp, 2)
     LoginPanel.set_login_name(bp, username)
     LoginPanel.click_btn_login(bp)
     bp.sleep(2)
@@ -59,6 +59,8 @@ def account_init(bp: BasePage, player_name, cmd_list):
         # t = str(time.time()).split('.')
         # player_name = "t" +t[0][-2:]+ t[1]
 
+    if not AvatarSelectPanel.is_panel_active(bp):
+        return
     # 随机选择性别
     r = random.randint(0, 1)
     gender_icon_position_list = AvatarSelectPanel.get_gender_icon_position_list(bp)

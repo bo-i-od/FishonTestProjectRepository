@@ -57,6 +57,7 @@ def change_tab_test(bp: BasePage):
     compare(FishAlbum3DPanel.get_photo_name(bp), photo_name)
 
     bp.click_position([0.5, 0.5])
+    bp.sleep(0.5)
 
 
 def photo_test(bp: BasePage):
@@ -153,5 +154,6 @@ def main(bp: BasePage):
 
 if __name__ == '__main__':
     # 连接设备号为127.0.0.1:21533的设备
-    bp = BasePage("b6h65hd64p5pxcyh")
+    bp = BasePage(serial_number="127.0.0.1:21523", is_mobile_device=True)
     main(bp)
+    bp.connect_close()

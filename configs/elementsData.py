@@ -235,7 +235,7 @@ class ElementsData:
     class BattlePassBuyLicense:
         BattlePassBuyLicensePanel =  {"locator": "UICanvas>Default>BattlePassBuyLicensePanel"}
         btn_close = {"locator": "UICanvas>Default>BattlePassBuyLicensePanel>panel_BP_buy>btn_close>img"}
-        btn_buy_list = {"locator": "UICanvas>Default>BattlePassBuyLicensePanel>panel_BP_buy>>btn", "focus": (0.5, 0)}
+        btn_buy_list = {"locator": "UICanvas>Default>BattlePassBuyLicensePanel>panel_BP_buy>>btn"}
         cost_icon_list = {"locator": "UICanvas>Default>BattlePassBuyLicensePanel>panel_BP_buy>>btn>icon"}
         cost_quantity_list = {"locator": "UICanvas>Default>BattlePassBuyLicensePanel>panel_BP_buy>>btn>text"}
         btn_buy_pro = {"locator": "UICanvas>Default>BattlePassBuyLicensePanel>panel_BP_buy>panel_right>btn>text"}
@@ -871,6 +871,10 @@ class ElementsData:
         btn_confirm = {"locator": "UICanvas>Important>MessageBoxPanel>Panel>btns>btn_confirm>btn_normal"}
         toggle = {"locator": "UICanvas>Important>MessageBoxPanel>Panel>option_2>Toggle", "focus": (0, 0.5)}
 
+    class MidAutumnPackPopup:
+        MidAutumnPackPopupPanel = {"locator": "UICanvas>Default>MidAutumnPackPopupPanel"}
+        btn_close = {"locator": "UICanvas>Default>MidAutumnPackPopupPanel>btn_close>img"}
+
     class MonthCardPop:
         MonthCardPopPanel = {"locator": "UICanvas>Default>MonthCardPopPanel"}
         btn_close = {"locator": "UICanvas>Default>MonthCardPopPanel>panel>btn_close>img"}
@@ -955,7 +959,8 @@ class ElementsData:
         NBG_fishphoto_3 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_fishphoto_3(Clone)"}
 
         # 升装备引导
-        NBG_fishing_fail_1 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_fishing_fail_1(Clone)"}
+        NBG_fishing_fail_0 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_fishing_fail_0(Clone)"}
+        NBG_fishing_fail_1 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_fishing_fail_1(Clone)>Guide_Highlight>ep_UI_novice guide"}
         NBG_fishing_fail_2 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_fishing_fail_2(Clone)>Guide_Highlight>ep_UI_novice guide"}
         NBG_fishing_fail_3 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_fishing_fail_3(Clone)>Guide_Highlight>ep_UI_novice guide"}
         NBG_fishing_fail_4 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_fishing_fail_4(Clone)"}
@@ -969,6 +974,9 @@ class ElementsData:
 
         # 对决引导
         NBG_friend_duel_1_1 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_friend_duel_1_1(Clone)>Guide_Highlight>ep_UI_novice guide"}
+
+        # 失败引导
+
 
 
 

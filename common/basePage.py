@@ -6,7 +6,7 @@ import netMsg.luaLog
 import json
 from importlib import import_module
 from configs.pathConfig import EXCEL_PATH
-from tools.excelRead import ExceTools
+from tools.excelRead import ExcelTools
 
 import time
 import pyautogui
@@ -626,16 +626,17 @@ class BasePageMain:
                 raise FindNoElementError
             at_home_flag = (not self.exist(element_data=self.element_data_home))
             if cur_panel is not None:
-                at_home_flag = at_home_flag or self.exist(element_data=JumpData.panel_dict[cur_panel])
+                at_home_flag = at_home_flag or self.exist(element_data=JumpData.panel_dict[cur_panel]["element_data"])
 
     # 去指定界面
     def go_to_panel(self, panel):
-        if self.exist(element_data=JumpData.panel_dict[panel]):
+        panel_dict = JumpData.panel_dict[panel]
+        if self.exist(element_data=panel_dict["element_data"]):
             return
         self.go_home()
-        while not self.exist(element_data=JumpData.panel_dict[panel]):
+        while not self.exist(element_data=panel_dict["element_data"]):
             self.clear_popup_once()
-            for element_data in JumpData.panel_open_dict[panel]:
+            for element_data in panel_dict["open_path"]:
                 self.click_element_safe(element_data=element_data)
                 self.sleep(0.5)
 
@@ -788,7 +789,7 @@ class BasePage(BasePageMain):
         self.set_send_log_flag(True)
 
         # 配置表的路径
-        self.excelTools = ExceTools(EXCEL_PATH)
+        self.excelTools = ExcelTools(EXCEL_PATH)
 
     def get_fish_list(self, fishery_id):
         table_data = self.excelTools.get_table_data("FISHERIES.xlsm")

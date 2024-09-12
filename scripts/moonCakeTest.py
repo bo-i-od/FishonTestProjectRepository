@@ -9,8 +9,7 @@ from tools import commonTools
 
 
 def energy_cost_once_test(bp: BasePage, energy_cost, step=10):
-    bp.set_item_count(target_count=100000, item_tpid="100500")
-    bp.set_item_count_list(target_count_list=[0, 0, 0], item_tpid_list=["290014", "290015", "290016"])
+    bp.set_item_count_list(target_count_list=[100000, 0, 0, 0], item_tpid_list=["100500", "290014", "290015", "290016"])
     if energy_cost == 1:
         spot_id = "40030101"
     elif energy_cost == 3:
@@ -21,18 +20,19 @@ def energy_cost_once_test(bp: BasePage, energy_cost, step=10):
         spot_id = "40030104"
 
     if energy_cost > 10:
+        # bp.sleep(2)
         # bp.cmd("mode 400301 399001")
-        # bp.sleep(1)
+        # bp.sleep(2)
         # fishingMsg.fish(bp, [{"spot_id": "40030103", "times": 1, "energy_cost": energy_cost, "is_activity_spot": False}])
-        # bp.sleep(1)
+        # bp.sleep(2)
         # bp.cmd("mode 0 0")
         # bp.sleep(1)
-        bp.sleep(1)
-        bp.set_item_count(target_count=energy_cost * 110, item_tpid="100500")
+        # bp.sleep(1)
+        # bp.set_item_count(target_count=energy_cost * 110, item_tpid="100500")
         bp.sleep(2)
         fishingMsg.fish(bp, [
-            {"spot_id": "40030103", "times": 30, "energy_cost": energy_cost, "is_activity_spot": False, "target_id_list": ["399001"]}])
-        bp.sleep(5)
+            {"spot_id": "40030103", "times": 50, "energy_cost": energy_cost, "is_activity_spot": False, "target_id_list": ["399001"]}])
+        bp.sleep(6)
         bp.set_item_count(target_count=100000, item_tpid="100500")
 
     energy_cost_total = 0
@@ -58,11 +58,11 @@ def energy_cost_once_test(bp: BasePage, energy_cost, step=10):
 
 
 def energy_cost_test(bp: BasePage):
-    start = 380
-    end = 390
+    start = 720
+    end = 800
     times = end - start
-    energy_cost = 2000
-    prefix = "w"
+    energy_cost = 1000
+    prefix = "e"
     cur = start
     energy_cost_total_list = []
     while cur < end:
@@ -142,7 +142,7 @@ def exchange_test(bp):
 
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21523", is_mobile_device=True)
+    bp = BasePage("127.0.0.1:21533", is_mobile_device=True)
     energy_cost_test(bp)
 
     bp.connect_close()
