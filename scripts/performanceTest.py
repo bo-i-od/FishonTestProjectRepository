@@ -534,7 +534,7 @@ def pve(bp: BasePage):
     bp.sleep(1)
 
     # 读表格数据
-    table_data = AchievementWantedPanel.get_achievement_wanted_table_data(bp)
+    table_data = bp.excelTools.get_table_data("ACHIEVEMENT_WANTED.xlsm")
 
     # 选第一个有悬赏鱼的钓场完成
     r = 0
@@ -751,7 +751,7 @@ def main(bp: BasePage):
     achievement(bp)
     battle_pass(bp)
     mail(bp)
-    duelTest.random_duelcup(bp, 7)
+    duelTest.set_duelcup_random(bp, 7)
     questionnaire(bp)
     download(bp)
     energy(bp)

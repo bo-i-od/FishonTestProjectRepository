@@ -722,7 +722,7 @@ def pve(bp: BasePage):
     bp.sleep(1)
 
     # 读表格数据
-    table_data = AchievementWantedPanel.get_achievement_wanted_table_data(bp)
+    table_data = bp.excelTools.get_table_data("ACHIEVEMENT_WANTED.xlsm")
 
     # 选第一个有悬赏鱼的钓场完成
     r = 0

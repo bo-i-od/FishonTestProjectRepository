@@ -49,18 +49,24 @@ class AchievementCategoryPanel(BasePage):
     # 去渔场钓悬赏鱼GGG
     def do_category(self, table_data, index):
         data_list = table_data["fishList"]
+        fishery_pre = None
         cur = 0
         while cur < len(data_list):
             fishery = str(table_data["fishList"][cur]["source"][index])
             if fishery == "0":
                 cur += 1
                 continue
-            # 进入指定渔场
-            self.go_to_panel("TournamentsPanel")
-            TournamentsPanel.go_to_fishery_by_tpid(self, fishery_tpid=fishery)
+
+            # 更换渔场
+            if fishery != fishery_pre:
+                fishery_pre = fishery
+                # 进入指定渔场
+                self.go_to_panel("TournamentsPanel")
+                TournamentsPanel.go_to_fishery_by_tpid(self, fishery_tpid=fishery)
+
             fish = str(table_data["fishList"][cur]["fish"][index])
-            battleTest.fish_once(self, fishery_id=fishery, fish_id=fish)
-            self.go_home()
+            battleTest.fish_once(self, fishery_id=fishery, fish_id=fish, is_quick=True)
+
             cur += 1
 
     def get_category_viewport(self):

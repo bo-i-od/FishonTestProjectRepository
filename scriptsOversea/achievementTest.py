@@ -17,7 +17,7 @@ from common import resource, gameInit
 
 
 # 点击页面介绍测试
-def tips_test(bp: BasePage):
+def tips_test(bp:BasePage):
     bp.sleep(0.5)
     AchievementPanel.click_btn_i(bp)
     bp.sleep(0.5)
@@ -29,7 +29,7 @@ def tips_test(bp: BasePage):
 
 
 # 点击锁定的成就测试
-def locked_test(bp: BasePage):
+def locked_test(bp:BasePage):
     bp.go_to_panel("AchievementPanel")
     bp.sleep(0.5)
     locked_set, unlockable_set, unlocked_set = AchievementPanel.get_achievement_status_set(bp)
@@ -62,8 +62,10 @@ def locked_test(bp: BasePage):
     # bp.debug_log("点击未解锁成就完成")
 
 
+
+
 # 点击可解锁成就测试
-def unlock_test(bp: BasePage):
+def unlock_test(bp:BasePage):
     bp.go_to_panel("AchievementPanel")
     bp.cmd("levelupto 99")
 
@@ -100,7 +102,7 @@ def unlock_test(bp: BasePage):
 
 
 # minitask跳转测试
-def minitask_test(bp: BasePage):
+def minitask_test(bp:BasePage):
     bp.go_to_panel("AchievementPanel")
     # 从任务导航进入成就 看进的成就组名称是否正确
     group_name = AchievementPanel.get_task_mini_group_name(bp)
@@ -112,9 +114,8 @@ def minitask_test(bp: BasePage):
     AchievementGroupPanel.click_btn_close(bp)
     bp.sleep(0.5)
 
-
 # 点击已解锁成就并进行跳转测试
-def jump_all_test(bp: BasePage):
+def jump_all_test(bp:BasePage):
     locked_set, unlockable_set, unlocked_set = AchievementPanel.get_achievement_status_set(bp)
     # 点击可解锁成就 将它们都解锁使task mini出现
     unlocked_list = list(unlocked_set)
@@ -150,8 +151,7 @@ def jump_all_test(bp: BasePage):
 def jump_test(bp: BasePage):
     achievement_position_list = AchievementGroupPanel.get_achievement_position_list(bp)
     achievement_bg_icon_list = AchievementGroupPanel.get_achievement_bg_icon_list(bp)
-    go_index_list, collect_index_list, uncollect_index_list = AchievementGroupPanel.get_go_collect_and_uncollect_index_list(
-        bp)
+    go_index_list, collect_index_list, uncollect_index_list = AchievementGroupPanel.get_go_collect_and_uncollect_index_list(bp)
     if not go_index_list:
         AchievementGroupPanel.click_btn_close(bp)
         return
@@ -173,7 +173,6 @@ def jump_test(bp: BasePage):
     # img = bp.get_full_screen_shot()
     # bp.save_img(img, "achievementGroupPanel_jump_test")
     bp.go_to_panel("AchievementPanel")
-
 
 # def login(zhanghao,mima):
 
@@ -215,7 +214,6 @@ def collect_test(bp: BasePage):
     #     AchievementGroupPanel.click_btn_close(bp)
     #     cur += 1
 
-
 def collect_all_test(bp: BasePage):
     achievement_point, progress_denominator = AchievementGroupPanel.get_achievement_point(bp)
     if achievement_point == progress_denominator:
@@ -235,7 +233,7 @@ def collect_all_test(bp: BasePage):
         achievement_point, progress_denominator = AchievementGroupPanel.get_achievement_point(bp)
 
     reward_icon_list, reward_quantity_list = AchievementGroupPanel.get_box_reward(bp)
-    item_dict = resource.make_item_dict(item_icon_list=reward_icon_list, item_quantity_list=reward_quantity_list)
+    item_dict = resource.make_item_dict(item_icon_list=reward_icon_list, item_quantity_list= reward_quantity_list)
     # 在没领满之前一直领取
     while achievement_point != progress_denominator:
         achievement_point, progress_denominator = collect_once_test(bp)
@@ -273,6 +271,7 @@ def collect_all_test(bp: BasePage):
     compare(complete_numerator, complete_denominator)
 
 
+
 def collect_once_test(bp: BasePage):
     # 记录奖励数量
     item_icon_list = AchievementGroupPanel.get_item_icon_list(bp)
@@ -300,7 +299,7 @@ def collect_once_test(bp: BasePage):
     return achievement_point, progress_denominator
 
 
-def select_test(bp: BasePage, index: int):
+def select_test(bp: BasePage, index:int):
     achievement_icon_list = AchievementGroupPanel.get_achievement_icon_list(bp)
     icon_main = AchievementGroupPanel.get_icon_main(bp)
     selected_status_list = AchievementGroupPanel.get_selected_status_list(bp)
@@ -348,8 +347,7 @@ def click_icon_test(bp: BasePage):
         compare(item_icon, reward_icon_list[r])
     bp.debug_log("click_icon_test图标点击测试通过")
 
-
-def main(bp: BasePage):
+def main(bp:BasePage):
     # 登录到大厅
     cmd_list = ["guideskip", "add 1 100200 12345"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
@@ -370,8 +368,9 @@ def main(bp: BasePage):
     bp.go_home()
 
 
+
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21523", is_mobile_device=True)
-    jump_all_test(bp)
+    bp = BasePage("127.0.0.1:21533", is_mobile_device=False)
+    main(bp)
     bp.connect_close()
 

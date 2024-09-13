@@ -79,12 +79,12 @@ def wanted_test(bp: BasePage):
     r = random.randint(0, len(achievement_icon_list) - 1)
     achievement_icon = achievement_icon_list[r]
     # 读表格数据
-    table_data = AchievementWantedPanel.get_achievement_wanted_table_data(bp)
+    table_data = bp.excelTools.get_table_data("ACHIEVEMENT_WANTED.xlsm")
 
     index = table_data["icon"].index(achievement_icon)
-    tpid = table_data["TPID"][index]
-    bp.cmd(f'wantedComplete {tpid}')
-    # AchievementWantedPanel.do_wanted(bp, table_data=table_data, index=r)
+    # tpid = table_data["TPID"][index]
+    # bp.cmd(f'wantedComplete {tpid}')
+    AchievementWantedPanel.do_wanted(bp, table_data=table_data, index=r)
     bp.go_home()
 
     # 去悬赏界面
@@ -145,7 +145,7 @@ def wanted_test(bp: BasePage):
 
 def main(bp: BasePage):
     # 登录到大厅
-    cmd_list = ["guideskip", "levelupto 61", "add 1 100500 1234"]
+    cmd_list = ["guideskip", "levelupto 90", "add 1 100500 1000"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     # # 关闭升级弹窗
@@ -156,6 +156,6 @@ def main(bp: BasePage):
     wanted_test(bp)
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.81:20012")
+    bp = BasePage("127.0.0.1:21523", is_mobile_device=True)
     main(bp)
     bp.connect_close()

@@ -98,7 +98,7 @@ def open_box_test(bp: BasePage, icon, quantity):
     compare(box_points_numerator, box_points_numerator_expect)
 
 
-def box_fragment_test(bp: BasePage):
+def box_fragment_test(bp:BasePage):
     box_fragment_position = TreasureChestRewardsPanel.get_box_fragment_position(bp)
     # 没有就不进行测试
     if not box_fragment_position:
@@ -142,7 +142,6 @@ def box_fragment_test(bp: BasePage):
         #     raise FindNoElementError
         GearPanel.click_btn_close(bp)
         return
-
 
 def click_tips_test(bp: BasePage):
     TreasureChestPanel.click_btn_magnifier(bp)
@@ -230,6 +229,8 @@ def main(bp: BasePage):
     bp.go_home()
 
 
+
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.77:20059")
+    bp = BasePage("127.0.0.1:21523", is_mobile_device=False)
     main(bp)
+    bp.connect_close()

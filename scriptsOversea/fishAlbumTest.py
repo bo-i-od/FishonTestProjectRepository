@@ -116,7 +116,6 @@ def anime_test(bp: BasePage):
         fish_count += 1
         cur += 1
 
-
     bp.go_to_panel("FishAlbum3DPanel")
     # 等待动画播放完
     progress = -1
@@ -134,11 +133,9 @@ def anime_test(bp: BasePage):
     bp.go_home()
 
 
-
-
 def main(bp: BasePage):
     # 进入大厅
-    cmd_list = ["guideskip","levelupto 36"]
+    cmd_list = ["guideskip", "levelupto 36"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     PlayerLevelupPanel.wait_for_panel_appear(bp)
@@ -156,7 +153,6 @@ def main(bp: BasePage):
 
 
 if __name__ == '__main__':
-    # 连接设备号为127.0.0.1:21533的设备
-    bp = BasePage(serial_number="127.0.0.1:21523", is_mobile_device=True)
+    bp = BasePage("127.0.0.1:21533", is_mobile_device=False)
     main(bp)
     bp.connect_close()

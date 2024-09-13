@@ -36,9 +36,10 @@ from panelObjs.tournamentsPanel import TournamentsPanel
 from scripts import battleTest, createUsers
 from scripts.battleTest import circulate_fish
 
+
 # 0-7分别对应 0新手 1青铜 2白银 3黄金 4白金 5钻石 6冠军 7传奇
-def set_duelcup_random(bp:BasePage, rank):
-    duelcup = random.randint(0,5)
+def set_duelcup_random(bp: BasePage, rank):
+    duelcup = random.randint(0, 5)
     bp.cmd(f"duelcup 1001 {duelcup}")
     duelcup_all = duelcup
     if rank > 0:
@@ -73,7 +74,8 @@ def set_duelcup_random(bp:BasePage, rank):
         duelcup_all += duelcup
     return duelcup_all
 
-def set_duelcup(bp:BasePage, duelcup):
+
+def set_duelcup(bp: BasePage, duelcup):
     if duelcup <= 5:
         bp.cmd(f"duelcup 1001 {duelcup}")
         return
@@ -110,11 +112,13 @@ def set_duelcup(bp:BasePage, duelcup):
     bp.cmd(f"duelcup 1007 {1920}")
     bp.cmd(f"duelcup 1008 {duelcup - 3625}")
 
-def clear_duelcup(bp:BasePage):
+
+def clear_duelcup(bp: BasePage):
     cur = 0
     while cur < 8:
-        bp.cmd(f"duelcup 100{8-cur} 0")
+        bp.cmd(f"duelcup 100{8 - cur} 0")
         cur += 1
+
 
 def get_toDrops(bp, is_print_id=True):
     # 清空消息列表 开始收消息
@@ -137,7 +141,6 @@ def get_toDrops(bp, is_print_id=True):
     output_list = ast.literal_eval(output_str)
     print(f"预期体型列表：{output_list}")
     bp.log_list_flag = False
-
 
 
 def pvp_fish(bp, is_quick=False):
@@ -193,7 +196,6 @@ def pvp_fish(bp, is_quick=False):
             print(f"体型列表：{fish_type_list}")
             bp.sleep(3)
             break
-
 
 
 def fish_once(bp: BasePage):
@@ -253,7 +255,8 @@ def point_cal(duelcup):
     end = 0.2 * duelcup + 3600
     return int(start), int(end)
 
-def duel_once(bp:BasePage, rank):
+
+def duel_once(bp: BasePage, rank):
     # rank = random.randint(4, 5)
     # # rank = 0
     # clear_duelcup(bp)
@@ -290,6 +293,7 @@ def duel_once(bp:BasePage, rank):
     #     n = "不符合预期"
     # print(f"{points_enemy},{n}")
 
+
 def get_pd(rank):
     if rank < 1:
         return 0.8
@@ -301,6 +305,7 @@ def get_pd(rank):
         return 0.6
     return 0.55
 
+
 def get_k(r0):
     if r0 < 2000:
         return 32
@@ -309,7 +314,7 @@ def get_k(r0):
     return 16
 
 
-def division_test(bp:BasePage):
+def division_test(bp: BasePage):
     # 进排行榜
     bp.go_to_panel("PVPHallPanel")
     bp.sleep(1)
@@ -353,7 +358,8 @@ def emoji(bp: BasePage):
     bp.click_position(emoji_position_list[r])
     bp.sleep(1)
 
-def main(bp:BasePage):
+
+def main(bp: BasePage):
     # 进入大厅
     cmd_list = ["guideskip", "levelupto 56"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
@@ -414,26 +420,10 @@ def main(bp:BasePage):
     bp.go_home()
 
 
-
 if __name__ == '__main__':
-    serial_number = "127.0.0.1:21533"
-    bp = BasePage(serial_number=serial_number, is_mobile_device=False)
-    # random_duelcup(bp, rank=7)
-    gameInit.set_joystick(bp)
-    # bp.cmd("globalgm duelScene 400315")
-    # while True:
-    #     duel_once(bp, rank=7)
-    # random_duelcup(bp, rank=7)
-    # print(serial_number)
-
-    cur = 1
-    # 指定对决次数
-    times = 1
-    while cur <= times:
-        print(f"<=====第{cur}次好友对决开始=====>")
-        duel_once_friend(bp, is_quick=False)
-        print(f"<=====对决结束=====>\n")
-        cur += 1
+    bp = BasePage("127.0.0.1:21533", is_mobile_device=False)
+    main(bp)
+    bp.connect_close()
 
 
 

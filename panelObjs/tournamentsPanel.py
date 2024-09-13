@@ -47,7 +47,7 @@ class TournamentsPanel(BasePage):
     # 跳转指定tpid渔场
     def go_to_fishery_by_tpid(self, fishery_tpid):
         fishery_tpid_list = TournamentsPanel.get_fishery_tpid_list(self)
-        index = fishery_tpid_list.index(fishery_tpid)
+        index = fishery_tpid_list.index(str(fishery_tpid))
         TournamentsPanel.go_to_fishery_by_index(self, index)
 
     # 跳转指定索引渔场
@@ -72,9 +72,10 @@ class TournamentsPanel(BasePage):
 if __name__ == "__main__":
     bp = BasePage("192.168.111.77:20086")
     # TournamentsPanel.get_fishery_list(bp)
-    a = TournamentsPanel.go_to_fishery_by_tpid(bp, "400301")
+    a = TournamentsPanel.get_fishery_tpid_list(bp)
 
     print(a)
+    bp.connect_close()
 
 
 

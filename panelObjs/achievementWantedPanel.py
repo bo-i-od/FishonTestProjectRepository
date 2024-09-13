@@ -56,7 +56,7 @@ class AchievementWantedPanel(BasePage):
     # 去渔场钓悬赏鱼
     def do_wanted(self, table_data, index):
         # 进入指定渔场
-        fishery = str(table_data["fishery"][index])
+        fishery = table_data["fishery"][index]
         self.go_to_panel("TournamentsPanel")
         TournamentsPanel.go_to_fishery_by_tpid(self, fishery_tpid=fishery)
 
@@ -64,8 +64,11 @@ class AchievementWantedPanel(BasePage):
         target_list = table_data["target"]
         cur = 0
         while cur < len(target_list):
-            target = str(target_list[cur][index])
-            battleTest.fish_once(self, fishery_id=fishery, fish_id=target)
+            target = target_list[cur][index]
+            if target == "0" or target == 0:
+                cur += 1
+                continue
+            battleTest.fish_once(self, fishery_id=fishery, fish_id=target, is_quick=True)
             cur += 1
 
     def click_btn_rewards(self):
@@ -82,6 +85,5 @@ class AchievementWantedPanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage("192.168.111.78:20009")
-    a = AchievementWantedPanel.get_achievement_wanted_table_data(bp)
-    print(a)
+
 

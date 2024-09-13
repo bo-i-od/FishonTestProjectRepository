@@ -2,8 +2,7 @@ from openpyxl import *
 from openpyxl.utils import get_column_letter
 
 
-
-class ExceTools:
+class ExcelTools:
     def __init__(self, root_path):
         self.root_path = root_path
 
@@ -12,6 +11,7 @@ class ExceTools:
         workbook = load_workbook(path, data_only=True)
         worksheet = workbook[sheet_name]
         return worksheet
+
     def get_column_index(self, worksheet, header):
         column_index_res = 0
         for column_index_cur in range(1, worksheet.max_column + 1):

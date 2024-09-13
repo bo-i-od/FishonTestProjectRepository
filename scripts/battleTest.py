@@ -263,9 +263,10 @@ if __name__ == '__main__':
     gameInit.set_joystick(bp)
     bp.is_time_scale = False
     bp.custom_cmd("setTension 0.9")
+    circulate_fish(bp, fishery_id="400312",is_quick=True, start=21)
     # main(bp, fishery_id="400318", is_double_week=True)
     # goldfish_all(bp, fishery_id="400306")
-    circulate_fish(bp, fishery_id="400318", is_quick=False)
+    # main(bp, fishery_id="400318", is_double_week=True)
     # flashcard_all(bp, "400306")
     # fishbone_all(bp, "400306")
     # while True:

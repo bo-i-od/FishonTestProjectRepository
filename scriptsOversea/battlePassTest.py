@@ -400,14 +400,4 @@ if __name__ == '__main__':
     bp = BasePage("127.0.0.1:21533", is_mobile_device=False)
     main(bp)
     bp.connect_close()
-    # cur = 0
-    # while cur < 80:
-    #
-    #     # clear_duelcup(bp)
-    #     # dc = random_duelcup(bp, 4)
-    #     # print(dc)
-    #     r = random.randint(0, 7)
-    #     circulate_duel(bp, r)
-    #     cur += 1
-    #     print(f"第{cur}次钓鱼")
 
