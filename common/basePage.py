@@ -1,5 +1,4 @@
 
-
 from airtest.core.helper import G
 from poco.drivers.unity3d.device import UnityEditorWindow
 import netMsg.luaLog
@@ -874,12 +873,12 @@ class BasePage(BasePageMain):
         unlock_lv = int(table_data['content'][index])
         return unlock_lv
 
-    def get_fish_type(self, fish, table_data=None):
+    def get_fish_type(self, fish_tpid, table_data=None):
         if table_data is None:
             table_data = self.excelTools.get_table_data(book_name="FISH.xlsm")
-        if fish == '':
+        if fish_tpid == '':
             return "钓鱼失败"
-        index = table_data["tpId"].index(int(fish))
+        index = table_data["tpId"].index(int(fish_tpid))
 
         if table_data["fishClass"][index] == 1:
             if table_data["fishType"][index] == 1:
@@ -905,7 +904,7 @@ class BasePage(BasePageMain):
         table_data = self.excelTools.get_table_data(book_name="FISH.xlsm")
         cur = 0
         while cur < len(fish_list):
-            fish_type = self.get_fish_type(fish=fish_list[cur], table_data=table_data)
+            fish_type = self.get_fish_type(fish_tpid=fish_list[cur], table_data=table_data)
             fish_type_list.append(fish_type)
             cur += 1
         return fish_type_list

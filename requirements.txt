@@ -4,3 +4,5 @@ opencv_contrib_python==4.6.0.66
 openpyxl==3.1.2
 pocoui==1.0.89
 PyAutoGUI==0.9.54
+slpp==1.2.3
+
