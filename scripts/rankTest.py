@@ -104,7 +104,7 @@ def leaderboard_test(bp: BasePage, data_list, is_like):
     RankFishLeaderboardPanel.click_btn_like(bp)
     bp.sleep(1)
     if RankFishLeaderboardPanel.is_btn_like_normal(bp):
-        bp.debug_log("erro_RankFishLeaderboardPanel.is_btn_like_normal(bp)")
+        bp.debug_log("error:RankFishLeaderboardPanel.is_btn_like_normal(bp)")
     compare(like_value + 1, RankFishLeaderboardPanel.get_like_value(bp))
 
     # 返回上级界面

@@ -269,7 +269,7 @@ def main(bp: BasePage):
         RewardsPanel.click_tap_to_claim(bp)
     # rating = remove_decimals(HomePanel.get_rating(bp))
     # if rating not in rating_expect_list:
-    #     print(f"erro_{rating, rating_expect_list}")
+    #     print(f"error:{rating, rating_expect_list}")
 
 
 if __name__ == "__main__":

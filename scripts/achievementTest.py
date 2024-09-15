@@ -22,7 +22,7 @@ def tips_test(bp: BasePage):
     AchievementPanel.click_btn_i(bp)
     bp.sleep(0.5)
     if not AchievementPanel.is_tips_active(bp):
-        bp.debug_log("erro:if not AchievementPanel.is_tips_active(bp)")
+        bp.debug_log("error:if not AchievementPanel.is_tips_active(bp)")
     bp.sleep(0.5)
     AchievementPanel.click_btn_i(bp)
     bp.sleep(0.5)
@@ -47,7 +47,7 @@ def locked_test(bp: BasePage):
     bp.click_position(position_list[locked_list[r]])
     bp.sleep(0.5)
     if not AchievementPanel.is_unlock_tips_active(bp):
-        bp.debug_log("erro:if not AchievementPanel.is_unlock_tips_active(bp)")
+        bp.debug_log("error:if not AchievementPanel.is_unlock_tips_active(bp)")
 
     # #点击所有未解锁成就
     # cur = 0

@@ -88,7 +88,7 @@ def click_btn_claim_test(bp:BasePage):
     bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
     if not MailPanel.is_claimed(bp):
-        bp.debug_log("erro:" , "if not MailPanel.is_claimed(bp)")
+        bp.debug_log("error:" , "if not MailPanel.is_claimed(bp)")
 
 
 def main(bp:BasePage):

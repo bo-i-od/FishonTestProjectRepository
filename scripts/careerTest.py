@@ -15,7 +15,7 @@ def tips_test(bp:BasePage):
     CareerPanel.click_btn_i(bp)
     bp.sleep(0.5)
     if not CareerPanel.is_tips_active(bp):
-        bp.debug_log("erro:if not CareerPanel.is_tips_active(bp)")
+        bp.debug_log("error:if not CareerPanel.is_tips_active(bp)")
         return
     bp.sleep(0.5)
     CareerPanel.click_btn_i(bp)

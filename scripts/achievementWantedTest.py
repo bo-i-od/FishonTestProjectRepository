@@ -112,7 +112,7 @@ def wanted_test(bp: BasePage):
         bp.click_position(wanted_position_list[cur])
         bp.sleep(0.5)
         if FlashTipsPanel.is_panel_active(bp):
-            bp.debug_log("erro_if FlashTipsPanel.is_panel_active(bp)")
+            bp.debug_log("error:if FlashTipsPanel.is_panel_active(bp)")
         cur += 1
 
     # 计算期望奖励

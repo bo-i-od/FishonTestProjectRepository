@@ -43,7 +43,7 @@ def playerEditNamePanelTest(bp: BasePage):
     head_expect_object_id = bp.get_parent_id(select_object_id)
     # 看他们parent是不是相同
     if head_object_id != head_expect_object_id:
-        bp.debug_log("erro_if head_object_id != head_expect_object_id")
+        bp.debug_log("error:if head_object_id != head_expect_object_id")
     # 点击确认按钮
     PlayerEditNamePanel.click_confirm(bp)
     bp.sleep(1)

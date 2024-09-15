@@ -67,7 +67,7 @@ def photo_test(bp: BasePage):
     FishAlbum3DPanel.click_btn_i(bp)
     bp.sleep(0.5)
     if not FishAlbum3DPanel.is_panel_rewards_tip_active(bp):
-        bp.debug_log("erro_if not FishAlbum3DPanel.is_panel_rewards_tip_active(bp):")
+        bp.debug_log("error:if not FishAlbum3DPanel.is_panel_rewards_tip_active(bp):")
     FishAlbum3DPanel.click_btn_i(bp)
     bp.sleep(0.5)
 

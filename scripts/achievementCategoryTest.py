@@ -60,7 +60,7 @@ def unlock_test(bp: BasePage):
     bp.click_position(category_position_list[r])
     bp.sleep(0.5)
     if not FlashTipsPanel.is_panel_active(bp):
-        bp.debug_log("erro_if not FlashTipsPanel.is_panel_active(bp)")
+        bp.debug_log("error:if not FlashTipsPanel.is_panel_active(bp)")
 
     # 随机点击一个奖励图标
     reward_position_list = AchievementCategoryPanel.get_reward_position_list(bp)
@@ -114,7 +114,7 @@ def category_test(bp: BasePage):
         bp.click_position(category_position_list[cur])
         bp.sleep(0.5)
         if FlashTipsPanel.is_panel_active(bp):
-            bp.debug_log("erro_if not FlashTipsPanel.is_panel_active(bp)")
+            bp.debug_log("error:if not FlashTipsPanel.is_panel_active(bp)")
         cur += 1
 
     # 计算期望奖励
