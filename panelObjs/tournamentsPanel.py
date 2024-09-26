@@ -17,7 +17,6 @@ class TournamentsPanel(BasePage):
         while cur < len(bg_list):
             bg_list[cur] = "icon_fisheries_" + bg_list[cur].split('_')[2]
             cur += 1
-
         tpId_list = table_data["tpId"]
         res_list = []
         displayicon_list = table_data["displayicon"]
@@ -38,7 +37,9 @@ class TournamentsPanel(BasePage):
     def get_entrance_viewport(self):
         size = self.get_size(element_data=ElementsData.Tournaments.panel_sidebar_bg)
         edge_left = 0.75 * size[0]
-        entrance_viewport = Viewport(self, element_viewport=ElementsData.Tournaments.entrance_viewport, element_item_list=ElementsData.Tournaments.btn_enter_list)
+        # 多人房进入按钮和单人房加一起
+        btn_enter_id_list_multi, btn_enter_id_list = self.get_object_id_list(element_data_list=[ElementsData.Tournaments.btn_enter_list_multi, ElementsData.Tournaments.btn_enter_list])
+        entrance_viewport = Viewport(self, element_viewport=ElementsData.Tournaments.entrance_viewport, item_id_list= btn_enter_id_list_multi + btn_enter_id_list)
         entrance_viewport.viewport_range = [entrance_viewport.viewport_range[0], 1]
         entrance_viewport.viewport_edge = [edge_left, 0.05]
         entrance_viewport.viewport_range_shift()
@@ -72,9 +73,10 @@ class TournamentsPanel(BasePage):
 if __name__ == "__main__":
     bp = BasePage("192.168.111.77:20086")
     # TournamentsPanel.get_fishery_list(bp)
-    a = TournamentsPanel.get_fishery_tpid_list(bp)
+    # a = TournamentsPanel.get_fishery_tpid_list(bp)
+    TournamentsPanel.go_to_fishery_by_tpid(bp, fishery_tpid='400301')
 
-    print(a)
+    # print(a)
     bp.connect_close()
 
 

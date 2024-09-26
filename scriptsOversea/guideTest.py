@@ -51,15 +51,15 @@ def playerEditNamePanelTest(bp: BasePage):
 def newbieGuidePanelTest(bp: BasePage):
     start_page = NewbieGuidePanel.get_start_page(bp)
     if start_page > 3:
-        NewbieGuidePanel.do_guide_1(bp)
-        NewbieGuidePanel.do_guide_2(bp)
+        NewbieGuidePanel.rookie_guide_1(bp)
+        NewbieGuidePanel.rookie_guide_2(bp)
     if start_page > 2:
-        NewbieGuidePanel.do_guide_3(bp)
-        NewbieGuidePanel.do_guide_4(bp)
+        NewbieGuidePanel.rookie_guide_3(bp)
+        NewbieGuidePanel.rookie_guide_4(bp)
     if start_page > 1:
-        NewbieGuidePanel.do_guide_5(bp)
+        NewbieGuidePanel.rookie_guide_5(bp)
     if start_page > 0:
-        NewbieGuidePanel.do_guide_6(bp)
+        NewbieGuidePanel.rookie_guide_6(bp)
 
 def hookTest(bp: BasePage):
     # 去卡多湖渔场抛竿

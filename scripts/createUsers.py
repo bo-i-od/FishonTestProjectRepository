@@ -15,6 +15,9 @@ from panelObjs.friendPanel import FriendPanel
 from scripts import battleTest
 import json
 
+from tools import commonTools
+
+
 def set_duelcup_random(bp:BasePage, rank):
     duelcup = random.randint(0,5)
     bp.cmd(f"duelcup 1001 {duelcup}")
@@ -118,8 +121,7 @@ _G.NetworkMgr:SDKLogin("{accountName}")
 
 
 def disconnect(bp: BasePage):
-    lua_code = """
----@type TYSDK.LoginSDK
+    lua_code = """---@type TYSDK.LoginSDK
 local loginSdkInst = TYSDK.LoginSDK.Instance
 --FIXME:兼容C#部分
 local function pcallloginSdkInstLogOutfunc()
@@ -130,10 +132,8 @@ end
 xpcall(pcallloginSdkInstLogOutfunc, function() end)
 local Login_Token_Key = "Login_Token"
 SettingMgr:Write(Login_Token_Key, "")
-_G.GAME_SDK_AUTHDATA_CACHE = nil
 _G.CURRENT_SDK_MANUAL_LOGIN = true
 PanelMgr:CloseAllOpend()
-GameRoot:GetFishingCamera().fsm:ChangeState(FishingCamera_FSM_STATE.GAME)
 Global_ClearCacheData()
 Global_SendLogout()
 _G.NetworkMgr.channelPurl = nil
@@ -142,10 +142,8 @@ _G.NetworkMgr:Disconnect()
 UIFacade.Reset()
 --Util.GoToLogin()
 EventMgr:SendEvent(GameMsg.CHANGE_GAME_STATE, GAME_STATE_ENUM.Login, true)
-AvatarMgr:ReleasePool()
     """
-#     lua_code = """
-# _G.CURRENT_SDK_MANUAL_LOGIN = true
+#     lua_code = """_G.CURRENT_SDK_MANUAL_LOGIN = true
 # PanelMgr:CloseAllOpend()
 # Global_ClearCacheData()
 # Global_SendLogout()
@@ -167,9 +165,10 @@ def login(bp: BasePage, name):
     connect(bp, name)
     LoadingPanel.wait_until_panel_disappear(bp)
     bp.log_list_flag = False
-    bp.cmd("guideskip")
+
     if not PlayerEditNamePanel.is_panel_active(bp):
         return
+    bp.cmd_list(["guideskip"])
     bp.sleep(1)
     while True:
         # PlayerEditNamePanel.set_player_name(bp, name)
@@ -185,7 +184,7 @@ def login(bp: BasePage, name):
     # # 随机选择性别
     # r = 0
     gender_icon_position_list = AvatarSelectPanel.get_gender_icon_position_list(bp)
-    bp.click_position(gender_icon_position_list[1])
+    bp.click_position(gender_icon_position_list[0])
     bp.sleep(0.5)
 
     AvatarSelectPanel.click_btn_start(bp)
@@ -207,30 +206,48 @@ def go_leaderborad(bp:BasePage):
     bp.sleep(1)
 
 def fish(bp: BasePage, index):
-    bp.cmd_list(["levelupto 16"])
-    # bp.cmd("mode 400302 390017")
-    # bp.sleep(0.5)
-    # fishingMsg.fish(bp, [{"spot_id": f"40030213", "times": 1, "is_activity_spot":True}])
-    # bp.sleep(0.5)
-    # bp.cmd("mode 400302 390018")
-    # bp.sleep(0.5)
-    # fishingMsg.fish(bp, [{"spot_id": f"40030213", "times": 1, "is_activity_spot":True}])
-    # bp.sleep(0.5)
-    # bp.cmd("mode 400302 390019")
-    # bp.sleep(0.5)
-    # fishingMsg.fish(bp, [{"spot_id": f"40030213", "times": 1, "is_activity_spot":True}])
 
-    bp.cmd("mode 400309 390087")
+    bp.cmd(f"setPlayerLayer 5000")
+    bp.cmd_list(["levelupto 99", "add 1 100500 3000"])
+
+
+
+    # bp.cmd("mode 400312 390116")
+    # bp.sleep(1)
+    # fishingMsg.fish(bp, [{"spot_id": f"40031213", "times": 96, "is_activity_spot": False}])
+    # bp.sleep(13)
+    # 清空消息列表 开始收消息
+    bp.log_list.clear()
+    bp.log_list_flag = True
+    msg_name = "ActivityDoubleWeekBatchDataMsg"
+    bp.cmd("mode 400319 390187")
     bp.sleep(0.5)
-    fishingMsg.fish(bp, [{"spot_id": f"40030913", "times": 1, "is_activity_spot":True}])
+    fishingMsg.fish(bp, [{"spot_id": f"40031913", "times": 1, "is_activity_spot": True}])
     bp.sleep(0.5)
-    bp.cmd("mode 400309 390088")
+    bp.cmd("mode 400319 390188")
     bp.sleep(0.5)
-    fishingMsg.fish(bp, [{"spot_id": f"40030913", "times": 1, "is_activity_spot":True}])
+    fishingMsg.fish(bp, [{"spot_id": f"40031913", "times": 1, "is_activity_spot": True}])
     bp.sleep(0.5)
-    bp.cmd("mode 400309 390089")
+    bp.cmd("mode 400319 390189")
     bp.sleep(0.5)
-    fishingMsg.fish(bp, [{"spot_id": f"40030913", "times": 1, "is_activity_spot":True}])
+    fishingMsg.fish(bp, [{"spot_id": f"40031913", "times": 1, "is_activity_spot": True}])
+
+    target_log = bp.receive_until_get_msg(msg_name=msg_name)
+    python_dict = commonTools.lua_dict_to_python_dict(target_log)
+    # print(python_dict)
+    roomId = python_dict['activityDoubleWeekList'][1]["rankRoomId"]
+    print(f"{index}:{roomId}")
+    # bp.cmd("mode 400318 390177")
+    # bp.sleep(0.5)
+    # fishingMsg.fish(bp, [{"spot_id": f"40031813", "times": 1, "is_activity_spot":True}])
+    # bp.sleep(0.5)
+    # bp.cmd("mode 400318 390178")
+    # bp.sleep(0.5)
+    # fishingMsg.fish(bp, [{"spot_id": f"40031813", "times": 1, "is_activity_spot":True}])
+    # bp.sleep(0.5)
+    # bp.cmd("mode 400318 390179")
+    # bp.sleep(0.5)
+    # fishingMsg.fish(bp, [{"spot_id": f"40031813", "times": 1, "is_activity_spot":True}])
 
     # bp.cmd("mode 400301 390005")
     # bp.sleep(0.5)
@@ -306,13 +323,39 @@ def tournament(bp:BasePage):
     bp.go_home()
 
 def hidden_treasure(bp:BasePage):
-    bp.cmd_list([f"levelupto 20", "add 1 101500 20"])
+    # 清空消息列表 开始收消息
+    bp.log_list.clear()
+    bp.log_list_flag = True
+    bp.cmd(f"setPlayerLayer 2000")
+    bp.cmd(f"levelupto 16")
+    msg_name = "HiddenTreasureBatchDataMsg"
+    target_log = bp.receive_until_get_msg(msg_name=msg_name)
+    python_dict = commonTools.lua_dict_to_python_dict(target_log)
+    roomId = python_dict['hiddenTreasureList'][1]['roomId']
+    print(roomId)
+    bp.cmd_list(["add 1 101500 20"])
     bp.sleep(0.2)
     dy = "{[1] = 1,}"
     dx = "{[1] = 1,}"
-    lua_code = csMsgAll.get_CSHiddenTreasureDigMsg(digYs=dy, roomId=1000340, groupId=6000001, stage=1, digXs=dx)
-    print(lua_code)
+    lua_code = csMsgAll.get_CSHiddenTreasureDigMsg(digYs=dy, roomId=roomId, groupId=6000001, stage=1, digXs=dx)
+    # print(lua_code)
     bp.lua_console(lua_code)
+
+
+def monopoly(bp:BasePage, layer, index):
+    # 清空消息列表 开始收消息
+    bp.log_list.clear()
+    bp.log_list_flag = True
+    bp.cmd(f"setPlayerLayer {layer}")
+    bp.cmd(f"levelupto 16")
+    msg_name = "MonopolyBatchDataMsg"
+    target_log = bp.receive_until_get_msg(msg_name=msg_name)
+    python_dict = commonTools.lua_dict_to_python_dict(target_log)
+    roomId = python_dict['monopolyList'][1]['roomId']
+    print(roomId)
+    bp.cmd(f"monopolyscore {layer + index}")
+
+
 
 
 def apply_guild(bp:BasePage):
@@ -330,7 +373,7 @@ def apply_guild(bp:BasePage):
 
 
 def ndays(bp:BasePage, count):
-    # bp.cmd(f"setPlayerLayer {count}000")
+    bp.cmd(f"setPlayerLayer {count}000")
     bp.cmd(f"levelupto 16")
 
 
@@ -518,16 +561,19 @@ def read_data():
 
 def main(bp: BasePage):
     # 登录号前缀
-    prefix = "钓手"
+    prefix = "5000_"
     # prefix_list = ["a", "b", "c", "d", "e"]
     init(bp)
     cur = 1
-    limit = 80
+    limit = 200
     while cur < limit:
         name = prefix + str(cur)
         login(bp, name)
+        # bp.cmd("levelupto 69")
         # bp.cmd(f"selfranksetip 180.175.{cur}.{cur}")
-        bp.cmd("levelupto 66")
+
+        # init(bp)
+        # fish(bp,cur)
         # 你要执行的初始化账号操作
         # add_gu(bp, cur)
         # dragon_boat(bp, cur)
@@ -535,17 +581,20 @@ def main(bp: BasePage):
         # friend(bp)
         # ndays(bp, cur)
         # rank(bp)
+        # monopoly(bp, layer=3000, index=cur)
         # hidden_treasure(bp)
-        cup(bp, cur)
+        # cup(bp, cur)
         # bp.sleep(2)
-        # fish(bp, cur)
+        # bp.cmd_list([f"add 1 101200 {cur}", f"add 2 209017 {cur}"])
+        fish(bp, cur)
         logout(bp)
         cur += 1
 
 
 if __name__ == '__main__':
     bp = BasePage("127.0.0.1:21523", is_mobile_device=True)
+    main(bp)
     # relogin(bp)
     # fish(bp, 5)
-    main(bp)
+    # fish(bp, 1)
     bp.connect_close()

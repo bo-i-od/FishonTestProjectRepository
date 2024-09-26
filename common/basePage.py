@@ -849,7 +849,8 @@ class BasePage(BasePageMain):
                     index = table_data[book_dict["icon"]].index(item_icon_name)
                     item_tpid = table_data[book_dict["id"]][index]
                     break
-
+        if item_tpid == "":
+            print("没找到对应tpid")
         return str(item_tpid)
 
     def get_tpid_list(self, item_name_list=None, item_icon_name_list=None):

@@ -1,12 +1,17 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
+from panelObjs.pveMultiRoomFriendPanel import PVEMultiRoomFriendPanel
 from tools.commonTools import *
 from panelObjs.baitAndRodShowPanel import BaitAndRodShowPanel
 from panelObjs.treasureChestPanel import TreasureChestPanel
 from threading import Thread
 from panelObjs.battlePanel import BattlePanel
 
+
 class NewbieGuidePanel(BasePage):
+    def is_panel_active(self):
+        return self.exist(element_data=ElementsData.NewbieGuide.NewbieGuidePanel)
+
     def get_start_page(self):
         if self.exist(element_data=ElementsData.NewbieGuide.NewbieGuidePanel_1):
             return 4
@@ -19,7 +24,7 @@ class NewbieGuidePanel(BasePage):
         else:
             raise FindNoElementError
 
-    def do_guide_1(self):
+    def rookie_guide_1(self):
         perform_list = [ElementsData.NewbieGuide.NBG_rookie_1, ElementsData.NewbieGuide.NBG_rookie_2,
                         ElementsData.NewbieGuide.NBG_rookie_3, ElementsData.NewbieGuide.NBG_rookie_4,
                         ElementsData.NewbieGuide.NBG_rookie_5, ElementsData.NewbieGuide.NBG_rookie_6,
@@ -31,12 +36,12 @@ class NewbieGuidePanel(BasePage):
         self.ray_input(element_data=ElementsData.Battle.btn_reel, target_name="btn_cast", kind="up")
         self.custom_cmd("autofish")
 
-    def do_guide_2(self):
+    def rookie_guide_2(self):
         perform_list = [ElementsData.NewbieGuide.NBG_rookie_9,
                         ElementsData.NewbieGuide.NBG_rookie_10]
         self.click_a_until_b_appear_list(perform_list)
 
-    def do_guide_3(self):
+    def rookie_guide_3(self):
         perform_list = [ElementsData.NewbieGuide.NBG_rookie_10, ElementsData.NewbieGuide.NBG_rookie_11,
                         ElementsData.NewbieGuide.NBG_rookie_12, ElementsData.NewbieGuide.NBG_rookie_13_1]
         self.click_a_until_b_appear_list(perform_list)
@@ -53,19 +58,19 @@ class NewbieGuidePanel(BasePage):
         # self.swipe(point_start=position_start,point_end=position_end)
 
 
-    def do_guide_4(self):
+    def rookie_guide_4(self):
         perform_list = [ElementsData.NewbieGuide.NBG_rookie_13_Guide_ULTInfoCloseBtn, ElementsData.NewbieGuide.NBG_rookie_14, ElementsData.NewbieGuide.NBG_rookie_15]
         self.click_a_until_b_appear_list(perform_list)
 
 
-    def do_guide_5(self):
+    def rookie_guide_5(self):
         perform_list = [ElementsData.NewbieGuide.NBG_rookie_15, ElementsData.NewbieGuide.NBG_rookie_16,
                         ElementsData.Rookie.btn_close, ElementsData.NewbieGuide.NBG_rookie_18,
                         ElementsData.NewbieGuide.NBG_system_1]
         self.click_a_until_b_appear_list(perform_list)
 
 
-    def do_guide_6(self):
+    def rookie_guide_6(self):
         perform_list = [ElementsData.NewbieGuide.NBG_system_1, ElementsData.NewbieGuide.NBG_system_2,
                         ElementsData.NewbieGuide.NBG_system_click_TreasureChest,
                         ElementsData.NewbieGuide.NBG_system_get_reward_TreasureChest_01,
@@ -74,3 +79,10 @@ class NewbieGuidePanel(BasePage):
         BaitAndRodShowPanel.click_tap_to_continue(self)
         self.click_until_disappear(ElementsData.TreasureChestRewards.btn_close)
         TreasureChestPanel.click_btn_close(self)
+
+    def multi_room_guide(self):
+        perform_list = [ElementsData.NewbieGuide.NBG_multiRoom_0, ElementsData.NewbieGuide.NBG_multiRoom_1,
+                        ElementsData.NewbieGuide.NBG_multiRoom_2, ElementsData.PVEMultiRoomFriend.PVEMultiRoomFriendPanel]
+        self.click_a_until_b_appear_list(perform_list)
+        PVEMultiRoomFriendPanel.click_btn_close(self)
+

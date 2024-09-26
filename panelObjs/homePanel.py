@@ -56,6 +56,7 @@ class HomePanel(BasePage):
             "head_img": self.get_icon(element_data=ElementsData.Home.head_img),
             "lv": lv,
             "rating": rating,
+            "head_frame": self.get_icon(element_data=ElementsData.Home.head_frame),
         }
         return player_info
 

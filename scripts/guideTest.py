@@ -48,24 +48,22 @@ def playerEditNamePanelTest(bp: BasePage):
     PlayerEditNamePanel.click_confirm(bp)
     bp.sleep(1)
 
+
 def newbieGuidePanelTest(bp: BasePage):
     start_page = NewbieGuidePanel.get_start_page(bp)
     if start_page > 3:
-        NewbieGuidePanel.do_guide_1(bp)
-        NewbieGuidePanel.do_guide_2(bp)
+        NewbieGuidePanel.rookie_guide_1(bp)
+        NewbieGuidePanel.rookie_guide_2(bp)
     if start_page > 2:
-        NewbieGuidePanel.do_guide_3(bp)
-        NewbieGuidePanel.do_guide_4(bp)
+        NewbieGuidePanel.rookie_guide_3(bp)
+        NewbieGuidePanel.rookie_guide_4(bp)
     if start_page > 1:
-        NewbieGuidePanel.do_guide_5(bp)
+        NewbieGuidePanel.rookie_guide_5(bp)
     if start_page > 0:
-        NewbieGuidePanel.do_guide_6(bp)
+        NewbieGuidePanel.rookie_guide_6(bp)
 
-def hookTest(bp: BasePage):
-    TournamentsPanel.go_to_fishery_by_tpid(bp, fishery_tpid='400301')
-    LoadingFisheryPanel.wait_until_panel_disappear(bp)
-    BattlePreparePanel.click_btn_cast(bp)
-    BattlePanel.hook_guide(bp)
+
+
 
 def main(bp:BasePage):
     username = str(time.time()).split('.')[0]
@@ -114,13 +112,21 @@ def main(bp:BasePage):
     ClubApplyPanel.guide(bp)
     ClubApplyPanel.click_btn_close(bp)
 
-
+    # 多人房引导
+    bp.go_to_panel("TournamentsPanel")
+    bp.sleep(1)
+    if NewbieGuidePanel.is_panel_active(bp):
+        NewbieGuidePanel.multi_room_guide(bp)
+        bp.go_home()
+        bp.go_to_panel("TournamentsPanel")
 
     # 刺鱼引导
-    bp.go_to_panel("TournamentsPanel")
     bp.cmd("mode 400301 390001")
     bp.sleep(1)
-    hookTest(bp)
+    TournamentsPanel.go_to_fishery_by_tpid(bp, fishery_tpid='400301')
+    LoadingFisheryPanel.wait_until_panel_disappear(bp)
+    BattlePreparePanel.click_btn_cast(bp)
+    BattlePanel.hook_guide(bp)
     BattlePanel.reel_quick(bp)
     element_btn = ResultPanel.wait_for_result(bp)
     ResultPanel.automatic_settlement(bp, element_btn=element_btn)

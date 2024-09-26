@@ -430,7 +430,7 @@ def main(bp: BasePage):
 
 
 if __name__ == "__main__":
-    bp = BasePage("127.0.0.1:21533", is_mobile_device=False)
+    bp = BasePage("127.0.0.1:21533", is_mobile_device=True)
     # main(bp)
 
     # one_star(bp)
@@ -439,7 +439,12 @@ if __name__ == "__main__":
     bp.sleep(1)
     bp.set_item_count(target_count=10000000000, item_tpid="100000")
     bp.set_item_count(target_count=10000000, item_tpid="200300")
+
     full_level(bp)
+    cur = 0
+    while cur < 10:
+        one_star(bp)
+        cur += 1
     # specify_level(bp, target_level=60)
     # bp.cmd("add 9 900011 50")
     # bp.sleep(1)

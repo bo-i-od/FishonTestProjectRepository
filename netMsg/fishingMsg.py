@@ -30,6 +30,7 @@ def get_rod_id(scene_id):
                     "400314": "500008",
                     "400315": "500007",
                     "400318": "500006",
+                    "400319": "500003",
                     }
     rod_id = scene_to_rod[scene_id]
     return rod_id

@@ -82,9 +82,9 @@ def wanted_test(bp: BasePage):
     table_data = bp.excelTools.get_table_data("ACHIEVEMENT_WANTED.xlsm")
 
     index = table_data["icon"].index(achievement_icon)
-    # tpid = table_data["TPID"][index]
-    # bp.cmd(f'wantedComplete {tpid}')
-    AchievementWantedPanel.do_wanted(bp, table_data=table_data, index=r)
+    tpid = table_data["TPID"][index]
+    bp.cmd(f'wantedComplete {tpid}')
+    # AchievementWantedPanel.do_wanted(bp, table_data=table_data, index=r)
     bp.go_home()
 
     # 去悬赏界面

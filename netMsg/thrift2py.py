@@ -4,7 +4,7 @@ import keyword
 
 from configs.pathConfig import thrift2py_folder_path
 
-type_dict = {"i64": "int", "i32": "int", "i16": "int", "i8": "int", "string": "str", "bool": "bool", "double": "float", "binary": "bytes", "MergeProductType": "str" }
+type_dict = {"i64": "int", "i32": "int", "i16": "int", "i8": "int", "string": "str", "bool": "bool", "double": "float", "binary": "bytes", "MergeProductType": "str", "CSAquariumNewFish": "str", "CSAquariumNewSpeedUpFish":"str" }
 
 # 把thrift文件需要的内容解析出来
 def get_thrift_data(file_name):

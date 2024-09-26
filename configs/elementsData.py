@@ -466,10 +466,10 @@ class ElementsData:
 
 
     class DLCDownload:
-        DLCDownloadPanel = {"locator": "UICanvas>Default>DLCDownloadPanel"}
-        icon_list = {"locator": "UICanvas>Default>DLCDownloadPanel>Panel>bg>group_list>>item>>icon"}
-        btn_close = {"locator": "UICanvas>Default>DLCDownloadPanel>Panel>btn_close>img"}
-        group_list = {"locator": "UICanvas>Default>DLCDownloadPanel>Panel>bg>group_list>"}
+        DLCDownloadPanel = {"locator": "UICanvas>Important>DLCDownloadPanel"}
+        icon_list = {"locator": "UICanvas>Important>DLCDownloadPanel>Panel>bg>group_list>>item>>icon"}
+        btn_close = {"locator": "UICanvas>Important>DLCDownloadPanel>Panel>btn_close>img"}
+        group_list = {"locator": "UICanvas>Important>DLCDownloadPanel>Panel>bg>group_list>"}
 
 
 
@@ -764,6 +764,7 @@ class ElementsData:
         player_lv = {"locator":"UICanvas>Default>HomePanel>panel>panel_player_info>player_info>player_exp>player_lv>value"}  # text
         exp = {"locator": "UICanvas>Default>HomePanel>panel>panel_player_info>player_info>player_exp>exp"}  # value
         head_img = {"locator": "UICanvas>Default>HomePanel>panel>panel_player_info>player_info>head>head_mask>head_img"}
+        head_frame = {"locator": "UICanvas>Default>HomePanel>panel>panel_player_info>player_info>head>head_frame>panel>head_frame"}
         flag = {"locator": "UICanvas>Default>HomePanel>panel>panel_player_info>player_info>flag"}
         rating = {"locator": "UICanvas>Default>HomePanel>panel>panel_player_info>player_info>rating>num"}
         ResourceBar = {"locator": "UICanvas>Default>HomePanel>panel>top_res>ResourceBar"}
@@ -882,6 +883,7 @@ class ElementsData:
 
 
     class NewbieGuide:
+        NewbieGuidePanel = {"locator": "UICanvas>Default>NewbieGuidePanel"}
         NewbieGuidePanel_1 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_rookie_1(Clone)"}
         NewbieGuidePanel_2 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_rookie_10(Clone)"}
         NewbieGuidePanel_3 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_rookie_15(Clone)"}
@@ -975,7 +977,10 @@ class ElementsData:
         # 对决引导
         NBG_friend_duel_1_1 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_friend_duel_1_1(Clone)>Guide_Highlight>ep_UI_novice guide"}
 
-        # 失败引导
+        # 多人房引导
+        NBG_multiRoom_0 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_multiRoom_20200(Clone)>Guide_Highlight>ep_UI_novice guide"}
+        NBG_multiRoom_1 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_multiRoom_20201(Clone)>Guide_Highlight>ep_UI_novice guide", "focus": (0.5, 0.2) }
+        NBG_multiRoom_2 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_multiRoom_20202(Clone)>Guide_Highlight>ep_UI_novice guide"}
 
 
 
@@ -1170,13 +1175,17 @@ class ElementsData:
         current_rewards_quantity_list = {"locator": "UICanvas>Default>ProgressRewardsPanel>Panel>AD>big_rewards>>quantity>value"}
         btn_claim = {"locator": "UICanvas>Default>ProgressRewardsPanel>Panel>current_rewards>btn_claim"}
 
+    class PVEMultiRoomFriend:
+        PVEMultiRoomFriendPanel = {"locator": "UICanvas>Default>PVEMultiRoomFriendPanel"}
+        btn_close = {"locator": "UICanvas>Default>PVEMultiRoomFriendPanel>btn_close"}
+
     class PVENewbieGiftPack:
         PVENewbieGiftPackPanel = {"locator": "UICanvas>Default>PVENewbieGiftPackPanel"}
         btn_close = {"locator": "UICanvas>Default>PVENewbieGiftPackPanel>btn_close>img"}
 
     class PVERuleTips:
         PVERuleTipsPanel = {"locator": "UICanvas>Default>PVERuleTipsPanel"}
-        btn_close = {"locator": "UICanvas>Default>PVERuleTipsPanel>Panel_Popups_Edit>Panel>btn_close>img"}
+        btn_close = {"locator": "UICanvas>Default>PVEMultiRoomFriendPanel>btn_close"}
 
 
     class PVPBattleHUD:
@@ -1496,6 +1505,7 @@ class ElementsData:
     class Tournaments:
         TournamentsPanel = {"locator": "UICanvas>Default>TournamentsPanel"}
         btn_close = {"locator": "UICanvas>Default>TournamentsPanel>panel>btn_close>img"}
+        btn_enter_list_multi = {"locator": "UICanvas>Default>TournamentsPanel>panel>panel_entrance>List>Viewport>Content>>model>btn_players>btn_players>text"}
         btn_enter_list = {"locator": "UICanvas>Default>TournamentsPanel>panel>panel_entrance>List>Viewport>Content>>model>btn_enter>text"}
         time_list = {"locator": "UICanvas>Default>TournamentsPanel>panel>panel_entrance>List>Viewport>Content>>model>tournaments_info>time>text"}
         bg_list = {"locator": "UICanvas>Default>TournamentsPanel>panel>panel_entrance>List>Viewport>Content>>model>bg"}

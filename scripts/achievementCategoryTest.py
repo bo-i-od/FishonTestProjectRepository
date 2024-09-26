@@ -85,8 +85,9 @@ def category_test(bp: BasePage):
 
     # 随机选一个鱼种完成
     index = table_data["icon"].index(achievement_icon)
-    # bp.cmd(f'categoryComplete {table_data["TPID"][index]}')
-    AchievementCategoryPanel.do_category(bp, table_data=table_data, index=index)
+    tpid = table_data["TPID"][index]
+    bp.cmd(f'categoryComplete {tpid}')
+    # AchievementCategoryPanel.do_category(bp, table_data=table_data, index=index)
     bp.go_home()
 
     # 去悬赏界面
