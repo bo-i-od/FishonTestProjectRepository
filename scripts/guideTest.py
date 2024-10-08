@@ -64,10 +64,10 @@ def newbieGuidePanelTest(bp: BasePage):
 
 
 
-
 def main(bp:BasePage):
     username = str(time.time()).split('.')[0]
     gameInit.login(bp, username=username)
+    gameInit.set_joystick(bp)
     bp.cmd("fishcardall 10")
 
     # # 姓名头像测试

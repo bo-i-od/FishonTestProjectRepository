@@ -116,7 +116,7 @@ class NewbieTaskPanel(BasePage):
 
     def get_task_viewport(self, task_id_list):
         size = self.get_size_list(object_id_list=task_id_list)[0]
-        task_viewport = Viewport(self, element_viewport=ElementsData.NewbieTask.task_viewport, item_id_list=task_id_list, viewport_direction="column", viewport_edge=[0, size[1]])
+        task_viewport = Viewport(self, element_viewport=ElementsData.NewbieTask.task_viewport, item_id_list=task_id_list, viewport_direction="column", viewport_edge=[0, 2 * size[1]])
         return task_viewport
 
     # 得到任务的instance id
