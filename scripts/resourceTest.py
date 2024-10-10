@@ -3,11 +3,13 @@ import json
 import os
 import sys
 from pathlib import Path
+
+from tools import baseDataRead
 from tools.excelRead import ExcelTools
 from datetime import datetime
 
 pic_path_data_dict = {
-    "ACHIEVEMENT_CATEGORY.xlsm": {"item_name": ["icon", "fishList>pic"], "ignore_icon_list": ["0", 0]},
+    "ACHIEVEMENT_CATEGORY.xlsm": {"item_name": ["icon", "fishList>pic"], "ignore_icon_list": []},
     "ACHIEVEMENT_GROUP.xlsm": {"item_name": ["icon"]},
 
     }
@@ -28,7 +30,7 @@ def find_files_with_extension(folder_path, extension):
     return [os.path.basename(file) for file in matching_files]
 
 
-def get_excel_key_dict():
+def get_key_dict_excel():
     files = find_files_with_extension(folder_path=excel_path, extension=".xlsm")
     key_dict = {}
     for index, file in enumerate(files):
@@ -40,9 +42,29 @@ def get_excel_key_dict():
         sys.stdout.flush()
     return key_dict
 
+def get_key_dict_base_data():
+    key_dict = {}
+    files = baseDataRead.get_files_in_current_directory(base_data_path)
+    prefix_list = baseDataRead.get_prefix_list(files)
+    for prefix in prefix_list:
+        temp_dict = {}
+        decl_file = base_data_path + prefix + '.decl.h'
+        try:
+            structs = baseDataRead.parse_decl_file(decl_file)
+        except FileNotFoundError:
+            continue
+        for struct in structs:
+            if prefix == struct:
+                temp_dict[prefix + '.xlsm'] = list(structs[struct])
+            else:
+                temp_dict[prefix + '.xlsm+' + struct] = list(structs[struct])
+        key_dict.update(temp_dict)
+
+    return key_dict
+
 
 # 根据路径找到表中图片
-def get_pic_list(table_data, pic_path: str):
+def get_pic_list_by_table_data(table_data, pic_path: str):
     pic_path_split_list = pic_path.split(">")
     res = [table_data]
     for pic_path_split in pic_path_split_list:
@@ -50,9 +72,37 @@ def get_pic_list(table_data, pic_path: str):
     return res
 
 
+def get_pic_list_by_table_data_object_list(table_data_object_list, pic_path: str):
+    pic_path_split_list = pic_path.split(">")
+    res = []
+    for table_data_object in table_data_object_list:
+        temp = [table_data_object]
+        for pic_path_split in pic_path_split_list:
+            temp = get_list(temp, pic_path_split)
+        res += temp
+    return res
+
+
+def get_list(parent_list, child_name):
+    child_list = []
+    for parent in parent_list:
+        if not parent:
+            continue
+        if not isinstance(parent, list):
+            child_list.append(parent[child_name])
+            continue
+        for p in parent:
+            if not p:
+                continue
+            child_list.append(p[child_name])
+    return child_list
+
+
 def get_child_list(parent_list, child_name):
     child_list = []
     for parent in parent_list:
+        if not parent:
+            continue
         children = parent[child_name]
         for child in children:
             child_list.append(child)
@@ -60,22 +110,38 @@ def get_child_list(parent_list, child_name):
 
 
 def find_file(target_filename):
-    root_path = Path(root_folder)
+    root_path = Path(pictures_folder)
     for path in root_path.rglob(target_filename):
         if path.is_file():  # 检查路径是否是文件
             return True
     return False
 
 
-def check_pic(excel_name):
+def get_pictures_by_excel(excel_name):
     table_data = excel_tools.get_table_data(excel_name)
     pic_path_list = pic_path_data_dict[excel_name]["item_name"]
     pic_set = set()
-    res = set()
-    for pic_path in pic_path_list:
-        pic_list = get_pic_list(table_data, pic_path)
-        pic_set |= set(pic_list)
 
+    for pic_path in pic_path_list:
+        pic_list = get_pic_list_by_table_data(table_data, pic_path)
+        pic_set |= set(pic_list)
+    return pic_set
+
+
+def get_pictures_by_base_data(excel_name):
+    prefix = excel_name.split(".")[0]
+    table_data_object_list = baseDataRead.convert_to_json(base_data_path, prefix)
+    pic_path_list = pic_path_data_dict[excel_name]["item_name"]
+    pic_set = set()
+
+    for pic_path in pic_path_list:
+        pic_list = get_pic_list_by_table_data_object_list(table_data_object_list, pic_path)
+        pic_set |= set(pic_list)
+    return pic_set
+
+
+def check_pictures(excel_name, pic_set):
+    res = set()
     for index, pic in enumerate(pic_set):
         output = f"进度：{index + 1}/{len(pic_set)}"
         # 打印并刷新 stdio
@@ -91,9 +157,10 @@ def check_pic(excel_name):
             continue
         res.add(target_filename)
         sys.stdout.write('\r' + ' ' * len(output) + '\r')
-        print(f"'{target_filename}' not found in '{root_folder}' or its subfolders.")
+        print(f"'{target_filename}' not found in '{pictures_folder}' or its subfolders.")
     print("\n")
     return res
+
 
 def compare_dicts(old_dict, new_dict):
     old_keys = set(old_dict.keys())
@@ -112,20 +179,20 @@ def compare_dicts(old_dict, new_dict):
     for key in common_keys:
         old_value = set(old_dict[key])
         new_value = set(new_dict[key])
-        if old_value != new_value:
-            changes["modified_values"][key] = {
-                "added": list(new_value - old_value),
-                "removed": list(old_value - new_value)
-            }
+        if old_value == new_value:
+            continue
+        changes["modified_values"][key] = {
+            "added": list(new_value - old_value),
+            "removed": list(old_value - new_value)
+        }
 
     return changes
 
 
-def version_comparison():
-    version_new = get_excel_key_dict()
+def version_comparison(version_new):
     version_old = version_new
     try:
-        with open("../report/comparison_2024-10-08-14-07-53.txt", "r", encoding="utf-8") as file:
+        with open("../report/comparison_2024-10-10-19-43-48.txt", "r", encoding="utf-8") as file:
             content = file.read()
             version_old = json.loads(content.replace("'", '"'))
     except Exception as e:
@@ -152,24 +219,31 @@ def version_comparison():
         file.write(str(version_new))
 
 
+
+
 def main():
     res = set()
     for pic_path_data in pic_path_data_dict:
-        print(pic_path_data)
-        check_result = check_pic(pic_path_data)
+        # pictures = get_pictures_by_excel(pic_path_data)
+        # print(pictures)
+        pictures = get_pictures_by_base_data(pic_path_data)
+        print(pictures)
+        check_result = check_pictures(pic_path_data, pictures)
         res |= check_result
     print(f"找不到的资源为{res}")
 
 
 if __name__ == '__main__':
     # 图片资源路径
-    root_folder = 'C:/trunkCHS/client/MainProject/Assets/InBundle'
-
+    root_path = 'C:/trunkCHS'
+    pictures_folder = root_path + '/client/MainProject/Assets/InBundle'
     # 配置表路径
-    excel_path = r"C:/trunkCHS/datapool/策划模板导出工具/"
+    excel_path = root_path + r"/datapool/策划模板导出工具/"
     excel_tools = ExcelTools(excel_path)
+    base_data_path = root_path + r"/datapool/ElementData/BaseData/"
 
     # 版本对照
-    version_comparison()
+    version_new = get_key_dict_base_data()
+    version_comparison(version_new)
 
     # main()
