@@ -77,8 +77,9 @@ def main(bp:BasePage):
 
     # # 姓名头像测试
     playerEditNamePanelTest(bp)
-
-    AvatarSelectPanel.wait_for_panel_appear(bp)
+    #海外版本暂无avatar
+    '''
+     AvatarSelectPanel.wait_for_panel_appear(bp)
 
     # 随机选择性别
     r = random.randint(0, 1)
@@ -88,6 +89,8 @@ def main(bp:BasePage):
 
     AvatarSelectPanel.click_btn_start(bp)
     bp.sleep(0.5)
+    '''
+
 
     # 新手引导
     newbieGuidePanelTest(bp)
@@ -105,8 +108,14 @@ def main(bp:BasePage):
     bp.clear_popup()
 
     # 水族馆引导
+    #海外版本暂无水族箱
+    '''
     bp.go_to_panel("AquariumPanel")
     AquariumPanel.guide(bp)
+    bp.go_home()
+    '''
+
+    bp.go_to_panel("FishAlbum3DPanel")
     bp.go_home()
 
     # 鱼卡引导
@@ -141,7 +150,7 @@ def main(bp:BasePage):
     BattlePanel.release_btn_reel(bp)
     # element_btn = ResultPanel.wait_for_result(bp)
     # ResultPanel.automatic_settlement(bp, element_btn=element_btn)
-    GearPanel.guide(bp)
+    GearPanel.guide_oversea(bp)
 
     bp.go_home()
 

@@ -81,7 +81,8 @@ def wanted_test(bp: BasePage):
     # 读表格数据
     table_data = bp.excelTools.get_table_data("ACHIEVEMENT_WANTED.xlsm")
 
-    index = table_data["icon"].index(achievement_icon)
+    # index = table_data["icon"].index(achievement_icon)
+    r = table_data["icon"].index(achievement_icon)
     # tpid = table_data["TPID"][index]
     # bp.cmd(f'wantedComplete {tpid}')
     AchievementWantedPanel.do_wanted(bp, table_data=table_data, index=r)
@@ -98,6 +99,7 @@ def wanted_test(bp: BasePage):
     # target_icon = table_data["icon"][r]
     # achievement_icon_list = AchievementPanel.get_achievement_icon_list(bp)
     # index = achievement_icon_list.index(target_icon)
+    r=0
     achievement_icon_id_list = AchievementPanel.get_achievement_icon_id_list(bp)
     viewport = AchievementPanel.get_viewport(bp)
     viewport.move_until_appear(achievement_icon_id_list[r])

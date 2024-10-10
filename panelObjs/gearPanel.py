@@ -162,6 +162,20 @@ class GearPanel(BasePage):
         self.sleep(1)
         BattlePreparePanel.click_btn_apply(self)
 
+    def guide_oversea(self):
+        perform_list = [ElementsData.NewbieGuide_oversea.NBG_fishing_fail_1,
+                        ElementsData.NewbieGuide_oversea.NBG_fishing_fail_2, ElementsData.NewbieGuide_oversea.NBG_fishing_fail_3,
+                        ElementsData.NewbieGuide_oversea.NBG_fishing_fail_4, ElementsData.NewbieGuide_oversea.NBG_fishing_fail_5,
+                        ElementsData.NewbieGuide_oversea.NBG_fishing_fail_6, ElementsData.NewbieGuide_oversea.NBG_fishing_fail_7]
+        self.click_a_until_b_appear_list(perform_list=perform_list)
+        self.click_until_disappear(element_data=ElementsData.NewbieGuide_oversea.NBG_fishing_fail_7)
+        self.sleep(1)
+        GearLevelupPanel.click_btn_close(self)
+        self.sleep(1)
+        GearPanel.click_btn_close(self)
+        self.sleep(1)
+        BattlePreparePanel.click_btn_apply(self)
+
     def get_fishing_rod_table_data(self):
         table_data = self.excelTools.get_table_data("FISHING_ROD.xlsm")
         return table_data

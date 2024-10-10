@@ -155,6 +155,8 @@ def str_to_int_list(count_list:list):
             count_list[cur] = int(float(count_list[cur]))
         cur += 1
 
+def str_to_int_list_oversea(count_list):
+   count_list = float(count_list[0].split(' ')[1])
 
 
 def split_string_by_uppercase(string):

@@ -254,6 +254,8 @@ def main(bp: BasePage):
     # 看战力是否更新
     rating_test(bp, rating, rating_fisheries)
 
+    FishCardGiftPackCustomizePanel.click_btn_close(bp)
+
     # 一键升级测试
     FishCardMultipleLevelUpPanel_test(bp)
 

@@ -109,8 +109,9 @@ def BattlePassBuyLevelPanel_test(bp:BasePage):
 
 # 通行证界面往其它界面的跳转测试
 def jump_test(bp:BasePage):
-    BattlePassPanel.click_btn_detail(bp)
-    BaitAndRodShowPanel.click_tap_to_continue(bp)
+    #点击左侧鱼竿查看详情，海外版本不可点击
+    #BattlePassPanel.click_btn_detail(bp)
+    #BaitAndRodShowPanel.click_tap_to_continue(bp)
     bp.sleep(1)
     BattlePassPanel.click_btn_task(bp)
     bp.sleep(1)
@@ -133,11 +134,12 @@ def buy_premium_test(bp:BasePage):
     bp.sleep(1)
 
     # 获得价格信息
-    cost_icon_list = BattlePassBuyLicensePanel.get_cost_icon_list(bp)
+    # 海外版本暂无点券
+    #cost_icon_list = BattlePassBuyLicensePanel.get_cost_icon_list(bp)
     cost_quantity_list = BattlePassBuyLicensePanel.get_cost_quantity_list(bp)
-    cost_icon = cost_icon_list[r]
+    #cost_icon = cost_icon_list[r]
     cost_quantity = cost_quantity_list[r]
-    cost_expect = bp.get_item_count(item_icon_name=cost_icon) - cost_quantity
+    #cost_expect = bp.get_item_count(item_icon_name=cost_icon) - cost_quantity
 
     # 随机点一个
     btn_buy_list = BattlePassBuyLicensePanel.get_btn_buy_list(bp)
@@ -146,9 +148,13 @@ def buy_premium_test(bp:BasePage):
     BattlePassBuyLicensePanel.wait_for_pay_result(bp)
     bp.sleep(1)
 
+    RewardsPanel.wait_for_panel_appear(bp)
+    bp.sleep(1)
+    RewardsPanel.click_tap_to_claim(bp)
+
     # 对比点券数量变化
-    cost = bp.get_item_count(item_icon_name=cost_icon)
-    compare(cost_expect, cost)
+    #cost = bp.get_item_count(item_icon_name=cost_icon)
+    #compare(cost_expect, cost)
     # if r == 1:
     #     RewardsPanel.wait_for_panel_appear(bp)
     #     bp.sleep(1)

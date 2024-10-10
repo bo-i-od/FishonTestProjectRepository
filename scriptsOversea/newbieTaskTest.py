@@ -55,9 +55,10 @@ def party_sale_test(bp: BasePage):
     stock_expect_list = bp.get_item_count_list(item_icon_name_list=item_icon_list)
 
     # 点卷数量
-    cost_icon = PartySalePanel.get_cost_icon(bp)
-    cost_quantity = PartySalePanel.get_cost_quantity(bp)
-    cost_expect = bp.get_item_count(item_icon_name=cost_icon) - cost_quantity
+    # 海外版本没有点券
+    # cost_icon = PartySalePanel.get_cost_icon(bp)
+    # cost_quantity = PartySalePanel.get_cost_quantity(bp)
+    # cost_expect = bp.get_item_count(item_icon_name=cost_icon) - cost_quantity
 
     # 点击购买
     PartySalePanel.click_btn_buy(bp)
@@ -75,8 +76,8 @@ def party_sale_test(bp: BasePage):
     # compare_list(stock_expect_list, stock_list)
 
     # 对比点券数量变化
-    cost = bp.get_item_count(item_icon_name=cost_icon)
-    compare(cost_expect, cost)
+    # cost = bp.get_item_count(item_icon_name=cost_icon)
+    # compare(cost_expect, cost)
 
     RewardsPanel.wait_for_panel_appear(bp)
     bp.sleep(1)
@@ -353,9 +354,9 @@ def progress_test(bp:BasePage):
     bp.set_item_count(target_count=max_reward_threshold - 1, item_tpid="209012")
     bp.sleep(1)
     bp.click_position(progress_reward_position_list[r])
-    RewardsPanel.wait_for_panel_appear(bp)
+    #RewardsPanel.wait_for_panel_appear(bp)
     bp.sleep(1)
-    RewardsPanel.click_tap_to_claim(bp)
+   # RewardsPanel.click_tap_to_claim(bp)
 
     # 只领取大奖
     # 求期望大奖数量和库存

@@ -133,6 +133,7 @@ class JumpData:
         "CareerPanel": {"element_data": ElementsData.Career.CareerPanel, "open_path": [ElementsData.Home.btn_career]},
         "DivisionLeaderboardPanel": {"element_data": ElementsData.DivisionLeaderboard.DivisionLeaderboardPanel, "open_path": [ElementsData.Home.btn_pve, ElementsData.Tournaments.btn_leaderboard]},
         "DLCDownloadPanel": {"element_data": ElementsData.DLCDownload.DLCDownloadPanel, "open_path": [ElementsData.Home.btn_download]},
+        "DLCDownloadPanel_oversea": {"element_data": ElementsData.DLCDownload_oversea.DLCDownloadPanel, "open_path": [ElementsData.Home.btn_download]},
         "FishAlbum3DPanel": {"element_data": ElementsData.FishAlbum3D.FishAlbum3DPanel, "open_path": [ElementsData.Home.btn_fishalbum]},
         "FishCardPanel": {"element_data": ElementsData.FishCard.FishCardPanel, "open_path": [ElementsData.Home.btn_fishcard]},
         "FisheryGiftPackPanel": {"element_data": ElementsData.FisheryGiftPack.FisheryGiftPackPanel, "open_path": [ElementsData.Home.btn_event_location]},

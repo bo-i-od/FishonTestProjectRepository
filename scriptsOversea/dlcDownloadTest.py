@@ -2,7 +2,7 @@ import random
 
 from common import gameInit
 from common.basePage import BasePage
-from panelObjs.dlcDownloadPanel import DLCDownloadPanel
+from panelObjs.dlcDownloadPanel import DLCDownloadPanel_oversea
 from panelObjs.rewardsPanel import RewardsPanel
 from panelObjs.itemTipsPanel import ItemTipsPanel
 from tools.commonTools import *
@@ -12,12 +12,12 @@ def main(bp: BasePage):
     cmd_list = ["guideskip"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
     # 进入界面
-    bp.go_to_panel("DLCDownloadPanel")
+    bp.go_to_panel("DLCDownloadPanel_oversea")
     bp.sleep(1)
 
     # 随机点击图标
-    reward_icon_list = DLCDownloadPanel.get_reward_icon_list(bp)
-    reward_icon_position_list = DLCDownloadPanel.get_reward_icon_position_list(bp)
+    reward_icon_list = DLCDownloadPanel_oversea.get_reward_icon_list(bp)
+    reward_icon_position_list = DLCDownloadPanel_oversea.get_reward_icon_position_list(bp)
     r = random.randint(0, len(reward_icon_position_list) - 1)
     bp.click_position(reward_icon_position_list[r])
     item_icon = ItemTipsPanel.get_item_icon(bp)
@@ -25,8 +25,8 @@ def main(bp: BasePage):
     bp.click_position([0.5, 0.1])
 
     # 点击领取
-    item_dict_list = DLCDownloadPanel.get_item_dict_list(bp)
-    btn_claim_position_list = DLCDownloadPanel.get_btn_claim_position_list(bp)
+    item_dict_list = DLCDownloadPanel_oversea.get_item_dict_list(bp)
+    btn_claim_position_list = DLCDownloadPanel_oversea.get_btn_claim_position_list(bp)
     cur = 0
     while cur < len(item_dict_list):
         if not btn_claim_position_list[cur]:
@@ -36,7 +36,7 @@ def main(bp: BasePage):
         cur += 1
 
     # 关闭界面
-    DLCDownloadPanel.click_btn_close(bp)
+    DLCDownloadPanel_oversea.click_btn_close(bp)
 
 def claim_once_test(bp: BasePage, item_dict_list, btn_claim_position_list, index):
     # 计算期望
@@ -66,7 +66,7 @@ def claim_once_test(bp: BasePage, item_dict_list, btn_claim_position_list, index
     RewardsPanel.click_tap_to_claim(bp)
     bp.sleep(1)
 
-    btn_claim_position_list = DLCDownloadPanel.get_btn_claim_position_list(bp)
+    btn_claim_position_list = DLCDownloadPanel_oversea.get_btn_claim_position_list(bp)
     if btn_claim_position_list[index]:
         raise FindElementError
 

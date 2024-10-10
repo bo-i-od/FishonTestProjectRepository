@@ -92,7 +92,7 @@ def leaderboard_test(bp: BasePage, data_list, is_like):
     rank_data = RankPanel.get_rank_data(bp, r)
     bp.click_position(photo_position_list[r])
     bp.sleep(1)
-    compare(rank_data, RankFishLeaderboardPanel.get_rank_data(bp))
+    compare(rank_data, RankFishLeaderboardPanel.get_rank_data_oversea(bp))
 
     # 点赞
     if not is_like:

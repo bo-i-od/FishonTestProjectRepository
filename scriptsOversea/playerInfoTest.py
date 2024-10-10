@@ -55,7 +55,7 @@ def settings_test(bp: BasePage):
     PlayerInfoPanel.set_options_joystick(bp, random.randint(0, 1))
     PlayerInfoPanel.set_options_vibration(bp, random.randint(0, 1))
     PlayerInfoPanel.set_options_gyro(bp, random.randint(0, 1))
-    PlayerInfoPanel.set_options_invite(bp, random.randint(0, 1))
+#    PlayerInfoPanel.set_options_invite(bp, random.randint(0, 1))
     PlayerInfoPanel.click_btn_copy_id(bp)
 
 def name_test(bp: BasePage):
@@ -153,8 +153,9 @@ def main(bp:BasePage):
     bp.go_to_panel("PlayerInfoPanel")
     bp.sleep(1)
 
-    PlayerInfoPanel.switch_tab(bp, 1)
-    bp.sleep(1)
+    # 海外暂无该模块
+    #PlayerInfoPanel.switch_tab(bp, 1)
+    #bp.sleep(1)
 
     # 点击鱼竿详情
     PlayerInfoPanel.click_btn_i_rod(bp)
@@ -168,8 +169,8 @@ def main(bp:BasePage):
     bp.sleep(1)
 
     # 切换到数据
-    PlayerInfoPanel.switch_tab(bp, 2)
-    bp.sleep(1)
+#    PlayerInfoPanel.switch_tab(bp, 2)
+ #   bp.sleep(1)
 
     # 点击礼包码
     gift_code_test(bp)
@@ -183,13 +184,14 @@ def main(bp:BasePage):
     bp.sleep(1)
 
     # 切换信息
-    PlayerInfoPanel.switch_tab(bp, 0)
-    bp.sleep(1)
+    # 暂无该部分
+    # PlayerInfoPanel.switch_tab(bp, 0)
+    # bp.sleep(1)
 
-    PlayerInfoPanel.click_btn_changecamera(bp)
-    bp.sleep(1)
-    PlayerInfoPanel.click_btn_changecamera(bp)
-    bp.sleep(1)
+    # PlayerInfoPanel.click_btn_changecamera(bp)
+    # bp.sleep(1)
+    # PlayerInfoPanel.click_btn_changecamera(bp)
+    # bp.sleep(1)
 
     # 点击战力详情
     PlayerInfoPanel.click_btn_i_rating(bp)

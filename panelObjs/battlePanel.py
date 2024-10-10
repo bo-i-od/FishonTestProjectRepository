@@ -111,8 +111,8 @@ class BattlePanel(BasePage):
             #     self.clear_popup()
             #     self.cur += 1
             self.clear_popup()
-            self.lua_console(command="GameRoot:GetFishingMatch():GetPlayer().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
-            # self.lua_console(command="GameRoot:GetFishingMatch().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
+            #self.lua_console(command="GameRoot:GetFishingMatch():GetPlayer().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
+            self.lua_console(command="GameRoot:GetFishingMatch().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
             self.sleep(1)
 
 
@@ -151,6 +151,11 @@ class BattlePanel(BasePage):
     def hook_guide(self):
         perform_list = [ElementsData.NewbieGuide.NBG_hook_1, ElementsData.NewbieGuide.NBG_hook_2, ElementsData.NewbieGuide.NBG_hook_3, ElementsData.NewbieGuide.NBG_hook_5]
         self.click_a_until_b_appear_list(perform_list)
+        self.click_until_disappear(ElementsData.NewbieGuide.NBG_hook_5)
+
+    def hook_guide_oversea(self):
+        perform_list_oversea = [ElementsData.NewbieGuide.NBG_hook_4, ElementsData.NewbieGuide.NBG_hook_5]
+        self.click_a_until_b_appear_list(perform_list_oversea)
         self.click_until_disappear(ElementsData.NewbieGuide.NBG_hook_5)
 
 

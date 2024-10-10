@@ -69,6 +69,7 @@ class AchievementWantedPanel(BasePage):
                 cur += 1
                 continue
             battleTest.fish_once(self, fishery_id=fishery, fish_id=target, is_quick=True)
+            # battleTest.fish_once(self, fishery_id=fishery, fish_id=target, is_quick=False)
             cur += 1
 
     def click_btn_rewards(self):
