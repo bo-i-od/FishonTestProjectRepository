@@ -790,7 +790,7 @@ class BasePage(BasePageMain):
         # 配置表的路径
         self.excelTools = ExcelTools(EXCEL_PATH)
 
-    def get_fish_list(self, fishery_id):
+    def get_fish_id_list(self, fishery_id):
         table_data = self.excelTools.get_table_data("FISHERIES.xlsm")
         tpId_list = table_data["tpId"]
         index = tpId_list.index(int(fishery_id))
@@ -1180,8 +1180,10 @@ class BasePage(BasePageMain):
 
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21523", is_mobile_device=True)
-    bp.set_item_count(target_count=2500, item_tpid="100500")
+    bp = BasePage("127.0.0.1:21523", is_mobile_device=False)
+    a = bp.get_item_count( item_tpid="100500")
+    print(a)
+    # bp.set_item_count(target_count=2500, item_tpid="100500")
     bp.connect_close()
     # while True:
     #     # a = bp.get_object_id_list(element_data=ElementsData.Login.btn_login)

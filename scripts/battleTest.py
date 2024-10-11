@@ -4,7 +4,6 @@ from netMsg import csMsgAll
 from netMsg.luaLog import get_value
 
 from panelObjs.battlePreparePanel import BattlePreparePanel
-from panelObjs.fishStatePanel import FishStatePanel
 from panelObjs.flashCardReceivePanel import FlashCardReceivePanel
 from panelObjs.loadingPanel import LoadingPanel
 from panelObjs.loginPanel import LoginPanel
@@ -37,12 +36,27 @@ def fish_once(bp: BasePage, fishery_id="", fish_id="", is_quick=False):
     if fish_id != "":
         bp.cmd("mode 0 0")
 
+def fail_once(bp: BasePage, fishery_id="", fish_id=""):
+    bp.set_time_scale()
+    if fish_id != "":
+        c = f"mode {fishery_id} {fish_id}"
+        print(c)
+        bp.cmd(c)
+    BattlePreparePanel.click_btn_cast(bp)
+    BattlePanel.hook(bp)
+    bp.set_time_scale()
+    element_btn = ResultPanel.wait_for_result(bp)
+    ResultPanel.automatic_settlement(bp, element_btn=element_btn)
+
+    if fish_id != "":
+        bp.cmd("mode 0 0")
+
 
 def circulate_fish(bp: BasePage, fishery_id=None, is_quick=False, times=500, start=0):
     fish_list = []
     cur = start
     if fishery_id is not None:
-        fish_list = bp.get_fish_list(fishery_id)
+        fish_list = bp.get_fish_id_list(fishery_id)
         times = len(fish_list)
     while cur < times:
         fish_id = ""
@@ -143,7 +157,7 @@ def leave_treasure_map(bp, fishery_id, is_double_week):
 
 
 def goldfish_all(bp: BasePage, fishery_id,  is_double_week=False):
-    fish_list = bp.get_fish_list(fishery_id)
+    fish_list = bp.get_fish_id_list(fishery_id)
     cur = 0
     while cur < len(fish_list):
         # 藏宝图消失就钓藏宝图
@@ -180,7 +194,7 @@ def goldfish_all(bp: BasePage, fishery_id,  is_double_week=False):
 
 
 def flashcard_all(bp: BasePage, fishery_id):
-    fish_list = bp.get_fish_list(fishery_id)
+    fish_list = bp.get_fish_id_list(fishery_id)
     # bp.cur = 0
     # while bp.cur < len(fish_list):
     #     go_to_treasure_map(bp, fishery_id=fishery_id, is_double_week=True)
@@ -218,21 +232,22 @@ def flashcard_all(bp: BasePage, fishery_id):
 
 
 def fishbone_all(bp: BasePage, fishery_id, is_gold=False, is_double_week=False):
-    spot_id = fishery_to_spot(fishery_id, is_gold, is_double_week)
-    # 黄金钓点
-    if is_gold:
-        go_to_treasure_map(bp, fishery_id=fishery_id, is_double_week=is_double_week)
-    else:
+    if not is_gold:
         leave_treasure_map(bp, fishery_id=fishery_id, is_double_week=is_double_week)
+    spot_id = fishery_to_spot(fishery_id, is_gold, is_double_week)
     drop_item_id_list = bp.get_drop_item_id_list(spot_id)
     for drop_item_id in drop_item_id_list:
         drop_item_id = str(drop_item_id)
         # 跳过藏宝图
         if drop_item_id == "399001":
             continue
+        # 黄金钓点
+        if is_gold:
+            go_to_treasure_map(bp, fishery_id=fishery_id, is_double_week=is_double_week)
         fish_once(bp, fishery_id=fishery_id, fish_id=drop_item_id, is_quick=True)
         bp.sleep(3)
-        FishStatePanel.click_btn_icon(bp)
+        BattlePreparePanel.click_btn_icon_warning(bp)
+
         bp.sleep(1)
         img = bp.get_full_screen_shot()
         bp.save_img(img)
@@ -240,7 +255,83 @@ def fishbone_all(bp: BasePage, fishery_id, is_gold=False, is_double_week=False):
         fish_once(bp, fishery_id=fishery_id, fish_id=fish_id, is_quick=True)
 
 
-def main(bp, fishery_id, is_double_week=False):
+def fail_all(bp: BasePage, fishery_id, is_gold=False, is_double_week=False):
+    if not is_gold:
+        leave_treasure_map(bp, fishery_id=fishery_id, is_double_week=is_double_week)
+    fish_id_list = bp.get_fish_id_list(fishery_id)
+    fishery_id = str(fishery_id)
+    cur = 0
+    while cur < len(fish_id_list):
+        fish_id = str(fish_id_list[cur])
+        if fish_id[:3] == fishery_id[-3:]:
+            cur += 1
+            continue
+        # 黄金钓点
+        if not is_gold:
+            # 触发失败鱼情
+            fail_once(bp, fishery_id=fishery_id, fish_id=fish_id)
+
+            # 点击图标截图
+            bp.sleep(3)
+            BattlePreparePanel.click_btn_icon_warning(bp)
+            bp.sleep(1)
+            img = bp.get_full_screen_shot()
+            bp.save_img(img)
+
+            # 钓上来
+            fish_once(bp, fishery_id=fishery_id, fish_id=fish_id)
+            cur += 1
+            continue
+
+        # 黄金鱼情
+        go_to_treasure_map(bp, fishery_id=fishery_id, is_double_week=is_double_week)
+
+        # 清空消息列表 开始收消息
+        bp.log_list.clear()
+        bp.log_list_flag = True
+
+        # 拉断线
+        bp.set_time_scale()
+        if fish_id != "":
+            c = f"mode {fishery_id} {fish_id}"
+            print(c)
+            bp.cmd(c)
+        BattlePreparePanel.click_btn_cast(bp)
+        bp.sleep(2)
+        bp.log_list_flag = False
+        target_log = bp.get_target_log(msg_key="SCFishingCastMsg")
+        color = get_value(msg=target_log, key="color", is_str=False)
+        BattlePanel.hook(bp)
+        # 如果不是黄金鱼就不要
+        if color != "11":
+            print("10")
+            if BattlePanel.is_reel_active(bp):
+                bp.custom_cmd("autofish")
+                qteThread = Thread(target=BattlePanel.qte, args=[bp])
+                qteThread.start()
+            BattlePanel.reel_quick(bp)
+            bp.set_time_scale()
+            element_btn = ResultPanel.wait_for_result(bp)
+            ResultPanel.automatic_settlement(bp, element_btn=element_btn)
+            continue
+        print("11")
+        # 是黄金鱼就拉断线
+        bp.set_time_scale()
+        element_btn = ResultPanel.wait_for_result(bp)
+        ResultPanel.automatic_settlement(bp, element_btn=element_btn)
+
+        # 点击图标截图
+        bp.sleep(3)
+        BattlePreparePanel.click_btn_icon_warning(bp)
+        bp.sleep(1)
+        img = bp.get_full_screen_shot()
+        bp.save_img(img)
+
+        # 钓上来
+        fish_once(bp, fishery_id=fishery_id, fish_id=fish_id)
+        cur += 1
+
+def main(bp: BasePage, fishery_id, is_double_week=False):
     bp.set_item_count(target_count=1000000000, item_tpid="100500")
     # # 渔场全部闪卡
     flashcard_all(bp, fishery_id)
@@ -248,8 +339,14 @@ def main(bp, fishery_id, is_double_week=False):
     # 渔场全部普通鱼骨
     fishbone_all(bp, fishery_id, is_gold=False, is_double_week=is_double_week)
 
+    # 渔场全部失败鱼情
+    fail_all(bp, fishery_id, is_gold=False, is_double_week=is_double_week)
+
     # 渔场全部黄金鱼骨
     fishbone_all(bp, fishery_id, is_gold=True, is_double_week=is_double_week)
+
+    # 渔场全部黄金失败鱼情
+    fail_all(bp, fishery_id, is_gold=True, is_double_week=is_double_week)
 
     # 渔场全部黄金鱼
     goldfish_all(bp, fishery_id, is_double_week=is_double_week)
@@ -263,26 +360,9 @@ if __name__ == '__main__':
     gameInit.set_joystick(bp)
     bp.is_time_scale = False
     bp.custom_cmd("setTension 0.9")
-    circulate_fish(bp, fishery_id="400312",is_quick=True, start=21)
-    # main(bp, fishery_id="400318", is_double_week=True)
-    # goldfish_all(bp, fishery_id="400306")
-    # main(bp, fishery_id="400318", is_double_week=True)
-    # flashcard_all(bp, "400306")
-    # fishbone_all(bp, "400306")
-    # while True:
-    #     fish_once(bp, fishery_id="400306", is_quick=True, fish_id="306011")
+    bp.set_item_count(target_count=1000000000, item_tpid="100500")
+    main(bp, fishery_id="400319",  is_double_week=True)
 
-
-
-    # # 按渔场id从小到大，再按鱼从小到大钓一遍
-    # fish_all(bp,  is_quick=True)
-    # fish_all(bp, is_quick=True)
-    # l = ["390011","390013", "390014", "390017", "390018"]
-    # cur = 1
-    # while cur < 6:
-    #     fish_once(bp, is_quick=False, fishery_id="400301", fish_id=f"39000{cur}")
-    #     cur += 1
-    #
     # 断开连接
     bp.connect_close()
 

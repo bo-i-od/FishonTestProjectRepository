@@ -7,24 +7,6 @@ class HomePanel(BasePage):
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.Home.HomePanel)
 
-    # 获取玩家经验值
-    def get_exp_val(self):
-        # 得到等级
-        lv_str = self.get_text(element_data=ElementsData.Home.player_lv)
-        lv = int(lv_str)
-        # 得到slider
-        exp_progress = self.get_slider_value(element_data=ElementsData.Home.exp)
-        print(exp_progress)
-        # 得到当前等级经验上限
-        exp_limit = HomePanel.get_exp_limit_val(self,lv)[0]
-        print(exp_limit)
-        # 经验 = 经验上限 * 进度条占总进度的百分比
-        exp = int(exp_progress * exp_limit + 0.5)  # 求出的数是float需要四舍五入一下
-        return exp, lv
-
-    def get_exp_limit_val(self, lv):
-        return self.excelTools.get_exp_limit(lv)
-
     def get_head_img(self):
         head_img = self.get_icon(element_data=ElementsData.Home.head_img)
         return head_img

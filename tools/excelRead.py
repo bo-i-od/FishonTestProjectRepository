@@ -1,3 +1,5 @@
+import json
+
 from openpyxl import *
 from openpyxl.utils import get_column_letter
 
@@ -12,7 +14,8 @@ class ExcelTools:
         worksheet = workbook[sheet_name]
         return worksheet
 
-    def get_column_index(self, worksheet, header):
+    @staticmethod
+    def get_column_index(worksheet, header):
         column_index_res = 0
         for column_index_cur in range(1, worksheet.max_column + 1):
             cell_value = worksheet.cell(4, column_index_cur).value
@@ -21,7 +24,8 @@ class ExcelTools:
                 break
         return column_index_res
 
-    def get_row_index(self, worksheet, column_index, target_value):
+    @staticmethod
+    def get_row_index(worksheet, column_index, target_value):
         row_index_res = 0
         for row_index_cur in range(1, worksheet.max_row + 1):
             cell_value = worksheet.cell(row_index_cur, column_index).value
@@ -29,21 +33,6 @@ class ExcelTools:
                 row_index_res = row_index_cur
                 break
         return row_index_res
-
-    def get_exp_limit(self, lv):
-        worksheet = self.get_worksheet("PLAYER_LEVEL_UP.xlsm", "模板数据")
-        header = "exp"
-        col_index_exp = self.get_column_index(worksheet, header)
-        # 偏移为6
-        delta = 6
-        exp_limit_str = worksheet.cell(delta + lv, col_index_exp).value
-        exp_limit = int(exp_limit_str)
-        exp_limit_all = 0
-        cur = 0
-        while cur < lv:
-            exp_limit_all += int(worksheet.cell(delta + cur, col_index_exp).value)
-            cur += 1
-        return exp_limit, exp_limit_all
 
 
     @staticmethod
@@ -130,8 +119,44 @@ class ExcelTools:
                 cur += 1
         return table_data
 
+    def get_table_data_object_list(self, book_name):
+        table_data_object_list = []
+        table_data, table_data_len = self.get_table_struct(book_name=book_name)
+        worksheet = self.get_worksheet(book_name=book_name, sheet_name="模板数据")
+        cur = 6
+        while worksheet.cell(cur, 1).value is not None:
+            table_data_template = table_data.copy()
+            row_data = self.get_row_data(worksheet, row_index=cur, table_data_len=table_data_len)
+            table_data_object = self.fill_template(template=table_data_template, data=row_data)
+            table_data_object_list.append(table_data_object)
+            cur += 1
+        return table_data_object_list
 
-    def get_bias_list(self, worksheet, table_data_len):
+    @staticmethod
+    def fill_template(template, data):
+        result = str(template)
+        for i, value in enumerate(data, start=1):
+            if isinstance(value, str):
+                result = result.replace(f'[{i}]', f"'{value}'")
+            else:
+                result = result.replace(f'[{i}]', str(value))
+        result = result.replace("'", '"')
+        result = json.loads(result)
+        return result
+
+    @staticmethod
+    def get_row_data(worksheet, row_index, table_data_len):
+        row_data = []
+        # 第六行开始
+        cur = 1
+        while cur <= table_data_len:
+            row_data.append(worksheet.cell(row_index, cur).value)
+            cur += 1
+        return row_data
+
+
+    @staticmethod
+    def get_bias_list(worksheet, table_data_len):
         bias_list = []
         bias = 0
         cur = 1
@@ -143,9 +168,8 @@ class ExcelTools:
             cur += 1
         return bias_list
 
-
-
-    def get_column_data(self, worksheet, column_index, bias_list):
+    @staticmethod
+    def get_column_data(worksheet, column_index, bias_list):
         column_data = []
         # 第六行开始
         cur = 6
@@ -155,6 +179,11 @@ class ExcelTools:
             cur += 1
         return column_data
 
+
+if __name__ == '__main__':
+    et = ExcelTools("C:/trunkCHS/datapool/策划模板导出工具/")
+    a = et.get_table_data_object_list(book_name="ACHIEVEMENT_CATEGORY.xlsm")
+    print(a)
 
 
 

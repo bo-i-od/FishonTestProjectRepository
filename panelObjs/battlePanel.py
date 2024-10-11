@@ -101,7 +101,6 @@ class BattlePanel(BasePage):
         self.click_element(element_data=ElementsData.Battle.btn_reel)
 
 
-    # unity上才能用
     def reel_quick(self):
         while not ResultPanel.is_panel_active(self):
             # if FlashCardReceivePanel.is_panel_active(self):
@@ -111,8 +110,10 @@ class BattlePanel(BasePage):
             #     self.clear_popup()
             #     self.cur += 1
             self.clear_popup()
-            #self.lua_console(command="GameRoot:GetFishingMatch():GetPlayer().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
-            self.lua_console(command="GameRoot:GetFishingMatch().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
+            # 国内
+            self.lua_console(command="GameRoot:GetFishingMatch():GetPlayer().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
+            # # 海外
+            # self.lua_console(command="GameRoot:GetFishingMatch().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
             self.sleep(1)
 
 
