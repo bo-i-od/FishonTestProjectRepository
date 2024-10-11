@@ -136,7 +136,7 @@ def buy_premium_test(bp:BasePage):
     # 获得价格信息
     # 海外版本暂无点券
     #cost_icon_list = BattlePassBuyLicensePanel.get_cost_icon_list(bp)
-    cost_quantity_list = BattlePassBuyLicensePanel.get_cost_quantity_list(bp)
+    cost_quantity_list = BattlePassBuyLicensePanel.get_cost_quantity_list_oversea(bp)
     #cost_icon = cost_icon_list[r]
     cost_quantity = cost_quantity_list[r]
     #cost_expect = bp.get_item_count(item_icon_name=cost_icon) - cost_quantity

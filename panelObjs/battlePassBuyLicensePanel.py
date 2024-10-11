@@ -18,6 +18,10 @@ class BattlePassBuyLicensePanel(BasePage):
     def get_cost_quantity_list(self):
         cost_quantity_list = self.get_text_list(element_data=ElementsData.BattlePassBuyLicense.cost_quantity_list)
         str_to_int_list(cost_quantity_list)
+        return cost_quantity_list
+
+    def get_cost_quantity_list_oversea(self):
+        cost_quantity_list = self.get_text_list(element_data=ElementsData.BattlePassBuyLicense.cost_quantity_list)
         str_to_int_list_oversea(cost_quantity_list)
         return cost_quantity_list
 
