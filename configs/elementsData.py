@@ -342,6 +342,8 @@ class ElementsData:
         gears = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears_new>panel_gears_preview>gears>bg"}
         panel_tip_location_newtreasure = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>panel_tip_location_newtreasure", "focus": (1, 0.8)}
 
+        btn_icon = {"locator":"UICanvas>Default>BattlePreparePanel>Panel_Prepare_Warning>panel>panel_icon>btn_icon_b>btn_icon>bg_icon"}
+
         class GlobalProgress:
             progress_info = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_tournaments_mini>panel_global_progress>panel_rewards>rewards>progress_info", "focus": (0.5, 0)}
             progress_cur = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_tournaments_mini>panel_global_progress>panel_rewards>rewards>progress_info>progressValueLayout>cur"}
@@ -362,6 +364,10 @@ class ElementsData:
             btn_claim = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>Panel_MiniTask>Panel>btn_claim"}
             text_task = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>Panel_MiniTask>Panel>text"}
             progress = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>Panel_MiniTask>Panel>progress>value"}
+
+        class PanelPrepareWarning:
+            btn_icon = {"locator": "UICanvas>Default>BattlePreparePanel>Panel_Prepare_Warning>panel>panel_icon>btn_icon_b>btn_icon>bg_icon"}
+
     class BattleTreasureMap:
         BattleTreasureMapPanel = {"locator": "UICanvas>Default>BattleTreasureMapPanel"}
         btn_close = {"locator": "UICanvas>Default>BattleTreasureMapPanel>panel>Panel>btn_close>img"}
@@ -587,10 +593,6 @@ class ElementsData:
     class FishCardMultipleLevelUpSuccess:
         FishCardMultipleLevelUpSuccessPanel = {"locator": "UICanvas>Default>FishCardMultipleLevelUpSuccessPanel"}
         btn_close = {"locator": "UICanvas>Default>FishCardMultipleLevelUpSuccessPanel>btn_close>text"}
-
-    class FishState:
-        FishStatePanel = {"locator": "UICanvas>Default>FishStatePanel"}
-        btn_icon = {"locator": "UICanvas>Default>FishStatePanel>panel>panel_icon>btn_icon>bg"}
 
 
 

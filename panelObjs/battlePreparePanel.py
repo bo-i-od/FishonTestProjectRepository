@@ -158,6 +158,9 @@ class BattlePreparePanel(BasePage):
     def is_panel_tip_location_active(self):
         return self.exist(element_data=ElementsData.BattlePrepare.panel_tip_location_newtreasure)
 
+    def click_btn_icon_warning(self):
+        self.click_element(element_data=ElementsData.BattlePrepare.PanelPrepareWarning.btn_icon)
+
     class Minitask(BasePage):
         def click_btn_recommend(self):
             self.click_element(element_data=ElementsData.BattlePrepare.Minitask.btn_recommend)
