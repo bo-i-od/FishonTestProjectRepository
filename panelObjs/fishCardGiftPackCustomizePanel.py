@@ -8,6 +8,9 @@ class FishCardGiftPackCustomizePanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.EventsGiftCenter.btn_close)
 
+    def click_btn_close_oversea(self):
+        self.click_element(element_data=ElementsData.EventsGiftCenter_oversea.btn_close)
+
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.FishCardGiftPackCustomize.FishCardGiftPackCustomizePanel)
 

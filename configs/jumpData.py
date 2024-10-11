@@ -92,7 +92,7 @@ class JumpData:
         "MonthCardPopPanel": [ElementsData.MonthCardPop.btn_close],
         # "NBG_prepare_2_album_01(Clone)": [ElementsData.NewbieGuide.NBG_prepare_2_album_01, ElementsData.NewbieGuide.NBG_prepare_2_album_02, ElementsData.NewbieGuide.NBG_prepare_2_album_03, ElementsData.NewbieGuide.NBG_album_01, ElementsData.NewbieGuide.NBG_album_02, ElementsData.NewbieGuide.NBG_album_03, ElementsData.NewbieGuide.NBG_prepare_weak_01],
         "PartySalePanel":[ElementsData.PartySale.btn_close],
-        "PlayerInfoPanel": [ElementsData.PlayerInfo.btn_close_additional, ElementsData.PlayerInfo.btn_confirm, ElementsData.PlayerInfo.btn_close],
+        "PlayerInfoPanel": [ElementsData.PlayerInfo.btn_close_additional, ElementsData.PlayerInfo.btn_confirm, ElementsData.PlayerInfo.btn_close,ElementsData.PlayerInfo_oversea.btn_close],
         "PlayerSettingPanel": [ElementsData.PlayerSetting.btn_close_additional, ElementsData.PlayerSetting.btn_close],
         "PlayerLevelupPanel": [ElementsData.PlayerLevelup.tap_to_continue],
         "PVPBoosterGiftPackPanel": [ElementsData.PVPBoosterGiftPack.btn_close],
