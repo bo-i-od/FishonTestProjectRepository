@@ -240,9 +240,12 @@ def main():
 
 
 if __name__ == '__main__':
-    # 图片资源路径
+    # unity工程路径，需根据自己配置
     root_path = 'C:/trunkCHS'
+    # 图片资源路径
+
     pictures_folder = root_path + '/client/MainProject/Assets/InBundle'
+
     # 配置表路径
     excel_path = root_path + r"/datapool/策划模板导出工具/"
     excel_tools = ExcelTools(excel_path)
