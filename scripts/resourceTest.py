@@ -129,6 +129,7 @@ def get_pictures_by_excel(excel_name):
 
 
 def get_pictures_by_base_data(excel_name):
+    print(excel_name)
     prefix = excel_name.split(".")[0]
     table_data_object_list = baseDataRead.convert_to_json(base_data_path, prefix)
     pic_path_list = pic_path_data_dict[excel_name]["item_name"]
@@ -189,7 +190,9 @@ def compare_dicts(old_dict, new_dict):
     return changes
 
 
-def version_comparison(version_new):
+def version_comparison():
+    # 版本对照
+    version_new = get_key_dict_base_data()
     version_old = version_new
     try:
         with open("../report/comparison_2024-10-10-19-43-48.txt", "r", encoding="utf-8") as file:
@@ -230,7 +233,10 @@ def main():
         print(pictures)
         check_result = check_pictures(pic_path_data, pictures)
         res |= check_result
-    print(f"找不到的资源为{res}")
+    if res:
+        print(f"找不到的资源为{res}")
+        return
+    print("资源都找到了")
 
 
 if __name__ == '__main__':
@@ -242,8 +248,7 @@ if __name__ == '__main__':
     excel_tools = ExcelTools(excel_path)
     base_data_path = root_path + r"/datapool/ElementData/BaseData/"
 
-    # 版本对照
-    version_new = get_key_dict_base_data()
-    version_comparison(version_new)
+    # 版本对比
+    # version_comparison()
 
-    # main()
+    main()
