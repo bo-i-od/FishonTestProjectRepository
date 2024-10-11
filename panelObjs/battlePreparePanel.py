@@ -161,6 +161,10 @@ class BattlePreparePanel(BasePage):
     def click_btn_icon_warning(self):
         self.click_element(element_data=ElementsData.BattlePrepare.PanelPrepareWarning.btn_icon)
 
+    def get_value_cost(self):
+        value_cost = self.get_text(element_data=ElementsData.BattlePrepare.value_cost)
+        return int(value_cost)
+
     class Minitask(BasePage):
         def click_btn_recommend(self):
             self.click_element(element_data=ElementsData.BattlePrepare.Minitask.btn_recommend)
