@@ -139,7 +139,14 @@ def fishery_to_spot(fishery_id, is_gold, is_double_week):
 
 
 def go_to_treasure_map(bp, fishery_id, is_double_week):
+    if BattlePreparePanel.get_value_cost(bp) > 10:
+        return
     if BattlePreparePanel.is_panel_tip_location_active(bp):
+        spot_id = fishery_to_spot(fishery_id, is_gold=True, is_double_week=is_double_week)
+        lua_code = csMsgAll.get_CSFishingSaveFishSpotMsg(fishSpotId=int(spot_id), fishSceneTpId=int(fishery_id),
+                                                         source=0, isInDoubleWeek=is_double_week)
+        bp.lua_console(lua_code)
+        bp.sleep(1)
         return
     fish_once(bp, fishery_id=fishery_id, fish_id="399001", is_quick=True)
     spot_id = fishery_to_spot(fishery_id, is_gold=True, is_double_week=is_double_week)
@@ -149,6 +156,8 @@ def go_to_treasure_map(bp, fishery_id, is_double_week):
 
 
 def leave_treasure_map(bp, fishery_id, is_double_week):
+    if BattlePreparePanel.get_value_cost(bp) < 20:
+        return
     spot_id = fishery_to_spot(fishery_id, is_gold=False, is_double_week=is_double_week)
     lua_code = csMsgAll.get_CSFishingSaveFishSpotMsg(fishSpotId=int(spot_id), fishSceneTpId=int(fishery_id), source=0,
                                                      isInDoubleWeek=is_double_week)
@@ -279,7 +288,7 @@ def fail_all(bp: BasePage, fishery_id, is_gold=False, is_double_week=False):
             bp.save_img(img)
 
             # 钓上来
-            fish_once(bp, fishery_id=fishery_id, fish_id=fish_id)
+            fish_once(bp, fishery_id=fishery_id, fish_id=fish_id, is_quick=True)
             cur += 1
             continue
 
@@ -304,7 +313,6 @@ def fail_all(bp: BasePage, fishery_id, is_gold=False, is_double_week=False):
         BattlePanel.hook(bp)
         # 如果不是黄金鱼就不要
         if color != "11":
-            print("10")
             if BattlePanel.is_reel_active(bp):
                 bp.custom_cmd("autofish")
                 qteThread = Thread(target=BattlePanel.qte, args=[bp])
@@ -314,7 +322,6 @@ def fail_all(bp: BasePage, fishery_id, is_gold=False, is_double_week=False):
             element_btn = ResultPanel.wait_for_result(bp)
             ResultPanel.automatic_settlement(bp, element_btn=element_btn)
             continue
-        print("11")
         # 是黄金鱼就拉断线
         bp.set_time_scale()
         element_btn = ResultPanel.wait_for_result(bp)
@@ -328,11 +335,10 @@ def fail_all(bp: BasePage, fishery_id, is_gold=False, is_double_week=False):
         bp.save_img(img)
 
         # 钓上来
-        fish_once(bp, fishery_id=fishery_id, fish_id=fish_id)
+        fish_once(bp, fishery_id=fishery_id, fish_id=fish_id, is_quick=True)
         cur += 1
 
 def main(bp: BasePage, fishery_id, is_double_week=False):
-    bp.set_item_count(target_count=1000000000, item_tpid="100500")
     # # 渔场全部闪卡
     flashcard_all(bp, fishery_id)
 
@@ -361,7 +367,8 @@ if __name__ == '__main__':
     bp.is_time_scale = False
     bp.custom_cmd("setTension 0.9")
     bp.set_item_count(target_count=1000000000, item_tpid="100500")
-    main(bp, fishery_id="400319",  is_double_week=True)
+    fail_all(bp, "400319", is_gold=False, is_double_week=True)
+    # main(bp, fishery_id="400319",  is_double_week=True)
 
     # 断开连接
     bp.connect_close()
