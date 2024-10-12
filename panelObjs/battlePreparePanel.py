@@ -162,6 +162,7 @@ class BattlePreparePanel(BasePage):
         self.click_element(element_data=ElementsData.BattlePrepare.PanelPrepareWarning.btn_icon)
 
     def get_value_cost(self):
+        self.wait_for_appear(element_data=ElementsData.BattlePrepare.btn_cast, is_click=False)
         value_cost = self.get_text(element_data=ElementsData.BattlePrepare.value_cost)
         return int(value_cost)
 
