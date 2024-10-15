@@ -346,73 +346,66 @@ def hide_unowned_test(bp: BasePage):
     GearPanel.click_btn_filter(bp)
 
 
-def full_level(bp: BasePage, tpId=None, table_data=None):
-    if table_data is None:
-        table_data = GearPanel.get_fishing_rod_table_data(bp)
-    tpId_list = table_data["tpId"]
+def full_level(bp: BasePage, tpId=None, table_data_detail=None):
+    if table_data_detail is None:
+        table_data_detail = GearPanel.get_fishing_rod_table_data_detail(bp)
 
     if tpId is not None:
-        maxLevel_list = table_data["maxLevel"]
-        index = tpId_list.index(tpId)
-        specify_level(bp, maxLevel_list[index], tpId=tpId, table_data=table_data)
+        table_data_object = bp.excelTools.get_table_data_object_by_key_value(key="tpId", value=tpId, table_data_detail=table_data_detail)
+        maxLevel = table_data_object["maxLevel"]
+        specify_level(bp, maxLevel, tpId=tpId, table_data_detail=table_data_detail)
         return
-
-    cur = 0
-    while cur < len(tpId_list):
-        full_level(bp, tpId=tpId_list[cur], table_data=table_data)
+    table_data_object_list = table_data_detail[0]
+    for table_data_object in table_data_object_list:
+        full_level(bp, tpId=table_data_object["tpId"], table_data_detail=table_data_detail)
         bp.sleep(0.1)
-        cur += 1
 
 
-def specify_level(bp: BasePage, target_level, tpId=None, table_data=None):
-    if table_data is None:
-        table_data = GearPanel.get_fishing_rod_table_data(bp)
-    tpId_list = table_data["tpId"]
+
+def specify_level(bp: BasePage, target_level, tpId=None, table_data_detail=None):
+    if table_data_detail is None:
+        table_data_detail = GearPanel.get_fishing_rod_table_data_detail(bp)
 
     if tpId is not None:
         lua_code = csMsgAll.get_CSBaitAndRodLevelUpToMsg(ioIdType=5, tpId=tpId, targetLevel=target_level)
         bp.lua_console(lua_code)
         return
 
-    cur = 0
-    while cur < len(tpId_list):
-        specify_level(bp, target_level, tpId=tpId_list[cur], table_data=table_data)
+    table_data_object_list = table_data_detail[0]
+    for table_data_object in table_data_object_list:
+        specify_level(bp, target_level, tpId=table_data_object["tpId"], table_data_detail=table_data_detail)
         bp.sleep(0.1)
-        cur += 1
 
-def full_star(bp: BasePage, tpId=None, table_data=None):
-    if table_data is None:
-        table_data = GearPanel.get_fishing_rod_table_data(bp)
-    tpId_list = table_data["tpId"]
-    maxStarLv_list = table_data["maxStarLv"]
+def full_star(bp: BasePage, tpId=None, table_data_detail=None):
+    if table_data_detail is None:
+        table_data_detail = GearPanel.get_fishing_rod_table_data_detail(bp)
 
     if tpId is not None:
-        index = tpId_list.index(tpId)
-        maxStarLv = maxStarLv_list[index]
+        table_data_object = bp.excelTools.get_table_data_object_by_key_value(key="tpId", value=tpId, table_data_detail=table_data_detail)
+        maxStarLv = table_data_object["maxStarLv"]
         cur = 0
         while cur < maxStarLv:
-            one_star(bp, tpId=tpId, table_data=table_data)
+            one_star(bp, tpId=tpId, table_data_detail=table_data_detail)
             bp.sleep(0.1)
             cur += 1
         return
-    cur = 0
-    while cur < len(tpId_list):
-        full_star(bp, tpId=tpId_list[cur], table_data=table_data)
-        cur += 1
+    table_data_object_list = table_data_detail[0]
+    for table_data_object in table_data_object_list:
+        full_star(bp, tpId=table_data_object["tpId"], table_data_detail=table_data_detail)
+        bp.sleep(0.1)
 
-def one_star(bp: BasePage, tpId=None, table_data=None):
+
+def one_star(bp: BasePage, tpId=None, table_data_detail=None):
     if tpId is not None:
         lua_code = csMsgAll.get_CSBaitAndRodStarLevelUpMsg(ioIdType=5, tpId=tpId)
         bp.lua_console(lua_code)
         return
-    if table_data is None:
-        table_data = GearPanel.get_fishing_rod_table_data(bp)
-    tpId_list = table_data["tpId"]
-    cur = 0
-    while cur < len(tpId_list):
-        one_star(bp, tpId=tpId_list[cur])
+    if table_data_detail is None:
+        table_data_detail = GearPanel.get_fishing_rod_table_data_detail(bp)
+    table_data_object_list = table_data_detail[0]
+    for table_data_object in table_data_object_list:
+        one_star(bp, tpId=table_data_object["tpId"])
         bp.sleep(0.1)
-        cur += 1
 
 
 def main(bp: BasePage):
@@ -430,7 +423,7 @@ def main(bp: BasePage):
 
 
 if __name__ == "__main__":
-    bp = BasePage("127.0.0.1:21533", is_mobile_device=True)
+    bp = BasePage("127.0.0.1:21533", is_mobile_device=False)
     # main(bp)
 
     # one_star(bp)

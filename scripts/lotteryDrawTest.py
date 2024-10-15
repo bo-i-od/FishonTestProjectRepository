@@ -23,17 +23,14 @@ def get_price(bp: BasePage):
 
 
 def get_small_reward_dict(bp: BasePage, price_list,wave):
-    reward = bp.excelTools.get_table_data("OUT_DRAW_SMALL_REWARD.xlsm")
-    try:
-        index = reward["roundId"].index(int(wave))
-    except ValueError:
-        index = reward["roundId"].index(str(wave))
+    table_data_object = bp.excelTools.get_table_data_object_by_key_value(key="roundId", value=wave, book_name="OUT_DRAW_SMALL_REWARD.xlsm")
     cur = 0
     reward_dict = {}
     while cur < len(price_list):
+
         price = int(price_list[cur])
-        tpid = reward["smallReward"][price]["tpId"][index]
-        count = reward["smallReward"][price]["count"][index]
+        tpid = table_data_object["smallReward"][price]["tpId"]
+        count = table_data_object["smallReward"][price]["count"]
         if tpid in reward_dict:
             reward_dict[tpid] += count
             cur += 1

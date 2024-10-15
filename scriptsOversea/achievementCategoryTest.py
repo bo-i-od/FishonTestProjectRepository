@@ -80,13 +80,13 @@ def category_test(bp: BasePage):
     achievement_icon_list = AchievementPanel.get_achievement_icon_list(bp)
     r = random.randint(0, len(achievement_icon_list) - 1)
     achievement_icon = achievement_icon_list[r]
-    # 读表格数据
-    table_data = bp.excelTools.get_table_data("ACHIEVEMENT_CATEGORY.xlsm")
 
+    # 读表格数据
     # 随机选一个鱼种完成
-    index = table_data["icon"].index(achievement_icon)
-    # bp.cmd(f'categoryComplete {table_data["TPID"][index]}')
-    AchievementCategoryPanel.do_category(bp, table_data=table_data, index=index)
+    table_data_object = bp.excelTools.get_table_data_object_by_key_value(key="icon", value=achievement_icon, book_name="ACHIEVEMENT_CATEGORY.xlsm")
+    tpid = table_data_object["TPID"]
+    bp.cmd(f'categoryComplete {tpid}')
+    # AchievementCategoryPanel.do_category(bp, table_data=table_data, index=index)
     bp.go_home()
 
     # 去悬赏界面

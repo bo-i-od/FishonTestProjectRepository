@@ -131,7 +131,7 @@ def get_pictures_by_excel(excel_name):
 def get_pictures_by_base_data(excel_name):
     print(excel_name)
     prefix = excel_name.split(".")[0]
-    table_data_object_list = baseDataRead.convert_to_json(base_data_path, prefix)
+    table_data_object_list = baseDataRead.convert_to_json(base_data_path, prefix)[0]
     pic_path_list = pic_path_data_dict[excel_name]["item_name"]
     pic_set = set()
 

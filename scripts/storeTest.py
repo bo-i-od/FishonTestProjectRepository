@@ -342,7 +342,7 @@ def gear_buy_once_test(bp:BasePage, gear_icon, price,btn_icon, btn_position):
     item_tpid = ""
     if price >= 0:
         # 当前库存
-        item_tpid = bp.get_tpid(item_icon_name=btn_icon)
+        item_tpid = bp.get_tpid(item_icon_name=btn_icon)[0]
         stock_expect = bp.get_item_count(bp, item_tpid=item_tpid)
 
     # 判断是否可以购买
@@ -423,7 +423,7 @@ def fish_card_buy_once_test(bp:BasePage, price, btn_icon, btn_position):
     item_tpid = ""
     if price >= 0:
         # 当前库存
-        item_tpid = bp.get_tpid(item_icon_name=btn_icon)
+        item_tpid = bp.get_tpid(item_icon_name=btn_icon)[0]
         stock_expect = bp.get_item_count(bp, item_tpid=item_tpid)
 
     # 是否可购买

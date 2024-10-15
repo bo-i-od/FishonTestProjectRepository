@@ -99,20 +99,18 @@ def photo_test(bp: BasePage):
 def anime_test(bp: BasePage):
     # 去主界面调用接口钓鱼
     bp.go_home()
-    table_data = bp.excelTools.get_table_data("FISHERIES.xlsm")
-    tpId = 400301
-    index = table_data["tpId"].index(tpId)
-    fish_list = table_data["fish"]
+    fishery_id = 400301
+    fish_list = bp.get_fish_id_list(fishery_id=fishery_id)
     fish_count = 0
     cur = 0
     while cur < len(fish_list):
-        fish_id = fish_list[cur][index]
+        fish_id = fish_list[cur]
         if fish_id in [0, "0", ""]:
             cur += 1
             continue
-        bp.cmd(f"mode {tpId} {fish_id}")
+        bp.cmd(f"mode {fishery_id} {fish_id}")
         bp.sleep(0.1)
-        fishingMsg.fish(bp, [{"spot_id": f"{tpId}03", "energy_cost": 30, "times": 1, "is_activity_spot": False}])
+        fishingMsg.fish(bp, [{"spot_id": f"{fishery_id}03", "energy_cost": 30, "times": 1, "is_activity_spot": False}])
         fish_count += 1
         cur += 1
 

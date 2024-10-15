@@ -346,14 +346,16 @@ def monopoly(bp:BasePage, layer, index):
     # 清空消息列表 开始收消息
     bp.log_list.clear()
     bp.log_list_flag = True
-    bp.cmd(f"setPlayerLayer {layer}")
+    # bp.cmd(f"setPlayerLayer {layer}")
     bp.cmd(f"levelupto 16")
+    bp.cmd(f"monopolyscore {layer + index}")
     msg_name = "MonopolyBatchDataMsg"
     target_log = bp.receive_until_get_msg(msg_name=msg_name)
     python_dict = commonTools.lua_dict_to_python_dict(target_log)
     roomId = python_dict['monopolyList'][1]['roomId']
     print(roomId)
-    bp.cmd(f"monopolyscore {layer + index}")
+
+
 
 
 
@@ -465,24 +467,6 @@ def add_friend(bp: BasePage,target_id):
     # bp.sleep(1)
     FriendPanel.add_friend(bp,target_id)
 
-def rank(bp: BasePage):
-    bp.set_item_count(target_count=10000, item_tpid="100500")
-    table_data = bp.excelTools.get_table_data("FISHERIES.xlsm")
-    i = 0
-    while i < 2:
-        tpid_fishery = table_data["tpId"][i]
-        cur = 0
-        while cur < len(table_data["fish"]):
-            tpid_fish = table_data["fish"][cur][i]
-            if tpid_fish == 0 or tpid_fish == "0":
-                cur += 1
-                continue
-            cmd = f"mode {tpid_fishery} {tpid_fish}"
-            bp.cmd(cmd)
-            bp.sleep(0.5)
-            fishingMsg.fish(bp, [{"spot_id": f"{tpid_fishery}03", "times": 1}])
-            cur += 1
-        i += 1
 
 def cup(bp, cur):
     set_duelcup(bp, duelcup=3625 + cur)
@@ -561,15 +545,15 @@ def read_data():
 
 def main(bp: BasePage):
     # 登录号前缀
-    prefix = "5000_"
+    prefix = "ssdfw_"
     # prefix_list = ["a", "b", "c", "d", "e"]
     init(bp)
     cur = 1
-    limit = 200
+    limit = 21
     while cur < limit:
         name = prefix + str(cur)
         login(bp, name)
-        # bp.cmd("levelupto 69")
+        bp.cmd("levelupto 16")
         # bp.cmd(f"selfranksetip 180.175.{cur}.{cur}")
 
         # init(bp)
@@ -581,18 +565,18 @@ def main(bp: BasePage):
         # friend(bp)
         # ndays(bp, cur)
         # rank(bp)
-        # monopoly(bp, layer=3000, index=cur)
+        monopoly(bp, layer=1000, index=cur)
         # hidden_treasure(bp)
         # cup(bp, cur)
         # bp.sleep(2)
         # bp.cmd_list([f"add 1 101200 {cur}", f"add 2 209017 {cur}"])
-        fish(bp, cur)
+        # fish(bp, cur)
         logout(bp)
         cur += 1
 
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21523", is_mobile_device=True)
+    bp = BasePage("127.0.0.1:21543", is_mobile_device=False)
     main(bp)
     # relogin(bp)
     # fish(bp, 5)

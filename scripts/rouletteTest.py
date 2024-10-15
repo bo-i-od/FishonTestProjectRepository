@@ -54,8 +54,8 @@ def draw_msg_test(bp: BasePage, lv, times):
     bp.set_item_count(target_count=times * 500, item_tpid="201001")
     bp.cmd(f"roulettesetlv {lv}")
     lua_code = csMsgAll.get_CSRouletteDrawMsg(lv=lv, groupId=1)
-    table_data = bp.excelTools.get_table_data("ROULETTE.xlsm")
-
+    # table_data = bp.excelTools.get_table_data("ROULETTE.xlsm")
+    table_data_detail = bp.excelTools.get_table_data_detail_by_base_data(book_name="ROULETTE.xlsm")
 
     # 进行times次实验
     cur = 0
@@ -85,10 +85,14 @@ def draw_msg_test(bp: BasePage, lv, times):
 
         key2 = "gotIndex"
         gotIndex = luaLog.get_value(msg=target_log, key=key2, is_str=False)
-        index = table_data["level"].index(lv)
-        reward = table_data["rewards"][int(gotIndex)]
-        tpid = reward["tpId"][index]
-        count = reward["count"][index]
+        # index = table_data["level"].index(lv)
+        # reward = table_data["rewards"][int(gotIndex)]
+        table_data_object = bp.excelTools.get_table_data_object_by_key_value(key="level", value=lv, table_data_detail=table_data_detail)
+        reward = table_data_object["rewards"][int(gotIndex)]
+        tpid = reward["tpId"]
+        count = reward["count"]
+        # tpid = reward["tpId"][index]
+        # count = reward["count"][index]
         n += 1
         if newLv != "-1":
             count_list.append(n)
@@ -112,7 +116,7 @@ def draw_msg_test(bp: BasePage, lv, times):
 
 
 
-def draw_to_level_once(bp: BasePage, lv, table_data):
+def draw_to_level_once(bp: BasePage, lv, table_data_detail):
     bp.cmd(f"roulettesetlv 1")
     get_dict = {}
     bp.sleep(1)
@@ -135,10 +139,11 @@ def draw_to_level_once(bp: BasePage, lv, table_data):
         newLv = luaLog.get_value(msg=target_log, key=key1, is_str=False)
         key2 = "gotIndex"
         gotIndex = luaLog.get_value(msg=target_log, key=key2, is_str=False)
-        index = table_data["level"].index(lv)
-        reward = table_data["rewards"][int(gotIndex)]
-        tpid = reward["tpId"][index]
-        count = reward["count"][index]
+        table_data_object = bp.excelTools.get_table_data_object_by_key_value(key="level", value=lv, table_data_detail=table_data_detail)
+        reward = table_data_object["rewards"][int(gotIndex)]
+        tpid = reward["tpId"]
+        count = reward["count"]
+
         if tpid in get_dict:
             get_dict[tpid] += int(count)
         else:
@@ -151,7 +156,7 @@ def draw_to_level_once(bp: BasePage, lv, table_data):
 
 
 def draw_to_level(bp: BasePage, lv, n):
-    table_data = bp.excelTools.get_table_data("ROULETTE.xlsm")
+    table_data_detail = bp.excelTools.get_table_data_detail_by_base_data(book_name="ROULETTE.xlsm")
     count_init = 1000000
     res_list = []
     get_list = []
@@ -161,7 +166,7 @@ def draw_to_level(bp: BasePage, lv, n):
     while cur < n:
         # 初始化
         bp.set_item_count(target_count=count_init, item_tpid="201001")
-        get_dict = draw_to_level_once(bp, lv, table_data)
+        get_dict = draw_to_level_once(bp, lv, table_data_detail)
         get_list.append(get_dict)
         count_cur = bp.get_item_count(item_tpid="201001")
         res_list.append(count_init - count_cur)

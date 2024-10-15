@@ -85,14 +85,11 @@ def energy_cash_test(bp:BasePage):
 def energy_cash_usd_test(bp:BasePage):
     if not bp.is_pay:
         return
-    # 获取体力上限
-    table_data = bp.excelTools.get_table_data("GLOBAL_VALUE.xlsm")
-    index = table_data['key'].index("ENERGY_LIMIT_MAX")
-    energy_max = int(table_data['value'][index])
+
     energy = BuyEnergyPanel.get_energy_value(bp)
     # cash_usd买
     cur = 1
-    while BuyEnergyPanel.get_btn_cash_usd_status(bp) != 2 and energy_max > energy:
+    while BuyEnergyPanel.get_btn_cash_usd_status(bp) != 2:
         cash_usd_recovery_value = BuyEnergyPanel.get_cash_usd_recovery_value(bp)
         energy_expect = cash_usd_recovery_value + energy
         BuyEnergyPanel.click_btn_cash_usd(bp)

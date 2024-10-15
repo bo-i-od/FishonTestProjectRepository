@@ -30,7 +30,7 @@ def cast(bp: BasePage):
     spot_id = "40030101"
     scene_id = spot_id[:6]
     rod_id = fishingMsg.get_rod_id(scene_id)
-    otherArgMap103 = spot_id[len(spot_id) - 2];
+    otherArgMap103 = spot_id[len(spot_id) - 2]
 
 
     # 发送cs请求

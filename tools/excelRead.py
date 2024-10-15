@@ -1,7 +1,9 @@
 import json
 
 from openpyxl import *
-from openpyxl.utils import get_column_letter
+
+from common.error import PluralElementError
+from tools import baseDataRead
 
 
 class ExcelTools:
@@ -132,6 +134,59 @@ class ExcelTools:
             cur += 1
         return table_data_object_list
 
+    def get_table_data_detail_by_base_data(self, book_name):
+        base_data_path = self.root_path.strip("/策划模板导出工具/") + r"/ElementData/BaseData/"
+        prefix = book_name.split('.')[0]
+        table_data_detail = baseDataRead.convert_to_json(path=base_data_path, prefix=prefix)
+        return table_data_detail
+
+    def get_table_data_object_list_by_key_value(self, key, value, book_name=None, table_data_detail=None):
+        res = []
+        if table_data_detail is None:
+            table_data_detail = self.get_table_data_detail_by_base_data(book_name=book_name)
+        table_data_object_list, structs, prefix = table_data_detail
+
+        # 给值转为正确的类型
+        type_value = structs[prefix.upper()][key][0]
+        if type_value == "int":
+            value = int(value)
+        elif type_value == "float":
+            value = float(value)
+        elif type_value == "string":
+            value = str(value)
+        for table_data_object in table_data_object_list:
+            if key not in table_data_object:
+                continue
+            if table_data_object[key] != value:
+                continue
+            res.append(table_data_object)
+        return res
+
+    def get_table_data_object_by_key_value(self, key, value, book_name=None, table_data_detail=None):
+        if table_data_detail is None:
+            table_data_detail = self.get_table_data_detail_by_base_data(book_name=book_name)
+        table_data_object_list, structs, prefix = table_data_detail
+        type_value = structs[prefix.upper()][key][0]
+        if type_value == "int":
+            value = int(value)
+        elif type_value == "float":
+            value = float(value)
+        elif type_value == "string":
+            value = str(value)
+        res = None
+        cur = 0
+        for table_data_object in table_data_object_list:
+            if key not in table_data_object:
+                continue
+            if table_data_object[key] != value:
+                continue
+            cur += 1
+            res = table_data_object
+        if cur != 1:
+            raise PluralElementError("表中键值的匹配项不是唯一，请使用get_table_data_object_list_by_key_value")
+        return res
+
+
     @staticmethod
     def fill_template(template, data):
         result = str(template)
@@ -182,8 +237,8 @@ class ExcelTools:
 
 if __name__ == '__main__':
     et = ExcelTools("C:/trunkCHS/datapool/策划模板导出工具/")
-    a = et.get_table_data_object_list(book_name="ACHIEVEMENT_CATEGORY.xlsm")
-    print(a)
+
+
 
 
 

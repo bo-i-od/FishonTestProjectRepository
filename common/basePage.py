@@ -790,122 +790,173 @@ class BasePage(BasePageMain):
         # 配置表的路径
         self.excelTools = ExcelTools(EXCEL_PATH)
 
-    def get_fish_id_list(self, fishery_id):
-        table_data = self.excelTools.get_table_data("FISHERIES.xlsm")
-        tpId_list = table_data["tpId"]
-        index = tpId_list.index(int(fishery_id))
-        fish_list = table_data["fish"]
-        res_list = []
-        cur = 0
-        while cur < len(fish_list):
-            fish_id = fish_list[cur][index]
-            if fish_id in [0, "0", ""]:
-                cur += 1
+    def get_fishery_id_list(self):
+        fishery_id_list = []
+        table_data_object_list = self.excelTools.get_table_data_detail_by_base_data(book_name="FISHERIES.xlsm")[0]
+        for table_data_object in table_data_object_list:
+            if "tpId" not in table_data_object:
                 continue
-            res_list.append(str(fish_id))
-            cur += 1
+            if "enabled" not in table_data_object:
+                continue
+            if table_data_object["enabled"] != 1:
+                continue
+            fishery_id = table_data_object["tpId"]
+            fishery_id_list.append(fishery_id)
+        return fishery_id_list
+
+    def get_fish_id_list(self, fishery_id):
+        table_data_object = self.excelTools.get_table_data_object_by_key_value(key="tpId", value=fishery_id, book_name="FISHERIES.xlsm")
+        fish_list = table_data_object["fish"]
+        res_list = []
+        for fish in fish_list:
+            if not fish:
+                continue
+            res_list.append(str(fish))
+
+        # table_data = self.excelTools.get_table_data("FISHERIES.xlsm")
+        # tpId_list = table_data["tpId"]
+        # index = tpId_list.index(int(fishery_id))
+        # fish_list = table_data["fish"]
+        # res_list = []
+        # cur = 0
+        # while cur < len(fish_list):
+        #     fish_id = fish_list[cur][index]
+        #     if fish_id in [0, "0", ""]:
+        #         cur += 1
+        #         continue
+        #     res_list.append(str(fish_id))
+        #     cur += 1
+
         return res_list
 
     def get_item_tpid_list(self, icon):
-        table_data = self.excelTools.get_table_data("ITEM_MAIN.xlsm")
-        icon_list = table_data['iconName']
-        tpid_list = table_data['itemTpId']
+        table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="iconName", value=icon, book_name="ITEM_MAIN.xlsm")
         res_list = []
-        cur = 0
-        while cur < len(icon_list):
-            if icon_list[cur] != icon:
-                cur += 1
-                continue
-            res_list.append(tpid_list[cur])
-            cur += 1
+        for table_data_object in table_data_object_list:
+            itemTpId = int(table_data_object["itemTpId"])
+            res_list.append(itemTpId)
+
+        # table_data = self.excelTools.get_table_data("ITEM_MAIN.xlsm")
+        # icon_list = table_data['iconName']
+        # tpid_list = table_data['itemTpId']
+        # res_list = []
+        # cur = 0
+        # while cur < len(icon_list):
+        #     if icon_list[cur] != icon:
+        #         cur += 1
+        #         continue
+        #     res_list.append(tpid_list[cur])
+        #     cur += 1
         return res_list
 
     def get_tpid(self, item_name: str = "", item_icon_name: str = ""):
-        item_tpid = ""
+        item_tpid_list = []
         book_list = [{"book_name": "RESOURCE.xlsm", "name": "name", "id": "resourceID", "icon": "itemIcon"},
                      {"book_name": "ITEM_MAIN.xlsm", "name": "name", "id": "itemTpId", "icon": "iconName"}]
         for book_dict in book_list:
             book_name = book_dict["book_name"]
-            table_data = self.excelTools.get_table_data(book_name=book_name)
+            table_data_detail = self.excelTools.get_table_data_detail_by_base_data(book_name=book_name)
+
+            # table_data = self.excelTools.get_table_data(book_name=book_name)
             # worksheet = self.excelTools.get_worksheet(book_dict["book_name"], "模板数据")
             if item_name != "":
-                if item_name in table_data[book_dict["name"]]:
-                    index = table_data[book_dict["name"]].index(item_name)
-                    item_tpid = table_data[book_dict["id"]][index]
-                    break
+                table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key=book_dict["name"], value=item_name, table_data_detail=table_data_detail)
+                if table_data_object_list:
+                    for table_data_object in table_data_object_list:
+                        item_tpid = table_data_object[book_dict["id"]]
+                        item_tpid_list.append(item_tpid)
+                # if item_name in table_data[book_dict["name"]]:
+                #     index = table_data[book_dict["name"]].index(item_name)
+                #     item_tpid = table_data[book_dict["id"]][index]
+                #     break
                 # res = self.excelTools.same_row_different_column_convert(worksheet, book_dict["name"], book_dict["id"],
                 #                                                         item_name)
                 # if res is not None:
                 #     item_tpid = res
                 #     break
             if item_icon_name != "":
+                table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key=book_dict["icon"], value=item_icon_name, table_data_detail=table_data_detail)
+                if table_data_object_list:
+                    for table_data_object in table_data_object_list:
+                        item_tpid = table_data_object[book_dict["id"]]
+                        item_tpid_list.append(item_tpid)
                 # res = self.excelTools.same_row_different_column_convert(worksheet, book_dict["icon"], book_dict["id"],
                 #                                                         item_icon_name)
                 # if res is not None:
                 #     item_tpid = res
                 #     break
 
-                if item_icon_name in table_data[book_dict["icon"]]:
-                    index = table_data[book_dict["icon"]].index(item_icon_name)
-                    item_tpid = table_data[book_dict["id"]][index]
-                    break
-        if item_tpid == "":
-            print("没找到对应tpid")
-        return str(item_tpid)
+                # if item_icon_name in table_data[book_dict["icon"]]:
+                #     index = table_data[book_dict["icon"]].index(item_icon_name)
+                #     item_tpid = table_data[book_dict["id"]][index]
+                #     break
+        return item_tpid_list
 
     def get_tpid_list(self, item_name_list=None, item_icon_name_list=None):
         item_tpid_list = []
         if item_name_list is not None:
             cur = 0
             while cur < len(item_name_list):
-                item_tpid_list.append(self.get_tpid(item_name=item_name_list[cur]))
+                item_tpid_list.append(self.get_tpid(item_name=item_name_list[cur])[0])
                 cur += 1
             return item_tpid_list
         cur = 0
         while cur < len(item_icon_name_list):
-            item_tpid_list.append(self.get_tpid(item_icon_name=item_icon_name_list[cur]))
+            item_tpid_list.append(self.get_tpid(item_icon_name=item_icon_name_list[cur])[0])
             cur += 1
         return item_tpid_list
 
     def get_unlock_lv(self, system_name):
-        table_data = self.excelTools.get_table_data("UNLOCK_SYSTEM.xlsm")
-        self.excelTools.get_value_from_key(table_data, header_key='name', header_value='content', key=system_name)
-        index = table_data['name'].index(system_name)
-        unlock_lv = int(table_data['content'][index])
+        table_data_object = self.excelTools.get_table_data_object_by_key_value(key="name", value=system_name, book_name="UNLOCK_SYSTEM.xlsm")
+        unlock_lv = int(table_data_object["content"])
+
+        # table_data = self.excelTools.get_table_data("UNLOCK_SYSTEM.xlsm")
+        # self.excelTools.get_value_from_key(table_data, header_key='name', header_value='content', key=system_name)
+        # index = table_data['name'].index(system_name)
+        # unlock_lv = int(table_data['content'][index])
+
         return unlock_lv
 
-    def get_fish_type(self, fish_tpid, table_data=None):
-        if table_data is None:
-            table_data = self.excelTools.get_table_data(book_name="FISH.xlsm")
+    def get_fish_type(self, fish_tpid, table_data_detail=None):
+        if table_data_detail is None:
+            table_data_detail = self.excelTools.get_table_data_detail_by_base_data("FISH.xlsm")
         if fish_tpid == '':
             return "钓鱼失败"
-        index = table_data["tpId"].index(int(fish_tpid))
+        table_data_object = self.excelTools.get_table_data_object_by_key_value(key="tpId", value=fish_tpid, table_data_detail=table_data_detail)
 
-        if table_data["fishClass"][index] == 1:
-            if table_data["fishType"][index] == 1:
+        fishClass = 0
+        fishType = 0
+        if "fishClass" in table_data_object:
+            fishClass = table_data_object["fishClass"]
+        if "fishType" in table_data_object:
+            fishType = table_data_object["fishType"]
+        # index = table_data_object_list["tpId"].index(int(fish_tpid))
+
+        if fishClass == 1:
+            if fishType == 1:
                 return "小"
-            if table_data["fishType"][index] == 2:
+            if fishType == 2:
                 return "中"
-            if table_data["fishType"][index] == 3:
+            if fishType == 3:
                 return "大"
-            if table_data["fishType"][index] == 4:
+            if fishType == 4:
                 return "特大"
-            if table_data["fishType"][index] == 5:
+            if fishType == 5:
                 return "超巨"
-        if table_data["fishClass"][index] == 2:
+        if fishClass == 2:
             return "奇珍"
-        if table_data["fishClass"][index] == 3:
+        if fishClass == 3:
             return "超奇珍"
-        if table_data["fishClass"][index] == 4:
+        if fishClass == 4:
             return "典藏"
         return "其它"
 
     def get_fish_type_list(self, fish_list):
+        table_data_detail = self.excelTools.get_table_data_detail_by_base_data("FISH.xlsm")
         fish_type_list = []
-        table_data = self.excelTools.get_table_data(book_name="FISH.xlsm")
         cur = 0
         while cur < len(fish_list):
-            fish_type = self.get_fish_type(fish_tpid=fish_list[cur], table_data=table_data)
+            fish_type = self.get_fish_type(fish_tpid=fish_list[cur], table_data_detail=table_data_detail)
             fish_type_list.append(fish_type)
             cur += 1
         return fish_type_list
@@ -916,7 +967,7 @@ class BasePage(BasePageMain):
             item_count_list = self.get_item_count_list(item_tpid_list=[item_tpid])
             self.is_single_element(item_count_list)
             return item_count_list[0]
-        item_tpid = self.get_tpid(item_name, item_icon_name)
+        item_tpid = self.get_tpid(item_name, item_icon_name)[0]
         tpid_list = [item_tpid]
         item_count_list = self.get_item_count_list(item_tpid_list=tpid_list)
         self.is_single_element(item_count_list)
@@ -926,7 +977,7 @@ class BasePage(BasePageMain):
     def set_item_count(self, target_count, item_name: str = "", item_icon_name: str = "", item_tpid: str = ""):
         # 参数给的是icon_name或item_name就转换为tpid
         if item_tpid == "":
-            item_tpid = self.get_tpid(item_name, item_icon_name)
+            item_tpid = self.get_tpid(item_name, item_icon_name)[0]
         item_count = self.get_item_count(item_tpid=item_tpid)
         count = target_count - item_count
         if not isinstance(count, int):
@@ -1111,65 +1162,118 @@ class BasePage(BasePageMain):
         return function(*args, **kwargs)
 
     def get_drop_item_id_list(self, spot_id):
-        table_data = self.excelTools.get_table_data("FISH_SPOT.xlsm")
+        fishDropInfo_list = []
+        # 鱼骨tpid转missionConditionID
+        table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="tpId", value=spot_id, book_name="FISH_SPOT.xlsm")
 
-        # 获取10倍钓点所在的行
-        spot_id_list = table_data['tpId']
-        try:
-            index = spot_id_list.index(int(spot_id))
-        except ValueError:
-            index = spot_id_list.index(str(spot_id))
+        for table_data_object in table_data_object_list:
+            fishDropInfo = table_data_object["fishDropInfo"]
+            for f in fishDropInfo:
+                fishDropInfo_list.append(f)
+
         # 拿到对应钓点的DropID列表
         drop_id_list = []
-        for fishDropInfo in table_data['fishDropInfo']:
-            drop_id = fishDropInfo["DropID"][index]
-            if drop_id == 0 or drop_id == "0":
+        for fishDropInfo in fishDropInfo_list:
+            if "DropID" not in fishDropInfo:
                 continue
+            drop_id = fishDropInfo["DropID"]
             drop_id_list.append(drop_id)
 
-        # 将DropID列表转为DropID列表
-        table_data = self.excelTools.get_table_data("DROP_PACK.xlsm")
-        drop_pack_id_list = []
-        for target_id in drop_id_list:
-            # DROP_PACK.xlsm表从dropId找到对应的dropPackId
-            for index, drop_id in enumerate(table_data["dropId"]):
-                if drop_id != target_id:
-                    continue
-                enable = table_data["enabled"][index]
-                if enable == 0 or enable == "0":
-                    continue
-                drop_pack_id = table_data["dropPackId"][index]
-                drop_pack_id_list.append(drop_pack_id)
 
+        # 鱼骨tpid转missionConditionID
+        drop_pack_id_list = []
+        table_data_detail = self.excelTools.get_table_data_detail_by_base_data("DROP_PACK.xlsm")
+        for drop_id in drop_id_list:
+            table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="dropId", value=drop_id, table_data_detail=table_data_detail)
+            for table_data_object in table_data_object_list:
+                if table_data_object["enabled"] in [0, "0"]:
+                    continue
+                dropPackId = table_data_object["dropPackId"]
+                drop_pack_id_list.append(dropPackId)
+
+        # drop_pack_id转item_id
         item_id_list = []
-        table_data = self.excelTools.get_table_data("DROP_ENTITY.xlsm")
+        table_data_detail = self.excelTools.get_table_data_detail_by_base_data("DROP_ENTITY.xlsm")
         for drop_pack_id in drop_pack_id_list:
-            try:
-                index = table_data["dropPackId"].index(int(drop_pack_id))
-            except ValueError:
-                index = table_data["dropPackId"].index(str(drop_pack_id))
-            enable = table_data["enabled"][index]
-            if enable == 0 or enable == "0":
-                continue
-            item_id_list.append(table_data["itemID"][index])
+            table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="dropPackId", value=int(drop_pack_id), table_data_detail=table_data_detail)
+            for table_data_object in table_data_object_list:
+                if table_data_object["enabled"] in [0, "0"]:
+                    continue
+                itemID = table_data_object["itemID"]
+                item_id_list.append(itemID)
+
+        # table_data = self.excelTools.get_table_data("FISH_SPOT.xlsm")
+        #
+        # # 获取10倍钓点所在的行
+        # spot_id_list = table_data['tpId']
+        # try:
+        #     index = spot_id_list.index(int(spot_id))
+        # except ValueError:
+        #     index = spot_id_list.index(str(spot_id))
+        # fishDropInfo_list = table_data['fishDropInfo']
+        # # 拿到对应钓点的DropID列表
+        # drop_id_list = []
+        # for fishDropInfo in fishDropInfo_list:
+        #     drop_id = fishDropInfo["DropID"][index]
+        #     if drop_id == 0 or drop_id == "0":
+        #         continue
+        #     drop_id_list.append(drop_id)
+        #
+        # print(drop_id_list)
+        # # 将DropID列表转为dropPackId列表
+        # table_data = self.excelTools.get_table_data("DROP_PACK.xlsm")
+        # drop_pack_id_list = []
+        # for target_id in drop_id_list:
+        #     # DROP_PACK.xlsm表从dropId找到对应的dropPackId
+        #     for index, drop_id in enumerate(table_data["dropId"]):
+        #         enable = table_data["enabled"][index]
+        #         if enable == 0 or enable == "0":
+        #             continue
+        #         if drop_id != target_id:
+        #             continue
+        #         drop_pack_id = table_data["dropPackId"][index]
+        #         drop_pack_id_list.append(drop_pack_id)
+        # print(drop_pack_id_list)
+        # item_id_list = []
+        # table_data = self.excelTools.get_table_data("DROP_ENTITY.xlsm")
+        # for drop_pack_id in drop_pack_id_list:
+        #     try:
+        #         index = table_data["dropPackId"].index(int(drop_pack_id))
+        #     except ValueError:
+        #         index = table_data["dropPackId"].index(str(drop_pack_id))
+        #     enable = table_data["enabled"][index]
+        #     if enable == 0 or enable == "0":
+        #         continue
+        #     item_id_list.append(table_data["itemID"][index])
+
         return item_id_list
 
     def fish_bone_to_fish(self, fish_bone_id):
         # 鱼骨tpid转missionConditionID
-        table_data = self.excelTools.get_table_data("MISSION_CONDITION.xlsm")
-        try:
-            index = table_data["triggerKeyS"].index(int(fish_bone_id))
-        except ValueError:
-            index = table_data["triggerKeyS"].index(str(fish_bone_id))
-        mission_condition_id = table_data["missionConditionID"][index]
+        table_data_object = self.excelTools.get_table_data_object_by_key_value(key="triggerKeyS", value=fish_bone_id, book_name="MISSION_CONDITION.xlsm")
+        mission_condition_id = table_data_object["missionConditionID"]
 
         # missionConditionID转鱼id
-        table_data = self.excelTools.get_table_data("FISH_STATE.xlsm")
-        try:
-            index = table_data["startConditionId"].index(int(mission_condition_id))
-        except ValueError:
-            index = table_data["startConditionId"].index(str(mission_condition_id))
-        fish_id = table_data["fishChange"][0]["fish"][index]
+        table_data_object = self.excelTools.get_table_data_object_by_key_value(key="startConditionId", value=mission_condition_id, book_name="FISH_STATE.xlsm")
+        fish_id = table_data_object["fishChange"][0]["fish"]
+
+        # # 鱼骨tpid转missionConditionID
+        # table_data = self.excelTools.get_table_data("MISSION_CONDITION.xlsm")
+        # try:
+        #     index = table_data["triggerKeyS"].index(int(fish_bone_id))
+        # except ValueError:
+        #     index = table_data["triggerKeyS"].index(str(fish_bone_id))
+        # mission_condition_id = table_data["missionConditionID"][index]
+
+
+        # # missionConditionID转鱼id
+        # table_data = self.excelTools.get_table_data("FISH_STATE.xlsm")
+        # try:
+        #     index = table_data["startConditionId"].index(int(mission_condition_id))
+        # except ValueError:
+        #     index = table_data["startConditionId"].index(str(mission_condition_id))
+        # fish_id = table_data["fishChange"][0]["fish"][index]
+        # print(fish_id)
         return str(fish_id)
 
 
@@ -1181,8 +1285,7 @@ class BasePage(BasePageMain):
 
 if __name__ == '__main__':
     bp = BasePage("127.0.0.1:21523", is_mobile_device=False)
-    a = bp.get_item_count( item_tpid="100500")
-    print(a)
+    a = bp.get_tpid(item_icon_name="coin_gold")
     # bp.set_item_count(target_count=2500, item_tpid="100500")
     bp.connect_close()
     # while True:

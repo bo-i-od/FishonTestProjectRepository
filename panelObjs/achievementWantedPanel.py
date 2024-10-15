@@ -48,11 +48,6 @@ class AchievementWantedPanel(BasePage):
             cur += 1
         return open_index_list
 
-    # 获得表数据
-    def get_achievement_wanted_table_data(self):
-        table_data = self.excelTools.get_table_data("ACHIEVEMENT_WANTED.xlsm")
-        return table_data
-
     # 去渔场钓悬赏鱼
     def do_wanted(self, table_data, index):
         # 进入指定渔场

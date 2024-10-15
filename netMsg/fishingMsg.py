@@ -4,12 +4,14 @@ from netMsg.csMsg import fishing_cs
 
 
 def get_CSFishingSaveLimitedSpotEnergyCostIdMsg(bp:BasePage, energy_cost:int):
-    table_data = bp.excelTools.get_table_data("FISH_ACTIVITY_SPOT_ENERGY.xlsm")
-    energyCost_list = table_data['energyCost']
-    tpId_list = table_data['tpId']
-    index = energyCost_list.index(energy_cost)
-    chooseEnergyCostId = tpId_list[index]
-    luaCode = fishing_cs.get_CSFishingSaveLimitedSpotEnergyCostIdMsg(chooseEnergyCostId=chooseEnergyCostId)
+    table_data_object = bp.excelTools.get_table_data_object_by_key_value(key="energyCost", value=energy_cost, book_name="FISH_ACTIVITY_SPOT_ENERGY.xlsm")
+    tpId = table_data_object["tpId"]
+    # table_data = bp.excelTools.get_table_data("FISH_ACTIVITY_SPOT_ENERGY.xlsm")
+    # energyCost_list = table_data['energyCost']
+    # tpId_list = table_data['tpId']
+    # index = energyCost_list.index(energy_cost)
+    # tpId = tpId_list[index]
+    luaCode = fishing_cs.get_CSFishingSaveLimitedSpotEnergyCostIdMsg(chooseEnergyCostId=tpId)
     return luaCode
 
 def get_rod_id(scene_id):
@@ -31,6 +33,7 @@ def get_rod_id(scene_id):
                     "400315": "500007",
                     "400318": "500006",
                     "400319": "500003",
+                    "400320": "500001",
                     }
     rod_id = scene_to_rod[scene_id]
     return rod_id
@@ -54,15 +57,40 @@ def fish(bp: BasePage, arg_list):
             execute_dict["isActivitySpot"] = arg_list[cur]["is_activity_spot"]
         if "energy_cost" in arg_list[cur]:
             energy_cost = arg_list[cur]["energy_cost"]
-            table_data = bp.excelTools.get_table_data("FISH_ACTIVITY_SPOT_ENERGY.xlsm")
-            energyCost_list = table_data['energyCost']
-            tpId_list = table_data['tpId']
-            try:
-                index = energyCost_list.index(energy_cost)
-                execute_dict["energyCostId"] = tpId_list[index]
-            except ValueError:
-                pass
+            table_data_object = bp.excelTools.get_table_data_object_by_key_value(key="energyCost", value=energy_cost, book_name="FISH_ACTIVITY_SPOT_ENERGY.xlsm")
+            tpId = table_data_object["tpId"]
+            execute_dict["energyCostId"] = tpId
+
+            # table_data = bp.excelTools.get_table_data("FISH_ACTIVITY_SPOT_ENERGY.xlsm")
+            # energyCost_list = table_data['energyCost']
+            # tpId_list = table_data['tpId']
+            # try:
+            #     index = energyCost_list.index(energy_cost)
+            #     execute_dict["energyCostId"] = tpId_list[index]
+            # except ValueError:
+            #     pass
         execute_list.append(execute_dict)
         cur += 1
     rpcMethodRequest.fish(bp.poco, execute_list)
+
+def fish_all(bp: BasePage):
+    bp.cmd("add 1 100500 1000000")
+    fishery_id_list = bp.get_fishery_id_list()
+    for fishery_id in fishery_id_list:
+        fish_id_list = bp.get_fish_id_list(fishery_id)
+        for fish_id in fish_id_list:
+            cmd = f"mode {fishery_id} {fish_id}"
+            print(cmd)
+            bp.cmd(cmd)
+            bp.sleep(0.1)
+            fish(bp, [
+                 {"spot_id": f"{fishery_id}13", "times": 1, "is_activity_spot": True}, {"spot_id": f"{fishery_id}03", "times": 1, "is_activity_spot": False}, {"spot_id": f"{fishery_id}13", "times": 1, "is_activity_spot": False}
+            ])
+            bp.sleep(0.2)
+
+if __name__ == '__main__':
+    bp = BasePage("127.0.0.1:21523", is_mobile_device=False)
+    fish_all(bp)
+    bp.connect_close()
+
 

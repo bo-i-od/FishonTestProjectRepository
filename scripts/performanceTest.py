@@ -11,6 +11,7 @@ from panelObjs.buyEnergyPanel import BuyEnergyPanel
 from panelObjs.divisionLeaderboardPanel import DivisionLeaderboardPanel
 from panelObjs.divisionListPanel import DivisionListPanel
 from panelObjs.dlcDownloadPanel import DLCDownloadPanel
+from panelObjs.eventsGiftCenterPanel import EventsGiftCenterPanel
 from panelObjs.leaderBoardPanel import LeaderBoardPanel
 from panelObjs.loadingFisheryPanel import LoadingFisheryPanel
 from panelObjs.mailPanel import MailPanel
@@ -329,7 +330,7 @@ def fish_card(bp: BasePage):
         cur += 1
     FishCardUpgradePanel.click_btn_close(bp)
     bp.sleep(1)
-    FishCardGiftPackPanel.click_btn_close(bp)
+    EventsGiftCenterPanel.click_btn_close(bp)
     bp.sleep(1)
 
     # 挨个点击渔场
@@ -534,11 +535,11 @@ def pve(bp: BasePage):
     bp.sleep(1)
 
     # 读表格数据
-    table_data = bp.excelTools.get_table_data("ACHIEVEMENT_WANTED.xlsm")
-
+    table_data_object_list = bp.excelTools.get_table_data_detail_by_base_data(book_name="ACHIEVEMENT_WANTED.xlsm")[0]
     # 选第一个有悬赏鱼的钓场完成
     r = 0
-    fishery = str(table_data["fishery"][r])
+    table_data_object = table_data_object_list[r]
+    fishery = str(table_data_object["fishery"])
     TournamentsPanel.go_to_fishery_by_tpid(bp, fishery_tpid=fishery)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
 
@@ -590,6 +591,8 @@ def pve(bp: BasePage):
 
 
 def pvp(bp: BasePage):
+    duelTest.set_duelcup_random(bp, 7)
+    bp.sleep(1)
     bp.go_to_panel("PVPHallPanel")
     bp.sleep(1)
 
@@ -735,23 +738,20 @@ def main(bp: BasePage):
     login(bp)
     playerEditName(bp)
     guide(bp)
-    bp.cmd("add 1 100200 1234")
+    bp.cmd_list(["levelupto 99", "missiondone 10"])
+
     player_setting(bp)
     PlayerLevelupPanel.wait_for_panel_appear(bp)
     bp.clear_popup()
     account_init(bp)
-    bp.cmd("add 1 100200 123456789")
     fish_album(bp)
-    PlayerLevelupPanel.wait_for_panel_appear(bp)
     aquarium(bp)
-    bp.cmd("missiondone 10")
     store(bp)
     gear(bp)
     fish_card(bp)
     achievement(bp)
     battle_pass(bp)
     mail(bp)
-    duelTest.set_duelcup_random(bp, 7)
     questionnaire(bp)
     download(bp)
     energy(bp)
@@ -764,6 +764,6 @@ def main(bp: BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21503")
+    bp = BasePage("127.0.0.1:21503", is_mobile_device=True)
     account_init(bp)
     # main(bp)

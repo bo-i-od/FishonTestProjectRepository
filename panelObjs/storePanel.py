@@ -224,7 +224,7 @@ class StorePanel(BasePage):
         if cost < 0:
             self.debug_log("已经购买无法购买")
             return False
-        item_tpid = self.get_tpid(item_icon_name=icon)
+        item_tpid = self.get_tpid(item_icon_name=icon)[0]
         element_data = None
         if item_tpid == "100000":
             element_data = ElementsData.Store.text_100000

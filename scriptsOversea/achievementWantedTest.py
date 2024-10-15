@@ -78,14 +78,12 @@ def wanted_test(bp: BasePage):
     achievement_icon_list = AchievementPanel.get_achievement_icon_list(bp)
     r = random.randint(0, len(achievement_icon_list) - 1)
     achievement_icon = achievement_icon_list[r]
-    # 读表格数据
-    table_data = bp.excelTools.get_table_data("ACHIEVEMENT_WANTED.xlsm")
 
-    # index = table_data["icon"].index(achievement_icon)
-    r = table_data["icon"].index(achievement_icon)
-    # tpid = table_data["TPID"][index]
-    # bp.cmd(f'wantedComplete {tpid}')
-    AchievementWantedPanel.do_wanted(bp, table_data=table_data, index=r)
+    # 读表格数据
+    table_data_object = bp.excelTools.get_table_data_object_by_key_value(key="icon", value=achievement_icon, book_name="ACHIEVEMENT_WANTED.xlsm")
+    tpid = table_data_object["TPID"]
+    bp.cmd(f'wantedComplete {tpid}')
+    # AchievementWantedPanel.do_wanted(bp, table_data=table_data, index=r)
     bp.go_home()
 
     # 去悬赏界面

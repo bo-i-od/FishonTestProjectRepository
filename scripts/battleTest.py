@@ -96,14 +96,10 @@ def select_location(bp: BasePage, index):
 
 
 def fish_all(bp: BasePage, is_quick=False):
-    table_data = bp.excelTools.get_table_data("FISHERIES.xlsm")
-    tpid_fishery_list = table_data["tpId"]
+    fishery_id_list = bp.get_fishery_id_list()
     cur = 0
-    while cur < len(tpid_fishery_list):
-        fishery_id = str(tpid_fishery_list[cur])
-        if table_data["enabled"][cur] != 1:
-            cur += 1
-            continue
+    while cur < len(fishery_id_list):
+        fishery_id = fishery_id_list[cur]
         TournamentsPanel.go_to_fishery_by_tpid(bp, fishery_id)
         circulate_fish(bp, fishery_id=fishery_id, is_quick=is_quick)
         BattlePreparePanel.click_btn_close(bp)
@@ -367,7 +363,6 @@ if __name__ == '__main__':
     bp.is_time_scale = False
     bp.custom_cmd("setTension 0.9")
     bp.set_item_count(target_count=1000000000, item_tpid="100500")
-    fail_all(bp, "400319", is_gold=False, is_double_week=True)
     # main(bp, fishery_id="400319",  is_double_week=True)
 
     # 断开连接

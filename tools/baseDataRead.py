@@ -61,13 +61,13 @@ def parse_data_file(data_file):
             continue
     struct_name = data_file.split(".")[0].split("/")[-1].lower()
 
-    blocks = content.split(struct_name)
+    blocks = content.split(struct_name + '{')
     blocks = blocks[1:]
     # 处理每个块
     cleaned_blocks = []
     for block in blocks:
         # 移除开头的 '{' 和结尾的 '};'，然后去除首尾空白
-        cleaned_block = block.strip().strip('{').strip('};').strip()
+        cleaned_block = block.strip().strip('};').strip()
         if cleaned_block:  # 只添加非空的块
             cleaned_blocks.append(cleaned_block)
     return cleaned_blocks
@@ -79,6 +79,7 @@ def deal_with_blocks(structs, blocks, prefix):
         lines = block.split('\n')
         data = deal_with_lines(structs, lines, prefix)
         result.append(data)
+
     return result
 
 
@@ -136,7 +137,7 @@ def convert_to_json(path, prefix):
     structs = parse_decl_file(decl_file)
     blocks = parse_data_file(data_file)
     res = deal_with_blocks(structs, blocks, prefix)
-    return res
+    return res, structs, prefix
 
 
 
@@ -159,14 +160,16 @@ def get_prefix_list(files):
 
 if __name__ == '__main__':
     path = r"C:/trunkCHS/datapool/ElementData/BaseData/"
-    # files = get_files_in_current_directory(path)
-    # a = get_prefix_list(files)
-    # for b in a:
-    #     try:
-    #         print(b)
-    #         convert_to_json(path, b)
-    #     except FileNotFoundError:
-    #         pass
-    #     except Exception as e:
-    #         print(e)
-    convert_to_json(path,  'DUEL_ROBOT_PERSONALITY')
+    files = get_files_in_current_directory(path)
+    a = get_prefix_list(files)
+    for b in a:
+        try:
+            print(b)
+            convert_to_json(path, b)
+        except FileNotFoundError:
+            pass
+        except Exception as e:
+            print("------------------")
+            print(e)
+            print("------------------")
+    # convert_to_json(path,  'FISH')

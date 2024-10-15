@@ -348,7 +348,7 @@ def hide_unowned_test(bp: BasePage):
 
 def full_level(bp: BasePage, tpId=None, table_data=None):
     if table_data is None:
-        table_data = GearPanel.get_fishing_rod_table_data(bp)
+        table_data = GearPanel.get_fishing_rod_table_data_detail(bp)
     tpId_list = table_data["tpId"]
 
     if tpId is not None:
@@ -366,7 +366,7 @@ def full_level(bp: BasePage, tpId=None, table_data=None):
 
 def specify_level(bp: BasePage, target_level, tpId=None, table_data=None):
     if table_data is None:
-        table_data = GearPanel.get_fishing_rod_table_data(bp)
+        table_data = GearPanel.get_fishing_rod_table_data_detail(bp)
     tpId_list = table_data["tpId"]
 
     if tpId is not None:
@@ -382,7 +382,7 @@ def specify_level(bp: BasePage, target_level, tpId=None, table_data=None):
 
 def full_star(bp: BasePage, tpId=None, table_data=None):
     if table_data is None:
-        table_data = GearPanel.get_fishing_rod_table_data(bp)
+        table_data = GearPanel.get_fishing_rod_table_data_detail(bp)
     tpId_list = table_data["tpId"]
     maxStarLv_list = table_data["maxStarLv"]
 
@@ -406,7 +406,7 @@ def one_star(bp: BasePage, tpId=None, table_data=None):
         bp.lua_console(lua_code)
         return
     if table_data is None:
-        table_data = GearPanel.get_fishing_rod_table_data(bp)
+        table_data = GearPanel.get_fishing_rod_table_data_detail(bp)
     tpId_list = table_data["tpId"]
     cur = 0
     while cur < len(tpId_list):
