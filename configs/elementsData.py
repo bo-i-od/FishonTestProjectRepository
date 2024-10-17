@@ -844,6 +844,10 @@ class ElementsData:
     class Loading:
         LoadingPanel = {"locator": "UICanvas>Default>LoadingPanel"}
 
+    class Location:
+        LocationPanel = {"locator": "UICanvas>Default>LocationPanel"}
+        btn_cancel = {"locator": "UICanvas>Default>LocationPanel>panel>btns>btn_cancel"}
+
     class LoadingFishery:
         LoadingFisheryPanel = {"locator": "UICanvas>Default>LoadingFisheryPanel"}
 

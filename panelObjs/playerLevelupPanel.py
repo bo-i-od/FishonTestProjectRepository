@@ -12,7 +12,7 @@ class PlayerLevelupPanel(BasePage):
             self.clear_popup_once(ignore_set={"PlayerLevelupPanel"})
             self.sleep(1)
             cur += 1
-            if cur > 20:
+            if cur > 10:
                 break
 
     def click_tap_to_continue(self):

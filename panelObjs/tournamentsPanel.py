@@ -11,7 +11,7 @@ class TournamentsPanel(BasePage):
 
 
     def get_fishery_tpid_list(self):
-        table_data_detail = bp.excelTools.get_table_data_detail_by_base_data(book_name="FISHERIES.xlsm")
+        table_data_detail = self.excelTools.get_table_data_detail_by_base_data(book_name="FISHERIES.xlsm")
         bg_list = self.get_icon_list(element_data=ElementsData.Tournaments.bg_list)
         cur = 0
         while cur < len(bg_list):
@@ -21,7 +21,7 @@ class TournamentsPanel(BasePage):
         res_list = []
         cur = 0
         while cur < len(bg_list):
-            table_data_object_list = bp.excelTools.get_table_data_object_list_by_key_value(key="displayicon", value=bg_list[cur], table_data_detail=table_data_detail)
+            table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="displayicon", value=bg_list[cur], table_data_detail=table_data_detail)
             if not table_data_object_list:
                 res_list.append("")
                 cur += 1
