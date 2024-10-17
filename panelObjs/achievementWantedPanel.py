@@ -49,17 +49,17 @@ class AchievementWantedPanel(BasePage):
         return open_index_list
 
     # 去渔场钓悬赏鱼
-    def do_wanted(self, table_data, index):
+    def do_wanted(self, table_data_object):
         # 进入指定渔场
-        fishery = table_data["fishery"][index]
+        fishery = table_data_object["fishery"]
         self.go_to_panel("TournamentsPanel")
         TournamentsPanel.go_to_fishery_by_tpid(self, fishery_tpid=fishery)
 
 
-        target_list = table_data["target"]
+        target_list = table_data_object["target"]
         cur = 0
         while cur < len(target_list):
-            target = target_list[cur][index]
+            target = target_list[cur]
             if target == "0" or target == 0:
                 cur += 1
                 continue

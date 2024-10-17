@@ -302,7 +302,7 @@ def fail_all(bp: BasePage, fishery_id, is_gold=False, is_double_week=False):
             print(c)
             bp.cmd(c)
         BattlePreparePanel.click_btn_cast(bp)
-        bp.sleep(2)
+        bp.sleep(1)
         bp.log_list_flag = False
         target_log = bp.get_target_log(msg_key="SCFishingCastMsg")
         color = get_value(msg=target_log, key="color", is_str=False)
@@ -380,14 +380,14 @@ def main(bp: BasePage, fishery_id, is_double_week=False):
 
 if __name__ == '__main__':
     # 连接设备号为127.0.0.1:21533的设备
-    bp = BasePage("127.0.0.1:21543", is_mobile_device=True)
+    bp = BasePage("127.0.0.1:21523", is_mobile_device=True)
 
     gameInit.set_joystick(bp)
     bp.is_time_scale = False
     bp.custom_cmd("setTension 0.9")
     bp.set_item_count(target_count=1000000000, item_tpid="100500")
-    # main(bp, fishery_id="400319",  is_double_week=True)
-    circulate_fish(bp, fishery_id="400306", is_quick=False)
+    main(bp, fishery_id="400320",  is_double_week=True)
+    # circulate_fish(bp, fishery_id="400306", is_quick=False)
     # 断开连接
     bp.connect_close()
 

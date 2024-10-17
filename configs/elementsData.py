@@ -367,7 +367,7 @@ class ElementsData:
             progress = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>Panel_MiniTask>Panel>progress>value"}
 
         class PanelPrepareWarning:
-            btn_icon = {"locator": "UICanvas>Default>BattlePreparePanel>Panel_Prepare_Warning>panel>panel_icon>btn_icon_b>btn_icon>bg_icon"}
+            btn_icon = {"locator": "UICanvas>Default>BattlePreparePanel>Panel_Prepare_Warning>panel>panel_icon>>btn_icon>bg_icon"}
 
     class BattleTreasureMap:
         BattleTreasureMapPanel = {"locator": "UICanvas>Default>BattleTreasureMapPanel"}

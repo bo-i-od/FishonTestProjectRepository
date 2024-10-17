@@ -553,7 +553,7 @@ def pve(bp: BasePage):
     bp.sleep(1)
 
     # 钓悬赏鱼
-    AchievementWantedPanel.do_wanted(bp, table_data=table_data, index=r)
+    AchievementWantedPanel.do_wanted(bp, table_data_object=table_data_object)
 
 
     bp.go_home()
@@ -565,7 +565,7 @@ def pve(bp: BasePage):
     bp.sleep(1)
 
     # 选择对应的渔场
-    target_icon = table_data["icon"][r]
+    target_icon = table_data_object["icon"]
     achievement_icon_list = AchievementPanel.get_achievement_icon_list(bp)
     achievement_position_list = AchievementPanel.get_achievement_position_list(bp)
     index = achievement_icon_list.index(target_icon)
