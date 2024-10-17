@@ -1,6 +1,6 @@
 from common import gameInit
 from common.basePage import BasePage
-from netMsg import csMsgAll
+from netMsg import csMsgAll, fishingMsg
 from netMsg.luaLog import get_value
 
 from panelObjs.battlePreparePanel import BattlePreparePanel
@@ -334,6 +334,29 @@ def fail_all(bp: BasePage, fishery_id, is_gold=False, is_double_week=False):
         fish_once(bp, fishery_id=fishery_id, fish_id=fish_id, is_quick=True)
         cur += 1
 
+# 体感抛竿
+def vibration_cast(bp: BasePage):
+    spot_id = "40030101"
+    scene_id = spot_id[:6]
+    rod_id = fishingMsg.get_rod_id(scene_id)
+    otherArgMap103 = spot_id[len(spot_id) - 2]
+    csMsgAll.get_CSFishingCastMsg()
+    lua_code = ('local cmd = NetworkMgr:NewMsg("CSFishingCastMsg")\n'
+                'local equipMap =NetworkMgr:NewMsg("SCFishEquip")\n'
+                f'equipMap.rodTpId={rod_id}\n'
+                'cmd.equip = equipMap\n'
+                'cmd.castGType = 0\n'
+                f'cmd.sceneArg1 = {scene_id}\n'
+                f'local otherArgMap = {{[101] = 0, [102] = {spot_id}, [103]={otherArgMap103}}}\n'
+                'cmd.otherArgMap = otherArgMap\n'
+                'cmd.sceneType = 1\n'
+                'cmd.castG = 2000\n'
+                'cmd.castGType = 0\n'
+                'NetworkMgr:Send(cmd)'
+                )
+    bp.lua_console(lua_code)
+
+
 def main(bp: BasePage, fishery_id, is_double_week=False):
     # # 渔场全部闪卡
     flashcard_all(bp, fishery_id)
@@ -357,14 +380,14 @@ def main(bp: BasePage, fishery_id, is_double_week=False):
 
 if __name__ == '__main__':
     # 连接设备号为127.0.0.1:21533的设备
-    bp = BasePage("127.0.0.1:21523", is_mobile_device=False)
+    bp = BasePage("127.0.0.1:21543", is_mobile_device=True)
 
     gameInit.set_joystick(bp)
     bp.is_time_scale = False
     bp.custom_cmd("setTension 0.9")
     bp.set_item_count(target_count=1000000000, item_tpid="100500")
     # main(bp, fishery_id="400319",  is_double_week=True)
-
+    circulate_fish(bp, fishery_id="400306", is_quick=False)
     # 断开连接
     bp.connect_close()
 
