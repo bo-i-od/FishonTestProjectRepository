@@ -134,7 +134,7 @@ def fishery_to_spot(fishery_id, is_gold, is_double_week):
     return spot_id
 
 
-def go_to_treasure_map(bp, fishery_id, is_double_week):
+def go_to_treasure_map(bp, fishery_id, is_double_week, is_in_double_week):
     if BattlePreparePanel.get_value_cost(bp) > 10:
         return
     if BattlePreparePanel.is_panel_tip_location_active(bp):
@@ -146,27 +146,27 @@ def go_to_treasure_map(bp, fishery_id, is_double_week):
         return
     fish_once(bp, fishery_id=fishery_id, fish_id="399001", is_quick=True)
     spot_id = fishery_to_spot(fishery_id, is_gold=True, is_double_week=is_double_week)
-    lua_code = csMsgAll.get_CSFishingSaveFishSpotMsg(fishSpotId=int(spot_id), fishSceneTpId=int(fishery_id), source=0, isInDoubleWeek=is_double_week)
+    lua_code = csMsgAll.get_CSFishingSaveFishSpotMsg(fishSpotId=int(spot_id), fishSceneTpId=int(fishery_id), source=0, isInDoubleWeek=is_in_double_week)
     bp.lua_console(lua_code)
     bp.sleep(1)
 
 
-def leave_treasure_map(bp, fishery_id, is_double_week):
+def leave_treasure_map(bp, fishery_id, is_double_week, is_in_double_week):
     if BattlePreparePanel.get_value_cost(bp) < 20:
         return
     spot_id = fishery_to_spot(fishery_id, is_gold=False, is_double_week=is_double_week)
     lua_code = csMsgAll.get_CSFishingSaveFishSpotMsg(fishSpotId=int(spot_id), fishSceneTpId=int(fishery_id), source=0,
-                                                     isInDoubleWeek=is_double_week)
+                                                     isInDoubleWeek=is_in_double_week)
     bp.lua_console(lua_code)
     bp.sleep(1)
 
 
-def goldfish_all(bp: BasePage, fishery_id,  is_double_week=False):
+def goldfish_all(bp: BasePage, fishery_id, is_double_week=False, is_in_double_week=False):
     fish_list = bp.get_fish_id_list(fishery_id)
     cur = 0
     while cur < len(fish_list):
         # 藏宝图消失就钓藏宝图
-        go_to_treasure_map(bp, fishery_id=fishery_id, is_double_week=is_double_week)
+        go_to_treasure_map(bp, fishery_id=fishery_id, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
         fish_id = fish_list[cur]
         c = f"mode {fishery_id} {fish_id}"
         print(c)
@@ -198,7 +198,10 @@ def goldfish_all(bp: BasePage, fishery_id,  is_double_week=False):
             bp.cmd("mode 0 0")
 
 
-def flashcard_all(bp: BasePage, fishery_id):
+def flashcard_all(bp: BasePage, fishery_id, is_double_week, is_in_double_week):
+    # 不是双周渔场就不钓闪卡
+    if not is_double_week:
+        return
     fish_list = bp.get_fish_id_list(fishery_id)
     # bp.cur = 0
     # while bp.cur < len(fish_list):
@@ -208,7 +211,7 @@ def flashcard_all(bp: BasePage, fishery_id):
     cur = 0
     while cur < len(fish_list):
         # 藏宝图消失就钓藏宝图
-        go_to_treasure_map(bp, fishery_id=fishery_id, is_double_week=True)
+        go_to_treasure_map(bp, fishery_id=fishery_id, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
         fish_id = fish_list[cur]
         c = f"mode {fishery_id} {fish_id}"
         print(c)
@@ -236,9 +239,9 @@ def flashcard_all(bp: BasePage, fishery_id):
             bp.cmd("mode 0 0")
 
 
-def fishbone_all(bp: BasePage, fishery_id, is_gold=False, is_double_week=False):
+def fishbone_all(bp: BasePage, fishery_id, is_gold=False, is_double_week=False, is_in_double_week=False):
     if not is_gold:
-        leave_treasure_map(bp, fishery_id=fishery_id, is_double_week=is_double_week)
+        leave_treasure_map(bp, fishery_id=fishery_id, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
     spot_id = fishery_to_spot(fishery_id, is_gold, is_double_week)
     drop_item_id_list = bp.get_drop_item_id_list(spot_id)
     for drop_item_id in drop_item_id_list:
@@ -248,7 +251,7 @@ def fishbone_all(bp: BasePage, fishery_id, is_gold=False, is_double_week=False):
             continue
         # 黄金钓点
         if is_gold:
-            go_to_treasure_map(bp, fishery_id=fishery_id, is_double_week=is_double_week)
+            go_to_treasure_map(bp, fishery_id=fishery_id, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
         fish_once(bp, fishery_id=fishery_id, fish_id=drop_item_id, is_quick=True)
         bp.sleep(3)
         BattlePreparePanel.click_btn_icon_warning(bp)
@@ -260,9 +263,9 @@ def fishbone_all(bp: BasePage, fishery_id, is_gold=False, is_double_week=False):
         fish_once(bp, fishery_id=fishery_id, fish_id=fish_id, is_quick=True)
 
 
-def fail_all(bp: BasePage, fishery_id, is_gold=False, is_double_week=False):
+def fail_all(bp: BasePage, fishery_id, is_gold=False, is_double_week=False, is_in_double_week=False):
     if not is_gold:
-        leave_treasure_map(bp, fishery_id=fishery_id, is_double_week=is_double_week)
+        leave_treasure_map(bp, fishery_id=fishery_id, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
     fish_id_list = bp.get_fish_id_list(fishery_id)
     fishery_id = str(fishery_id)
     cur = 0
@@ -289,7 +292,7 @@ def fail_all(bp: BasePage, fishery_id, is_gold=False, is_double_week=False):
             continue
 
         # 黄金鱼情
-        go_to_treasure_map(bp, fishery_id=fishery_id, is_double_week=is_double_week)
+        go_to_treasure_map(bp, fishery_id=fishery_id, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
 
         # 清空消息列表 开始收消息
         bp.log_list.clear()
@@ -357,24 +360,26 @@ def vibration_cast(bp: BasePage):
     bp.lua_console(lua_code)
 
 
-def main(bp: BasePage, fishery_id, is_double_week=False):
+# is_double_week 历史的双周渔场
+# is_in_double_week 当前的双周渔场
+def main(bp: BasePage, fishery_id, is_double_week=False, is_in_double_week=False):
     # # 渔场全部闪卡
-    flashcard_all(bp, fishery_id)
+    flashcard_all(bp, fishery_id, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
 
     # 渔场全部普通鱼骨
-    fishbone_all(bp, fishery_id, is_gold=False, is_double_week=is_double_week)
+    fishbone_all(bp, fishery_id, is_gold=False, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
 
     # 渔场全部失败鱼情
-    fail_all(bp, fishery_id, is_gold=False, is_double_week=is_double_week)
+    fail_all(bp, fishery_id, is_gold=False, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
 
     # 渔场全部黄金鱼骨
-    fishbone_all(bp, fishery_id, is_gold=True, is_double_week=is_double_week)
+    fishbone_all(bp, fishery_id, is_gold=True, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
 
     # 渔场全部黄金失败鱼情
-    fail_all(bp, fishery_id, is_gold=True, is_double_week=is_double_week)
+    fail_all(bp, fishery_id, is_gold=True, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
 
     # 渔场全部黄金鱼
-    goldfish_all(bp, fishery_id, is_double_week=is_double_week)
+    goldfish_all(bp, fishery_id, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
 
 
 
@@ -386,8 +391,8 @@ if __name__ == '__main__':
     bp.is_time_scale = False
     bp.custom_cmd("setTension 0.9")
     bp.set_item_count(target_count=1000000000, item_tpid="100500")
-    main(bp, fishery_id="400320",  is_double_week=True)
-    # circulate_fish(bp, fishery_id="400306", is_quick=False)
+    main(bp, fishery_id="400320",  is_double_week=True, is_in_double_week=False)
+    # circulate_fish(bp, fishery_id="400320", is_quick=False)
     # 断开连接
     bp.connect_close()
 
