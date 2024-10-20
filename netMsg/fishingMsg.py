@@ -1,18 +1,6 @@
 from common.basePage import BasePage
 from common import rpcMethodRequest
-from netMsg.csMsg import fishing_cs
 
-
-def get_CSFishingSaveLimitedSpotEnergyCostIdMsg(bp:BasePage, energy_cost:int):
-    table_data_object = bp.excelTools.get_table_data_object_by_key_value(key="energyCost", value=energy_cost, book_name="FISH_ACTIVITY_SPOT_ENERGY.xlsm")
-    tpId = table_data_object["tpId"]
-    # table_data = bp.excelTools.get_table_data("FISH_ACTIVITY_SPOT_ENERGY.xlsm")
-    # energyCost_list = table_data['energyCost']
-    # tpId_list = table_data['tpId']
-    # index = energyCost_list.index(energy_cost)
-    # tpId = tpId_list[index]
-    luaCode = fishing_cs.get_CSFishingSaveLimitedSpotEnergyCostIdMsg(chooseEnergyCostId=tpId)
-    return luaCode
 
 def get_rod_id(scene_id):
     scene_to_rod = {"400301": "500001",
@@ -76,7 +64,9 @@ def fish(bp: BasePage, arg_list):
 def fish_all(bp: BasePage):
     bp.cmd("add 1 100500 1000000")
     fishery_id_list = bp.get_fishery_id_list()
-    for fishery_id in fishery_id_list:
+    cur = 0
+    while cur < len(fishery_id_list):
+        fishery_id = fishery_id_list[cur]
         fish_id_list = bp.get_fish_id_list(fishery_id)
         for fish_id in fish_id_list:
             cmd = f"mode {fishery_id} {fish_id}"
@@ -84,12 +74,20 @@ def fish_all(bp: BasePage):
             bp.cmd(cmd)
             bp.sleep(0.1)
             fish(bp, [
-                 {"spot_id": f"{fishery_id}13", "times": 1, "is_activity_spot": True}, {"spot_id": f"{fishery_id}03", "times": 1, "is_activity_spot": False}, {"spot_id": f"{fishery_id}13", "times": 1, "is_activity_spot": False}
+                 {"spot_id": f"{fishery_id}13", "times": 1, "is_activity_spot": True}])
+            bp.sleep(0.4)
+            fish(bp, [
+                {"spot_id": f"{fishery_id}03", "times": 1, "is_activity_spot": False}
             ])
-            bp.sleep(0.2)
+            bp.sleep(0.4)
+            fish(bp, [
+                 {"spot_id": f"{fishery_id}13", "times": 1, "is_activity_spot": False}
+            ])
+            bp.sleep(0.4)
+        cur += 1
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21523", is_mobile_device=False)
+    bp = BasePage("127.0.0.1:21533", is_mobile_device=True)
     fish_all(bp)
     bp.connect_close()
 
