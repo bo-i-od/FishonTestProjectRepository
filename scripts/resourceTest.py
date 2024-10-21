@@ -7,12 +7,7 @@ from pathlib import Path
 from tools import baseDataRead
 from tools.excelRead import ExcelTools
 from datetime import datetime
-
-pic_path_data_dict = {
-    "ACHIEVEMENT_CATEGORY.xlsm": {"item_name": ["icon", "fishList>pic"], "ignore_icon_list": []},
-    "ACHIEVEMENT_GROUP.xlsm": {"item_name": ["icon"]},
-
-    }
+from configs import excelConfig
 
 
 def find_files_with_extension(folder_path, extension):
@@ -89,10 +84,14 @@ def get_list(parent_list, child_name):
         if not parent:
             continue
         if not isinstance(parent, list):
+            if child_name not in parent:
+                continue
             child_list.append(parent[child_name])
             continue
         for p in parent:
             if not p:
+                continue
+            if child_name not in p:
                 continue
             child_list.append(p[child_name])
     return child_list
@@ -119,7 +118,7 @@ def find_file(target_filename):
 
 def get_pictures_by_excel(excel_name):
     table_data = excel_tools.get_table_data(excel_name)
-    pic_path_list = pic_path_data_dict[excel_name]["item_name"]
+    pic_path_list = excelConfig.pic_path_data_dict[excel_name]["item_name"]
     pic_set = set()
 
     for pic_path in pic_path_list:
@@ -132,7 +131,7 @@ def get_pictures_by_base_data(excel_name):
     print(excel_name)
     prefix = excel_name.split(".")[0]
     table_data_object_list = baseDataRead.convert_to_json(base_data_path, prefix)[0]
-    pic_path_list = pic_path_data_dict[excel_name]["item_name"]
+    pic_path_list = excelConfig.pic_path_data_dict[excel_name]["item_name"]
     pic_set = set()
 
     for pic_path in pic_path_list:
@@ -148,8 +147,8 @@ def check_pictures(excel_name, pic_set):
         # 打印并刷新 stdio
         sys.stdout.write(f"\r{output}")
         sys.stdout.flush()
-        if "ignore_icon_list" in pic_path_data_dict[excel_name]:
-            pic_ignore_list = pic_path_data_dict[excel_name]["ignore_icon_list"]
+        if "ignore_icon_list" in excelConfig.pic_path_data_dict[excel_name]:
+            pic_ignore_list = excelConfig.pic_path_data_dict[excel_name]["ignore_icon_list"]
             if pic in pic_ignore_list:
                 continue
         target_filename = str(pic) + '.png'
@@ -226,7 +225,7 @@ def version_comparison():
 
 def main():
     res = set()
-    for pic_path_data in pic_path_data_dict:
+    for pic_path_data in excelConfig.pic_path_data_dict:
         # pictures = get_pictures_by_excel(pic_path_data)
         # print(pictures)
         pictures = get_pictures_by_base_data(pic_path_data)
