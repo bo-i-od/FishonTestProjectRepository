@@ -46,6 +46,10 @@ class BasePageMain:
         # 是否开启战斗倍速
         self.is_time_scale = False
 
+        self.is_ios = False
+        if is_mobile_device is False or serial_number is not None:
+            self.is_ios = True
+
         # 默认端口 5001
         addr = ('', 5001)
         addr_listen = ('', 5002)
@@ -55,7 +59,9 @@ class BasePageMain:
             self.dev = self.get_device(serial_number=serial_number)
 
         self.poco = UnityPoco(addr, device=dev)
-        self.poco_listen = UnityPoco(addr_listen, device=dev)
+        self.poco_listen = None
+        if not self.is_ios:
+            self.poco_listen = UnityPoco(addr_listen, device=dev)
         self.screen_w, self.screen_h = self.poco.get_screen_size()  # 获取屏幕尺寸
 
         if self.is_debug_log:
@@ -86,7 +92,7 @@ class BasePageMain:
         except Exception as e:
             print(e)
             print("进行设备连接")
-        if serial_number is None:
+        if self.is_ios:
             dev = connect_device(f"ios:///http://127.0.0.1:8100")
             return dev
         dev = connect_device(f"android://127.0.0.1:5037/{serial_number}")
@@ -98,7 +104,8 @@ class BasePageMain:
     def connect_close(self):
         self.send_log_flag = False
         self.poco.agent.c.conn.close()
-        self.poco_listen.agent.c.conn.close()
+        if self.poco_listen is not None:
+            self.poco_listen.agent.c.conn.close()
 
 
     # 开启调试打印再打印
@@ -773,19 +780,29 @@ class BasePage(BasePageMain):
         # 全局变量
         self.cur = 0
 
-        # 是否监听Unity发来的log
-        self.listen_log_flag = True
-
-        # 是否将Unity发来的log加到消息列表里
-        self.log_list_flag = True
-
         # 消息储存队列
         self.log_list = []
 
-        # self._extend_base_page()
+        # 是否监听Unity发来的log
+        self.listen_log_flag = False
+
+        # 是否将Unity发来的log加到消息列表里
+        self.log_list_flag = False
 
         # 是否让Unity发log
-        self.set_send_log_flag(True)
+        self.set_send_log_flag(False)
+
+        if not self.is_ios:
+            # 是否监听Unity发来的log
+            self.listen_log_flag = True
+
+            # 是否将Unity发来的log加到消息列表里
+            self.log_list_flag = True
+
+            # 是否让Unity发log
+            self.set_send_log_flag(True)
+
+        # self._extend_base_page()
 
         # 配置表的路径
         self.excelTools = ExcelTools(EXCEL_PATH)
