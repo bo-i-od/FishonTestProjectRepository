@@ -47,7 +47,7 @@ class BasePageMain:
         self.is_time_scale = False
 
         self.is_ios = False
-        if is_mobile_device is False or serial_number is not None:
+        if is_mobile_device is True and serial_number is None:
             self.is_ios = True
 
         # 默认端口 5001
