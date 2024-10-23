@@ -135,7 +135,7 @@ class ExcelTools:
         return table_data_object_list
 
     def get_table_data_detail_by_base_data(self, book_name):
-        base_data_path = self.root_path.strip("/策划模板导出工具/") + r"/ElementData/BaseData/"
+        base_data_path = self.root_path.split("策划模板导出工具/")[0] + r"ElementData/BaseData/"
         prefix = book_name.split('.')[0]
         table_data_detail = baseDataRead.convert_to_json(path=base_data_path, prefix=prefix)
         return table_data_detail
