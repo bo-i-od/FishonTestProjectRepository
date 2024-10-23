@@ -136,7 +136,11 @@ def get_pictures_by_base_data(excel_name):
 
     for pic_path in pic_path_list:
         pic_list = get_pic_list_by_table_data_object_list(table_data_object_list, pic_path)
-        pic_set |= set(pic_list)
+        for pic in pic_list:
+            if not isinstance(pic, list):
+                pic_set |= set(pic_list)
+                break
+            pic_set |= set(pic)
     return pic_set
 
 
