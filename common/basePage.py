@@ -23,7 +23,7 @@ from configs.elementsData import ElementsData
 from configs.jumpData import JumpData
 
 import logging
-
+import wda
 
 class BasePageMain:
     def __init__(self, serial_number=None, dev=None, is_mobile_device=False):
@@ -63,6 +63,13 @@ class BasePageMain:
         if not self.is_ios:
             self.poco_listen = UnityPoco(addr_listen, device=dev)
         self.screen_w, self.screen_h = self.poco.get_screen_size()  # 获取屏幕尺寸
+
+        self.scale_factor = 1
+        if self.is_ios:
+            self.udid = wda.usbmux.pyusbmux.list_devices()[0].serial
+            usb_dev = wda.Client(f"http+usbmux://{self.udid}:8100")
+            window_size = usb_dev.window_size()
+            self.scale_factor = window_size[0] / self.screen_w * usb_dev.scale
 
         if self.is_debug_log:
             print(self.screen_w, self.screen_h)
@@ -418,6 +425,8 @@ class BasePageMain:
     # position=[x,y]
     # 0<=x<=1, 0<=y<=1
     def click_position_base(self, position):
+        position[0] = self.scale_factor * position[0]
+        position[1] = 1 - self.scale_factor * (1 - position[1])
         if not (0 <= position[0] <= 1) or not (0 <= position[1] <= 1):
             raise InvalidOperationError('Click position out of screen. pos={}'.format(repr(position)))
         # 点击前进行截图保存
@@ -549,6 +558,7 @@ class BasePageMain:
     # 判断元素存在后再点击
     def click_element_safe(self, object_id: int = 0, element_data: dict = None):
         position_list = self.get_position_list(object_id=object_id, element_data=element_data)
+
         if not position_list:
             return
         try:
@@ -1301,8 +1311,8 @@ class BasePage(BasePageMain):
 
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21523", is_mobile_device=False)
-    a = bp.get_tpid(item_icon_name="coin_gold")
+    bp = BasePage( is_mobile_device=True)
+    # a = bp.get_tpid(item_icon_name="coin_gold")
     # bp.set_item_count(target_count=2500, item_tpid="100500")
     bp.connect_close()
     # while True:
