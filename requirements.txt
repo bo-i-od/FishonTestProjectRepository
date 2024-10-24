@@ -5,4 +5,4 @@ openpyxl==3.1.2
 pocoui==1.0.89
 PyAutoGUI==0.9.54
 slpp==1.2.3
-
+facebook-wda==1.4.9

@@ -155,11 +155,20 @@ def check_pictures(excel_name, pic_set):
             pic_ignore_list = excelConfig.pic_path_data_dict[excel_name]["ignore_icon_list"]
             if pic in pic_ignore_list:
                 continue
+        target_filename = str(pic)
+        if '.png' in target_filename:
+            found = find_file(target_filename)
+            if found:
+                continue
         target_filename = str(pic) + '.png'
         found = find_file(target_filename)
         if found:
             continue
         target_filename = str(pic) + '.mat'
+        found = find_file(target_filename)
+        if found:
+            continue
+        target_filename = str(pic) + '.prefab'
         found = find_file(target_filename)
         if found:
             continue
@@ -239,6 +248,7 @@ def main():
         pictures = get_pictures_by_base_data(pic_path_data)
         print(pictures)
         check_result = check_pictures(pic_path_data, pictures)
+
         res |= check_result
     if res:
         print(f"找不到的资源为{res}")
