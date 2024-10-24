@@ -172,9 +172,9 @@ def check_pictures(excel_name, pic_set):
         found = find_file(target_filename)
         if found:
             continue
-        res.add(target_filename)
+        res.add(pic)
         sys.stdout.write('\r' + ' ' * len(output) + '\r')
-        print(f"'{target_filename}' not found in '{pictures_folder}' or its subfolders.")
+        print(f"'{pic}' not found in '{pictures_folder}' or its subfolders.")
     print("\n")
     return res
 
