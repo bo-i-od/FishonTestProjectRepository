@@ -110,6 +110,10 @@ def get_child_list(parent_list, child_name):
 
 def find_file(target_filename):
     root_path = Path(pictures_folder)
+    if "Assets/" in target_filename:
+        target_filename = target_filename.split("Assets/")[1]
+    if "InBundle/" in target_filename:
+        target_filename = target_filename.split("InBundle/")[1]
     for path in root_path.rglob(target_filename):
         if path.is_file():  # 检查路径是否是文件
             return True
@@ -172,6 +176,7 @@ def check_pictures(excel_name, pic_set):
         found = find_file(target_filename)
         if found:
             continue
+
         res.add(pic)
         sys.stdout.write('\r' + ' ' * len(output) + '\r')
         print(f"'{pic}' not found in '{pictures_folder}' or its subfolders.")
