@@ -64,12 +64,14 @@ class BasePageMain:
             self.poco_listen = UnityPoco(addr_listen, device=dev)
         self.screen_w, self.screen_h = self.poco.get_screen_size()  # 获取屏幕尺寸
 
-        self.scale_factor = 1
+        self.scale_factor_w = 1
+        self.scale_factor_h = 1
         if self.is_ios:
             self.udid = wda.usbmux.pyusbmux.list_devices()[0].serial
             usb_dev = wda.Client(f"http+usbmux://{self.udid}:8100")
             window_size = usb_dev.window_size()
-            self.scale_factor = window_size[0] / self.screen_w * usb_dev.scale
+            self.scale_factor_w = window_size[0] / self.screen_w * usb_dev.scale
+            self.scale_factor_h = window_size[1] / self.screen_h * usb_dev.scale
 
         if self.is_debug_log:
             print(self.screen_w, self.screen_h)
@@ -425,8 +427,8 @@ class BasePageMain:
     # position=[x,y]
     # 0<=x<=1, 0<=y<=1
     def click_position_base(self, position):
-        position[0] = self.scale_factor * position[0]
-        position[1] = 1 - self.scale_factor * (1 - position[1])
+        position[0] = self.scale_factor_w * position[0]
+        position[1] = 1 - self.scale_factor_h * (1 - position[1])
         if not (0 <= position[0] <= 1) or not (0 <= position[1] <= 1):
             raise InvalidOperationError('Click position out of screen. pos={}'.format(repr(position)))
         # 点击前进行截图保存
@@ -737,11 +739,11 @@ class BasePageMain:
         self.click_button(element_data_list=[element_data])
 
     # kind包含up，down，click
-    def ray_input(self, target_name: str, kind: str, element_data:dict = None,element_data_list: list = None):
+    def ray_input(self, target_name: str, kind: str, element_data: dict = None, element_data_list: list = None):
         if element_data_list is not None:
             rpcMethodRequest.ray_input(self.poco, element_data_list, target_name, kind)
             return
-        self.ray_input(target_name=target_name, kind=kind,element_data_list=[element_data])
+        self.ray_input(target_name=target_name, kind=kind, element_data_list=[element_data])
 
     # 设定节点激活状态
     def set_object_active_list(self, active, object_id=0, object_id_list: list = None, element_data: dict = None,element_data_list: list = None, offspring_path=""):
@@ -1311,9 +1313,10 @@ class BasePage(BasePageMain):
 
 
 if __name__ == '__main__':
-    bp = BasePage( is_mobile_device=True)
+    bp = BasePage( is_mobile_device=False)
     # a = bp.get_tpid(item_icon_name="coin_gold")
     # bp.set_item_count(target_count=2500, item_tpid="100500")
+    bp.excelTools.get_table_data_detail_by_base_data("ACTIVITY_DOUBLE_WEEK.xlsm")
     bp.connect_close()
     # while True:
     #     # a = bp.get_object_id_list(element_data=ElementsData.Login.btn_login)

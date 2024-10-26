@@ -149,6 +149,17 @@ def get_pictures_by_base_data(excel_name):
 
 
 def check_pictures(excel_name, pic_set):
+    pic_list = []
+    for pic in pic_set:
+        target_filename = str(pic)
+        if ":" not in target_filename:
+            pic_list.append(pic)
+            continue
+        target_filename_split = target_filename.split(":")
+        pic_list.append(target_filename_split[0])
+        pic_list.append(target_filename_split[1])
+    pic_set = set(pic_list)
+
     res = set()
     for index, pic in enumerate(pic_set):
         output = f"进度：{index + 1}/{len(pic_set)}"
@@ -173,6 +184,14 @@ def check_pictures(excel_name, pic_set):
         if found:
             continue
         target_filename = str(pic) + '.prefab'
+        found = find_file(target_filename)
+        if found:
+            continue
+        target_filename = str(pic) + '.unity'
+        found = find_file(target_filename)
+        if found:
+            continue
+        target_filename = str(pic) + '.wav'
         found = find_file(target_filename)
         if found:
             continue

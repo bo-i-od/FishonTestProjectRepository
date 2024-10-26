@@ -172,7 +172,7 @@ def login(bp: BasePage, name):
     bp.sleep(1)
     while True:
         # PlayerEditNamePanel.set_player_name(bp, name)
-        PlayerEditNamePanel.click_confirm(bp)
+        PlayerEditNamePanel.click_confirm(bp, is_ray_input=True)
         bp.sleep(1)
         if not PlayerEditNamePanel.is_panel_active(bp):
             break
@@ -183,11 +183,11 @@ def login(bp: BasePage, name):
         return
     # # 随机选择性别
     # r = 0
-    gender_icon_position_list = AvatarSelectPanel.get_gender_icon_position_list(bp)
-    bp.click_position(gender_icon_position_list[0])
-    bp.sleep(0.5)
+    # gender_icon_position_list = AvatarSelectPanel.get_gender_icon_position_list(bp)
+    # bp.click_position(gender_icon_position_list[0])
+    # bp.sleep(0.5)
 
-    AvatarSelectPanel.click_btn_start(bp)
+    AvatarSelectPanel.click_btn_start(bp, is_ray_input=True)
 
 
 
@@ -302,7 +302,7 @@ def friend(bp: BasePage):
 
     bp.cmd_list(["levelupto 20"])
     bp.sleep(0.2)
-    lua_code = csMsgAll.get_CSGlobalFriendsApplyMsg(targetSimpleId=20018852, source=0, type=2, targetCharId="66a0ea35be3a1671c3c9fe59", simpleId=charSimpleId)
+    lua_code = csMsgAll.get_CSGlobalFriendsApplyMsg(targetSimpleId=10051868, source=0, type=2, targetCharId="67247c4294a86760d6829b3e", simpleId=charSimpleId)
     bp.lua_console(lua_code)
 
 
@@ -354,10 +354,6 @@ def monopoly(bp:BasePage, layer, index):
     python_dict = commonTools.lua_dict_to_python_dict(target_log)
     roomId = python_dict['monopolyList'][1]['roomId']
     print(roomId)
-
-
-
-
 
 
 def apply_guild(bp:BasePage):
@@ -545,14 +541,16 @@ def read_data():
 
 def main(bp: BasePage):
     # 登录号前缀
-    prefix = "ssdfw_"
+    prefix = "vvv_"
     # prefix_list = ["a", "b", "c", "d", "e"]
     init(bp)
-    cur = 1
-    limit = 21
+    # 起始序号 终止序号
+    cur = 4
+    limit = 6
     while cur < limit:
         name = prefix + str(cur)
         login(bp, name)
+        # 前置gm命令
         bp.cmd("levelupto 16")
         # bp.cmd(f"selfranksetip 180.175.{cur}.{cur}")
 
@@ -562,10 +560,10 @@ def main(bp: BasePage):
         # add_gu(bp, cur)
         # dragon_boat(bp, cur)
         # apply_guild(bp)
-        # friend(bp)
+        friend(bp)
         # ndays(bp, cur)
         # rank(bp)
-        monopoly(bp, layer=1000, index=cur)
+        # monopoly(bp, layer=1000, index=cur)
         # hidden_treasure(bp)
         # cup(bp, cur)
         # bp.sleep(2)
@@ -578,7 +576,4 @@ def main(bp: BasePage):
 if __name__ == '__main__':
     bp = BasePage("127.0.0.1:21543", is_mobile_device=False)
     main(bp)
-    # relogin(bp)
-    # fish(bp, 5)
-    # fish(bp, 1)
     bp.connect_close()

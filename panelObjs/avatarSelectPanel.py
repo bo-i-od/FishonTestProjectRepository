@@ -10,7 +10,10 @@ class AvatarSelectPanel(BasePage):
         while not AvatarSelectPanel.is_panel_active(self):
             self.sleep(1)
 
-    def click_btn_start(self):
+    def click_btn_start(self, is_ray_input=False):
+        if is_ray_input:
+            self.ray_input(target_name="btn_start", element_data=ElementsData.AvatarSelect.btn_start, kind="click")
+            return
         self.click_element(element_data=ElementsData.AvatarSelect.btn_start)
 
     def get_gender_icon_position_list(self):

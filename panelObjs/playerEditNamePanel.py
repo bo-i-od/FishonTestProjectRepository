@@ -83,12 +83,18 @@ class PlayerEditNamePanel(BasePage):
         return head_object_id
 
     # 点击确认按钮
-    def click_confirm(self):
+    def click_confirm(self, is_ray_input=False):
         position_list = self.get_position_list(element_data_list=[ElementsData.PlayerEditName.btn_confirm, ElementsData.PlayerEditName_oversea.btn_confirm])
         if position_list[0]:
+            if is_ray_input:
+                self.ray_input(target_name="btn_confirm", kind="click", element_data=ElementsData.PlayerEditName.btn_confirm)
+                return
             self.click_position(position_list[0][0])
             return
         if position_list[1]:
+            if is_ray_input:
+                self.ray_input(target_name="btn_confirm", kind="click", element_data=ElementsData.PlayerEditName_oversea.btn_confirm)
+                return
             self.click_position(position_list[1][0])
             return
 
