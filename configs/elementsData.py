@@ -123,7 +123,7 @@ class ElementsData:
 
     class AvatarSelect:
         AvatarSelectPanel = {"locator": "UICanvas>Default>AvatarSelectPanel"}
-        gender_icon_list = {"locator": "UICanvas>Default>AvatarSelectPanel>panel_edit>panel_tab>content>TabList>Viewport>Content>>icon" }
+        gender_icon_list = {"locator": "UICanvas>Default>AvatarSelectPanel>panel_edit>panel_tab>content>TabList>Viewport>Content>" }
         btn_start = {"locator": "UICanvas>Default>AvatarSelectPanel>panel_edit>btn_start", "focus": (1, 1)}
 
     class AvatarSkinPop:

@@ -186,7 +186,8 @@ def login(bp: BasePage, name):
     # gender_icon_position_list = AvatarSelectPanel.get_gender_icon_position_list(bp)
     # bp.click_position(gender_icon_position_list[0])
     # bp.sleep(0.5)
-
+    AvatarSelectPanel.click_first_icon(bp, is_ray_input=True)
+    bp.sleep(0.5)
     AvatarSelectPanel.click_btn_start(bp, is_ray_input=True)
 
 
@@ -545,8 +546,8 @@ def main(bp: BasePage):
     # prefix_list = ["a", "b", "c", "d", "e"]
     init(bp)
     # 起始序号 终止序号
-    cur = 4
-    limit = 6
+    cur = 12
+    limit = 15
     while cur < limit:
         name = prefix + str(cur)
         login(bp, name)
@@ -575,5 +576,7 @@ def main(bp: BasePage):
 
 if __name__ == '__main__':
     bp = BasePage("127.0.0.1:21543", is_mobile_device=False)
+
     main(bp)
+
     bp.connect_close()
