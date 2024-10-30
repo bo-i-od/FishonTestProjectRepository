@@ -35,13 +35,22 @@ def championship(bp, index, times):
         bp.go_to_panel("TournamentsPanel")
         bp.sleep(1)
         while True:
-            tournaments_info_position_list = TournamentsPanel.get_tournaments_info_position_list(bp)
-            if not tournaments_info_position_list:
+            # 移动直到入口出现在可点击范围
+            entrance_viewport = TournamentsPanel.get_entrance_viewport(bp)
+            entrance_viewport.item_id_list = TournamentsPanel.get_tournaments_info_id_list(bp)
+
+            if not entrance_viewport.item_id_list:
                 break
-            if len(tournaments_info_position_list) < 2:
+            if len(entrance_viewport.item_id_list) < 2:
                 index = 0
+            entrance_viewport.move_until_appear(entrance_viewport.item_id_list[index])
+
+            tournaments_info_position_list = TournamentsPanel.get_tournaments_info_position_list(bp)
+
+            # 点击入口
             bp.click_position(tournaments_info_position_list[index])
             bp.sleep(0.5)
+            break
         circulate_fish(bp, times=times, is_quick=False)
         bp.go_home()
     except Exception as e:
