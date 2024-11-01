@@ -1,5 +1,5 @@
 from load_log import load_log
-from tools.excelRead import ExceTools
+from tools.excelRead import ExcelTools
 from configs.pathConfig import EXCEL_PATH
 S=1
 M=2
@@ -10,7 +10,7 @@ Rare=11
 Elite=12
 Monster=13
 
-excelTools =  ExceTools(EXCEL_PATH)
+excelTools =  ExcelTools(EXCEL_PATH)
 
 fish_table_data=excelTools.get_table_data("FISH.xlsm")
 fish_tpId_list = fish_table_data['tpId']
