@@ -146,7 +146,7 @@ class JumpData:
         "PlayerSettingPanel": {"element_data": ElementsData.PlayerSetting.PlayerSettingPanel, "open_path": [ElementsData.Home.player_info, ElementsData.PlayerInfo.btn_setting]},
         "PlayerInfoPanel": {"element_data": ElementsData.PlayerInfo.PlayerInfoPanel, "open_path": [ElementsData.Home.player_info]},
         "ProgressRewardsPanel": {"element_data": ElementsData.ProgressRewards.ProgressRewardsPanel, "open_path": [ElementsData.Home.btn_globa_progress]},
-        "PVPHallPanel": {"element_data": ElementsData.PVPHall.PVPHallPanel, "open_path": [ElementsData.Home.btn_pvp, ElementsData.NewbieGuide.NBG_friend_duel_1_1]},
+        "PVPHallPanel": {"element_data": ElementsData.PVPHall.PVPHallPanel, "open_path": [ElementsData.Home.btn_pvp, ElementsData.NewbieGuide.NBG_friend_duel_1_1, ElementsData.PVPResult.tap_to_close]},
         "QuestionnairePanel": {"element_data": ElementsData.Questionnaire.QuestionnairePanel, "open_path": [ElementsData.Home.btn_questionnaire]},
         "RankPanel": {"element_data": ElementsData.Rank.RankPanel, "open_path": [ElementsData.Home.btn_fishranking]},
         "Recharge1And1Panel": {"element_data": ElementsData.Recharge1And1.Recharge1And1Panel, "open_path": [ElementsData.Home.btn_1add1]},

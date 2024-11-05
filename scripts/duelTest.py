@@ -5,7 +5,7 @@ import traceback
 from threading import Thread
 
 from pywinauto import keyboard
-
+from tools.commonTools import lua_dict_to_python_dict
 import common
 from common import gameInit
 from common.basePage import BasePage
@@ -125,19 +125,32 @@ def get_toDrops(bp, is_print_id=True):
     bp.sleep(1)
     # 提取hook消息
     target_log = bp.get_target_log(msg_key="SCGmCommandMsg")
+    target_log = lua_dict_to_python_dict(target_log)
     if is_print_id:
-        fishBalanceTpId = luaLog.get_value(msg=target_log, key="fishBalanceTpId", is_str=False)
-        print(fishBalanceTpId)
-    output_match = re.search(r'toDrops=(\[.*?\])', target_log)
-    if not output_match:
-        bp.log_list_flag = False
-        return
-    output_str = output_match.group(1)
-    # 使用ast.literal_eval将字符串转换为列表
-    output_list = ast.literal_eval(output_str)
-    print(f"预期体型列表：{output_list}")
+        print(target_log["output"])
+        # fishBalanceTpId = luaLog.get_value(msg=target_log, key="fishBalanceTpId", is_str=False)
+    #     print(fishBalanceTpId)
+    # output_match = re.search(r'toDrops=(\[.*?\])', target_log)
+    # if not output_match:
+    #     bp.log_list_flag = False
+    #     return
+    # output_str = output_match.group(1)
+    # # 使用ast.literal_eval将字符串转换为列表
+    # output_list = ast.literal_eval(output_str)
+    # print(f"预期体型列表：{output_list}")
     bp.log_list_flag = False
 
+def get_result(bp):
+    target_log = ""
+    for log in bp.log_list_duel:
+        if "SCDuelEndMsg" not in log:
+            continue
+        target_log = log
+        break
+    if not target_log:
+        return
+    target_log = lua_dict_to_python_dict(target_log)
+    print(target_log)
 
 
 def pvp_fish(bp, is_quick=False):
@@ -146,6 +159,7 @@ def pvp_fish(bp, is_quick=False):
         bp.sleep(1)
     # 获取掉落列表
     get_toDrops(bp, is_print_id=True)
+    bp.log_list_duel.clear()
 
     while True:
         # try:
@@ -160,9 +174,9 @@ def pvp_fish(bp, is_quick=False):
         bp.sleep(3)
         if PVPResultPanel.is_panel_active(bp):
             bp.log_list_flag = False
-            print(f"出鱼列表：{tpid_list}")
-            fish_type_list = bp.get_fish_type_list(fish_list=tpid_list)
-            print(f"体型列表：{fish_type_list}")
+            # print(f"出鱼列表：{tpid_list}")
+            # fish_type_list = bp.get_fish_type_list(fish_list=tpid_list)
+            # print(f"体型列表：{fish_type_list}")
             bp.sleep(3)
             break
         BattlePanel.hook(bp)
@@ -185,12 +199,12 @@ def pvp_fish(bp, is_quick=False):
         target_log = bp.get_target_log(msg_key="SCFishingHookMsg")
         tpid = luaLog.get_value(msg=target_log, key="tpId", is_str=False)
         tpid_list.append(tpid)
-
-        bp.log_list_flag = False
+        #
         if PVPResultPanel.is_panel_active(bp):
-            print(f"出鱼列表：{tpid_list}")
-            fish_type_list = bp.get_fish_type_list(fish_list=tpid_list)
-            print(f"体型列表：{fish_type_list}")
+            bp.log_list_flag = False
+            # print(f"出鱼列表：{tpid_list}")
+            # fish_type_list = bp.get_fish_type_list(fish_list=tpid_list)
+            # print(f"体型列表：{fish_type_list}")
             bp.sleep(3)
             break
 
@@ -271,6 +285,7 @@ def duel_once(bp:BasePage, rank):
     #     lambda: PVPHallPanel.click_btn_play(bp, rank)]
     # bp.try_actions(action_list=action_list)
     pvp_fish(bp)
+    get_result(bp)
     bp.sleep(5)
     # PVPResultPanel.click_btn_open(bp)
     # bp.sleep(1)
@@ -284,6 +299,7 @@ def duel_once(bp:BasePage, rank):
     # points_mine = PVPResultPanel.get_points_mine(bp)
     PVPResultPanel.click_tap_to_click(bp)
     bp.sleep(1)
+
     # print(f"玩家分数：{points_mine}，机器人分数：{points_enemy}")
     # n = "符合预期"
     # if points_enemy < s or points_enemy > e:
@@ -414,26 +430,48 @@ def main(bp:BasePage):
     bp.go_home()
 
 
+def duel_test(bp):
+    try:
+        while True:
+            bp.go_to_panel("PVPHallPanel")
+            clear_duelcup(bp)
+            r = random.randint(0, 7)
+            set_duelcup_random(bp, rank=r)
+            bp.go_home()
+            bp.go_to_panel("PVPHallPanel")
+            bp.sleep(1)
+
+            duel_once(bp, rank=r)
+    except Exception as e:
+        print(e)
+        # bp.connect_close()
+        bp = gameInit.reset_bp(bp.dev)
+        duel_test(bp)
+
+
 
 if __name__ == '__main__':
-    serial_number = "127.0.0.1:21533"
-    bp = BasePage(serial_number=serial_number, is_mobile_device=False)
-    # random_duelcup(bp, rank=7)
-    gameInit.set_joystick(bp)
-    # bp.cmd("globalgm duelScene 400315")
-    # while True:
-    #     duel_once(bp, rank=7)
-    # random_duelcup(bp, rank=7)
-    # print(serial_number)
+    serial_number = "127.0.0.1:21553"
+    print(serial_number)
+    base_page = BasePage(serial_number=serial_number, is_mobile_device=True)
+    # set_duelcup_random(bp, rank=7)
+    base_page.set_item_count(target_count=100000, item_tpid="100500")
+    gameInit.set_joystick(base_page)
+    duel_test(base_page)
 
-    cur = 1
-    # 指定对决次数
-    times = 1
-    while cur <= times:
-        print(f"<=====第{cur}次好友对决开始=====>")
-        duel_once_friend(bp, is_quick=False)
-        print(f"<=====对决结束=====>\n")
-        cur += 1
+    # bp.cmd("globalgm duelScene 400315")
+
+    #
+    #
+
+    # cur = 1
+    # # 指定对决次数
+    # times = 1
+    # while cur <= times:
+    #     print(f"<=====第{cur}次好友对决开始=====>")
+    #     duel_once_friend(bp, is_quick=False)
+    #     print(f"<=====对决结束=====>\n")
+    #     cur += 1
 
 
 

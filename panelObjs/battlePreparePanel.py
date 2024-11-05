@@ -46,7 +46,7 @@ class BattlePreparePanel(BasePage):
         self.sleep(1)
         if self.exist(element_data=ElementsData.Battle.BattlePanel):
             return
-        self.click_btn_cast()
+        BattlePreparePanel.click_btn_cast(self)
 
     # 点击快速换装
     def click_btn_quick_switch(self):

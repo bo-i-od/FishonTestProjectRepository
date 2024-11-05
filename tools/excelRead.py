@@ -111,13 +111,12 @@ class ExcelTools:
                 continue
             cur = 0
             while cur < len(table_data[key]):
-
                 if isinstance(table_data[key][cur], int):
                     table_data[key][cur] = self.get_column_data(worksheet, table_data[key][cur], bias_list)
-                else:
-                    for key_sub in table_data[key][cur]:
-                        table_data[key][cur][key_sub] = self.get_column_data(worksheet,
-                                                                             table_data[key][cur][key_sub][0], bias_list)
+                    cur += 1
+                    continue
+                for key_sub in table_data[key][cur]:
+                    table_data[key][cur][key_sub] = self.get_column_data(worksheet, table_data[key][cur][key_sub][0], bias_list)
                 cur += 1
         return table_data
 

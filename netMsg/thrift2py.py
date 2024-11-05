@@ -87,6 +87,11 @@ def gen_py_function(struct):
             arg = f'"{{{arg_list[cur]}}}"'
         if isinstance({arg_list[cur]}, bool):
             arg = str({arg_list[cur]}).lower()
+        if isinstance({arg_list[cur]}, list):
+            arg = '{{'
+            for index, j in enumerate({arg_list[cur]}):
+                arg += f'[{{index + 1}}] = {{j}},'
+            arg += '}}'
         cmd_part += f'cmd.{arg_list[cur]} = {{arg}}\n'
         """
         # cmd_part += rf"f'cmd.{arg_list[cur]} = {{{arg_list[cur]}}}\n'"
@@ -119,7 +124,6 @@ def get_{msg_name}(addition_part="", {args_str}):
     """
     return code
 
-
 # def gen_lua_code():
 #     lua_code = (f'local cmd = NetworkMgr:NewMsg("CSFishingSaveLimitedSpotEnergyCostIdMsg")\n'
 #                 f'cmd.chooseEnergyCostId = {tpId_list[index]}\n'
@@ -131,7 +135,7 @@ def get_{msg_name}(addition_part="", {args_str}):
 def thrift_type_to_py_type(type_str):
     if "list" in type_str:
         # result = re.findall(r"list<(.+?)>", type_str)
-        return "str"
+        return "list"
     if "map" in type_str:
         return "dict"
     if "set" in type_str:

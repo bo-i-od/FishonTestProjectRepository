@@ -1601,24 +1601,23 @@ class ElementsData:
         btn_enter_list = {"locator": "UICanvas>Default>TournamentsPanel>panel>panel_entrance>List>Viewport>Content>>model>btn_enter>text"}
         time_list = {"locator": "UICanvas>Default>TournamentsPanel>panel>panel_entrance>List>Viewport>Content>>model>tournaments_info>time>text"}
         bg_list = {"locator": "UICanvas>Default>TournamentsPanel>panel>panel_entrance>List>Viewport>Content>>model>bg"}
+        model_list = {"locator": "UICanvas>Default>TournamentsPanel>panel>panel_entrance>List>Viewport>Content>>model"}
         entrance_viewport = {"locator": "UICanvas>Default>TournamentsPanel>panel>panel_entrance>List>Viewport", "focus": (0, 0)}
         btn_leaderboard = {"locator": "UICanvas>Default>TournamentsPanel>panel>panel_division_sidebar>panel_sidebar>panel_detail>btn_leaderboard", "focus":(1, 0.5)}
         btn_turntable = {"locator": "UICanvas>Default>TournamentsPanel>panel>panel_division_sidebar>panel_sidebar>panel_detail>btn_turntable>btn_normal"}
         panel_sidebar_bg = {"locator": "UICanvas>Default>TournamentsPanel>panel>panel_division_sidebar>panel_sidebar>panel_bg"}
         tournaments_info_list = {"locator": "UICanvas>Default>TournamentsPanel>panel>panel_entrance>List>Viewport>Content>>model>tournaments_info>logo"}
 
-
-
     class TournamentsInfo:
         TournamentsInfoPanel = {"locator": "UICanvas>Default>TournamentsInfoPanel"}
         btn_close = {"locator": "UICanvas>Default>TournamentsInfoPanel>Panel>btn_close>img"}
         tab_list = {"locator": "UICanvas>Default>TournamentsInfoPanel>Panel>panel_tab>TabList>Viewport>Content>>bg"}
 
-
     class TreasureChestGearsShards:
         TreasureChestGearsShardsPanel = {"locator": "UICanvas>Default>TreasureChestGearsShardsPanel"}
         btn_close = {"locator": "UICanvas>Default>TreasureChestGearsShardsPanel>btn_close>text"}
         btn_enhance_list = {"locator": "UICanvas>Default>TreasureChestGearsShardsPanel>rewards_list>Viewport>Content>>btn_enhance", "focus":(0.5, 1)}
+
     # 宝箱
     class TreasureChest:
         TreasureChestPanel = {"locator": "UICanvas>Default>TreasureChestPanel"}

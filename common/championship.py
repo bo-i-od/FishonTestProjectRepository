@@ -1,6 +1,7 @@
 import traceback
 from common import gameInit
 from common.basePage import BasePage
+from netMsg import csMsgAll
 from panelObjs.loadingPanel import LoadingPanel
 from panelObjs.loginPanel import LoginPanel
 from panelObjs.tournamentsPanel import TournamentsPanel
@@ -8,55 +9,47 @@ from scripts.battleTest import circulate_fish
 from scripts.duelTest import duel_once
 
 
-def get_bp(dev):
-    bp = gameInit.restart_to_login(dev, package_list=["com.xuejing.smallfish.official", "com.arkgame.fishingmaster"])
-    if not LoginPanel.is_panel_active(bp):
-        return bp
-    LoginPanel.click_btn_login(bp)
-    bp.sleep(2)
-    LoadingPanel.wait_until_panel_disappear(bp, is_wait_for_appear=False)
-    bp.sleep(5)
-    return bp
 
-
-def reset_bp(dev):
-    try:
-        bp = get_bp(dev)
-    except:
-        traceback.print_exc()
-        bp = reset_bp(dev)
-    return bp
-
-
-def championship(bp, index, times):
+# cost=1是x1, cost=2是x3, cost=3是x10
+def championship(bp, index, times, cost=1):
     try:
         gameInit.set_joystick(bp)
         bp.clear_popup()
         bp.go_to_panel("TournamentsPanel")
         bp.sleep(1)
-        while True:
-            # 移动直到入口出现在可点击范围
-            entrance_viewport = TournamentsPanel.get_entrance_viewport(bp)
-            entrance_viewport.item_id_list = TournamentsPanel.get_tournaments_info_id_list(bp)
 
-            if not entrance_viewport.item_id_list:
-                break
-            if len(entrance_viewport.item_id_list) < 2:
-                index = 0
-            entrance_viewport.move_until_appear(entrance_viewport.item_id_list[index])
+        tournaments_index_list = TournamentsPanel.get_tournaments_index_list(bp)
 
-            tournaments_info_position_list = TournamentsPanel.get_tournaments_info_position_list(bp)
+        if len(tournaments_index_list) < 1:
+            entrance_index = 0
+        elif len(tournaments_index_list) < 2:
+            entrance_index = tournaments_index_list[0]
+        else:
+            entrance_index = tournaments_index_list[index]
+        fishery_id_list = TournamentsPanel.get_fishery_tpid_list(bp)
+        fishery_id = fishery_id_list[entrance_index]
+        TournamentsPanel.go_to_fishery_by_index(bp, index=entrance_index)
 
-            # 点击入口
-            bp.click_position(tournaments_info_position_list[index])
-            bp.sleep(0.5)
-            break
+
+        spot_id = fishery_id + "1" + str(cost)
+        lua_code = csMsgAll.get_CSFishingSaveFishSpotMsg(fishSpotId=int(spot_id), fishSceneTpId=int(fishery_id), source=0, isInDoubleWeek=True)
+        bp.lua_console(lua_code)
+        bp.sleep(0.5)
+        spot_id = fishery_id + "1" + str(cost)
+        lua_code = csMsgAll.get_CSFishingSaveFishSpotMsg(fishSpotId=int(spot_id), fishSceneTpId=int(fishery_id), source=0, isInDoubleWeek=False)
+        bp.lua_console(lua_code)
+        bp.sleep(0.5)
+        spot_id = fishery_id + "0" + str(cost)
+        lua_code = csMsgAll.get_CSFishingSaveFishSpotMsg(fishSpotId=int(spot_id), fishSceneTpId=int(fishery_id), source=0, isInDoubleWeek=False)
+        bp.lua_console(lua_code)
+        bp.sleep(0.5)
+
         circulate_fish(bp, times=times, is_quick=False)
         bp.go_home()
     except Exception as e:
         print(e)
         # bp.connect_close()
-        bp = reset_bp(bp.dev)
+        bp = gameInit.reset_bp(bp.dev)
     return bp
 
 
@@ -72,9 +65,10 @@ if __name__ == '__main__':
     #     duel_once(base_page, 0)
     #     cur += 1
     #     print(f"第{cur}次钓鱼")
-    # circulate_fish(bp=base_page, is_quick=False, times=30)
+    # circulate_fish(bp=base_page, is_quick=False, times=100)
+    # base_page.sleep(3600)
     while True:
-        base_page = championship(base_page, 0, 20)
+        base_page = championship(base_page, 0, 20, cost=1)
         # base_page.sleep(60)
-        base_page = championship(base_page, 1, 20)
+        base_page = championship(base_page, 1, 20, cost=1)
         # base_page.sleep(60)

@@ -9,13 +9,8 @@ def merge_sell_item(bp, grid_id=None, grid_id_list=None):
     if grid_id is not None:
         merge_sell_item(bp, grid_id_list=[grid_id])
         return
-    gridIds = ""
-    cur = 0
-    while cur < len(grid_id_list):
-        gridIds += f"[{cur + 1}] = {grid_id_list[cur]},"
-        cur += 1
 
-    lua_code = csMsgAll.get_CSMergeSellItemMsg(gridIds=f"{{{gridIds}}}")
+    lua_code = csMsgAll.get_CSMergeSellItemMsg(gridIds=grid_id_list)
     bp.lua_console(lua_code)
 
 def sell_all(bp):

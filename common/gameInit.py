@@ -1,5 +1,6 @@
 import os
 import random
+import traceback
 from threading import Thread
 from airtest.core.api import connect_device,  install, Template, start_app, shell, click, sleep, stop_app
 from airtest.core.helper import G
@@ -16,6 +17,26 @@ from requests.auth import HTTPBasicAuth
 from time import sleep
 import time
 from tools import commonTools
+
+
+def get_bp(dev):
+    bp = restart_to_login(dev, package_list=["com.xuejing.smallfish.official", "com.arkgame.fishingmaster"])
+    if not LoginPanel.is_panel_active(bp):
+        return bp
+    LoginPanel.click_btn_login(bp)
+    bp.sleep(2)
+    LoadingPanel.wait_until_panel_disappear(bp, is_wait_for_appear=False)
+    bp.sleep(5)
+    return bp
+
+
+def reset_bp(dev):
+    try:
+        bp = get_bp(dev)
+    except:
+        traceback.print_exc()
+        bp = reset_bp(dev)
+    return bp
 
 
 def login(bp: BasePage, username):

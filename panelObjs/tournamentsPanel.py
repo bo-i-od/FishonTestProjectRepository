@@ -39,8 +39,18 @@ class TournamentsPanel(BasePage):
         size = self.get_size(element_data=ElementsData.Tournaments.panel_sidebar_bg)
         edge_left = 0.75 * size[0]
         # 多人房进入按钮和单人房加一起
-        btn_enter_id_list_multi, btn_enter_id_list = self.get_object_id_list(element_data_list=[ElementsData.Tournaments.btn_enter_list_multi, ElementsData.Tournaments.btn_enter_list])
-        entrance_viewport = Viewport(self, element_viewport=ElementsData.Tournaments.entrance_viewport, item_id_list= btn_enter_id_list_multi + btn_enter_id_list)
+        model_id_list = self.get_object_id_list(element_data=ElementsData.Tournaments.model_list)
+        item_id_list = []
+        for model_id in model_id_list:
+            btn_enter_id_list = self.get_offspring_id_list(object_id=model_id, offspring_path="btn_enter>text")
+            if btn_enter_id_list:
+                item_id_list.append(btn_enter_id_list[0])
+                continue
+            btn_players_id_list = self.get_offspring_id_list(object_id=model_id, offspring_path="btn_players>btn_players>text")
+            if btn_players_id_list:
+                item_id_list.append(btn_players_id_list [0])
+                continue
+        entrance_viewport = Viewport(self, element_viewport=ElementsData.Tournaments.entrance_viewport, item_id_list= item_id_list)
         entrance_viewport.viewport_range = [entrance_viewport.viewport_range[0], 1]
         entrance_viewport.viewport_edge = [edge_left, 0.05]
         entrance_viewport.viewport_range_shift()
@@ -73,14 +83,26 @@ class TournamentsPanel(BasePage):
     def get_tournaments_info_icon_list(self):
         return self.get_icon_list(element_data=ElementsData.Tournaments.tournaments_info_list)
 
+    def get_tournaments_index_list(self):
+        tournaments_index_list = []
+        parent_id_list = self.get_parent_id_list(element_data=ElementsData.Tournaments.bg_list)
+        cur = 0
+        while cur < len(parent_id_list):
+            position_list = self.get_position_list(object_id=parent_id_list[cur], offspring_path="tournaments_info>logo")
+            if not position_list:
+                cur += 1
+                continue
+            tournaments_index_list.append(cur)
+            cur += 1
+        return tournaments_index_list
+
 
 if __name__ == "__main__":
-    bp = BasePage("192.168.111.77:20086")
+    bp = BasePage(serial_number="127.0.0.1:21503", is_mobile_device=True)
     # TournamentsPanel.get_fishery_list(bp)
     # a = TournamentsPanel.get_fishery_tpid_list(bp)
-    a = TournamentsPanel.get_fishery_tpid_list(bp)
-    print(a)
-
+    parent_id_list = TournamentsPanel.get_tournaments_index_list(bp)
+    print(parent_id_list)
     # print(a)
     bp.connect_close()
 
