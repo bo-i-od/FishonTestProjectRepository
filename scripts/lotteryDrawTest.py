@@ -1,10 +1,9 @@
-import re
 import sys
 
 from netMsg import csMsgAll, luaLog
 from common.basePage import BasePage
 
-from collections import OrderedDict
+
 
 def sort_dict_recursively(d):
     if isinstance(d, dict):
@@ -23,7 +22,15 @@ def get_price(bp: BasePage):
 
 
 def get_small_reward_dict(bp: BasePage, price_list,wave):
-    table_data_object = bp.excelTools.get_table_data_object_by_key_value(key="roundId", value=wave, book_name="OUT_DRAW_SMALL_REWARD.xlsm")
+    table_data_object_list = bp.excelTools.get_table_data_object_list_by_key_value(key="roundId", value=wave, book_name="OUT_DRAW_SMALL_REWARD.xlsm")
+    table_data_object = table_data_object_list[0]
+    cur = 0
+    while cur < len(table_data_object_list):
+        if activity_name not in table_data_object_list[cur]["name"]:
+            cur += 1
+            continue
+        table_data_object = table_data_object_list[cur]
+        break
     cur = 0
     reward_dict = {}
     while cur < len(price_list):
@@ -44,7 +51,7 @@ def get_small_reward_dict(bp: BasePage, price_list,wave):
 def lottery_draw(bp: BasePage, target_index=None):
     count_init = 10000
     bp.set_item_count(item_tpid="102200", target_count=count_init)
-    lua_code = csMsgAll.get_CSLotteryDrawOnceMsg(groupId=4000103)
+    lua_code = csMsgAll.get_CSLotteryDrawOnceMsg(groupId=4000104)
     wave = 1
     count_last = count_init
     res = {}
@@ -171,6 +178,7 @@ def main(bp: BasePage):
 
 
 if __name__ == '__main__':
+    activity_name = "20241108抽奖"
     bp = BasePage("192.168.111.77:20052")
     main(bp)
     bp.connect_close()
