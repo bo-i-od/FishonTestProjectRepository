@@ -11,3 +11,6 @@ class TournamentsInfoPanel(BasePage):
     def switch_tab(self, index):
         tab_position_list = self.get_position_list(element_data=ElementsData.TournamentsInfo.tab_list)
         self.click_position(tab_position_list[index])
+
+    def is_checked(self):
+        return self.exist(element_data=ElementsData.TournamentsInfo.check)

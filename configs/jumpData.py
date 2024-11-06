@@ -120,6 +120,7 @@ class JumpData:
         "TaskFishingCareerPanel": [ElementsData.TaskFishingCareer.btn_close],
         "TaskPanel": [ElementsData.Task.btn_close],
         "TournamentsPanel": [ElementsData.Tournaments.btn_close],
+        "TournamentsInfoPanel": [ElementsData.TournamentsInfo.btn_close],
         "TreasureChestGearsShardsPanel": [ElementsData.TreasureChestGearsShards.btn_close],
         "TreasureChestPanel": [ElementsData.TreasureChest.btn_close],
         "TreasureChestRewardsPanel": [ElementsData.TreasureChestRewards.btn_close]
