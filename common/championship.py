@@ -16,7 +16,7 @@ def check_reward(bp):
     if BattlePreparePanel.is_wait_for_join(bp):
         return False
     BattlePreparePanel.click_btn_tournaments(bp)
-    bp.sleep(1)
+    TournamentsInfoPanel.wait_for_panel_appear(bp)
     TournamentsInfoPanel.switch_tab(bp, 2)
     bp.sleep(0.5)
     if TournamentsInfoPanel.is_checked(bp):
@@ -86,10 +86,10 @@ if __name__ == '__main__':
     #     duel_once(base_page, 0)
     #     cur += 1
     #     print(f"第{cur}次钓鱼")
-    circulate_fish(bp=base_page, is_quick=False, times=100)
+    # circulate_fish(bp=base_page, is_quick=False, times=100)
     # base_page.sleep(3600)
     while True:
-        base_page = championship(base_page, 0, 20, cost=1)
+        base_page = championship(base_page, 0, 5, cost=1)
         # base_page.sleep(60)
-        base_page = championship(base_page, 1, 20, cost=1)
+        base_page = championship(base_page, 1, 5, cost=1)
         # base_page.sleep(60)

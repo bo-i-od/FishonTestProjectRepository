@@ -5,6 +5,11 @@ from common.viewport import Viewport
 class TournamentsInfoPanel(BasePage):
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.TournamentsInfo.TournamentsInfoPanel)
+
+    def wait_for_panel_appear(self):
+        while not TournamentsInfoPanel.is_panel_active(self):
+            self.sleep(1)
+
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.TournamentsInfo.btn_close)
 
