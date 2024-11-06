@@ -814,9 +814,15 @@ class ElementsData:
             text_task = {"locator": "UICanvas>Default>HomePanel>panel>panel_left>list>Panel_mini_task>Panel>text"}
             progress = {"locator": "UICanvas>Default>HomePanel>panel>panel_left>list>Panel_mini_task>Panel>progress>value"}
 
+
+    class KatanaPackPopup:
+        KatanaPackPopupPanel= {"locator":"UICanvas>Default>KatanaPackPopupPanel"}
+        btn_close = {"locator": "UICanvas>Default>KatanaPackPopupPanel>btn_close>img"}
+
     class IAA:
         IAAPanel= {"locator": "UICanvas>Default>IAAPanel"}
         btn_close = {"locator": "UICanvas>Default>IAAPanel>panel>btn_close>img"}
+
 
 
     class ItemTips:

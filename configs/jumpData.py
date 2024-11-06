@@ -16,6 +16,7 @@ class JumpData:
         "FisheryGiftPackPanel",
         "FisheryUnlockPanel",
         "FlashCardReceivePanel",
+        "KatanaPackPopupPanel",
         "LeaderBoardPopResultPanel",
         "LocationPanel",
         "LoginAnnouncementPanel",
@@ -33,6 +34,7 @@ class JumpData:
         "MessageBoxPanel",
         "MidAutumnPackPopupPanel",
         "MonthCardPopPanel",
+
     }
 
     panel_close_dict = {
@@ -87,6 +89,7 @@ class JumpData:
         "GearEnhancePanel":[ElementsData.GearEnhance.btn_close],
         "GearEnhanceSuccesPanel":[ElementsData.GearEnhanceSucces.btn_close],
         "IAAPanel": [ElementsData.IAA.btn_close],
+        "KatanaPackPopupPanel": [ElementsData.KatanaPackPopup.btn_close],
         "LeaderBoardPopResultPanel": [ElementsData.LeaderBoardPopResult.btn_claim],
         "LocationPanel": [ElementsData.Location.btn_cancel],
         "LoginPanel": [ElementsData.Login.btn_login_cn, ElementsData.Login.btn_login],

@@ -4,6 +4,7 @@ from configs.elementsData import ElementsData
 from common import resource
 from panelObjs.messageBoxPanel import MessageBoxPanel
 from panelObjs.rewardsPanel import RewardsPanel
+from panelObjs.tournamentsInfoPanel import TournamentsInfoPanel
 from tools.commonTools import *
 
 class BattlePreparePanel(BasePage):
@@ -105,7 +106,13 @@ class BattlePreparePanel(BasePage):
         self.click_element(element_data=ElementsData.BattlePrepare.GlobalProgress.progress_finish)
 
     def click_btn_tournaments(self):
-        self.click_element(element_data=ElementsData.BattlePrepare.btn_tournaments)
+        while not TournamentsInfoPanel.is_panel_active(self):
+            position_list = self.get_position_list(element_data=ElementsData.BattlePrepare.btn_tournaments)
+            if not position_list:
+                return False
+            self.click_position(position_list[0])
+            self.sleep(1)
+        return True
 
     # 得到钓点状态
     def get_location_status(self):

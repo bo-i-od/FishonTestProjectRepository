@@ -15,8 +15,9 @@ def check_reward(bp):
     BattlePreparePanel.wait_for_panel_appear(bp)
     if BattlePreparePanel.is_wait_for_join(bp):
         return False
-    BattlePreparePanel.click_btn_tournaments(bp)
-    TournamentsInfoPanel.wait_for_panel_appear(bp)
+    if not BattlePreparePanel.click_btn_tournaments(bp):
+        return True
+
     TournamentsInfoPanel.switch_tab(bp, 2)
     bp.sleep(0.5)
     if TournamentsInfoPanel.is_checked(bp):
@@ -75,18 +76,18 @@ def championship(bp, index, times, cost=1):
 
 
 if __name__ == '__main__':
-    serial_number = "127.0.0.1:21503"
+    serial_number = "127.0.0.1:21513"
     base_page = BasePage(serial_number=serial_number, is_mobile_device=True)
     print(serial_number)
     base_page.set_send_log_flag(False)
     gameInit.set_joystick(base_page)
     base_page.custom_cmd("setTension 0.95")
-    # cur = 0
-    # while cur < 5:
-    #     duel_once(base_page, 0)
-    #     cur += 1
-    #     print(f"第{cur}次钓鱼")
-    # circulate_fish(bp=base_page, is_quick=False, times=100)
+    cur = 0
+    while cur < 8:
+        duel_once(base_page, 2)
+        cur += 1
+        print(f"第{cur}次钓鱼")
+    # circulate_fish(bp=base_page, is_quick=False, times=20)
     # base_page.sleep(3600)
     while True:
         base_page = championship(base_page, 0, 5, cost=1)
