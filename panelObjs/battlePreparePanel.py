@@ -10,6 +10,10 @@ class BattlePreparePanel(BasePage):
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.BattlePrepare.BattlePreparePanel)
 
+    def wait_for_panel_appear(self):
+        while not BattlePreparePanel.is_panel_active(self):
+            self.sleep(1)
+
     # 点击关闭
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.BattlePrepare.btn_close)
@@ -169,6 +173,16 @@ class BattlePreparePanel(BasePage):
         self.wait_for_appear(element_data=ElementsData.BattlePrepare.btn_cast, is_click=False)
         value_cost = self.get_text(element_data=ElementsData.BattlePrepare.value_cost)
         return int(value_cost)
+
+    def is_wait_for_join(self):
+        position_list = self.get_position_list(element_data=ElementsData.BattlePrepare.wait_for_join)
+        if position_list:
+            return True
+        return False
+
+
+
+
 
     class Minitask(BasePage):
         def click_btn_recommend(self):

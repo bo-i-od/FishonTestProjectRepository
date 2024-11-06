@@ -330,7 +330,7 @@ class ElementsData:
         btn_cast = {"locator": "UICanvas>Default>BattlePreparePanel>>>btn_cast>btn_normal"}
         location = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears>panel_gears_switch>location_info>bg>location>value"}
         btn_apply = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears_new>panel_gears_switch>btns>btn_apply>btn_normal"}
-        btn_tournaments = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>btn_activity>btn_tournaments>img"}
+        btn_tournaments = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_activity>btn_activity>btn_tournaments>img"}
         btn_location = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>btn_location>btn_normal"}
         panel_tip_location = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>panel_tip_location"}
         location_list = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>panel_tip_location>panel>list_location>", "focus": (0, 0)}
@@ -344,6 +344,8 @@ class ElementsData:
 
         btn_icon = {"locator":"UICanvas>Default>BattlePreparePanel>Panel_Prepare_Warning>panel>panel_icon>btn_icon_b>btn_icon>bg_icon"}
         value_cost = {"locator":"UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>btn_cast>value_cost"}
+
+        wait_for_join = {"locator":"UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_activity>btn_activity>btn_tournaments>rank>value_3"}
 
         class GlobalProgress:
             progress_info = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_tournaments_mini>panel_global_progress>panel_rewards>rewards>progress_info", "focus": (0.5, 0)}
@@ -1610,8 +1612,10 @@ class ElementsData:
 
     class TournamentsInfo:
         TournamentsInfoPanel = {"locator": "UICanvas>Default>TournamentsInfoPanel"}
-        btn_close = {"locator": "UICanvas>Default>TournamentsInfoPanel>Panel>btn_close>img"}
-        tab_list = {"locator": "UICanvas>Default>TournamentsInfoPanel>Panel>panel_tab>TabList>Viewport>Content>>bg"}
+        btn_close = {"locator": "UICanvas>Default>TournamentsInfoPanel>panel>btn_close>img"}
+        tab_list = {"locator": "UICanvas>Default>TournamentsInfoPanel>panel>panel_tab_list>panel_tab>TabList>Viewport>Content>>bg"}
+        check = {"locator": "UICanvas>Default>TournamentsInfoPanel>panel>panel_rules>rules_2>progress_info>reward>item_model_mini>collected>check"}
+
 
     class TreasureChestGearsShards:
         TreasureChestGearsShardsPanel = {"locator": "UICanvas>Default>TreasureChestGearsShardsPanel"}

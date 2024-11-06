@@ -16,6 +16,8 @@ class ResultPanel(BasePage):
     def wait_for_result(self):
         while True:
             self.clear_popup()
+            if RewardsPanel.is_panel_active(self):
+                RewardsPanel.click_tap_to_claim(self)
             # if FlashCardReceivePanel.is_panel_active(self):
             #     self.sleep(6)
             #     img = self.get_full_screen_shot()
