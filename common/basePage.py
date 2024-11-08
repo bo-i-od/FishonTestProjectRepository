@@ -1,3 +1,4 @@
+from datetime import datetime
 
 from airtest.core.helper import G
 from poco.drivers.unity3d.device import UnityEditorWindow
@@ -795,6 +796,8 @@ class BasePage(BasePageMain):
         # 消息储存队列
         self.log_list = []
 
+        self.log_list_duel = []
+
         # 是否监听Unity发来的log
         self.listen_log_flag = False
 
@@ -821,7 +824,7 @@ class BasePage(BasePageMain):
 
     def get_fishery_id_list(self):
         fishery_id_list = []
-        table_data_object_list = self.excelTools.get_table_data_detail_by_base_data(book_name="FISHERIES.xlsm")[0]
+        table_data_object_list = self.excelTools.get_table_data_detail(book_name="FISHERIES.xlsm")[0]
         for table_data_object in table_data_object_list:
             if "tpId" not in table_data_object:
                 continue
@@ -884,7 +887,7 @@ class BasePage(BasePageMain):
                      {"book_name": "ITEM_MAIN.xlsm", "name": "name", "id": "itemTpId", "icon": "iconName"}]
         for book_dict in book_list:
             book_name = book_dict["book_name"]
-            table_data_detail = self.excelTools.get_table_data_detail_by_base_data(book_name=book_name)
+            table_data_detail = self.excelTools.get_table_data_detail(book_name=book_name)
 
             # table_data = self.excelTools.get_table_data(book_name=book_name)
             # worksheet = self.excelTools.get_worksheet(book_dict["book_name"], "模板数据")
@@ -948,7 +951,7 @@ class BasePage(BasePageMain):
 
     def get_fish_type(self, fish_tpid, table_data_detail=None):
         if table_data_detail is None:
-            table_data_detail = self.excelTools.get_table_data_detail_by_base_data("FISH.xlsm")
+            table_data_detail = self.excelTools.get_table_data_detail("FISH.xlsm")
         if fish_tpid == '':
             return "钓鱼失败"
         table_data_object = self.excelTools.get_table_data_object_by_key_value(key="tpId", value=fish_tpid, table_data_detail=table_data_detail)
@@ -981,7 +984,7 @@ class BasePage(BasePageMain):
         return "其它"
 
     def get_fish_type_list(self, fish_list):
-        table_data_detail = self.excelTools.get_table_data_detail_by_base_data("FISH.xlsm")
+        table_data_detail = self.excelTools.get_table_data_detail("FISH.xlsm")
         fish_type_list = []
         cur = 0
         while cur < len(fish_list):
@@ -1166,6 +1169,7 @@ class BasePage(BasePageMain):
         msg = data['msg']
         if self.log_list_flag:
             self.log_list.append(msg)
+        self.log_list_duel.append(msg)
         netMsg.luaLog.deal_with_msg(msg)
 
     def handle_request(self, data):
@@ -1211,7 +1215,7 @@ class BasePage(BasePageMain):
 
         # 鱼骨tpid转missionConditionID
         drop_pack_id_list = []
-        table_data_detail = self.excelTools.get_table_data_detail_by_base_data("DROP_PACK.xlsm")
+        table_data_detail = self.excelTools.get_table_data_detail("DROP_PACK.xlsm")
         for drop_id in drop_id_list:
             table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="dropId", value=drop_id, table_data_detail=table_data_detail)
             for table_data_object in table_data_object_list:
@@ -1222,7 +1226,7 @@ class BasePage(BasePageMain):
 
         # drop_pack_id转item_id
         item_id_list = []
-        table_data_detail = self.excelTools.get_table_data_detail_by_base_data("DROP_ENTITY.xlsm")
+        table_data_detail = self.excelTools.get_table_data_detail("DROP_ENTITY.xlsm")
         for drop_pack_id in drop_pack_id_list:
             table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="dropPackId", value=int(drop_pack_id), table_data_detail=table_data_detail)
             for table_data_object in table_data_object_list:
@@ -1305,18 +1309,35 @@ class BasePage(BasePageMain):
         # print(fish_id)
         return str(fish_id)
 
-
-
-
-
+    def get_spot_id_list(self, fishery_id):
+        table_data_object_activity_double_week = self.excelTools.get_table_data_object_by_key_value(key="fishSceneTpId", value=fishery_id, book_name="ACTIVITY_DOUBLE_WEEK.xlsm")
+        if "TimerId" not in table_data_object_activity_double_week:
+            return table_data_object_activity_double_week["fishSpot"], False
+        timer_id = table_data_object_activity_double_week["TimerId"]
+        table_data_object_timer_main = self.excelTools.get_table_data_object_by_key_value(key="timerID", value=timer_id, book_name="TIMER_MAIN.xlsm")
+        open_time = table_data_object_timer_main["openTime"]
+        open_time = datetime.strptime(open_time, '%Y-%m-%d %H:%M:%S')
+        open_time = int(time.mktime(open_time.timetuple()))
+        end_time = table_data_object_timer_main["openTime"]
+        end_time = datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S')
+        end_time = int(time.mktime(end_time.timetuple()))
+        cur_time = time.time()
+        if cur_time > end_time:
+            return table_data_object_activity_double_week["fishSpotB"], False
+        if cur_time > open_time:
+            return table_data_object_activity_double_week["fishSpotB"], True
+        return table_data_object_activity_double_week["fishSpot"], False
 
 
 
 if __name__ == '__main__':
-    bp = BasePage( is_mobile_device=False)
+    bp = BasePage(is_mobile_device=True, serial_number="127.0.0.1:21503")
     # a = bp.get_tpid(item_icon_name="coin_gold")
     # bp.set_item_count(target_count=2500, item_tpid="100500")
-    bp.excelTools.get_table_data_detail_by_base_data("ACTIVITY_DOUBLE_WEEK.xlsm")
+    # bp.excelTools.get_table_data_detail_by_base_data("ACTIVITY_DOUBLE_WEEK.xlsm")
+    # bp.lua_console("PrintTable(_G.PassiveNewbieGuideEnum)")
+    a = bp.get_spot_id_list(fishery_id=400307)
+    print(a)
     bp.connect_close()
     # while True:
     #     # a = bp.get_object_id_list(element_data=ElementsData.Login.btn_login)

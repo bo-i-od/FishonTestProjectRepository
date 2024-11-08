@@ -133,21 +133,21 @@ class ExcelTools:
             cur += 1
         return table_data_object_list
 
-    def get_table_data_detail_by_base_data(self, book_name):
+    def get_table_data_detail(self, book_name):
         base_data_path = self.root_path.split("策划模板导出工具/")[0] + r"ElementData/BaseData/"
         prefix = book_name.split('.')[0]
         table_data_detail = baseDataRead.convert_to_json(path=base_data_path, prefix=prefix)
         return table_data_detail
 
     def get_table_data_object_list(self, book_name):
-        table_data_object_list, _, _ = self.get_table_data_detail_by_base_data(book_name=book_name)
+        table_data_object_list, _, _ = self.get_table_data_detail(book_name=book_name)
         return table_data_object_list
 
 
     def get_table_data_object_list_by_key_value(self, key, value, book_name=None, table_data_detail=None):
         res = []
         if table_data_detail is None:
-            table_data_detail = self.get_table_data_detail_by_base_data(book_name=book_name)
+            table_data_detail = self.get_table_data_detail(book_name=book_name)
         table_data_object_list, structs, prefix = table_data_detail
 
         # 给值转为正确的类型
@@ -168,7 +168,7 @@ class ExcelTools:
 
     def get_table_data_object_by_key_value(self, key, value, book_name=None, table_data_detail=None):
         if table_data_detail is None:
-            table_data_detail = self.get_table_data_detail_by_base_data(book_name=book_name)
+            table_data_detail = self.get_table_data_detail(book_name=book_name)
         table_data_object_list, structs, prefix = table_data_detail
         type_value = structs[prefix.upper()][key][0]
         if type_value == "int":

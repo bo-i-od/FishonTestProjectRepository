@@ -48,17 +48,13 @@ def championship(bp, index, times, cost=1):
         fishery_id = fishery_id_list[entrance_index]
         TournamentsPanel.go_to_fishery_by_index(bp, index=entrance_index)
 
-
-        spot_id = fishery_id + "1" + str(cost)
-        lua_code = csMsgAll.get_CSFishingSaveFishSpotMsg(fishSpotId=int(spot_id), fishSceneTpId=int(fishery_id), source=0, isInDoubleWeek=True)
-        bp.lua_console(lua_code)
-        bp.sleep(0.5)
-        spot_id = fishery_id + "1" + str(cost)
-        lua_code = csMsgAll.get_CSFishingSaveFishSpotMsg(fishSpotId=int(spot_id), fishSceneTpId=int(fishery_id), source=0, isInDoubleWeek=False)
-        bp.lua_console(lua_code)
-        bp.sleep(0.5)
-        spot_id = fishery_id + "0" + str(cost)
-        lua_code = csMsgAll.get_CSFishingSaveFishSpotMsg(fishSpotId=int(spot_id), fishSceneTpId=int(fishery_id), source=0, isInDoubleWeek=False)
+        spot_id_list, is_in_double_week = bp.get_spot_id_list(fishery_id=fishery_id)
+        if cost < 1:
+            cost = 1
+        if cost > 4:
+            cost = 1
+        spot_id = spot_id_list[cost - 1]
+        lua_code = csMsgAll.get_CSFishingSaveFishSpotMsg(fishSpotId=int(spot_id), fishSceneTpId=int(fishery_id), source=0, isInDoubleWeek=is_in_double_week)
         bp.lua_console(lua_code)
         bp.sleep(0.5)
 
@@ -76,17 +72,17 @@ def championship(bp, index, times, cost=1):
 
 
 if __name__ == '__main__':
-    serial_number = "127.0.0.1:21513"
+    serial_number = "127.0.0.1:21503"
     base_page = BasePage(serial_number=serial_number, is_mobile_device=True)
     print(serial_number)
     base_page.set_send_log_flag(False)
     gameInit.set_joystick(base_page)
     base_page.custom_cmd("setTension 0.95")
-    cur = 0
-    while cur < 8:
-        duel_once(base_page, 2)
-        cur += 1
-        print(f"第{cur}次钓鱼")
+    # cur = 0
+    # while cur < 15:
+    #     duel_once(base_page, 3)
+    #     cur += 1
+    #     print(f"第{cur}次钓鱼")
     # circulate_fish(bp=base_page, is_quick=False, times=20)
     # base_page.sleep(3600)
     while True:

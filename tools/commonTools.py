@@ -188,6 +188,21 @@ def lua_dict_to_python_dict(lua_string):
     data = slpp.decode(lua_string)
     return data
 
+def sort_dict_recursively(d):
+    # 如果是字典类型，进行递归排序
+    if isinstance(d, dict):
+        # 创建一个新的有序字典
+        return {
+            key: sort_dict_recursively(value)
+            for key, value in sorted(d.items())
+        }
+    # 如果是列表类型，对列表中的每个元素进行递归排序
+    elif isinstance(d, list):
+        return [sort_dict_recursively(item) for item in d]
+    # 如果是其他类型，直接返回
+    else:
+        return d
+
 
 
 

@@ -55,7 +55,7 @@ def draw_msg_test(bp: BasePage, lv, times):
     bp.cmd(f"roulettesetlv {lv}")
     lua_code = csMsgAll.get_CSRouletteDrawMsg(lv=lv, groupId=1)
     # table_data = bp.excelTools.get_table_data("ROULETTE.xlsm")
-    table_data_detail = bp.excelTools.get_table_data_detail_by_base_data(book_name="ROULETTE.xlsm")
+    table_data_detail = bp.excelTools.get_table_data_detail(book_name="ROULETTE.xlsm")
 
     # 进行times次实验
     cur = 0
@@ -156,7 +156,7 @@ def draw_to_level_once(bp: BasePage, lv, table_data_detail):
 
 
 def draw_to_level(bp: BasePage, lv, n):
-    table_data_detail = bp.excelTools.get_table_data_detail_by_base_data(book_name="ROULETTE.xlsm")
+    table_data_detail = bp.excelTools.get_table_data_detail(book_name="ROULETTE.xlsm")
     count_init = 1000000
     res_list = []
     get_list = []
