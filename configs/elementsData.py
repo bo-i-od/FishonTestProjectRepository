@@ -1,6 +1,7 @@
 
 class ElementsData:
     Panels = {"locator": "UICanvas>>"}
+    Panels_Default = {"locator": "UICanvas>Default>"}
 
     class AchievementGroup:
         AchievementGroupPanel = {"locator": "UICanvas>Default>AchievementGroupPanel"}
@@ -375,6 +376,10 @@ class ElementsData:
         BattleTreasureMapPanel = {"locator": "UICanvas>Default>BattleTreasureMapPanel"}
         btn_close = {"locator": "UICanvas>Default>BattleTreasureMapPanel>panel>Panel>btn_close>img"}
         btn_go = {"locator": "UICanvas>Default>BattleTreasureMapPanel>panel>Panel>btn_go"}
+
+    class BattleTreasureMapDescription:
+        BattleTreasureMapDescriptionPanel = {"locator": "UICanvas>Default>BattleTreasureMapDescriptionPanel"}
+        btn_close = {"locator": "UICanvas>Default>BattleTreasureMapDescriptionPanel>bg>btn_close>img"}
 
     class BuyEnergy:
         BuyEnergyPanel = {"locator": "UICanvas>Default>BuyEnergyPanel"}

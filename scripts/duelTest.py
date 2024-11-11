@@ -76,39 +76,40 @@ def set_duelcup_random(bp:BasePage, rank):
 def set_duelcup(bp:BasePage, duelcup):
     if duelcup <= 5:
         bp.cmd(f"duelcup 1001 {duelcup}")
-        return
+        return 0
     bp.cmd(f"duelcup 1001 {5}")
 
     if duelcup <= 25:
         bp.cmd(f"duelcup 1002 {duelcup - 5}")
-        return
+        return 1
     bp.cmd(f"duelcup 1002 {20}")
 
     if duelcup <= 105:
         bp.cmd(f"duelcup 1003 {duelcup - 25}")
-        return
+        return 2
     bp.cmd(f"duelcup 1003 {80}")
 
     if duelcup <= 265:
         bp.cmd(f"duelcup 1004 {duelcup - 105}")
-        return
+        return 3
     bp.cmd(f"duelcup 1004 {160}")
 
     if duelcup <= 745:
         bp.cmd(f"duelcup 1005 {duelcup - 265}")
-        return
+        return 4
     bp.cmd(f"duelcup 1005 {480}")
 
     if duelcup <= 1705:
         bp.cmd(f"duelcup 1006 {duelcup - 745}")
-        return
+        return 5
     bp.cmd(f"duelcup 1006 {960}")
 
     if duelcup <= 3625:
         bp.cmd(f"duelcup 1007 {duelcup - 1705}")
-        return
+        return 6
     bp.cmd(f"duelcup 1007 {1920}")
     bp.cmd(f"duelcup 1008 {duelcup - 3625}")
+    return 7
 
 def clear_duelcup(bp:BasePage):
     cur = 0
@@ -178,15 +179,37 @@ def get_result(bp):
     target_log = lua_dict_to_python_dict(target_log)
     print(target_log)
 
+def get_robot(bp):
+    # 清空消息列表 开始收消息
+    bp.log_list.clear()
+    bp.log_list_flag = True
+
+    bp.cmd("duelRival")
+    bp.sleep(1)
+    # 提取hook消息
+    target_log = bp.get_target_log(msg_key="SCGmCommandMsg")
+    target_log = lua_dict_to_python_dict(target_log)
+    print(target_log["output"])
+    bp.log_list_flag = False
+
+
+
 
 def pvp_fish(bp, is_quick=False):
     # tpid_list = []
-    while not BattlePreparePanel.is_panel_active(bp):
+    cur = 0
+    while cur < 30:
+        if BattlePreparePanel.is_panel_active(bp):
+            break
         bp.sleep(1)
+        cur += 1
+    if cur >= 30:
+        raise FindNoElementError("超时")
     # 获取掉落列表
     get_to_drops(bp)
     get_avg_score(bp)
     get_report(bp)
+    get_robot(bp)
     bp.log_list_duel.clear()
 
     while True:
@@ -210,17 +233,14 @@ def pvp_fish(bp, is_quick=False):
         bp.sleep(1)
         if BattlePanel.is_reel_active(bp):
             bp.custom_cmd("autofish")
-            qteThread = Thread(target=BattlePanel.qte, args=[bp])
-            qteThread.start()
         if is_quick:
-            BattlePanel.reel_quick(bp)
+            reel_quick_thread = Thread(target=BattlePanel.reel_quick, args=[bp])
+            reel_quick_thread.start()
+        BattlePanel.qte(bp)
         # try:
         #     emoji(bp)
         # except:
         #     pass
-        element_btn = ResultPanel.wait_for_result(bp)
-        bp.sleep(1)
-        ResultPanel.automatic_settlement(bp, element_btn)
 
         # # 提取hook消息
         # target_log = bp.get_target_log(msg_key="SCFishingHookMsg")
@@ -457,37 +477,42 @@ def main(bp:BasePage):
     bp.go_home()
 
 
-def duel_test(bp):
+def duel_test(bp, is_monitor=False):
     try:
         while True:
             bp.go_to_panel("PVPHallPanel")
             clear_duelcup(bp)
-            r = random.randint(0, 7)
+            r = random.randint(0, 3625)
 
-            set_duelcup_random(bp, rank=r)
-            # r = random.randint(5000, 100000)
-            # set_duelcup(bp, r)
-            #
+            rank = set_duelcup(bp, duelcup=r)
+
             bp.go_home()
             bp.go_to_panel("PVPHallPanel")
-            bp.sleep(1)
-            duel_once(bp, rank=r)
+            r_max = rank
+            r = random.randint(0, r_max * (r_max + 1) // 2)
+            cur = r_max - 1
+            while cur >= 0:
+                if r >= cur * (cur + 1) // 2:
+                    rank = cur
+                    break
+                cur -= 1
+            duel_once(bp, rank=rank)
     except Exception as e:
         print(e)
         # bp.connect_close()
-        bp = gameInit.reset_bp(bp.dev)
-        duel_test(bp)
+        bp = gameInit.reset_bp(bp.dev, is_monitor=is_monitor)
+        duel_test(bp, is_monitor=is_monitor)
 
 
 
 if __name__ == '__main__':
     serial_number = "127.0.0.1:21563"
     print(serial_number)
-    base_page = BasePage(serial_number=serial_number, is_mobile_device=True)
+    base_page = BasePage(serial_number=serial_number, is_mobile_device=True, is_monitor=True)
     # set_duelcup_random(base_page, rank=7)
     base_page.set_item_count(target_count=100000, item_tpid="100500")
     gameInit.set_joystick(base_page)
-    duel_test(base_page)
+    duel_test(base_page, is_monitor=True)
 
     # bp.cmd("globalgm duelScene 400315")
 

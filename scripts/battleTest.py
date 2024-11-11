@@ -25,13 +25,17 @@ def fish_once(bp: BasePage, fishery_id="", fish_id="", is_quick=False):
     bp.set_time_scale()
     if BattlePanel.is_reel_active(bp):
         bp.custom_cmd("autofish")
-        qteThread = Thread(target=BattlePanel.qte, args=[bp])
-        qteThread.start()
+        # qteThread = Thread(target=BattlePanel.qte, args=[bp])
+        # qteThread.start()
     if is_quick:
-        BattlePanel.reel_quick(bp)
-    bp.set_time_scale()
-    element_btn = ResultPanel.wait_for_result(bp)
-    ResultPanel.automatic_settlement(bp, element_btn=element_btn)
+        reel_quick_thread = Thread(target=BattlePanel.reel_quick, args=[bp])
+        reel_quick_thread.start()
+    BattlePanel.qte(bp)
+
+        # BattlePanel.reel_quick(bp)
+    # bp.set_time_scale()
+    # element_btn = ResultPanel.wait_for_result(bp)
+    # ResultPanel.automatic_settlement(bp, element_btn=element_btn)
 
     if fish_id != "":
         bp.cmd("mode 0 0")
@@ -59,6 +63,7 @@ def circulate_fish(bp: BasePage, fishery_id=None, is_quick=False, times=500, sta
         fish_list = bp.get_fish_id_list(fishery_id)
         times = len(fish_list)
     while cur < times:
+        # go_to_treasure_map(bp, fishery_id="400306", is_double_week=True, is_in_double_week=True)
         fish_id = ""
         # 指定鱼
         if fish_list:
@@ -97,7 +102,7 @@ def select_location(bp: BasePage, index):
 
 def fish_all(bp: BasePage, is_quick=False):
     fishery_id_list = bp.get_fishery_id_list()
-    cur = 0
+    cur = 1
     while cur < len(fishery_id_list):
         fishery_id = fishery_id_list[cur]
         TournamentsPanel.go_to_fishery_by_tpid(bp, fishery_id)
@@ -363,8 +368,8 @@ def vibration_cast(bp: BasePage):
 # is_double_week 历史的双周渔场
 # is_in_double_week 当前的双周渔场
 def main(bp: BasePage, fishery_id, is_double_week=False, is_in_double_week=False):
-    # # 渔场全部闪卡
-    flashcard_all(bp, fishery_id, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
+    # # # 渔场全部闪卡
+    # flashcard_all(bp, fishery_id, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
 
     # 渔场全部普通鱼骨
     fishbone_all(bp, fishery_id, is_gold=False, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
@@ -385,14 +390,15 @@ def main(bp: BasePage, fishery_id, is_double_week=False, is_in_double_week=False
 
 if __name__ == '__main__':
     # 连接设备号为127.0.0.1:21533的设备
-    bp = BasePage("127.0.0.1:21523", is_mobile_device=True)
-
-    gameInit.set_joystick(bp)
+    bp = BasePage("127.0.0.1:21533", is_mobile_device=True)
     bp.is_time_scale = False
+    gameInit.set_joystick(bp)
     bp.custom_cmd("setTension 0.9")
     bp.set_item_count(target_count=1000000000, item_tpid="100500")
-    main(bp, fishery_id="400320",  is_double_week=True, is_in_double_week=False)
-    # circulate_fish(bp, fishery_id="400320", is_quick=False)
+
+    # main(bp, fishery_id="400321",  is_double_week=True, is_in_double_week=True)
+    circulate_fish(bp, is_quick=False, fishery_id="400320")
+    # fish_all(bp, is_quick=False)
     # 断开连接
     bp.connect_close()
 

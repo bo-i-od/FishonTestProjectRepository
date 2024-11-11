@@ -1,3 +1,4 @@
+import threading
 from datetime import datetime
 
 from airtest.core.helper import G
@@ -5,6 +6,8 @@ from poco.drivers.unity3d.device import UnityEditorWindow
 import netMsg.luaLog
 import json
 from importlib import import_module
+
+from common.uimonitor import UIMonitor
 from configs.pathConfig import EXCEL_PATH
 from tools.excelRead import ExcelTools
 
@@ -27,7 +30,7 @@ import logging
 import wda
 
 class BasePageMain:
-    def __init__(self, serial_number=None, dev=None, is_mobile_device=False):
+    def __init__(self, serial_number=None, dev=None, is_mobile_device=False, is_monitor=False):
         # 不打印airtest日志
         logging.getLogger("airtest").setLevel(logging.ERROR)
         # unity窗口使用UnityEditorWindow()
@@ -127,9 +130,9 @@ class BasePageMain:
     @staticmethod
     def is_single_element(element_list: list):
         if len(element_list) == 0:
-            raise FindNoElementError
+            raise FindNoElementError("FindNoElement")
         elif len(element_list) > 1:
-            raise PluralElementError
+            raise PluralElementError("PluralElement")
 
     # 把路径和后代路径合成为当前要用的的element_data
     @staticmethod
@@ -580,7 +583,7 @@ class BasePageMain:
     #         self.click_element(object_id=object_id, element_data=element_data)
     #     except PluralElementError:
     #         print("请检查元素的定位信息")
-    #     except FindNoElementError:
+    #     except FindNoElementError("FindNoElement"):
     #         print("正在检查是否有弹窗遮挡")
     #         self.clear_popup_once()
     #         self.try_click_element(object_id=object_id, element_data=element_data)
@@ -642,7 +645,7 @@ class BasePageMain:
             self.sleep(0.5)
             cur += 1
             if cur > 30:
-                raise FindNoElementError
+                raise FindNoElementError("FindNoElement")
             at_home_flag = (not self.exist(element_data=self.element_data_home))
             if cur_panel is not None:
                 at_home_flag = at_home_flag or self.exist(element_data=JumpData.panel_dict[cur_panel]["element_data"])
@@ -658,6 +661,7 @@ class BasePageMain:
             for element_data in panel_dict["open_path"]:
                 self.click_element_safe(element_data=element_data)
                 self.sleep(0.5)
+
 
     # 关除了主界面的界面
     def clear_panel_except_home(self):
@@ -785,8 +789,8 @@ class BasePageMain:
 
 
 class BasePage(BasePageMain):
-    def __init__(self, serial_number=None, dev=None, is_mobile_device=False):
-        super().__init__(serial_number, dev, is_mobile_device)
+    def __init__(self, serial_number=None, dev=None, is_mobile_device=False, is_monitor=False):
+        super().__init__(serial_number, dev, is_mobile_device, is_monitor)
         # 是否测试会拉起支付的按钮
         self.is_pay = True
 
@@ -817,10 +821,17 @@ class BasePage(BasePageMain):
             # 是否让Unity发log
             self.set_send_log_flag(True)
 
+        self.is_monitor = is_monitor
+
         # self._extend_base_page()
 
         # 配置表的路径
         self.excelTools = ExcelTools(EXCEL_PATH)
+
+        if self.is_monitor:
+            self.monitor = UIMonitor(self)
+            self.monitor.start_monitoring(threading.current_thread())
+
 
     def get_fishery_id_list(self):
         fishery_id_list = []
@@ -1318,7 +1329,7 @@ class BasePage(BasePageMain):
         open_time = table_data_object_timer_main["openTime"]
         open_time = datetime.strptime(open_time, '%Y-%m-%d %H:%M:%S')
         open_time = int(time.mktime(open_time.timetuple()))
-        end_time = table_data_object_timer_main["openTime"]
+        end_time = table_data_object_timer_main["endTime"]
         end_time = datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S')
         end_time = int(time.mktime(end_time.timetuple()))
         cur_time = time.time()
@@ -1328,17 +1339,32 @@ class BasePage(BasePageMain):
             return table_data_object_activity_double_week["fishSpotB"], True
         return table_data_object_activity_double_week["fishSpot"], False
 
+    # @staticmethod
+    # def monitor_hook(args):
+    #     print(f"Thread {args.thread.name} died with exception: {args.exc_value}")
+    #     raise FindNoElementError
+
+
+
+
 
 
 if __name__ == '__main__':
-    bp = BasePage(is_mobile_device=True, serial_number="127.0.0.1:21503")
+    bp = BasePage(is_mobile_device=True, serial_number="127.0.0.1:21503", is_monitor=True)
     # a = bp.get_tpid(item_icon_name="coin_gold")
     # bp.set_item_count(target_count=2500, item_tpid="100500")
     # bp.excelTools.get_table_data_detail_by_base_data("ACTIVITY_DOUBLE_WEEK.xlsm")
     # bp.lua_console("PrintTable(_G.PassiveNewbieGuideEnum)")
-    a = bp.get_spot_id_list(fishery_id=400307)
-    print(a)
-    bp.connect_close()
+    try:
+        cur = 0
+        while True:
+            bp.sleep(1)
+            print(cur)
+            cur += 1
+    except Exception as e:
+        print(e, "被中断")
+
+    # bp.connect_close()
     # while True:
     #     # a = bp.get_object_id_list(element_data=ElementsData.Login.btn_login)
     #     bp.sleep(1)

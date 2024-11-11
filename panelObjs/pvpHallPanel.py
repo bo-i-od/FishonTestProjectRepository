@@ -20,7 +20,7 @@ class PVPHallPanel(BasePage):
         edge_right = size_list[0][0]
         # edge_right = 0.8 * size_list[0][0]
         # print(edge_right)
-        viewport = Viewport(self, element_viewport=ElementsData.PVPHall.Viewport, element_item_list=ElementsData.PVPHall.btn_play_list, viewport_edge=[edge_left, edge_right])
+        viewport = Viewport(self, element_viewport=ElementsData.PVPHall.Viewport, element_item_list=ElementsData.PVPHall.btn_play_list, viewport_edge=[edge_left, edge_right], viewport_direction= "row")
         while PVPHallPanel.is_panel_active(self):
             try:
                 viewport.move_until_appear(viewport.item_id_list[index])
@@ -42,5 +42,24 @@ class PVPHallPanel(BasePage):
         self.click_element(element_data=ElementsData.PVPHall.btn_leaderboard)
 
 if __name__ == '__main__':
-    bp = BasePage()
+    bp = BasePage(serial_number="127.0.0.1:21553", is_mobile_device=True)
+    # position_list = bp.get_position_list(element_data=ElementsData.PVPHall.btn_play_list)
+    # print(position_list)
+    # bp.connect_close()
+    # size_list = bp.get_size_list(element_data=ElementsData.PVPHall.btn_play_list)
+    # edge_left = size_list[0][0]
+    # edge_right = size_list[0][0]
+    # # edge_right = 0.8 * size_list[0][0]
+    # # print(edge_right)
+    # viewport = Viewport(bp, element_viewport=ElementsData.PVPHall.Viewport,
+    #                     element_item_list=ElementsData.PVPHall.btn_play_list, viewport_edge=[edge_left, edge_right])
+    # while PVPHallPanel.is_panel_active(bp):
+    #     try:
+    #         viewport.move_until_appear(viewport.item_id_list[index])
+    #     except:
+    #         print("viewport有问题")
+    #     position_list = self.get_position_list(element_data=ElementsData.PVPHall.btn_play_list)
+    #     if not position_list:
+    #         return
     PVPHallPanel.click_btn_play(bp, 0)
+    bp.connect_close()

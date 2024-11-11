@@ -1,5 +1,4 @@
-import time
-
+from poco.utils.simplerpc.utils import RemoteError
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from panelObjs.flashCardReceivePanel import FlashCardReceivePanel
@@ -36,7 +35,7 @@ class BattlePanel(BasePage):
                 continue
 
     def qte(self):
-        element_data_list = [ElementsData.Battle.qte_left, ElementsData.Battle.qte_right, ElementsData.Battle.qte_up, ElementsData.Battle.qte_jump_left, ElementsData.Battle.qte_jump_right, ElementsData.Battle.hud_power_list, ElementsData.Battle.hud_power_list_old, ElementsData.Result.ResultPanel, ElementsData.FlashCardReceive.FlashCardReceivePanel]
+        element_data_list = [ElementsData.Battle.qte_left, ElementsData.Battle.qte_right, ElementsData.Battle.qte_up, ElementsData.Battle.qte_jump_left, ElementsData.Battle.qte_jump_right, ElementsData.Battle.hud_power_list, ElementsData.Battle.hud_power_list_old, ElementsData.Result.btn_claim, ElementsData.Result.btn_claim_token_fish, ElementsData.BattleFailed.btn_again, ElementsData.FlashCardReceive.FlashCardReceivePanel]
         qte_left_index = element_data_list.index(ElementsData.Battle.qte_left)
         qte_right_index = element_data_list.index(ElementsData.Battle.qte_right)
         qte_up_index = element_data_list.index(ElementsData.Battle.qte_up)
@@ -44,7 +43,9 @@ class BattlePanel(BasePage):
         qte_jump_right_index = element_data_list.index(ElementsData.Battle.qte_jump_right)
         hud_power_list_index = element_data_list.index(ElementsData.Battle.hud_power_list)
         hud_power_list_old_index = element_data_list.index(ElementsData.Battle.hud_power_list_old)
-        ResultPanel_index = element_data_list.index(ElementsData.Result.ResultPanel)
+        btn_claim_index = element_data_list.index(ElementsData.Result.btn_claim)
+        btn_claim_token_fish_index = element_data_list.index(ElementsData.Result.btn_claim_token_fish)
+        btn_again_index = element_data_list.index(ElementsData.BattleFailed.btn_again)
         FlashCardReceivePanel_index = element_data_list.index(ElementsData.FlashCardReceive.FlashCardReceivePanel)
 
         while True:
@@ -70,10 +71,18 @@ class BattlePanel(BasePage):
             if object_id_list[qte_right_index]:
                 BattlePanel.slide(self, "right")
                 continue
-            if object_id_list[ResultPanel_index]:
+            if object_id_list[btn_claim_index]:
+                ResultPanel.automatic_settlement(self, element_btn=ElementsData.Result.btn_claim)
+                break
+            if object_id_list[btn_claim_token_fish_index]:
+                ResultPanel.automatic_settlement(self, element_btn=ElementsData.Result.btn_claim_token_fish)
+                break
+            if object_id_list[btn_again_index]:
+                ResultPanel.automatic_settlement(self, element_btn=ElementsData.BattleFailed.btn_again)
                 break
             if object_id_list[FlashCardReceivePanel_index]:
-                break
+                self.clear_popup()
+                continue
 
 
     def slide(self, dir):
@@ -131,7 +140,7 @@ class BattlePanel(BasePage):
             pass
 
     def hook(self):
-        self.wait_for_appear(element_data=ElementsData.Battle.btn_reel, is_click=False, timeout=20)
+        self.wait_for_appear(element_data=ElementsData.Battle.btn_reel, is_click=False, timeout=25)
         # 如果没有刺鱼就跳过
         progress_position = self.get_position_list(element_data=ElementsData.Battle.progress)
         if not progress_position:
@@ -139,13 +148,21 @@ class BattlePanel(BasePage):
         progress_size = self.get_size(element_data=ElementsData.Battle.progress)
         h = progress_size[1]
         range = [progress_position[0][1] - 0.5 * h, progress_position[0][1] + 0.5 * h]
-        arrow_position = self.get_position(element_data=ElementsData.Battle.arrow)
-        progress = (arrow_position[1] - range[0]) / h
+        arrow_position = self.get_position_list(element_data=ElementsData.Battle.arrow)
+        if not arrow_position:
+            return
+        progress = (arrow_position[0][1] - range[0]) / h
         while progress < 0.7:
-            arrow_position = self.get_position(element_data=ElementsData.Battle.arrow)
-            progress = (arrow_position[1] - range[0]) / h
+            arrow_position = self.get_position_list(element_data=ElementsData.Battle.arrow)
+            if not arrow_position:
+                return
+            progress = (arrow_position[0][1] - range[0]) / h
             self.sleep(0.05)
-        self.ray_input(element_data=ElementsData.Battle.btn_reel, target_name="btn_cast", kind="down")
+        try:
+            self.ray_input(element_data=ElementsData.Battle.btn_reel, target_name="btn_cast", kind="down")
+        except RemoteError:
+            pass
+
         # self.ray_input(element_data=ElementsData.Battle.btn_reel, target_name="btn_cast", kind="up")
         # self.click_position_base(position_btn_reel)
 

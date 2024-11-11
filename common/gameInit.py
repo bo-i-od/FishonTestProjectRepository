@@ -19,8 +19,8 @@ import time
 from tools import commonTools
 
 
-def get_bp(dev):
-    bp = restart_to_login(dev, package_list=["com.xuejing.smallfish.official", "com.arkgame.fishingmaster"])
+def get_bp(dev, is_monitor=False):
+    bp = restart_to_login(dev, is_monitor=is_monitor, package_list=["com.xuejing.smallfish.official", "com.arkgame.fishingmaster"])
     if not LoginPanel.is_panel_active(bp):
         return bp
     LoginPanel.click_btn_login(bp)
@@ -30,12 +30,12 @@ def get_bp(dev):
     return bp
 
 
-def reset_bp(dev):
+def reset_bp(dev, is_monitor=False):
     try:
-        bp = get_bp(dev)
+        bp = get_bp(dev, is_monitor=is_monitor)
     except:
         traceback.print_exc()
-        bp = reset_bp(dev)
+        bp = reset_bp(dev, is_monitor=is_monitor)
     return bp
 
 
@@ -101,7 +101,7 @@ def login_to_hall(bp: BasePage,cmd_list=None):
     account_init(bp, username, cmd_list)
 
 
-def app_start_to_login(dev=None):
+def app_start_to_login(dev=None, is_monitor=False):
     cur = 0
     bp = None
     while cur < 300:
@@ -109,7 +109,7 @@ def app_start_to_login(dev=None):
         #     authorize(poco)
         # except:
         #     pass
-        bp = get_basePage(dev=dev)
+        bp = get_basePage(dev=dev, is_monitor=is_monitor)
         if bp is not None:
             break
         time.sleep(1)
@@ -128,9 +128,9 @@ def tap_to_start():
     return match_pos
 
 
-def get_basePage(serial_number=None, dev=None):
+def get_basePage(serial_number=None, dev=None, is_monitor=False):
     try:
-        bp = BasePage(serial_number=serial_number, dev=dev)
+        bp = BasePage(serial_number=serial_number, dev=dev, is_monitor=is_monitor)
         return bp
     except:
         return None
@@ -241,9 +241,9 @@ def install_monitor(poco):
 
 
 # 重启
-def restart_to_login(dev, package=None, package_list=None):
+def restart_to_login(dev, is_monitor=False, package=None, package_list=None):
     if package_list is None:
-        return restart_to_login(dev, package_list=[package])
+        return restart_to_login(dev, is_monitor=is_monitor, package_list=[package])
     for p in package_list:
         try:
             dev.stop_app(package=p)
@@ -252,7 +252,7 @@ def restart_to_login(dev, package=None, package_list=None):
         except:
             continue
     # poco_uiautomation = AndroidUiautomationPoco(device=G.DEVICE)
-    bp = app_start_to_login(dev=dev)
+    bp = app_start_to_login(dev=dev, is_monitor=is_monitor)
     return bp
 
 

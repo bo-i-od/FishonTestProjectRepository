@@ -47,7 +47,7 @@ class BattlePreparePanel(BasePage):
     # 点击抛竿
     def click_btn_cast(self):
         self.wait_for_appear(element_data=ElementsData.BattlePrepare.btn_cast, is_click=False)
-        self.click_until_disappear(element_data=ElementsData.BattlePrepare.btn_cast, ignore_set={"BattlePreparePanel"})
+        self.click_element_safe(element_data=ElementsData.BattlePrepare.btn_cast)
         self.sleep(1)
         if self.exist(element_data=ElementsData.Battle.BattlePanel):
             return

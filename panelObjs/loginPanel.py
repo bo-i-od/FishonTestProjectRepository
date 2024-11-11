@@ -16,7 +16,7 @@ class LoginPanel(BasePage):
         return False
 
     def wait_for_btn_login(self):
-        self.wait_for_appear(element_data_list=[ElementsData.Login.btn_login, ElementsData.Login.btn_login_cn],timeout=20)
+        self.wait_for_appear(element_data_list=[ElementsData.Login.btn_login, ElementsData.Login.btn_login_cn], timeout=20)
 
     def click_btn_login(self):
         btn_login_element = ElementsData.Login.btn_login
@@ -38,8 +38,7 @@ class LoginPanel(BasePage):
         self.set_dropdown_value(element_data=ElementsData.Login.Dropdown, index=index)
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21503", is_mobile_device=True)
-    a = bp.get_position_list(element_data_list=[ElementsData.Login.btn_login, ElementsData.Login.btn_login_cn])
-    print(a)
+    bp = BasePage("127.0.0.1:21503", is_mobile_device=False)
+    bp.click_element(element_data=ElementsData.Login.btn_login)
 
     bp.connect_close()
