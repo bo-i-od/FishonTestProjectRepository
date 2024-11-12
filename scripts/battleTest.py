@@ -21,6 +21,8 @@ def fish_once(bp: BasePage, fishery_id="", fish_id="", is_quick=False):
         print(c)
         bp.cmd(c)
     BattlePreparePanel.click_btn_cast(bp)
+    if bp.monitor:
+        bp.monitor.schedule_next_check()
     BattlePanel.hook(bp)
     bp.set_time_scale()
     if BattlePanel.is_reel_active(bp):

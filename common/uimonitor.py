@@ -2,6 +2,7 @@ import threading
 import ctypes
 import time
 from configs.elementsData import ElementsData
+from threading import Timer
 
 
 class TimeoutException(Exception):
@@ -15,6 +16,9 @@ class UIMonitor:
         self.stop_event = threading.Event()
         self.main_thread = None
         self.monitor_thread = None
+        self.timer = None
+        self.cur = 0
+        self.panel_id_list_pre = []
 
     def start_monitoring(self, main_thread):
         self.main_thread = main_thread
@@ -31,18 +35,29 @@ class UIMonitor:
             print(e)
 
     def monitor(self):
-        cur = 0
-        panel_id_list_pre = []
-        while True:
-            time.sleep(10)
-            panel_id_list = self.bp.get_object_id_list(element_data=ElementsData.Panels_Default)
-            if panel_id_list != panel_id_list_pre:
-                panel_id_list_pre = panel_id_list
-                cur = 0
-                continue
-            cur += 1
-            if cur > 15:
-                raise TimeoutException("Timeout!")
+        self.check_panels()
+
+    def check_panels(self):
+        if self.stop_event.is_set():
+            return
+
+        panel_id_list = self.bp.get_object_id_list(element_data=ElementsData.Panels_Default)
+        if panel_id_list != self.panel_id_list_pre:
+            self.panel_id_list_pre = panel_id_list
+            self.cur = 0
+        else:
+            self.cur += 1
+
+        if self.cur > 5:
+            raise TimeoutException("Timeout!")
+
+        self.schedule_next_check()
+
+    def reset_monitoring(self):
+        with self.lock:
+            self.cur = 0
+            self.panel_id_list_pre = []
+
 
     def _raise_exception_in_main_thread(self, e):
         thread_id = self.main_thread.ident
@@ -53,7 +68,18 @@ class UIMonitor:
             ctypes.pythonapi.PyThreadState_SetAsyncExc(ctypes.c_long(thread_id), None)
             print("Failed to raise exception in main thread")
 
+    def schedule_next_check(self):
+        self.cancel_timer()
+        self.timer = Timer(20, self.check_panels)
+        self.timer.start()
+
+    def cancel_timer(self):
+        if self.timer:
+            self.timer.cancel()
+            self.timer = None
+
     def stop_monitoring(self):
         self.stop_event.set()
+        self.cancel_timer()
         if self.monitor_thread:
             self.monitor_thread.join()

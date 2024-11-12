@@ -10,7 +10,7 @@ import common
 from common import gameInit
 from common.basePage import BasePage
 from common.error import FindNoElementError
-from netMsg import luaLog
+from netMsg import luaLog, csMsgAll
 from panelObjs.commonWebViewPanel import CommonWebViewPanel
 from panelObjs.divisionLeaderboardPanel import DivisionLeaderboardPanel
 from panelObjs.divisionListPanel import DivisionListPanel
@@ -127,8 +127,8 @@ def get_to_drops(bp):
     # 提取hook消息
     target_log = bp.get_target_log(msg_key="SCGmCommandMsg")
     target_log = lua_dict_to_python_dict(target_log)
-
-    print(target_log["output"])
+    res = target_log["output"]
+    print(res)
         # fishBalanceTpId = luaLog.get_value(msg=target_log, key="fishBalanceTpId", is_str=False)
     #     print(fishBalanceTpId)
     # output_match = re.search(r'toDrops=(\[.*?\])', target_log)
@@ -140,6 +140,7 @@ def get_to_drops(bp):
     # output_list = ast.literal_eval(output_str)
     # print(f"预期体型列表：{output_list}")
     bp.log_list_flag = False
+    return res
 
 def get_avg_score(bp):
     # 清空消息列表 开始收消息
@@ -151,8 +152,11 @@ def get_avg_score(bp):
     # 提取hook消息
     target_log = bp.get_target_log(msg_key="SCGmCommandMsg")
     target_log = lua_dict_to_python_dict(target_log)
-    print(target_log["output"])
+    res = target_log["output"]
+    print(res)
     bp.log_list_flag = False
+    return res
+
 
 def get_report(bp):
     # 清空消息列表 开始收消息
@@ -164,8 +168,10 @@ def get_report(bp):
     # 提取hook消息
     target_log = bp.get_target_log(msg_key="SCGmCommandMsg")
     target_log = lua_dict_to_python_dict(target_log)
-    print(target_log["output"])
+    res = target_log["output"]
+    print(res)
     bp.log_list_flag = False
+    return res
 
 def get_result(bp):
     target_log = ""
@@ -178,6 +184,7 @@ def get_result(bp):
         return
     target_log = lua_dict_to_python_dict(target_log)
     print(target_log)
+    return target_log
 
 def get_robot(bp):
     # 清空消息列表 开始收消息
@@ -189,10 +196,29 @@ def get_robot(bp):
     # 提取hook消息
     target_log = bp.get_target_log(msg_key="SCGmCommandMsg")
     target_log = lua_dict_to_python_dict(target_log)
-    print(target_log["output"])
+    res = target_log["output"]
+    print(res)
     bp.log_list_flag = False
+    return res
 
+def get_chara(bp, duel_info):
+    charId = duel_info['selfBaitAndRods'][1]['charId']
+    lua_code = csMsgAll.get_CSQueryPlayerCardInfoMsg(charId=charId)
+    # 清空消息列表 开始收消息
+    bp.log_list.clear()
+    bp.log_list_flag = True
 
+    bp.lua_console(lua_code)
+    bp.sleep(1)
+
+    # 提取hook消息
+    target_log = bp.get_target_log(msg_key="SCQueryPlayerCardInfoMsg")
+    target_log = lua_dict_to_python_dict(target_log)
+    res = target_log["playerCardInfo"]["chara"]
+    # level = target_log["playerCardInfo"]["chara"]["level"]
+    # power = target_log["playerCardInfo"]["chara"]["sumPower"] +target_log["playerCardInfo"]["chara"]["talentSumPower"]
+    print(res)
+    return res
 
 
 def pvp_fish(bp, is_quick=False):
@@ -205,11 +231,12 @@ def pvp_fish(bp, is_quick=False):
         cur += 1
     if cur >= 30:
         raise FindNoElementError("超时")
+    duel_log = ""
     # 获取掉落列表
-    get_to_drops(bp)
-    get_avg_score(bp)
-    get_report(bp)
-    get_robot(bp)
+    duel_log += str(get_to_drops(bp)) + '\n'
+    duel_log += str(get_avg_score(bp)) + '\n'
+    duel_log += str(get_report(bp)) + '\n'
+    duel_log += str(get_robot(bp)) + '\n'
     bp.log_list_duel.clear()
 
     while True:
@@ -229,6 +256,8 @@ def pvp_fish(bp, is_quick=False):
             # print(f"体型列表：{fish_type_list}")
             bp.sleep(3)
             break
+        if bp.monitor:
+            bp.monitor.schedule_next_check()
         BattlePanel.hook(bp)
         bp.sleep(1)
         if BattlePanel.is_reel_active(bp):
@@ -254,6 +283,14 @@ def pvp_fish(bp, is_quick=False):
             # print(f"体型列表：{fish_type_list}")
             bp.sleep(3)
             break
+    duel_info = get_result(bp)
+    duel_log += str(duel_info) + '\n'
+    duel_log += str(get_chara(bp, duel_info)) + '\n'
+    file_path = "C:/Users/TU/Desktop/duel/" + serial_number.split(':')[1] + '.txt'
+    # 写入文件
+    with open(file_path, "a", encoding="utf-8") as file:
+        file.write(duel_log)
+
 
 
 
@@ -332,7 +369,6 @@ def duel_once(bp:BasePage, rank):
     #     lambda: PVPHallPanel.click_btn_play(bp, rank)]
     # bp.try_actions(action_list=action_list)
     pvp_fish(bp)
-    get_result(bp)
     bp.sleep(5)
     # PVPResultPanel.click_btn_open(bp)
     # bp.sleep(1)
@@ -480,23 +516,28 @@ def main(bp:BasePage):
 def duel_test(bp, is_monitor=False):
     try:
         while True:
-            bp.go_to_panel("PVPHallPanel")
-            clear_duelcup(bp)
-            r = random.randint(0, 3625)
-
-            rank = set_duelcup(bp, duelcup=r)
+            # bp.go_to_panel("PVPHallPanel")
+            # clear_duelcup(bp)
+            # r = random.randint(0, 3625)
+            #
+            # rank = set_duelcup(bp, duelcup=r)
 
             bp.go_home()
+
             bp.go_to_panel("PVPHallPanel")
-            r_max = rank
-            r = random.randint(0, r_max * (r_max + 1) // 2)
-            cur = r_max - 1
-            while cur >= 0:
-                if r >= cur * (cur + 1) // 2:
-                    rank = cur
-                    break
-                cur -= 1
-            duel_once(bp, rank=rank)
+
+            btn_play_position_list = PVPHallPanel.get_btn_play_position_list(bp)
+            r = random.randint(0, len(btn_play_position_list) - 1)
+            # r_max = rank
+            # r = random.randint(0, r_max * (r_max + 1) // 2)
+            # cur = r_max - 1
+            # while cur >= 0:
+            #     if r >= cur * (cur + 1) // 2:
+            #         rank = cur
+            #         break
+            #     cur -= 1
+            duel_once(bp, rank=r)
+
     except Exception as e:
         print(e)
         # bp.connect_close()
@@ -506,7 +547,7 @@ def duel_test(bp, is_monitor=False):
 
 
 if __name__ == '__main__':
-    serial_number = "127.0.0.1:21563"
+    serial_number = "127.0.0.1:21573"
     print(serial_number)
     base_page = BasePage(serial_number=serial_number, is_mobile_device=True, is_monitor=True)
     # set_duelcup_random(base_page, rank=7)
