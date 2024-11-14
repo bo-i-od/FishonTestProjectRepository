@@ -66,7 +66,8 @@ for i in range(200):
         if fish_skill_info and BUFF_LIST in fish_skill_info:
             buff_id = fish_skill_info[BUFF_LIST][0]
             fish_object.remove_buff(buff_id)
-
+        if len(skill_list)==0:
+            break
         now_skill = skill_list.pop(0)  # 下个技能
         fish_skill_info = fish_skill_data[now_skill]
         if BUFF_LIST in fish_skill_info:
