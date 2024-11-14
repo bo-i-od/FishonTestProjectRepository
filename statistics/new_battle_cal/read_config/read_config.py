@@ -1,6 +1,6 @@
 from statistics.new_battle_cal.read_config.translate_assist_diff_versions import doWorkOnDataTxtFile
-
-file_path="C:/Users/TU/Documents/Dev_NewBattle/datapool/ElementData/BaseData/"
+from statistics.new_battle_cal import attr_config
+file_path=attr_config.file_path
 battle_skill="BATTLE_SKILL"
 battle_buff = "BATTLE_BUFF"
 
