@@ -1,7 +1,8 @@
 from buff import *
+import attr_config
 class Fish:
     def __init__(self):
-        self.velocityZ = 4000
+        self.velocityZ = attr_config.fish_velocityZ
         # buff 状态维护
         self.damage_rate=0
         self.velocityZ_add_rate = 0

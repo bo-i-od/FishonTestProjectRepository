@@ -1,19 +1,20 @@
 from buff import *
+import attr_config
 class Player:
     def __init__(self):
         # -------------------跑线相关-------------
         # 收线时的拉力速度
-        self.velocityZ = 2000
+        self.velocityZ = attr_config.player_velocityZ
         # 放线时的拉力速度
-        self.no_reel_velocityZ = 0
+        self.no_reel_velocityZ = attr_config.player_no_reel_velocityZ
         # ----------------张力相关-------------------
         # 鱼竿属性
         # 对抗张力
-        self.rod_tension_increase = 10
+        self.rod_tension_increase = attr_config.rod_tension_increase
         # 放松时的下降速度，写死，固定
-        self.rod_tension_decrease = -100
+        self.rod_tension_decrease = attr_config.rod_tension_decrease
         # -------------------伤害相关--------------------
-        self.atk = 100  # 每次收线 每200ms一次伤害
+        self.atk = attr_config.player_atk  # 每次收线 每200ms一次伤害
 
 
         # 玩家鱼线长度

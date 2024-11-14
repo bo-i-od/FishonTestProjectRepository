@@ -52,7 +52,7 @@ now_time = 0
 total_damage = 0
 
 result=[]
-print("时间 状态     距离    鱼速度 人拉力  实际跑速  累计伤害")
+print("时间 状态     距离    鱼速度 人拉力  实际跑速  累计伤害   人buff  鱼buff")
 #result.append(["时间","距离","状态","鱼速度","人拉力","实际跑速","累计伤害"])
 
 for i in range(200):
@@ -131,7 +131,7 @@ for i in range(200):
     now_time += per_time
 
     if now_time%1000==0:
-        result.append([int(now_time/1000), now_skill,int(fish_line_distance), int(fish_velocityZ), int(player_velocityZ), int(now_velocityZ),int(total_damage)])
+        result.append([int(now_time/1000), now_skill,int(fish_line_distance), int(fish_velocityZ), int(player_velocityZ), int(now_velocityZ),int(total_damage),list(player_object.buff_dict.keys()),list(fish_object.buff_dict.keys())])
 
 print(tabulate(result))
 
