@@ -9,6 +9,14 @@ TIMEMS='time'
 BUFF_LIST='buff_list'
 COUNTER_TIME='canCounterTimingMS'
 
+""" 
+注，目前支持buff类型
+SwimVelocityZUpRate
+DamageReduceRate
+ReelVelocityZUpRate
+DamageAmplifyRate
+"""
+
 fish_skill_data={
     FISH_SWIM:{TIMEMS:1000},
     CUT_LINE:{TIMEMS:3000,COUNTER_TIME:1000},
