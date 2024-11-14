@@ -2,14 +2,14 @@ from buff import *
 class Fish:
     def __init__(self):
         self.velocityZ = 4000
+        # buff 状态维护
         self.damage_rate=0
         self.velocityZ_add_rate = 0
         self.buff_dict={}
-        self.hp = 10000
+        # self.hp = 10000
 
     def get_current_velocityZ(self):
         return self.velocityZ*(self.velocityZ_add_rate+1000)/1000
-
 
     def add_buff(self,buff_id,now_time):
         # 重复叠层

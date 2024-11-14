@@ -1,7 +1,7 @@
 import random
-
 import pandas as pd
 from statistics.battle_cal.my_wheel import Wheel
+from tabulate import tabulate
 from get_skill_list import *
 from player import Player
 from fish import Fish
@@ -20,6 +20,7 @@ class BattleCommon:
 
     @classmethod
     def cal_tension_atk_rate(cls,tension_now):
+        """ 张力伤害计算公式 """
         rate = tension_now / cls.tension_total_max
         if rate > 0.8:
             return 1
@@ -31,49 +32,28 @@ class BattleCommon:
             return 0.25
 
 
-total_win=0
-total_lose=0
-total_count={}
-
-
-
-now_time = 0
-now_tension = BattleCommon.start_tension  # 当前张力
-rod_tension_status = 'reel'
-
+# ----------初始化各项参数 ----------------
 fish_object = Fish()
 player_object = Player()
-
-now_skill=None
-skill_data=None
+# 张力
+now_tension = BattleCommon.start_tension  # 当前张力
+rod_tension_status = 'reel'
 # 剩余时间
 now_skill_left_time=0
-per_time=200 # 每0.1秒执行一次
-
-
+per_time=200 # 每0.2秒执行一次
 # 距离，单位米
 fish_line_distance = BattleCommon.start_line
-fish_line_distance_max = 100
-
-
-# 鱼线血量
-line_hp=3
-# 鱼血量
-fish_hp=100
-
-# 统计
-total_cost_time=0
-
-player_die=None
-fish_die=None
-player_counter_rate = 0.5
-player_perfect_counter_rate=0.2
-player_super_skill_rate=0.1 # 仅限鱼出于weak状态使用
+# 当前鱼技能
+now_skill=None
 fish_skill_info=None
-
+# 时间
+now_time = 0
+# 总伤害
 total_damage = 0
 
-print("时间 距离 状态 鱼速度 人拉力 实际跑速 累计伤害")
+result=[]
+print("时间 状态     距离    鱼速度 人拉力  实际跑速  累计伤害")
+#result.append(["时间","距离","状态","鱼速度","人拉力","实际跑速","累计伤害"])
 
 for i in range(200):
     # check buff是否过期
@@ -98,7 +78,8 @@ for i in range(200):
         # 如果是QTE，还额外触发一次QTE
         if now_skill==JUMP:
             player_object.energy+=1
-            player_object.add_buff(200003, now_time)
+            # QTE触发技能
+            # player_object.add_buff(200003, now_time)
             # if random.random()<0.67:
             #     player_object.add_buff(200003,now_time)
             # else:
@@ -107,14 +88,14 @@ for i in range(200):
     # 可弹反
     if COUNTER_TIME in fish_skill_info:
         # 到了时间
-        if now_skill_left_time==(fish_skill_info[TIMEMS]-fish_skill_info[COUNTER_TIME]):
+        if now_skill_left_time == (fish_skill_info[TIMEMS]-fish_skill_info[COUNTER_TIME]):
             # 有气
             if player_object.energy>=1:
                 player_object.energy -= 1
                 # 打断
                 now_skill_left_time = 0
-                # 加buff
-                player_object.add_buff(200006, now_time)
+                # 弹反加buff
+                # player_object.add_buff(200006, now_time)
 
     # 张力 行为变化
     if now_tension >= BattleCommon.tension_max:
@@ -123,33 +104,34 @@ for i in range(200):
         rod_tension_status = 'reel'
 
     if rod_tension_status=='reel':
-        player_velocityZ = player_object.get_current_velocityZ()
-        now_tension += player_object.rod_tension_increase * per_time/1000
 
-        # 根据鱼距离判断加buff
-        if fish_line_distance<=20:
-            fish_object.add_buff(200010,now_time)
-        else:
-            fish_object.remove_buff(200010)
+        now_tension += player_object.rod_tension_increase * per_time/1000
+        # # 根据鱼距离判断加buff
+        # if fish_line_distance<=20:
+        #     fish_object.add_buff(200010,now_time)
+        # else:
+        #     fish_object.remove_buff(200010)
         # 实际造成伤害,  基础攻击* 张力系数 * buff系数
         do_damage = player_object.atk * BattleCommon.cal_tension_atk_rate(now_tension) * (1000 + player_object.damage_rate - fish_object.damage_rate)/1000
 
     elif rod_tension_status=='not_reel':
-        player_velocityZ = 0
         now_tension += player_object.rod_tension_decrease * per_time/1000
 
         do_damage = 0
 
+    player_velocityZ = player_object.get_current_velocityZ(rod_tension_status)
     fish_velocityZ=fish_object.get_current_velocityZ()
     now_velocityZ = fish_velocityZ-player_velocityZ
     # 鱼跑远
     fish_line_distance += now_velocityZ/1000 * per_time/1000
-    # 鱼扣血
-    fish_object.hp-=do_damage
-    total_damage +=do_damage
+    # 累计伤害
+    total_damage += do_damage
 
     now_skill_left_time -= per_time
     now_time += per_time
 
     if now_time%1000==0:
-        print(int(now_time/1000),int(fish_line_distance), now_skill, int(fish_velocityZ), int(player_velocityZ), int(now_velocityZ),int(total_damage))
+        result.append([int(now_time/1000), now_skill,int(fish_line_distance), int(fish_velocityZ), int(player_velocityZ), int(now_velocityZ),int(total_damage)])
+
+print(tabulate(result))
+
