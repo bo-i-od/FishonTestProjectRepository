@@ -11,14 +11,14 @@ COUNTER_TIME='canCounterTimingMS'
 
 fish_skill_data={
     FISH_SWIM:{TIMEMS:1000},
-    CUT_LINE:{TIMEMS:3000},
+    CUT_LINE:{TIMEMS:3000,COUNTER_TIME:1000},
     RUSH:{TIMEMS:3000,BUFF_LIST:[200001]},
     ESCAPE:{TIMEMS:3000,BUFF_LIST:[200001],COUNTER_TIME:1000},
     JUMP:{TIMEMS:2500}
 }
 
-skill_list=['swim', 'jump', 'swim', 'jump', 'swim', 'cut_line', 'swim', 'rush', 'swim', 'escape', 'swim', 'rush', 'swim','swim', 'jump', 'swim', 'jump', 'swim', 'cut_line', 'swim', 'rush', 'swim', 'escape', 'swim', 'rush', 'swim']
-
+# skill_list 运行到最后一个后，会重新循环
+skill_list=['swim', 'jump','swim','escape','swim','rush']
 
 if __name__ == '__main__':
     # fish_random_skill_list=[CUT_LINE,RUSH,ESCAPE,JUMP]
