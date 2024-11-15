@@ -83,7 +83,7 @@ if __name__ == '__main__':
     #     duel_once(base_page, 0)
     #     cur += 1
     #     print(f"第{cur}次钓鱼")
-    # circulate_fish(bp=base_page, is_quick=False, times=25)
+    # circulate_fish(bp=base_page, is_quick=False, times=2)
     # base_page.sleep(3600)
     while True:
         base_page = championship(base_page, 0, 5, cost=1, is_monitor=True)

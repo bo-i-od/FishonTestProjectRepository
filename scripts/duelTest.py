@@ -256,8 +256,9 @@ def pvp_fish(bp, is_quick=False):
             # print(f"体型列表：{fish_type_list}")
             bp.sleep(3)
             break
-        if bp.monitor:
-            bp.monitor.schedule_next_check()
+        # with bp.monitor.lock:
+        #     bp.monitor.task = "reset_monitoring"
+        bp.monitor.add_task("schedule_next_check", cur=0)
         BattlePanel.hook(bp)
         bp.sleep(1)
         if BattlePanel.is_reel_active(bp):
@@ -359,7 +360,13 @@ def duel_once(bp:BasePage, rank):
     # rank = 0
     # print(rank)
     # bp.set_item_count(target_count=250000, item_tpid="100200")
-    PVPHallPanel.click_btn_play(bp, rank)
+    lua_code = csMsgAll.get_CSGlobalEnterMatchMsg(matcherId=1, seriesId=1001 + rank, source=0)
+    bp.lua_console(lua_code)
+    r = random.random()
+    bp.sleep(r)
+    print(f"本次点击间隔{r}s")
+    bp.lua_console(lua_code)
+    # PVPHallPanel.click_btn_play(bp, rank)
     # s, e = point_cal(dc)
     # print(f"当前杯数：{dc},预期分数范围:{s,e}")
     # action_list = [lambda: PVPHallPanel.click_btn_close(bp)]
@@ -527,7 +534,8 @@ def duel_test(bp, is_monitor=False):
             bp.go_to_panel("PVPHallPanel")
 
             btn_play_position_list = PVPHallPanel.get_btn_play_position_list(bp)
-            r = random.randint(0, len(btn_play_position_list) - 1)
+            # r = random.randint(0, len(btn_play_position_list) - 1)
+            r = random.randint(0, 6)
             # r_max = rank
             # r = random.randint(0, r_max * (r_max + 1) // 2)
             # cur = r_max - 1
@@ -536,7 +544,11 @@ def duel_test(bp, is_monitor=False):
             #         rank = cur
             #         break
             #     cur -= 1
+            energy_start = bp.get_item_count(item_tpid="100500")
+
             duel_once(bp, rank=r)
+            energy_end = bp.get_item_count(item_tpid="100500")
+            print(f"体力消耗：{energy_end - energy_start}")
 
     except Exception as e:
         print(e)
@@ -547,12 +559,12 @@ def duel_test(bp, is_monitor=False):
 
 
 if __name__ == '__main__':
-    serial_number = "127.0.0.1:21573"
+    serial_number = "127.0.0.1:21533"
     print(serial_number)
     base_page = BasePage(serial_number=serial_number, is_mobile_device=True, is_monitor=True)
     # set_duelcup_random(base_page, rank=7)
-    base_page.set_item_count(target_count=100000, item_tpid="100500")
-    gameInit.set_joystick(base_page)
+    # base_page.set_item_count(target_count=100000, item_tpid="100500")
+    # gameInit.set_joystick(base_page)
     duel_test(base_page, is_monitor=True)
 
     # bp.cmd("globalgm duelScene 400315")
