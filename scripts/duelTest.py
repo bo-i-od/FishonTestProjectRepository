@@ -258,7 +258,8 @@ def pvp_fish(bp, is_quick=False):
             break
         # with bp.monitor.lock:
         #     bp.monitor.task = "reset_monitoring"
-        bp.monitor.add_task("schedule_next_check", cur=0)
+        if bp.is_monitor:
+            bp.monitor.add_task("schedule_next_check", cur=0)
         BattlePanel.hook(bp)
         bp.sleep(1)
         if BattlePanel.is_reel_active(bp):

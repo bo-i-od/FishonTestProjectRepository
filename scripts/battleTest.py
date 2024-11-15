@@ -21,7 +21,8 @@ def fish_once(bp: BasePage, fishery_id="", fish_id="", is_quick=False):
         print(c)
         bp.cmd(c)
     BattlePreparePanel.click_btn_cast(bp)
-    bp.monitor.add_task("schedule_next_check", cur=0)
+    if bp.is_monitor:
+        bp.monitor.add_task("schedule_next_check", cur=0)
     BattlePanel.hook(bp)
     bp.set_time_scale()
     if BattlePanel.is_reel_active(bp):
@@ -391,15 +392,16 @@ def main(bp: BasePage, fishery_id, is_double_week=False, is_in_double_week=False
 
 if __name__ == '__main__':
     # 连接设备号为127.0.0.1:21533的设备
-    bp = BasePage("127.0.0.1:21533", is_mobile_device=True)
+    bp = BasePage("127.0.0.1:21533", is_mobile_device=False)
     bp.is_time_scale = False
     gameInit.set_joystick(bp)
     bp.custom_cmd("setTension 0.9")
-    bp.set_item_count(target_count=1000000000, item_tpid="100500")
+    # bp.set_item_count(target_count=1000000000, item_tpid="100500")
 
     # main(bp, fishery_id="400321",  is_double_week=True, is_in_double_week=True)
-    circulate_fish(bp, is_quick=False, fishery_id="400320")
+    # circulate_fish(bp, is_quick=False, fishery_id="400320")
     # fish_all(bp, is_quick=False)
+    fish_once(bp, is_quick=False)
     # 断开连接
     bp.connect_close()
 
