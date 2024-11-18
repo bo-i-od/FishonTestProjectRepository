@@ -36,5 +36,9 @@ class Fish(Actor):
             return 'DamageReduceRate'
         if buff_name == 'TensionUnstableRate':
             return 'TensionUnstableRate'
+        if buff_name == 'TensionUnstableValue':
+            return 'TensionUnstableValue'
         if buff_name == 'BattleTensionUnstable':
             return 'BattleTensionUnstable'
+        if buff_name == 'LineCutChance':
+            return 'LineCutChance'
