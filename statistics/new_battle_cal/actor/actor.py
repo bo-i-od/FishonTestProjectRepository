@@ -11,7 +11,7 @@ class Actor:
         # 重复叠层
         if buff_id in self.buff_dict:
             buff_object=self.buff_dict[buff_id]
-            buff_object.stack = max(buff_object.stack+1,buff_object.stackLimit)
+            # buff_object.stack = max(buff_object.stack+1,buff_object.stackLimit)
             if buff_object.stack + 1 > buff_object.stackLimit:
                 isNeedAdd = False
             else:
