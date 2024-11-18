@@ -21,6 +21,7 @@ class Player(Actor):
         self.energy = 0
         # 爆气状态
         self.ultimate_status = False
+        self.ultimate_left_time = 0
         # 收线时的拉力速度加成百分比
         self.ReelVelocityZUpRate = 0
         # 伤害加成百分比

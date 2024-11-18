@@ -29,7 +29,7 @@ now_time = 0
 total_damage = 0
 
 result=[]
-print("时间 状态     距离    鱼速度 人拉力  实际跑速  累计伤害   dps   人buff  鱼buff")
+print("时间 鱼状态  人爆气   距离    鱼速度 人拉力  实际跑速  累计伤害   dps   人buff  鱼buff")
 #result.append(["时间","距离","状态","鱼速度","人拉力","实际跑速","累计伤害"])
 
 for i in range(200):
@@ -75,6 +75,15 @@ for i in range(200):
                 now_skill_left_time = 0
                 # 弹反加buff
                 # player_object.add_buff(200006, now_time)
+    # 爆气状态维护
+    if player_object.ultimate_status:
+        player_object.ultimate_left_time -= per_time
+        if player_object.ultimate_left_time<=0:
+            player_object.ultimate_status = False
+    if player_object.energy>=3 and not player_object.ultimate_status:
+        player_object.energy-=3
+        player_object.ultimate_status = True
+        player_object.ultimate_left_time = 2000
 
     # 张力 行为变化
     if player_object.ultimate_status:
@@ -112,7 +121,7 @@ for i in range(200):
         # 计算DPS        
         total_time_seconds = now_time / 1000  # 总时间（秒）
         dps = total_damage / total_time_seconds
-        result.append([int(now_time/1000), now_skill,int(fish_line_distance), int(fish_velocityZ), int(player_velocityZ), int(now_velocityZ),int(total_damage),dps,list(player_object.buff_dict.keys()),list(fish_object.buff_dict.keys())])
+        result.append([int(now_time/1000), now_skill,player_object.ultimate_status,int(fish_line_distance), int(fish_velocityZ), int(player_velocityZ), int(now_velocityZ),int(total_damage),dps,list(player_object.buff_dict.keys()),list(fish_object.buff_dict.keys())])
 
 print(tabulate(result))
 

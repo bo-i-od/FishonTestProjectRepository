@@ -18,7 +18,7 @@ fish_skill_data={
 }
 
 # skill_list 运行到最后一个后，会重新循环
-skill_list=['swim', 'jump','swim','escape','swim','rush']
+skill_list=['swim', 'jump','jump','swim','escape','swim','jump','rush']
 
 #  以下内容暂时无视
 if __name__ == '__main__':
