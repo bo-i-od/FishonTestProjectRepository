@@ -1,11 +1,9 @@
 import copy
-import random
-import pandas as pd
-from statistics.battle_cal.my_wheel import Wheel
+# from statistics.battle_cal.my_wheel import Wheel
 from tabulate import tabulate
 from get_skill_list import *
-from player import Player
-from fish import Fish
+from statistics.new_battle_cal.actor.actor_player import Player
+from statistics.new_battle_cal.actor.actor_fish import Fish
 
 class BattleCommon:
     # 张力条总长度
