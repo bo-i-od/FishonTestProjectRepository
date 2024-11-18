@@ -43,7 +43,7 @@ class ResultPanel(BasePage):
             #     self.save_img(img)
             #     f_flag = False
 
-            self.clear_popup_once()
+            self.clear_popup()
             self.sleep(1)
             self.click_element_safe(element_data=element_btn)
 
