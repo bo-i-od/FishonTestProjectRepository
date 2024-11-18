@@ -108,17 +108,12 @@ for i in range(200):
 
     if rod_tension_status=='reel':
 
-        now_tension += player_object.rod_tension_increase * per_time/1000
-        # # 根据鱼距离判断加buff
-        # if fish_line_distance<=20:
-        #     fish_object.add_buff(200010,now_time)
-        # else:
-        #     fish_object.remove_buff(200010)
+        now_tension += player_object.get_BattleTensionUpSpeed(fish_object) * per_time/1000
         # 实际造成伤害,  基础攻击* 张力系数 * buff系数
-        do_damage = player_object.atk * BattleCommon.cal_tension_atk_rate(now_tension) * (1000 + player_object.damage_rate - fish_object.damage_rate)/1000 * per_time/cal_damage_per_time
+        do_damage = player_object.atk * BattleCommon.cal_tension_atk_rate(now_tension) * (1000 + player_object.DamageAmplifyRate - fish_object.DamageReduceRate)/1000 * per_time/cal_damage_per_time
 
     elif rod_tension_status=='not_reel':
-        now_tension += player_object.rod_tension_decrease * per_time/1000
+        now_tension += player_object.get_BattleTensionDownSpeed(fish_object) * per_time/1000
 
         do_damage = 0
 

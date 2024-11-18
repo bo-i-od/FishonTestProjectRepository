@@ -27,8 +27,8 @@ class Actor:
             setattr(self,attr_name,getattr(self,attr_name)+int(buff_object.value))
 
     def trans_buff_to_attr(self,buff_name):
-        return None
-
+        """ 人 和 鱼各自自己定义"""
+        return ""
 
     def remove_buff(self,buff_id):
         if buff_id in self.buff_dict:
