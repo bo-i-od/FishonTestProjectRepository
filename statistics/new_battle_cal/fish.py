@@ -13,18 +13,24 @@ class Fish:
         return self.velocityZ*(self.velocityZ_add_rate+1000)/1000
 
     def add_buff(self,buff_id,now_time):
+        isNeedAdd = True
         # 重复叠层
         if buff_id in self.buff_dict:
             buff_object=self.buff_dict[buff_id]
-            buff_object.stack = max(buff_object.stack+1,buff_object.stackLimit)
+            if buff_object.stack + 1 > buff_object.stackLimit:
+                isNeedAdd = False
+            else:
+                buff_object.stack += 1
+            # buff_object.stack = max(buff_object.stack+1,buff_object.stackLimit)
+            # TODO 无论叠层是否满都 refresh_time?
             buff_object.refresh_time(now_time)
         else:
             buff_object = get_buff_object(buff_id,now_time)
             self.buff_dict[buff_id]=buff_object
 
-        if buff_object.name == 'SwimVelocityZUpRate':
+        if buff_object.name == 'SwimVelocityZUpRate' and isNeedAdd:
             self.velocityZ_add_rate+= int(buff_object.value)
-        if buff_object.name == 'DamageReduceRate':
+        if buff_object.name == 'DamageReduceRate' and isNeedAdd:
             self.damage_rate +=buff_object.value
 
     def remove_buff(self,buff_id):

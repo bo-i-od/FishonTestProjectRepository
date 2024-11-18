@@ -42,18 +42,25 @@ class Player:
 
 
     def add_buff(self, buff_id, now_time):
+        isNeedAdd = True
         # 重复叠层
         if buff_id in self.buff_dict:
             buff_object = self.buff_dict[buff_id]
-            buff_object.stack = max(buff_object.stack + 1, buff_object.stackLimit)
+            if buff_object.stack + 1 > buff_object.stackLimit:
+                isNeedAdd = False
+            else:
+                buff_object.stack += 1
+            # buff_object.stack = max(buff_object.stack+1,buff_object.stackLimit)
+            # buff_object.stack = max(buff_object.stack + 1, buff_object.stackLimit)
+            # TODO 无论叠层是否满都 refresh_time?
             buff_object.refresh_time(now_time)
         else:
             buff_object = get_buff_object(buff_id, now_time)
             self.buff_dict[buff_id] = buff_object
 
-        if buff_object.name == 'ReelVelocityZUpRate':
+        if buff_object.name == 'ReelVelocityZUpRate' and isNeedAdd:
             self.velocityZ_add_rate += buff_object.value
-        if buff_object.name == 'DamageAmplifyRate':
+        if buff_object.name == 'DamageAmplifyRate' and isNeedAdd:
             self.damage_rate += buff_object.value
 
     def remove_buff(self, buff_id):
