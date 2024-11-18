@@ -39,7 +39,8 @@ now_tension = BattleCommon.start_tension  # 当前张力
 rod_tension_status = 'reel'
 # 剩余时间
 now_skill_left_time=0
-per_time=200 # 每0.2秒执行一次
+per_time=200 # 每per_time毫秒执行一次
+cal_damage_per_time=200 # 每cal_damage_per_time毫秒计算一次伤害
 # 距离，单位米
 fish_line_distance = BattleCommon.start_line
 # 当前鱼技能
@@ -52,7 +53,7 @@ now_time = 0
 total_damage = 0
 
 result=[]
-print("时间 状态     距离    鱼速度 人拉力  实际跑速  累计伤害   人buff  鱼buff")
+print("时间 状态     距离    鱼速度 人拉力  实际跑速  累计伤害   dps   人buff  鱼buff")
 #result.append(["时间","距离","状态","鱼速度","人拉力","实际跑速","累计伤害"])
 
 for i in range(200):
@@ -114,7 +115,7 @@ for i in range(200):
         # else:
         #     fish_object.remove_buff(200010)
         # 实际造成伤害,  基础攻击* 张力系数 * buff系数
-        do_damage = player_object.atk * BattleCommon.cal_tension_atk_rate(now_tension) * (1000 + player_object.damage_rate - fish_object.damage_rate)/1000
+        do_damage = player_object.atk * BattleCommon.cal_tension_atk_rate(now_tension) * (1000 + player_object.damage_rate - fish_object.damage_rate)/1000 * per_time/cal_damage_per_time
 
     elif rod_tension_status=='not_reel':
         now_tension += player_object.rod_tension_decrease * per_time/1000
@@ -133,7 +134,10 @@ for i in range(200):
     now_time += per_time
 
     if now_time%1000==0:
-        result.append([int(now_time/1000), now_skill,int(fish_line_distance), int(fish_velocityZ), int(player_velocityZ), int(now_velocityZ),int(total_damage),list(player_object.buff_dict.keys()),list(fish_object.buff_dict.keys())])
+        # 计算DPS        
+        total_time_seconds = now_time / 1000  # 总时间（秒）
+        dps = total_damage / total_time_seconds
+        result.append([int(now_time/1000), now_skill,int(fish_line_distance), int(fish_velocityZ), int(player_velocityZ), int(now_velocityZ),int(total_damage),dps,list(player_object.buff_dict.keys()),list(fish_object.buff_dict.keys())])
 
 print(tabulate(result))
 
