@@ -9,14 +9,6 @@ TIMEMS='time'
 BUFF_LIST='buff_list'
 COUNTER_TIME='canCounterTimingMS'
 
-""" 
-注，目前支持buff类型
-SwimVelocityZUpRate
-DamageReduceRate
-ReelVelocityZUpRate
-DamageAmplifyRate
-"""
-
 fish_skill_data={
     FISH_SWIM:{TIMEMS:1000},
     CUT_LINE:{TIMEMS:3000,COUNTER_TIME:1000},
@@ -28,6 +20,7 @@ fish_skill_data={
 # skill_list 运行到最后一个后，会重新循环
 skill_list=['swim', 'jump','swim','escape','swim','rush']
 
+#  以下内容暂时无视
 if __name__ == '__main__':
     # fish_random_skill_list=[CUT_LINE,RUSH,ESCAPE,JUMP]
     #

@@ -4,31 +4,7 @@ from tabulate import tabulate
 from get_skill_list import *
 from statistics.new_battle_cal.actor.actor_player import Player
 from statistics.new_battle_cal.actor.actor_fish import Fish
-
-class BattleCommon:
-    # 张力条总长度
-    tension_total_max=10000
-    # 张力条到极限，开始松手
-    tension_max=9000
-    tension_min=8000
-
-    # 初始鱼线位置
-    start_line=20
-    # 初始张力条位置
-    start_tension=4000
-
-    @classmethod
-    def cal_tension_atk_rate(cls,tension_now):
-        """ 张力伤害计算公式 """
-        rate = tension_now / cls.tension_total_max
-        if rate > 0.8:
-            return 1
-        elif rate > 0.6:
-            return 0.85
-        elif rate > 0.3:
-            return 0.55
-        else:
-            return 0.25
+from statistics.new_battle_cal.battle_common import BattleCommon
 
 
 # ----------初始化各项参数 ----------------
@@ -101,20 +77,24 @@ for i in range(200):
                 # player_object.add_buff(200006, now_time)
 
     # 张力 行为变化
-    if now_tension >= BattleCommon.tension_max:
-        rod_tension_status = 'not_reel'
-    if now_tension <= BattleCommon.tension_min:
+    if player_object.ultimate_status:
         rod_tension_status = 'reel'
+    else:
+        if now_tension >= BattleCommon.tension_max:
+            rod_tension_status = 'not_reel'
+        if now_tension <= BattleCommon.tension_min:
+            rod_tension_status = 'reel'
 
-    if rod_tension_status=='reel':
+    if not player_object.ultimate_status:
+        # 爆气时张力不变
+        if rod_tension_status=='reel':
+            now_tension += player_object.get_BattleTensionUpSpeed(fish_object) * per_time/1000
+        elif rod_tension_status=='not_reel':
+            now_tension += player_object.get_BattleTensionDownSpeed(fish_object) * per_time/1000
 
-        now_tension += player_object.get_BattleTensionUpSpeed(fish_object) * per_time/1000
-        # 实际造成伤害,  基础攻击* 张力系数 * buff系数
-        do_damage = player_object.atk * BattleCommon.cal_tension_atk_rate(now_tension) * (1000 + player_object.DamageAmplifyRate - fish_object.DamageReduceRate)/1000 * per_time/cal_damage_per_time
-
-    elif rod_tension_status=='not_reel':
-        now_tension += player_object.get_BattleTensionDownSpeed(fish_object) * per_time/1000
-
+    if rod_tension_status == 'reel':
+        do_damage = player_object.get_final_damage(fish_object,now_tension) * per_time/cal_damage_per_time
+    else:
         do_damage = 0
 
     player_velocityZ = player_object.get_current_velocityZ(rod_tension_status)
