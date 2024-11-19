@@ -95,7 +95,7 @@ for i in range(200):
             rod_tension_status = 'reel'
 
     if not player_object.ultimate_status:
-        # 爆气时张力不变
+        # 非爆气时计算张力变化，爆气时张力不变
         if rod_tension_status=='reel':
             now_tension += player_object.get_BattleTensionUpSpeed(fish_object) * per_time/1000
         elif rod_tension_status=='not_reel':
