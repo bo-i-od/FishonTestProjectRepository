@@ -1,5 +1,5 @@
 # 配置表路径
-file_path="C:/Users/TU/Documents/Dev_NewBattle/datapool/ElementData/BaseData/"
+file_path="G:/proj/Dev_NewBattle/datapool/ElementData/BaseData/"
 
 # 速度相关
 # 鱼跑速

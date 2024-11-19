@@ -15,7 +15,7 @@ JUMP='JUMP'
 QTE='QTE'
 
 # ----------初始化各项参数 ----------------
-fish_object = Fish(131296)
+fish_object = Fish("301001", "1")
 player_object = Player()
 # 张力
 now_tension = BattleCommon.start_tension  # 当前张力
