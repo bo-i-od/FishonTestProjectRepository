@@ -8,7 +8,7 @@ from statistics.new_battle_cal.battle_common import BattleCommon
 
 
 # ----------初始化各项参数 ----------------
-fish_object = Fish()
+fish_object = Fish(131296)
 player_object = Player()
 # 张力
 now_tension = BattleCommon.start_tension  # 当前张力

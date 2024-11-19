@@ -1,9 +1,9 @@
 from statistics.new_battle_cal.actor.actor import Actor
 from statistics.new_battle_cal import attr_config
-
+from read_config.read_config import *
 
 class Fish(Actor):
-    def __init__(self):
+    def __init__(self, fish_id):
         super().__init__()
         self.velocityZ = attr_config.fish_velocityZ
         # 战斗中鱼免伤率
@@ -18,6 +18,14 @@ class Fish(Actor):
         self.TensionUnstableValue = 0
         # buff系统里对 鱼张力战斗值 直接影响的增量值 （一般buff不会直接修改对应值的增量，而是修改相关系数，但是少量buff这么改了，且客户端逻辑支持，就先保障和客户端实现效果一样处理了 ）
         self.BattleTensionUnstable = 0
+        # 鱼id
+        self.fish_id = fish_id
+        # 鱼读表数据
+        self.fish_data = fish_data[str(fish_id)]
+
+    def dump(self):
+        print("=====Fish=====")
+        print(self.fish_data)
 
     def get_current_velocityZ(self):
         """获取鱼跑速"""

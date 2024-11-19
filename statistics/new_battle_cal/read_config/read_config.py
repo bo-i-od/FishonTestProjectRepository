@@ -1,3 +1,5 @@
+import json
+
 from statistics.new_battle_cal.read_config.translate_assist_diff_versions import doWorkOnDataTxtFile
 from statistics.new_battle_cal import attr_config
 file_path=attr_config.file_path
@@ -7,7 +9,8 @@ collect_map = {}
 collect_dup_map = None
 
 # 将需要处理的文件名放入列表中
-data_keys = ["BATTLE_SKILL", "BATTLE_BUFF", "FISH_TYPECLASS_VISUAL", "FISH_STAR_GRADING"]
+data_keys = ["BATTLE_SKILL", "BATTLE_BUFF", "FISH_TYPECLASS_VISUAL", "FISH_STAR_GRADING", "FISHERIES", "FISH"]
+# data_keys = ["FISH"]
 
 for data_key in data_keys:
     doWorkOnDataTxtFile(file_path + data_key + ".data.txt", 'en', collect_list, collect_dup_map, collect_map)
@@ -16,5 +19,5 @@ for data_key in data_keys:
 if __name__ == '__main__':
     # print(battle_buff_data)
     # print(battle_skill_data)
-    print(battle_skill_data)
-    # print(collect_list)
+    with open('test_data.json', 'w', encoding='utf-8') as json_file:
+        json.dump(fish_data, json_file, ensure_ascii=False, indent=4)
