@@ -1084,7 +1084,10 @@ class BasePage(BasePageMain):
             return
         if command_list is None:
             return
-        rpcMethodRequest.cmd(self.poco, command_list)
+        lua_code = "local ConsolePanel = require('View.Common.ConsolePanel')\n"
+        for command in command_list:
+            lua_code += f'ConsolePanel:OnPocoCMD("{command}")\n'
+        self.lua_console(lua_code)
 
     def cmd(self, command):
         if command == "":
@@ -1350,19 +1353,29 @@ class BasePage(BasePageMain):
 
 
 if __name__ == '__main__':
-    bp = BasePage(is_mobile_device=True, serial_number="127.0.0.1:21503", is_monitor=True)
+    bp = BasePage(is_mobile_device=True, serial_number="b6h65hd64p5pxcyh", is_monitor=True)
+    # "127.0.0.1:21613"
+    # "b6h65hd64p5pxcyh"
+    # bp.set_item_count(item_tpid="100500", target_count=10000)
+    # bp.lua_console('PanelMgr:OpenPanel("HomePanel")')
+    bp.cmd("guideskip")
+    bp.sleep(0.1)
+    bp.cmd("levelupto 76")
+    bp.sleep(0.1)
+    bp.cmd("add 1 100500 100")
+    bp.connect_close()
     # a = bp.get_tpid(item_icon_name="coin_gold")
     # bp.set_item_count(target_count=2500, item_tpid="100500")
     # bp.excelTools.get_table_data_detail_by_base_data("ACTIVITY_DOUBLE_WEEK.xlsm")
     # bp.lua_console("PrintTable(_G.PassiveNewbieGuideEnum)")
-    try:
-        cur = 0
-        while True:
-            bp.sleep(1)
-            print(cur)
-            cur += 1
-    except Exception as e:
-        print(e, "被中断")
+    # try:
+    #     cur = 0
+    #     while True:
+    #         bp.sleep(1)
+    #         print(cur)
+    #         cur += 1
+    # except Exception as e:
+    #     print(e, "被中断")
 
     # bp.connect_close()
     # while True:
