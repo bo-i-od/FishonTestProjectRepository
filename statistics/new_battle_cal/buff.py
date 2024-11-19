@@ -1,5 +1,5 @@
 import time
-from read_config.read_config import *
+from statistics.new_battle_cal.read_config.read_config import *
 class Buff:
     def __init__(self, name, duration, value, stackLimit,now_time):
         self.name = name # buff名

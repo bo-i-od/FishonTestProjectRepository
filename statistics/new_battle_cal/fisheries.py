@@ -1,4 +1,4 @@
-from read_config.read_config import *
+from statistics.new_battle_cal.read_config.read_config import *
 
 class Fisheries:
     def __init__(self,fish_id):        

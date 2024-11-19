@@ -2,11 +2,10 @@ from statistics.new_battle_cal.actor.actor import Actor
 from statistics.new_battle_cal import attr_config
 from statistics.new_battle_cal.fisheries import Fisheries
 from statistics.new_battle_cal.fish_typeclass_visual import FishTypeClassVisual
-from read_config.read_config import *
+from statistics.new_battle_cal.read_config.read_config import *
 
 class Fish(Actor):
-    def __init__(self, fish_id, fish_star):
-        """fish_id: 鱼的id，fish_star: 鱼的星级"""
+    def __init__(self, fish_id):
         super().__init__()
         self.velocityZ = attr_config.fish_velocityZ
         # 战斗中鱼免伤率
@@ -24,8 +23,10 @@ class Fish(Actor):
         # 鱼数据
         self.fish_data = {}
         for id, data in fish_data.items():
-            if data['tpId'] == fish_id:
+            tpId = data.get('tpId', None)
+            if tpId and tpId == fish_id:
                 self.fish_data = data
+                break
         # 鱼所在渔场的数据
         self.fishery = Fisheries(fish_id)
 
@@ -45,10 +46,22 @@ class Fish(Actor):
 
         # 张力上涨 = FISH_TYPECLASS_VISUAL.tensionReel + FISH_STAR_GRADING.tensionReel + FISHERIES.tensionReel + FISH.tensionReel
         #     a. = 鱼体型 + (鱼卡提供的星级修正 or 渔场星级提供的倍率) + 鱼场修正 + 鱼修正
+        
+        # 鱼体型
         fishtypeclass_tension = FishTypeClassVisual.get_tension_reel_by_class_and_type(self.fish_data["fishType"], self.fish_data["fishClass"])
+        # 鱼场修正
         fishery_tension = self.fishery.get_tension_reel()
+        # 鱼修正
+        fish_tension = self.fish_data.get("tensionReel", 0)
 
-        return attr_config.GrowthTensionUnstable
+        # print(f"fishery_tension: {fishery_tension}, fishtypeclass_tension: {fishtypeclass_tension}, fish_tension: {fish_tension}")
+        # return attr_config.GrowthTensionUnstable
+
+        # TODO 渔场星级提供的倍率
+
+        ret = int(fishtypeclass_tension) + int(fishery_tension) + int(fish_tension)
+        return ret
+
     def get_BattleTensionUnstable(self):
         """获取鱼战斗张力值"""
         return attr_config.GrowthTensionUnstable*(1000+self.TensionUnstableRate)/1000+self.TensionUnstableValue+self.BattleTensionUnstable
@@ -66,3 +79,7 @@ class Fish(Actor):
             return 'BattleTensionUnstable'
         if buff_name == 'LineCutChance':
             return 'LineCutChance'
+
+if __name__ == "__main__":
+    fish = Fish("302001")
+    print(fish.get_GrowthTensionUnstable())
