@@ -1,11 +1,18 @@
 import copy
 # from statistics.battle_cal.my_wheel import Wheel
 from tabulate import tabulate
-from get_skill_list import *
+from statistics.new_battle_cal.fish_ai.fish_behaviour import skill_list
 from statistics.new_battle_cal.actor.actor_player import Player
 from statistics.new_battle_cal.actor.actor_fish import Fish
 from statistics.new_battle_cal.battle_common import BattleCommon
 
+# --------------------fish ai相关key------------
+TIMEMS='timeMS'
+BUFF_LIST='buffList'
+COUNTER_TIME='canCounterTimingMS'
+TYPE='type'
+JUMP='JUMP'
+QTE='QTE'
 
 # ----------初始化各项参数 ----------------
 fish_object = Fish(131296)
@@ -46,8 +53,8 @@ for i in range(200):
         # 初始化
         if len(fish_skill_list)==0:
             fish_skill_list = copy.deepcopy(skill_list)
-        now_skill = fish_skill_list.pop(0)  # 下个技能
-        fish_skill_info = fish_skill_data[now_skill]
+        fish_skill_info= fish_skill_list.pop(0)
+        now_skill = fish_skill_info[TYPE]  # 下个技能
         if BUFF_LIST in fish_skill_info:
             buff_id=fish_skill_info[BUFF_LIST][0]
             fish_object.add_buff(buff_id,now_time)
@@ -55,7 +62,7 @@ for i in range(200):
         now_skill_left_time=fish_skill_info[TIMEMS]
 
         # 如果是QTE，还额外触发一次QTE
-        if now_skill==JUMP:
+        if now_skill in [JUMP,QTE]:
             player_object.energy+=1
             # QTE触发技能
             # player_object.add_buff(200003, now_time)
