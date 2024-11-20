@@ -381,6 +381,19 @@ class ElementsData:
         BattleTreasureMapDescriptionPanel = {"locator": "UICanvas>Default>BattleTreasureMapDescriptionPanel"}
         btn_close = {"locator": "UICanvas>Default>BattleTreasureMapDescriptionPanel>bg>btn_close>img"}
 
+    class BugMultiple:
+        BugMultiplePanel = {"locator": "UICanvas>Default>BugMultiplePanel"}
+        btn_cancel = {"locator": "UICanvas>Default>BugMultiplePanel>panel>btns>btn_cancel"}
+        btn_confirm = {"locator": "UICanvas>Default>BugMultiplePanel>panel>btns>btn_confirm"}
+        btn_min = {"locator": "UICanvas>Default>BugMultiplePanel>panel>btn_min"}
+        btn_max = {"locator": "UICanvas>Default>BugMultiplePanel>panel>btn_max"}
+        btn_sub = {"locator": "UICanvas>Default>BugMultiplePanel>panel>btn_sub"}
+        btn_add = {"locator": "UICanvas>Default>BugMultiplePanel>panel>btn_add"}
+        slider = {"locator": "UICanvas>Default>BugMultiplePanel>panel>slider"}
+        value = {"locator": "UICanvas>Default>BugMultiplePanel>panel>value"}
+        icon = {"locator":"UICanvas>Default>BugMultiplePanel>panel>item>item_model_mini>icon"}
+        quantity= {"locator":"UICanvas>Default>BugMultiplePanel>panel>item>item_model_mini>quantity>value"}
+
     class BuyEnergy:
         BuyEnergyPanel = {"locator": "UICanvas>Default>BuyEnergyPanel"}
         btn_close = {"locator": "UICanvas>Default>BuyEnergyPanel>btn_close>text"}
@@ -1530,6 +1543,7 @@ class ElementsData:
             btn_disabled_list = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_4>panel_list_type2>view_port>content>>btn_disabled>text"}
             box_list = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_4>panel_list_type2>view_port>content>>group>icon_box"}
             item_list = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_4>panel_list_type2>view_port>content>"}
+
 
         class Cash:
             cash_list = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_3>content>"}

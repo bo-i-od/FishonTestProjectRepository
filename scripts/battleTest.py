@@ -261,7 +261,8 @@ def fishbone_all(bp: BasePage, fishery_id, is_gold=False, is_double_week=False, 
             go_to_treasure_map(bp, fishery_id=fishery_id, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
         fish_once(bp, fishery_id=fishery_id, fish_id=drop_item_id, is_quick=True)
         bp.sleep(3)
-        BattlePreparePanel.click_btn_icon_warning(bp)
+        btn_icon_warning_position = BattlePreparePanel.get_btn_icon_warning_position(bp)[0]
+        bp.click_position(btn_icon_warning_position)
 
         bp.sleep(1)
         img = bp.get_full_screen_shot()
@@ -288,7 +289,8 @@ def fail_all(bp: BasePage, fishery_id, is_gold=False, is_double_week=False, is_i
 
             # 点击图标截图
             bp.sleep(3)
-            BattlePreparePanel.click_btn_icon_warning(bp)
+            btn_icon_warning_position = BattlePreparePanel.get_btn_icon_warning_position(bp)[0]
+            bp.click_position(btn_icon_warning_position)
             bp.sleep(1)
             img = bp.get_full_screen_shot()
             bp.save_img(img)
@@ -335,7 +337,8 @@ def fail_all(bp: BasePage, fishery_id, is_gold=False, is_double_week=False, is_i
 
         # 点击图标截图
         bp.sleep(3)
-        BattlePreparePanel.click_btn_icon_warning(bp)
+        btn_icon_warning_position = BattlePreparePanel.get_btn_icon_warning_position(bp)[0]
+        bp.click_position(btn_icon_warning_position)
         bp.sleep(1)
         img = bp.get_full_screen_shot()
         bp.save_img(img)
@@ -399,9 +402,9 @@ if __name__ == '__main__':
     # bp.set_item_count(target_count=1000000000, item_tpid="100500")
 
     # main(bp, fishery_id="400321",  is_double_week=True, is_in_double_week=True)
-    # circulate_fish(bp, is_quick=False, fishery_id="400320")
+    circulate_fish(bp, is_quick=True)
     # fish_all(bp, is_quick=False)
-    fish_once(bp, is_quick=False)
+    # fish_once(bp, is_quick=False)
     # 断开连接
     bp.connect_close()
 

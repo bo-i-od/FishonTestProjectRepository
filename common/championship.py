@@ -7,12 +7,17 @@ from panelObjs.loadingPanel import LoadingPanel
 from panelObjs.loginPanel import LoginPanel
 from panelObjs.tournamentsInfoPanel import TournamentsInfoPanel
 from panelObjs.tournamentsPanel import TournamentsPanel
-from scripts.battleTest import circulate_fish
+from scripts.battleTest import circulate_fish, fish_once
 from scripts.duelTest import duel_once
 
 
 def check_reward(bp, overflow_factor: float = 1):
     BattlePreparePanel.wait_for_panel_appear(bp)
+
+    # 鱼情不管当前到没到积分
+    if BattlePreparePanel.get_btn_icon_warning_position(bp):
+        return False
+
     if BattlePreparePanel.is_wait_for_join(bp):
         return False
     if not BattlePreparePanel.click_btn_tournaments(bp):
@@ -67,6 +72,10 @@ def championship(bp, index, times, cost=1, is_monitor=False, overflow_factor: fl
             return bp
 
         circulate_fish(bp, times=times, is_quick=False)
+
+        while BattlePreparePanel.get_btn_icon_warning_position(bp):
+            fish_once(bp, is_quick=False)
+
         bp.go_home()
     except Exception as e:
         print(e)
@@ -77,7 +86,7 @@ def championship(bp, index, times, cost=1, is_monitor=False, overflow_factor: fl
 
 if __name__ == '__main__':
     serial_number = "127.0.0.1:21503"
-    base_page = BasePage(serial_number=serial_number, is_mobile_device=True, is_monitor=True)
+    base_page = BasePage(serial_number=serial_number, is_mobile_device=False, is_monitor=True)
     print(serial_number)
     # base_page.set_send_log_flag(False)
     gameInit.set_joystick(base_page)

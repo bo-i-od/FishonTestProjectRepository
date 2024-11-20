@@ -64,6 +64,7 @@ class JumpData:
         "BattlePreparePanel": [ElementsData.BattlePrepare.btn_close],
         "BattleTreasureMapPanel":[ElementsData.BattleTreasureMap.btn_close],
         "BattleTreasureMapDescriptionPanel": [ElementsData.BattleTreasureMapDescription.btn_close],
+        "BugMultiplePanel": [ElementsData.BugMultiple.btn_cancel],
         "BuyEnergyPanel": [ElementsData.BuyEnergy.btn_close],
         "CareerPanel": [ElementsData.Career.btn_close],
         "ChampointshipResultPopup": [ElementsData.ChampointshipResult.btn_close],

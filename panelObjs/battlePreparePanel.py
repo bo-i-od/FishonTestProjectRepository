@@ -173,8 +173,8 @@ class BattlePreparePanel(BasePage):
     def is_panel_tip_location_active(self):
         return self.exist(element_data=ElementsData.BattlePrepare.panel_tip_location_newtreasure)
 
-    def click_btn_icon_warning(self):
-        self.click_element(element_data=ElementsData.BattlePrepare.PanelPrepareWarning.btn_icon)
+    def get_btn_icon_warning_position(self):
+        return self.get_position_list(element_data=ElementsData.BattlePrepare.PanelPrepareWarning.btn_icon)
 
     def get_value_cost(self):
         self.wait_for_appear(element_data=ElementsData.BattlePrepare.btn_cast, is_click=False)

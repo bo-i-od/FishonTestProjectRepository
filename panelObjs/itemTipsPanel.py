@@ -13,4 +13,4 @@ class ItemTipsPanel(BasePage):
         return self.get_text(element_data=ElementsData.ItemTips.title)
 
     def get_item_quantitiy(self):
-        return self.get_text(element_data=ElementsData.ItemTips.quantity)
+        return int(self.get_text(element_data=ElementsData.ItemTips.quantity))
