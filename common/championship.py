@@ -77,7 +77,7 @@ def championship(bp, index, times, cost=1, is_monitor=False, overflow_factor: fl
 
 if __name__ == '__main__':
     serial_number = "127.0.0.1:21503"
-    base_page = BasePage(serial_number=serial_number, is_mobile_device=False, is_monitor=True)
+    base_page = BasePage(serial_number=serial_number, is_mobile_device=True, is_monitor=True)
     print(serial_number)
     # base_page.set_send_log_flag(False)
     gameInit.set_joystick(base_page)
@@ -90,7 +90,7 @@ if __name__ == '__main__':
     # circulate_fish(bp=base_page, is_quick=False, times=30)
     # base_page.sleep(3600)
     while True:
-        base_page = championship(base_page, 0, 5, cost=2, overflow_factor=1.1, is_monitor=True)
+        base_page = championship(base_page, 0, 5, cost=2, overflow_factor=1, is_monitor=True)
         # base_page.sleep(60)
         base_page = championship(base_page, 1, 5, cost=1, overflow_factor=1, is_monitor=True)
         # base_page.sleep(60)
