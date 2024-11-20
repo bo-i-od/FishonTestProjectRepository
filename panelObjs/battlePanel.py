@@ -142,21 +142,24 @@ class BattlePanel(BasePage):
     def hook(self):
         self.wait_for_appear(element_data=ElementsData.Battle.btn_reel, is_click=False, timeout=25)
         # 如果没有刺鱼就跳过
-        progress_position = self.get_position_list(element_data=ElementsData.Battle.progress)
+        progress_position, arrow_position = self.get_position_list(element_data_list=[ElementsData.Battle.progress, ElementsData.Battle.arrow])
         if not progress_position:
             return
-        progress_size = self.get_size(element_data=ElementsData.Battle.progress)
-        h = progress_size[1]
-        range = [progress_position[0][1] - 0.5 * h, progress_position[0][1] + 0.5 * h]
-        arrow_position = self.get_position_list(element_data=ElementsData.Battle.arrow)
         if not arrow_position:
             return
-        progress = (arrow_position[0][1] - range[0]) / h
+        progress_size_list = self.get_size_list(element_data=ElementsData.Battle.progress)
+        if not progress_size_list:
+            return
+        progress_size = progress_size_list[0]
+        h = progress_size[1]
+        progress_range = [progress_position[0][1] - 0.5 * h, progress_position[0][1] + 0.5 * h]
+
+        progress = (arrow_position[0][1] - progress_range[0]) / h
         while progress < 0.7:
             arrow_position = self.get_position_list(element_data=ElementsData.Battle.arrow)
             if not arrow_position:
                 return
-            progress = (arrow_position[0][1] - range[0]) / h
+            progress = (arrow_position[0][1] - progress_range[0]) / h
             self.sleep(0.05)
         try:
             self.ray_input(element_data=ElementsData.Battle.btn_reel, target_name="btn_cast", kind="down")

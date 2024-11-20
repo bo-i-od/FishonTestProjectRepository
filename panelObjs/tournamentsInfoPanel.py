@@ -19,3 +19,9 @@ class TournamentsInfoPanel(BasePage):
 
     def is_checked(self):
         return self.exist(element_data=ElementsData.TournamentsInfo.check)
+
+    def get_progress(self):
+        progress_cur_text, progress_max_text = self.get_text_list(element_data_list=[ElementsData.TournamentsInfo.progress_cur, ElementsData.TournamentsInfo.progress_max])
+        progress_cur = int(progress_cur_text[0])
+        progress_max = int(progress_max_text[0])
+        return progress_cur, progress_max

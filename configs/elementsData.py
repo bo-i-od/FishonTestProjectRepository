@@ -1626,6 +1626,8 @@ class ElementsData:
         btn_close = {"locator": "UICanvas>Default>TournamentsInfoPanel>panel>btn_close>img"}
         tab_list = {"locator": "UICanvas>Default>TournamentsInfoPanel>panel>panel_tab_list>panel_tab>TabList>Viewport>Content>>bg"}
         check = {"locator": "UICanvas>Default>TournamentsInfoPanel>panel>panel_rules>rules_2>progress_info>reward>item_model_mini>collected>check"}
+        progress_cur = {"locator": "UICanvas>Default>TournamentsInfoPanel>panel>panel_rules>rules_2>progress_info>progressValueLayout>cur"}
+        progress_max = {"locator": "UICanvas>Default>TournamentsInfoPanel>panel>panel_rules>rules_2>progress_info>progressValueLayout>max"}
 
 
     class TreasureChestGearsShards:

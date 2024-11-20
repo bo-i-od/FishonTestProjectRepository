@@ -11,7 +11,7 @@ from scripts.battleTest import circulate_fish
 from scripts.duelTest import duel_once
 
 
-def check_reward(bp):
+def check_reward(bp, overflow_factor: float = 1):
     BattlePreparePanel.wait_for_panel_appear(bp)
     if BattlePreparePanel.is_wait_for_join(bp):
         return False
@@ -20,16 +20,20 @@ def check_reward(bp):
 
     TournamentsInfoPanel.switch_tab(bp, 2)
     bp.sleep(0.5)
-    if TournamentsInfoPanel.is_checked(bp):
+    if not TournamentsInfoPanel.is_checked(bp):
+        TournamentsInfoPanel.click_btn_close(bp)
+        return False
+
+    progress_cur, progress_max = TournamentsInfoPanel.get_progress(bp)
+    if progress_cur > progress_max * overflow_factor:
         TournamentsInfoPanel.click_btn_close(bp)
         return True
     TournamentsInfoPanel.click_btn_close(bp)
     return False
 
 
-
 # cost=1是x1, cost=2是x3, cost=3是x10
-def championship(bp, index, times, cost=1, is_monitor=False):
+def championship(bp, index, times, cost=1, is_monitor=False, overflow_factor: float = 1):
     try:
         gameInit.set_joystick(bp)
         bp.clear_popup()
@@ -58,7 +62,7 @@ def championship(bp, index, times, cost=1, is_monitor=False):
         bp.lua_console(lua_code)
         bp.sleep(0.5)
 
-        if check_reward(bp):
+        if check_reward(bp, overflow_factor=overflow_factor):
             bp.go_home()
             return bp
 
@@ -73,20 +77,20 @@ def championship(bp, index, times, cost=1, is_monitor=False):
 
 if __name__ == '__main__':
     serial_number = "127.0.0.1:21503"
-    base_page = BasePage(serial_number=serial_number, is_mobile_device=True, is_monitor=True)
+    base_page = BasePage(serial_number=serial_number, is_mobile_device=False, is_monitor=True)
     print(serial_number)
     # base_page.set_send_log_flag(False)
     gameInit.set_joystick(base_page)
     base_page.custom_cmd("setTension 0.95")
     # cur = 0
-    # while cur < 3:
+    # while cur < 5:
     #     duel_once(base_page, 0)
     #     cur += 1
     #     print(f"第{cur}次钓鱼")
-    # circulate_fish(bp=base_page, is_quick=False, times=2)
+    # circulate_fish(bp=base_page, is_quick=False, times=30)
     # base_page.sleep(3600)
     while True:
-        base_page = championship(base_page, 0, 5, cost=1, is_monitor=True)
+        base_page = championship(base_page, 0, 5, cost=2, overflow_factor=1.1, is_monitor=True)
         # base_page.sleep(60)
-        base_page = championship(base_page, 1, 5, cost=1, is_monitor=True)
+        base_page = championship(base_page, 1, 5, cost=1, overflow_factor=1, is_monitor=True)
         # base_page.sleep(60)
