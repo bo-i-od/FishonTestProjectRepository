@@ -402,7 +402,7 @@ def gear(bp: BasePage):
 
 
 def guide(bp: BasePage):
-    guideTest.newbieGuidePanelTest(bp)
+    guideTest.rookie_guide_test(bp)
 
 
 def login(bp: BasePage):
@@ -460,7 +460,7 @@ def newbie_task(bp: BasePage):
     bp.go_home()
 
 def playerEditName(bp: BasePage):
-    guideTest.playerEditNamePanelTest(bp)
+    guideTest.player_edit_name_test(bp)
 
 
 def player_setting(bp: BasePage):

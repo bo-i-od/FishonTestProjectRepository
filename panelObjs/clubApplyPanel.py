@@ -13,7 +13,4 @@ class ClubApplyPanel(BasePage):
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.ClubApply.ClubApplyPanel)
 
-    def guide(self):
-        perform_list = [ElementsData.NewbieGuide.NBG_system_click_Club, ElementsData.NewbieGuide.NBG_system_club_apply]
-        self.click_a_until_b_appear_list(perform_list=perform_list)
-        self.click_until_disappear(element_data=ElementsData.NewbieGuide.NBG_system_club_apply)
+

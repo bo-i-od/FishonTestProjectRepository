@@ -532,7 +532,7 @@ def gear(bp: BasePage):
 
 
 def guide(bp: BasePage):
-    guideTest.newbieGuidePanelTest(bp)
+    guideTest.rookie_guide_test(bp)
 
 
 def login(bp: BasePage):

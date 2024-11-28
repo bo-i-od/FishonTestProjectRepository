@@ -23,7 +23,6 @@ class JumpData:
         "LocationPanel",
         "LoginAnnouncementPanel",
         "PartySalePanel",
-        # "NBG_prepare_2_album_01(Clone)",
         "PlayerLevelupPanel",
         "PVENewbieGiftPackPanel",
         "PVPBoosterGiftPackPanel",
@@ -32,11 +31,10 @@ class JumpData:
         "RechargeBlack5Panel",
         "RodSkinGiftPack027Panel",
         "RodSkinGiftPack030Panel",
-        "BattleTreasureMapPanel",
+        "StoreSuitPopupPanel",
         "MessageBoxPanel",
         "MidAutumnPackPopupPanel",
         "MonthCardPopPanel",
-
     }
 
     panel_close_dict = {
@@ -102,7 +100,6 @@ class JumpData:
         "MessageBoxPanel": [ElementsData.MessageBox.toggle, ElementsData.MessageBox.btn_confirm],
         "MidAutumnPackPopupPanel":[ElementsData.MidAutumnPackPopup.btn_close],
         "MonthCardPopPanel": [ElementsData.MonthCardPop.btn_close],
-        # "NBG_prepare_2_album_01(Clone)": [ElementsData.NewbieGuide.NBG_prepare_2_album_01, ElementsData.NewbieGuide.NBG_prepare_2_album_02, ElementsData.NewbieGuide.NBG_prepare_2_album_03, ElementsData.NewbieGuide.NBG_album_01, ElementsData.NewbieGuide.NBG_album_02, ElementsData.NewbieGuide.NBG_album_03, ElementsData.NewbieGuide.NBG_prepare_weak_01],
         "PartySalePanel":[ElementsData.PartySale.btn_close],
         "PlayerInfoPanel": [ElementsData.PlayerInfo.btn_close_additional, ElementsData.PlayerInfo.btn_confirm, ElementsData.PlayerInfo.btn_close,ElementsData.PlayerInfo_oversea.btn_close],
         "PlayerSettingPanel": [ElementsData.PlayerSetting.btn_close_additional, ElementsData.PlayerSetting.btn_close],
@@ -127,6 +124,7 @@ class JumpData:
         "RodSkinGiftPack030Panel":[ElementsData.RodSkinGiftPack030.btn_close],
         "RoulettePanel": [ElementsData.Roulette.btn_close],
         "StorePanel": [ElementsData.Store.btn_close],
+        "StoreSuitPopupPanel": [ElementsData.StoreSuitPopup.btn_close],
         "TaskFishingCareerPanel": [ElementsData.TaskFishingCareer.btn_close],
         "TaskPanel": [ElementsData.Task.btn_close],
         "TournamentsPanel": [ElementsData.Tournaments.btn_close],
@@ -169,3 +167,13 @@ class JumpData:
         "TournamentsPanel": {"element_data": ElementsData.Tournaments.TournamentsPanel, "open_path": [ElementsData.Home.btn_pve]},
         "TreasureChestPanel": {"element_data": ElementsData.TreasureChest.TreasureChestPanel, "open_path": [ElementsData.Home.btn_chest]},
     }
+
+
+
+
+
+
+
+
+
+

@@ -3,13 +3,13 @@ from configs.elementsData import ElementsData
 from tools.commonTools import *
 from common.viewport import Viewport
 
+
 class AchievementPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.Achievement.btn_close)
 
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.Achievement.AchievementPanel)
-
 
     def is_unlock_tips_active(self):
         return self.exist(element_data=ElementsData.Achievement.tips_unlock)

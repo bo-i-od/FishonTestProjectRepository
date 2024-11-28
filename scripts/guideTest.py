@@ -23,7 +23,7 @@ from tools.commonTools import *
 
 
 
-def playerEditNamePanelTest(bp: BasePage):
+def player_edit_name_test(bp: BasePage):
     if not PlayerEditNamePanel.is_panel_active(bp):
         return
     name = PlayerEditNamePanel.get_player_name(bp)
@@ -42,26 +42,25 @@ def playerEditNamePanelTest(bp: BasePage):
     select_object_id = PlayerEditNamePanel.get_select_object_id(bp)
     head_expect_object_id = bp.get_parent_id(select_object_id)
     # 看他们parent是不是相同
-    if head_object_id != head_expect_object_id:
-        bp.debug_log("error:if head_object_id != head_expect_object_id")
+    compare(head_object_id, head_expect_object_id)
+
     # 点击确认按钮
     PlayerEditNamePanel.click_confirm(bp)
     bp.sleep(1)
 
 
-def newbieGuidePanelTest(bp: BasePage):
+def rookie_guide_test(bp: BasePage):
     start_page = NewbieGuidePanel.get_start_page(bp)
     if start_page > 3:
-        NewbieGuidePanel.rookie_guide_1(bp)
-        NewbieGuidePanel.rookie_guide_2(bp)
+        NewbieGuidePanel.guide_rookie_1(bp)
+        NewbieGuidePanel.guide_rookie_2(bp)
     if start_page > 2:
-        NewbieGuidePanel.rookie_guide_3(bp)
-        NewbieGuidePanel.rookie_guide_4(bp)
+        NewbieGuidePanel.guide_rookie_3(bp)
+        NewbieGuidePanel.guide_rookie_4(bp)
     if start_page > 1:
-        NewbieGuidePanel.rookie_guide_5(bp)
+        NewbieGuidePanel.guide_rookie_5(bp)
     if start_page > 0:
-        NewbieGuidePanel.rookie_guide_6(bp)
-
+        NewbieGuidePanel.guide_rookie_6(bp)
 
 
 def main(bp:BasePage):
@@ -71,7 +70,7 @@ def main(bp:BasePage):
     bp.cmd("fishcardall 10")
 
     # # 姓名头像测试
-    playerEditNamePanelTest(bp)
+    player_edit_name_test(bp)
 
     AvatarSelectPanel.wait_for_panel_appear(bp)
 
@@ -85,7 +84,7 @@ def main(bp:BasePage):
     bp.sleep(0.5)
 
     # 新手引导
-    newbieGuidePanelTest(bp)
+    rookie_guide_test(bp)
 
     # 查询水族箱的解锁等级
     unlock_lv = bp.get_unlock_lv("水族箱")
@@ -93,30 +92,29 @@ def main(bp:BasePage):
 
     # 鱼册引导
     bp.go_to_panel("FishAlbum3DPanel")
-    FishAlbum3DPanel.guide(bp)
-
+    NewbieGuidePanel.guide_album(bp)
 
     PlayerLevelupPanel.wait_for_panel_appear(bp)
     bp.clear_popup()
 
     # 水族馆引导
     bp.go_to_panel("AquariumPanel")
-    AquariumPanel.guide(bp)
+    NewbieGuidePanel.guide_aquarium(bp)
     bp.go_home()
 
     # 鱼卡引导
-    FishCardPanel.guide(bp)
+    NewbieGuidePanel.guide_fish_card(bp)
     bp.go_home()
 
     # 俱乐部引导
-    ClubApplyPanel.guide(bp)
+    NewbieGuidePanel.guide_club(bp)
     ClubApplyPanel.click_btn_close(bp)
 
     # 多人房引导
     bp.go_to_panel("TournamentsPanel")
     bp.sleep(1)
     if NewbieGuidePanel.is_panel_active(bp):
-        NewbieGuidePanel.multi_room_guide(bp)
+        NewbieGuidePanel.guide_multi_room(bp)
         bp.go_home()
         bp.go_to_panel("TournamentsPanel")
 
@@ -126,7 +124,7 @@ def main(bp:BasePage):
     TournamentsPanel.go_to_fishery_by_tpid(bp, fishery_tpid='400301')
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
     BattlePreparePanel.click_btn_cast(bp)
-    BattlePanel.hook_guide(bp)
+    NewbieGuidePanel.guide_hook(bp)
     BattlePanel.reel_quick(bp)
     element_btn = ResultPanel.wait_for_result(bp)
     ResultPanel.automatic_settlement(bp, element_btn=element_btn)
@@ -136,7 +134,7 @@ def main(bp:BasePage):
     bp.clear_popup()
 
     # 稀有鱼引导
-    AchievementWantedPanel.guide(bp)
+    NewbieGuidePanel.guide_fish_photo(bp)
     bp.sleep(1)
 
     # 断线引导
@@ -146,7 +144,7 @@ def main(bp:BasePage):
     BattlePanel.release_btn_reel(bp)
     # element_btn = ResultPanel.wait_for_result(bp)
     # ResultPanel.automatic_settlement(bp, element_btn=element_btn)
-    GearPanel.guide(bp)
+    NewbieGuidePanel.guide_fishing_fail(bp)
 
     bp.go_home()
 

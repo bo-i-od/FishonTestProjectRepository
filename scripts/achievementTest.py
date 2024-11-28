@@ -218,86 +218,30 @@ def collect_test(bp: BasePage):
 
 def collect_all_test(bp: BasePage):
     achievement_point, progress_denominator = AchievementGroupPanel.get_achievement_point(bp)
-    if achievement_point == progress_denominator:
+    complete_numerator, complete_denominator = AchievementGroupPanel.get_complete(bp)
+    if complete_numerator == complete_denominator:
         # img = bp.get_full_screen_shot()
         # bp.save_img(img, "跳过collect_all_test期望状态为已经领取完成")
         return
 
     # 点击箱子查看奖励
-    while AchievementGroupPanel.is_box_clickable(bp):
-        AchievementGroupPanel.click_box(bp)
-        RewardsPanel.wait_for_panel_appear(bp)
-        bp.sleep(0.5)
-        RewardsPanel.click_tap_to_claim(bp)
-        bp.sleep(0.5)
-        # 防止鱼卡弹窗
-        bp.clear_popup_until_appear(elements_data=AchievementGroupPanel.get_panel_element())
-        achievement_point, progress_denominator = AchievementGroupPanel.get_achievement_point(bp)
-
-    reward_icon_list, reward_quantity_list = AchievementGroupPanel.get_box_reward(bp)
-    item_dict = resource.make_item_dict(item_icon_list=reward_icon_list, item_quantity_list=reward_quantity_list)
-    # 在没领满之前一直领取
-    while achievement_point != progress_denominator:
-        achievement_point, progress_denominator = collect_once_test(bp)
-
-        # 进度条宝箱不可领取就进行下次点击
-        if not AchievementGroupPanel.is_box_clickable(bp):
-            continue
-
-        # 领取进度条宝箱 做数值方面验证
-        item_stock_expect_list = bp.get_item_count_list(item_icon_name_list=reward_icon_list)
-        cur = 0
-        while cur < len(reward_icon_list):
-            item_stock_expect_list[cur] += item_dict[reward_icon_list[cur]]
-            cur += 1
-        AchievementGroupPanel.click_box(bp)
-        reward_dict = RewardsPanel.get_reward_dict(bp)
-        compare_dict(item_dict, reward_dict)
-        item_stock_list = bp.get_item_count_list(item_icon_name_list=reward_icon_list)
-        compare_list(item_stock_expect_list, item_stock_list)
-        RewardsPanel.wait_for_panel_appear(bp)
-        bp.sleep(0.5)
-        RewardsPanel.click_tap_to_claim(bp)
-        bp.sleep(0.5)
-
-        # 防止鱼卡弹窗
-        if FishBagPanel.is_panel_active(bp):
-            bp.clear_popup()
-            bp.sleep(0.5)
-        achievement_point, progress_denominator = AchievementGroupPanel.get_achievement_point(bp)
-        if achievement_point == progress_denominator:
-            break
-        reward_icon_list, reward_quantity_list = AchievementGroupPanel.get_box_reward(bp)
-        item_dict = resource.make_item_dict(item_icon_list=reward_icon_list, item_quantity_list=reward_quantity_list)
-    complete_numerator, complete_denominator = AchievementGroupPanel.get_complete(bp)
-    compare(complete_numerator, complete_denominator)
-
-
-def collect_once_test(bp: BasePage):
-    # 记录奖励数量
-    item_icon_list = AchievementGroupPanel.get_item_icon_list(bp)
-    item_quantity_list = AchievementGroupPanel.get_item_quantity_list(bp)
-    achievement_point_expect, progress_denominator = AchievementGroupPanel.get_achievement_point(bp)
-    cur = 0
-    while cur < len(item_icon_list):
-        if item_icon_list[cur] == "coin_achv":
-            achievement_point_expect += item_quantity_list[cur]
-            item_quantity_list[cur] = 0
-            cur += 1
-            continue
-        item_count = bp.get_item_count(item_icon_name=item_icon_list[cur])
-        item_quantity_list[cur] += item_count
-        cur += 1
-    # 点击领取
-    AchievementGroupPanel.click_btn_collect(bp)
-    bp.sleep(1)
+    AchievementGroupPanel.click_box_until_not_collectable(bp)
     achievement_point, progress_denominator = AchievementGroupPanel.get_achievement_point(bp)
-    bp.debug_log(f"achievement_point_expect, achievement_point:{achievement_point_expect, achievement_point}")
-    compare(achievement_point_expect, achievement_point)
-    item_count_list = bp.get_item_count_list(item_icon_name_list=item_icon_list)
-    bp.debug_log(f"item_quantity_list, item_count_list:{item_quantity_list, item_count_list}")
-    compare_list(item_quantity_list, item_count_list)
-    return achievement_point, progress_denominator
+
+    # reward_icon_list, reward_quantity_list = AchievementGroupPanel.get_box_reward(bp)
+    # item_dict = resource.make_item_dict(item_icon_list=reward_icon_list, item_quantity_list=reward_quantity_list)
+    # 在没领满之前一直领取
+    while complete_numerator != complete_denominator:
+        AchievementGroupPanel.click_box_until_not_collectable(bp)
+        bp.sleep(1)
+        complete_numerator, complete_denominator = AchievementGroupPanel.get_complete(bp)
+        if complete_numerator == complete_denominator:
+            break
+        AchievementGroupPanel.click_btn_collect(bp)
+        bp.sleep(1)
+
+        # reward_icon_list, reward_quantity_list = AchievementGroupPanel.get_box_reward(bp)
+        # item_dict = resource.make_item_dict(item_icon_list=reward_icon_list, item_quantity_list=reward_quantity_list)
 
 
 def select_test(bp: BasePage, index: int):
@@ -350,7 +294,7 @@ def click_icon_test(bp: BasePage):
 
 
 def main(bp: BasePage):
-    # 登录到大厅
+    # # 登录到大厅
     cmd_list = ["guideskip", "add 1 100200 12345"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
@@ -371,7 +315,7 @@ def main(bp: BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21523", is_mobile_device=True)
-    jump_all_test(bp)
+    bp = BasePage("127.0.0.1:21523", is_mobile_device=False)
+    main(bp)
     bp.connect_close()
 

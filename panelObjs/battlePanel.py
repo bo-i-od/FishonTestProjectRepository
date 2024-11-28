@@ -11,29 +11,6 @@ class BattlePanel(BasePage):
     def is_reel_active(self):
         return self.exist(element_data=ElementsData.Battle.btn_reel)
 
-    def qte0(self):
-        while True:
-            qte_id_list = self.get_parent_id_list(element_data=ElementsData.Battle.qte_list)
-            name_list = self.get_name_list(object_id_list=qte_id_list)
-            if not name_list:
-                hud_power_list = self.get_object_id_list(element_data=ElementsData.Battle.hud_power_list)
-                if len(hud_power_list) > 2:
-                    BattlePanel.unleash_power(self)
-                    # self.sleep(0.5)
-                    continue
-                if self.exist(element_data=ElementsData.Result.ResultPanel):
-                    break
-                continue
-            if "left" in name_list[0]:
-                BattlePanel.slide(self, "left")
-                continue
-            if "right" in name_list[0]:
-                BattlePanel.slide(self, "right")
-                continue
-            if "up" in name_list[0]:
-                BattlePanel.slide(self, "up")
-                continue
-
     def qte(self):
         element_data_list = [ElementsData.Battle.qte_left, ElementsData.Battle.qte_right, ElementsData.Battle.qte_up, ElementsData.Battle.qte_jump_left, ElementsData.Battle.qte_jump_right, ElementsData.Battle.hud_power_list, ElementsData.Battle.hud_power_list_old, ElementsData.Result.btn_claim, ElementsData.Result.btn_claim_token_fish, ElementsData.BattleFailed.btn_again, ElementsData.FlashCardReceive.FlashCardReceivePanel]
         qte_left_index = element_data_list.index(ElementsData.Battle.qte_left)
@@ -169,10 +146,6 @@ class BattlePanel(BasePage):
         # self.ray_input(element_data=ElementsData.Battle.btn_reel, target_name="btn_cast", kind="up")
         # self.click_position_base(position_btn_reel)
 
-    def hook_guide(self):
-        perform_list = [ElementsData.NewbieGuide.NBG_hook_1, ElementsData.NewbieGuide.NBG_hook_2, ElementsData.NewbieGuide.NBG_hook_3, ElementsData.NewbieGuide.NBG_hook_5]
-        self.click_a_until_b_appear_list(perform_list)
-        self.click_until_disappear(ElementsData.NewbieGuide.NBG_hook_5)
 
     def hook_guide_oversea(self):
         perform_list_oversea = [ElementsData.NewbieGuide.NBG_hook_4, ElementsData.NewbieGuide.NBG_hook_5]

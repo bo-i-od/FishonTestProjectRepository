@@ -3,6 +3,8 @@ from configs.elementsData import ElementsData
 from common.resource import *
 from common.viewport import Viewport
 from common.slider import Slider
+
+
 class BattlePassBuyLevelPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.BattlePassBuyLevel.btn_close)
@@ -24,7 +26,6 @@ class BattlePassBuyLevelPanel(BasePage):
         new_level = int(matches[1].replace("<", ""))
         return buy_level, new_level
 
-
     def get_cost(self):
         btn_buy_text = self.get_text(element_data=ElementsData.BattlePassBuyLevel.btn_buy_text)
         cost = int(btn_buy_text)
@@ -33,6 +34,7 @@ class BattlePassBuyLevelPanel(BasePage):
     def get_cash(self):
         cash = get_resource(self, "100100", element_data=ElementsData.BattlePassBuyLevel.text_100100)
         return cash
+
     def click_btn_buy(self):
         self.click_element(element_data=ElementsData.BattlePassBuyLevel.btn_buy_text)
 
@@ -58,6 +60,7 @@ class BattlePassBuyLevelPanel(BasePage):
 
     def go_to_RechargeStorePanel(self):
         self.click_element(element_data=ElementsData.BattlePassBuyLevel.btn_add_100100)
+
 
 if __name__ == "__main__":
     bp = BattlePassBuyLevelPanel()

@@ -2,16 +2,8 @@ import sys
 
 from netMsg import csMsgAll, luaLog
 from common.basePage import BasePage
+from tools.commonTools import sort_dict_recursively
 
-
-
-def sort_dict_recursively(d):
-    if isinstance(d, dict):
-        return {k: sort_dict_recursively(v) for k, v in sorted(d.items(), key=lambda item: item[0])}
-    elif isinstance(d, list):
-        return [sort_dict_recursively(item) for item in d]
-    else:
-        return d
 
 def get_price(bp: BasePage):
     msg_name = "LotteryBatchDataMsg"
@@ -21,7 +13,7 @@ def get_price(bp: BasePage):
     return high_prize_list
 
 
-def get_small_reward_dict(bp: BasePage, price_list,wave):
+def get_small_reward_dict(bp: BasePage, price_list, wave):
     table_data_object_list = bp.excelTools.get_table_data_object_list_by_key_value(key="roundId", value=wave, book_name="OUT_DRAW_SMALL_REWARD.xlsm")
     table_data_object = table_data_object_list[0]
     cur = 0
@@ -149,7 +141,7 @@ def main(bp: BasePage):
         bp.sleep(0.5)
 
         # target_index代表目标是1-5哪个大奖
-        res = lottery_draw(bp)
+        res = lottery_draw(bp, target_index=1)
         print(res)
         if res["总消耗"] > cost_max:
             cost_max = res["总消耗"]

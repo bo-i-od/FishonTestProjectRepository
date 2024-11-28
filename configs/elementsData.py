@@ -985,6 +985,26 @@ class ElementsData:
         NBG_aquarium_3_4 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_aquarium_3_4(Clone)>Guide_Highlight>ep_UI_novice guide"}
         NBG_aquarium_3_5 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_aquarium_3_5(Clone)"}
 
+        # 水族箱引导新
+        NBG_aquarium_new_1_1 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_aquarium_new_1_1(Clone)"}
+        NBG_aquarium_new_1_2 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_aquarium_new_1_2(Clone)"}
+        NBG_aquarium_new_1_3 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_aquarium_new_1_3(Clone)>Guide_Arrow>arrow"}
+        NBG_aquarium_new_2_1 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_aquarium_new_2_1(Clone)"}
+        NBG_aquarium_new_2_2 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_aquarium_new_2_2(Clone)>Guide_Highlight>ep_UI_novice guide"}
+        NBG_aquarium_new_2_3 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_aquarium_new_2_3(Clone)>Guide_Highlight>ep_UI_novice guide"}
+        NBG_aquarium_new_2_4 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_aquarium_new_2_4(Clone)"}
+        NBG_aquarium_new_2_5 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_aquarium_new_2_5(Clone)>Guide_Highlight>ep_UI_novice guide"}
+        NBG_aquarium_new_3_1 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_aquarium_new_3_1(Clone)>Guide_Highlight>ep_UI_novice guide"}
+        NBG_aquarium_new_3_2 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_aquarium_new_3_2(Clone)"}
+        NBG_aquarium_new_3_3 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_aquarium_new_3_3(Clone)>Guide_Highlight>ep_UI_novice guide"}
+        NBG_aquarium_new_3_4 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_aquarium_new_3_4(Clone)>Guide_Highlight>ep_UI_novice guide"}
+        NBG_aquarium_new_4_1 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_aquarium_new_4_1(Clone)"}
+        NBG_aquarium_new_4_2 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_aquarium_new_4_2(Clone)"}
+        NBG_aquarium_new_4_3 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_aquarium_new_4_3(Clone)"}
+        NBG_aquarium_new_4_4 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_aquarium_new_4_4(Clone)"}
+        NBG_aquarium_new_4_5 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_aquarium_new_4_5(Clone)>Guide_Highlight>ep_UI_novice guide"}
+        NBG_aquarium_new_4_6 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_aquarium_new_4_6(Clone)"}
+
         # 刺鱼引导
         NBG_hook_1 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_hook_1(Clone)"}
         NBG_hook_2 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_hook_2(Clone)"}
@@ -1024,6 +1044,21 @@ class ElementsData:
         NBG_multiRoom_0 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_multiRoom_20200(Clone)>Guide_Highlight>ep_UI_novice guide"}
         NBG_multiRoom_1 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_multiRoom_20201(Clone)>Guide_Highlight>ep_UI_novice guide", "focus": (0.5, 0.2) }
         NBG_multiRoom_2 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_multiRoom_20202(Clone)>Guide_Highlight>ep_UI_novice guide"}
+
+        # 抛竿引导
+        NBG_fishingcast_1 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_fishingcast_1(Clone)"}
+        NBG_fishingcast_2 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_fishingcast_2(Clone)>Guide_btn>btn_orange"}
+
+        # 钓点引导
+        NBG_fishpoint_1 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_fishpoint_1(Clone)"}
+        NBG_fishpoint_2 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_fishpoint_2(Clone)"}
+        NBG_fishpoint_3 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_fishpoint_3(Clone)"}
+        NBG_fishpoint_4 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_fishpoint_4(Clone)"}
+        NBG_fishpoint_5 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_fishpoint_5(Clone)"}
+        NBG_fishpoint_6 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_fishpoint_6(Clone)>Guide_Highlight>ep_UI_novice guide"}
+        NBG_fishpoint_7 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_fishpoint_7(Clone)>Guide_Highlight>ep_UI_novice guide"}
+        NBG_fishpoint_8 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_fishpoint_8(Clone)>Guide_Highlight>ep_UI_novice guide"}
+
 
     class NewbieGuide_oversea:
         # 升装备引导
@@ -1565,6 +1600,10 @@ class ElementsData:
             month_card_2_quantity_list = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_7>panel_month_02>content>>group_rewards>>item_icon>item_model_mini(Clone)>quantity>value"}
             month_card_2_quantity_total_list = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_7>panel_month_02>content>>value>text"}
             month_card_2_item_model_list = {"locator": "UICanvas>Default>StorePanel>Panel>panel_tab_7>panel_month_02>content>>group_rewards>>item_icon>item_model_mini(Clone)"}
+
+    class StoreSuitPopup:
+        StoreSuitPopupPanel = {"locator": "UICanvas>Default>StoreSuitPopupPanel"}
+        btn_close = {"locator": "UICanvas>Default>StoreSuitPopupPanel>panel>btn_close>img"}
 
     class TaskFishingCareer:
         TaskFishingCareerPanel = {"locator": "UICanvas>Default>TaskFishingCareerPanel"}

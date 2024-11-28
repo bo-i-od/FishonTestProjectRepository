@@ -12,10 +12,6 @@ class FishAlbum3DPanel(BasePage):
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.FishAlbum3D.FishAlbum3DPanel)
 
-    def guide(self):
-        perform_list = [ElementsData.NewbieGuide.NBG_album_01, ElementsData.NewbieGuide.NBG_album_02, ElementsData.NewbieGuide.NBG_album_03,ElementsData.Home.HomePanel]
-        self.click_a_until_b_appear_list(perform_list=perform_list)
-
     def click_btn_share(self):
         self.click_until_disappear(element_data=ElementsData.FishAlbum3D.btn_share, ignore_set={"FishAlbum3DPanel"})
 

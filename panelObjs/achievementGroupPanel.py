@@ -1,5 +1,6 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
+from panelObjs.rewardsPanel import RewardsPanel
 from tools.commonTools import *
 from common import resource
 from panelObjs.rewardsPreviewPanel import RewardsPreviewPanel
@@ -72,6 +73,18 @@ class AchievementGroupPanel(BasePage):
                 break
             cur += 1
         return cur
+
+    def click_box_until_not_collectable(self):
+        while AchievementGroupPanel.is_box_clickable(self):
+            AchievementGroupPanel.click_box(self)
+            RewardsPanel.wait_for_panel_appear(self)
+            self.sleep(0.5)
+            RewardsPanel.click_tap_to_claim(self)
+            self.sleep(0.5)
+            # 防止鱼卡弹窗
+            self.clear_popup_until_appear(elements_data=AchievementGroupPanel.get_panel_element())
+
+
 
     def click_box(self):
         self.click_element(element_data=ElementsData.AchievementGroup.box)
