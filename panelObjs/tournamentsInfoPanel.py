@@ -11,7 +11,7 @@ class TournamentsInfoPanel(BasePage):
             self.sleep(1)
 
     def click_btn_close(self):
-        self.click_element(element_data=ElementsData.TournamentsInfo.btn_close)
+        self.click_until_disappear(element_data=ElementsData.TournamentsInfo.btn_close)
 
     def switch_tab(self, index):
         tab_position_list = self.get_position_list(element_data=ElementsData.TournamentsInfo.tab_list)
