@@ -46,6 +46,7 @@ class JumpData:
         "AquariumPanel": [ElementsData.Aquarium.btn_close],
         "AquariumCommonFishChangePanel": [ElementsData.AquariumCommonFishChange.btn_close],
         "AquariumFishPanel":[ElementsData.AquariumFish.btn_close],
+        "AquariumMainPanel": [ElementsData.AquariumMain.btn_close],
         "AvatarMainPanel":[ElementsData.AvatarMain.btn_close],
         "AvatarSkinPopPanel":[ElementsData.AvatarSkinPop.btn_close],
         "AvatarSkinPopPanel_subType_2":[ElementsData.AvatarSkinPop2.btn_close],
@@ -137,6 +138,8 @@ class JumpData:
     panel_dict = {
         "AchievementPanel": {"element_data": ElementsData.Achievement.AchievementPanel, "open_path": [ElementsData.Home.btn_achievement], },
         "AquariumPanel": {"element_data": ElementsData.Aquarium.AquariumPanel, "open_path": [ElementsData.Home.btn_aquarium]},
+        "AquariumMainPanel": {"element_data": ElementsData.AquariumMain.AquariumMainPanel, "open_path": [ElementsData.Home.btn_aquarium]},
+        "AquariumFishNewPanel":{"element_data": ElementsData.AquariumFishNew.AquariumFishNewPanel, "open_path": [ElementsData.Home.btn_aquarium, ElementsData.AquariumMain.btn_fish]},
         "ActivityCenterPanel": {"element_data": ElementsData.ActivityCenter.ActivityCenterPanel, "open_path": [ElementsData.Home.btn_center_new]},
         "BattlePassPanel": {"element_data": ElementsData.BattlePass.BattlePassPanel, "open_path": [ElementsData.Home.btn_bp]},
         "BaitAndRodAlbumPanel": {"element_data": ElementsData.BaitAndRodAlbum.BaitAndRodAlbumPanel, "open_path": [ElementsData.Home.btn_gears]},

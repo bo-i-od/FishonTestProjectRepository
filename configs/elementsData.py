@@ -122,6 +122,18 @@ class ElementsData:
         Viewport = {"locator": "UICanvas>Default>AquariumFishPanel>panel>panel_fish>List>Viewport"}
         fish_model_list = {"locator": "UICanvas>Default>AquariumFishPanel>panel>panel_fish>List>Viewport>Content>"}
 
+    class AquariumFishNew:
+        AquariumFishNewPanel = {"locator": "UICanvas>Default>AquariumFishNewPanel"}
+        btn_accelerate_reddot_list = {"locator": "UICanvas>Default>AquariumFishNewPanel>panel>panel_fish>List>Viewport>Content>fish_model>aquarium_fish_new_model>btns>btn_accelerate>reddot"}
+        btn_sell_reddot_list = {"locator": "UICanvas>Default>AquariumFishNewPanel>panel>panel_fish>List>Viewport>Content>fish_model>aquarium_fish_new_model>btns>btn_sell>reddot"}
+        tab_list = {"locator": "UICanvas>Default>AquariumFishNewPanel>panel>panel_fish>tab>view_port>content>>bg"}
+        btn_change = {"locator": "UICanvas>Default>AquariumFishNewPanel>panel>panel_fish>fish_num>panel_info>btn_change>icon"}
+
+    class AquariumMain:
+        AquariumMainPanel = {"locator":"UICanvas>Default>AquariumMainPanel"}
+        btn_close = {"locator": "UICanvas>Default>AquariumMainPanel>panel>btn_close>img"}
+        btn_fish = {"locator": "UICanvas>Default>AquariumMainPanel>panel>navbar>btns>btn_fish>bg"}
+
     class AvatarSelect:
         AvatarSelectPanel = {"locator": "UICanvas>Default>AvatarSelectPanel"}
         gender_icon_list = {"locator": "UICanvas>Default>AvatarSelectPanel>panel_edit>panel_tab>content>TabList>Viewport>Content>" }
