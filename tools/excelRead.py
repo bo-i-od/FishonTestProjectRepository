@@ -121,7 +121,7 @@ class ExcelTools:
                 cur += 1
         return table_data
 
-    def get_table_data_object_list(self, book_name):
+    def get_table_data_object_list_by_excel(self, book_name):
         table_data_object_list = []
         table_data, table_data_len = self.get_table_struct(book_name=book_name)
         worksheet = self.get_worksheet(book_name=book_name, sheet_name="模板数据")
@@ -139,6 +139,11 @@ class ExcelTools:
         prefix = book_name.split('.')[0]
         table_data_detail = baseDataRead.convert_to_json(path=base_data_path, prefix=prefix)
         return table_data_detail
+
+    def get_table_data_object_list(self, book_name):
+        table_data_object_list, _, _ = self.get_table_data_detail_by_base_data(book_name=book_name)
+        return table_data_object_list
+
 
     def get_table_data_object_list_by_key_value(self, key, value, book_name=None, table_data_detail=None):
         res = []
