@@ -121,6 +121,7 @@ def sell_and_put_fish(bp: BasePage):
 def aquarium(bp: BasePage):
     bp.go_to_panel("AquariumFishNewPanel")
 
+    bp.sleep(1)
     sell_and_put_fish(bp)
 
     # 切另一个
