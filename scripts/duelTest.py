@@ -231,13 +231,13 @@ def pvp_fish(bp, is_quick=False):
         cur += 1
     if cur >= 30:
         raise FindNoElementError("超时")
-    duel_log = ""
-    # 获取掉落列表
-    duel_log += str(get_to_drops(bp)) + '\n'
-    duel_log += str(get_avg_score(bp)) + '\n'
-    duel_log += str(get_report(bp)) + '\n'
-    duel_log += str(get_robot(bp)) + '\n'
-    bp.log_list_duel.clear()
+    # duel_log = ""
+    # # 获取掉落列表
+    # duel_log += str(get_to_drops(bp)) + '\n'
+    # duel_log += str(get_avg_score(bp)) + '\n'
+    # duel_log += str(get_report(bp)) + '\n'
+    # duel_log += str(get_robot(bp)) + '\n'
+    # bp.log_list_duel.clear()
 
     while True:
         # try:
@@ -285,13 +285,13 @@ def pvp_fish(bp, is_quick=False):
             # print(f"体型列表：{fish_type_list}")
             bp.sleep(3)
             break
-    duel_info = get_result(bp)
-    duel_log += str(duel_info) + '\n'
-    duel_log += str(get_chara(bp, duel_info)) + '\n'
-    file_path = "C:/Users/TU/Desktop/duel/" + serial_number.split(':')[1] + '.txt'
-    # 写入文件
-    with open(file_path, "a", encoding="utf-8") as file:
-        file.write(duel_log)
+    # duel_info = get_result(bp)
+    # duel_log += str(duel_info) + '\n'
+    # duel_log += str(get_chara(bp, duel_info)) + '\n'
+    # file_path = "C:/Users/TU/Desktop/duel/" + serial_number.split(':')[1] + '.txt'
+    # # 写入文件
+    # with open(file_path, "a", encoding="utf-8") as file:
+    #     file.write(duel_log)
 
 
 
@@ -363,10 +363,13 @@ def duel_once(bp:BasePage, rank):
     # bp.set_item_count(target_count=250000, item_tpid="100200")
     lua_code = csMsgAll.get_CSGlobalEnterMatchMsg(matcherId=1, seriesId=1001 + rank, source=0)
     bp.lua_console(lua_code)
-    r = random.random()
-    bp.sleep(r)
-    print(f"本次点击间隔{r}s")
+    bp.sleep(1)
+    lua_code = csMsgAll.get_CSGlobalEnterMatchMsg(matcherId=1, seriesId=1001 + rank, source=0)
     bp.lua_console(lua_code)
+    # r = random.random()
+    # bp.sleep(r)
+    # print(f"本次点击间隔{r}s")
+    # bp.lua_console(lua_code)
     # PVPHallPanel.click_btn_play(bp, rank)
     # s, e = point_cal(dc)
     # print(f"当前杯数：{dc},预期分数范围:{s,e}")
@@ -535,8 +538,8 @@ def duel_test(bp, is_monitor=False):
             bp.go_to_panel("PVPHallPanel")
 
             btn_play_position_list = PVPHallPanel.get_btn_play_position_list(bp)
-            # r = random.randint(0, len(btn_play_position_list) - 1)
-            r = random.randint(0, 6)
+            r = random.randint(0, len(btn_play_position_list) - 1)
+
             # r_max = rank
             # r = random.randint(0, r_max * (r_max + 1) // 2)
             # cur = r_max - 1
@@ -545,14 +548,38 @@ def duel_test(bp, is_monitor=False):
             #         rank = cur
             #         break
             #     cur -= 1
-            energy_start = bp.get_item_count(item_tpid="100500")
+            target_count = 80
+            if r == 0:
+                target_count = 5
+            elif r == 1:
+                target_count = 10
+            elif r == 2:
+                target_count = 20
+            elif r == 3:
+                target_count = 50
+            elif r == 4:
+                target_count = 50
+            elif r == 5:
+                target_count = 60
+            elif r == 6:
+                target_count = 70
+
+            bp.set_item_count(item_tpid="100500", target_count=target_count)
 
             duel_once(bp, rank=r)
             energy_end = bp.get_item_count(item_tpid="100500")
-            print(f"体力消耗：{energy_end - energy_start}")
+            energy_cost = target_count - energy_end
+            if energy_end < 0:
+                print(f"实际体力消耗：{energy_cost}, 预期体力消耗：{target_count}")
 
     except Exception as e:
+        try:
+            img = bp.get_full_screen_shot()
+            bp.save_img(img)
+        except:
+            pass
         print(e)
+        bp.sleep(1)
         # bp.connect_close()
         bp = gameInit.reset_bp(bp.dev, is_monitor=is_monitor)
         duel_test(bp, is_monitor=is_monitor)
@@ -560,22 +587,25 @@ def duel_test(bp, is_monitor=False):
 
 
 if __name__ == '__main__':
-    serial_number = "127.0.0.1:21533"
+    serial_number = "127.0.0.1:21523"
     print(serial_number)
     base_page = BasePage(serial_number=serial_number, is_mobile_device=True, is_monitor=True)
+    main(base_page)
+    base_page.connect_close()
     # set_duelcup_random(base_page, rank=7)
     # base_page.set_item_count(target_count=100000, item_tpid="100500")
+    # base_page.cmd("globalgm duelScene 400322")
     # gameInit.set_joystick(base_page)
-    duel_test(base_page, is_monitor=True)
-
-    # bp.cmd("globalgm duelScene 400315")
-
+    # # duel_test(base_page, is_monitor=True)
     #
+    # # bp.cmd("globalgm duelScene 400315")
     #
-
+    # #
+    # #
+    #
     # cur = 1
     # # 指定对决次数
-    # times = 3
+    # times = 2
     # while cur <= times:
     #     print(f"<=====第{cur}次好友对决开始=====>")
     #     duel_once_friend(base_page, is_quick=False)

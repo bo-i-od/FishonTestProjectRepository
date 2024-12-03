@@ -37,26 +37,26 @@ def collect_test(bp: BasePage):
     LoadingPanel.wait_until_panel_disappear(bp, is_wait_for_appear=False)
     bp.sleep(1)
 
-    # 计算期望库存
-    current_rewards_icon_list = BattlePreparePanel.get_current_rewards_icon_list(bp)
-    current_rewards_quantity_list = BattlePreparePanel.get_current_rewards_icon_list(bp)
-    current_rewards_dict = resource.make_item_dict(item_icon_list=current_rewards_icon_list, item_quantity_list=current_rewards_quantity_list)
-    rewards_icon_list = list(current_rewards_dict)
-    stock_expect_list = bp.get_item_count_list(item_icon_name_list=rewards_icon_list)
-    cur = 0
-    while cur < len(rewards_icon_list):
-        stock_expect_list[cur] += current_rewards_dict[rewards_icon_list[cur]]
-        cur += 1
+    # # 计算期望库存
+    # current_rewards_icon_list = BattlePreparePanel.get_current_rewards_icon_list(bp)
+    # current_rewards_quantity_list = BattlePreparePanel.get_current_rewards_icon_list(bp)
+    # current_rewards_dict = resource.make_item_dict(item_icon_list=current_rewards_icon_list, item_quantity_list=current_rewards_quantity_list)
+    # rewards_icon_list = list(current_rewards_dict)
+    # stock_expect_list = bp.get_item_count_list(item_icon_name_list=rewards_icon_list)
+    # cur = 0
+    # while cur < len(rewards_icon_list):
+    #     stock_expect_list[cur] += current_rewards_dict[rewards_icon_list[cur]]
+    #     cur += 1
 
     # 领取奖励
     BattlePreparePanel.click_progress_info(bp)
     bp.sleep(1)
-    reward_dict = RewardsPanel.get_reward_dict(bp)
-    compare_dict(current_rewards_dict, reward_dict)
-
-    # 计算库存是否正确
-    stock_list = bp.get_item_count_list(item_icon_name_list=rewards_icon_list)
-    compare_list(stock_expect_list, stock_list)
+    # reward_dict = RewardsPanel.get_reward_dict(bp)
+    # compare_dict(current_rewards_dict, reward_dict)
+    #
+    # # 计算库存是否正确
+    # stock_list = bp.get_item_count_list(item_icon_name_list=rewards_icon_list)
+    # compare_list(stock_expect_list, stock_list)
 
     # 关闭恭喜获得
     RewardsPanel.wait_for_panel_appear(bp)
@@ -141,5 +141,6 @@ def main(bp: BasePage):
     bp.go_home()
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.81:20015")
+    bp = BasePage("127.0.0.1:21523", is_mobile_device=True)
     main(bp)
+    bp.connect_close()

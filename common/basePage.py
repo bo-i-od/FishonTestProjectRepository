@@ -68,6 +68,7 @@ class BasePageMain:
             self.poco_listen = UnityPoco(addr_listen, device=dev)
         self.screen_w, self.screen_h = self.poco.get_screen_size()  # 获取屏幕尺寸
 
+        # ios设备出现过poco获取屏幕尺寸与wda尺寸不同的情况，所以需要scale_factor对点击位置做下矫正
         self.scale_factor_w = 1
         self.scale_factor_h = 1
         if self.is_ios:
