@@ -13,8 +13,87 @@ from panelObjs.battlePanel import BattlePanel
 
 
 class NewbieGuidePanel(BasePage):
+    guide_perform_dict = {
+        "guide_album": [
+            ElementsData.NewbieGuide.NBG_prepare_2_album_01, ElementsData.NewbieGuide.NBG_prepare_2_album_02,
+            ElementsData.NewbieGuide.NBG_prepare_2_album_03, ElementsData.NewbieGuide.NBG_album_01,
+            ElementsData.NewbieGuide.NBG_album_02, ElementsData.NewbieGuide.NBG_album_03,
+            ElementsData.NewbieGuide.NBG_prepare_weak_01
+        ],
+        "guide_aquarium_1": [
+            ElementsData.NewbieGuide.NBG_aquarium_new_1_1, ElementsData.NewbieGuide.NBG_aquarium_new_1_2,
+            ElementsData.NewbieGuide.NBG_aquarium_new_1_3
+        ],
+        "guide_aquarium_2": [
+            ElementsData.NewbieGuide.NBG_aquarium_new_2_1, ElementsData.NewbieGuide.NBG_aquarium_new_2_2,
+            ElementsData.NewbieGuide.NBG_aquarium_new_2_3, ElementsData.NewbieGuide.NBG_aquarium_new_2_4,
+            ElementsData.NewbieGuide.NBG_aquarium_new_2_5, ElementsData.NewbieGuide.NBG_aquarium_new_3_1,
+            ElementsData.NewbieGuide.NBG_aquarium_new_3_2, ElementsData.NewbieGuide.NBG_aquarium_new_3_3,
+            ElementsData.NewbieGuide.NBG_aquarium_new_3_4, ElementsData.NewbieGuide.NBG_aquarium_new_4_1,
+            ElementsData.NewbieGuide.NBG_aquarium_new_4_2, ElementsData.NewbieGuide.NBG_aquarium_new_4_3,
+            ElementsData.NewbieGuide.NBG_aquarium_new_4_4, ElementsData.NewbieGuide.NBG_aquarium_new_4_5,
+            ElementsData.NewbieGuide.NBG_aquarium_new_4_6
+        ],
+        "guide_fish_card": [
+            ElementsData.NewbieGuide.NBG_fishcard_1, ElementsData.NewbieGuide.NBG_fishcard_2,
+            ElementsData.NewbieGuide.NBG_fishcard_5, ElementsData.NewbieGuide.NBG_fishcard_3,
+            ElementsData.NewbieGuide.NBG_fishcard_4
+        ],
+        "guide_club": [
+            ElementsData.NewbieGuide.NBG_system_click_Club, ElementsData.NewbieGuide.NBG_system_club_apply
+        ],
+        "guide_hook": [
+            ElementsData.NewbieGuide.NBG_hook_1, ElementsData.NewbieGuide.NBG_hook_2,
+            ElementsData.NewbieGuide.NBG_hook_3, ElementsData.NewbieGuide.NBG_hook_5
+        ],
+        "guide_fish_photo": [
+            ElementsData.NewbieGuide.NBG_fishphoto_2, ElementsData.NewbieGuide.NBG_fishphoto_3
+        ],
+        "guide_fishing_fail": [
+            ElementsData.NewbieGuide.NBG_fishing_fail_0, ElementsData.NewbieGuide.NBG_fishing_fail_1,
+            ElementsData.NewbieGuide.NBG_fishing_fail_2, ElementsData.NewbieGuide.NBG_fishing_fail_3,
+            ElementsData.NewbieGuide.NBG_fishing_fail_4, ElementsData.NewbieGuide.NBG_fishing_fail_5,
+            ElementsData.NewbieGuide.NBG_fishing_fail_6, ElementsData.NewbieGuide.NBG_fishing_fail_7
+        ],
+        "guide_multi_room": [
+            ElementsData.NewbieGuide.NBG_multiRoom_0, ElementsData.NewbieGuide.NBG_multiRoom_1,
+            ElementsData.NewbieGuide.NBG_multiRoom_2
+        ],
+        "guide_friend_duel": [
+            ElementsData.NewbieGuide.NBG_friend_duel_1_1
+        ],
+        "guide_fishing_cast": [
+            ElementsData.NewbieGuide.NBG_fishingcast_1, ElementsData.NewbieGuide.NBG_fishingcast_2
+        ],
+        "guide_fish_point": [
+            ElementsData.NewbieGuide.NBG_fishpoint_1, ElementsData.NewbieGuide.NBG_fishpoint_2,
+            ElementsData.NewbieGuide.NBG_fishpoint_3, ElementsData.NewbieGuide.NBG_fishpoint_4,
+            ElementsData.NewbieGuide.NBG_fishpoint_5, ElementsData.NewbieGuide.NBG_fishpoint_6,
+            ElementsData.NewbieGuide.NBG_fishpoint_7, ElementsData.NewbieGuide.NBG_fishpoint_8
+        ]
+    }
+
+    def guide_common(self, guide_name):
+        perform_list = NewbieGuidePanel.guide_perform_dict[guide_name]
+        self.click_a_until_b_appear_list(perform_list)
+        self.click_until_disappear(perform_list[-1])
+
+    @staticmethod
+    def get_first_perform_list(guide_list):
+        first_perform_list = []
+        cur = 0
+        while cur < len(guide_list):
+            guide = guide_list[cur]
+            first_perform_list.append(NewbieGuidePanel.guide_perform_dict[guide][0])
+            cur += 1
+        return first_perform_list
+
+
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.NewbieGuide.NewbieGuidePanel)
+
+    def wait_for_panel_appear(self, timeout=10):
+        self.wait_for_appear(element_data=ElementsData.NewbieGuide.NewbieGuidePanel, timeout=timeout)
 
     def get_start_page(self):
         if self.exist(element_data=ElementsData.NewbieGuide.NewbieGuidePanel_1):
@@ -74,76 +153,56 @@ class NewbieGuidePanel(BasePage):
     def guide_rookie_6(self):
         perform_list = [ElementsData.NewbieGuide.NBG_system_1, ElementsData.NewbieGuide.NBG_system_2,
                         ElementsData.NewbieGuide.NBG_system_click_TreasureChest,
-                        ElementsData.NewbieGuide.NBG_system_get_reward_TreasureChest_01,
-                        ElementsData.BaitAndRodShow.BaitAndRodShowPanel]
+                        ElementsData.NewbieGuide.NBG_system_get_reward_TreasureChest_01]
         self.click_a_until_b_appear_list(perform_list)
-        BaitAndRodShowPanel.click_tap_to_continue(self)
-        self.click_until_disappear(ElementsData.TreasureChestRewards.btn_close)
-        TreasureChestPanel.click_btn_close(self)
+        self.click_until_disappear(element_data=ElementsData.NewbieGuide.NBG_system_get_reward_TreasureChest_01)
+        self.go_home()
 
     def guide_album(self):
-        perform_list = [ElementsData.NewbieGuide.NBG_album_01, ElementsData.NewbieGuide.NBG_album_02, ElementsData.NewbieGuide.NBG_album_03,ElementsData.Home.HomePanel]
-        self.click_a_until_b_appear_list(perform_list=perform_list)
+        pass
 
     def guide_aquarium(self):
-        perform_list = [ElementsData.NewbieGuide.NBG_aquarium_2_1, ElementsData.NewbieGuide.NBG_aquarium_2_2,
-                        ElementsData.NewbieGuide.NBG_aquarium_2_3, ElementsData.NewbieGuide.NBG_aquarium_2_4,
-                        ElementsData.NewbieGuide.NBG_aquarium_2_5, ElementsData.NewbieGuide.NBG_aquarium_2_6,
-                        ElementsData.NewbieGuide.NBG_aquarium_2_7, ElementsData.NewbieGuide.NBG_aquarium_3_1,
-                        ElementsData.NewbieGuide.NBG_aquarium_3_2, ElementsData.NewbieGuide.NBG_aquarium_3_3,
-                        ElementsData.NewbieGuide.NBG_aquarium_3_4, ElementsData.NewbieGuide.NBG_aquarium_3_5]
-        self.click_a_until_b_appear_list(perform_list=perform_list)
-        self.click_until_disappear(element_data=ElementsData.NewbieGuide.NBG_aquarium_3_5)
+        pass
 
-    def guide_fish_card(self):
-        self.click_a_until_b_appear(element_data_a=ElementsData.NewbieGuide.NBG_fishcard_1, element_data_b=ElementsData.NewbieGuide.NBG_fishcard_2)
-        self.click_until_disappear(element_data=ElementsData.NewbieGuide.NBG_fishcard_2)
-        self.sleep(1)
-        self.clear_popup()
-        perform_list = [ElementsData.NewbieGuide.NBG_fishcard_5, ElementsData.NewbieGuide.NBG_fishcard_3,
-                        ElementsData.NewbieGuide.NBG_fishcard_4]
-        self.click_a_until_b_appear_list(perform_list=perform_list)
-        self.click_until_disappear(element_data=ElementsData.NewbieGuide.NBG_fishcard_4)
+    def guide_fish_card_1(self):
+        pass
+
+    def guide_fish_card_2(self):
+        # self.sleep(1)
+        # self.clear_popup()
+        pass
 
     def guide_club(self):
-        perform_list = [ElementsData.NewbieGuide.NBG_system_click_Club, ElementsData.NewbieGuide.NBG_system_club_apply]
-        self.click_a_until_b_appear_list(perform_list=perform_list)
-        self.click_until_disappear(element_data=ElementsData.NewbieGuide.NBG_system_club_apply)
+        pass
 
     def guide_hook(self):
-        perform_list = [ElementsData.NewbieGuide.NBG_hook_1, ElementsData.NewbieGuide.NBG_hook_2, ElementsData.NewbieGuide.NBG_hook_3, ElementsData.NewbieGuide.NBG_hook_5]
-        self.click_a_until_b_appear_list(perform_list)
-        self.click_until_disappear(ElementsData.NewbieGuide.NBG_hook_5)
+        pass
 
     def guide_fish_photo(self):
-        self.click_a_until_b_appear(element_data_a=ElementsData.NewbieGuide.NBG_fishphoto_2, element_data_b=ElementsData.NewbieGuide.NBG_fishphoto_3)
-        self.click_until_disappear(element_data=ElementsData.NewbieGuide.NBG_fishphoto_3)
-        self.sleep(1)
-        AchievementWantedPanel.click_btn_close(self)
+        pass
+        # self.sleep(1)
+        # AchievementWantedPanel.click_btn_close(self)
         # self.sleep(1)
         # AchievementPanel.click_btn_close(self)
 
     def guide_fishing_fail(self):
-        perform_list = [ElementsData.NewbieGuide.NBG_fishing_fail_0, ElementsData.NewbieGuide.NBG_fishing_fail_1,
-                        ElementsData.NewbieGuide.NBG_fishing_fail_2, ElementsData.NewbieGuide.NBG_fishing_fail_3,
-                        ElementsData.NewbieGuide.NBG_fishing_fail_4, ElementsData.NewbieGuide.NBG_fishing_fail_5,
-                        ElementsData.NewbieGuide.NBG_fishing_fail_6, ElementsData.NewbieGuide.NBG_fishing_fail_7]
-        self.click_a_until_b_appear_list(perform_list=perform_list)
-        self.click_until_disappear(element_data=ElementsData.NewbieGuide.NBG_fishing_fail_7)
-        self.sleep(1)
-        GearLevelupPanel.click_btn_close(self)
-        self.sleep(1)
-        GearPanel.click_btn_close(self)
-        self.sleep(1)
-        BattlePreparePanel.click_btn_apply(self)
+        pass
+        # self.sleep(1)
+        # GearLevelupPanel.click_btn_close(self)
+        # self.sleep(1)
+        # GearPanel.click_btn_close(self)
+        # self.sleep(1)
+        # BattlePreparePanel.click_btn_apply(self)
 
     def guide_multi_room(self):
-        perform_list = [ElementsData.NewbieGuide.NBG_multiRoom_0, ElementsData.NewbieGuide.NBG_multiRoom_1,
-                        ElementsData.NewbieGuide.NBG_multiRoom_2, ElementsData.PVEMultiRoomFriend.PVEMultiRoomFriendPanel]
-        self.click_a_until_b_appear_list(perform_list)
-        PVEMultiRoomFriendPanel.click_btn_close(self)
+        pass
+        # PVEMultiRoomFriendPanel.click_btn_close(self)
 
     def guide_friend_duel(self):
-        perform_list = [ElementsData.NewbieGuide.NBG_multiRoom_0, ElementsData.NewbieGuide.NBG_multiRoom_1,
-                        ElementsData.NewbieGuide.NBG_multiRoom_2, ElementsData.PVEMultiRoomFriend.PVEMultiRoomFriendPanel]
-        self.click_a_until_b_appear_list(perform_list)
+        pass
+
+    def guide_fishing_cast(self):
+        pass
+
+    def guide_fish_point(self):
+        pass

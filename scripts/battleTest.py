@@ -42,7 +42,9 @@ def fish_once(bp: BasePage, fishery_id="", fish_id="", is_quick=False):
     if fish_id != "":
         bp.cmd("mode 0 0")
 
-def fail_once(bp: BasePage, fishery_id="", fish_id=""):
+# mode=0是超距失败
+# mode!=0是超张力失败
+def fail_once(bp: BasePage, fishery_id="", fish_id="", mode=0):
     bp.set_time_scale()
     if fish_id != "":
         c = f"mode {fishery_id} {fish_id}"
@@ -50,6 +52,8 @@ def fail_once(bp: BasePage, fishery_id="", fish_id=""):
         bp.cmd(c)
     BattlePreparePanel.click_btn_cast(bp)
     BattlePanel.hook(bp)
+    if mode != 0:
+        BattlePanel.hold_btn_reel(bp)
     bp.set_time_scale()
     element_btn = ResultPanel.wait_for_result(bp)
     ResultPanel.automatic_settlement(bp, element_btn=element_btn)
@@ -395,14 +399,14 @@ def main(bp: BasePage, fishery_id, is_double_week=False, is_in_double_week=False
 
 if __name__ == '__main__':
     # 连接设备号为127.0.0.1:21533的设备
-    bp = BasePage("127.0.0.1:21533", is_mobile_device=False)
+    bp = BasePage("127.0.0.1:21523", is_mobile_device=True)
     bp.is_time_scale = False
     gameInit.set_joystick(bp)
     bp.custom_cmd("setTension 0.9")
     # bp.set_item_count(target_count=1000000000, item_tpid="100500")
 
     # main(bp, fishery_id="400321",  is_double_week=True, is_in_double_week=True)
-    circulate_fish(bp, is_quick=True)
+    circulate_fish(bp, is_quick=False, fishery_id="400322")
     # fish_all(bp, is_quick=False)
     # fish_once(bp, is_quick=False)
     # 断开连接

@@ -359,6 +359,7 @@ class ElementsData:
         value_cost = {"locator":"UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>btn_cast>value_cost"}
 
         wait_for_join = {"locator":"UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_activity>btn_activity>btn_tournaments>rank>value_3"}
+        btn_cancel = {"locator":"UICanvas>Default>BattlePreparePanel>panel_gears_new>panel_gears_switch>btns>btn_cancel>text"}
 
         class GlobalProgress:
             progress_info = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_tournaments_mini>panel_global_progress>panel_rewards>rewards>progress_info", "focus": (0.5, 0)}

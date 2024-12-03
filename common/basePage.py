@@ -521,10 +521,11 @@ class BasePageMain:
         return position_list[0]
 
     # 在b元素出现前一直尝试点击a元素
-    def click_a_until_b_appear(self, element_data_a: dict, element_data_b: dict):
+    def click_a_until_b_appear(self, element_data_a: dict, element_data_b: dict, interval: float = 0.5, ignore_set=None):
         while not self.exist(element_data=element_data_b):
             self.click_element_safe(element_data=element_data_a)
-            self.sleep(0.5)
+            self.clear_popup(ignore_set=ignore_set)
+            self.sleep(interval)
 
     # 第一次a为列表第1个元素 b为第2个元素
     # 第二次a为列表第2个元素 b为第3个元素
@@ -540,7 +541,7 @@ class BasePageMain:
     def click_a_until_b_disappear(self, element_data_a: dict, element_data_b: dict, interval: float = 0.5, ignore_set=None):
         self.wait_for_appear(element_data=element_data_b, is_click=False)
         while self.exist(element_data=element_data_b):
-            self.clear_popup_once(ignore_set=ignore_set)
+            self.clear_popup(ignore_set=ignore_set)
             self.click_element_safe(element_data=element_data_a)
             self.sleep(interval)
 
@@ -549,7 +550,7 @@ class BasePageMain:
         self.click_a_until_b_disappear(element_data_a=element_data, element_data_b=element_data, interval=interval, ignore_set=ignore_set)
 
     # 等待指定元素出现
-    def wait_for_appear(self, element_data: dict=None, element_data_list=None,is_click: bool = False, interval: float = 0.2, timeout=120, ignore_set=None):
+    def wait_for_appear(self, element_data: dict = None, element_data_list=None, is_click: bool = False, interval: float = 0.2, timeout=120, ignore_set=None):
         # 是否找到目标位置
         def is_position(p_list):
             p = []
@@ -570,7 +571,7 @@ class BasePageMain:
         cur = 0
         position = []
         while cur < timeout:
-            self.clear_popup_once(ignore_set=ignore_set)
+            self.clear_popup(ignore_set=ignore_set)
             position_list = self.get_position_list(element_data_list=element_data_list)
             position = is_position(position_list)
             if position:
@@ -1149,6 +1150,29 @@ class BasePage(BasePageMain):
             return
         self.lua_console_list([command])
 
+    # lua_code_main是lua代码主体
+    # lua_code_res是需要接收的部分
+    def lua_console_with_response(self, lua_code_main="", lua_code_print=""):
+        # 清空消息列表 开始收消息
+        self.log_list.clear()
+        self.log_list_flag = True
+        title = f'<==== [C#] Receive LuaSnippets Response "{lua_code_print}" ====>'
+
+        lua_code = lua_code_main
+
+        if lua_code:
+            lua_code += "\n"
+        lua_code += rf"print('{title}',tostring({lua_code_print}))"
+        # 发送消息
+        self.lua_console(lua_code)
+
+        target_log = self.receive_until_get_msg(msg_name="", key_sc=title)
+
+        if not target_log:
+            return None
+
+        return target_log.split(title)[1].strip()
+
     def custom_cmd_list(self, command_list):
         if not command_list:
             return
@@ -1166,6 +1190,7 @@ class BasePage(BasePageMain):
     def get_scene_list(self):
         return rpcMethodRequest.get_scene_list(self.poco)
 
+
     def get_target_log(self, msg_key):
         target_log = ""
         for log in self.log_list:
@@ -1175,13 +1200,12 @@ class BasePage(BasePageMain):
             break
         return target_log
 
-    def receive_until_get_msg(self, msg_name, timeout=5):
+    def receive_until_get_msg(self, msg_name, timeout=5, key_sc='<==== [Lua] Receive Net Msg "SC'):
         cur = 0
         while cur < timeout:
             cur += 0.05
             self.sleep(0.05)
             # 在最近收集的消息列表中筛出目标消息
-            key_sc = '<==== [Lua] Receive Net Msg "SC'
             msg_key = key_sc + msg_name
             target_log = self.get_target_log(msg_key)
             if target_log == "":
@@ -1381,21 +1405,18 @@ class BasePage(BasePageMain):
             return table_data_object_activity_double_week["fishSpotB"], True
         return table_data_object_activity_double_week["fishSpot"], False
 
-    # @staticmethod
-    # def monitor_hook(args):
-    #     print(f"Thread {args.thread.name} died with exception: {args.exc_value}")
-    #     raise FindNoElementError
-
-
-
 
 
 
 if __name__ == '__main__':
-    bp = BasePage(is_mobile_device=True, serial_number="b6h65hd64p5pxcyh")
+    bp = BasePage(is_mobile_device=False, serial_number="b6h65hd64p5pxcyh")
     # "127.0.0.1:21613"
     # "b6h65hd64p5pxcyh"
-    bp.set_item_count(item_tpid="100500", target_count=10)
+    # "TimeMgr:GetServerTime()"
+
+    time_server = bp.lua_console_with_response(lua_code_print="TimeMgr:GetServerTime()")
+    a = int(time_server) - 60 * 60 * 1000 * 25
+    print(a)
     # bp.cmd("levelupto 12")
     # bp.lua_console('PanelMgr:OpenPanel("HomePanel")')
     # bp.set_text(element_data={"locator":"UICanvas>Default>PlayerInfoPanel>panel>Panel_PlayerCard_new>panel>panel_playerinfo>playerinfo>player_id>value"}, text="1000002002")

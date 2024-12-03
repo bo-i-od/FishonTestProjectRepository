@@ -139,12 +139,12 @@ class BattlePanel(BasePage):
             progress = (arrow_position[0][1] - progress_range[0]) / h
             self.sleep(0.05)
         try:
-            self.ray_input(element_data=ElementsData.Battle.btn_reel, target_name="btn_cast", kind="down")
+            BattlePanel.hold_btn_reel(self)
+            self.sleep(0.1)
+            BattlePanel.release_btn_reel(self)
         except RemoteError:
             pass
 
-        # self.ray_input(element_data=ElementsData.Battle.btn_reel, target_name="btn_cast", kind="up")
-        # self.click_position_base(position_btn_reel)
 
 
     def hook_guide_oversea(self):
