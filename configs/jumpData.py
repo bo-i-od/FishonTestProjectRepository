@@ -66,6 +66,7 @@ class JumpData:
         "BugMultiplePanel": [ElementsData.BugMultiple.btn_cancel],
         "BuyEnergyPanel": [ElementsData.BuyEnergy.btn_close],
         "CareerPanel": [ElementsData.Career.btn_close],
+        "ChatPanel": [ElementsData.Chat.btn_close],
         "ChampointshipResultPopup": [ElementsData.ChampointshipResult.btn_close],
         "CommonWebViewPanel": [ElementsData.CommonWebView.btn_close],
         "ClubApplyPanel": [ElementsData.ClubApply.btn_close],

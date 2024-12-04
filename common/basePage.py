@@ -56,6 +56,7 @@ class BasePageMain:
 
         # 默认端口 5001
         addr = ('', 5001)
+        # Unity log接收端口5002
         addr_listen = ('', 5002)
         self.dev = dev
         if self.dev is None:
@@ -64,6 +65,8 @@ class BasePageMain:
 
         self.poco = UnityPoco(addr, device=dev)
         self.poco_listen = None
+
+        # 不是ios就可以开启Unity log接收
         if not self.is_ios:
             self.poco_listen = UnityPoco(addr_listen, device=dev)
         self.screen_w, self.screen_h = self.poco.get_screen_size()  # 获取屏幕尺寸
@@ -71,6 +74,7 @@ class BasePageMain:
         # ios设备出现过poco获取屏幕尺寸与wda尺寸不同的情况，所以需要scale_factor对点击位置做下矫正
         self.scale_factor_w = 1
         self.scale_factor_h = 1
+
         if self.is_ios:
             self.udid = wda.usbmux.pyusbmux.list_devices()[0].serial
             usb_dev = wda.Client(f"http+usbmux://{self.udid}:8100")
@@ -80,6 +84,7 @@ class BasePageMain:
 
         if self.is_debug_log:
             print(self.screen_w, self.screen_h)
+
         self.warning_list = []
         self.erro_list = []
         file_path = os.path.join(os.path.dirname(__file__))
@@ -93,11 +98,12 @@ class BasePageMain:
         # BasePageExt(self)
 
     def get_device(self, serial_number=None):
-        # pc端
+        # unity端
         if not self.is_mobile_device:
             dev = UnityEditorWindow()
             return dev
 
+        # 非unity
         # 已连接
         try:
             dev = G.DEVICE
@@ -121,7 +127,7 @@ class BasePageMain:
         if self.poco_listen is not None:
             self.poco_listen.agent.c.conn.close()
 
-    # 开启调试打印再打印
+    # is_debug_log是True再打印
     def debug_log(self, *msg):
         if self.is_debug_log:
             print(*msg)
@@ -143,6 +149,7 @@ class BasePageMain:
             element_data_copy["locator"] = element_data_copy["locator"] + '>' + offspring_path
         return element_data_copy
 
+    # 依次element_data_list中的element_data和offspring_path合成
     def get_element_data_list(self, element_data_list, offspring_path):
         if offspring_path == "":
             return element_data_list
@@ -166,7 +173,6 @@ class BasePageMain:
         if self.exist(element_data_list=[element_data], offspring_path=offspring_path)[0]:
             return True
         return False
-
 
     # 得到元素的Instance Id列表
     def get_object_id_list(self, element_data: dict = None, element_data_list: list = None, offspring_path=""):
@@ -677,25 +683,31 @@ class BasePageMain:
             self.sleep(0.5)
 
     # 回到主界面
-    def go_home(self, cur_panel=None):
+    def go_home(self, cur_panel=None, target_panel=None):
         cur = 0
-        at_home_flag = True
-        while at_home_flag:
+        at_home_flag = False
+        while not at_home_flag:
             self.clear_panel_except_home()
             self.sleep(0.5)
+
+            # 在返回大厅过程中找到目标面板就直接返回
+            at_target_panel_flag = self.exist(element_data=JumpData.panel_dict[target_panel]["element_data"])
+            if at_target_panel_flag:
+                return
+
             cur += 1
             if cur > 30:
                 raise FindNoElementError("FindNoElement")
-            at_home_flag = (not self.exist(element_data=self.element_data_home))
+            at_home_flag = self.exist(element_data=self.element_data_home)
             if cur_panel is not None:
-                at_home_flag = at_home_flag or self.exist(element_data=JumpData.panel_dict[cur_panel]["element_data"])
+                at_home_flag = at_home_flag and not self.exist(element_data=JumpData.panel_dict[cur_panel]["element_data"])
 
     # 去指定界面
     def go_to_panel(self, panel):
         panel_dict = JumpData.panel_dict[panel]
         if self.exist(element_data=panel_dict["element_data"]):
             return
-        self.go_home()
+        self.go_home(target_panel=panel)
         while not self.exist(element_data=panel_dict["element_data"]):
             self.clear_popup_once()
             for element_data in panel_dict["open_path"]:
@@ -1313,50 +1325,6 @@ class BasePage(BasePageMain):
                 itemID = table_data_object["itemID"]
                 item_id_list.append(itemID)
 
-        # table_data = self.excelTools.get_table_data("FISH_SPOT.xlsm")
-        #
-        # # 获取10倍钓点所在的行
-        # spot_id_list = table_data['tpId']
-        # try:
-        #     index = spot_id_list.index(int(spot_id))
-        # except ValueError:
-        #     index = spot_id_list.index(str(spot_id))
-        # fishDropInfo_list = table_data['fishDropInfo']
-        # # 拿到对应钓点的DropID列表
-        # drop_id_list = []
-        # for fishDropInfo in fishDropInfo_list:
-        #     drop_id = fishDropInfo["DropID"][index]
-        #     if drop_id == 0 or drop_id == "0":
-        #         continue
-        #     drop_id_list.append(drop_id)
-        #
-        # print(drop_id_list)
-        # # 将DropID列表转为dropPackId列表
-        # table_data = self.excelTools.get_table_data("DROP_PACK.xlsm")
-        # drop_pack_id_list = []
-        # for target_id in drop_id_list:
-        #     # DROP_PACK.xlsm表从dropId找到对应的dropPackId
-        #     for index, drop_id in enumerate(table_data["dropId"]):
-        #         enable = table_data["enabled"][index]
-        #         if enable == 0 or enable == "0":
-        #             continue
-        #         if drop_id != target_id:
-        #             continue
-        #         drop_pack_id = table_data["dropPackId"][index]
-        #         drop_pack_id_list.append(drop_pack_id)
-        # print(drop_pack_id_list)
-        # item_id_list = []
-        # table_data = self.excelTools.get_table_data("DROP_ENTITY.xlsm")
-        # for drop_pack_id in drop_pack_id_list:
-        #     try:
-        #         index = table_data["dropPackId"].index(int(drop_pack_id))
-        #     except ValueError:
-        #         index = table_data["dropPackId"].index(str(drop_pack_id))
-        #     enable = table_data["enabled"][index]
-        #     if enable == 0 or enable == "0":
-        #         continue
-        #     item_id_list.append(table_data["itemID"][index])
-
         return item_id_list
 
     def fish_bone_to_fish(self, fish_bone_id):
@@ -1368,23 +1336,6 @@ class BasePage(BasePageMain):
         table_data_object = self.excelTools.get_table_data_object_by_key_value(key="startConditionId", value=mission_condition_id, book_name="FISH_STATE.xlsm")
         fish_id = table_data_object["fishChange"][0]["fish"]
 
-        # # 鱼骨tpid转missionConditionID
-        # table_data = self.excelTools.get_table_data("MISSION_CONDITION.xlsm")
-        # try:
-        #     index = table_data["triggerKeyS"].index(int(fish_bone_id))
-        # except ValueError:
-        #     index = table_data["triggerKeyS"].index(str(fish_bone_id))
-        # mission_condition_id = table_data["missionConditionID"][index]
-
-
-        # # missionConditionID转鱼id
-        # table_data = self.excelTools.get_table_data("FISH_STATE.xlsm")
-        # try:
-        #     index = table_data["startConditionId"].index(int(mission_condition_id))
-        # except ValueError:
-        #     index = table_data["startConditionId"].index(str(mission_condition_id))
-        # fish_id = table_data["fishChange"][0]["fish"][index]
-        # print(fish_id)
         return str(fish_id)
 
     def get_spot_id_list(self, fishery_id):
@@ -1414,10 +1365,10 @@ if __name__ == '__main__':
     # "127.0.0.1:21613"
     # "b6h65hd64p5pxcyh"
     # "TimeMgr:GetServerTime()"
-
-    time_server = bp.lua_console_with_response(lua_code_print="TimeMgr:GetServerTime()")
-    a = int(time_server) - 60 * 60 * 1000 * 25
-    print(a)
+    # t = bp.lua_console_with_response(lua_code_print="TimeMgr:GetServerTime()")
+    # print(t)
+    bp.go_to_panel("TournamentsPanel")
+    # bp.cmd_list(["guideskip", "levelupto 90"])
     # bp.cmd("levelupto 12")
     # bp.lua_console('PanelMgr:OpenPanel("HomePanel")')
     # bp.set_text(element_data={"locator":"UICanvas>Default>PlayerInfoPanel>panel>Panel_PlayerCard_new>panel>panel_playerinfo>playerinfo>player_id>value"}, text="1000002002")
