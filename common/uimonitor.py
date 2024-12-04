@@ -85,7 +85,7 @@ class UIMonitor:
             self.cur = 0
         else:
             self.cur += 1
-        if self.cur > 10:
+        if self.cur > 15:
             raise TimeoutException("Timeout!")
 
         self.schedule_next_check(self.cur)
@@ -109,7 +109,7 @@ class UIMonitor:
             return
         self.cancel_timer()
         self.cur = cur
-        self.timer = Timer(10, self.add_task, args=["check_panels"])
+        self.timer = Timer(15, self.add_task, args=["check_panels"])
         self.timer.start()
 
     def cancel_timer(self):

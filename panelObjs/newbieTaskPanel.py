@@ -42,7 +42,7 @@ class NewbieTaskPanel(BasePage):
 
     def get_progress_reward_viewport(self, progress_reward_id_list):
         size = self.get_size(object_id=progress_reward_id_list[0])
-        progress_reward_viewport = Viewport(self, element_viewport=ElementsData.NewbieTask.progress_reward_viewport, item_id_list=progress_reward_id_list, viewport_edge=[0, 0.1])
+        progress_reward_viewport = Viewport(self, element_viewport=ElementsData.NewbieTask.progress_reward_viewport, item_id_list=progress_reward_id_list, viewport_edge=[0, 2 * size[0]])
         return progress_reward_viewport
 
     def get_progress_reward_position_list(self, progress_reward_id_list):
