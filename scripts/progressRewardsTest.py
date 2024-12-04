@@ -101,6 +101,7 @@ def mini_panel_test(bp: BasePage):
     compare(icon_mini, icon)
     compare(quantity_mini, quantity)
 
+    bp.sleep(1)
     # 关闭tips
     ProgressRewardsPanel.click_btn_i(bp)
 
