@@ -328,11 +328,11 @@ def progress_test(bp:BasePage):
     # 点击图标
     locked_list = reward_status[0]
     progress_reward_icon_list = NewbieTaskPanel.get_progress_reward_icon_list(bp, progress_reward_id_list=locked_list)
-    progress_reward_position_list = NewbieTaskPanel.get_progress_reward_position_list(bp, progress_reward_id_list=locked_list)
     progress_reward_viewport = NewbieTaskPanel.get_progress_reward_viewport(bp, progress_reward_id_list=locked_list)
-    r = random.randint(0, len(progress_reward_position_list) - 1)
+    r = random.randint(0, len(locked_list) - 1)
     reward_icon = progress_reward_icon_list[r]
     progress_reward_viewport.move_until_appear(target_id=locked_list[r])
+    progress_reward_position_list = NewbieTaskPanel.get_progress_reward_position_list(bp, progress_reward_id_list=locked_list)
     bp.sleep(1)
     bp.click_position(progress_reward_position_list[r])
     bp.sleep(1)
@@ -455,8 +455,9 @@ def main(bp: BasePage):
     locked_test(bp)
 
     # 升级重进界面
-    bp.cmd("levelupto 31")
+    bp.cmd("levelupto 51")
     bp.go_home()
+    PlayerLevelupPanel.wait_for_panel_appear(bp)
     bp.go_to_panel("NewbieTaskPanel")
 
     # 跳转测试
