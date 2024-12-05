@@ -691,13 +691,17 @@ class BasePageMain:
             self.sleep(0.5)
 
             # 在返回大厅过程中找到目标面板就直接返回
-            at_target_panel_flag = self.exist(element_data=JumpData.panel_dict[target_panel]["element_data"])
+            at_target_panel_flag = False
+            if target_panel:
+                at_target_panel_flag = self.exist(element_data=JumpData.panel_dict[target_panel]["element_data"])
             if at_target_panel_flag:
                 return
 
             cur += 1
             if cur > 30:
                 raise FindNoElementError("FindNoElement")
+
+            # 有HomePanel且没有cur_panel需要关闭时才判断停止
             at_home_flag = self.exist(element_data=self.element_data_home)
             if cur_panel is not None:
                 at_home_flag = at_home_flag and not self.exist(element_data=JumpData.panel_dict[cur_panel]["element_data"])
@@ -1361,13 +1365,15 @@ class BasePage(BasePageMain):
 
 
 if __name__ == '__main__':
-    bp = BasePage(is_mobile_device=False, serial_number="b6h65hd64p5pxcyh")
+    bp = BasePage(is_mobile_device=True, serial_number="127.0.0.1:21503")
     # "127.0.0.1:21613"
     # "b6h65hd64p5pxcyh"
     # "TimeMgr:GetServerTime()"
     # t = bp.lua_console_with_response(lua_code_print="TimeMgr:GetServerTime()")
     # print(t)
-    bp.go_to_panel("TournamentsPanel")
+    # bp.go_to_panel("TournamentsPanel")
+    bp.go_home()
+
     # bp.cmd_list(["guideskip", "levelupto 90"])
     # bp.cmd("levelupto 12")
     # bp.lua_console('PanelMgr:OpenPanel("HomePanel")')
