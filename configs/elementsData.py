@@ -212,7 +212,7 @@ class ElementsData:
     class Battle:
         BattlePanel = {"locator": "UICanvas>Default>BattlePanel"}
         joystick = {"locator": "UICanvas>Default>BattlePanel>joystick"}
-        btn_reel = {"locator": "UICanvas>Default>BattlePanel>btn_cast>btn"}
+        btn_reel = {"locator": "UICanvas>Default>BattlePanel>btn_cast", "focus": (1, 1)}
         tip_slide = {"locator": "UICanvas>Default>BattlePanel>btn_cast>tip_slide"}
         progress = {"locator": "UICanvas>Default>BattlePanel>hook>progress>bg"}
         arrow = {"locator": "UICanvas>Default>BattlePanel>hook>progress>arrow"}
@@ -1117,7 +1117,7 @@ class ElementsData:
     class PlayerEditName:
         PlayerEditNamePanel = {"locator": "UICanvas>Default>PlayerEditNamePanel"}
         head_viewport = {"locator": "UICanvas>Default>PlayerEditNamePanel>panel>panel_info>HeadList>Viewport","focus": (0, 0)}
-        btn_confirm = {"locator": "UICanvas>Default>PlayerEditNamePanel>panel>panel_info>btns>btn_confirm>btn_normal"}
+        btn_confirm = {"locator": "UICanvas>Default>PlayerEditNamePanel>panel>panel_info>btns>btn_confirm"}
         Input_PlayerName = {"locator": "UICanvas>Default>PlayerEditNamePanel>panel>panel_info>Input_PlayerName"}
         btn_confirm_oversea = {"locator": "UICanvas>Default>PlayerEditNamePanel>panel>btns>btn_confirm>btn_normal"}
         Input_PlayerName_oversea = {"locator": "UICanvas>Default>PlayerEditNamePanel>panel>Input_PlayerName"}
@@ -1127,7 +1127,7 @@ class ElementsData:
     class PlayerEditName_oversea:
         PlayerEditNamePanel = {"locator": "UICanvas>Default>PlayerEditNamePanel"}
         head_viewport = {"locator": "UICanvas>Default>PlayerEditNamePanel>panel>HeadList>Viewport","focus": (0, 0)}
-        btn_confirm = {"locator": "UICanvas>Default>PlayerEditNamePanel>panel>btns>btn_confirm>btn_normal"}
+        btn_confirm = {"locator": "UICanvas>Default>PlayerEditNamePanel>panel>btns>btn_confirm"}
         Input_PlayerName = {"locator": "UICanvas>Default>PlayerEditNamePanel>panel>Input_PlayerName"}
         head_list = {"locator": "UICanvas>Default>PlayerEditNamePanel>panel>HeadList>Viewport>Content>>head"}
         select = {"locator": "UICanvas>Default>PlayerEditNamePanel>panel>HeadList>Viewport>Content>>select"}

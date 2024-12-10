@@ -87,13 +87,13 @@ class PlayerEditNamePanel(BasePage):
         position_list = self.get_position_list(element_data_list=[ElementsData.PlayerEditName.btn_confirm, ElementsData.PlayerEditName_oversea.btn_confirm])
         if position_list[0]:
             if is_ray_input:
-                self.ray_input(target_name="btn_confirm", kind="click", element_data=ElementsData.PlayerEditName.btn_confirm)
+                self.ray_input(kind="click", element_data=ElementsData.PlayerEditName.btn_confirm)
                 return
             self.click_position(position_list[0][0])
             return
         if position_list[1]:
             if is_ray_input:
-                self.ray_input(target_name="btn_confirm", kind="click", element_data=ElementsData.PlayerEditName_oversea.btn_confirm)
+                self.ray_input(kind="click", element_data=ElementsData.PlayerEditName_oversea.btn_confirm)
                 return
             self.click_position(position_list[1][0])
             return
@@ -101,5 +101,5 @@ class PlayerEditNamePanel(BasePage):
 
 if __name__ == "__main__":
     bp = BasePage()
-    head_id_list = PlayerEditNamePanel.get_head_id_list(bp)
-    PlayerEditNamePanel.select_head(bp, head_id_list=head_id_list, index=24)
+    head_id_list = PlayerEditNamePanel.click_confirm(bp, is_ray_input=True)
+    bp.connect_close()

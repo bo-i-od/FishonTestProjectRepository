@@ -77,10 +77,10 @@ class BattlePanel(BasePage):
             return
 
     def release_btn_reel(self):
-        self.ray_input(element_data=ElementsData.Battle.btn_reel, target_name="btn_cast", kind="up")
+        self.ray_input(element_data=ElementsData.Battle.btn_reel, kind="up")
 
     def hold_btn_reel(self):
-        self.ray_input(element_data=ElementsData.Battle.btn_reel, target_name="btn_cast", kind="down")
+        self.ray_input(element_data=ElementsData.Battle.btn_reel, kind="down")
 
 
     def click_btn_reel(self):
@@ -169,10 +169,12 @@ class BattlePanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    while True:
-        hud_escaping = bp.get_text_list(element_data=ElementsData.Battle.hud_escaping)
-        if not hud_escaping:
-            bp.sleep(0.1)
-            continue
-        print(hud_escaping[0][:-1])
-        bp.sleep(0.1)
+    BattlePanel.hook(bp)
+    bp.connect_close()
+    # while True:
+    #     hud_escaping = bp.get_text_list(element_data=ElementsData.Battle.hud_escaping)
+    #     if not hud_escaping:
+    #         bp.sleep(0.1)
+    #         continue
+    #     print(hud_escaping[0][:-1])
+    #     bp.sleep(0.1)

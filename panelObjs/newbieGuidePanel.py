@@ -114,9 +114,9 @@ class NewbieGuidePanel(BasePage):
                         ElementsData.NewbieGuide.NBG_rookie_7]
         self.click_a_until_b_appear_list(perform_list)
         self.click_until_disappear(ElementsData.NewbieGuide.NBG_rookie_7)
-        self.ray_input(element_data=ElementsData.Battle.btn_reel, target_name="btn_cast", kind="down")
+        self.ray_input(element_data=ElementsData.Battle.btn_reel, kind="down")
         self.click_until_disappear(element_data=ElementsData.NewbieGuide.NBG_rookie_8)
-        self.ray_input(element_data=ElementsData.Battle.btn_reel, target_name="btn_cast", kind="up")
+        self.ray_input(element_data=ElementsData.Battle.btn_reel, kind="up")
         self.custom_cmd("autofish")
 
     def guide_rookie_2(self):

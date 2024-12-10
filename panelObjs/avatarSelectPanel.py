@@ -12,7 +12,7 @@ class AvatarSelectPanel(BasePage):
 
     def click_btn_start(self, is_ray_input=False):
         if is_ray_input:
-            self.ray_input(target_name="btn_start", element_data=ElementsData.AvatarSelect.btn_start, kind="click")
+            self.ray_input( element_data=ElementsData.AvatarSelect.btn_start, kind="click")
             return
         self.click_element(element_data=ElementsData.AvatarSelect.btn_start)
 
@@ -21,7 +21,13 @@ class AvatarSelectPanel(BasePage):
 
     def click_first_icon(self, is_ray_input=False):
         if is_ray_input:
-            self.ray_input(target_name="1", kind="click", element_data=ElementsData.AvatarSelect.gender_icon_list)
+            self.ray_input(kind="click", element_data=ElementsData.AvatarSelect.gender_icon_list)
             return
         position_list = self.get_position_list(element_data=ElementsData.AvatarSelect.gender_icon_list)
         self.click_position(position_list[0])
+
+
+if __name__ == '__main__':
+    bp = BasePage()
+    AvatarSelectPanel.click_btn_start(bp, is_ray_input=True)
+    bp.connect_close()
