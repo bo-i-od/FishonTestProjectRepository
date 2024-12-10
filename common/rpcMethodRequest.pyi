@@ -96,7 +96,10 @@ def set_object_active_by_id(poco:Poco, id_list: list, offspring_path:str, active
 def click_button(poco:Poco, element: list)-> any:
     ...
 
-def ray_input(poco:Poco, element: list, target_name:str, kind:str)-> any:
+def ray_input(poco:Poco, element: list, kind:str)-> any:
+    ...
+
+def ray_input_by_id(poco:Poco, id_list: list, offspring_path: str, kind:str)-> any:
     ...
 
 def set_time_scale(poco:Poco, time_scale:float)-> any:
