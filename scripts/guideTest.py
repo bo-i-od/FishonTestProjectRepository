@@ -220,7 +220,7 @@ def main(bp:BasePage):
     bp.go_home()
 
     # 钓点引导、鱼册引导
-    guide_list = ["guide_fish_point", "guide_album"]
+    guide_list = ["guide_fish_point", "guide_album", "guide_fishing_cast"]
     guide_BattlePreparePanel_test(bp, guide_list)
 
     # 升等级
@@ -240,7 +240,7 @@ def main(bp:BasePage):
     guide_TournamentsPanel_test(bp, guide_list)
 
     # 水族箱引导、照片墙引导、体感抛竿引导、
-    guide_list = ["guide_aquarium_2", "guide_fish_photo", "guide_fishing_cast"]
+    guide_list = ["guide_aquarium_2", "guide_fish_photo"]
     guide_BattlePreparePanel_test(bp, guide_list)
 
     # 断线引导
@@ -251,6 +251,6 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21523", is_mobile_device=True)
+    bp = BasePage("127.0.0.1:21523", is_mobile_device=False)
     main(bp)
     bp.connect_close()

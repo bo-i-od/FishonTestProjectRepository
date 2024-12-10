@@ -28,7 +28,9 @@ class RechargeEndlessPanel(BasePage):
         icon_id_list = self.get_offspring_id_list("item_list>>icon", object_id=group_id)
         quantity_id_list = self.get_offspring_id_list("item_list>>quantity>value", object_id=group_id)
         select_icon_list = self.get_icon_list(object_id_list=icon_id_list)
+        select_icon_list = merge_list(select_icon_list)
         select_quantity_list = self.get_text_list(object_id_list=quantity_id_list)
+        select_quantity_list = merge_list(select_quantity_list)
         str_to_int_list(select_quantity_list)
         item_icon_and_quantity_list = RechargeEndlessPanel.get_item_icon_and_quantity_list(self)
         select_icon_list.append(item_icon_and_quantity_list[0][index])
@@ -45,8 +47,10 @@ class RechargeEndlessPanel(BasePage):
             group_id = group_id_list[cur]
             icon_id_list = self.get_offspring_id_list("item_list>>icon", object_id=group_id)
             icon_list = self.get_icon_list(object_id_list=icon_id_list)
+            icon_list = merge_list(icon_list)
             position_list = self.get_position_list(object_id_list=icon_id_list)
             clickable_icon_list += icon_list
+            position_list = merge_list(position_list)
             clickable_position_list += position_list
             cur += 1
         return clickable_icon_list, clickable_position_list

@@ -64,7 +64,7 @@ class CareerPanel(BasePage):
 
         page_item_middle_id_list = CareerPanel.get_page_item_id_list(self)
 
-        icon_size_list = self.get_size_list(object_id_list=page_item_middle_id_list,offspring_path="icon_bg")
+        icon_size_list = self.get_size_list(object_id=page_item_middle_id_list[0],offspring_path="icon_bg")
         edge = [icon_size_list[0][0],0.01]
         viewport = Viewport(self, element_viewport=ElementsData.Career.career_viewport, item_id_list=page_item_middle_id_list,viewport_edge=edge)
         range_r = viewport.get_viewport_range()[0]

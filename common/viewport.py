@@ -1,5 +1,8 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
+from tools.commonTools import merge_list
+
+
 class Viewport:
     def __init__(self, bp, element_viewport, element_item_list=None, item_id_list=None, viewport_direction=None,viewport_range=None, viewport_edge=None):
         self.basePage = bp
@@ -107,9 +110,17 @@ class Viewport:
         return viewport_size
 
     def get_clickable_icon_and_position_list(self):
+        icon_list = []
+        position_list = []
         cur = 0
-        icon_list = self.basePage.get_icon_list(element_data=self.element_item_list, object_id_list=self.item_id_list)
-        position_list = self.basePage.get_position_list(element_data=self.element_item_list, object_id_list=self.item_id_list)
+        if self.element_item_list:
+            icon_list = self.basePage.get_icon_list(element_data=self.element_item_list)
+            position_list = self.basePage.get_position_list(element_data=self.element_item_list)
+        elif self.item_id_list:
+            icon_list = self.basePage.get_icon_list(object_id_list=self.item_id_list)
+            position_list = self.basePage.get_position_list(object_id_list=self.item_id_list)
+            icon_list = merge_list(icon_list)
+            position_list = merge_list(position_list)
         clickable_icon_list = []
         clickable_position_list = []
         while cur < len(position_list):
@@ -135,7 +146,12 @@ class Viewport:
 
     def get_clickable_index_list(self):
         cur = 0
-        position_list = self.basePage.get_position_list(element_data=self.element_item_list, object_id_list=self.item_id_list)
+        position_list = []
+        if self.element_item_list:
+            position_list = self.basePage.get_position_list(element_data=self.element_item_list)
+        elif self.item_id_list:
+            position_list = self.basePage.get_position_list(object_id_list=self.item_id_list)
+            position_list = merge_list(position_list)
         clickable_index_list = []
         while cur < len(position_list):
             if self.viewport_direction == "column":

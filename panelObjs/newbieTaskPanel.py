@@ -36,7 +36,7 @@ class NewbieTaskPanel(BasePage):
     # 得到3天活动代币数量
     def get_coin(self):
         coin = resource.str_to_int(self.get_text(element_data=ElementsData.NewbieTask.coin))
-        item_count = self.get_item_count( item_tpid="209012")
+        item_count = self.get_item_count(item_tpid="209012")
         compare(coin, item_count)
         return coin
 
@@ -46,17 +46,28 @@ class NewbieTaskPanel(BasePage):
         return progress_reward_viewport
 
     def get_progress_reward_position_list(self, progress_reward_id_list):
-        return self.get_position_list(object_id_list=progress_reward_id_list, offspring_path="item>item_model_mini(Clone)>icon")
+        position_list = self.get_position_list(object_id_list=progress_reward_id_list, offspring_path="item>item_model_mini(Clone)>icon")
+        progress_reward_position_list = []
+        cur = 0
+        while cur < len(position_list):
+            if not position_list[cur]:
+                cur += 1
+                continue
+            progress_reward_position_list.append(position_list[cur])
+            cur += 1
+        return progress_reward_position_list
 
     # 得到进度条奖励图标
     def get_progress_reward_icon_list(self, progress_reward_id_list):
         icon_list = self.get_icon_list(object_id_list=progress_reward_id_list, offspring_path="item>item_model_mini(Clone)>icon")
+        icon_list = merge_list(icon_list)
         return icon_list
 
 
     # 得到进度条奖励数量
     def get_progress_reward_quantity_list(self, progress_reward_id_list):
         quantity_list = self.get_text_list(object_id_list=progress_reward_id_list, offspring_path="item>item_model_mini(Clone)>quantity>value")
+        quantity_list = merge_list(quantity_list)
         resource.str_to_int_list(quantity_list)
         return quantity_list
 
@@ -67,6 +78,7 @@ class NewbieTaskPanel(BasePage):
         collected_list = []
         progress_reward_item_id_list = self.get_object_id_list(element_data=ElementsData.NewbieTask.progress_reward_list, offspring_path="item")
         progress_reward_id_list = self.get_parent_id_list(object_id_list=progress_reward_item_id_list)
+        progress_reward_id_list = merge_list(progress_reward_id_list)
         coin = NewbieTaskPanel.get_coin(self)
         cur = 0
         while cur < len(progress_reward_id_list):
@@ -115,7 +127,7 @@ class NewbieTaskPanel(BasePage):
         self.click_position(position)
 
     def get_task_viewport(self, task_id_list):
-        size = self.get_size_list(object_id_list=task_id_list)[0]
+        size = self.get_size_list(object_id=task_id_list[0])[0]
         task_viewport = Viewport(self, element_viewport=ElementsData.NewbieTask.task_viewport, item_id_list=task_id_list, viewport_direction="column", viewport_edge=[0, 2 * size[1]])
         return task_viewport
 
@@ -167,14 +179,22 @@ class NewbieTaskPanel(BasePage):
     # 得到按钮位置
     def get_task_position_list(self, task_id_list):
         position_list = self.get_position_list(object_id_list=task_id_list, offspring_path="list_right")
-        return position_list
+        task_position_list = []
+        cur = 0
+        while cur < len(position_list):
+            if not position_list[cur]:
+                cur += 1
+                continue
+            task_position_list.append(position_list[cur])
+            cur += 1
+        return task_position_list
 
     # 得到挑战的instance id
     def get_challenge_id_list(self):
         return self.get_object_id_list(element_data=ElementsData.NewbieTask.challenge_list)
 
     def get_challenge_viewport(self, challenge_id_list):
-        size = self.get_size_list(object_id_list=challenge_id_list)[0]
+        size = self.get_size_list(object_id=challenge_id_list[0])[0]
         challenge_viewport = Viewport(self, element_viewport=ElementsData.NewbieTask.challenge_viewport, item_id_list=challenge_id_list, viewport_direction="column", viewport_edge=[0, 0.75 * size[1]])
         return challenge_viewport
 
@@ -198,12 +218,12 @@ class NewbieTaskPanel(BasePage):
         challenge_position_list = []
         cur = 0
         while cur < len(challenge_id_list):
-            position_list = self.get_position_list(object_id_list=[challenge_id_list[cur]], offspring_path="fish_info>right")
+            position_list = self.get_position_list(object_id=challenge_id_list[cur], offspring_path="fish_info>right")
             if position_list:
                 challenge_position_list.append(position_list[0])
                 cur += 1
                 continue
-            position_list = self.get_position_list(object_id_list=[challenge_id_list[cur]], offspring_path="no_records>btn_go")
+            position_list = self.get_position_list(object_id=challenge_id_list[cur], offspring_path="no_records>btn_go")
             if position_list:
                 challenge_position_list.append(position_list[0])
                 cur += 1

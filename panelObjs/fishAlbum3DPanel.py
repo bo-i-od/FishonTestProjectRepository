@@ -47,7 +47,8 @@ class FishAlbum3DPanel(BasePage):
 
         cur = 0
         while cur < len(tab_id_list):
-            if self.get_offspring_id_list(object_id=tab_id_list[cur], offspring_path="lock"):
+            lock_id_list = self.get_offspring_id_list(object_id=tab_id_list[cur], offspring_path="lock")
+            if lock_id_list:
                 lock_tab_list.append(cur)
                 cur += 1
                 continue
@@ -57,6 +58,7 @@ class FishAlbum3DPanel(BasePage):
 
     def get_tab_name_list(self, tab_id_list):
         tab_name_list = self.get_text_list(object_id_list=tab_id_list, offspring_path="title")
+        tab_name_list = merge_list(tab_name_list)
         return tab_name_list
 
     def get_progress_cur(self):
@@ -72,7 +74,9 @@ class FishAlbum3DPanel(BasePage):
     def get_select_index(self, tab_id_list):
         cur = 0
         while cur < len(tab_id_list):
-            if self.get_offspring_id_list(object_id_list=tab_id_list[cur], offspring_path="select"):
+            select_id_list = self.get_offspring_id_list(object_id_list=tab_id_list[cur], offspring_path="select")
+            select_id_list = merge_list(select_id_list)
+            if select_id_list:
                 break
             cur += 1
         return cur

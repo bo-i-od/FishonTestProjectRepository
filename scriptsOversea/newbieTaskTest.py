@@ -235,7 +235,7 @@ def collect_test(bp:BasePage):
     task_reward_tpid_list = bp.get_tpid_list(item_icon_name_list=task_reward_icon_list)
     cur = 0
     while cur < len(task_reward_tpid_list):
-        item_tpid_list = bp.get_item_tpid_list(icon=task_reward_icon_list[cur])
+        item_tpid_list = bp.get_tpid(item_icon_name=task_reward_icon_list[cur])
         if 209012 not in item_tpid_list:
             task_reward_tpid_list[cur] = task_reward_tpid_list[cur]
             cur += 1

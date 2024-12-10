@@ -17,6 +17,7 @@ class MailPanel(BasePage):
         self.click_position(position_list[index])
         tab_id_list = self.get_parent_id_list(element_data=ElementsData.Mail.tab_list)
         toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
+        toggle_is_on_list = merge_list(toggle_is_on_list)
         toggle_is_on_index = get_toggle_is_on_index(toggle_is_on_list)
         compare(index, toggle_is_on_index)
 

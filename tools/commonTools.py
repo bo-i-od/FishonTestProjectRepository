@@ -174,6 +174,13 @@ def get_toggle_is_on_index(toggle_is_on_list:list):
         cur += 1
     return res
 
+def merge_list(list_before_merge):
+    list_after_merge = []
+    for child_list in list_before_merge:
+        list_after_merge += child_list
+    return list_after_merge
+
+
 def get_img_position(query,img):
     if img is None:
         print("屏幕可能锁定")

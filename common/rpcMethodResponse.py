@@ -1,36 +1,115 @@
-import json
-import queue
-
-from common.basePage import BasePage
+from poco.pocofw import Poco
 
 
+def set_text(poco:Poco, element: list, text: str) -> any:
+    ...
+
+def set_text_by_id(poco:Poco, id_list: list, offspring_path:str, text: str) -> any:
+    ...
+
+def get_text(poco:Poco, element: list) -> list:
+    ...
+
+def get_text_by_id(poco:Poco, id_list: list, offspring_path:str) -> list:
+    ...
+
+def get_slider_value(poco:Poco, element: list) -> list:
+    ...
+
+def get_slider_value_by_id(poco:Poco, id_list: list, offspring_path:str) -> list:
+    ...
+
+def get_img_name(poco:Poco, element: list) -> list:
+    ...
+
+def get_img_name_by_id(poco:Poco, id_list: list, offspring_path:str) -> list:
+    ...
+
+def get_name(poco:Poco, element: list) -> list:
+    ...
+
+def get_name_by_id(poco:Poco, id_list: list, offspring_path:str) -> list:
+    ...
+
+def get_position(poco:Poco, element: list) -> list:
+    ...
+
+def get_position_by_id(poco:Poco, id_list: list, offspring_path:str) -> list:
+    ...
+
+def get_size(poco:Poco, element: list) -> list:
+    ...
+
+def get_size_by_id(poco:Poco, id_list: list, offspring_path:str) -> list:
+    ...
+
+def get_object_id(poco:Poco, element: list) -> list:
+    ...
 
 
-def qte(bp: BasePage, params_str):
-    params = json.loads(params_str)
-    qte_input_mask = params[0]
-    qte_input = params[1]
-    bp.qte_queue = queue.Queue()
+def get_offspring_id_by_id(poco:Poco, id_list: list, offspring_path: str) -> list:
+    ...
 
-    cur = 0
-    while cur < 6:
-        # if qte_input_mask & (1 << cur) == 0:
-        #     cur += 1
-        #     continue
-        is_on = qte_input & (1 << cur) != 0
-        # is_change = qte_input_mask & (1 << cur) != 0
-        if is_on:
-            bp.qte_queue.put(cur)
-            cur += 1
-            continue
-        cur += 1
+def get_parent_id(poco:Poco, element: list) -> list:
+    ...
 
-    # qte_up = (qte_input & 0x1) != 0
-    # qte_left = (qte_input & 0x2) != 0
-    # qte_right = (qte_input & 0x4) != 0
-    # qte_jump_left = (qte_input & 0x8) != 0
-    # qte_jump_right = (qte_input & 0x10) != 0
-    # qte_power = (qte_input & 0x20) != 0
-    # print(qte_up, qte_left, qte_right, qte_jump_left, qte_jump_right, qte_power)
+def get_parent_id_by_id(poco:Poco, id_list: list, offspring_path:str) -> list:
+    ...
+
+def get_item_count(poco:Poco, tpid_list: list) -> list:
+    ...
 
 
+def get_toggle_is_on(poco:Poco, element: list)-> list:
+    ...
+
+def get_toggle_is_on_by_id(poco:Poco, id_list: list, offspring_path:str)-> list:
+    ...
+
+def screen_shot(poco:Poco, ui_x:int, ui_y:int, ui_w:int, ui_h:int)-> (str, str):
+    ...
+
+def get_dropdown_value(poco:Poco, element: list)-> list:
+    ...
+
+def set_dropdown_value(poco:Poco, element: list, index:int)-> any:
+    ...
+
+def cmd(poco:Poco, command: list)-> any:
+    ...
+
+def lua_console(poco:Poco, command: list)-> any:
+    ...
+
+def custom_cmd(poco:Poco, command_list:list):
+    ...
+
+def set_btn_enabled(poco:Poco, element: list, enabled: bool)-> any:
+    ...
+
+def set_object_active(poco:Poco, element: list, active: bool)-> any:
+    ...
+
+def set_object_active_by_id(poco:Poco, id_list: list, offspring_path:str, active: bool) -> any:
+    ...
+
+def click_button(poco:Poco, element: list)-> any:
+    ...
+
+def ray_input(poco:Poco, element: list, kind:str)-> any:
+    ...
+
+def ray_input_by_id(poco:Poco, id_list: list, offspring_path: str, kind:str)-> any:
+    ...
+
+def set_time_scale(poco:Poco, time_scale:float)-> any:
+    ...
+
+def fish(poco:Poco, execute_list:list)-> any:
+    ...
+
+def get_scene_list(poco:Poco)-> list:
+    ...
+
+def set_send_log_flag(poco:Poco, send_log_flag:bool)-> any:
+    ...

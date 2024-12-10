@@ -3,7 +3,7 @@ import re
 from common.basePage import BasePage
 from common.viewport import Viewport
 from configs.elementsData import ElementsData
-from tools.commonTools import get_toggle_is_on_index, compare
+from tools.commonTools import get_toggle_is_on_index, compare, merge_list
 
 
 class PlayerInfoPanel(BasePage):
@@ -168,7 +168,7 @@ class PlayerInfoPanel(BasePage):
         return badge_select_id_list
 
     def get_badge_show_viewport(self, badge_show_id_list):
-        size_list = self.get_size_list(object_id_list=badge_show_id_list)
+        size_list = self.get_size_list(object_id=badge_show_id_list[0])
         badge_viewport = Viewport(self, element_viewport=ElementsData.PlayerInfo.viewport_badge_show,
                                   item_id_list=badge_show_id_list, viewport_direction="row",viewport_edge=[size_list[0][0] * 0.4, size_list[0][0] * 0.1])
         return badge_viewport
@@ -192,7 +192,7 @@ class PlayerInfoPanel(BasePage):
         return badge_select_id_list
 
     def get_badge_show_viewport_oversea(self, badge_show_id_list):
-        size_list = self.get_size_list(object_id_list=badge_show_id_list)
+        size_list = self.get_size_list(object_id=badge_show_id_list[0])
         badge_viewport = Viewport(self, element_viewport=ElementsData.PlayerInfo_oversea.viewport_badge_show,
                                   item_id_list=badge_show_id_list, viewport_direction="row",viewport_edge=[size_list[0][0] * 0.4, size_list[0][0] * 0.1])
         return badge_viewport
@@ -251,6 +251,7 @@ class PlayerInfoPanel(BasePage):
 
     def get_badge_select_list(self, badge_select_id_list):
         icon_list = self.get_icon_list(object_id_list=badge_select_id_list, offspring_path="icon")
+        icon_list = merge_list(icon_list)
         return icon_list
 
     def select_badge(self, badge_select_id_list, index):
@@ -305,6 +306,7 @@ class PlayerInfoPanel(BasePage):
         self.click_position(position_list[index])
         tab_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerInfo.options_graphics_list)
         toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
+        toggle_is_on_list = merge_list(toggle_is_on_list)
         toggle_is_on_index = get_toggle_is_on_index(toggle_is_on_list)
         compare(index, toggle_is_on_index)
 
@@ -317,6 +319,7 @@ class PlayerInfoPanel(BasePage):
         self.click_position(position_list[index])
         tab_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerInfo.options_frame_list)
         toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
+        toggle_is_on_list = merge_list(toggle_is_on_list)
         toggle_is_on_index = get_toggle_is_on_index(toggle_is_on_list)
         compare(index, toggle_is_on_index)
 
@@ -329,6 +332,7 @@ class PlayerInfoPanel(BasePage):
         self.click_position(position_list[index])
         tab_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerInfo.options_joystick_list)
         toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
+        toggle_is_on_list = merge_list(toggle_is_on_list)
         toggle_is_on_index = get_toggle_is_on_index(toggle_is_on_list)
         compare(index, toggle_is_on_index)
 
@@ -341,6 +345,7 @@ class PlayerInfoPanel(BasePage):
         self.click_position(position_list[index])
         tab_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerInfo.options_vibration_list)
         toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
+        toggle_is_on_list = merge_list(toggle_is_on_list)
         toggle_is_on_index = get_toggle_is_on_index(toggle_is_on_list)
         compare(index, toggle_is_on_index)
 
@@ -353,6 +358,7 @@ class PlayerInfoPanel(BasePage):
         self.click_position(position_list[index])
         tab_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerInfo.options_gyro_list)
         toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
+        toggle_is_on_list = merge_list(toggle_is_on_list)
         toggle_is_on_index = get_toggle_is_on_index(toggle_is_on_list)
         compare(index, toggle_is_on_index)
 
@@ -365,6 +371,7 @@ class PlayerInfoPanel(BasePage):
         self.click_position(position_list[index])
         tab_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerInfo.options_invite_list)
         toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
+        toggle_is_on_list = merge_list(toggle_is_on_list)
         toggle_is_on_index = get_toggle_is_on_index(toggle_is_on_list)
         compare(index, toggle_is_on_index)
 
@@ -408,7 +415,7 @@ class PlayerInfoPanel(BasePage):
         return self.get_object_id_list(element_data=ElementsData.PlayerInfo.head_frame_list)
 
     def get_avatar_viewport(self, avatar_id_list):
-        size_list = self.get_size_list(object_id_list=avatar_id_list)
+        size_list = self.get_size_list(object_id=avatar_id_list[0])
         h = 0
         if size_list:
             h = size_list[0][1]
@@ -416,7 +423,7 @@ class PlayerInfoPanel(BasePage):
         return avatar_viewport
 
     def get_head_framer_viewport(self, head_frame_id_list):
-        size_list = self.get_size_list(object_id_list=head_frame_id_list)
+        size_list = self.get_size_list(object_id=head_frame_id_list[0])
         h = 0
         if size_list:
             h = size_list[0][1]
@@ -470,6 +477,7 @@ class PlayerInfoPanel(BasePage):
         self.click_position(position_list[index])
         tab_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerInfo_oversea.options_graphics_list)
         toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
+        toggle_is_on_list = merge_list(toggle_is_on_list)
         toggle_is_on_index = get_toggle_is_on_index(toggle_is_on_list)
         compare(index, toggle_is_on_index)
 
@@ -482,6 +490,7 @@ class PlayerInfoPanel(BasePage):
         self.click_position(position_list[index])
         tab_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerInfo_oversea.options_frame_list)
         toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
+        toggle_is_on_list = merge_list(toggle_is_on_list)
         toggle_is_on_index = get_toggle_is_on_index(toggle_is_on_list)
         compare(index, toggle_is_on_index)
 
@@ -494,6 +503,7 @@ class PlayerInfoPanel(BasePage):
         self.click_position(position_list[index])
         tab_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerInfo_oversea.options_joystick_list)
         toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
+        toggle_is_on_list = merge_list(toggle_is_on_list)
         toggle_is_on_index = get_toggle_is_on_index(toggle_is_on_list)
         compare(index, toggle_is_on_index)
 
@@ -506,6 +516,7 @@ class PlayerInfoPanel(BasePage):
         self.click_position(position_list[index])
         tab_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerInfo_oversea.options_vibration_list)
         toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
+        toggle_is_on_list = merge_list(toggle_is_on_list)
         toggle_is_on_index = get_toggle_is_on_index(toggle_is_on_list)
         compare(index, toggle_is_on_index)
 
@@ -518,6 +529,7 @@ class PlayerInfoPanel(BasePage):
         self.click_position(position_list[index])
         tab_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerInfo_oversea.options_gyro_list)
         toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
+        toggle_is_on_list = merge_list(toggle_is_on_list)
         toggle_is_on_index = get_toggle_is_on_index(toggle_is_on_list)
         compare(index, toggle_is_on_index)
 
@@ -530,6 +542,7 @@ class PlayerInfoPanel(BasePage):
         self.click_position(position_list[index])
         tab_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerInfo_oversea.options_invite_list)
         toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
+        toggle_is_on_list = merge_list(toggle_is_on_list)
         toggle_is_on_index = get_toggle_is_on_index(toggle_is_on_list)
         compare(index, toggle_is_on_index)
 
@@ -573,7 +586,7 @@ class PlayerInfoPanel(BasePage):
         return self.get_object_id_list(element_data=ElementsData.PlayerInfo_oversea.head_frame_list)
 
     def get_avatar_viewport_oversea(self, avatar_id_list):
-        size_list = self.get_size_list(object_id_list=avatar_id_list)
+        size_list = self.get_size_list(object_id=avatar_id_list[0])
         h = 0
         if size_list:
             h = size_list[0][1]
@@ -581,7 +594,7 @@ class PlayerInfoPanel(BasePage):
         return avatar_viewport
 
     def get_head_framer_viewport_oversea(self, head_frame_id_list):
-        size_list = self.get_size_list(object_id_list=head_frame_id_list)
+        size_list = self.get_size_list(object_id=head_frame_id_list[0])
         h = 0
         if size_list:
             h = size_list[0][1]
@@ -603,6 +616,7 @@ class PlayerInfoPanel(BasePage):
 
     def get_selected_icon_index(self, icon_id_list):
         select_id_list = self.get_offspring_id_list(object_id_list=icon_id_list, offspring_path="select")
+        select_id_list = merge_list(select_id_list)
         icon_id = self.get_parent_id(object_id=select_id_list[0])
         index = icon_id_list.index(icon_id)
         return index

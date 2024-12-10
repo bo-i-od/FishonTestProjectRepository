@@ -28,7 +28,9 @@ class TaskPanel(BasePage):
         icon_id_list = self.get_offspring_id_list(offspring_path=">item_model_new>icon", object_id=task_id)
         quantity_id_list = self.get_offspring_id_list(offspring_path=">item_model_new>quantity>value", object_id=task_id)
         icon_list = self.get_icon_list(object_id_list=icon_id_list)
+        icon_list = merge_list(icon_list)
         quantity_list = self.get_text_list(object_id_list=quantity_id_list)
+        quantity_list = merge_list(quantity_list )
         str_to_int_list(quantity_list)
         item_dict = resource.make_item_dict(item_icon_list=icon_list, item_quantity_list=quantity_list)
         return item_dict

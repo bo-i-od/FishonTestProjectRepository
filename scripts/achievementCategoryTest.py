@@ -83,10 +83,7 @@ def category_test(bp: BasePage):
     # 读表格数据
     table_data_object = bp.excelTools.get_table_data_object_by_key_value(key="icon", value=achievement_icon, book_name="ACHIEVEMENT_CATEGORY.xlsm")
     tpid = table_data_object["TPID"]
-    # table_data = bp.excelTools.get_table_data("ACHIEVEMENT_CATEGORY.xlsm")
-    # # 随机选一个鱼种完成
-    # index = table_data["icon"].index(achievement_icon)
-    # tpid = table_data["TPID"][index]
+
     # 随机选一个鱼种完成
     bp.cmd(f'categoryComplete {tpid}')
     # AchievementCategoryPanel.do_category(bp, table_data=table_data, index=index)
@@ -160,7 +157,7 @@ def main(bp: BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21523", is_mobile_device=True)
+    bp = BasePage("127.0.0.1:21573", is_mobile_device=False)
     main(bp)
     bp.connect_close()
 

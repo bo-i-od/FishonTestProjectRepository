@@ -171,8 +171,12 @@ def click_button(poco, element):
     return poco.agent.c.call("ClickButton", element)
 
 @sync_wrapper
-def ray_input(poco, element, target_name, kind):
-    return poco.agent.c.call("RayInput", element, target_name, kind)
+def ray_input(poco, element, kind):
+    return poco.agent.c.call("RayInput", element, kind)
+
+@sync_wrapper
+def ray_input_by_id(poco, id_list, offspring_path, kind):
+    return poco.agent.c.call("RayInputById", id_list, offspring_path, kind)
 
 @sync_wrapper
 def set_time_scale(poco, time_scale):

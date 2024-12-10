@@ -259,8 +259,10 @@ class StorePanel(BasePage):
             icon_id_list = self.get_offspring_id_list(offspring_path="group>item_list>>icon", object_id=gift_pack_id)
             quantity_id_list = self.get_offspring_id_list(offspring_path="group>item_list>>quantity>value", object_id=gift_pack_id)
             icon_list = self.get_icon_list(object_id_list=icon_id_list)
+            icon_list = merge_list(icon_list)
             resource.check_icon_list(icon_list)
             quantity_list = self.get_text_list(object_id_list=quantity_id_list)
+            quantity_list = merge_list(quantity_list)
             str_to_int_list(quantity_list)
             item_dict = resource.make_item_dict(item_icon_list=icon_list, item_quantity_list=quantity_list)
             gift_pack_dict_list.append(item_dict)
@@ -297,6 +299,7 @@ class StorePanel(BasePage):
             if icon_id_list:
                 gear_icon_id_list.append(icon_id_list[0])
         gear_icon_list = self.get_icon_list(object_id_list=gear_icon_id_list)
+        gear_icon_list = merge_list(gear_icon_list)
         return gear_icon_list
 
     def click_btn_info(self):
@@ -328,8 +331,10 @@ class StorePanel(BasePage):
             icon_id_list = self.get_offspring_id_list(offspring_path="group>icon_list>>icon", object_id=booster_id)
             quantity_id_list = self.get_offspring_id_list(offspring_path="group>icon_list>>quantity>value", object_id=booster_id)
             icon_list = self.get_icon_list(object_id_list=icon_id_list)
+            icon_list = merge_list(icon_list)
             resource.check_icon_list(icon_list)
             quantity_list = self.get_text_list(object_id_list=quantity_id_list)
+            quantity_list = merge_list(quantity_list)
             str_to_int_list(quantity_list)
             item_dict = resource.make_item_dict(item_icon_list=icon_list, item_quantity_list=quantity_list)
             booster_dict_list.append(item_dict)

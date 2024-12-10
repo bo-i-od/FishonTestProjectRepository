@@ -165,6 +165,7 @@ class PlayerSettingPanel(BasePage):
         self.click_position(position_list[index])
         tab_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerSetting.options_graphics_list)
         toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
+        toggle_is_on_list = merge_list(toggle_is_on_list)
         toggle_is_on_index = get_toggle_is_on_index(toggle_is_on_list)
         compare(index, toggle_is_on_index)
 
@@ -177,6 +178,7 @@ class PlayerSettingPanel(BasePage):
         self.click_position(position_list[index])
         tab_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerSetting.options_frame_list)
         toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
+        toggle_is_on_list = merge_list(toggle_is_on_list)
         toggle_is_on_index = get_toggle_is_on_index(toggle_is_on_list)
         compare(index, toggle_is_on_index)
 
@@ -189,6 +191,7 @@ class PlayerSettingPanel(BasePage):
         self.click_position(position_list[index])
         tab_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerSetting.options_joystick_list)
         toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
+        toggle_is_on_list = merge_list(toggle_is_on_list)
         toggle_is_on_index = get_toggle_is_on_index(toggle_is_on_list)
         compare(index, toggle_is_on_index)
 
@@ -201,6 +204,7 @@ class PlayerSettingPanel(BasePage):
         self.click_position(position_list[index])
         tab_id_list = self.get_parent_id_list(element_data=ElementsData.PlayerSetting.options_vibration_list)
         toggle_is_on_list = self.get_toggle_is_on_list(object_id_list=tab_id_list)
+        toggle_is_on_list = merge_list(toggle_is_on_list)
         toggle_is_on_index = get_toggle_is_on_index(toggle_is_on_list)
         compare(index, toggle_is_on_index)
 
@@ -264,7 +268,7 @@ class PlayerSettingPanel(BasePage):
         return self.get_object_id_list(element_data=ElementsData.PlayerSetting.avatar_list)
 
     def get_avatar_viewport(self, avatar_id_list):
-        size_list = self.get_size_list(object_id_list=avatar_id_list)
+        size_list = self.get_size_list(object_id=avatar_id_list[0])
         h = 0
         if size_list:
             h = size_list[0][1]
@@ -280,6 +284,7 @@ class PlayerSettingPanel(BasePage):
 
     def get_selected_icon_index(self, icon_id_list):
         select_id_list = self.get_offspring_id_list(object_id_list=icon_id_list, offspring_path="select")
+        select_id_list = merge_list(select_id_list)
         icon_id = self.get_parent_id(object_id=select_id_list[0])
         index = icon_id_list.index(icon_id)
         return index
@@ -292,7 +297,7 @@ class PlayerSettingPanel(BasePage):
         return self.get_object_id_list(element_data=ElementsData.PlayerSetting.banner_list)
 
     def get_banner_viewport(self, banner_id_list):
-        size_list = self.get_size_list(object_id_list=banner_id_list)
+        size_list = self.get_size_list(object_id=banner_id_list[0])
         h = 0
         if size_list:
             h = size_list[0][1]
@@ -330,7 +335,7 @@ class PlayerSettingPanel(BasePage):
         return badge_id_list
 
     def get_badge_viewport(self, badge_id_list):
-        size_list = self.get_size_list(object_id_list=badge_id_list)
+        size_list = self.get_size_list(object_id=badge_id_list[0])
         h = 0
         if size_list:
             h = size_list[0][1]
@@ -388,7 +393,9 @@ class PlayerSettingPanel(BasePage):
         self.click_element(object_id=badge_id_list[index], focus=[0, 0.5])
 
     def get_badge_player_list(self):
-        return self.get_icon_list(element_data=ElementsData.PlayerSetting.badge_player_list)
+        icon_list = self.get_icon_list(element_data=ElementsData.PlayerSetting.badge_player_list)
+        icon_list = merge_list(icon_list)
+        return icon_list
 
     def set_player_name(self, name):
         self.set_text(element_data=ElementsData.PlayerSetting.Input_PlayerName, text=name)
