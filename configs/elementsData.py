@@ -2,6 +2,7 @@
 class ElementsData:
     Panels = {"locator": "UICanvas>>"}
     Panels_Default = {"locator": "UICanvas>Default>"}
+    Panels_Important = {"locator": "UICanvas>Important>"}
 
     class AchievementGroup:
         AchievementGroupPanel = {"locator": "UICanvas>Default>AchievementGroupPanel"}

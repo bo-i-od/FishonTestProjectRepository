@@ -1233,7 +1233,8 @@ class BasePageMain:
         """函数功能简述
             关除了主界面的其它界面一次
         """
-        panel_name_list = self.get_name_list(element_data=ElementsData.Panels)
+        panel_name_list = self.get_name_list(element_data_list=[ElementsData.Panels])
+        panel_name_list = tools.commonTools.merge_list(panel_name_list)
         for panel_name in panel_name_list:
             if panel_name not in JumpData.panel_close_dict:
                 continue
@@ -2198,16 +2199,16 @@ end
 
 
 if __name__ == '__main__':
-    bp = BasePage(is_mobile_device=True, serial_number="b6h65hd64p5pxcyh")
+    bp = BasePage(is_mobile_device=False, serial_number="b6h65hd64p5pxcyh")
     # "127.0.0.1:21613"
     # "b6h65hd64p5pxcyh"
     # "TimeMgr:GetServerTime()"
     # t = bp.lua_console_with_response(lua_code_print="_G.PassiveNewbieGuideEnum")
-    bp.cmd_list([ "levelupto 69", "guideskip"])
-    bp.sleep(1)
+    # bp.cmd_list(["levelupto 69", "guideskip"])
+    # bp.sleep(1)
 
     # bp.go_to_panel("TournamentsPanel")
-    # bp.go_home()
+    bp.go_home()
 
     # bp.cmd_list(["guideskip", "levelupto 90"])
     # bp.cmd("levelupto 12")

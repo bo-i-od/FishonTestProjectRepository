@@ -173,6 +173,8 @@ class JumpData:
         "TreasureChestPanel": {"element_data": ElementsData.TreasureChest.TreasureChestPanel, "open_path": [ElementsData.Home.btn_chest]},
     }
 
+    panel_list = [ElementsData.Panels]
+
 
 
 
