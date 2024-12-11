@@ -47,6 +47,7 @@ class NewbieTaskPanel(BasePage):
 
     def get_progress_reward_position_list(self, progress_reward_id_list):
         position_list = self.get_position_list(object_id_list=progress_reward_id_list, offspring_path="item>item_model_mini(Clone)>icon")
+        position_list = merge_list(position_list)
         progress_reward_position_list = []
         cur = 0
         while cur < len(position_list):
@@ -179,6 +180,7 @@ class NewbieTaskPanel(BasePage):
     # 得到按钮位置
     def get_task_position_list(self, task_id_list):
         position_list = self.get_position_list(object_id_list=task_id_list, offspring_path="list_right")
+        position_list = merge_list(position_list)
         task_position_list = []
         cur = 0
         while cur < len(position_list):

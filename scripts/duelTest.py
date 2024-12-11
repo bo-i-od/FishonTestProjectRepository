@@ -295,30 +295,6 @@ def pvp_fish(bp, is_quick=False):
 
 
 
-
-def fish_once(bp: BasePage):
-    BattlePreparePanel.click_btn_quick_switch(bp)
-    BattlePreparePanel.click_rod_model(bp)
-    bp.sleep(1)
-    location = BattlePreparePanel.get_location(bp)
-    print(location)
-    BattlePreparePanel.click_btn_apply(bp)
-    bp.sleep(1)
-    BattlePreparePanel.click_btn_cast(bp)
-    bp.sleep(15)
-    BattleFailedPanel.click_cast_again(bp)
-    bp.sleep(1)
-    BattlePreparePanel.click_btn_cast(bp)
-    bp.sleep(15)
-    BattleFailedPanel.click_cast_again(bp)
-    bp.sleep(1)
-    BattlePreparePanel.click_btn_cast(bp)
-    BattlePanel.reel_quick(bp)
-    ResultPanel.wait_for_result(bp)
-    bp.sleep(130)
-    ResultPanel.click_btn_claim(bp)
-
-
 def wait_for_ResultPanel(bp):
     while not PVPResultPanel.is_panel_active(bp):
         bp.sleep(1)
@@ -361,9 +337,6 @@ def duel_once(bp:BasePage, rank):
     # rank = 0
     # print(rank)
     # bp.set_item_count(target_count=250000, item_tpid="100200")
-    lua_code = csMsgAll.get_CSGlobalEnterMatchMsg(matcherId=1, seriesId=1001 + rank, source=0)
-    bp.lua_console(lua_code)
-    bp.sleep(1)
     lua_code = csMsgAll.get_CSGlobalEnterMatchMsg(matcherId=1, seriesId=1001 + rank, source=0)
     bp.lua_console(lua_code)
     # r = random.random()
@@ -590,7 +563,11 @@ if __name__ == '__main__':
     serial_number = "127.0.0.1:21523"
     print(serial_number)
     base_page = BasePage(serial_number=serial_number, is_mobile_device=True, is_monitor=True)
-    main(base_page)
+    # base_page.cmd_list(["levelupto 69", "guideskip"])
+    # set_duelcup_random(base_page, rank=7)
+    # base_page.cmd("globalgm duelScene 400313")
+    # duel_once(base_page, rank=7)
+
     base_page.connect_close()
     # set_duelcup_random(base_page, rank=7)
     # base_page.set_item_count(target_count=100000, item_tpid="100500")

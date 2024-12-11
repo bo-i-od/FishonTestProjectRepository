@@ -82,7 +82,7 @@ class AchievementGroupPanel(BasePage):
             RewardsPanel.click_tap_to_claim(self)
             self.sleep(0.5)
             # 防止鱼卡弹窗
-            self.clear_popup_until_appear(elements_data=AchievementGroupPanel.get_panel_element())
+            self.clear_popup_until_appear(element_data=AchievementGroupPanel.get_panel_element())
 
 
 

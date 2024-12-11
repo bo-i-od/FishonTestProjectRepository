@@ -229,7 +229,7 @@ def collect_all_test(bp: BasePage):
         RewardsPanel.click_tap_to_claim(bp)
         bp.sleep(0.5)
         # 防止鱼卡弹窗
-        bp.clear_popup_until_appear(elements_data=AchievementGroupPanel.get_panel_element())
+        bp.clear_popup_until_appear(element_data=AchievementGroupPanel.get_panel_element())
         achievement_point, progress_denominator = AchievementGroupPanel.get_achievement_point(bp)
 
     reward_icon_list, reward_quantity_list = AchievementGroupPanel.get_box_reward(bp)
