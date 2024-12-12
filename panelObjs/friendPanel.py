@@ -13,5 +13,12 @@ class FriendPanel(BasePage):
         self.sleep(1)
         self.click_element(element_data=ElementsData.Friend.btn_add)
 
+    def is_panel_active(self):
+        return self.exist(element_data=ElementsData.Friend.FriendPanel)
+
+    def click_btn_close(self):
+        return self.click_element(element_data=ElementsData.Friend.btn_close)
+
+
 if __name__ == '__main__':
     bp = BasePage()

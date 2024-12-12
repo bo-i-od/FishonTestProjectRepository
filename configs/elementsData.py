@@ -684,7 +684,7 @@ class ElementsData:
 
     class Friend:
         FriendPanel = {"locator": "UICanvas>Default>FriendPanel"}
-        btn_close = {"locator": "UICanvas>Default>HomePanel>panel>panel_giftpack>list>Viewport>Content>btn_store"}
+        btn_close = {"locator": "UICanvas>Default>FriendPanel>btn_close"}
         btn_friend = {"locator": "UICanvas>Default>FriendPanel>panel>panel_tab>content>TabList>Viewport>Content>tab_1>title"}
         btn_add_friend = {"locator": "UICanvas>Default>FriendPanel>panel>panel_tab>content>TabList>Viewport>Content>tab_2>title"}
         input_search = {"locator": "UICanvas>Default>FriendPanel>panel>panel_info>panel_top>search>Input_search"}
