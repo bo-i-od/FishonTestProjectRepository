@@ -123,6 +123,10 @@ class ElementsData:
         Viewport = {"locator": "UICanvas>Default>AquariumFishPanel>panel>panel_fish>List>Viewport"}
         fish_model_list = {"locator": "UICanvas>Default>AquariumFishPanel>panel>panel_fish>List>Viewport>Content>"}
 
+    class AquariumNewActivityInnerPopup:
+        AquariumNewActivityInnerPopupPanel = {"locator": "UICanvas>Default>AquariumNewActivityInnerPopupPanel"}
+        btn_close = {"locator": "UICanvas>Default>AquariumNewActivityInnerPopupPanel>panel>btn_close>img"}
+
     class AquariumFishNew:
         AquariumFishNewPanel = {"locator": "UICanvas>Default>AquariumFishNewPanel"}
         btn_accelerate_reddot_list = {"locator": "UICanvas>Default>AquariumFishNewPanel>panel>panel_fish>List>Viewport>Content>fish_model>aquarium_fish_new_model>btns>btn_accelerate>reddot"}
@@ -475,6 +479,9 @@ class ElementsData:
         ClubApplyPanel = {"locator":"UICanvas>Default>ClubApplyPanel"}
         btn_close = {"locator":"UICanvas>Default>ClubApplyPanel>panel>btn_close>img"}
 
+    class ClubRedEnvelope:
+        btn_close = {"locator": "UICanvas>Default>ClubRedEnvelopePanel>Panel_normal>bg", "focus": (-0.25, 0.5)}
+
     class CommonItemGet:
         CommonItemGetPanel = {"locator":"UICanvas>Default>CommonItemGetPanel"}
         btn_close = {"locator":"UICanvas>Default>CommonItemGetPanel>panel>btn_close>img"}
@@ -724,6 +731,7 @@ class ElementsData:
         kind = {"locator": "UICanvas>Default>GearPanel>panel_info>panel>content>upgrade_bg>name_bg>kind"}
         name = {"locator": "UICanvas>Default>GearPanel>panel_info>panel>content>upgrade_bg>name_bg>name"}
         skill_list = {"locator": "UICanvas>Default>GearPanel>panel_info>panel>content>enhance_bg>skill_list>>rod_skill>icon_bg>icon"}
+        btn_equip = {"locator": "UICanvas>Default>GearPanel>panel_info>panel>content>btn>btn_equip", "focus": (0.5, 1)}
 
 
     class GearLevelup:
