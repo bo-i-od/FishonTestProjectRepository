@@ -74,6 +74,7 @@ class BasePageMain:
             self.poco_listen = UnityPoco(addr_listen, device=dev)
         self.screen_w, self.screen_h = self.poco.get_screen_size()  # 获取屏幕尺寸
 
+
         # ios设备出现过poco获取屏幕尺寸与wda尺寸不同的情况，所以需要scale_factor对点击位置做下矫正
         self.scale_factor_w = 1
         self.scale_factor_h = 1
@@ -96,7 +97,30 @@ class BasePageMain:
         # current_dir = os.getcwd()
         # 获取父目录
         self.root_dir = os.path.abspath(os.path.dirname(file_path))
-        self.element_data_home = ElementsData.Home.HomePanel
+
+        # 消息储存队列
+        self.log_list = []
+
+        self.log_list_duel = []
+
+        # 是否监听Unity发来的log
+        self.listen_log_flag = False
+
+        # 是否将Unity发来的log加到消息列表里
+        self.log_list_flag = False
+
+        # 是否让Unity发log
+        self.set_send_log_flag(False)
+
+        if not self.is_ios:
+            # 是否监听Unity发来的log
+            self.listen_log_flag = True
+
+            # 是否将Unity发来的log加到消息列表里
+            self.log_list_flag = True
+
+            # 是否让Unity发log
+            self.set_send_log_flag(True)
 
         # BasePageExt(self)
 
@@ -1180,7 +1204,6 @@ class BasePageMain:
             cur_panel: 有一些面板会在HomePanel存在时同时存在，需要特殊记录这些面板
             target_panel: 目标面板，在回主界面的过程中，如果遇到target_panel也会跳出循环
         """
-        cur = 0
         at_home_flag = False
         while not at_home_flag:
             # 关闭一次除了HomePanel的所有面板
@@ -1194,13 +1217,8 @@ class BasePageMain:
             if at_target_panel_flag:
                 return
 
-            # 关闭面板30次还没回到大厅大概率卡住了
-            cur += 1
-            if cur > 30:
-                raise FindNoElementError("FindNoElement")
-
             # 有HomePanel且没有cur_panel需要关闭时才判断停止
-            at_home_flag = self.exist(element_data=self.element_data_home)
+            at_home_flag = self.exist(element_data=JumpData.element_data_home)
             if cur_panel is not None:
                 at_home_flag = at_home_flag and not self.exist(
                     element_data=JumpData.panel_dict[cur_panel]["element_data"])
@@ -1462,13 +1480,154 @@ class BasePageMain:
         """
         time.sleep(t)
 
-    # 键盘输入
-    @staticmethod
-    def send_key(key: str):
+    def custom_cmd_list(self, command_list):
         """函数功能简述
-            打字限windows上使用
+            批量自定义的命令
+
+        参数:
+            command_list:list[str]
         """
-        pyautogui.typewrite(key)
+        if not command_list:
+            return
+        rpcMethodRequest.custom_cmd(self.poco, command_list)
+
+    def custom_cmd(self, command):
+        """函数功能简述
+            批量自定义的命令
+
+        参数:
+            command:str
+                autofish (下一杆自动钓鱼)
+                setTension x (x的范围在0~1)
+                setSceneType x (x=1是pve，x=2是pvp)
+        """
+        if not command:
+            return
+        self.custom_cmd_list([command])
+
+    def get_target_log(self, msg_key):
+        """函数功能简述
+            在self.log_list中找到包含msg_key的消息
+
+        参数:
+            msg_key: 关键词
+
+        返回值: 带关键词的log
+        """
+        target_log = ""
+        for log in self.log_list:
+            if msg_key not in log:
+                continue
+            target_log = log
+            break
+        return target_log
+
+    def receive_until_get_msg(self, msg_name, time_interval=0.05, timeout=5, key_sc='<==== [Lua] Receive Net Msg "SC'):
+        """函数功能简述
+            循环接收消息直到找到目标消息
+
+        参数:
+            key_sc + msg_name组成关键词
+            time_interval: 检测间隔
+            timeout: 超时时长
+
+        返回值: 带关键词的log
+        """
+        cur = 0
+        while cur < timeout:
+            cur += time_interval
+            self.sleep(time_interval)
+            # 在最近收集的消息列表中筛出目标消息
+            msg_key = key_sc + msg_name
+            target_log = self.get_target_log(msg_key)
+            if target_log == "":
+                continue
+            return target_log
+        return None
+
+    def set_send_log_flag(self, send_log_flag):
+        """函数功能简述
+            设置send_log_flag
+            如果设置C#发送消息，Python这边把接收消息也打开
+        """
+        self.send_log_flag = send_log_flag
+        rpcMethodRequest.set_send_log_flag(self.poco, send_log_flag)
+        if send_log_flag:
+            self.wait_msg()
+
+    # 接收C#传来的消息
+    def circulate_update(self):
+        """函数功能简述
+            接收C#传来的消息
+        """
+        while self.send_log_flag:
+            if not self.listen_log_flag:
+                time.sleep(0.1)
+                continue
+            # 每隔一段时间取一下接收区的消息
+            try:
+                rec = self.poco_listen.agent.c.conn.recv()
+            except:
+                # print(e)
+                break
+            for m in rec:
+                # 转格式加处理消息
+                data = json.loads(m)
+                self.handle_message(data)
+                self.handle_request(data)
+                # 返回消息给C#
+                # poco.agent.c.conn.send("ok")
+            time.sleep(0.01)
+
+    def handle_message(self, data):
+        """函数功能简述
+            data消息中筛出'msg'字段的值
+            当self.log_list_flag=True时，将'msg'字段的值加到self.log_list中
+        """
+        if 'msg' not in data:
+            return
+        msg = data['msg']
+        if self.log_list_flag:
+            self.log_list.append(msg)
+        self.log_list_duel.append(msg)
+        netMsg.luaLog.deal_with_msg(msg)
+
+    def handle_request(self, data):
+        """函数功能简述
+            C#请求Python的函数
+            data消息中筛出'method'和'params'字段的值
+        """
+        if 'method' not in data:
+            return
+        method = data['method']
+        params = data['params']
+        self.call_function("common.rpcMethodResponse", method, self, params)
+
+    def wait_msg(self):
+        """函数功能简述
+            开启线程循环检测消息
+        """
+        from threading import Thread
+        t = Thread(target=self.circulate_update, args=[])
+        t.daemon = True
+        t.start()
+
+    @staticmethod
+    def call_function(module_name, function_name, *args, **kwargs):
+        """函数功能简述
+            以字符串形式调方法
+
+        参数:
+            module_name: 模块名
+            function: 方法名
+            *args, **kwargs: 方法的参数
+        """
+        # 动态导入模块
+        module = import_module(module_name)
+        # 获取函数
+        function = getattr(module, function_name)
+        # 调用函数并返回结果
+        return function(*args, **kwargs)
 
 
 class BasePage(BasePageMain):
@@ -1479,30 +1638,6 @@ class BasePage(BasePageMain):
 
         # 全局变量
         self.cur = 0
-
-        # 消息储存队列
-        self.log_list = []
-
-        self.log_list_duel = []
-
-        # 是否监听Unity发来的log
-        self.listen_log_flag = False
-
-        # 是否将Unity发来的log加到消息列表里
-        self.log_list_flag = False
-
-        # 是否让Unity发log
-        self.set_send_log_flag(False)
-
-        if not self.is_ios:
-            # 是否监听Unity发来的log
-            self.listen_log_flag = True
-
-            # 是否将Unity发来的log加到消息列表里
-            self.log_list_flag = True
-
-            # 是否让Unity发log
-            self.set_send_log_flag(True)
 
         self.is_monitor = is_monitor
 
@@ -1941,160 +2076,11 @@ end
 
         return target_log.split(title)[1].strip()
 
-    def custom_cmd_list(self, command_list):
-        """函数功能简述
-            批量自定义的命令
-
-        参数:
-            command_list:list[str]
-        """
-        if not command_list:
-            return
-        rpcMethodRequest.custom_cmd(self.poco, command_list)
-
-    def custom_cmd(self, command):
-        """函数功能简述
-            批量自定义的命令
-
-        参数:
-            command:str
-                autofish (下一杆自动钓鱼)
-                setTension x (x的范围在0~1)
-                setSceneType x (x=1是pve，x=2是pvp)
-        """
-        if not command:
-            return
-        self.custom_cmd_list([command])
-
     def get_scene_list(self):
         """函数功能简述
             获取当前激活的场景名
         """
         return rpcMethodRequest.get_scene_list(self.poco)
-
-    def get_target_log(self, msg_key):
-        """函数功能简述
-            在self.log_list中找到包含msg_key的消息
-
-        参数:
-            msg_key: 关键词
-
-        返回值: 带关键词的log
-        """
-        target_log = ""
-        for log in self.log_list:
-            if msg_key not in log:
-                continue
-            target_log = log
-            break
-        return target_log
-
-    def receive_until_get_msg(self, msg_name, time_interval=0.05, timeout=5, key_sc='<==== [Lua] Receive Net Msg "SC'):
-        """函数功能简述
-            循环接收消息直到找到目标消息
-
-        参数:
-            key_sc + msg_name组成关键词
-            time_interval: 检测间隔
-            timeout: 超时时长
-
-        返回值: 带关键词的log
-        """
-        cur = 0
-        while cur < timeout:
-            cur += time_interval
-            self.sleep(time_interval)
-            # 在最近收集的消息列表中筛出目标消息
-            msg_key = key_sc + msg_name
-            target_log = self.get_target_log(msg_key)
-            if target_log == "":
-                continue
-            return target_log
-        return None
-
-    def set_send_log_flag(self, send_log_flag):
-        """函数功能简述
-            设置send_log_flag
-            如果设置C#发送消息，Python这边把接收消息也打开
-        """
-        self.send_log_flag = send_log_flag
-        rpcMethodRequest.set_send_log_flag(self.poco, send_log_flag)
-        if send_log_flag:
-            self.wait_msg()
-
-    # 接收C#传来的消息
-    def circulate_update(self):
-        """函数功能简述
-            接收C#传来的消息
-        """
-        while self.send_log_flag:
-            if not self.listen_log_flag:
-                time.sleep(0.1)
-                continue
-            # 每隔一段时间取一下接收区的消息
-            try:
-                rec = self.poco_listen.agent.c.conn.recv()
-            except:
-                # print(e)
-                break
-            for m in rec:
-                # 转格式加处理消息
-                data = json.loads(m)
-                self.handle_message(data)
-                self.handle_request(data)
-                # 返回消息给C#
-                # poco.agent.c.conn.send("ok")
-            time.sleep(0.01)
-
-    def handle_message(self, data):
-        """函数功能简述
-            data消息中筛出'msg'字段的值
-            当self.log_list_flag=True时，将'msg'字段的值加到self.log_list中
-        """
-        if 'msg' not in data:
-            return
-        msg = data['msg']
-        if self.log_list_flag:
-            self.log_list.append(msg)
-        self.log_list_duel.append(msg)
-        netMsg.luaLog.deal_with_msg(msg)
-
-    def handle_request(self, data):
-        """函数功能简述
-            C#请求Python的函数
-            data消息中筛出'method'和'params'字段的值
-        """
-        if 'method' not in data:
-            return
-        method = data['method']
-        params = data['params']
-        self.call_function("common.rpcMethodResponse", method, self, params)
-
-    def wait_msg(self):
-        """函数功能简述
-            开启线程循环检测消息
-        """
-        from threading import Thread
-        t = Thread(target=self.circulate_update, args=[])
-        t.daemon = True
-        t.start()
-
-    @staticmethod
-    def call_function(module_name, function_name, *args, **kwargs):
-        """函数功能简述
-            以字符串形式调方法
-
-        参数:
-            module_name: 模块名
-            function: 方法名
-            *args, **kwargs: 方法的参数
-        """
-        # 动态导入模块
-        module = import_module(module_name)
-        # 获取函数
-        function = getattr(module, function_name)
-        # 调用函数并返回结果
-        return function(*args, **kwargs)
 
     def get_drop_item_id_list(self, spot_id):
         """函数功能简述
@@ -2199,16 +2185,17 @@ end
 
 
 if __name__ == '__main__':
-    bp = BasePage(is_mobile_device=False, serial_number="b6h65hd64p5pxcyh")
+    bp = BasePage(is_mobile_device=True, serial_number="127.0.0.1:21553")
     # "127.0.0.1:21613"
     # "b6h65hd64p5pxcyh"
     # "TimeMgr:GetServerTime()"
     # t = bp.lua_console_with_response(lua_code_print="_G.PassiveNewbieGuideEnum")
-    # bp.cmd_list(["levelupto 69", "guideskip"])
+    bp.cmd_list(["levelupto 69", "guideskip"])
     # bp.sleep(1)
 
     # bp.go_to_panel("TournamentsPanel")
-    bp.go_home()
+    # bp.go_home()
+    # bp.clear_popup()
 
     # bp.cmd_list(["guideskip", "levelupto 90"])
     # bp.cmd("levelupto 12")

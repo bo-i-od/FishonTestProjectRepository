@@ -118,7 +118,7 @@ def sell_and_put_fish(bp: BasePage):
 
 
 @handle_game_exception
-def aquarium(bp: BasePage):
+def aquarium(bp: BasePage, is_monitor=False):
     bp.go_to_panel("AquariumFishNewPanel")
 
     bp.sleep(1)
@@ -142,17 +142,16 @@ if __name__ == '__main__':
     gameInit.set_joystick(base_page)
     base_page.custom_cmd("setTension 0.95")
     # cur = 0
-    # while cur < 5:
+    # while cur < 2:
     #     duel_once(base_page, 0)
     #     cur += 1
     #     print(f"第{cur}次钓鱼")
-    # circulate_fish(bp=base_page, is_quick=False, times=20)
+    # circulate_fish(bp=base_page, is_quick=False, times=30)
     # base_page.sleep(3600)
     # aquarium(bp=base_page)
 
     while True:
-        base_page = aquarium(base_page)
-        base_page = championship(base_page, 0, 5, cost=1, overflow_factor=1, is_monitor=True)
+        base_page = aquarium(base_page, is_monitor=True)
+        base_page = championship(base_page, 0, 10, cost=1, overflow_factor=1, is_monitor=True)
         # base_page.sleep(60)
-        base_page = championship(base_page, 1, 5, cost=1, overflow_factor=1, is_monitor=True)
-        # base_page.sleep(60)
+        base_page = championship(base_page, 1, 10, cost=1, overflow_factor=1, is_monitor=True)

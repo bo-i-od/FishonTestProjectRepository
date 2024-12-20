@@ -167,6 +167,9 @@ class GearPanel(BasePage):
         table_data_object_list = self.excelTools.get_table_data_detail(book_name="FISHING_ROD.xlsm")
         return table_data_object_list
 
+    def click_btn_equip(self):
+        self.click_element(element_data=ElementsData.Gear.btn_equip)
+
 
 
 

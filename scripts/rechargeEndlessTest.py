@@ -1,4 +1,7 @@
 import random
+
+from panelObjs.eventsGiftCenterPanel import EventsGiftCenterPanel
+from panelObjs.fishCardPackTipsPanel import FishCardPackTipsPanel
 from tools.commonTools import *
 from common.basePage import BasePage
 from panelObjs.rewardsPanel import RewardsPanel
@@ -7,64 +10,75 @@ from panelObjs.rechargeEndlessPanel import RechargeEndlessPanel
 from configs.elementsData import ElementsData
 
 
-def click_icon_test(bp: BasePage):
-    clickable_icon_list, clickable_position_list = RechargeEndlessPanel.get_clickable_icon_and_position_list(bp, 0)
+def click_icon_test(bp: BasePage,item_icon_list, item_icon_position_list):
     # 随机选中一个图标
-    r = random.randint(0, len(clickable_icon_list) - 1)
-    bp.click_position(clickable_position_list[r])
-    item_icon = ItemTipsPanel.get_item_icon(bp)
-    # 对比物品图标和浮窗物品图标
-    compare(item_icon, clickable_icon_list[r])
-    bp.click_position([0.5, 0.1])
-    if ItemTipsPanel.is_panel_active(bp):
-        raise FindElementError
-    print("点击图标测试通过")
-
-def buy_test(bp: BasePage, index):
-    icon_list, quantity_list = RechargeEndlessPanel.get_select_icon_and_quantity_list(bp, index)
-    item_count_list = bp.get_item_count_list(item_icon_name_list=icon_list)
-    price = RechargeEndlessPanel.click_btn_buy(bp, index)
-    if price != "FREE":
-        pass  # 手机加支付和取消支付逻辑
-    # if wait_for_pay_result(bp) is False:  # 支付失败
-    #     print("1+1礼包，支付失败，跳过测试")
-    #     return False
-    reward_icon_list, gear_icon_list = RewardsPanel.get_reward_icon_list(bp)
-    compare_list(reward_icon_list, icon_list)
     cur = 0
-    while cur < len(item_count_list):
-        quantity_list[cur] += item_count_list[cur]
+    while cur < len(item_icon_list):
+        bp.click_position(item_icon_position_list[cur])
+        bp.sleep(0.5)
+        if ItemTipsPanel.is_panel_active(bp):
+            item_icon = ItemTipsPanel.get_item_icon(bp)
+        else:
+            item_icon = FishCardPackTipsPanel.get_item_icon(bp)
+        # 对比物品图标和浮窗物品图标
+        compare(item_icon, item_icon_list[cur])
+        bp.click_position([0.5, 0.1])
+        bp.sleep(0.5)
         cur += 1
-    item_count_list = bp.get_item_count_list(item_icon_name_list=icon_list)
-    compare(item_count_list, quantity_list)
-    RewardsPanel.wait_for_panel_appear(bp)
-    bp.sleep(1)
-    RewardsPanel.click_tap_to_claim(bp)
-    if RewardsPanel.is_panel_active(bp):
-        raise FindElementError
-    print("购买测试成功")
-    return True
 
-def buy_many_test(bp: BasePage):
-    bp.go_to_panel("RechargeEndlessPanel")
-    click_icon_test(bp)
-    # 随机点击锁定的buy按钮位置
-    r = random.randint(1, 3)
-    RechargeEndlessPanel.click_btn_buy(bp, r)
-    # 若干次购买
-    cur = 0
-    while cur < 5:
-        if buy_test(bp, cur) is False:
-            break
+
+def buy_test(bp: BasePage):
+    # 获取当前点卷
+    money_expect = bp.get_item_count(item_tpid="101900")
+
+    # 获取商品信息
+    unlocked_index, locked_index_list = RechargeEndlessPanel.get_btn_status(bp)
+    item_info_list = RechargeEndlessPanel.get_item_info_list(bp)
+
+    item_info_buy = item_info_list[unlocked_index]
+    item_icon_list = list(item_info_buy)
+    item_icon_position_list = RechargeEndlessPanel.get_item_icon_position_list(bp)[unlocked_index]
+    click_icon_test(bp, item_icon_list, item_icon_position_list)
+    btn_buy_position_list = RechargeEndlessPanel.get_btn_buy_position_list(bp)
+
+    cost_list = RechargeEndlessPanel.get_item_cost_list(bp)
+    money_expect = money_expect - cost_list[unlocked_index]
+
+
+    # 点一个锁定的
+    if locked_index_list:
+        r = random.randint(0, len(locked_index_list) - 1)
+        btn_buy_locked_index = locked_index_list[r]
+        bp.click_position(btn_buy_position_list[btn_buy_locked_index])
         bp.sleep(1)
-        cur += 1
-    RechargeEndlessPanel.close_RechargeEndlessPanel(bp)
-    if RechargeEndlessPanel.is_panel_active(bp):
-        raise FindElementError
-    print("多次购买测试成功")
+
+    # 点非锁定的
+    bp.click_position(btn_buy_position_list[unlocked_index])
+    RewardsPanel.wait_for_panel_appear(bp)
+
+    # 对照数量
+    money = bp.get_item_count(item_tpid="101900")
+    compare(money_expect, money)
+    reward_dict = RewardsPanel.get_reward_dict(bp)
+    compare_dict(item_info_buy, reward_dict)
+
+    RewardsPanel.click_tap_to_claim(bp)
+
+
+def main(bp: BasePage):
+    bp.cmd("add 1 101900 1000000")
+    bp.go_to_panel("RechargeEndlessPanel")
+
+    # 若干次购买
+    while RechargeEndlessPanel.get_item_id_list(bp):
+        buy_test(bp)
+        bp.sleep(1)
+
+    EventsGiftCenterPanel.click_btn_close(bp)
 
 if __name__ == '__main__':
     bp = BasePage()
-    buy_many_test(bp)
+    main(bp)
+    bp.connect_close()
 
 

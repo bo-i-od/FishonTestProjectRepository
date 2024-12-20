@@ -332,6 +332,11 @@ def GearPanel_test(bp: BasePage):
     skill_icon = GearSkillTipsPanel.get_skill_icon(bp)
     compare(skill_icon_list[r], skill_icon)
     bp.click_position([0.5, 0.9])
+    bp.sleep(0.5)
+
+    # 点击装备按钮
+    GearPanel.click_btn_equip(bp)
+    bp.sleep(0.5)
 
     # 点击筛选
     GearPanel.click_btn_filter(bp)
@@ -423,11 +428,11 @@ def main(bp: BasePage):
 
 
 if __name__ == "__main__":
-    bp = BasePage("127.0.0.1:21533", is_mobile_device=False)
+    bp = BasePage("127.0.0.1:21553", is_mobile_device=True)
     # main(bp)
 
-    # one_star(bp)
-    # bp.cmd("talentall")
+    one_star(bp)
+    bp.cmd("talentall")
     bp.cmd("allrod 500")
     bp.sleep(1)
     bp.set_item_count(target_count=10000000000, item_tpid="100000")

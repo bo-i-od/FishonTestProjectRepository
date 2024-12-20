@@ -109,9 +109,9 @@ def BattlePassBuyLevelPanel_test(bp:BasePage):
 
 # 通行证界面往其它界面的跳转测试
 def jump_test(bp:BasePage):
-    BattlePassPanel.click_btn_detail(bp)
-    BaitAndRodShowPanel.click_tap_to_continue(bp)
-    bp.sleep(1)
+    # BattlePassPanel.click_btn_detail(bp)
+    # BaitAndRodShowPanel.click_tap_to_continue(bp)
+    # bp.sleep(1)
     BattlePassPanel.click_btn_task(bp)
     bp.sleep(1)
     TaskPanel.click_btn_close(bp)
@@ -397,7 +397,7 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21533", is_mobile_device=False)
+    bp = BasePage("127.0.0.1:21553", is_mobile_device=True)
     main(bp)
     bp.connect_close()
     # cur = 0

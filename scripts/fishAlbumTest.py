@@ -109,8 +109,9 @@ def anime_test(bp: BasePage):
             cur += 1
             continue
         bp.cmd(f"mode {fishery_id} {fish_id}")
-        bp.sleep(0.1)
+        bp.sleep(0.5)
         fishingMsg.fish(bp, [{"spot_id": f"{fishery_id}03", "energy_cost": 30, "times": 1, "is_activity_spot": False}])
+        bp.sleep(0.5)
         fish_count += 1
         cur += 1
 
@@ -155,6 +156,6 @@ def main(bp: BasePage):
 
 if __name__ == '__main__':
     # 连接设备号为127.0.0.1:21533的设备
-    bp = BasePage(serial_number="127.0.0.1:21523", is_mobile_device=True)
+    bp = BasePage(serial_number="127.0.0.1:21553", is_mobile_device=True)
     main(bp)
     bp.connect_close()

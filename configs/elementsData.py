@@ -127,6 +127,10 @@ class ElementsData:
         AquariumNewActivityInnerPopupPanel = {"locator": "UICanvas>Default>AquariumNewActivityInnerPopupPanel"}
         btn_close = {"locator": "UICanvas>Default>AquariumNewActivityInnerPopupPanel>panel>btn_close>img"}
 
+    class AquariumNewActivityPopup:
+        AquariumNewActivityPopupPanel = {"locator": "UICanvas>Default>AquariumNewActivityPopupPanel"}
+        btn_close = {"locator": "UICanvas>Default>AquariumNewActivityPopupPanel>panel>btn_close>img"}
+
     class AquariumFishNew:
         AquariumFishNewPanel = {"locator": "UICanvas>Default>AquariumFishNewPanel"}
         btn_accelerate_reddot_list = {"locator": "UICanvas>Default>AquariumFishNewPanel>panel>panel_fish>List>Viewport>Content>fish_model>aquarium_fish_new_model>btns>btn_accelerate>reddot"}
@@ -798,6 +802,8 @@ class ElementsData:
         btn_center_new = {"locator": "UICanvas>Default>HomePanel>panel>panel_left>list>Viewport>Content>btn_center_new"}
         btn_iaa = {"locator": "UICanvas>Default>HomePanel>panel>panel_events>events_list>Viewport>Content>btn_iaa>img"}
         btn_endless = {"locator": "UICanvas>Default>HomePanel>panel>panel_events>events_list>Viewport>Content>btn_endless>img"}
+        btn_events_endless_thanksgiving = {"locator": "UICanvas>Default>HomePanel>panel>panel_giftpack>list>Viewport>Content>btn_events_endless_thanksgiving>img"}
+        btn_events_endless_newyear = {"locator": "UICanvas>Default>HomePanel>panel>panel_giftpack>list>Viewport>Content>btn_events_endless_newyear>img"}
         btn_1add1 = {"locator": "UICanvas>Default>HomePanel>panel>panel_giftpack>list>Viewport>Content>btn_1add1", "focus": (1, 0.5)}
         btn_black5 = {"locator": "UICanvas>Default>HomePanel>panel>panel_events>events_list>Viewport>Content>btn_black5>img"}
         # panel_entrance
@@ -934,7 +940,7 @@ class ElementsData:
         MessageBoxPanel = {"locator": "UICanvas>Important>MessageBoxPanel"}
         btn_cancel = {"locator": "UICanvas>Important>MessageBoxPanel>Panel>btns>btn_cancel>btn_normal"}
         btn_confirm = {"locator": "UICanvas>Important>MessageBoxPanel>Panel>btns>btn_confirm>btn_normal"}
-        toggle = {"locator": "UICanvas>Important>MessageBoxPanel>Panel>option_2>Toggle", "focus": (0, 0.5)}
+        toggle = {"locator": "UICanvas>Important>MessageBoxPanel>Panel>option_2>Toggle"}
 
     class MidAutumnPackPopup:
         MidAutumnPackPopupPanel = {"locator": "UICanvas>Default>MidAutumnPackPopupPanel"}
@@ -1422,12 +1428,16 @@ class ElementsData:
         # day3_quantity_list = {"locator": "UICanvas>Default>RechargeBlack5Panel>panel>panel_right>day3>item_list>>quantity>value"}
 
     class RechargeEndless:
-        RechargeEndlessPanel = {"locator": "UICanvas>Default>RechargeEndlessPanel"}
-        btn_close = {"locator": "UICanvas>Default>RechargeEndlessPanel>panel>btn_close>img"}
-        btn_buy_list = {"locator": "UICanvas>Default>RechargeEndlessPanel>panel_list>view_port>content>>>btn_buy>text"}
-        icon_list = {"locator": "UICanvas>Default>RechargeEndlessPanel>panel_list>view_port>content>>>group_list>group>icon"}
-        quantity_list = {"locator": "UICanvas>Default>RechargeEndlessPanel>panel_list>view_port>content>>>group_list>group>icon>quantity>value"}
-        group_list = {"locator": "UICanvas>Default>RechargeEndlessPanel>panel_list>view_port>content>>>group_list>group"}
+        item_model_list = {"locator": "UICanvas>Default>>panel>panel_info>panel_list>Viewport>content>itemModel(Clone)"}
+        icon_main_list = {"locator": "UICanvas>Default>>panel>panel_info>panel_list>Viewport>content>itemModel(Clone)>item_free>group>icon"}
+        quantity_main_list = {"locator": "UICanvas>Default>>panel>panel_info>panel_list>Viewport>content>itemModel(Clone)>item_free>group>icon>quantity>value"}
+        icon_sub_list = {"locator": "UICanvas>Default>>panel>panel_info>panel_list>Viewport>content>itemModel(Clone)>>group>item_list>item_model_mini(Clone)>icon"}
+        quantity_sub_list = {"locator": "UICanvas>Default>>panel>panel_info>panel_list>Viewport>content>itemModel(Clone)>>group>item_list>item_model_mini(Clone)>quantity>value"}
+        btn_buy_list = {"locator": "UICanvas>Default>>panel>panel_info>panel_list>Viewport>content>itemModel(Clone)>>btn"}
+
+
+
+
 
     class Result:
         ResultPanel = {"locator": "UICanvas>Default>ResultPanel"}
@@ -1578,6 +1588,10 @@ class ElementsData:
     class StoreSuitPopup:
         StoreSuitPopupPanel = {"locator": "UICanvas>Default>StoreSuitPopupPanel"}
         btn_close = {"locator": "UICanvas>Default>StoreSuitPopupPanel>panel>btn_close>img"}
+
+    class StoreChristmasPopup:
+        StoreChristmasPopupPanel = {"locator": "UICanvas>Default>StoreChristmasPopupPanel"}
+        btn_close = {"locator": "UICanvas>Default>StoreChristmasPopupPanel>Panel>btn_close>img"}
 
     class TaskFishingCareer:
         TaskFishingCareerPanel = {"locator": "UICanvas>Default>TaskFishingCareerPanel"}

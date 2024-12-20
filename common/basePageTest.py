@@ -132,12 +132,12 @@ def get_name_list_test(bp: BasePageMain):
 
 
 def get_slider_value_list_test(bp: BasePageMain):
-    result = bp.get_name_list(element_data=element_data["slider"])
+    result = bp.get_slider_value(element_data=element_data["slider"])
     print(result)
 
 
 def get_dropdown_value_list_test(bp: BasePageMain):
-    result = bp.get_name_list(element_data=element_data["dropdown"])
+    result = bp.get_dropdown_value(element_data=element_data["dropdown"])
     print(result)
 
 
@@ -157,38 +157,39 @@ def get_position_list_test(bp: BasePageMain):
 
 
 
-
 if __name__ == '__main__':
     base_page = BasePageMain(is_mobile_device=False, serial_number="b6h65hd64p5pxcyh")
 
     exist_test(bp=base_page)
 
-    # get_object_id_list_test(bp=base_page)
-    #
-    # get_object_id_test(bp=base_page)
-    #
-    # get_offspring_id_list_test(bp=base_page)
-    #
-    # get_offspring_id_test(bp=base_page)
-    #
-    # get_parent_id_list_test(bp=base_page)
-    #
-    # get_text_list_test(bp=base_page)
-    #
-    # set_text_list_test(bp=base_page)
-    #
-    # get_icon_list_test(bp=base_page)
-    #
-    # get_name_list_test(bp=base_page)
-    #
-    # get_slider_value_list_test(bp=base_page)
-    #
-    # get_dropdown_value_list_test(bp=base_page)
-    #
-    # get_size_list_test(bp=base_page)
-    #
-    # get_toggle_is_on_list_test(bp=base_page)
-    #
-    # get_position_list_test(bp=base_page)
+    get_object_id_list_test(bp=base_page)
+
+    get_object_id_test(bp=base_page)
+
+    get_offspring_id_list_test(bp=base_page)
+
+    get_offspring_id_test(bp=base_page)
+
+    get_parent_id_list_test(bp=base_page)
+
+    get_text_list_test(bp=base_page)
+
+    set_text_list_test(bp=base_page)
+
+    get_icon_list_test(bp=base_page)
+
+    get_name_list_test(bp=base_page)
+
+    get_slider_value_list_test(bp=base_page)
+
+    get_dropdown_value_list_test(bp=base_page)
+
+    get_size_list_test(bp=base_page)
+
+    get_toggle_is_on_list_test(bp=base_page)
+
+    get_position_list_test(bp=base_page)
+
+
 
     base_page.connect_close()

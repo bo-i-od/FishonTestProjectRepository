@@ -151,7 +151,7 @@ def select_card_test(bp: BasePage):
     bp.sleep(1)
     card_information_1 = FishCardUpgradePanel.get_card_information(bp)
     if card_information_0 == card_information_1:
-        raise SameError
+        raise SameError("card_information_0 == card_information_1")
     FishCardUpgradePanel.click_btn_next(bp)
     bp.sleep(1)
     card_information_2 = FishCardUpgradePanel.get_card_information(bp)
@@ -273,7 +273,7 @@ def main(bp: BasePage):
 
 
 if __name__ == "__main__":
-    bp = BasePage("127.0.0.1:21533", is_mobile_device=False)
+    bp = BasePage("127.0.0.1:21553", is_mobile_device=True)
     main(bp)
     bp.connect_close()
 
