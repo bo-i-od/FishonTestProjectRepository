@@ -1,9 +1,12 @@
 from configs.elementsData import ElementsData
 
 class JumpData:
+    element_data_home = ElementsData.Home.HomePanel
+
     pop_window_set = {
         "AquariumCommonFishChangePanel",
         "AquariumNewActivityInnerPopupPanel",
+        "AquariumNewActivityPopupPanel",
         "AvatarSkinPopPanel",
         "AvatarSkinPopPanel_subType_2",
         "BaitAndRodShowPanel",
@@ -34,6 +37,7 @@ class JumpData:
         "RodSkinGiftPack027Panel",
         "RodSkinGiftPack030Panel",
         "StoreSuitPopupPanel",
+        "StoreChristmasPopupPanel",
         "MessageBoxPanel",
         "MidAutumnPackPopupPanel",
         "MonthCardPopPanel",
@@ -49,6 +53,7 @@ class JumpData:
         "AquariumCommonFishChangePanel": [ElementsData.AquariumCommonFishChange.btn_close],
         "AquariumFishPanel": [ElementsData.AquariumFish.btn_close],
         "AquariumNewActivityInnerPopupPanel": [ElementsData.AquariumNewActivityInnerPopup.btn_close],
+        "AquariumNewActivityPopupPanel": [ElementsData.AquariumNewActivityPopup.btn_close],
         "AquariumMainPanel": [ElementsData.AquariumMain.btn_close],
         "AvatarMainPanel": [ElementsData.AvatarMain.btn_close],
         "AvatarSkinPopPanel": [ElementsData.AvatarSkinPop.btn_close],
@@ -132,6 +137,7 @@ class JumpData:
         "RoulettePanel": [ElementsData.Roulette.btn_close],
         "StorePanel": [ElementsData.Store.btn_close],
         "StoreSuitPopupPanel": [ElementsData.StoreSuitPopup.btn_close],
+        "StoreChristmasPopupPanel": [ElementsData.StoreChristmasPopup.btn_close],
         "TaskFishingCareerPanel": [ElementsData.TaskFishingCareer.btn_close],
         "TaskPanel": [ElementsData.Task.btn_close],
         "TournamentsPanel": [ElementsData.Tournaments.btn_close],
@@ -169,7 +175,7 @@ class JumpData:
         "RankPanel": {"element_data": ElementsData.Rank.RankPanel, "open_path": [ElementsData.Home.btn_fishranking]},
         "Recharge1And1Panel": {"element_data": ElementsData.Recharge1And1.Recharge1And1Panel, "open_path": [ElementsData.Home.btn_1add1]},
         "RechargeBlack5Panel": {"element_data": ElementsData.RechargeBlack5.RechargeBlack5Panel, "open_path": [ElementsData.Home.btn_black5]},
-        "RechargeEndlessPanel": {"element_data": ElementsData.RechargeEndless.RechargeEndlessPanel, "open_path": [ElementsData.Home.btn_endless]},
+        "RechargeEndlessPanel": {"element_data": ElementsData.EventsGiftCenter.EventsGiftCenterPanel, "open_path": [ElementsData.Home.btn_events_endless_newyear, ElementsData.Home.btn_events_endless_thanksgiving]},
         "RoulettePanel": {"element_data": ElementsData.Roulette.RoulettePanel, "open_path": [ElementsData.Home.btn_pvp, ElementsData.PVPHall.btn_turntable]},
         "StorePanel": {"element_data": ElementsData.Store.StorePanel, "open_path": [ElementsData.Home.btn_store]},
         "TaskPanel": {"element_data": ElementsData.Task.TaskPanel, "open_path": [ElementsData.Home.btn_bp,ElementsData.BattlePassReward.btn_close, ElementsData.BattlePassIntro.next1to2,  ElementsData.BattlePassIntro.next2to3, ElementsData.BattlePassIntro.btn_go, ElementsData.BattlePass.btn_task]},
