@@ -351,7 +351,7 @@ class ElementsData:
         panel_gears_switch = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears>panel_gears_switch"}
         btn_cast = {"locator": "UICanvas>Default>BattlePreparePanel>>>btn_cast>btn_normal"}
         location = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears>panel_gears_switch>location_info>bg>location>value"}
-        btn_apply = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears_new>panel_gears_switch>btns>btn_apply>btn_normal"}
+
         btn_tournaments = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_activity>btn_activity>btn_tournaments>img"}
         btn_location = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>btn_location>btn_normal"}
         panel_tip_location = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>panel_tip_location"}
@@ -361,14 +361,17 @@ class ElementsData:
         treasure_energy_list = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>panel_tip_location>panel>list_treasure>>energy>value"}
         btn_add_100500 = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>top_res>ResourceBar>100500>btn_add"}
         btn_collection = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_gohome>btn_collection>icon"}
-        gears = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears_new>panel_gears_preview>gears>bg"}
         panel_tip_location_newtreasure = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>panel_tip_location_newtreasure", "focus": (1, 0.8)}
 
         btn_icon = {"locator":"UICanvas>Default>BattlePreparePanel>Panel_Prepare_Warning>panel>panel_icon>btn_icon_b>btn_icon>bg_icon"}
         value_cost = {"locator":"UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>btn_cast>value_cost"}
 
         wait_for_join = {"locator":"UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_activity>btn_activity>btn_tournaments>rank>value_3"}
+
+        gears = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears_new>panel_gears_preview>gears>bg"}
+        btn_apply = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears_new>panel_gears_switch>btns>btn_apply>btn_normal"}
         btn_cancel = {"locator":"UICanvas>Default>BattlePreparePanel>panel_gears_new>panel_gears_switch>btns>btn_cancel>text"}
+        btn_go = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears_new>panel_gears_switch>panel_gears_preview>btns>btn_go"}
 
         class GlobalProgress:
             progress_info = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_tournaments_mini>panel_global_progress>panel_rewards>rewards>progress_info", "focus": (0.5, 0.5)}
@@ -393,6 +396,41 @@ class ElementsData:
 
         class PanelPrepareWarning:
             btn_icon = {"locator": "UICanvas>Default>BattlePreparePanel>Panel_Prepare_Warning>panel>panel_icon>>btn_icon>bg_icon"}
+
+        class Sidebar:
+            btn_menu = {"locator":"UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_gohome>btn_menu>icon"}
+            panel_main_sidebar= {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar"}
+            btn_close = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>btn_close"}
+            panel_sidebar = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar"}
+            panel_bg = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_bg"}
+            head_img = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>head>head_mask>head_img"}
+            head_frame = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>head>head_frame>panel>head_frame"}
+            head_frame_com = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>head>head_frame>panel>head_frame_com"}
+            division = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>player_top>division>icon"}
+            player_name = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>player_top>player_name"}
+            player_lv_lv= {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>player_down>player_lv>lv"}
+            player_lv_value = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>player_down>player_lv>value"}
+            player_rating_img = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>player_down>player_rating>rating>img"}
+            player_rating_num = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>player_down>player_rating>rating>num"}
+            player_id_text = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_id>text"}
+            player_id_value = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_id>value"}
+            btn_leaderboard = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_down>btns>btn_leaderboard>img"}
+            btn_changeroom = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_down>btns>btn_changeroom>img"}
+            btn_mail = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_down>btns>btn_mail>img"}
+            btn_announcement = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_down>btns>btn_announcement>img"}
+            btn_setting = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_down>btns>btn_setting>img"}
+            gears = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>gears>rod"}
+            btn_club = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_club>btn"}
+            btn_friend = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_friend>btn"}
+            btn_aquarium = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_aquarium>btn"}
+            btn_career = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_career>btn"}
+            btn_fishcard = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_fishcard>btn"}
+            btn_store = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_store>btn"}
+            btn_avatar = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_avatar>btn"}
+            btn_flashcard = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_flashcard>btn"}
+            btn_achievement = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_achievement>btn"}
+            btn_fishalbum = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_fishalbum>btn"}
+
 
     class BattleTreasureMap:
         BattleTreasureMapPanel = {"locator": "UICanvas>Default>BattleTreasureMapPanel"}
@@ -695,7 +733,7 @@ class ElementsData:
 
     class Friend:
         FriendPanel = {"locator": "UICanvas>Default>FriendPanel"}
-        btn_close = {"locator": "UICanvas>Default>FriendPanel>btn_close"}
+        btn_close = {"locator": "UICanvas>Default>FriendPanel>btn_close", "focus": (0.25, 0.5)}
         btn_friend = {"locator": "UICanvas>Default>FriendPanel>panel>panel_tab>content>TabList>Viewport>Content>tab_1>title"}
         btn_add_friend = {"locator": "UICanvas>Default>FriendPanel>panel>panel_tab>content>TabList>Viewport>Content>tab_2>title"}
         input_search = {"locator": "UICanvas>Default>FriendPanel>panel>panel_info>panel_top>search>Input_search"}
@@ -788,6 +826,9 @@ class ElementsData:
     class GearSkillTips:
         GearSkillTipsPanel = {"locator": "UICanvas>Default>GearSkillTipsPanel"}
         skill_icon = {"locator": "UICanvas>Default>GearSkillTipsPanel>panel>Content>title_group>rod_skill>rod_skill>icon_bg>icon"}
+
+
+
 
 
 
@@ -1661,7 +1702,8 @@ class ElementsData:
         btn_turntable = {"locator": "UICanvas>Default>TournamentsPanel>panel>panel_division_sidebar>panel_sidebar>panel_detail>btn_turntable>btn_normal"}
         panel_sidebar_bg = {"locator": "UICanvas>Default>TournamentsPanel>panel>panel_division_sidebar>panel_sidebar>panel_bg"}
         tournaments_info_list = {"locator": "UICanvas>Default>TournamentsPanel>panel>panel_entrance>List>Viewport>Content>>model>tournaments_info>logo"}
-
+        btn_flashcard_banner = {"locator": "UICanvas>Default>TournamentsPanel>panel>panel_division_sidebar>panel_sidebar>panel_detail>btn_flashcard_banner"}
+        btn_magnifier = {"locator": "UICanvas>Default>TournamentsPanel>panel>panel_division_sidebar>panel_sidebar>panel_detail>btn_flashcard_banner>panel_name>btn_magnifier>icon"}
     class TournamentsInfo:
         TournamentsInfoPanel = {"locator": "UICanvas>Default>TournamentsInfoPanel"}
         btn_close = {"locator": "UICanvas>Default>TournamentsInfoPanel>panel>btn_close>img"}
@@ -1707,6 +1749,28 @@ class ElementsData:
 
     class WaitHint:
         WaitHintPanel = {"locator": "UICanvas>Default>WaitHintPanel"}
+
+    class FlashCard:
+        FlashCardPanel = {"locator": "UICanvas>Default>FlashCardPanel>Panel"}
+        FlashCardPanel_btn_shop = {"locator": "UICanvas>Default>FlashCardPanel>Panel>Panel_info>btns>btn_shop>img"}
+        FlashCardPanel_btn_comcard = {"locator": "UICanvas>Default>FlashCardPanel>Panel>Panel_info>btns>btn_comcard>img"}
+        FlashCardPanel_btn_close = {"locator": "UICanvas>Default>FlashCardPanel>Panel>Panel_info>btn_close>img"}
+        FlashCardPanel_btn_i = {"locator": "UICanvas>Default>FlashCardPanel>Panel>Panel_info>title_group>content>btn_i>img"}
+        FlashCardPanel_arrow_right = {"locator": "UICanvas>Default>FlashCardPanel>Panel>Panel_info>panel_right>arrow>arrow_right>img"}
+        FlashCardPanel_arrow_left = {"locator": "UICanvas>Default>FlashCardPanel>Panel>Panel_info>panel_right>arrow>arrow_left>img"}
+        FlashCardPanel_left_item2 = {"locator": "UICanvas>Default>FlashCardPanel>Panel>Panel_info>panel_left>panel_banner>item2>item_model_mini>icon"}
+        FlashCardPanel_left_item1 = {"locator": "UICanvas>Default>FlashCardPanel>Panel>Panel_info>panel_left>panel_banner>item1>item_model_mini>icon"}
+        FlashCardPanel_left_type3 = {"locator": "UICanvas>Default>FlashCardPanel>Panel>Panel_info>panel_left>panel_type>type3>item>item_model_mini>icon"}
+        FlashCardPanel_left_type2 = {"locator": "UICanvas>Default>FlashCardPanel>Panel>Panel_info>panel_left>panel_type>type2>item>item_model_mini>icon"}
+        FlashCardPanel_left_type1 = {"locator": "UICanvas>Default>FlashCardPanel>Panel>Panel_info>panel_left>panel_type>type1>item>item_model_mini>icon"}
+
+
+        class FlashCardBoxesPanel:
+            FlashCardBoxesPanel = {"locator": "UICanvas>Default>FlashCardBoxesPanel"}
+            FlashCardBoxes_btn_close = {"locator": "UICanvas>Default>FlashCardBoxesPanel>panel>btn_close>img"}
+            FlashCardBoxes_btn_i = {"locator": "UICanvas>Default>FlashCardBoxesPanel>panel>title_group>content>btn_i>img"}
+
+
 
 
 
