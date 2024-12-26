@@ -7,38 +7,38 @@ from tools.commonTools import *
 
 class FishAlbum3DPanel(BasePage):
     def click_btn_close(self):
-        self.click_until_disappear(element_data=ElementsData.FishAlbum3D.btn_close, ignore_set={"FishAlbum3DPanel"})
+        self.click_until_disappear(element_data=ElementsData.FishAlbum3DPanel.btn_close, ignore_set={"FishAlbum3DPanel"})
 
     def is_panel_active(self):
-        return self.exist(element_data=ElementsData.FishAlbum3D.FishAlbum3DPanel)
+        return self.exist(element_data=ElementsData.FishAlbum3DPanel.FishAlbum3DPanel)
 
     def click_btn_share(self):
-        self.click_until_disappear(element_data=ElementsData.FishAlbum3D.btn_share, ignore_set={"FishAlbum3DPanel"})
+        self.click_until_disappear(element_data=ElementsData.FishAlbum3DPanel.btn_share, ignore_set={"FishAlbum3DPanel"})
 
     def click_btn_switch(self):
-        self.click_element(element_data=ElementsData.FishAlbum3D.btn_switch)
+        self.click_element(element_data=ElementsData.FishAlbum3DPanel.btn_switch)
 
     def get_reward_icon_position(self):
-        return self.get_position(element_data=ElementsData.FishAlbum3D.reward_icon)
+        return self.get_position(element_data=ElementsData.FishAlbum3DPanel.reward_icon)
 
     def click_btn_preview(self):
-        self.click_element(element_data=ElementsData.FishAlbum3D.btn_preview)
+        self.click_element(element_data=ElementsData.FishAlbum3DPanel.btn_preview)
 
     def click_btn_i(self):
-        self.click_element(element_data=ElementsData.FishAlbum3D.btn_i)
+        self.click_element(element_data=ElementsData.FishAlbum3DPanel.btn_i)
 
     def is_panel_rewards_tip_active(self):
-        return self.exist(element_data=ElementsData.FishAlbum3D.panel_rewards_tip)
+        return self.exist(element_data=ElementsData.FishAlbum3DPanel.panel_rewards_tip)
 
     def is_panel_fisheries_active(self):
-        return self.exist(element_data=ElementsData.FishAlbum3D.panel_fisheries)
+        return self.exist(element_data=ElementsData.FishAlbum3DPanel.panel_fisheries)
 
     def switch_tab(self, index):
-        target_id = self.get_object_id_list(element_data=ElementsData.FishAlbum3D.fisheries_list)[index]
-        viewport = Viewport(self, element_viewport=ElementsData.FishAlbum3D.fisheries_list_viewport,
-                            element_item_list=ElementsData.FishAlbum3D.fisheries_list)
+        target_id = self.get_object_id_list(element_data=ElementsData.FishAlbum3DPanel.fisheries_list)[index]
+        viewport = Viewport(self, element_viewport=ElementsData.FishAlbum3DPanel.fisheries_list_viewport,
+                            element_item_list=ElementsData.FishAlbum3DPanel.fisheries_list)
         viewport.move_until_appear(target_id)
-        position_list = self.get_position_list(element_data=ElementsData.FishAlbum3D.fisheries_list)
+        position_list = self.get_position_list(element_data=ElementsData.FishAlbum3DPanel.fisheries_list)
         self.click_position(position_list[index])
 
     def get_tab_status(self, tab_id_list):
@@ -62,13 +62,13 @@ class FishAlbum3DPanel(BasePage):
         return tab_name_list
 
     def get_progress_cur(self):
-        progress_cur_list = self.get_text_list(element_data=ElementsData.FishAlbum3D.progress_cur_list)
+        progress_cur_list = self.get_text_list(element_data=ElementsData.FishAlbum3DPanel.progress_cur_list)
         str_to_int_list(progress_cur_list)
         progress_cur = progress_cur_list[0] + progress_cur_list[1]
         return progress_cur
 
     def get_tab_id_list(self):
-        tab_id_list = self.get_object_id_list(element_data=ElementsData.FishAlbum3D.fisheries_list)
+        tab_id_list = self.get_object_id_list(element_data=ElementsData.FishAlbum3DPanel.fisheries_list)
         return tab_id_list
 
     def get_select_index(self, tab_id_list):
@@ -82,16 +82,16 @@ class FishAlbum3DPanel(BasePage):
         return cur
 
     def get_photo_name(self):
-        return self.get_text(element_data=ElementsData.FishAlbum3D.photo_name)
+        return self.get_text(element_data=ElementsData.FishAlbum3DPanel.photo_name)
 
     def get_photo_bg(self):
-        return self.get_icon(element_data=ElementsData.FishAlbum3D.photo_bg)
+        return self.get_icon(element_data=ElementsData.FishAlbum3DPanel.photo_bg)
 
     def get_photo_bg_position(self):
-        return self.get_position(element_data=ElementsData.FishAlbum3D.photo_bg)
+        return self.get_position(element_data=ElementsData.FishAlbum3DPanel.photo_bg)
 
     def get_star_position_list(self):
-        return self.get_position_list(element_data=ElementsData.FishAlbum3D.star_list)
+        return self.get_position_list(element_data=ElementsData.FishAlbum3DPanel.star_list)
 
 
 

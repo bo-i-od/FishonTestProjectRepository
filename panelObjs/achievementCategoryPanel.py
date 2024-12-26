@@ -7,25 +7,25 @@ from common.viewport import Viewport
 
 class AchievementCategoryPanel(BasePage):
     def click_btn_close(self):
-        self.click_element(element_data=ElementsData.AchievementCategory.btn_close)
+        self.click_element(element_data=ElementsData.AchievementCategoryPanel.btn_close)
 
     def is_panel_active(self):
-        return self.exist(element_data=ElementsData.AchievementCategory.AchievementCategoryPanel)
+        return self.exist(element_data=ElementsData.AchievementCategoryPanel.AchievementCategoryPanel)
 
 
     def get_category_position_list(self):
-        return self.get_position_list(element_data=ElementsData.AchievementCategory.item_list)
+        return self.get_position_list(element_data=ElementsData.AchievementCategoryPanel.item_list)
 
     # 图标列表
     def get_reward_icon_list(self):
-        return self.get_icon_list(element_data=ElementsData.AchievementCategory.reward_icon_list)
+        return self.get_icon_list(element_data=ElementsData.AchievementCategoryPanel.reward_icon_list)
 
     def get_reward_position_list(self):
-        return self.get_position_list(element_data=ElementsData.AchievementCategory.reward_icon_list)
+        return self.get_position_list(element_data=ElementsData.AchievementCategoryPanel.reward_icon_list)
 
     # 数量列表
     def get_reward_quantity_list(self):
-        reward_quantity_list = self.get_text_list(element_data=ElementsData.AchievementCategory.reward_quantity_list)
+        reward_quantity_list = self.get_text_list(element_data=ElementsData.AchievementCategoryPanel.reward_quantity_list)
         str_to_int_list(reward_quantity_list)
         return reward_quantity_list
 
@@ -66,14 +66,14 @@ class AchievementCategoryPanel(BasePage):
             cur += 1
 
     def get_category_viewport(self):
-        category_viewport = Viewport(self, element_viewport=ElementsData.AchievementCategory.category_viewport, element_item_list=ElementsData.AchievementCategory.item_list,viewport_direction="column")
+        category_viewport = Viewport(self, element_viewport=ElementsData.AchievementCategoryPanel.category_viewport, element_item_list=ElementsData.AchievementCategoryPanel.item_list, viewport_direction="column")
         return category_viewport
 
     def click_btn_rewards(self):
-        self.click_element(element_data=ElementsData.AchievementCategory.btn_rewards)
+        self.click_element(element_data=ElementsData.AchievementCategoryPanel.btn_rewards)
 
 if __name__ == '__main__':
     bp = BasePage()
-    a = bp.click_element(element_data=ElementsData.NewbieGuide.NBG_system_club_apply)
+    a = bp.click_element(element_data=ElementsData.NewbieGuidePanel.NBG_system_club_apply)
     print(a)
     bp.connect_close()

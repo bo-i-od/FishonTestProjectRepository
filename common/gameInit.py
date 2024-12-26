@@ -79,7 +79,7 @@ def account_init(bp: BasePage, player_name, cmd_list):
             break
         # t = str(time.time()).split('.')
         # player_name = "t" +t[0][-2:]+ t[1]
-
+    AvatarSelectPanel.wait_for_panel_appear(bp)
     if not AvatarSelectPanel.is_panel_active(bp):
         return
     # 随机选择性别

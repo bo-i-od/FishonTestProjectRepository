@@ -3,10 +3,10 @@ from configs.elementsData import ElementsData
 
 class PVPRoomInvitePanel(BasePage):
     def is_panel_active(self):
-        return self.exist(element_data=ElementsData.PVPRoomInvite.PVPRoomInvitePanel)
+        return self.exist(element_data=ElementsData.PVPRoomInvitePanel.PVPRoomInvitePanel)
 
     def click_btn_confirm(self):
-        self.click_element(element_data=ElementsData.PVPRoomInvite.btn_confirm)
+        self.click_element(element_data=ElementsData.PVPRoomInvitePanel.btn_confirm)
 
     def click_btn_cancel(self):
-        self.click_element(element_data=ElementsData.PVPRoomInvite.btn_cancel)
+        self.click_element(element_data=ElementsData.PVPRoomInvitePanel.btn_cancel)

@@ -8,35 +8,35 @@ from common.viewport import Viewport
 class StorePanel(BasePage):
     @staticmethod
     def get_StorePanel_element_data():
-        return ElementsData.Store.StorePanel
+        return ElementsData.StorePanel.StorePanel
 
     def click_btn_close(self):
-        self.click_element(element_data=ElementsData.Store.btn_close)
+        self.click_element(element_data=ElementsData.StorePanel.btn_close)
 
     def is_panel_active(self):
-        return self.exist(element_data=ElementsData.Store.StorePanel)
+        return self.exist(element_data=ElementsData.StorePanel.StorePanel)
 
     def click_btn_refresh(self):
-        position_list = self.get_position_list(element_data=ElementsData.Store.Box.btn_refresh_text)
+        position_list = self.get_position_list(element_data=ElementsData.StorePanel.Box.btn_refresh_text)
         if position_list:
             position = position_list[0]
             self.click_position(position)
             return
-        position = self.get_position(element_data=ElementsData.Store.Box.btn_refresh_value)
+        position = self.get_position(element_data=ElementsData.StorePanel.Box.btn_refresh_value)
         self.click_position(position)
 
 
     def change_tab(self, index):
         edge = [0.01, 0.01]
-        viewport_tab = Viewport(self, element_viewport=ElementsData.Store.viewport_tab, element_item_list=ElementsData.Store.tab_list, viewport_edge=edge)
+        viewport_tab = Viewport(self, element_viewport=ElementsData.StorePanel.viewport_tab, element_item_list=ElementsData.StorePanel.tab_list, viewport_edge=edge)
         viewport_tab.move_until_appear(viewport_tab.item_id_list[index])
         self.sleep(0.5)
-        position_list = self.get_position_list(element_data=ElementsData.Store.tab_list)
+        position_list = self.get_position_list(element_data=ElementsData.StorePanel.tab_list)
         self.click_position(position_list[index])
 
     # 看还有几次刷新次数
     def get_times_refresh(self):
-        times_refresh_str = self.get_text(element_data=ElementsData.Store.Box.times_refresh)
+        times_refresh_str = self.get_text(element_data=ElementsData.StorePanel.Box.times_refresh)
         times_refresh_split_str = times_refresh_str.split("/")
         # 分子
         times_refresh_numerator = int(times_refresh_split_str[0])
@@ -45,14 +45,14 @@ class StorePanel(BasePage):
         return times_refresh_numerator, times_refresh_denominator
 
     def click_btn_add_100100(self):
-        self.click_element(element_data=ElementsData.Store.btn_add_100100)
+        self.click_element(element_data=ElementsData.StorePanel.btn_add_100100)
 
 
     # 获得图标、数量和折扣列表
     def get_box_details(self):
-        icon_list = self.get_icon_list(element_data=ElementsData.Store.Box.box_list)
-        quantity_list = self.get_text_list(element_data=ElementsData.Store.Box.quantity_list)
-        item_id_list = self.get_object_id_list(element_data=ElementsData.Store.Box.item_list)
+        icon_list = self.get_icon_list(element_data=ElementsData.StorePanel.Box.box_list)
+        quantity_list = self.get_text_list(element_data=ElementsData.StorePanel.Box.quantity_list)
+        item_id_list = self.get_object_id_list(element_data=ElementsData.StorePanel.Box.item_list)
         off_list = []
         cur = 0
         while cur < len(item_id_list):
@@ -172,19 +172,19 @@ class StorePanel(BasePage):
 
 
     def get_box_id_list(self):
-        item_id_list = self.get_object_id_list(element_data=ElementsData.Store.Box.item_list)
+        item_id_list = self.get_object_id_list(element_data=ElementsData.StorePanel.Box.item_list)
         return item_id_list
 
     def get_item_id_list(self):
-        item_id_list = self.get_object_id_list(element_data=ElementsData.Store.Resource.item_list)
+        item_id_list = self.get_object_id_list(element_data=ElementsData.StorePanel.Resource.item_list)
         return item_id_list
 
     def get_cash_id_list(self):
-        cash_id_list = self.get_object_id_list(element_data=ElementsData.Store.Cash.cash_list)
+        cash_id_list = self.get_object_id_list(element_data=ElementsData.StorePanel.Cash.cash_list)
         return cash_id_list
 
     def get_gift_pack_id_list(self):
-        gift_pack_id_list = self.get_object_id_list(element_data=ElementsData.Store.GiftPack.gift_pack_list)
+        gift_pack_id_list = self.get_object_id_list(element_data=ElementsData.StorePanel.GiftPack.gift_pack_list)
         return gift_pack_id_list
 
 
@@ -204,9 +204,9 @@ class StorePanel(BasePage):
 
     # 获取刷新按钮上的价格  FREE和SOLD OUT分别记为0和-1
     def get_refresh_cost(self):
-        price_str_list = self.get_text_list(element_data=ElementsData.Store.Box.btn_refresh_text)
+        price_str_list = self.get_text_list(element_data=ElementsData.StorePanel.Box.btn_refresh_text)
         if not price_str_list:
-            price_str = self.get_text(element_data=ElementsData.Store.Box.btn_refresh_value)
+            price_str = self.get_text(element_data=ElementsData.StorePanel.Box.btn_refresh_value)
         else:
             price_str = price_str_list[0]
         free_list = ["FREE", "免费"]
@@ -227,9 +227,9 @@ class StorePanel(BasePage):
         item_tpid = self.get_tpid(item_icon_name=icon)[0]
         element_data = None
         if item_tpid == "100000":
-            element_data = ElementsData.Store.text_100000
+            element_data = ElementsData.StorePanel.text_100000
         elif item_tpid == "100100":
-            element_data = ElementsData.Store.text_100100
+            element_data = ElementsData.StorePanel.text_100100
 
         count = resource.get_resource(self, item_tpid=item_tpid, element_data=element_data)
         if cost > count:
@@ -239,7 +239,7 @@ class StorePanel(BasePage):
 
 
     def get_cash(self):
-        cash = resource.get_resource(self, "100100", element_data=ElementsData.Store.text_100100)
+        cash = resource.get_resource(self, "100100", element_data=ElementsData.StorePanel.text_100100)
         return cash
 
     # 宝箱商店的箱子转换为箱子的索引号
@@ -254,7 +254,7 @@ class StorePanel(BasePage):
 
     def get_gift_pack_dict_list(self):
         gift_pack_dict_list = []
-        gift_pack_id_list = self.get_object_id_list(element_data=ElementsData.Store.GiftPack.gift_pack_list)
+        gift_pack_id_list = self.get_object_id_list(element_data=ElementsData.StorePanel.GiftPack.gift_pack_list)
         for gift_pack_id in gift_pack_id_list:
             icon_id_list = self.get_offspring_id_list(offspring_path="group>item_list>>icon", object_id=gift_pack_id)
             quantity_id_list = self.get_offspring_id_list(offspring_path="group>item_list>>quantity>value", object_id=gift_pack_id)
@@ -269,19 +269,19 @@ class StorePanel(BasePage):
         return gift_pack_dict_list
 
     def get_gift_pack_position_list(self):
-        gift_pack_position_list = self.get_position_list(element_data=ElementsData.Store.GiftPack.icon_list)
+        gift_pack_position_list = self.get_position_list(element_data=ElementsData.StorePanel.GiftPack.icon_list)
         return gift_pack_position_list
 
     def get_gift_pack_icon_list(self):
-        gift_pack_icon_list = self.get_icon_list(element_data=ElementsData.Store.GiftPack.icon_list)
+        gift_pack_icon_list = self.get_icon_list(element_data=ElementsData.StorePanel.GiftPack.icon_list)
         return gift_pack_icon_list
 
     def get_gear_position_list(self):
-        gear_position_list = self.get_position_list(element_data=ElementsData.Store.Resource.gear_card_list)
+        gear_position_list = self.get_position_list(element_data=ElementsData.StorePanel.Resource.gear_card_list)
         return gear_position_list
 
     def get_gear_name_list(self):
-        gear_name_list = self.get_text_list(element_data=ElementsData.Store.Resource.gear_name_list)
+        gear_name_list = self.get_text_list(element_data=ElementsData.StorePanel.Resource.gear_name_list)
         cur = 0
         while cur < len(gear_name_list):
             gear_name_list[cur] = gear_name_list[cur].split('>')[1].split('<')[0]
@@ -289,7 +289,7 @@ class StorePanel(BasePage):
         return gear_name_list
 
     def get_gear_icon_list(self):
-        gear_card_id_list = self.get_object_id_list(element_data=ElementsData.Store.Resource.gear_card_list)
+        gear_card_id_list = self.get_object_id_list(element_data=ElementsData.StorePanel.Resource.gear_card_list)
         gear_icon_id_list = []
         for gear_card_id in gear_card_id_list:
             icon_id_list = self.get_offspring_id_list(object_id=gear_card_id, offspring_path="rod_mask>icon")
@@ -303,30 +303,30 @@ class StorePanel(BasePage):
         return gear_icon_list
 
     def click_btn_info(self):
-        self.click_element(element_data=ElementsData.Store.Resource.btn_info)
+        self.click_element(element_data=ElementsData.StorePanel.Resource.btn_info)
 
     def get_fish_card_icon_list(self):
-        fish_card_icon_list = self.get_icon_list(element_data=ElementsData.Store.Resource.fish_card_icon_list)
+        fish_card_icon_list = self.get_icon_list(element_data=ElementsData.StorePanel.Resource.fish_card_icon_list)
         return fish_card_icon_list
 
     def get_fish_card_name_list(self):
-        fish_card_name_list = self.get_text_list(element_data=ElementsData.Store.Resource.fish_card_name_list)
+        fish_card_name_list = self.get_text_list(element_data=ElementsData.StorePanel.Resource.fish_card_name_list)
         return fish_card_name_list
 
     def get_fish_card_main_name(self):
-        fish_card_main_name = self.get_text(element_data=ElementsData.Store.Resource.fish_card_main_name)
+        fish_card_main_name = self.get_text(element_data=ElementsData.StorePanel.Resource.fish_card_main_name)
         return fish_card_main_name
 
     def get_fish_card_position_list(self):
-        fish_card_position_list = self.get_position_list(element_data=ElementsData.Store.Resource.fish_card_icon_list)
+        fish_card_position_list = self.get_position_list(element_data=ElementsData.StorePanel.Resource.fish_card_icon_list)
         return fish_card_position_list
     def get_fish_card_quantity_list(self):
-        fish_card_quantity_list = self.get_text_list(element_data=ElementsData.Store.Resource.fish_card_quantity_list)
+        fish_card_quantity_list = self.get_text_list(element_data=ElementsData.StorePanel.Resource.fish_card_quantity_list)
         return fish_card_quantity_list
 
     def get_booster_dict_list(self):
         booster_dict_list = []
-        booster_id_list = self.get_object_id_list(element_data=ElementsData.Store.Resource.item_list)
+        booster_id_list = self.get_object_id_list(element_data=ElementsData.StorePanel.Resource.item_list)
         for booster_id in booster_id_list:
             icon_id_list = self.get_offspring_id_list(offspring_path="group>icon_list>>icon", object_id=booster_id)
             quantity_id_list = self.get_offspring_id_list(offspring_path="group>icon_list>>quantity>value", object_id=booster_id)
@@ -341,83 +341,83 @@ class StorePanel(BasePage):
         return booster_dict_list
 
     def get_booster_icon_list(self):
-        icon_list = self.get_icon_list(element_data=ElementsData.Store.Resource.booster_icon_list)
+        icon_list = self.get_icon_list(element_data=ElementsData.StorePanel.Resource.booster_icon_list)
         return icon_list
 
     def get_booster_position_list(self):
-        position_list = self.get_position_list(element_data=ElementsData.Store.Resource.booster_icon_list)
+        position_list = self.get_position_list(element_data=ElementsData.StorePanel.Resource.booster_icon_list)
         return position_list
 
     def get_materials_icon_list(self):
-        materials_icon_list = self.get_icon_list(element_data=ElementsData.Store.Resource.materials_icon_list)
+        materials_icon_list = self.get_icon_list(element_data=ElementsData.StorePanel.Resource.materials_icon_list)
         return materials_icon_list
 
     def get_materials_position_list(self):
-        materials_position_list = self.get_position_list(element_data=ElementsData.Store.Resource.materials_icon_list)
+        materials_position_list = self.get_position_list(element_data=ElementsData.StorePanel.Resource.materials_icon_list)
         return materials_position_list
 
     def click_btn_min(self):
-        self.click_element(element_data=ElementsData.Store.Resource.btn_min)
+        self.click_element(element_data=ElementsData.StorePanel.Resource.btn_min)
 
     def click_btn_max(self):
-        self.click_element(element_data=ElementsData.Store.Resource.btn_max)
+        self.click_element(element_data=ElementsData.StorePanel.Resource.btn_max)
 
     def click_btn_add(self):
-        self.click_element(element_data=ElementsData.Store.Resource.btn_add)
+        self.click_element(element_data=ElementsData.StorePanel.Resource.btn_add)
 
     def click_btn_sub(self):
-        self.click_element(element_data=ElementsData.Store.Resource.btn_sub)
+        self.click_element(element_data=ElementsData.StorePanel.Resource.btn_sub)
 
     def click_btn_purchase(self):
-        self.click_element(element_data=ElementsData.Store.Resource.btn_purchase)
+        self.click_element(element_data=ElementsData.StorePanel.Resource.btn_purchase)
 
     def get_slider_size(self):
-        return self.get_size(element_data=ElementsData.Store.Resource.slider)
+        return self.get_size(element_data=ElementsData.StorePanel.Resource.slider)
 
     def get_slider_position(self):
-        return self.get_position(element_data=ElementsData.Store.Resource.slider)
+        return self.get_position(element_data=ElementsData.StorePanel.Resource.slider)
 
     def get_item_icon(self):
-        item_icon = self.get_icon(element_data=ElementsData.Store.Resource.item_icon)
+        item_icon = self.get_icon(element_data=ElementsData.StorePanel.Resource.item_icon)
         return item_icon
 
     def get_item_quantity(self):
-        item_quantity = self.get_text(element_data=ElementsData.Store.Resource.item_quantity)
+        item_quantity = self.get_text(element_data=ElementsData.StorePanel.Resource.item_quantity)
         item_quantity = str_to_int(item_quantity)
         return item_quantity
 
     def get_cost_icon(self):
-        item_icon = self.get_icon(element_data=ElementsData.Store.Resource.cost_icon)
+        item_icon = self.get_icon(element_data=ElementsData.StorePanel.Resource.cost_icon)
         return item_icon
 
     def get_cost_quantity(self):
-        item_quantity = self.get_text(element_data=ElementsData.Store.Resource.cost_quantity)
+        item_quantity = self.get_text(element_data=ElementsData.StorePanel.Resource.cost_quantity)
         item_quantity = str_to_int(item_quantity)
         return item_quantity
 
     def get_cash_position_list(self):
-        cash_position_list = self.get_position_list(element_data=ElementsData.Store.Cash.cash_icon_list)
+        cash_position_list = self.get_position_list(element_data=ElementsData.StorePanel.Cash.cash_icon_list)
         return cash_position_list
 
     def get_cash_icon_list(self):
-        cash_icon_list = self.get_icon_list(element_data=ElementsData.Store.Cash.cash_icon_list)
+        cash_icon_list = self.get_icon_list(element_data=ElementsData.StorePanel.Cash.cash_icon_list)
         return cash_icon_list
 
     def get_cash_quantity_list(self):
-        cash_quantity_list = self.get_text_list(element_data=ElementsData.Store.Cash.cash_quantity_list)
+        cash_quantity_list = self.get_text_list(element_data=ElementsData.StorePanel.Cash.cash_quantity_list)
         str_to_int_list(cash_quantity_list)
         return cash_quantity_list
 
     def get_coupons_id_list(self):
-        coupons_id_list = self.get_object_id_list(element_data=ElementsData.Store.Coupons.coupons_list)
+        coupons_id_list = self.get_object_id_list(element_data=ElementsData.StorePanel.Coupons.coupons_list)
         return coupons_id_list
 
     def get_coupons_icon_list(self):
-        coupons_icon_list = self.get_icon_list(element_data=ElementsData.Store.Coupons.coupons_icon_list)
+        coupons_icon_list = self.get_icon_list(element_data=ElementsData.StorePanel.Coupons.coupons_icon_list)
         return coupons_icon_list
 
     def get_coupons_quantity_list(self):
-        coupons_quantity_list = self.get_text_list(element_data=ElementsData.Store.Coupons.coupons_quantity_list)
+        coupons_quantity_list = self.get_text_list(element_data=ElementsData.StorePanel.Coupons.coupons_quantity_list)
         cur = 0
         while cur < len(coupons_quantity_list):
             coupons_quantity_list[cur] = extract_number(coupons_quantity_list[cur])
@@ -426,7 +426,7 @@ class StorePanel(BasePage):
         return coupons_quantity_list
 
     def get_cash_first_time_list(self):
-        cash_id_list = self.get_object_id_list(element_data=ElementsData.Store.Cash.cash_list)
+        cash_id_list = self.get_object_id_list(element_data=ElementsData.StorePanel.Cash.cash_list)
         cash_first_time_list = []
         for cash_id in cash_id_list:
             first_bg = self.get_offspring_id_list(object_id=cash_id, offspring_path="first_bg")
@@ -434,53 +434,53 @@ class StorePanel(BasePage):
         return cash_first_time_list
 
     def change_resource_tab(self, index):
-        resource_tab_position_list = self.get_position_list(element_data=ElementsData.Store.Resource.resource_tab_list)
+        resource_tab_position_list = self.get_position_list(element_data=ElementsData.StorePanel.Resource.resource_tab_list)
         self.click_position(resource_tab_position_list[index])
 
     def get_month_model_1_id_list(self):
-        return self.get_object_id_list(element_data=ElementsData.Store.MonthCard.month_model_1)
+        return self.get_object_id_list(element_data=ElementsData.StorePanel.MonthCard.month_model_1)
 
     def get_month_card_1_icon_list(self):
-        icon_list = self.get_icon_list(element_data=ElementsData.Store.MonthCard.month_card_1_icon_list)
+        icon_list = self.get_icon_list(element_data=ElementsData.StorePanel.MonthCard.month_card_1_icon_list)
         return icon_list
 
     def get_month_card_1_position_list(self):
-        position_list = self.get_position_list(element_data=ElementsData.Store.MonthCard.month_card_1_icon_list)
+        position_list = self.get_position_list(element_data=ElementsData.StorePanel.MonthCard.month_card_1_icon_list)
         return position_list
 
     def get_month_card_1_quantity_list(self):
-        quantity_list = self.get_text_list(element_data=ElementsData.Store.MonthCard.month_card_1_quantity_list)
+        quantity_list = self.get_text_list(element_data=ElementsData.StorePanel.MonthCard.month_card_1_quantity_list)
         str_to_int_list(quantity_list)
         return quantity_list
 
     def get_month_card_1_quantity_total(self):
-        quantity = self.get_text(element_data=ElementsData.Store.MonthCard.month_card_1_quantity_total)
+        quantity = self.get_text(element_data=ElementsData.StorePanel.MonthCard.month_card_1_quantity_total)
         quantity = str_to_int(quantity)
         return quantity
 
     def get_month_model_2_id_list(self):
-        return self.get_object_id_list(element_data=ElementsData.Store.MonthCard.month_model_2_list)
+        return self.get_object_id_list(element_data=ElementsData.StorePanel.MonthCard.month_model_2_list)
 
     def get_month_card_2_icon_list(self):
-        icon_list = self.get_icon_list(element_data=ElementsData.Store.MonthCard.month_card_2_icon_list)
+        icon_list = self.get_icon_list(element_data=ElementsData.StorePanel.MonthCard.month_card_2_icon_list)
         return icon_list
 
     def get_month_card_2_position_list(self):
-        position_list = self.get_position_list(element_data=ElementsData.Store.MonthCard.month_card_2_icon_list)
+        position_list = self.get_position_list(element_data=ElementsData.StorePanel.MonthCard.month_card_2_icon_list)
         return position_list
 
     def get_month_card_2_quantity_list(self):
-        quantity_list = self.get_text_list(element_data=ElementsData.Store.MonthCard.month_card_2_quantity_list)
+        quantity_list = self.get_text_list(element_data=ElementsData.StorePanel.MonthCard.month_card_2_quantity_list)
         str_to_int_list(quantity_list)
         return quantity_list
 
     def get_month_card_2_quantity_total_list(self):
-        quantity_list = self.get_text_list(element_data=ElementsData.Store.MonthCard.month_card_2_quantity_total_list)
+        quantity_list = self.get_text_list(element_data=ElementsData.StorePanel.MonthCard.month_card_2_quantity_total_list)
         str_to_int_list(quantity_list)
         return quantity_list
 
     def get_month_card_2_collected_list(self):
-        item_model_id_list = self.get_object_id_list(element_data=ElementsData.Store.MonthCard.month_card_2_item_model_list)
+        item_model_id_list = self.get_object_id_list(element_data=ElementsData.StorePanel.MonthCard.month_card_2_item_model_list)
         collected_list = []
         cur = 0
         while cur < len(item_model_id_list):
@@ -493,13 +493,18 @@ class StorePanel(BasePage):
         return collected_list
 
 
+    def click_btns(self):
+        self.click_object_of_plural_objects(element_data=ElementsData.StorePanel.GiftPack.icon_list, element_viewport=ElementsData.StorePanel.GiftPack.viewport)
+
+
 
 
 
 
 if __name__ == '__main__':
     bp = BasePage()
-    StorePanel.change_tab(bp, 0)
+    StorePanel.click_btns(bp)
+    bp.connect_close()
     # cur = 301
     # while cur <= 400:
     #     name = f"player0"

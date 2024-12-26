@@ -7,42 +7,42 @@ from tools.commonTools import *
 class NewbieTaskPanel(BasePage):
     # 面板是否存在
     def is_panel_active(self):
-        return self.exist(element_data=ElementsData.NewbieTask.NewbieTaskPanel)
+        return self.exist(element_data=ElementsData.NewbieTaskPanel.NewbieTaskPanel)
 
     # 点击关闭按钮
     def click_btn_close(self):
-        self.click_element(element_data=ElementsData.NewbieTask.btn_close)
+        self.click_element(element_data=ElementsData.NewbieTaskPanel.btn_close)
 
     def get_remain_day(self):
-        remain_time = self.get_text(element_data=ElementsData.NewbieTask.remain_time)
+        remain_time = self.get_text(element_data=ElementsData.NewbieTaskPanel.remain_time)
         return int(remain_time.split('D')[0])
 
     # 点击左上角问号弹出tips
     def click_btn_i(self):
-        self.click_element(element_data=ElementsData.NewbieTask.btn_i)
+        self.click_element(element_data=ElementsData.NewbieTaskPanel.btn_i)
 
     # 关闭tips
     def click_tap_to_close(self):
-        self.click_element(element_data=ElementsData.NewbieTask.tap_to_close)
+        self.click_element(element_data=ElementsData.NewbieTaskPanel.tap_to_close)
 
     # 点击派对促销
     def click_btn_sale(self):
-        self.click_element(element_data=ElementsData.NewbieTask.btn_sale)
+        self.click_element(element_data=ElementsData.NewbieTaskPanel.btn_sale)
 
     # 点击排行榜
     def click_btn_leaderboard(self):
-        self.click_element(element_data=ElementsData.NewbieTask.btn_leaderboard)
+        self.click_element(element_data=ElementsData.NewbieTaskPanel.btn_leaderboard)
 
     # 得到3天活动代币数量
     def get_coin(self):
-        coin = resource.str_to_int(self.get_text(element_data=ElementsData.NewbieTask.coin))
+        coin = resource.str_to_int(self.get_text(element_data=ElementsData.NewbieTaskPanel.coin))
         item_count = self.get_item_count(item_tpid="209012")
         compare(coin, item_count)
         return coin
 
     def get_progress_reward_viewport(self, progress_reward_id_list):
         size = self.get_size(object_id=progress_reward_id_list[0])
-        progress_reward_viewport = Viewport(self, element_viewport=ElementsData.NewbieTask.progress_reward_viewport, item_id_list=progress_reward_id_list, viewport_edge=[0, 2 * size[0]])
+        progress_reward_viewport = Viewport(self, element_viewport=ElementsData.NewbieTaskPanel.progress_reward_viewport, item_id_list=progress_reward_id_list, viewport_edge=[0, 2 * size[0]])
         return progress_reward_viewport
 
     def get_progress_reward_position_list(self, progress_reward_id_list):
@@ -77,7 +77,7 @@ class NewbieTaskPanel(BasePage):
         locked_list = []
         collectable_list = []
         collected_list = []
-        progress_reward_item_id_list = self.get_object_id_list(element_data=ElementsData.NewbieTask.progress_reward_list, offspring_path="item")
+        progress_reward_item_id_list = self.get_object_id_list(element_data=ElementsData.NewbieTaskPanel.progress_reward_list, offspring_path="item")
         progress_reward_id_list = self.get_parent_id_list(object_id_list=progress_reward_item_id_list)
         progress_reward_id_list = merge_list(progress_reward_id_list)
         coin = NewbieTaskPanel.get_coin(self)
@@ -105,36 +105,36 @@ class NewbieTaskPanel(BasePage):
         return locked_list, collectable_list, collected_list
 
     def get_max_reward_icon(self):
-        max_reward_icon = self.get_icon(element_data=ElementsData.NewbieTask.max_reward, offspring_path="item>item_model_mini(Clone)>icon")
+        max_reward_icon = self.get_icon(element_data=ElementsData.NewbieTaskPanel.max_reward, offspring_path="item>item_model_mini(Clone)>icon")
         return max_reward_icon
 
     def get_max_reward_position(self):
-        max_reward_position = self.get_position(element_data=ElementsData.NewbieTask.max_reward,
-                                        offspring_path="item>item_model_mini(Clone)>icon")
+        max_reward_position = self.get_position(element_data=ElementsData.NewbieTaskPanel.max_reward,
+                                                offspring_path="item>item_model_mini(Clone)>icon")
         return max_reward_position
 
     def get_max_reward_quantity(self):
-        max_reward_quantity = int(self.get_text(element_data=ElementsData.NewbieTask.max_reward, offspring_path="item>item_model_mini(Clone)>quantity>value"))
+        max_reward_quantity = int(self.get_text(element_data=ElementsData.NewbieTaskPanel.max_reward, offspring_path="item>item_model_mini(Clone)>quantity>value"))
         return max_reward_quantity
 
     def get_max_reward_threshold(self):
-        max_reward_threshold = int(self.get_text(element_data=ElementsData.NewbieTask.max_reward, offspring_path="value"))
+        max_reward_threshold = int(self.get_text(element_data=ElementsData.NewbieTaskPanel.max_reward, offspring_path="value"))
         return max_reward_threshold
 
     # 切换页签
     def switch_tab(self, index):
-        position_list = self.get_position_list(element_data=ElementsData.NewbieTask.tab_list)
+        position_list = self.get_position_list(element_data=ElementsData.NewbieTaskPanel.tab_list)
         position = position_list[index]
         self.click_position(position)
 
     def get_task_viewport(self, task_id_list):
         size = self.get_size_list(object_id=task_id_list[0])[0]
-        task_viewport = Viewport(self, element_viewport=ElementsData.NewbieTask.task_viewport, item_id_list=task_id_list, viewport_direction="column", viewport_edge=[0, 2 * size[1]])
+        task_viewport = Viewport(self, element_viewport=ElementsData.NewbieTaskPanel.task_viewport, item_id_list=task_id_list, viewport_direction="column", viewport_edge=[0, 2 * size[1]])
         return task_viewport
 
     # 得到任务的instance id
     def get_task_id_list(self):
-        return self.get_object_id_list(element_data=ElementsData.NewbieTask.task_list)
+        return self.get_object_id_list(element_data=ElementsData.NewbieTaskPanel.task_list)
 
     # 得到每个任务对应的图标及其数量的字典
     def get_task_reward_dict_list(self, task_id_list):
@@ -193,11 +193,11 @@ class NewbieTaskPanel(BasePage):
 
     # 得到挑战的instance id
     def get_challenge_id_list(self):
-        return self.get_object_id_list(element_data=ElementsData.NewbieTask.challenge_list)
+        return self.get_object_id_list(element_data=ElementsData.NewbieTaskPanel.challenge_list)
 
     def get_challenge_viewport(self, challenge_id_list):
         size = self.get_size_list(object_id=challenge_id_list[0])[0]
-        challenge_viewport = Viewport(self, element_viewport=ElementsData.NewbieTask.challenge_viewport, item_id_list=challenge_id_list, viewport_direction="column", viewport_edge=[0, 0.75 * size[1]])
+        challenge_viewport = Viewport(self, element_viewport=ElementsData.NewbieTaskPanel.challenge_viewport, item_id_list=challenge_id_list, viewport_direction="column", viewport_edge=[0, 0.75 * size[1]])
         return challenge_viewport
 
     # 得到分数 go转换为0分

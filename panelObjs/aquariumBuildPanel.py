@@ -4,14 +4,14 @@ from tools.commonTools import *
 
 class AquariumBuildPanel(BasePage):
     def click_btn_close(self):
-        self.click_element(element_data=ElementsData.AquariumBuild.btn_close)
+        self.click_element(element_data=ElementsData.AquariumBuildPanel.btn_close)
 
     def switch_tab(self, index):
-        tab_position_list = self.get_position_list(element_data=ElementsData.AquariumBuild.tab_list)
+        tab_position_list = self.get_position_list(element_data=ElementsData.AquariumBuildPanel.tab_list)
         self.click_position(tab_position_list[index])
 
     def click_btn_add_100100(self):
-        self.click_element(element_data=ElementsData.AquariumBuild.btn_add_100100)
+        self.click_element(element_data=ElementsData.AquariumBuildPanel.btn_add_100100)
 
     def is_panel_active(self):
-        return self.exist(element_data=ElementsData.AquariumBuild.AquariumBuildPanel)
+        return self.exist(element_data=ElementsData.AquariumBuildPanel.AquariumBuildPanel)

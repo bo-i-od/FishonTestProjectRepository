@@ -5,12 +5,12 @@ from common.resource import *
 
 class GearEnhanceSuccesPanel(BasePage):
     def click_btn_close(self):
-        self.click_element(element_data=ElementsData.GearEnhanceSucces.btn_close)
+        self.click_element(element_data=ElementsData.GearEnhanceSuccesPanel.btn_close)
         if GearEnhanceSuccesPanel.is_panel_active(self):
             raise FindElementError
 
     def is_panel_active(self):
-        return self.exist(element_data=ElementsData.GearEnhanceSucces.GearEnhanceSuccesPanel)
+        return self.exist(element_data=ElementsData.GearEnhanceSuccesPanel.GearEnhanceSuccesPanel)
 
     def wait_for_panel_appear(self):
         while not GearEnhanceSuccesPanel.is_panel_active(self):

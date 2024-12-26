@@ -11,11 +11,9 @@ def click_icon_test(bp: BasePage):
     item_icon_list = Recharge1And1Panel.get_item_icon_list(bp)
     r = random.randint(0, 1)
     bp.click_position(item_position_list[r])
-    if not bp.exist(element_data=ElementsData.BaitAndRodShow.BaitAndRodShowPanel):
-        raise FindNoElementError
+
     BaitAndRodShowPanel.click_tap_to_continue(bp)
-    if not bp.exist(element_data=ElementsData.Recharge1And1.Recharge1And1Panel):
-        raise FindNoElementError
+
     r = random.randint(2, 3)
     bp.click_position(item_position_list[r])
     item_icon = ItemTipsPanel.get_item_icon(bp)

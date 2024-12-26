@@ -4,4 +4,4 @@ from configs.elementsData import ElementsData
 
 class FlashTipsPanel(BasePage):
     def is_panel_active(self):
-        return self.exist(element_data=ElementsData.FlashTips.FlashTipsPanel)
+        return self.exist(element_data=ElementsData.FlashTipsPanel.FlashTipsPanel)

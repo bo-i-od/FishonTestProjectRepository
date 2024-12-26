@@ -5,17 +5,17 @@ from common import resource
 
 class DLCDownloadPanel(BasePage):
     def click_btn_close(self):
-        self.click_element(element_data=ElementsData.DLCDownload.btn_close)
+        self.click_element(element_data=ElementsData.DLCDownloadPanel.btn_close)
 
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.DLCDownload.DLCDownloadPanel):
+        if self.exist(element_data=ElementsData.DLCDownloadPanel.DLCDownloadPanel):
             return True
         return False
 
     def get_item_dict_list(self):
         item_dict_list = []
-        group_id_list = self.get_object_id_list(element_data=ElementsData.DLCDownload.group_list)
+        group_id_list = self.get_object_id_list(element_data=ElementsData.DLCDownloadPanel.group_list)
         cur = 0
         while cur < len(group_id_list):
             icon_list = self.get_icon_list(object_id=group_id_list[cur], offspring_path="item>>icon")
@@ -27,15 +27,15 @@ class DLCDownloadPanel(BasePage):
         return item_dict_list
 
     def get_reward_icon_position_list(self):
-        return self.get_position_list(element_data=ElementsData.DLCDownload.icon_list)
+        return self.get_position_list(element_data=ElementsData.DLCDownloadPanel.icon_list)
 
     def get_reward_icon_list(self):
-        return self.get_icon_list(element_data=ElementsData.DLCDownload.icon_list)
+        return self.get_icon_list(element_data=ElementsData.DLCDownloadPanel.icon_list)
 
 
     def get_btn_claim_position_list(self):
         position_list = []
-        group_id_list = self.get_object_id_list(element_data=ElementsData.DLCDownload.group_list)
+        group_id_list = self.get_object_id_list(element_data=ElementsData.DLCDownloadPanel.group_list)
         cur = 0
         while cur < len(group_id_list):
             btn_claim_position = self.get_position_list(object_id=group_id_list[cur], offspring_path="btn_orange>btn_normal")
@@ -52,17 +52,17 @@ class DLCDownloadPanel(BasePage):
 
 class DLCDownloadPanel_oversea(BasePage):
     def click_btn_close(self):
-        self.click_element(element_data=ElementsData.DLCDownload_oversea.btn_close)
+        self.click_element(element_data=ElementsData.DLCDownloadPanel_oversea.btn_close)
 
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.DLCDownload_oversea.DLCDownloadPanel):
+        if self.exist(element_data=ElementsData.DLCDownloadPanel_oversea.DLCDownloadPanel):
             return True
         return False
 
     def get_item_dict_list(self):
         item_dict_list = []
-        group_id_list = self.get_object_id_list(element_data=ElementsData.DLCDownload_oversea.group_list)
+        group_id_list = self.get_object_id_list(element_data=ElementsData.DLCDownloadPanel_oversea.group_list)
         cur = 0
         while cur < len(group_id_list):
             icon_list = self.get_icon_list(object_id=group_id_list[cur], offspring_path="item>>icon")
@@ -74,15 +74,15 @@ class DLCDownloadPanel_oversea(BasePage):
         return item_dict_list
 
     def get_reward_icon_position_list(self):
-        return self.get_position_list(element_data=ElementsData.DLCDownload_oversea.icon_list)
+        return self.get_position_list(element_data=ElementsData.DLCDownloadPanel_oversea.icon_list)
 
     def get_reward_icon_list(self):
-        return self.get_icon_list(element_data=ElementsData.DLCDownload_oversea.icon_list)
+        return self.get_icon_list(element_data=ElementsData.DLCDownloadPanel_oversea.icon_list)
 
 
     def get_btn_claim_position_list(self):
         position_list = []
-        group_id_list = self.get_object_id_list(element_data=ElementsData.DLCDownload_oversea.group_list)
+        group_id_list = self.get_object_id_list(element_data=ElementsData.DLCDownloadPanel_oversea.group_list)
         cur = 0
         while cur < len(group_id_list):
             btn_claim_position = self.get_position_list(object_id=group_id_list[cur], offspring_path="btn_orange>btn_normal")

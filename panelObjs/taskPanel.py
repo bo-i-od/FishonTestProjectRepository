@@ -8,18 +8,18 @@ from panelObjs.itemTipsPanel import ItemTipsPanel
 
 class TaskPanel(BasePage):
     def click_btn_close(self):
-        self.click_element(element_data=ElementsData.Task.btn_close)
+        self.click_element(element_data=ElementsData.TaskPanel.btn_close)
 
     def is_panel_active(self):
-        if self.exist(element_data=ElementsData.Task.TaskPanel):
+        if self.exist(element_data=ElementsData.TaskPanel.TaskPanel):
             return True
         return False
 
     def get_viewport(self):
         # 右边界偏移半个任务的宽度，防止点到屏幕外
-        size = self.get_size_list(element_data=ElementsData.Task.task_list)[0]
+        size = self.get_size_list(element_data=ElementsData.TaskPanel.task_list)[0]
         edge = [0.05, 0.5 * size[0]]
-        viewport = Viewport(self, element_viewport=ElementsData.Task.view_port, element_item_list=ElementsData.Task.task_list, viewport_edge=edge)
+        viewport = Viewport(self, element_viewport=ElementsData.TaskPanel.view_port, element_item_list=ElementsData.TaskPanel.task_list, viewport_edge=edge)
         return viewport
 
 
@@ -36,7 +36,7 @@ class TaskPanel(BasePage):
         return item_dict
 
     def get_task_id_list(self):
-        return self.get_object_id_list(element_data=ElementsData.Task.task_list)
+        return self.get_object_id_list(element_data=ElementsData.TaskPanel.task_list)
 
     def get_btn_status(self, task_id_list:list):
         # 0代表go 1代表collect 2代表completed
@@ -91,26 +91,26 @@ class TaskPanel(BasePage):
     def switch_tab(self, index:int):
         # 0是日常 1是周常 2是月常
         if index == 0:
-            self.click_element(element_data=ElementsData.Task.tab_daily)
+            self.click_element(element_data=ElementsData.TaskPanel.tab_daily)
             return
         if index == 1:
-            self.click_element(element_data=ElementsData.Task.tab_weekly)
+            self.click_element(element_data=ElementsData.TaskPanel.tab_weekly)
             return
         if index == 2:
-            self.click_element(element_data=ElementsData.Task.tab_month)
+            self.click_element(element_data=ElementsData.TaskPanel.tab_month)
 
 
     def get_task_award_icon_list(self):
-        task_award_icon_list = self.get_icon_list(element_data=ElementsData.Task.task_award_icon_list)
+        task_award_icon_list = self.get_icon_list(element_data=ElementsData.TaskPanel.task_award_icon_list)
         return task_award_icon_list
 
     def get_task_award_position_list(self):
-        task_award_position_list = self.get_position_list(element_data=ElementsData.Task.task_award_icon_list)
+        task_award_position_list = self.get_position_list(element_data=ElementsData.TaskPanel.task_award_icon_list)
         return task_award_position_list
 
 
     def get_box_status(self):
-        box_id_list = self.get_object_id_list(element_data=ElementsData.Task.box_list)
+        box_id_list = self.get_object_id_list(element_data=ElementsData.TaskPanel.box_list)
         uncollectable_list = []
         collectable_list = []
         collected_list = []
@@ -136,7 +136,7 @@ class TaskPanel(BasePage):
 
 
     def get_box_position_list(self):
-        box_id_list = self.get_object_id_list(element_data=ElementsData.Task.box_list)
+        box_id_list = self.get_object_id_list(element_data=ElementsData.TaskPanel.box_list)
         # 0 代表未完成  1 代表未领奖  2 代表已领奖
         box_position_list = []
         cur = 0
@@ -214,31 +214,31 @@ class TaskPanel(BasePage):
                 raise FindNoElementError
 
     def is_award_detail_active(self):
-        return self.exist(element_data=ElementsData.Task.award_detail)
+        return self.exist(element_data=ElementsData.TaskPanel.award_detail)
 
     def is_month_award_detail_active(self):
-        return self.exist(element_data=ElementsData.Task.month_award_detail)
+        return self.exist(element_data=ElementsData.TaskPanel.month_award_detail)
 
     def get_box_award_icon_list(self):
-        award_icon_list = self.get_icon_list(element_data=ElementsData.Task.award_icon_list)
+        award_icon_list = self.get_icon_list(element_data=ElementsData.TaskPanel.award_icon_list)
         return award_icon_list
 
     def get_box_award_quantity_list(self):
-        award_quantity_list = self.get_text_list(element_data=ElementsData.Task.award_quantity_list)
+        award_quantity_list = self.get_text_list(element_data=ElementsData.TaskPanel.award_quantity_list)
         str_to_int_list(award_quantity_list)
         return award_quantity_list
 
     def get_month_box_award_icon_list(self):
-        award_icon_list = self.get_icon_list(element_data=ElementsData.Task.month_award_icon_list)
+        award_icon_list = self.get_icon_list(element_data=ElementsData.TaskPanel.month_award_icon_list)
         return award_icon_list
 
     def get_month_box_award_quantity_list(self):
-        award_quantity_list = self.get_text_list(element_data=ElementsData.Task.month_award_quantity_list)
+        award_quantity_list = self.get_text_list(element_data=ElementsData.TaskPanel.month_award_quantity_list)
         str_to_int_list(award_quantity_list)
         return award_quantity_list
 
     def get_box_award_position_list(self):
-        award_position_list = self.get_position_list(element_data=ElementsData.Task.award_icon_list)
+        award_position_list = self.get_position_list(element_data=ElementsData.TaskPanel.award_icon_list)
         return award_position_list
 
     def get_box_award_dict(self):
@@ -247,11 +247,11 @@ class TaskPanel(BasePage):
         return resource.make_item_dict(item_icon_list=box_award_icon_list, item_quantity_list=box_award_quantity_list)
 
     def get_progress_value(self):
-        progress_value = self.get_slider_value(element_data=ElementsData.Task.progress_value)
+        progress_value = self.get_slider_value(element_data=ElementsData.TaskPanel.progress_value)
         return progress_value
 
     def get_duel_task_index(self):
-        text_list = self.get_text_list(element_data=ElementsData.Task.text_list)
+        text_list = self.get_text_list(element_data=ElementsData.TaskPanel.text_list)
         cur = 0
         while cur < len(text_list):
             if text_list[cur] == "Complete 1 Duel":
@@ -260,28 +260,28 @@ class TaskPanel(BasePage):
         return cur
 
     def get_task_kind(self):
-        task_kind = self.get_text_list(element_data=ElementsData.Task.kind_list)[0]
+        task_kind = self.get_text_list(element_data=ElementsData.TaskPanel.kind_list)[0]
         return task_kind
 
     # 月度任务的宝箱路径跟日和周不一样
     def get_month_box_position(self):
-        ing_position_list = self.get_position_list(element_data=ElementsData.Task.month_box_list, offspring_path="ing")
+        ing_position_list = self.get_position_list(element_data=ElementsData.TaskPanel.month_box_list, offspring_path="ing")
         if ing_position_list:
             return ing_position_list[0]
-        award_position_list = self.get_position_list(element_data=ElementsData.Task.month_box_list, offspring_path="award")
+        award_position_list = self.get_position_list(element_data=ElementsData.TaskPanel.month_box_list, offspring_path="award")
         if award_position_list:
             return award_position_list[0]
-        done_position_list = self.get_position_list(element_data=ElementsData.Task.month_box_list, offspring_path="done")
+        done_position_list = self.get_position_list(element_data=ElementsData.TaskPanel.month_box_list, offspring_path="done")
         return done_position_list[0]
 
     def get_month_box_status(self):
-        ing_position_list = self.get_position_list(element_data=ElementsData.Task.month_box_list, offspring_path="ing")
+        ing_position_list = self.get_position_list(element_data=ElementsData.TaskPanel.month_box_list, offspring_path="ing")
         if ing_position_list:
             return 0
-        award_position_list = self.get_position_list(element_data=ElementsData.Task.month_box_list, offspring_path="award")
+        award_position_list = self.get_position_list(element_data=ElementsData.TaskPanel.month_box_list, offspring_path="award")
         if award_position_list:
             return 1
-        done_position_list = self.get_position_list(element_data=ElementsData.Task.month_box_list, offspring_path="done")
+        done_position_list = self.get_position_list(element_data=ElementsData.TaskPanel.month_box_list, offspring_path="done")
         if done_position_list:
             return 2
         return -1

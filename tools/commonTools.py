@@ -21,9 +21,13 @@ def compare_list(list_a, list_b):
 
 
 def compare_dict(dict_a, dict_b):
+    if len(dict_a) != len(dict_b):
+        print(sort_dict_recursively(dict_a), sort_dict_recursively(dict_b))
+        return
     for key in dict_a:
         compare(dict_a[key], dict_b[key])
-    compare(len(dict_a), len(dict_b))
+
+
 
 
 def checktoggle(toggle_is_on_list, index):

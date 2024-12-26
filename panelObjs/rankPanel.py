@@ -4,41 +4,41 @@ from common.viewport import Viewport
 
 class RankPanel(BasePage):
     def click_btn_close(self):
-        self.click_element(element_data=ElementsData.Rank.btn_close)
+        self.click_element(element_data=ElementsData.RankPanel.btn_close)
 
     def is_panel_active(self):
-        return self.exist(element_data=ElementsData.Rank.RankPanel)
+        return self.exist(element_data=ElementsData.RankPanel.RankPanel)
 
     def get_fisheries_position_list(self):
-        return self.get_position_list(element_data=ElementsData.Rank.fisheries_list)
+        return self.get_position_list(element_data=ElementsData.RankPanel.fisheries_list)
 
     def get_fisheries_viewport(self):
         edge_up = 0.05
         edge_down = 0.05
-        fisheries_viewport = Viewport(self, element_viewport=ElementsData.Rank.fisheries_viewport, element_item_list=ElementsData.Rank.fisheries_list, viewport_edge=[edge_up, edge_down])
+        fisheries_viewport = Viewport(self, element_viewport=ElementsData.RankPanel.fisheries_viewport, element_item_list=ElementsData.RankPanel.fisheries_list, viewport_edge=[edge_up, edge_down])
         return fisheries_viewport
 
     def get_tab_area_position_list(self):
-        tab_area_position_list = self.get_position_list(element_data=ElementsData.Rank.tab_area_list)
+        tab_area_position_list = self.get_position_list(element_data=ElementsData.RankPanel.tab_area_list)
         return tab_area_position_list
 
     def get_tab_time_position_list(self):
-        tab_time_position_list = self.get_position_list(element_data=ElementsData.Rank.tab_time_list)
+        tab_time_position_list = self.get_position_list(element_data=ElementsData.RankPanel.tab_time_list)
         return tab_time_position_list
 
     def is_time_active(self):
-        return self.exist(element_data=ElementsData.Rank.time)
+        return self.exist(element_data=ElementsData.RankPanel.time)
 
     def get_photo_viewport(self):
         edge = [0.05, 0.05]
-        photo_viewport = Viewport(self, element_viewport=ElementsData.Rank.photo_viewport, element_item_list=ElementsData.Rank.photo_list, viewport_edge=edge)
+        photo_viewport = Viewport(self, element_viewport=ElementsData.RankPanel.photo_viewport, element_item_list=ElementsData.RankPanel.photo_list, viewport_edge=edge)
         return photo_viewport
 
     def get_photo_position_list(self):
-        return self.get_position_list(element_data=ElementsData.Rank.photo_list)
+        return self.get_position_list(element_data=ElementsData.RankPanel.photo_list)
 
     def get_photo_status(self):
-        photo_id_list = self.get_object_id_list(element_data=ElementsData.Rank.photo_list)
+        photo_id_list = self.get_object_id_list(element_data=ElementsData.RankPanel.photo_list)
         cur = 0
         data_list = []
         no_data_list = []
@@ -53,7 +53,7 @@ class RankPanel(BasePage):
         return data_list, no_data_list
 
     def get_photo_id_list(self):
-        return self.get_object_id_list(element_data=ElementsData.Rank.photo_list)
+        return self.get_object_id_list(element_data=ElementsData.RankPanel.photo_list)
 
     def get_rank_data(self, index):
         photo_id_list = RankPanel.get_photo_id_list(self)

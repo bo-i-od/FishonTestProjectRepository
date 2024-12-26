@@ -5,81 +5,81 @@ from tools.commonTools import *
 
 class BattlePassPanel(BasePage):
     def click_btn_close(self):
-        self.click_element(element_data=ElementsData.BattlePass.btn_close)
+        self.click_element(element_data=ElementsData.BattlePassPanel.btn_close)
 
     def is_panel_active(self):
-        return self.exist(element_data=ElementsData.BattlePass.BattlePassPanel)
+        return self.exist(element_data=ElementsData.BattlePassPanel.BattlePassPanel)
 
     # 点击鱼竿进入预览
     def click_btn_detail(self):
-        self.click_element(element_data=ElementsData.BattlePass.btn_detail)
+        self.click_element(element_data=ElementsData.BattlePassPanel.btn_detail)
 
     def click_btn_i(self):
-        self.click_element(element_data=ElementsData.BattlePass.btn_i)
+        self.click_element(element_data=ElementsData.BattlePassPanel.btn_i)
 
     def click_btn_i_gold_band(self):
-        self.click_element(element_data=ElementsData.BattlePass.btn_i_goldbank)
+        self.click_element(element_data=ElementsData.BattlePassPanel.btn_i_goldbank)
 
     def is_Tip_goldbank_active(self):
-        return self.exist(element_data=ElementsData.BattlePass.Tip_goldbank)
+        return self.exist(element_data=ElementsData.BattlePassPanel.Tip_goldbank)
 
     def click_btn_task(self):
-        self.click_element(element_data=ElementsData.BattlePass.btn_task)
+        self.click_element(element_data=ElementsData.BattlePassPanel.btn_task)
 
     def click_btn_buy_levels(self):
-        self.click_element(element_data=ElementsData.BattlePass.btn_buy)
+        self.click_element(element_data=ElementsData.BattlePassPanel.btn_buy)
 
     def click_btn_get_premium(self):
-        if not self.exist(element_data=ElementsData.BattlePass.btn_premium):
+        if not self.exist(element_data=ElementsData.BattlePassPanel.btn_premium):
             return False
-        self.click_element(element_data=ElementsData.BattlePass.btn_premium)
+        self.click_element(element_data=ElementsData.BattlePassPanel.btn_premium)
         return True
 
     def click_btn_unlock_premium(self):
-        if not self.exist(element_data=ElementsData.BattlePass.btn_unlock):
+        if not self.exist(element_data=ElementsData.BattlePassPanel.btn_unlock):
             return False
-        self.click_element(element_data=ElementsData.BattlePass.btn_unlock)
+        self.click_element(element_data=ElementsData.BattlePassPanel.btn_unlock)
         return True
 
     def click_btn_collect_all(self):
-        if not self.exist(element_data=ElementsData.BattlePass.btn_collect):
+        if not self.exist(element_data=ElementsData.BattlePassPanel.btn_collect):
             return False
-        self.click_element(element_data=ElementsData.BattlePass.btn_collect)
+        self.click_element(element_data=ElementsData.BattlePassPanel.btn_collect)
         return True
 
     def get_premium_position_list(self):
-        return self.get_position_list(element_data=ElementsData.BattlePass.premium_icon_list)
+        return self.get_position_list(element_data=ElementsData.BattlePassPanel.premium_icon_list)
 
     def get_free_position_list(self):
-        return self.get_position_list(element_data=ElementsData.BattlePass.free_icon_list)
+        return self.get_position_list(element_data=ElementsData.BattlePassPanel.free_icon_list)
 
     def get_premium_icon_list(self):
-        return self.get_icon_list(element_data=ElementsData.BattlePass.premium_icon_list)
+        return self.get_icon_list(element_data=ElementsData.BattlePassPanel.premium_icon_list)
 
     def get_free_icon_list(self):
-        return self.get_icon_list(element_data=ElementsData.BattlePass.free_icon_list)
+        return self.get_icon_list(element_data=ElementsData.BattlePassPanel.free_icon_list)
 
     def get_premium_quantity_list(self):
-        quantity_list = self.get_text_list(element_data=ElementsData.BattlePass.premium_quantity_list)
+        quantity_list = self.get_text_list(element_data=ElementsData.BattlePassPanel.premium_quantity_list)
         str_to_int_list(quantity_list)
         return quantity_list
 
     def get_free_quantity_list(self):
-        quantity_list = self.get_text_list(element_data=ElementsData.BattlePass.free_quantity_list)
+        quantity_list = self.get_text_list(element_data=ElementsData.BattlePassPanel.free_quantity_list)
         str_to_int_list(quantity_list)
         return quantity_list
 
     def get_gear_data(self):
-        gear_id = self.get_object_id(element_data=ElementsData.BattlePass.reward_gear_list)
+        gear_id = self.get_object_id(element_data=ElementsData.BattlePassPanel.reward_gear_list)
         position = self.get_position(object_id = gear_id)
         return gear_id, position
 
     def get_premium_id_list(self):
-        object_id_list = self.get_object_id_list(element_data=ElementsData.BattlePass.premium_list)
+        object_id_list = self.get_object_id_list(element_data=ElementsData.BattlePassPanel.premium_list)
         return object_id_list
 
     def get_free_id_list(self):
-        object_id_list = self.get_object_id_list(element_data=ElementsData.BattlePass.free_list)
+        object_id_list = self.get_object_id_list(element_data=ElementsData.BattlePassPanel.free_list)
         return object_id_list
 
     def get_free_status(self):
@@ -174,21 +174,21 @@ class BattlePassPanel(BasePage):
 
 
     def get_viewport(self):
-        right_size = self.get_size_list(element_data=ElementsData.BattlePass.free_icon_list)[0][0] + 0.05
-        viewport_free = Viewport(self, element_viewport=ElementsData.BattlePass.Viewport, element_item_list=ElementsData.BattlePass.free_icon_list, viewport_edge=[0, right_size])
-        viewport_premium = Viewport(self, element_viewport=ElementsData.BattlePass.Viewport, element_item_list=ElementsData.BattlePass.premium_icon_list, viewport_edge=[0, right_size])
+        right_size = self.get_size_list(element_data=ElementsData.BattlePassPanel.free_icon_list)[0][0] + 0.05
+        viewport_free = Viewport(self, element_viewport=ElementsData.BattlePassPanel.Viewport, element_item_list=ElementsData.BattlePassPanel.free_icon_list, viewport_edge=[0, right_size])
+        viewport_premium = Viewport(self, element_viewport=ElementsData.BattlePassPanel.Viewport, element_item_list=ElementsData.BattlePassPanel.premium_icon_list, viewport_edge=[0, right_size])
         return viewport_free, viewport_premium
 
     def get_preview_icon_and_position_list(self):
-        preview_item_icon_list = self.get_icon_list(element_data=ElementsData.BattlePass.preview_item_icon_list)
-        preview_item_position_list = self.get_position_list(element_data=ElementsData.BattlePass.preview_item_icon_list)
-        preview_gear_icon_list = self.get_icon_list(element_data=ElementsData.BattlePass.preview_gear_icon_list)
-        preview_gear_position_list = self.get_position_list(element_data=ElementsData.BattlePass.preview_gear_icon_list)
+        preview_item_icon_list = self.get_icon_list(element_data=ElementsData.BattlePassPanel.preview_item_icon_list)
+        preview_item_position_list = self.get_position_list(element_data=ElementsData.BattlePassPanel.preview_item_icon_list)
+        preview_gear_icon_list = self.get_icon_list(element_data=ElementsData.BattlePassPanel.preview_gear_icon_list)
+        preview_gear_position_list = self.get_position_list(element_data=ElementsData.BattlePassPanel.preview_gear_icon_list)
         return preview_item_icon_list, preview_item_position_list, preview_gear_icon_list, preview_gear_position_list
 
 if __name__ == '__main__':
     bp = BasePage()
-    bp.click_element(element_data=ElementsData.DailyTips.btn_close)
+    bp.click_element(element_data=ElementsData.DailyTipsPanel.btn_close)
 
 
 

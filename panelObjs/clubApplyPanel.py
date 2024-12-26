@@ -8,9 +8,9 @@ from tools.commonTools import *
 
 class ClubApplyPanel(BasePage):
     def click_btn_close(self):
-        self.click_element(element_data=ElementsData.ClubApply.btn_close)
+        self.click_element(element_data=ElementsData.ClubApplyPanel.btn_close)
 
     def is_panel_active(self):
-        return self.exist(element_data=ElementsData.ClubApply.ClubApplyPanel)
+        return self.exist(element_data=ElementsData.ClubApplyPanel.ClubApplyPanel)
 
 

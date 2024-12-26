@@ -49,4 +49,7 @@ class MoveError(BaseError):
     pass
 
 class InvalidOperationError(BaseError):
+    """
+        超范围，会报错
+    """
     pass

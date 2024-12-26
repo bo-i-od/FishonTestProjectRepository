@@ -4,7 +4,7 @@ from tools.commonTools import *
 
 class SharePanel(BasePage):
     def click_btn_close(self):
-        self.click_until_disappear(element_data=ElementsData.Share.btn_close, ignore_set={"SharePanel"})
+        self.click_until_disappear(element_data=ElementsData.SharePanel.btn_close, ignore_set={"SharePanel"})
 
     def is_panel_active(self):
-        return self.exist(element_data=ElementsData.Share.SharePanel)
+        return self.exist(element_data=ElementsData.SharePanel.SharePanel)

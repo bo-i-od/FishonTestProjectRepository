@@ -4,15 +4,15 @@ from common.viewport import Viewport
 
 class TournamentsPanel(BasePage):
     def is_panel_active(self):
-        return self.exist(element_data=ElementsData.Tournaments.TournamentsPanel)
+        return self.exist(element_data=ElementsData.TournamentsPanel.TournamentsPanel)
 
     def click_btn_close(self):
-        self.click_element(element_data=ElementsData.Tournaments.btn_close)
+        self.click_element(element_data=ElementsData.TournamentsPanel.btn_close)
 
 
     def get_fishery_tpid_list(self):
         table_data_detail = self.excelTools.get_table_data_detail(book_name="FISHERIES.xlsm")
-        bg_list = self.get_icon_list(element_data=ElementsData.Tournaments.bg_list)
+        bg_list = self.get_icon_list(element_data=ElementsData.TournamentsPanel.bg_list)
         cur = 0
         while cur < len(bg_list):
             bg_list[cur] = "icon_fisheries_" + bg_list[cur].split('_')[2]
@@ -36,10 +36,10 @@ class TournamentsPanel(BasePage):
         return res_list
 
     def get_entrance_viewport(self):
-        size = self.get_size(element_data=ElementsData.Tournaments.panel_sidebar_bg)
+        size = self.get_size(element_data=ElementsData.TournamentsPanel.panel_sidebar_bg)
         edge_left = 0.75 * size[0]
         # 多人房进入按钮和单人房加一起
-        model_id_list = self.get_object_id_list(element_data=ElementsData.Tournaments.model_list)
+        model_id_list = self.get_object_id_list(element_data=ElementsData.TournamentsPanel.model_list)
         item_id_list = []
         for model_id in model_id_list:
             btn_enter_id_list = self.get_offspring_id_list(object_id=model_id, offspring_path="btn_enter>text")
@@ -50,7 +50,7 @@ class TournamentsPanel(BasePage):
             if btn_players_id_list:
                 item_id_list.append(btn_players_id_list [0])
                 continue
-        entrance_viewport = Viewport(self, element_viewport=ElementsData.Tournaments.entrance_viewport, item_id_list= item_id_list)
+        entrance_viewport = Viewport(self, element_viewport=ElementsData.TournamentsPanel.entrance_viewport, item_id_list= item_id_list)
         entrance_viewport.viewport_range = [entrance_viewport.viewport_range[0], 1]
         entrance_viewport.viewport_edge = [edge_left, 0.05]
         entrance_viewport.viewport_range_shift()
@@ -72,20 +72,20 @@ class TournamentsPanel(BasePage):
             self.sleep(0.2)
 
     def click_btn_leaderboard(self):
-        self.click_element(element_data=ElementsData.Tournaments.btn_leaderboard)
+        self.click_element(element_data=ElementsData.TournamentsPanel.btn_leaderboard)
 
     def get_tournaments_info_position_list(self):
-        return self.get_position_list(element_data=ElementsData.Tournaments.tournaments_info_list)
+        return self.get_position_list(element_data=ElementsData.TournamentsPanel.tournaments_info_list)
 
     def get_tournaments_info_id_list(self):
-        return self.get_object_id_list(element_data=ElementsData.Tournaments.tournaments_info_list)
+        return self.get_object_id_list(element_data=ElementsData.TournamentsPanel.tournaments_info_list)
 
     def get_tournaments_info_icon_list(self):
-        return self.get_icon_list(element_data=ElementsData.Tournaments.tournaments_info_list)
+        return self.get_icon_list(element_data=ElementsData.TournamentsPanel.tournaments_info_list)
 
     def get_tournaments_index_list(self):
         tournaments_index_list = []
-        parent_id_list = self.get_parent_id_list(element_data=ElementsData.Tournaments.bg_list)
+        parent_id_list = self.get_parent_id_list(element_data=ElementsData.TournamentsPanel.bg_list)
         cur = 0
         while cur < len(parent_id_list):
             position_list = self.get_position_list(object_id=parent_id_list[cur], offspring_path="tournaments_info>logo")
@@ -101,7 +101,8 @@ if __name__ == "__main__":
     bp = BasePage(serial_number="127.0.0.1:21503", is_mobile_device=True)
     # TournamentsPanel.get_fishery_list(bp)
     # a = TournamentsPanel.get_fishery_tpid_list(bp)
-    parent_id_list = TournamentsPanel.get_tournaments_index_list(bp)
+    parent_id_list = TournamentsPanel.go_to_fishery_by_index(bp)
+
     print(parent_id_list)
     # print(a)
     bp.connect_close()

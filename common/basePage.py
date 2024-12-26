@@ -1,3 +1,4 @@
+import random
 import threading
 from datetime import datetime
 
@@ -9,6 +10,7 @@ from importlib import import_module
 
 import tools.commonTools
 from common.uimonitor import UIMonitor
+from common.viewport import Viewport
 from configs.pathConfig import EXCEL_PATH
 from tools.excelRead import ExcelTools
 
@@ -983,6 +985,21 @@ class BasePageMain:
         self.click_position_base(position_list[0])
         return position_list[0]
 
+    def click_object_of_plural_objects(self, object_id_list: list = None, element_data: dict = None, index=-1, element_viewport: dict =None,  viewport_direction=None, viewport_range=None, viewport_edge=None):
+        if element_viewport:
+            viewport = Viewport(self, element_viewport=element_viewport, element_item_list=element_data, item_id_list=object_id_list, viewport_direction=viewport_direction, viewport_range=viewport_range, viewport_edge=viewport_edge)
+            # 如果index没有赋合法值，就随机点击一个
+            if index < 0:
+                index = random.randint(0, len(viewport.item_id_list) - 1)
+            target_id = viewport.item_id_list[index]
+            viewport.move_until_appear(target_id=target_id)
+
+        position_list = self.get_position_list(element_data=element_data)
+        # 如果index没有赋合法值，就随机点击一个
+        if index < 0:
+            index = random.randint(0, len(position_list) - 1)
+        self.click_position(position=position_list[index])
+
     # 在b元素出现前一直尝试点击a元素
     def click_a_until_b_appear(self, element_data_a: dict, element_data_b: dict, interval: float = 0.5, ignore_set=None):
         """函数功能简述
@@ -1165,7 +1182,7 @@ class BasePageMain:
             if panel_name == "FishBagPanel":
                 self.click_position_base([0.5, 0.5])
                 self.sleep(0.5)
-            for close_element in JumpData.panel_close_dict[panel_name]:
+            for close_element in JumpData.panel_dict[panel_name]["close_path"]:
                 self.click_element_safe(element_data=close_element)
                 self.sleep(1)
         return False
@@ -1254,10 +1271,10 @@ class BasePageMain:
         panel_name_list = self.get_name_list(element_data_list=[ElementsData.Panels])
         panel_name_list = tools.commonTools.merge_list(panel_name_list)
         for panel_name in panel_name_list:
-            if panel_name not in JumpData.panel_close_dict:
+            if panel_name not in JumpData.panel_dict:
                 continue
             self.clear_popup_once()
-            for close_element in JumpData.panel_close_dict[panel_name]:
+            for close_element in JumpData.panel_dict[panel_name]["close_path"]:
                 self.click_element_safe(element_data=close_element)
             break
         self.sleep(0.2)
@@ -2185,12 +2202,12 @@ end
 
 
 if __name__ == '__main__':
-    bp = BasePage(is_mobile_device=True, serial_number="127.0.0.1:21553")
+    bp = BasePage(is_mobile_device=True, serial_number="127.0.0.1:21543")
     # "127.0.0.1:21613"
     # "b6h65hd64p5pxcyh"
     # "TimeMgr:GetServerTime()"
     # t = bp.lua_console_with_response(lua_code_print="_G.PassiveNewbieGuideEnum")
-    bp.cmd_list(["levelupto 69", "guideskip"])
+    # bp.cmd_list(["levelupto 69", "guideskip"])
     # bp.sleep(1)
 
     # bp.go_to_panel("TournamentsPanel")

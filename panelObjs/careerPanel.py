@@ -8,55 +8,55 @@ from common.viewport import Viewport
 
 class CareerPanel(BasePage):
     def click_btn_close(self):
-        self.click_element(element_data=ElementsData.Career.btn_close)
+        self.click_element(element_data=ElementsData.CareerPanel.btn_close)
         if CareerPanel.is_panel_active(self):
             return FindElementError
 
     def is_panel_active(self):
-        return self.exist(element_data=ElementsData.Career.CareerPanel)
+        return self.exist(element_data=ElementsData.CareerPanel.CareerPanel)
 
     def click_btn_i(self):
-        self.click_element(element_data=ElementsData.Career.btn_i)
+        self.click_element(element_data=ElementsData.CareerPanel.btn_i)
 
     def is_tips_active(self):
-        return self.exist(element_data=ElementsData.Career.tips)
+        return self.exist(element_data=ElementsData.CareerPanel.tips)
 
     #获取总天赋值
     def get_rating_total(self):
-        self.get_text(element_data=ElementsData.Career.rating_total)
+        self.get_text(element_data=ElementsData.CareerPanel.rating_total)
 
     def click_rating_panel(self):
-        self.click_element(element_data=ElementsData.Career.rating_total)
+        self.click_element(element_data=ElementsData.CareerPanel.rating_total)
 
     def is_rating_tips_active(self):
-        return self.exist(element_data=ElementsData.Career.rating_tips)
+        return self.exist(element_data=ElementsData.CareerPanel.rating_tips)
 
     #比较tipspanel中的天赋值和总天赋值
     def compare_rating_total(self):
-        rating_total = self.get_text(element_data=ElementsData.Career.rating_total)
-        rating_child = self.get_text(element_data=ElementsData.Career.rating_child)
+        rating_total = self.get_text(element_data=ElementsData.CareerPanel.rating_total)
+        rating_child = self.get_text(element_data=ElementsData.CareerPanel.rating_child)
         if rating_child==rating_total:
             return True
         return False
 
     #获取顶部栏金币、积分
     def get_cash_value(self):
-        cash_value = self.get_text(element_data=ElementsData.Career.text_100000)
+        cash_value = self.get_text(element_data=ElementsData.CareerPanel.text_100000)
         return str_to_int(cash_value)
 
     def get_points_value(self):
-        points_value=self.get_text(element_data=ElementsData.Career.text_100400)
+        points_value=self.get_text(element_data=ElementsData.CareerPanel.text_100400)
         return str_to_int(points_value)
 
     def get_item_rating(self):
-        self.get_text(element_data=ElementsData.Career.rating)
+        self.get_text(element_data=ElementsData.CareerPanel.rating)
 
     def get_item_lv(self):
-        self.get_text(element_data=ElementsData.Career.item_lv)
+        self.get_text(element_data=ElementsData.CareerPanel.item_lv)
 
     #获取每页的mid节点
     def get_page_item_id_list(self):
-        page_item_middle_id_list = self.get_object_id_list(element_data=ElementsData.Career.page_item_middle_list)
+        page_item_middle_id_list = self.get_object_id_list(element_data=ElementsData.CareerPanel.page_item_middle_list)
         return page_item_middle_id_list
 
     #突破至某节点出现
@@ -66,9 +66,9 @@ class CareerPanel(BasePage):
 
         icon_size_list = self.get_size_list(object_id=page_item_middle_id_list[0],offspring_path="icon_bg")
         edge = [icon_size_list[0][0],0.01]
-        viewport = Viewport(self, element_viewport=ElementsData.Career.career_viewport, item_id_list=page_item_middle_id_list,viewport_edge=edge)
+        viewport = Viewport(self, element_viewport=ElementsData.CareerPanel.career_viewport, item_id_list=page_item_middle_id_list, viewport_edge=edge)
         range_r = viewport.get_viewport_range()[0]
-        range_l = self.get_position(element_data=ElementsData.Career.btn_enhance)[0]+self.get_size(element_data=ElementsData.Career.btn_enhance)[0]*0.5
+        range_l = self.get_position(element_data=ElementsData.CareerPanel.btn_enhance)[0] + self.get_size(element_data=ElementsData.CareerPanel.btn_enhance)[0] * 0.5
         #print(self.get_position(element_data=ElementsData.Career.btn_enhance))
         viewport.viewport_range = [range_r,range_l]
         cur = index
@@ -84,7 +84,7 @@ class CareerPanel(BasePage):
             #判断下一节点是否解锁
             if self.exist(object_id=page_item_middle_id_list[begin+1],offspring_path="lock"):
                 # 判断当前节点是否已满级
-                if not self.exist(element_data=ElementsData.Career.btn_enhance):
+                if not self.exist(element_data=ElementsData.CareerPanel.btn_enhance):
                     group_id = self.get_parent_id(object_id=page_item_middle_id_list[begin])
                     page_id = self.get_parent_id(object_id=group_id)
                     text = self.get_text(object_id=page_id, offspring_path="arrow_Next_lock>text")
@@ -109,13 +109,13 @@ class CareerPanel(BasePage):
 
     #突破消耗数量列表
     def get_cost_qulity_list(self):
-        cost_qulity_list = self.get_text_list(element_data=ElementsData.Career.cost_quantity_list)
+        cost_qulity_list = self.get_text_list(element_data=ElementsData.CareerPanel.cost_quantity_list)
         #print(cost_qulity_list)
         str_to_int_list(cost_qulity_list)
         return cost_qulity_list
 
     def click_btn_enhance(self):
-        self.click_element(element_data=ElementsData.Career.btn_enhance)
+        self.click_element(element_data=ElementsData.CareerPanel.btn_enhance)
 
     #突破已在屏幕中的节点
     def enhance(self):

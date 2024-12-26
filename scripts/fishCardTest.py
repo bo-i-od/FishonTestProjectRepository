@@ -1,5 +1,6 @@
 import random
 from common.basePage import BasePage
+from netMsg import csMsgAll
 from panelObjs.eventsGiftCenterPanel import EventsGiftCenterPanel
 from panelObjs.fishCardMultipleLevelUpPanel import FishCardMultipleLevelUpPanel
 from panelObjs.achievementPopupPanel import AchievementPopupPanel
@@ -229,6 +230,36 @@ def rating_test(bp: BasePage, rating_expect, rating_fisheries_expect):
     compare(rating_expect, rating)
     compare(rating_fisheries_expect, rating_fisheries)
 
+
+def fish_card_one_key_level_up(bp: BasePage):
+    bp.cmd_list(["add 1 100000 100000000000", "fishcardall 50000"])
+
+    table_data_object_list = bp.excelTools.get_table_data_object_list("FISHCARD.xlsm")
+    fish_card_list = []
+    fishery_last = None
+    for table_data_object in table_data_object_list:
+        if table_data_object["fishCardFishery"] == fishery_last:
+            fish_card_list.append(table_data_object["tpId"])
+            fishery_last = table_data_object["fishCardFishery"]
+            continue
+        fishery_last = table_data_object["fishCardFishery"]
+        if fish_card_list:
+            lua_code = csMsgAll.get_CSFishCardOneKeyLevelUpMsg(fishCardTpIds=fish_card_list)
+            bp.lua_console(lua_code)
+        fish_card_list.clear()
+        fish_card_list.append(table_data_object["tpId"])
+    if fish_card_list:
+        lua_code = csMsgAll.get_CSFishCardOneKeyLevelUpMsg(fishCardTpIds=fish_card_list)
+        bp.lua_console(lua_code)
+
+
+
+
+
+
+
+
+
 def main(bp: BasePage):
     # 进入大厅
     r1 = random.randint(8, 22)
@@ -273,8 +304,9 @@ def main(bp: BasePage):
 
 
 if __name__ == "__main__":
-    bp = BasePage("127.0.0.1:21553", is_mobile_device=True)
-    main(bp)
+    bp = BasePage("127.0.0.1:21573", is_mobile_device=True)
+    # main(bp)
+    fish_card_one_key_level_up(bp)
     bp.connect_close()
 
 

@@ -10,33 +10,33 @@ from panelObjs.gearLevelupPanel import GearLevelupPanel
 
 class GearPanel(BasePage):
     def click_btn_close(self):
-        self.click_element(element_data=ElementsData.Gear.btn_close)
+        self.click_element(element_data=ElementsData.GearPanel.btn_close)
 
     def is_panel_active(self):
-        return self.exist(element_data=ElementsData.Gear.GearPanel)
+        return self.exist(element_data=ElementsData.GearPanel.GearPanel)
 
     def is_upgrade_max_active(self):
-        return self.exist(element_data=ElementsData.Gear.upgrade_max)
+        return self.exist(element_data=ElementsData.GearPanel.upgrade_max)
 
     def is_enhance_max_active(self):
-        return self.exist(element_data=ElementsData.Gear.enhance_max)
+        return self.exist(element_data=ElementsData.GearPanel.enhance_max)
 
     def click_btn_upgrade(self):
-        self.click_element(element_data=ElementsData.Gear.btn_upgrade)
+        self.click_element(element_data=ElementsData.GearPanel.btn_upgrade)
 
     def click_btn_enhance(self):
-        self.click_element(element_data=ElementsData.Gear.btn_enhence)
+        self.click_element(element_data=ElementsData.GearPanel.btn_enhence)
 
     def get_level(self):
-        level = self.get_text(element_data=ElementsData.Gear.level)
-        progress_now = self.get_text(element_data=ElementsData.Gear.progress_now)
+        level = self.get_text(element_data=ElementsData.GearPanel.level)
+        progress_now = self.get_text(element_data=ElementsData.GearPanel.progress_now)
         compare(level, progress_now)
-        progress_max = self.get_text(element_data=ElementsData.Gear.progress_max).split("/")[1]
+        progress_max = self.get_text(element_data=ElementsData.GearPanel.progress_max).split("/")[1]
         return int(level), int(progress_max)
 
 
     def get_stars(self):
-        stars_list = self.get_icon_list(element_data=ElementsData.Gear.stars)
+        stars_list = self.get_icon_list(element_data=ElementsData.GearPanel.stars)
         stars = 0
         cur = 0
         while cur < len(stars_list):
@@ -49,22 +49,22 @@ class GearPanel(BasePage):
         return stars
 
     def get_rod_info(self):
-        name = self.get_text(element_data=ElementsData.Gear.name)
-        t = self.get_icon(element_data=ElementsData.Gear.t)
-        kind = self.get_icon(element_data=ElementsData.Gear.kind)
+        name = self.get_text(element_data=ElementsData.GearPanel.name)
+        t = self.get_icon(element_data=ElementsData.GearPanel.t)
+        kind = self.get_icon(element_data=ElementsData.GearPanel.kind)
         stars = GearPanel.get_stars(self)
-        dps = int(self.get_text(element_data=ElementsData.Gear.dps))
+        dps = int(self.get_text(element_data=ElementsData.GearPanel.dps))
         rod_info = {"name": name, "t": t, "kind": kind, "stars": stars, "dps": dps}
         return rod_info
 
     def get_skill_position_list(self):
-        return self.get_position_list(element_data=ElementsData.Gear.skill_list)
+        return self.get_position_list(element_data=ElementsData.GearPanel.skill_list)
 
     def get_skill_icon_list(self):
-        return self.get_icon_list(element_data=ElementsData.Gear.skill_list)
+        return self.get_icon_list(element_data=ElementsData.GearPanel.skill_list)
 
     def get_rod_id_list(self):
-        rod_id_list = self.get_object_id_list(element_data=ElementsData.Gear.rod_list)
+        rod_id_list = self.get_object_id_list(element_data=ElementsData.GearPanel.rod_list)
         return rod_id_list
 
     def get_rod_status(self, rod_id_list):
@@ -81,11 +81,11 @@ class GearPanel(BasePage):
         return lock_list, unlock_list
 
     def get_rodlist_viewport(self):
-        rodlist_viewport = Viewport(self, element_viewport=ElementsData.Gear.rodlist_viewport, element_item_list=ElementsData.Gear.rod_bg_list)
+        rodlist_viewport = Viewport(self, element_viewport=ElementsData.GearPanel.rodlist_viewport, element_item_list=ElementsData.GearPanel.rod_bg_list)
         return rodlist_viewport
 
     def get_rod_position_list(self):
-        return self.get_position_list(element_data=ElementsData.Gear.rod_bg_list)
+        return self.get_position_list(element_data=ElementsData.GearPanel.rod_bg_list)
 
     def select_unlock_rod(self):
         # 获取鱼竿列表
@@ -122,40 +122,40 @@ class GearPanel(BasePage):
         self.click_position(rod_position_list[rod_index])
 
     def click_btn_filter(self):
-        self.click_element(element_data=ElementsData.Gear.btn_filter)
+        self.click_element(element_data=ElementsData.GearPanel.btn_filter)
 
     def is_tip_filter_rod_active(self):
-        return self.exist(element_data=ElementsData.Gear.tip_filter_rod)
+        return self.exist(element_data=ElementsData.GearPanel.tip_filter_rod)
 
     def click_btn_apply(self):
-        self.click_element(element_data=ElementsData.Gear.btn_apply)
+        self.click_element(element_data=ElementsData.GearPanel.btn_apply)
 
     def click_btn_reset(self):
-        self.click_element(element_data=ElementsData.Gear.btn_reset)
+        self.click_element(element_data=ElementsData.GearPanel.btn_reset)
 
     def get_hide_unowned_toggle(self):
-        return self.get_toggle_is_on(element_data=ElementsData.Gear.hide_unowned)
+        return self.get_toggle_is_on(element_data=ElementsData.GearPanel.hide_unowned)
 
     def get_rarity_toggle_list(self):
-        return self.get_toggle_is_on_list(element_data=ElementsData.Gear.rarity_list)
+        return self.get_toggle_is_on_list(element_data=ElementsData.GearPanel.rarity_list)
 
     def get_rarity_position_list(self):
-        return self.get_position_list(element_data=ElementsData.Gear.rarity_list)
+        return self.get_position_list(element_data=ElementsData.GearPanel.rarity_list)
 
     def get_available_location_toggle_list(self):
-        return self.get_toggle_is_on_list(element_data=ElementsData.Gear.available_location_list)
+        return self.get_toggle_is_on_list(element_data=ElementsData.GearPanel.available_location_list)
 
     def get_available_location_position_list(self):
-        return self.get_position_list(element_data=ElementsData.Gear.available_location_list)
+        return self.get_position_list(element_data=ElementsData.GearPanel.available_location_list)
 
 
     def guide_oversea(self):
-        perform_list = [ElementsData.NewbieGuide_oversea.NBG_fishing_fail_1,
-                        ElementsData.NewbieGuide_oversea.NBG_fishing_fail_2, ElementsData.NewbieGuide_oversea.NBG_fishing_fail_3,
-                        ElementsData.NewbieGuide_oversea.NBG_fishing_fail_4, ElementsData.NewbieGuide_oversea.NBG_fishing_fail_5,
-                        ElementsData.NewbieGuide_oversea.NBG_fishing_fail_6, ElementsData.NewbieGuide_oversea.NBG_fishing_fail_7]
+        perform_list = [ElementsData.NewbieGuidePanel_oversea.NBG_fishing_fail_1,
+                        ElementsData.NewbieGuidePanel_oversea.NBG_fishing_fail_2, ElementsData.NewbieGuidePanel_oversea.NBG_fishing_fail_3,
+                        ElementsData.NewbieGuidePanel_oversea.NBG_fishing_fail_4, ElementsData.NewbieGuidePanel_oversea.NBG_fishing_fail_5,
+                        ElementsData.NewbieGuidePanel_oversea.NBG_fishing_fail_6, ElementsData.NewbieGuidePanel_oversea.NBG_fishing_fail_7]
         self.click_a_until_b_appear_list(perform_list=perform_list)
-        self.click_until_disappear(element_data=ElementsData.NewbieGuide_oversea.NBG_fishing_fail_7)
+        self.click_until_disappear(element_data=ElementsData.NewbieGuidePanel_oversea.NBG_fishing_fail_7)
         self.sleep(1)
         GearLevelupPanel.click_btn_close(self)
         self.sleep(1)
@@ -168,7 +168,7 @@ class GearPanel(BasePage):
         return table_data_object_list
 
     def click_btn_equip(self):
-        self.click_element(element_data=ElementsData.Gear.btn_equip)
+        self.click_element(element_data=ElementsData.GearPanel.btn_equip)
 
 
 

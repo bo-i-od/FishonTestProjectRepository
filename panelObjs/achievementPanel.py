@@ -6,33 +6,33 @@ from common.viewport import Viewport
 
 class AchievementPanel(BasePage):
     def click_btn_close(self):
-        self.click_element(element_data=ElementsData.Achievement.btn_close)
+        self.click_element(element_data=ElementsData.AchievementPanel.btn_close)
 
     def is_panel_active(self):
-        return self.exist(element_data=ElementsData.Achievement.AchievementPanel)
+        return self.exist(element_data=ElementsData.AchievementPanel.AchievementPanel)
 
     def is_unlock_tips_active(self):
-        return self.exist(element_data=ElementsData.Achievement.tips_unlock)
+        return self.exist(element_data=ElementsData.AchievementPanel.tips_unlock)
 
     def click_btn_i(self):
-        self.click_element(element_data=ElementsData.Achievement.btn_i)
+        self.click_element(element_data=ElementsData.AchievementPanel.btn_i)
 
     def is_tips_active(self):
-        return self.exist(element_data=ElementsData.Achievement.tips)
+        return self.exist(element_data=ElementsData.AchievementPanel.tips)
 
     def get_achievement_icon_list(self):
-        return self.get_icon_list(element_data=ElementsData.Achievement.achievement_icon_list)
+        return self.get_icon_list(element_data=ElementsData.AchievementPanel.achievement_icon_list)
 
     def get_achievement_icon_id_list(self):
-        return self.get_object_id_list(element_data=ElementsData.Achievement.achievement_icon_list)
+        return self.get_object_id_list(element_data=ElementsData.AchievementPanel.achievement_icon_list)
 
     def click_task_mini(self):
-        self.click_element(element_data=ElementsData.Achievement.task_mini_icon)
+        self.click_element(element_data=ElementsData.AchievementPanel.task_mini_icon)
 
     def get_task_mini_group_name(self):
-        task_mini_icon = self.get_icon(element_data=ElementsData.Achievement.task_mini_icon)
-        achievement_icon_list = self.get_icon_list(element_data=ElementsData.Achievement.achievement_icon_list)
-        achievement_group_name_list = self.get_text_list(element_data=ElementsData.Achievement.achievement_group_name_list)
+        task_mini_icon = self.get_icon(element_data=ElementsData.AchievementPanel.task_mini_icon)
+        achievement_icon_list = self.get_icon_list(element_data=ElementsData.AchievementPanel.achievement_icon_list)
+        achievement_group_name_list = self.get_text_list(element_data=ElementsData.AchievementPanel.achievement_group_name_list)
         index = -1
         cur = 0
         while cur < len(achievement_icon_list):
@@ -62,15 +62,15 @@ class AchievementPanel(BasePage):
         return [locked_set, unlockable_set, unlocked_set]
 
     def get_achievement_id_list(self):
-        return self.get_object_id_list(element_data=ElementsData.Achievement.achievement_list)
+        return self.get_object_id_list(element_data=ElementsData.AchievementPanel.achievement_list)
 
     def get_achievement_position_list(self):
-        position_list = self.get_position_list(element_data=ElementsData.Achievement.achievement_list)
+        position_list = self.get_position_list(element_data=ElementsData.AchievementPanel.achievement_list)
         return position_list
 
     def get_viewport(self):
-        size = self.get_size_list(element_data=ElementsData.Achievement.achievement_list)[0]
-        viewport = Viewport(self, element_viewport=ElementsData.Achievement.viewport, element_item_list=ElementsData.Achievement.achievement_list,viewport_direction="row")
+        size = self.get_size_list(element_data=ElementsData.AchievementPanel.achievement_list)[0]
+        viewport = Viewport(self, element_viewport=ElementsData.AchievementPanel.viewport, element_item_list=ElementsData.AchievementPanel.achievement_list, viewport_direction="row")
         viewport.viewport_range = [viewport.viewport_range[0], 1]
         edge = [0.01, 0.01]
         viewport.viewport_edge = edge
@@ -83,7 +83,7 @@ class AchievementPanel(BasePage):
         return group_name
 
     def switch_tab(self, index):
-        position_list = self.get_position_list(element_data=ElementsData.Achievement.tab_list)
+        position_list = self.get_position_list(element_data=ElementsData.AchievementPanel.tab_list)
         self.click_position(position_list[index])
 
 
@@ -93,9 +93,9 @@ class AchievementPanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage("R5CT22NJ44H")
-    a = bp.get_size_list(element_data=ElementsData.Achievement.achievement_list)
-    achievement_id_list = bp.get_object_id_list(element_data=ElementsData.Achievement.achievement_list)
-    print(bp.get_position_list(element_data=ElementsData.Achievement.achievement_list))
+    a = bp.get_size_list(element_data=ElementsData.AchievementPanel.achievement_list)
+    achievement_id_list = bp.get_object_id_list(element_data=ElementsData.AchievementPanel.achievement_list)
+    print(bp.get_position_list(element_data=ElementsData.AchievementPanel.achievement_list))
     print(bp.get_position_list(object_id_list=achievement_id_list))
     print(AchievementPanel.get_viewport(bp).viewport_range)
     print(a)

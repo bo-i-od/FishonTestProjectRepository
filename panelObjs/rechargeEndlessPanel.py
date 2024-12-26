@@ -5,17 +5,17 @@ from common.resource import *
 
 class RechargeEndlessPanel(BasePage):
     def is_panel_active(self):
-        return self.exist(element_data=ElementsData.EventsGiftCenter.EventsGiftCenterPanel)
+        return self.exist(element_data=ElementsData.EventsGiftCenterPanel.EventsGiftCenterPanel)
 
     def get_item_id_list(self):
-        return self.get_object_id_list(element_data=ElementsData.RechargeEndless.item_model_list)
+        return self.get_object_id_list(element_data=ElementsData.RechargeEndlessPanel.item_model_list)
 
     def get_item_info_list(self):
         item_id_list = RechargeEndlessPanel.get_item_id_list(self)
         icon_main_list = self.get_icon_list(object_id_list=item_id_list, offspring_path=">group>icon")
         quantity_main_list = self.get_text_list(object_id_list=item_id_list, offspring_path=">group>icon>quantity>value")
-        icon_sub_list = self.get_icon_list(object_id_list=item_id_list, offspring_path=">group>item_list>item_model_mini(Clone)>icon")
-        quantity_sub_list = self.get_text_list(object_id_list=item_id_list, offspring_path=">group>item_list>item_model_mini(Clone)>quantity>value")
+        icon_sub_list = self.get_icon_list(object_id_list=item_id_list, offspring_path=">group>item_list>>icon")
+        quantity_sub_list = self.get_text_list(object_id_list=item_id_list, offspring_path=">group>item_list>>quantity>value")
 
         item_info_list = []
 
@@ -31,7 +31,7 @@ class RechargeEndlessPanel(BasePage):
     def get_item_icon_position_list(self):
         item_id_list = RechargeEndlessPanel.get_item_id_list(self)
         icon_main_position_list = self.get_position_list(object_id_list=item_id_list, offspring_path=">group>icon")
-        icon_sub_position_list = self.get_position_list(object_id_list=item_id_list, offspring_path=">group>item_list>item_model_mini(Clone)>icon")
+        icon_sub_position_list = self.get_position_list(object_id_list=item_id_list, offspring_path=">group>item_list>>icon")
         item_icon_position_list = []
 
         cur = 0
@@ -53,7 +53,7 @@ class RechargeEndlessPanel(BasePage):
         return cost_list
 
     def get_btn_buy_position_list(self):
-        return self.get_position_list(element_data=ElementsData.RechargeEndless.btn_buy_list)
+        return self.get_position_list(element_data=ElementsData.RechargeEndlessPanel.btn_buy_list)
 
     def get_btn_status(self):
         btn_buy_position_list = RechargeEndlessPanel.get_btn_buy_position_list(self)

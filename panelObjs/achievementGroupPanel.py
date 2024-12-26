@@ -8,60 +8,60 @@ from panelObjs.rewardsPreviewPanel import RewardsPreviewPanel
 
 class AchievementGroupPanel(BasePage):
     def click_btn_close(self):
-        self.click_element(element_data=ElementsData.AchievementGroup.btn_close)
+        self.click_element(element_data=ElementsData.AchievementGroupPanel.btn_close)
 
     def is_panel_active(self):
-        return self.exist(element_data=ElementsData.AchievementGroup.AchievementGroupPanel)
+        return self.exist(element_data=ElementsData.AchievementGroupPanel.AchievementGroupPanel)
 
 
     @staticmethod
     def get_panel_element():
-        return ElementsData.AchievementGroup.AchievementGroupPanel
+        return ElementsData.AchievementGroupPanel.AchievementGroupPanel
 
     def get_title(self):
-        title = self.get_text(element_data=ElementsData.AchievementGroup.title)
+        title = self.get_text(element_data=ElementsData.AchievementGroupPanel.title)
         return title
 
     def get_item_icon_list(self):
-        item_icon_list = self.get_icon_list(element_data=ElementsData.AchievementGroup.item_icon_list)
+        item_icon_list = self.get_icon_list(element_data=ElementsData.AchievementGroupPanel.item_icon_list)
         return item_icon_list
 
     def get_item_quantity_list(self):
-        item_quantity_list = self.get_text_list(element_data=ElementsData.AchievementGroup.item_quantity_list)
+        item_quantity_list = self.get_text_list(element_data=ElementsData.AchievementGroupPanel.item_quantity_list)
         str_to_int_list(item_quantity_list)
         return item_quantity_list
 
     def get_item_position_list(self):
-        item_position_list = self.get_position_list(element_data=ElementsData.AchievementGroup.item_icon_list)
+        item_position_list = self.get_position_list(element_data=ElementsData.AchievementGroupPanel.item_icon_list)
         return item_position_list
 
     def get_achievement_point(self):
-        progress = self.get_text(element_data=ElementsData.AchievementGroup.progress).split('/')
+        progress = self.get_text(element_data=ElementsData.AchievementGroupPanel.progress).split('/')
         progress_numerator = int(progress[0])
         progress_denominator = int(progress[1])
         return progress_numerator, progress_denominator
 
     def click_btn_collect(self):
-        self.click_element(element_data=ElementsData.AchievementGroup.btn_collect)
+        self.click_element(element_data=ElementsData.AchievementGroupPanel.btn_collect)
 
 
     def click_btn_go(self):
-        self.click_element(element_data=ElementsData.AchievementGroup.btn_go)
+        self.click_element(element_data=ElementsData.AchievementGroupPanel.btn_go)
 
 
     def get_icon_main(self):
-        icon_main = self.get_icon(element_data=ElementsData.AchievementGroup.icon_main)
+        icon_main = self.get_icon(element_data=ElementsData.AchievementGroupPanel.icon_main)
         return icon_main
 
     def get_achievement_icon_list(self):
-        achievement_icon_list = self.get_icon_list(element_data=ElementsData.AchievementGroup.achievement_icon_list)
+        achievement_icon_list = self.get_icon_list(element_data=ElementsData.AchievementGroupPanel.achievement_icon_list)
         return achievement_icon_list
 
     def get_selected_status_list(self):
-        return self.get_toggle_is_on_list(element_data=ElementsData.AchievementGroup.achievement_list)
+        return self.get_toggle_is_on_list(element_data=ElementsData.AchievementGroupPanel.achievement_list)
 
     def get_achievement_bg_icon_list(self):
-        achievement_bg_icon_list = self.get_icon_list(element_data=ElementsData.AchievementGroup.achievement_bg_icon_list)
+        achievement_bg_icon_list = self.get_icon_list(element_data=ElementsData.AchievementGroupPanel.achievement_bg_icon_list)
         return achievement_bg_icon_list
 
     # 看第几个是选中的
@@ -87,22 +87,22 @@ class AchievementGroupPanel(BasePage):
 
 
     def click_box(self):
-        self.click_element(element_data=ElementsData.AchievementGroup.box)
+        self.click_element(element_data=ElementsData.AchievementGroupPanel.box)
 
     def is_box_clickable(self):
-        return self.exist(element_data=ElementsData.AchievementGroup.box_collectable)
+        return self.exist(element_data=ElementsData.AchievementGroupPanel.box_collectable)
 
 
     def get_resource_100000(self):
-        return resource.get_resource(self, item_tpid="100000", element_data=ElementsData.AchievementGroup.text_100000)
+        return resource.get_resource(self, item_tpid="100000", element_data=ElementsData.AchievementGroupPanel.text_100000)
 
     def get_achievement_position_list(self):
-        position_list = self.get_position_list(element_data=ElementsData.AchievementGroup.achievement_icon_list)
+        position_list = self.get_position_list(element_data=ElementsData.AchievementGroupPanel.achievement_icon_list)
         return position_list
 
     def get_status_list(self):
         achievement_bg_icon_list = AchievementGroupPanel.get_achievement_bg_icon_list(bp)
-        achievement_id_list = self.get_object_id_list(element_data=ElementsData.AchievementGroup.achievement_list)
+        achievement_id_list = self.get_object_id_list(element_data=ElementsData.AchievementGroupPanel.achievement_list)
         status_list = []
         cur = 0
         while cur < len(achievement_bg_icon_list):
@@ -121,7 +121,7 @@ class AchievementGroupPanel(BasePage):
 
     def get_go_collect_and_uncollect_index_list(self):
         achievement_bg_icon_list = AchievementGroupPanel.get_achievement_bg_icon_list(self)
-        achievement_id_list = self.get_object_id_list(element_data=ElementsData.AchievementGroup.achievement_list)
+        achievement_id_list = self.get_object_id_list(element_data=ElementsData.AchievementGroupPanel.achievement_list)
         go_index_list = []
         collect_index_list = []
         uncollect_index_list = []
@@ -156,7 +156,7 @@ class AchievementGroupPanel(BasePage):
         return reward_icon_list, reward_quantity_list
 
     def get_complete(self):
-        complete = self.get_text(element_data=ElementsData.AchievementGroup.complete)
+        complete = self.get_text(element_data=ElementsData.AchievementGroupPanel.complete)
         complete = complete.split('>')
         complete_numerator = int(complete[1].split('<')[0])
         complete_denominator = int(complete[2].split('/')[1])
@@ -169,6 +169,6 @@ class AchievementGroupPanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    a = bp.click_element(element_data=ElementsData.FlashCardReceive.btn_close)
+    a = bp.click_element(element_data=ElementsData.FlashCardReceivePanel.btn_close)
     # a = AchievementGroupPanel.get_status_list(bp)
     print(a)

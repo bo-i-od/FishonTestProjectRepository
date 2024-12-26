@@ -10,26 +10,26 @@ from tools.commonTools import *
 
 class AchievementWantedPanel(BasePage):
     def click_btn_close(self):
-        self.click_element(element_data=ElementsData.AchievementWanted.btn_close)
+        self.click_element(element_data=ElementsData.AchievementWantedPanel.btn_close)
 
 
     def is_panel_active(self):
-        return self.exist(element_data=ElementsData.AchievementWanted.AchievementWantedPanel)
+        return self.exist(element_data=ElementsData.AchievementWantedPanel.AchievementWantedPanel)
 
     # 悬赏图位置
     def get_wanted_position_list(self):
-        return self.get_position_list(element_data=ElementsData.AchievementWanted.item_list)
+        return self.get_position_list(element_data=ElementsData.AchievementWantedPanel.item_list)
 
     # 图标列表
     def get_reward_icon_list(self):
-        return self.get_icon_list(element_data=ElementsData.AchievementWanted.reward_icon_list)
+        return self.get_icon_list(element_data=ElementsData.AchievementWantedPanel.reward_icon_list)
 
     def get_reward_position_list(self):
-        return self.get_position_list(element_data=ElementsData.AchievementWanted.reward_icon_list)
+        return self.get_position_list(element_data=ElementsData.AchievementWantedPanel.reward_icon_list)
 
     # 数量列表
     def get_reward_quantity_list(self):
-        reward_quantity_list = self.get_text_list(element_data=ElementsData.AchievementWanted.reward_quantity_list)
+        reward_quantity_list = self.get_text_list(element_data=ElementsData.AchievementWantedPanel.reward_quantity_list)
         str_to_int_list(reward_quantity_list)
         return reward_quantity_list
 
@@ -68,7 +68,7 @@ class AchievementWantedPanel(BasePage):
             cur += 1
 
     def click_btn_rewards(self):
-        self.click_element(element_data=ElementsData.AchievementWanted.btn_rewards)
+        self.click_element(element_data=ElementsData.AchievementWantedPanel.btn_rewards)
 
 
 

@@ -7,30 +7,30 @@ from tools.commonTools import *
 
 class FishCardPanel(BasePage):
     def click_btn_close(self):
-        self.click_element(element_data=ElementsData.FishCard.btn_close)
+        self.click_element(element_data=ElementsData.FishCardPanel.btn_close)
 
     def is_panel_active(self):
-        return self.exist(element_data=ElementsData.FishCard.FishCardPanel)
+        return self.exist(element_data=ElementsData.FishCardPanel.FishCardPanel)
 
     def click_btn_upgrade(self):
-        self.click_element(element_data=ElementsData.FishCard.btn_upgrade)
+        self.click_element(element_data=ElementsData.FishCardPanel.btn_upgrade)
 
     def switch_tab(self, index):
-        target_id = self.get_object_id_list(element_data=ElementsData.FishCard.tab_list)[index]
-        viewport = Viewport(self, element_viewport=ElementsData.FishCard.fisheries_viewport, element_item_list=ElementsData.FishCard.tab_list)
+        target_id = self.get_object_id_list(element_data=ElementsData.FishCardPanel.tab_list)[index]
+        viewport = Viewport(self, element_viewport=ElementsData.FishCardPanel.fisheries_viewport, element_item_list=ElementsData.FishCardPanel.tab_list)
         viewport.move_until_appear(target_id)
-        position_list = self.get_position_list(element_data=ElementsData.FishCard.tab_list)
+        position_list = self.get_position_list(element_data=ElementsData.FishCardPanel.tab_list)
         self.click_position(position_list[index])
 
     def get_fisheries_list(self):
-        fisheries_title_list = self.get_text_list(element_data=ElementsData.FishCard.fisheries_title_list)
+        fisheries_title_list = self.get_text_list(element_data=ElementsData.FishCardPanel.fisheries_title_list)
         return fisheries_title_list
 
     def select_card(self, index):
         card_id_list = FishCardPanel.get_card_id_list(self)
 
         target_id = card_id_list[index]
-        viewport = Viewport(self, element_viewport=ElementsData.FishCard.fish_card_viewport, item_id_list=card_id_list, viewport_direction="column")
+        viewport = Viewport(self, element_viewport=ElementsData.FishCardPanel.fish_card_viewport, item_id_list=card_id_list, viewport_direction="column")
         viewport.move_until_appear(target_id)
         # position_list = self.get_position_list(element_data=ElementsData.FishCard.fisheries_title_list)
         self.click_element(object_id=card_id_list[index])
@@ -38,20 +38,20 @@ class FishCardPanel(BasePage):
     # 得到卡模型id列表
     # 选中的卡记作selected_index 如果没有选中selected_index = -1
     def get_card_id_list(self):
-        fish_card_model_id_list = self.get_object_id_list(element_data=ElementsData.FishCard.fish_card_model_list)
+        fish_card_model_id_list = self.get_object_id_list(element_data=ElementsData.FishCardPanel.fish_card_model_list)
         return fish_card_model_id_list
 
     def get_card_information(self):
-        fish_name = self.get_text(element_data=ElementsData.FishCard.fish_name_selected)
-        fisheries_name = self.get_text(element_data=ElementsData.FishCard.fisheries_name_selected)
-        progress = self.get_text(element_data=ElementsData.FishCard.progress_selected)
+        fish_name = self.get_text(element_data=ElementsData.FishCardPanel.fish_name_selected)
+        fisheries_name = self.get_text(element_data=ElementsData.FishCardPanel.fisheries_name_selected)
+        progress = self.get_text(element_data=ElementsData.FishCardPanel.progress_selected)
         progress_split = progress.split('/')
         progress_numerator = int(progress_split[0])
         progress_denominator = int(progress_split[1])
-        level = int(self.get_text(element_data=ElementsData.FishCard.level_selected))
-        talent = self.get_text(element_data=ElementsData.FishCard.talent_selected)
+        level = int(self.get_text(element_data=ElementsData.FishCardPanel.level_selected))
+        talent = self.get_text(element_data=ElementsData.FishCardPanel.talent_selected)
         talent = positive_percentage_to_float(talent)
-        title_bg = self.get_icon(element_data=ElementsData.FishCard.title_bg_selected)
+        title_bg = self.get_icon(element_data=ElementsData.FishCardPanel.title_bg_selected)
         card_information = {"fish_name": fish_name,
                             "fisheries_name": fisheries_name,
                             "progress_numerator": progress_numerator,
@@ -62,12 +62,12 @@ class FishCardPanel(BasePage):
         return card_information
 
     def get_main_name_and_size(self):
-        main_name = self.get_text(element_data=ElementsData.FishCard.main_name)
-        main_size = self.get_icon(element_data=ElementsData.FishCard.main_size)
+        main_name = self.get_text(element_data=ElementsData.FishCardPanel.main_name)
+        main_size = self.get_icon(element_data=ElementsData.FishCardPanel.main_size)
         return main_name, main_size
 
     def get_talent_dict(self):
-        upgrade_talent_now_list = self.get_text_list(element_data=ElementsData.FishCard.talent_now_list)
+        upgrade_talent_now_list = self.get_text_list(element_data=ElementsData.FishCardPanel.talent_now_list)
         talent_dict = {}
         cur = 0
         while cur < len(upgrade_talent_now_list):
@@ -109,7 +109,7 @@ class FishCardPanel(BasePage):
         return unlock_list, unlevelable_list, levelable_list
 
     def get_tab_status(self):
-        tab_id_list = self.get_object_id_list(element_data=ElementsData.FishCard.tab_list)
+        tab_id_list = self.get_object_id_list(element_data=ElementsData.FishCardPanel.tab_list)
         unlock_tab_list = []
         lock_tab_list = []
 
@@ -125,26 +125,26 @@ class FishCardPanel(BasePage):
 
 
     def click_btn_events(self):
-        self.click_element(element_data=ElementsData.FishCard.btn_events)
+        self.click_element(element_data=ElementsData.FishCardPanel.btn_events)
 
     def switch_sub_tab(self, index):
-        position_list = self.get_position_list(element_data=ElementsData.FishCard.sub_tab_list)
+        position_list = self.get_position_list(element_data=ElementsData.FishCardPanel.sub_tab_list)
         if len(position_list) - 1 < index:
             index = len(position_list) - 1
         self.click_position(position_list[index])
 
     def click_btn_i(self):
-        self.click_element(element_data=ElementsData.FishCard.btn_i)
+        self.click_element(element_data=ElementsData.FishCardPanel.btn_i)
 
     def is_tips_cardbonus_active(self):
-        return self.exist(element_data=ElementsData.FishCard.tips_cardbonus)
+        return self.exist(element_data=ElementsData.FishCardPanel.tips_cardbonus)
 
     def get_rating(self):
-        rating = int(self.get_text(element_data=ElementsData.FishCard.rating))
+        rating = int(self.get_text(element_data=ElementsData.FishCardPanel.rating))
         return rating
 
     def get_rating_fisheries(self):
-        rating = int(self.get_text(element_data=ElementsData.FishCard.rating_fisheries))
+        rating = int(self.get_text(element_data=ElementsData.FishCardPanel.rating_fisheries))
         return rating
 
 

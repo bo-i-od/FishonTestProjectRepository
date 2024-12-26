@@ -6,8 +6,8 @@ from tools.commonTools import *
 
 class FishAlbumPreviewPanel(BasePage):
     def click_btn_close(self):
-        self.click_element(element_data=ElementsData.FishAlbumPreview.btn_close, ignore_set={"FishAlbumPreviewPanel"})
+        self.click_element(element_data=ElementsData.FishAlbumPreviewPanel.btn_close, ignore_set={"FishAlbumPreviewPanel"})
 
 
     def is_panel_active(self):
-        return self.exist(element_data=ElementsData.FishAlbumPreview.FishAlbumPreviewPanel)
+        return self.exist(element_data=ElementsData.FishAlbumPreviewPanel.FishAlbumPreviewPanel)
