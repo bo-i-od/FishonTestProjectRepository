@@ -58,56 +58,6 @@ class PlayerInfoPanel(BasePage):
     def click_btn_edit_achievement(self):
         self.click_element(element_data=ElementsData.PlayerInfoPanel.btn_edit_achievement)
 
-    def is_panel_active_oversea(self):
-        return self.exist(element_data=ElementsData.PlayerInfo_oversea.PlayerInfoPanel)
-
-    def click_btn_close_oversea(self):
-        self.click_element(element_data=ElementsData.PlayerInfo_oversea.btn_close)
-
-    def click_btn_changecamera_oversea(self):
-        self.click_element(element_data=ElementsData.PlayerInfo_oversea.btn_changecamera)
-
-    def switch_tab_oversea(self, index):
-        position_list = self.get_position_list(element_data=ElementsData.PlayerInfo_oversea.tab_list)
-        self.click_position(position_list[index])
-
-    def click_btn_setting_oversea(self):
-        self.click_element(element_data=ElementsData.PlayerInfo_oversea.btn_setting)
-
-    def click_btn_logout_oversea(self):
-        self.click_element(element_data=ElementsData.PlayerInfo_oversea.btn_logout)
-
-    def click_btn_giftcode_oversea(self):
-        self.click_element(element_data=ElementsData.PlayerInfo_oversea.btn_giftcode)
-
-    def set_giftcode_oversea(self, text):
-        self.set_text(element_data=ElementsData.PlayerInfo_oversea.giftcode_input, text=text)
-
-    def get_giftcode_oversea(self):
-        giftcode_input = self.get_text(element_data=ElementsData.PlayerInfo_oversea.giftcode_input)
-        return giftcode_input
-
-
-    def click_btn_close_additional_oversea(self):
-        self.click_element(element_data=ElementsData.PlayerInfo_oversea.btn_close_additional)
-
-    def click_btn_edit_player_info_oversea(self):
-        self.click_element(element_data=ElementsData.PlayerInfo_oversea.btn_edit_player_info)
-
-    def click_btn_copy_oversea(self):
-        self.click_element(element_data=ElementsData.PlayerInfo_oversea.btn_copy)
-
-    def click_btn_i_rating_oversea(self):
-        self.click_element(element_data=ElementsData.PlayerInfo_oversea.btn_i_rating)
-
-    def click_btn_i_rod_oversea(self):
-        self.click_element(element_data=ElementsData.PlayerInfo_oversea.btn_i_rod)
-
-    def click_btn_confirm_oversea(self):
-        self.click_element(element_data=ElementsData.PlayerInfo_oversea.btn_confirm)
-
-    def click_btn_edit_achievement_oversea(self):
-        self.click_element(element_data=ElementsData.PlayerInfo_oversea.btn_edit_achievement)
 
 
     def get_player_info(self):
@@ -179,29 +129,6 @@ class PlayerInfoPanel(BasePage):
                                   item_id_list=badge_select_id_list, viewport_direction="row", viewport_edge=[0.01, 0.01])
         return badge_viewport
 
-    def get_value_cost_oversea(self):
-        value_cost = int(self.get_text(element_data=ElementsData.PlayerInfo_oversea.value_cost))
-        return value_cost
-
-    def get_badge_show_id_list_oversea(self):
-        badge_show_id_list = self.get_object_id_list(element_data=ElementsData.PlayerInfo_oversea.badge_show_list)
-        return badge_show_id_list
-
-    def get_badge_select_id_list_oversea(self):
-        badge_select_id_list = self.get_object_id_list(element_data=ElementsData.PlayerInfo_oversea.badge_select_list)
-        return badge_select_id_list
-
-    def get_badge_show_viewport_oversea(self, badge_show_id_list):
-        size_list = self.get_size_list(object_id=badge_show_id_list[0])
-        badge_viewport = Viewport(self, element_viewport=ElementsData.PlayerInfo_oversea.viewport_badge_show,
-                                  item_id_list=badge_show_id_list, viewport_direction="row",viewport_edge=[size_list[0][0] * 0.4, size_list[0][0] * 0.1])
-        return badge_viewport
-
-    def get_badge_select_viewport_oversea(self, badge_select_id_list):
-        # size_list = self.get_size_list(object_id_list=badge_select_id_list)
-        badge_viewport = Viewport(self, element_viewport=ElementsData.PlayerInfo_oversea.viewport_badge_select,
-                                  item_id_list=badge_select_id_list, viewport_direction="row",viewport_edge=[0.01, 0.01])
-        return badge_viewport
 
     def get_badge_show_list(self, badge_show_id_list):
         badge_show_list = []
@@ -222,11 +149,6 @@ class PlayerInfoPanel(BasePage):
 
     def get_selected_badge_show_index(self):
         toggle_is_on_list = self.get_toggle_is_on_list(element_data=ElementsData.PlayerInfoPanel.badge_show_list)
-        index = get_toggle_is_on_index(toggle_is_on_list=toggle_is_on_list)
-        return index
-
-    def get_selected_badge_show_index_oversea(self):
-        toggle_is_on_list = self.get_toggle_is_on_list(element_data=ElementsData.PlayerInfo_oversea.badge_show_list)
         index = get_toggle_is_on_index(toggle_is_on_list=toggle_is_on_list)
         return index
 
