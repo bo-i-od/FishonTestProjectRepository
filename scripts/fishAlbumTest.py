@@ -3,11 +3,11 @@ import random
 from common import gameInit
 from common.basePage import BasePage
 from netMsg import fishingMsg
-from panelObjs.fishAlbum3DPanel import FishAlbum3DPanel
-from panelObjs.fishAlbumPreviewPanel import FishAlbumPreviewPanel
-from panelObjs.fishCardPackTipsPanel import FishCardPackTipsPanel
-from panelObjs.playerLevelupPanel import PlayerLevelupPanel
-from panelObjs.sharePanel import SharePanel
+from panelObjs.FishAlbum3DPanel import FishAlbum3DPanel
+from panelObjs.FishAlbumPreviewPanel import FishAlbumPreviewPanel
+from panelObjs.FishCardPackTipsPanel import FishCardPackTipsPanel
+from panelObjs.PlayerLevelupPanel import PlayerLevelupPanel
+from panelObjs.SharePanel import SharePanel
 from tools.commonTools import compare
 
 

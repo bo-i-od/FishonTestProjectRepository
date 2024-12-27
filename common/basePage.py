@@ -15,7 +15,6 @@ from configs.pathConfig import EXCEL_PATH
 from tools.excelRead import ExcelTools
 
 import time
-import pyautogui
 import base64
 import cv2
 import numpy as np
@@ -26,7 +25,6 @@ from common.error import *
 import zlib
 
 import os
-from configs.elementsData import ElementsData
 from configs.jumpData import JumpData
 
 import logging
@@ -1170,7 +1168,8 @@ class BasePageMain:
         """
         if ignore_set is None:
             ignore_set = set()
-        panel_name_list = self.get_name_list(element_data=ElementsData.Panels)
+        panel_name_list = self.get_name_list(element_data_list=JumpData.panel_list)
+        panel_name_list = tools.commonTools.merge_list(panel_name_list)
         # 弹窗=检测到的弹窗-忽略的弹窗
         pop_window_set = set(panel_name_list) & JumpData.pop_window_set - ignore_set
 
@@ -1268,12 +1267,14 @@ class BasePageMain:
         """函数功能简述
             关除了主界面的其它界面一次
         """
-        panel_name_list = self.get_name_list(element_data_list=[ElementsData.Panels])
+        panel_name_list = self.get_name_list(element_data_list=JumpData.panel_list)
         panel_name_list = tools.commonTools.merge_list(panel_name_list)
         for panel_name in panel_name_list:
             if panel_name not in JumpData.panel_dict:
                 continue
             self.clear_popup_once()
+            if "close_path" not in JumpData.panel_dict[panel_name]:
+                continue
             for close_element in JumpData.panel_dict[panel_name]["close_path"]:
                 self.click_element_safe(element_data=close_element)
             break

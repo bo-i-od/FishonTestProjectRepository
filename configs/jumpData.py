@@ -1,10 +1,9 @@
-
 from configs.elementsData import ElementsData
 
 
 class JumpData:
     element_data_home = ElementsData.HomePanel.HomePanel
-
+    panel_list = [ElementsData.Panels, ElementsData.Home3DPanel.Home3DPanel]
     pop_window_set = {
         "AquariumCommonFishChangePanel",
         "AquariumNewActivityInnerPopupPanel",
@@ -50,7 +49,6 @@ class JumpData:
         "AchievementWantedPanel": {"element_data": ElementsData.AchievementWantedPanel.AchievementWantedPanel, "close_path": [ElementsData.AchievementWantedPanel.btn_close]},
         "AchievementCategoryPanel": {"element_data": ElementsData.AchievementCategoryPanel.AchievementCategoryPanel, "close_path": [ElementsData.AchievementCategoryPanel.btn_close]},
         "AchievementPanel": {"element_data": ElementsData.AchievementPanel.AchievementPanel, "open_path": [ElementsData.HomePanel.btn_achievement], "close_path": [ElementsData.AchievementPanel.btn_close]},
-        # "AchievementPanel": {"element_data": ElementsData.Achievement.AchievementPanel, "open_path": [ElementsData.Home.btn_achievement], "panel_object": panelObjs.achievementPanel.AchievementPanel},
         "AquariumPanel": {"element_data": ElementsData.AquariumPanel.AquariumPanel, "open_path": [ElementsData.HomePanel.btn_aquarium], "close_path": [ElementsData.AquariumPanel.btn_close]},
         "AquariumCommonFishChangePanel":{"element_data": ElementsData.AquariumCommonFishChangePanel.AquariumCommonFishChangePanel, "close_path":  [ElementsData.AquariumCommonFishChangePanel.btn_close]},
         "AquariumFishPanel":{"element_data": ElementsData.AquariumFishPanel.AquariumFishPanel, "close_path": [ElementsData.AquariumFishPanel.btn_close]},
@@ -85,7 +83,7 @@ class JumpData:
         "ClubRedEnvelopePanel": {"element_data": ElementsData.ClubRedEnvelopePanel.ClubRedEnvelopePanel, "close_path": [ElementsData.ClubRedEnvelopePanel.btn_close]},
         "DailyTipsPanel": {"element_data": ElementsData.DailyTipsPanel.DailyTipsPanel, "close_path": [ElementsData.DailyTipsPanel.btn_close]},
         "DivisionChangePanel": {"element_data": ElementsData.DivisionChangePanel.DivisionChangePanel, "close_path": [ElementsData.DivisionChangePanel.tap_to_close]},
-        "DivisionLeaderboardPanel": {"element_data": ElementsData.DivisionLeaderboardPanel.DivisionLeaderboardPanel, "open_path": [ElementsData.HomePanel.btn_pve, ElementsData.TournamentsPanel.btn_leaderboard], "close_path": [ElementsData.DivisionLeaderboardPanel.btn_close]},
+        "DivisionLeaderboardPanel": {"element_data": ElementsData.DivisionLeaderboardPanel.DivisionLeaderboardPanel, "open_path": [ElementsData.Home3DPanel.btn_pve, ElementsData.TournamentsPanel.btn_leaderboard], "close_path": [ElementsData.DivisionLeaderboardPanel.btn_close]},
         "DivisionListPanel": {"element_data": ElementsData.DivisionListPanel.DivisionListPanel, "close_path": [ElementsData.DivisionListPanel.btn_close]},
         "DLCDownloadPanel": {"element_data": ElementsData.DLCDownloadPanel.DLCDownloadPanel, "open_path": [ElementsData.HomePanel.btn_download], "close_path": [ElementsData.DLCDownloadPanel.btn_close, ElementsData.DLCDownloadPanel_oversea.btn_close]},
         "EnergyGiftPackPanel": {"element_data": ElementsData.EnergyGiftPackPanel.EnergyGiftPackPanel},
@@ -105,6 +103,7 @@ class JumpData:
         "GearLevelupPanel": {"element_data": ElementsData.GearLevelupPanel.GearLevelupPanel, "close_path": [ElementsData.GearLevelupPanel.btn_close]},
         "GearEnhancePanel": {"element_data": ElementsData.GearEnhancePanel.GearEnhancePanel, "close_path": [ElementsData.GearEnhancePanel.btn_close]},
         "GearEnhanceSuccesPanel": {"element_data": ElementsData.GearEnhanceSuccesPanel.GearEnhanceSuccesPanel, "close_path": [ElementsData.GearEnhanceSuccesPanel.btn_close]},
+        "HomePanel": {"element_data": ElementsData.HomePanel.HomePanel},
         "IAAPanel": {"element_data": ElementsData.IAAPanel.IAAPanel, "close_path": [ElementsData.IAAPanel.btn_close]},
         "KatanaPackPopupPanel": {"element_data": ElementsData.KatanaPackPopupPanel.KatanaPackPopupPanel, "close_path": [ElementsData.KatanaPackPopupPanel.btn_close]},
         "LeaderBoardPopResultPanel": {"element_data": ElementsData.LeaderBoardPopResultPanel.LeaderBoardPopResultPanel, "close_path": [ElementsData.LeaderBoardPopResultPanel.btn_claim]},
@@ -123,7 +122,7 @@ class JumpData:
         "PVPBoosterGiftPackPanel": {"element_data": ElementsData.PVPBoosterGiftPackPanel.PVPBoosterGiftPackPanel, "close_path": [ElementsData.PVPBoosterGiftPackPanel.btn_close]},
         "PVENewbieGiftPackPanel": {"element_data": ElementsData.PVENewbieGiftPackPanel.PVENewbieGiftPackPanel, "close_path": [ElementsData.PVENewbieGiftPackPanel.btn_close]},
         "ProgressRewardsPanel": {"element_data": ElementsData.ProgressRewardsPanel.ProgressRewardsPanel, "open_path": [ElementsData.HomePanel.btn_globa_progress], "close_path": [ElementsData.ProgressRewardsPanel.btn_close]},
-        "PVPHallPanel": {"element_data": ElementsData.PVPHallPanel.PVPHallPanel, "open_path": [ElementsData.HomePanel.btn_pvp, ElementsData.NewbieGuidePanel.NBG_friend_duel_1_1, ElementsData.PVPResultPanel.tap_to_close], "close_path": [ElementsData.PVPHallPanel.btn_close]},
+        "PVPHallPanel": {"element_data": ElementsData.PVPHallPanel.PVPHallPanel, "open_path": [ElementsData.Home3DPanel.btn_pvp, ElementsData.NewbieGuidePanel.NBG_friend_duel_1_1, ElementsData.PVPResultPanel.tap_to_close], "close_path": [ElementsData.PVPHallPanel.btn_close]},
         "PVPResultPanel": {"element_data": ElementsData.PVPResultPanel.PVPResultPanel, "close_path": [ElementsData.PVPResultPanel.tap_to_close]},
         "PVPRuleTipsPanel": {"element_data": ElementsData.PVPRuleTipsPanel.PVPRuleTipsPanel, "close_path": [ElementsData.PVPRuleTipsPanel.btn_close]},
         "QuestionnairePanel": {"element_data": ElementsData.QuestionnairePanel.QuestionnairePanel, "open_path": [ElementsData.HomePanel.btn_questionnaire], "close_path": [ElementsData.QuestionnairePanel.btn_close]},
@@ -139,7 +138,7 @@ class JumpData:
         "RechargeBlack5Panel": {"element_data": ElementsData.RechargeBlack5Panel.RechargeBlack5Panel, "open_path": [ElementsData.HomePanel.btn_black5], "close_path": [ElementsData.EventsGiftCenterPanel.btn_close]},
         "RechargeEndlessThanksPanel": {"element_data": ElementsData.RechargeEndlessThanksPanel.RechargeEndlessThanksPanel, "open_path": [ElementsData.HomePanel.btn_events_endless_thanksgiving], "close_path": [ElementsData.RechargeEndlessThanksPanel.btn_close, ElementsData.EventsGiftCenterPanel.btn_close]},
         "RechargeEndlessNewYearPanel": {"element_data": ElementsData.RechargeEndlessNewYearPanel.RechargeEndlessNewYearPanel, "open_path": [ElementsData.HomePanel.btn_events_endless_newyear], "close_path": [ElementsData.RechargeEndlessNewYearPanel.btn_close, ElementsData.EventsGiftCenterPanel.btn_close]},
-        "RoulettePanel": {"element_data": ElementsData.RoulettePanel.RoulettePanel, "open_path": [ElementsData.HomePanel.btn_pvp, ElementsData.PVPHallPanel.btn_turntable], "close_path": [ElementsData.RoulettePanel.btn_close]},
+        "RoulettePanel": {"element_data": ElementsData.RoulettePanel.RoulettePanel, "open_path": [ElementsData.Home3DPanel.btn_pvp, ElementsData.PVPHallPanel.btn_turntable], "close_path": [ElementsData.RoulettePanel.btn_close]},
         "StoreSuitPopupPanel": {"element_data": ElementsData.StoreSuitPopupPanel.StoreSuitPopupPanel, "close_path": [ElementsData.StoreSuitPopupPanel.btn_close]},
         "StoreChristmasPopupPanel": {"element_data": ElementsData.StoreChristmasPopupPanel.StoreChristmasPopupPanel, "close_path": [ElementsData.StoreChristmasPopupPanel.btn_close]},
         "StorePanel": {"element_data": ElementsData.StorePanel.StorePanel, "open_path": [ElementsData.HomePanel.btn_store], "close_path": [ElementsData.StorePanel.btn_close]},
@@ -147,12 +146,12 @@ class JumpData:
         "TournamentsInfoPanel": {"element_data": ElementsData.TournamentsInfoPanel.TournamentsInfoPanel, "close_path": [ElementsData.TournamentsInfoPanel.btn_close]},
         "TreasureChestGearsShardsPanel": {"element_data": ElementsData.TreasureChestGearsShardsPanel.TreasureChestGearsShardsPanel, "close_path": [ElementsData.TreasureChestGearsShardsPanel.btn_close]},
         "TaskPanel": {"element_data": ElementsData.TaskPanel.TaskPanel, "open_path": [ElementsData.HomePanel.btn_bp, ElementsData.BattlePassRewardPanel.btn_close, ElementsData.BattlePassIntroPanel.next1to2, ElementsData.BattlePassIntroPanel.next2to3, ElementsData.BattlePassIntroPanel.btn_go, ElementsData.BattlePassPanel.btn_task], "close_path":  [ElementsData.TaskPanel.btn_close]},
-        "TournamentsPanel": {"element_data": ElementsData.TournamentsPanel.TournamentsPanel, "open_path": [ElementsData.HomePanel.btn_pve], "close_path": [ElementsData.TournamentsPanel.btn_close]},
-        "TreasureChestPanel": {"element_data": ElementsData.TreasureChestPanel.TreasureChestPanel, "open_path": [ElementsData.HomePanel.btn_chest], "close_path": [ElementsData.TreasureChestPanel.btn_close]},
+        "TournamentsPanel": {"element_data": ElementsData.TournamentsPanel.TournamentsPanel, "open_path": [ElementsData.Home3DPanel.btn_pve], "close_path": [ElementsData.TournamentsPanel.btn_close]},
+        "TreasureChestPanel": {"element_data": ElementsData.TreasureChestPanel.TreasureChestPanel, "open_path": [ElementsData.Home3DPanel.btn_chest], "close_path": [ElementsData.TreasureChestPanel.btn_close]},
         "TreasureChestRewardsPanel": {"element_data": ElementsData.TreasureChestRewardsPanel.TreasureChestRewardsPanel, "close_path": [ElementsData.TreasureChestRewardsPanel.btn_close]},
     }
 
-    panel_list = [ElementsData.Panels]
+
 
 
 

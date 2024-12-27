@@ -3,15 +3,15 @@ import time
 
 import scripts
 from netMsg import csMsgAll, fishingMsg, luaLog
-from panelObjs.avatarSelectPanel import AvatarSelectPanel
-from panelObjs.battlePreparePanel import BattlePreparePanel
-from panelObjs.loadingPanel import LoadingPanel
-from panelObjs.loginPanel import LoginPanel
+from panelObjs.AvatarSelectPanel import AvatarSelectPanel
+from panelObjs.BattlePreparePanel import BattlePreparePanel
+from panelObjs.LoadingPanel import LoadingPanel
+from panelObjs.LoginPanel import LoginPanel
 from common.basePage import BasePage
-from panelObjs.homePanel import HomePanel
-from panelObjs.playerEditNamePanel import PlayerEditNamePanel
-from panelObjs.tournamentsPanel import TournamentsPanel
-from panelObjs.friendPanel import FriendPanel
+from panelObjs.HomePanel import HomePanel
+from panelObjs.PlayerEditNamePanel import PlayerEditNamePanel
+from panelObjs.TournamentsPanel import TournamentsPanel
+from panelObjs.FriendPanel import FriendPanel
 from scripts import battleTest
 import json
 
@@ -171,11 +171,12 @@ def login(bp: BasePage, name):
     bp.cmd_list(["guideskip"])
     bp.sleep(1)
     while True:
-        # PlayerEditNamePanel.set_player_name(bp, name)
+        PlayerEditNamePanel.set_player_name(bp, name)
         PlayerEditNamePanel.click_confirm(bp, is_ray_input=True)
         bp.sleep(1)
         if not PlayerEditNamePanel.is_panel_active(bp):
             break
+        name = name.replace("64", "000")
         # name = "t" + str(time.time()).split('.')[0]
 
     bp.sleep(1)
@@ -208,68 +209,12 @@ def go_leaderborad(bp:BasePage):
 
 def fish(bp: BasePage, index):
 
-    bp.cmd(f"setPlayerLayer 5000")
-    bp.cmd_list(["levelupto 99", "add 1 100500 3000"])
-
-
-
-    # bp.cmd("mode 400312 390116")
-    # bp.sleep(1)
-    # fishingMsg.fish(bp, [{"spot_id": f"40031213", "times": 96, "is_activity_spot": False}])
-    # bp.sleep(13)
-    # 清空消息列表 开始收消息
-    bp.log_list.clear()
-    bp.log_list_flag = True
-    msg_name = "ActivityDoubleWeekBatchDataMsg"
-    bp.cmd("mode 400319 390187")
-    bp.sleep(0.5)
-    fishingMsg.fish(bp, [{"spot_id": f"40031913", "times": 1, "is_activity_spot": True}])
-    bp.sleep(0.5)
-    bp.cmd("mode 400319 390188")
-    bp.sleep(0.5)
-    fishingMsg.fish(bp, [{"spot_id": f"40031913", "times": 1, "is_activity_spot": True}])
-    bp.sleep(0.5)
-    bp.cmd("mode 400319 390189")
-    bp.sleep(0.5)
-    fishingMsg.fish(bp, [{"spot_id": f"40031913", "times": 1, "is_activity_spot": True}])
-
-    target_log = bp.receive_until_get_msg(msg_name=msg_name)
-    python_dict = commonTools.lua_dict_to_python_dict(target_log)
-    # print(python_dict)
-    roomId = python_dict['activityDoubleWeekList'][1]["rankRoomId"]
-    print(f"{index}:{roomId}")
-    # bp.cmd("mode 400318 390177")
-    # bp.sleep(0.5)
-    # fishingMsg.fish(bp, [{"spot_id": f"40031813", "times": 1, "is_activity_spot":True}])
-    # bp.sleep(0.5)
-    # bp.cmd("mode 400318 390178")
-    # bp.sleep(0.5)
-    # fishingMsg.fish(bp, [{"spot_id": f"40031813", "times": 1, "is_activity_spot":True}])
-    # bp.sleep(0.5)
-    # bp.cmd("mode 400318 390179")
-    # bp.sleep(0.5)
-    # fishingMsg.fish(bp, [{"spot_id": f"40031813", "times": 1, "is_activity_spot":True}])
-
-    # bp.cmd("mode 400301 390005")
-    # bp.sleep(0.5)
-    # fishingMsg.fish(bp, [{"spot_id": f"40030103", "times": 1, "is_activity_spot": False}])
-    #
-    # bp.cmd("mode 400303 390026")
-    # bp.sleep(0.5)
-    # fishingMsg.fish(bp, [{"spot_id": f"40030303", "times": 1, "is_activity_spot": False}])
-    #
-    # bp.cmd("mode 400303 390025")
-    # bp.sleep(0.5)
-    # fishingMsg.fish(bp, [{"spot_id": f"40030303", "times": 1, "is_activity_spot": False}])
-    #
-    # bp.cmd("mode 400302 390016")
-    # bp.sleep(0.5)
-    # fishingMsg.fish(bp, [{"spot_id": f"40030203", "times": 1, "is_activity_spot": False}])
-    #
-    # bp.cmd("mode 400309 390086")
-    # bp.sleep(0.5)
-    # fishingMsg.fish(bp, [{"spot_id": f"40030903", "times": 1, "is_activity_spot": False}])
-
+    fishingMsg.fish(bp, [
+        # {"spot_id": f"40030203", "times": 1000, "energy_cost": 50, "targetIdList": ["391011"]},
+        {"spot_id": f"40030703", "times": 30, "is_activity_spot": False},
+        #
+    ])
+    bp.sleep(10)
 
 
 
@@ -303,7 +248,8 @@ def friend(bp: BasePage):
 
     bp.cmd_list(["levelupto 20"])
     bp.sleep(0.2)
-    lua_code = csMsgAll.get_CSGlobalFriendsApplyMsg(targetSimpleId=10051868, source=0, type=2, targetCharId="67247c4294a86760d6829b3e", simpleId=charSimpleId)
+    lua_code = csMsgAll.get_CSGlobalFriendsApplyMsg(targetSimpleId=10006471, source=0, type=2, targetCharId="677745af9050147ea9469e9f", simpleId=charSimpleId)
+    # "1734057963"
     bp.lua_console(lua_code)
 
 
@@ -542,26 +488,28 @@ def read_data():
 
 def main(bp: BasePage):
     # 登录号前缀
-    prefix = "vvv_"
+    prefix = "yh_"
     # prefix_list = ["a", "b", "c", "d", "e"]
     init(bp)
     # 起始序号 终止序号
-    cur = 12
-    limit = 15
+    cur = 4
+    limit = 110
     while cur < limit:
         name = prefix + str(cur)
         login(bp, name)
         # 前置gm命令
-        bp.cmd("levelupto 16")
+        bp.cmd_list(["levelupto 69", "setUserIp 61.48.77.2", "add 1 100500 3000"])
         # bp.cmd(f"selfranksetip 180.175.{cur}.{cur}")
-
         # init(bp)
-        # fish(bp,cur)
+        lua_code = csMsgAll.get_CSSelfRankCityChangeMsg(city=110105, cancel=False)
+        bp.lua_console(lua_code)
+        fish(bp,cur)
+        # bp.sleep(5)
         # 你要执行的初始化账号操作
         # add_gu(bp, cur)
         # dragon_boat(bp, cur)
         # apply_guild(bp)
-        friend(bp)
+        # friend(bp)
         # ndays(bp, cur)
         # rank(bp)
         # monopoly(bp, layer=1000, index=cur)
@@ -575,8 +523,9 @@ def main(bp: BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21543", is_mobile_device=False)
-
+    bp = BasePage("127.0.0.1:21583", is_mobile_device=False)
     main(bp)
+    # logout(bp)
+    # bp.lua_console('PanelMgr:OpenPanel("PlayerBuildPanel")')
 
     bp.connect_close()

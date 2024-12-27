@@ -4,8 +4,8 @@ from common.resource import *
 from common.viewport import Viewport
 import random
 
-from panelObjs.battlePreparePanel import BattlePreparePanel
-from panelObjs.gearLevelupPanel import GearLevelupPanel
+from panelObjs.BattlePreparePanel import BattlePreparePanel
+from panelObjs.GearLevelupPanel import GearLevelupPanel
 
 
 class GearPanel(BasePage):

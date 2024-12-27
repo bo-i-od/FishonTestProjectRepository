@@ -3,9 +3,9 @@ import random
 from common import gameInit
 from common.basePage import BasePage
 from common.viewport import Viewport
-from panelObjs.careerPanel import CareerPanel
-from panelObjs.messageBoxPanel import MessageBoxPanel
-from panelObjs.playerLevelupPanel import PlayerLevelupPanel
+from panelObjs.CareerPanel import CareerPanel
+from panelObjs.MessageBoxPanel import MessageBoxPanel
+from panelObjs.PlayerLevelupPanel import PlayerLevelupPanel
 
 
 # 检查标题tips
@@ -110,6 +110,6 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("192.168.111.36:20028")
+    bp = BasePage(serial_number="127.0.0.1:21553", is_mobile_device=True)
     main(bp)
     bp.connect_close()

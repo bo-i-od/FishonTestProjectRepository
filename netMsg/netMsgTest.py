@@ -1,8 +1,8 @@
 import time
 from common.basePage import BasePage
 import luaLog
-from panelObjs.loadingPanel import LoadingPanel
-from panelObjs.loginPanel import LoginPanel
+from panelObjs.LoadingPanel import LoadingPanel
+from panelObjs.LoginPanel import LoginPanel
 
 
 class NetMsgTest():

@@ -1,6 +1,5 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from common.viewport import Viewport
 
 class TournamentsInfoPanel(BasePage):
     def is_panel_active(self):

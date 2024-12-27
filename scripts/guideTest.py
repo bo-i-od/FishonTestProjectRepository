@@ -3,21 +3,21 @@ import time
 
 from common import gameInit
 from common.basePage import BasePage
-from panelObjs.achievementWantedPanel import AchievementWantedPanel
-from panelObjs.aquariumPanel import AquariumPanel
-from panelObjs.avatarSelectPanel import AvatarSelectPanel
-from panelObjs.battlePreparePanel import BattlePreparePanel
-from panelObjs.clubApplyPanel import ClubApplyPanel
-from panelObjs.fishAlbum3DPanel import FishAlbum3DPanel
-from panelObjs.fishCardPanel import FishCardPanel
-from panelObjs.gearPanel import GearPanel
-from panelObjs.loadingFisheryPanel import LoadingFisheryPanel
-from panelObjs.playerEditNamePanel import PlayerEditNamePanel
-from panelObjs.newbieGuidePanel import NewbieGuidePanel
-from panelObjs.battlePanel import BattlePanel
-from panelObjs.playerLevelupPanel import PlayerLevelupPanel
-from panelObjs.resultPanel import ResultPanel
-from panelObjs.tournamentsPanel import TournamentsPanel
+from panelObjs.AchievementWantedPanel import AchievementWantedPanel
+from panelObjs.AquariumPanel import AquariumPanel
+from panelObjs.AvatarSelectPanel import AvatarSelectPanel
+from panelObjs.BattlePreparePanel import BattlePreparePanel
+from panelObjs.ClubApplyPanel import ClubApplyPanel
+from panelObjs.FishAlbum3DPanel import FishAlbum3DPanel
+from panelObjs.FishCardPanel import FishCardPanel
+from panelObjs.GearPanel import GearPanel
+from panelObjs.LoadingFisheryPanel import LoadingFisheryPanel
+from panelObjs.PlayerEditNamePanel import PlayerEditNamePanel
+from panelObjs.NewbieGuidePanel import NewbieGuidePanel
+from panelObjs.BattlePanel import BattlePanel
+from panelObjs.PlayerLevelupPanel import PlayerLevelupPanel
+from panelObjs.ResultPanel import ResultPanel
+from panelObjs.TournamentsPanel import TournamentsPanel
 from scripts import battleTest
 from tools.commonTools import *
 
@@ -251,6 +251,6 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21523", is_mobile_device=False)
+    bp = BasePage("127.0.0.1:21553", is_mobile_device=True)
     main(bp)
     bp.connect_close()

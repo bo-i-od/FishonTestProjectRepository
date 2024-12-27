@@ -1,18 +1,18 @@
 from common.basePage import BasePage
 import random
 
-from panelObjs.fishBagPanel import FishBagPanel
-from panelObjs.fishCardPackTipsPanel import FishCardPackTipsPanel
-from panelObjs.playerLevelupPanel import PlayerLevelupPanel
+from panelObjs.FishBagPanel import FishBagPanel
+from panelObjs.FishCardPackTipsPanel import FishCardPackTipsPanel
+from panelObjs.PlayerLevelupPanel import PlayerLevelupPanel
 from tools.commonTools import *
 
-from panelObjs.achievementPanel import AchievementPanel
-from panelObjs.achievementGroupPanel import AchievementGroupPanel
-from panelObjs.itemTipsPanel import ItemTipsPanel
-from panelObjs.rewardsPanel import RewardsPanel
-from panelObjs.rewardsPreviewPanel import RewardsPreviewPanel
-from panelObjs.loadingFisheryPanel import LoadingFisheryPanel
-from panelObjs.loadingPanel import LoadingPanel
+from panelObjs.AchievementPanel import AchievementPanel
+from panelObjs.AchievementGroupPanel import AchievementGroupPanel
+from panelObjs.ItemTipsPanel import ItemTipsPanel
+from panelObjs.RewardsPanel import RewardsPanel
+from panelObjs.RewardsPreviewPanel import RewardsPreviewPanel
+from panelObjs.LoadingFisheryPanel import LoadingFisheryPanel
+from panelObjs.LoadingPanel import LoadingPanel
 from common import resource, gameInit
 
 
@@ -315,7 +315,7 @@ def main(bp: BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21523", is_mobile_device=False)
+    bp = BasePage("127.0.0.1:21553", is_mobile_device=True)
     main(bp)
     bp.connect_close()
 

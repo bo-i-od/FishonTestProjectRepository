@@ -732,6 +732,13 @@ class ElementsData:
         cotent_fishcard= {"locator": "UICanvas>Default>FishCardUpgradePanel>panel_upgrade>cotent_fishcard"}
         max_text = {"locator": "UICanvas>Default>FishCardUpgradePanel>panel_upgrade>Content>max_text"}
 
+    class FishingTipsPanel:
+        FishingTipsPanel = {"locator": "UICanvas>Default>FishingTipsPanel"}
+        btn_close = {"locator": "UICanvas>Default>FishingTipsPanel>panel>btn_close>img"}
+        tab_main_list = {"locator": "UICanvas>Default>FishingTipsPanel>panel>tab>TabList>Viewport>Content>>bg"}
+        tab_sub_list = {"locator": "UICanvas>Default>FishingTipsPanel>panel>>tab>>bg"}
+        btn_arrow = {"locator": "UICanvas>Default>FishingTipsPanel>panel>>tips>>btn_arrow>img"}
+
     class FisheryGiftPackPanel:
         FisheryGiftPackPanel = {"locator": "UICanvas>Default>FisheryGiftPackPanel"}
         btn_close = {"locator": "UICanvas>Default>FisheryGiftPackPanel>btn_close>img"}
@@ -846,12 +853,6 @@ class ElementsData:
         GearSkillTipsPanel = {"locator": "UICanvas>Default>GearSkillTipsPanel"}
         skill_icon = {"locator": "UICanvas>Default>GearSkillTipsPanel>panel>Content>title_group>rod_skill>rod_skill>icon_bg>icon"}
 
-
-
-
-
-
-
     class HomePanel:
         #panel_left
         HomePanel = {"locator": "UICanvas>Default>HomePanel"}
@@ -905,14 +906,8 @@ class ElementsData:
         # panel_giftpack
         btn_fishranking = {"locator": "UICanvas>Default>HomePanel>panel>panel_giftpack>list>Viewport>Content>btn_fishranking>img"}
         btn_store = {"locator": "UICanvas>Default>HomePanel>panel>panel_giftpack>list>Viewport>Content>btn_store>img"}
-        # Camera3D
-        btn_chest = {"locator": "HomeCanvas>Home3DPanel>panel>chest>btn_chest", "camera": "Camera3D"}
-        btn_pve = {"locator": "HomeCanvas>Home3DPanel>panel>panel_entrance>btn_pve>text", "camera": "Camera3D"}
-        btn_pvp = {"locator": "HomeCanvas>Home3DPanel>panel>panel_entrance>btn_pvp", "camera": "Camera3D"}
-        btn_avatar = {"locator": "HomeCanvas>Home3DPanel>panel>panel_avatar>btn_avatar", "camera": "Camera3D"}
         panel_left_btns = {"locator": "UICanvas>Default>HomePanel>panel>panel_left>list>Viewport>Content>>img"}
         panel_giftpack_btns = {"locator": "UICanvas>Default>HomePanel>panel>panel_giftpack>list>Viewport>Content>", "focus": (0, 0.5)}
-        panel_entrance_btns = {"locator": "HomeCanvas>Home3DPanel>panel>panel_entrance>", "camera": "Camera3D"}
         top_res_btns = {"locator": "UICanvas>Default>HomePanel>panel>top_res>ResourceBar>>btn_add"}
         navbar_btns = {"locator": "UICanvas>Default>HomePanel>panel>navbar>btns>"}
         btn_chat = {"locator": "UICanvas>Default>HomePanel>panel>panel_left>btn_chat"}
@@ -926,6 +921,14 @@ class ElementsData:
             btn_claim = {"locator": "UICanvas>Default>HomePanel>panel>panel_left>list>Panel_mini_task>Panel>btn_claim"}
             text_task = {"locator": "UICanvas>Default>HomePanel>panel>panel_left>list>Panel_mini_task>Panel>text"}
             progress = {"locator": "UICanvas>Default>HomePanel>panel>panel_left>list>Panel_mini_task>Panel>progress>value"}
+
+    class Home3DPanel:
+        Home3DPanel ={"locator": "HomeCanvas>Home3DPanel", "camera": "Camera3D"}
+        panel_entrance_btns = {"locator": "HomeCanvas>Home3DPanel>panel>panel_entrance>", "camera": "Camera3D"}
+        btn_chest = {"locator": "HomeCanvas>Home3DPanel>panel>chest>btn_chest", "camera": "Camera3D"}
+        btn_pve = {"locator": "HomeCanvas>Home3DPanel>panel>panel_entrance>btn_pve>text", "camera": "Camera3D"}
+        btn_pvp = {"locator": "HomeCanvas>Home3DPanel>panel>panel_entrance>btn_pvp", "camera": "Camera3D"}
+        btn_avatar = {"locator": "HomeCanvas>Home3DPanel>panel>panel_avatar>btn_avatar", "camera": "Camera3D"}
 
 
     class KatanaPackPopupPanel:

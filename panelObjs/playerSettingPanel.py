@@ -2,7 +2,7 @@ from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from tools.commonTools import *
 from common.viewport import Viewport
-from panelObjs.homePanel import HomePanel
+from panelObjs.HomePanel import HomePanel
 
 class PlayerSettingPanel(BasePage):
     def is_panel_active(self):

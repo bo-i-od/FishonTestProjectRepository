@@ -1,10 +1,10 @@
 from common import gameInit
 from common.basePage import BasePage
-from panelObjs.battlePreparePanel import BattlePreparePanel
-from panelObjs.homePanel import HomePanel
-from panelObjs.loadingFisheryPanel import LoadingFisheryPanel
-from panelObjs.rewardsPanel import RewardsPanel
-from panelObjs.tournamentsPanel import TournamentsPanel
+from panelObjs.BattlePreparePanel import BattlePreparePanel
+from panelObjs.HomePanel import HomePanel
+from panelObjs.LoadingFisheryPanel import LoadingFisheryPanel
+from panelObjs.RewardsPanel import RewardsPanel
+from panelObjs.TournamentsPanel import TournamentsPanel
 from scripts import battleTest
 from tools.commonTools import *
 
@@ -109,6 +109,6 @@ def main(bp: BasePage):
     bp.go_home()
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21533", is_mobile_device=False)
+    bp = BasePage("127.0.0.1:21553", is_mobile_device=True)
     main(bp)
     bp.connect_close()

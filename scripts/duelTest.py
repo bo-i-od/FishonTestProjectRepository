@@ -11,28 +11,28 @@ from common import gameInit
 from common.basePage import BasePage
 from common.error import FindNoElementError
 from netMsg import luaLog, csMsgAll
-from panelObjs.commonWebViewPanel import CommonWebViewPanel
-from panelObjs.divisionLeaderboardPanel import DivisionLeaderboardPanel
-from panelObjs.divisionListPanel import DivisionListPanel
-from panelObjs.loadingFisheryPanel import LoadingFisheryPanel
-from panelObjs.loadingPanel import LoadingPanel
-from panelObjs.messageBoxPanel import MessageBoxPanel
-from panelObjs.playerLevelupPanel import PlayerLevelupPanel
-from panelObjs.pvpBattleHUDPanel import PVPBattleHUDPanel
-from panelObjs.pvpHallPanel import PVPHallPanel
-from panelObjs.homePanel import HomePanel
-from panelObjs.battlePreparePanel import BattlePreparePanel
-from panelObjs.pvpMatchPanel import PVPMatchPanel
-from panelObjs.pvpResultPanel import PVPResultPanel
-from panelObjs.battlePanel import BattlePanel
-from panelObjs.pvpRoomPanel import PVPRoomPanel
-from panelObjs.resultPanel import ResultPanel
-from panelObjs.playerEditNamePanel import PlayerEditNamePanel
-from panelObjs.playerSettingPanel import PlayerSettingPanel
-from panelObjs.loginPanel import LoginPanel
-from panelObjs.battleFailedPanel import BattleFailedPanel
-from panelObjs.roulettePanel import RoulettePanel
-from panelObjs.tournamentsPanel import TournamentsPanel
+from panelObjs.CommonWebViewPanel import CommonWebViewPanel
+from panelObjs.DivisionLeaderboardPanel import DivisionLeaderboardPanel
+from panelObjs.DivisionListPanel import DivisionListPanel
+from panelObjs.LoadingFisheryPanel import LoadingFisheryPanel
+from panelObjs.LoadingPanel import LoadingPanel
+from panelObjs.MessageBoxPanel import MessageBoxPanel
+from panelObjs.PlayerLevelupPanel import PlayerLevelupPanel
+from panelObjs.PVPBattleHUDPanel import PVPBattleHUDPanel
+from panelObjs.PVPHallPanel import PVPHallPanel
+from panelObjs.HomePanel import HomePanel
+from panelObjs.BattlePreparePanel import BattlePreparePanel
+from panelObjs.PVPMatchPanel import PVPMatchPanel
+from panelObjs.PVPResultPanel import PVPResultPanel
+from panelObjs.BattlePanel import BattlePanel
+from panelObjs.PVPRoomPanel import PVPRoomPanel
+from panelObjs.ResultPanel import ResultPanel
+from panelObjs.PlayerEditNamePanel import PlayerEditNamePanel
+from panelObjs.PlayerSettingPanel import PlayerSettingPanel
+from panelObjs.LoginPanel import LoginPanel
+from panelObjs.BattleFailedPanel import BattleFailedPanel
+from panelObjs.RoulettePanel import RoulettePanel
+from panelObjs.TournamentsPanel import TournamentsPanel
 from scripts import battleTest, createUsers
 from scripts.battleTest import circulate_fish
 
@@ -231,13 +231,13 @@ def pvp_fish(bp, is_quick=False):
         cur += 1
     if cur >= 30:
         raise FindNoElementError("超时")
-    # duel_log = ""
-    # # 获取掉落列表
-    # duel_log += str(get_to_drops(bp)) + '\n'
-    # duel_log += str(get_avg_score(bp)) + '\n'
-    # duel_log += str(get_report(bp)) + '\n'
-    # duel_log += str(get_robot(bp)) + '\n'
-    # bp.log_list_duel.clear()
+    duel_log = ""
+    # 获取掉落列表
+    duel_log += str(get_to_drops(bp)) + '\n'
+    duel_log += str(get_avg_score(bp)) + '\n'
+    duel_log += str(get_report(bp)) + '\n'
+    duel_log += str(get_robot(bp)) + '\n'
+    bp.log_list_duel.clear()
 
     while True:
         # try:
@@ -254,6 +254,7 @@ def pvp_fish(bp, is_quick=False):
             # print(f"出鱼列表：{tpid_list}")
             # fish_type_list = bp.get_fish_type_list(fish_list=tpid_list)
             # print(f"体型列表：{fish_type_list}")
+
             bp.sleep(3)
             break
         # with bp.monitor.lock:
@@ -278,6 +279,7 @@ def pvp_fish(bp, is_quick=False):
         # tpid = luaLog.get_value(msg=target_log, key="tpId", is_str=False)
         # tpid_list.append(tpid)
         #
+        bp.sleep(3)
         if PVPResultPanel.is_panel_active(bp):
             # bp.log_list_flag = False
             # print(f"出鱼列表：{tpid_list}")
@@ -285,13 +287,13 @@ def pvp_fish(bp, is_quick=False):
             # print(f"体型列表：{fish_type_list}")
             bp.sleep(3)
             break
-    # duel_info = get_result(bp)
-    # duel_log += str(duel_info) + '\n'
-    # duel_log += str(get_chara(bp, duel_info)) + '\n'
-    # file_path = "C:/Users/TU/Desktop/duel/" + serial_number.split(':')[1] + '.txt'
-    # # 写入文件
-    # with open(file_path, "a", encoding="utf-8") as file:
-    #     file.write(duel_log)
+    duel_info = get_result(bp)
+    duel_log += str(duel_info) + '\n'
+    duel_log += str(get_chara(bp, duel_info)) + '\n'
+    file_path = "C:/Users/TU/Desktop/duel/" + serial_number.split(':')[1] + '.txt'
+    # 写入文件
+    with open(file_path, "a", encoding="utf-8") as file:
+        file.write(duel_log)
 
 
 
@@ -329,7 +331,7 @@ def point_cal(duelcup):
     end = 0.2 * duelcup + 3600
     return int(start), int(end)
 
-def duel_once(bp:BasePage, rank):
+def duel_once(bp:BasePage, rank, is_quick=False):
     # rank = random.randint(4, 5)
     # # rank = 0
     # clear_duelcup(bp)
@@ -352,8 +354,7 @@ def duel_once(bp:BasePage, rank):
     #     lambda: bp.go_to_panel("PVPHallPanel"),
     #     lambda: PVPHallPanel.click_btn_play(bp, rank)]
     # bp.try_actions(action_list=action_list)
-    pvp_fish(bp)
-    bp.sleep(5)
+    pvp_fish(bp, is_quick=is_quick)
     # PVPResultPanel.click_btn_open(bp)
     # bp.sleep(1)
     # result_right = PVPResultPanel.get_result_right(bp)
@@ -364,8 +365,6 @@ def duel_once(bp:BasePage, rank):
 
     # points_enemy = PVPResultPanel.get_points_enemy(bp)
     # points_mine = PVPResultPanel.get_points_mine(bp)
-    PVPResultPanel.click_tap_to_click(bp)
-    bp.sleep(1)
 
     # print(f"玩家分数：{points_mine}，机器人分数：{points_enemy}")
     # n = "符合预期"
@@ -506,12 +505,12 @@ def duel_test(bp, is_monitor=False):
             #
             # rank = set_duelcup(bp, duelcup=r)
 
-            bp.go_home()
 
             bp.go_to_panel("PVPHallPanel")
 
             btn_play_position_list = PVPHallPanel.get_btn_play_position_list(bp)
-            r = random.randint(0, len(btn_play_position_list) - 1)
+            r = 7
+            # r = random.randint(0, len(btn_play_position_list) - 1)
 
             # r_max = rank
             # r = random.randint(0, r_max * (r_max + 1) // 2)
@@ -540,10 +539,7 @@ def duel_test(bp, is_monitor=False):
             bp.set_item_count(item_tpid="100500", target_count=target_count)
 
             duel_once(bp, rank=r)
-            energy_end = bp.get_item_count(item_tpid="100500")
-            energy_cost = target_count - energy_end
-            if energy_end < 0:
-                print(f"实际体力消耗：{energy_cost}, 预期体力消耗：{target_count}")
+
 
     except Exception as e:
         try:
@@ -560,13 +556,21 @@ def duel_test(bp, is_monitor=False):
 
 
 if __name__ == '__main__':
-    serial_number = "127.0.0.1:21523"
+    serial_number = "127.0.0.1:21553"
     print(serial_number)
-    base_page = BasePage(serial_number=serial_number, is_mobile_device=True, is_monitor=True)
+
+    base_page = BasePage(serial_number=serial_number, is_mobile_device=False, is_monitor=True)
+    gameInit.set_joystick(base_page)
+    # duel_test(base_page, is_monitor=True)
     # base_page.cmd_list(["levelupto 69", "guideskip"])
-    # set_duelcup_random(base_page, rank=7)
+    set_duelcup_random(base_page, rank=7)
     # base_page.cmd("globalgm duelScene 400313")
-    # duel_once(base_page, rank=7)
+    # cur = 0
+    # while cur < 2:
+    #     duel_once(base_page, 7, is_quick=True)
+    #     cur += 1
+    #     print(f"第{cur}次钓鱼")
+    # main(base_page)
 
     base_page.connect_close()
     # set_duelcup_random(base_page, rank=7)

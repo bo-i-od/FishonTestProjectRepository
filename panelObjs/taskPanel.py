@@ -3,7 +3,7 @@ from configs.elementsData import ElementsData
 from tools.commonTools import *
 from common.viewport import Viewport
 from common import resource
-from panelObjs.itemTipsPanel import ItemTipsPanel
+from panelObjs.ItemTipsPanel import ItemTipsPanel
 
 
 class TaskPanel(BasePage):

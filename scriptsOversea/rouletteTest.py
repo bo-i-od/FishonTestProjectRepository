@@ -2,11 +2,11 @@ import sys
 
 from common.basePage import BasePage
 from netMsg import csMsgAll, luaLog
-from panelObjs.commonWebViewPanel import CommonWebViewPanel
-from panelObjs.playerLevelupPanel import PlayerLevelupPanel
-from panelObjs.pvpHallPanel import PVPHallPanel
-from panelObjs.rewardsPanel import RewardsPanel
-from panelObjs.roulettePanel import RoulettePanel
+from panelObjs.CommonWebViewPanel import CommonWebViewPanel
+from panelObjs.PlayerLevelupPanel import PlayerLevelupPanel
+from panelObjs.PVPHallPanel import PVPHallPanel
+from panelObjs.RewardsPanel import RewardsPanel
+from panelObjs.RoulettePanel import RoulettePanel
 from tools.commonTools import *
 from common import resource, gameInit
 

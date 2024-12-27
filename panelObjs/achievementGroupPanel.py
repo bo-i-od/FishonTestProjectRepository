@@ -1,9 +1,9 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from panelObjs.rewardsPanel import RewardsPanel
+from panelObjs.RewardsPanel import RewardsPanel
 from tools.commonTools import *
 from common import resource
-from panelObjs.rewardsPreviewPanel import RewardsPreviewPanel
+from panelObjs.RewardsPreviewPanel import RewardsPreviewPanel
 
 
 class AchievementGroupPanel(BasePage):

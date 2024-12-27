@@ -1,12 +1,12 @@
 import random
 from common import gameInit
 from common.basePage import BasePage
-from panelObjs.gearPanel import GearPanel
-from panelObjs.treasureChestPanel import TreasureChestPanel
-from panelObjs.storePanel import StorePanel
-from panelObjs.treasureChestRewardsPanel import TreasureChestRewardsPanel
-from panelObjs.treasureChestGearsShardsPanel import TreasureChestGearsShardsPanel
-from panelObjs.itemTipsPanel import ItemTipsPanel
+from panelObjs.GearPanel import GearPanel
+from panelObjs.TreasureChestPanel import TreasureChestPanel
+from panelObjs.StorePanel import StorePanel
+from panelObjs.TreasureChestRewardsPanel import TreasureChestRewardsPanel
+from panelObjs.TreasureChestGearsShardsPanel import TreasureChestGearsShardsPanel
+from panelObjs.ItemTipsPanel import ItemTipsPanel
 from tools.commonTools import *
 
 

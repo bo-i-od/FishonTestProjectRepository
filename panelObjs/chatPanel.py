@@ -1,6 +1,6 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from panelObjs.rewardsPanel import RewardsPanel
+from panelObjs.RewardsPanel import RewardsPanel
 from common import resource
 from tools.commonTools import *
 from common.viewport import Viewport

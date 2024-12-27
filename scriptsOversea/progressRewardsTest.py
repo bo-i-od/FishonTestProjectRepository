@@ -1,12 +1,12 @@
 import random
 from common.basePage import BasePage
-from panelObjs.battlePreparePanel import BattlePreparePanel
-from panelObjs.tournamentsPanel import TournamentsPanel
-from panelObjs.rewardsPanel import RewardsPanel
-from panelObjs.progressRewardsPanel import ProgressRewardsPanel
-from panelObjs.loadingPanel import LoadingPanel
-from panelObjs.loadingFisheryPanel import LoadingFisheryPanel
-from panelObjs.itemTipsPanel import ItemTipsPanel
+from panelObjs.BattlePreparePanel import BattlePreparePanel
+from panelObjs.TournamentsPanel import TournamentsPanel
+from panelObjs.RewardsPanel import RewardsPanel
+from panelObjs.ProgressRewardsPanel import ProgressRewardsPanel
+from panelObjs.LoadingPanel import LoadingPanel
+from panelObjs.LoadingFisheryPanel import LoadingFisheryPanel
+from panelObjs.ItemTipsPanel import ItemTipsPanel
 from common import resource, gameInit
 from scripts import battleTest
 from tools.commonTools import *

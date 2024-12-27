@@ -1,20 +1,20 @@
 import random
 
 from common import resource, gameInit
-from panelObjs.playerLevelupPanel import PlayerLevelupPanel
+from panelObjs.PlayerLevelupPanel import PlayerLevelupPanel
 
 from tools.commonTools import *
 from common.basePage import BasePage
-from panelObjs.newbieTaskPanel import NewbieTaskPanel
-from panelObjs.partySalePanel import PartySalePanel
-from panelObjs.baitAndRodShowPanel import BaitAndRodShowPanel
-from panelObjs.itemTipsPanel import ItemTipsPanel
-from panelObjs.rewardsPanel import RewardsPanel
-from panelObjs.leaderBoardPanel import LeaderBoardPanel
-from panelObjs.leaderBoardPopResultPanel import LeaderBoardPopResultPanel
-from panelObjs.fishCardPackTipsPanel import FishCardPackTipsPanel
-from panelObjs.loadingPanel import LoadingPanel
-from panelObjs.loadingFisheryPanel import LoadingFisheryPanel
+from panelObjs.NewbieTaskPanel import NewbieTaskPanel
+from panelObjs.PartySalePanel import PartySalePanel
+from panelObjs.BaitAndRodShowPanel import BaitAndRodShowPanel
+from panelObjs.ItemTipsPanel import ItemTipsPanel
+from panelObjs.RewardsPanel import RewardsPanel
+from panelObjs.LeaderBoardPanel import LeaderBoardPanel
+from panelObjs.LeaderBoardPopResultPanel import LeaderBoardPopResultPanel
+from panelObjs.FishCardPackTipsPanel import FishCardPackTipsPanel
+from panelObjs.LoadingPanel import LoadingPanel
+from panelObjs.LoadingFisheryPanel import LoadingFisheryPanel
 
 
 def party_sale_test(bp: BasePage):

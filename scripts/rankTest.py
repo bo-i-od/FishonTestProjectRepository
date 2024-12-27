@@ -1,9 +1,9 @@
 import random
 
 from common import gameInit
-from panelObjs.playerLevelupPanel import PlayerLevelupPanel
-from panelObjs.rankFishLeaderboardPanel import RankFishLeaderboardPanel
-from panelObjs.rankPanel import RankPanel
+from panelObjs.PlayerLevelupPanel import PlayerLevelupPanel
+from panelObjs.RankFishLeaderboardPanel import RankFishLeaderboardPanel
+from panelObjs.RankPanel import RankPanel
 from tools.commonTools import *
 from common.basePage import BasePage
 

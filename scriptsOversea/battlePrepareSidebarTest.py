@@ -1,21 +1,21 @@
 from common import gameInit
 from common.basePage import BasePage
-from panelObjs import fishAlbum3DPanel, flashCardBoxesPanel, fishCardPanel
-from panelObjs.achievementWantedPanel import AchievementWantedPanel
-from panelObjs.battlePreparePanel import BattlePreparePanel
-from panelObjs.careerPanel import CareerPanel
-from panelObjs.clubApplyPanel import ClubApplyPanel
-from panelObjs.friendPanel import FriendPanel
+from panelObjs import FishAlbum3DPanel, FlashCardBoxesPanel, FishCardPanel
+from panelObjs.AchievementWantedPanel import AchievementWantedPanel
+from panelObjs.BattlePreparePanel import BattlePreparePanel
+from panelObjs.CareerPanel import CareerPanel
+from panelObjs.ClubApplyPanel import ClubApplyPanel
+from panelObjs.FriendPanel import FriendPanel
 from panelObjs.gearNewPanel import GearNewPanel
-from panelObjs.homePanel import HomePanel
-from panelObjs.loadingFisheryPanel import LoadingFisheryPanel
-from panelObjs.loadingPanel import LoadingPanel
-from panelObjs.playerInfoPanel import PlayerInfoPanel
-from panelObjs.playerInteractPanel import PlayerInteractPanel
-from panelObjs.rankPanel import RankPanel
-from panelObjs.rewardsPanel import RewardsPanel
-from panelObjs.storePanel import StorePanel
-from panelObjs.tournamentsPanel import TournamentsPanel
+from panelObjs.HomePanel import HomePanel
+from panelObjs.LoadingFisheryPanel import LoadingFisheryPanel
+from panelObjs.LoadingPanel import LoadingPanel
+from panelObjs.PlayerInfoPanel import PlayerInfoPanel
+from panelObjs.PlayerInteractPanel import PlayerInteractPanel
+from panelObjs.RankPanel import RankPanel
+from panelObjs.RewardsPanel import RewardsPanel
+from panelObjs.StorePanel import StorePanel
+from panelObjs.TournamentsPanel import TournamentsPanel
 from scripts import battleTest
 from tools.commonTools import *
 

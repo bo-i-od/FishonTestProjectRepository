@@ -3,11 +3,11 @@ import random
 from common import resource
 from tools.commonTools import *
 from common.basePage import BasePage
-from panelObjs.newbieTaskPanel import NewbieTaskPanel
-from panelObjs.partySalePanel import PartySalePanel
-from panelObjs.baitAndRodShowPanel import BaitAndRodShowPanel
-from panelObjs.itemTipsPanel import ItemTipsPanel
-from panelObjs.rewardsPanel import RewardsPanel
+from panelObjs.NewbieTaskPanel import NewbieTaskPanel
+from panelObjs.PartySalePanel import PartySalePanel
+from panelObjs.BaitAndRodShowPanel import BaitAndRodShowPanel
+from panelObjs.ItemTipsPanel import ItemTipsPanel
+from panelObjs.RewardsPanel import RewardsPanel
 
 def party_sale_test(bp: BasePage):
     # 点击道具图标

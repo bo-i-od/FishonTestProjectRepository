@@ -2,12 +2,12 @@ import traceback
 from common import gameInit
 from common.basePage import BasePage
 from netMsg import csMsgAll
-from panelObjs.aquariumFishNewPanel import AquariumFishNewPanel
-from panelObjs.battlePreparePanel import BattlePreparePanel
-from panelObjs.loadingPanel import LoadingPanel
-from panelObjs.loginPanel import LoginPanel
-from panelObjs.tournamentsInfoPanel import TournamentsInfoPanel
-from panelObjs.tournamentsPanel import TournamentsPanel
+from panelObjs.AquariumFishNewPanel import AquariumFishNewPanel
+from panelObjs.BattlePreparePanel import BattlePreparePanel
+from panelObjs.LoadingPanel import LoadingPanel
+from panelObjs.LoginPanel import LoginPanel
+from panelObjs.TournamentsInfoPanel import TournamentsInfoPanel
+from panelObjs.TournamentsPanel import TournamentsPanel
 from scripts.battleTest import circulate_fish, fish_once
 from scripts.duelTest import duel_once
 
@@ -146,12 +146,12 @@ if __name__ == '__main__':
     #     duel_once(base_page, 0)
     #     cur += 1
     #     print(f"第{cur}次钓鱼")
-    # circulate_fish(bp=base_page, is_quick=False, times=30)
+    # circulate_fish(bp=base_page, is_quick=False, times=13)
     # base_page.sleep(3600)
     # aquarium(bp=base_page)
 
     while True:
         base_page = aquarium(base_page, is_monitor=True)
-        base_page = championship(base_page, 0, 10, cost=1, overflow_factor=1, is_monitor=True)
+        base_page = championship(base_page, 0, 10, cost=2, overflow_factor=1, is_monitor=True)
         # base_page.sleep(60)
         base_page = championship(base_page, 1, 10, cost=1, overflow_factor=1, is_monitor=True)

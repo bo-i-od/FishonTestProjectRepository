@@ -1,10 +1,10 @@
 from common import gameInit
 from common.basePage import BasePage
-from panelObjs.battlePreparePanel import BattlePreparePanel
-from panelObjs.homePanel import HomePanel
-from panelObjs.loadingFisheryPanel import LoadingFisheryPanel
-from panelObjs.rewardsPanel import RewardsPanel
-from panelObjs.tournamentsPanel import TournamentsPanel
+from panelObjs.BattlePreparePanel import BattlePreparePanel
+from panelObjs.HomePanel import HomePanel
+from panelObjs.LoadingFisheryPanel import LoadingFisheryPanel
+from panelObjs.RewardsPanel import RewardsPanel
+from panelObjs.TournamentsPanel import TournamentsPanel
 from scripts import battleTest
 from tools.commonTools import *
 

@@ -1,6 +1,5 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from common.resource import *
 
 
 class GearSkillTipsPanel(BasePage):

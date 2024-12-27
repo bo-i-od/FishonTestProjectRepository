@@ -2,14 +2,14 @@ import random
 
 from common import gameInit
 from common.resource import *
-from panelObjs.playerLevelupPanel import PlayerLevelupPanel
-from panelObjs.taskPanel import TaskPanel
-from panelObjs.rewardsPanel import RewardsPanel
-from panelObjs.itemTipsPanel import ItemTipsPanel
+from panelObjs.PlayerLevelupPanel import PlayerLevelupPanel
+from panelObjs.TaskPanel import TaskPanel
+from panelObjs.RewardsPanel import RewardsPanel
+from panelObjs.ItemTipsPanel import ItemTipsPanel
 from common.viewport import Viewport
 from common.basePage import BasePage
-from panelObjs.loadingFisheryPanel import LoadingFisheryPanel
-from panelObjs.loadingPanel import LoadingPanel
+from panelObjs.LoadingFisheryPanel import LoadingFisheryPanel
+from panelObjs.LoadingPanel import LoadingPanel
 
 
 def click_icon_test(bp:BasePage,task_id_list:list, viewport:Viewport):

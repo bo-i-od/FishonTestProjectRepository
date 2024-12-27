@@ -1,10 +1,10 @@
 import random
 from common.basePage import BasePage
-from panelObjs.fisheryGiftPackPanel import FisheryGiftPackPanel
-from panelObjs.fishCardPackTipsPanel import FishCardPackTipsPanel
-from panelObjs.rewardsPanel import RewardsPanel
-from panelObjs.itemTipsPanel import ItemTipsPanel
-from panelObjs.baitAndRodShowPanel import BaitAndRodShowPanel
+from panelObjs.FisheryGiftPackPanel import FisheryGiftPackPanel
+from panelObjs.FishCardPackTipsPanel import FishCardPackTipsPanel
+from panelObjs.RewardsPanel import RewardsPanel
+from panelObjs.ItemTipsPanel import ItemTipsPanel
+from panelObjs.BaitAndRodShowPanel import BaitAndRodShowPanel
 from tools.commonTools import *
 from common import resource
 

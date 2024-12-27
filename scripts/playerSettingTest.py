@@ -3,11 +3,11 @@ import time
 
 from common import gameInit
 from common.resource import *
-from panelObjs.playerSettingPanel import PlayerSettingPanel
+from panelObjs.PlayerSettingPanel import PlayerSettingPanel
 from common.basePage import BasePage
-from panelObjs.messageBoxPanel import MessageBoxPanel
-from panelObjs.rewardsPanel import RewardsPanel
-from panelObjs.homePanel import HomePanel
+from panelObjs.MessageBoxPanel import MessageBoxPanel
+from panelObjs.RewardsPanel import RewardsPanel
+from panelObjs.HomePanel import HomePanel
 import datetime
 
 

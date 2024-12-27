@@ -1,5 +1,3 @@
-import random
-
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 

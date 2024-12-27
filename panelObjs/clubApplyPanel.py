@@ -1,7 +1,7 @@
 from common.basePage import BasePage
 from common.resource import make_item_dict
 from configs.elementsData import ElementsData
-from panelObjs.rewardsPanel import RewardsPanel
+from panelObjs.RewardsPanel import RewardsPanel
 from common import resource
 from tools.commonTools import *
 

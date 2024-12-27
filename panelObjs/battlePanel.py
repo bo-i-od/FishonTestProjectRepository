@@ -1,8 +1,8 @@
 from poco.utils.simplerpc.utils import RemoteError
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from panelObjs.flashCardReceivePanel import FlashCardReceivePanel
-from panelObjs.resultPanel import ResultPanel
+from panelObjs.FlashCardReceivePanel import FlashCardReceivePanel
+from panelObjs.ResultPanel import ResultPanel
 from tools.commonTools import *
 class BattlePanel(BasePage):
     def is_panel_active(self):

@@ -1,14 +1,14 @@
 from common.basePage import BasePage
 import random
 
-from panelObjs.achievementCategoryPanel import AchievementCategoryPanel
-from panelObjs.flashTipsPanel import FlashTipsPanel
-from panelObjs.playerLevelupPanel import PlayerLevelupPanel
+from panelObjs.AchievementCategoryPanel import AchievementCategoryPanel
+from panelObjs.FlashTipsPanel import FlashTipsPanel
+from panelObjs.PlayerLevelupPanel import PlayerLevelupPanel
 from tools.commonTools import *
 
-from panelObjs.achievementPanel import AchievementPanel
-from panelObjs.itemTipsPanel import ItemTipsPanel
-from panelObjs.rewardsPanel import RewardsPanel
+from panelObjs.AchievementPanel import AchievementPanel
+from panelObjs.ItemTipsPanel import ItemTipsPanel
+from panelObjs.RewardsPanel import RewardsPanel
 from common import gameInit
 
 

@@ -3,14 +3,14 @@ from common.basePage import BasePage
 from netMsg import csMsgAll, fishingMsg
 from netMsg.luaLog import get_value
 
-from panelObjs.battlePreparePanel import BattlePreparePanel
-from panelObjs.flashCardReceivePanel import FlashCardReceivePanel
-from panelObjs.loadingPanel import LoadingPanel
-from panelObjs.loginPanel import LoginPanel
-from panelObjs.resultPanel import ResultPanel
-from panelObjs.battlePanel import BattlePanel
+from panelObjs.BattlePreparePanel import BattlePreparePanel
+from panelObjs.FlashCardReceivePanel import FlashCardReceivePanel
+from panelObjs.LoadingPanel import LoadingPanel
+from panelObjs.LoginPanel import LoginPanel
+from panelObjs.ResultPanel import ResultPanel
+from panelObjs.BattlePanel import BattlePanel
 from threading import Thread
-from panelObjs.tournamentsPanel import TournamentsPanel
+from panelObjs.TournamentsPanel import TournamentsPanel
 
 
 
@@ -399,14 +399,14 @@ def main(bp: BasePage, fishery_id, is_double_week=False, is_in_double_week=False
 
 if __name__ == '__main__':
     # 连接设备号为127.0.0.1:21533的设备
-    bp = BasePage("127.0.0.1:21523", is_mobile_device=True)
+    bp = BasePage("127.0.0.1:21553", is_mobile_device=True)
     bp.is_time_scale = False
     gameInit.set_joystick(bp)
     bp.custom_cmd("setTension 0.9")
     # bp.set_item_count(target_count=1000000000, item_tpid="100500")
 
-    # main(bp, fishery_id="400321",  is_double_week=True, is_in_double_week=True)
-    circulate_fish(bp, is_quick=False, fishery_id="400322")
+    main(bp, fishery_id="400321",  is_double_week=True, is_in_double_week=True)
+    circulate_fish(bp, is_quick=False)
     # fish_all(bp, is_quick=False)
     # fish_once(bp, is_quick=False)
     # 断开连接

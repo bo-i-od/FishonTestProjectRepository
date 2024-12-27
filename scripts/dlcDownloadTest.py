@@ -2,9 +2,9 @@ import random
 
 from common import gameInit
 from common.basePage import BasePage
-from panelObjs.dlcDownloadPanel import DLCDownloadPanel
-from panelObjs.rewardsPanel import RewardsPanel
-from panelObjs.itemTipsPanel import ItemTipsPanel
+from panelObjs.DLCDownloadPanel import DLCDownloadPanel
+from panelObjs.RewardsPanel import RewardsPanel
+from panelObjs.ItemTipsPanel import ItemTipsPanel
 from tools.commonTools import *
 
 def main(bp: BasePage):

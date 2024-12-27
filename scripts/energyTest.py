@@ -2,10 +2,10 @@ import random
 
 from common import gameInit
 from common.basePage import BasePage
-from panelObjs.bugMultiplePanel import BugMultiplePanel
-from panelObjs.buyEnergyPanel import BuyEnergyPanel
-from panelObjs.itemTipsPanel import ItemTipsPanel
-from panelObjs.rewardsPanel import RewardsPanel
+from panelObjs.BugMultiplePanel import BugMultiplePanel
+from panelObjs.BuyEnergyPanel import BuyEnergyPanel
+from panelObjs.ItemTipsPanel import ItemTipsPanel
+from panelObjs.RewardsPanel import RewardsPanel
 from tools.commonTools import *
 
 def energy_drink_single_test(bp: BasePage):
@@ -230,8 +230,8 @@ def main(bp: BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21533", is_mobile_device=False)
-    energy_drink_multiple_test(bp)
+    bp = BasePage("127.0.0.1:21543", is_mobile_device=True)
+    main(bp)
     bp.connect_close()
 
 

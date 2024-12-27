@@ -1,10 +1,10 @@
 import random
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from panelObjs.itemTipsPanel import ItemTipsPanel
-from panelObjs.baitAndRodShowPanel import BaitAndRodShowPanel
-from panelObjs.recharge1And1Panel import Recharge1And1Panel
-from panelObjs.rewardsPanel import RewardsPanel
+from panelObjs.ItemTipsPanel import ItemTipsPanel
+from panelObjs.BaitAndRodShowPanel import BaitAndRodShowPanel
+from panelObjs.Recharge1And1Panel import Recharge1And1Panel
+from panelObjs.RewardsPanel import RewardsPanel
 from common.resource import *
 def click_icon_test(bp: BasePage):
     item_position_list = Recharge1And1Panel.get_item_position_list(bp)

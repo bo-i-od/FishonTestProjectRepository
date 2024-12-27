@@ -1,6 +1,5 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from tools.commonTools import *
 
 class MessageBoxPanel(BasePage):
     def click_btn_cancel(self):

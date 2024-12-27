@@ -1,11 +1,11 @@
 import random
 from common.basePage import BasePage
-from panelObjs.playerLevelupPanel import PlayerLevelupPanel
-from panelObjs.storePanel import StorePanel
-from panelObjs.itemTipsPanel import ItemTipsPanel
-from panelObjs.rewardsPanel import RewardsPanel
-from panelObjs.baitAndRodShowPanel import BaitAndRodShowPanel
-from panelObjs.fishCardPackTipsPanel import FishCardPackTipsPanel
+from panelObjs.PlayerLevelupPanel import PlayerLevelupPanel
+from panelObjs.StorePanel import StorePanel
+from panelObjs.ItemTipsPanel import ItemTipsPanel
+from panelObjs.RewardsPanel import RewardsPanel
+from panelObjs.BaitAndRodShowPanel import BaitAndRodShowPanel
+from panelObjs.FishCardPackTipsPanel import FishCardPackTipsPanel
 from tools.commonTools import *
 from common import resource, gameInit
 

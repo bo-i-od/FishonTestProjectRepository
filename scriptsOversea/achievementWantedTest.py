@@ -1,17 +1,17 @@
 from common.basePage import BasePage
 import random
 
-from panelObjs.achievementWantedPanel import AchievementWantedPanel
-from panelObjs.flashTipsPanel import FlashTipsPanel
-from panelObjs.playerLevelupPanel import PlayerLevelupPanel
+from panelObjs.AchievementWantedPanel import AchievementWantedPanel
+from panelObjs.FlashTipsPanel import FlashTipsPanel
+from panelObjs.PlayerLevelupPanel import PlayerLevelupPanel
 from tools.commonTools import *
 
-from panelObjs.achievementPanel import AchievementPanel
-from panelObjs.itemTipsPanel import ItemTipsPanel
-from panelObjs.rewardsPanel import RewardsPanel
-from panelObjs.rewardsPreviewPanel import RewardsPreviewPanel
-from panelObjs.loadingFisheryPanel import LoadingFisheryPanel
-from panelObjs.loadingPanel import LoadingPanel
+from panelObjs.AchievementPanel import AchievementPanel
+from panelObjs.ItemTipsPanel import ItemTipsPanel
+from panelObjs.RewardsPanel import RewardsPanel
+from panelObjs.RewardsPreviewPanel import RewardsPreviewPanel
+from panelObjs.LoadingFisheryPanel import LoadingFisheryPanel
+from panelObjs.LoadingPanel import LoadingPanel
 from common import resource, gameInit
 
 

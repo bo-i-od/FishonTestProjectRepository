@@ -1,6 +1,6 @@
 import os
 import re
-import keyword
+
 
 from configs.pathConfig import thrift2py_folder_path
 
@@ -48,6 +48,9 @@ def gen_py(thrift_data):
     cur = 0
     while cur < len(struct_list):
         struct = struct_list[cur]
+
+        # 一个结构体生成一个对应的消息生成方法
+        # 然后加到一起
         code += gen_py_function(struct)
         cur += 1
 
@@ -219,17 +222,24 @@ def gen_test_py_function(struct):
 
 
 def main():
+    # 获取协议文件名
     file_list = os.listdir(folder_path)
     code = ""
     for file in file_list:
         if file[-9:] != "cs.thrift":
             continue
+        # 获取协议内容
+        # 包括1.文件名 2.结构体名及其变量名和类型
         thrift_data = get_thrift_data(file)
+
+        # 生成协议转换代码
         code += gen_py(thrift_data)
-    # print(code)
+
+    # 写入到csMsgAll.py中
     with open("csMsgAll.py", 'w') as f:
         f.write(code)
 
+    # 生成测试代码
     # 分别取到字典和方法进行累加
     code_dict, code_function = "", ""
     code_main = """\n\n

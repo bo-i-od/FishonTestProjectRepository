@@ -6,12 +6,12 @@ from airtest.core.api import connect_device,  install, Template, start_app, shel
 from airtest.core.helper import G
 from poco.drivers.android.uiautomation import AndroidUiautomationPoco
 
-from panelObjs.avatarSelectPanel import AvatarSelectPanel
-from panelObjs.loginPanel import LoginPanel
-from panelObjs.homePanel import HomePanel
-from panelObjs.loadingPanel import LoadingPanel
+from panelObjs.AvatarSelectPanel import AvatarSelectPanel
+from panelObjs.LoginPanel import LoginPanel
+from panelObjs.HomePanel import HomePanel
+from panelObjs.LoadingPanel import LoadingPanel
 from common.basePage import BasePage
-from panelObjs.playerEditNamePanel import PlayerEditNamePanel
+from panelObjs.PlayerEditNamePanel import PlayerEditNamePanel
 import requests
 from requests.auth import HTTPBasicAuth
 from time import sleep
@@ -46,7 +46,7 @@ def login(bp: BasePage, username):
     # while not LoginPanel.is_panel_active(bp):
     #     EntryUpdateLoading.click_tap_to_start(bp)
     # 选服务器 输入名称 点击登录
-    LoginPanel.set_server(bp, 5)
+    LoginPanel.set_server(bp, 1)
     LoginPanel.set_login_name(bp, username)
     LoginPanel.click_btn_login(bp)
     bp.sleep(2)

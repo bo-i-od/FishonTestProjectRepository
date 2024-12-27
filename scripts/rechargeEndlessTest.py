@@ -1,14 +1,14 @@
 import random
 
 from common import gameInit
-from panelObjs.eventsGiftCenterPanel import EventsGiftCenterPanel
-from panelObjs.fishCardPackTipsPanel import FishCardPackTipsPanel
-from panelObjs.playerLevelupPanel import PlayerLevelupPanel
+from panelObjs.EventsGiftCenterPanel import EventsGiftCenterPanel
+from panelObjs.FishCardPackTipsPanel import FishCardPackTipsPanel
+from panelObjs.PlayerLevelupPanel import PlayerLevelupPanel
 from tools.commonTools import *
 from common.basePage import BasePage
-from panelObjs.rewardsPanel import RewardsPanel
-from panelObjs.itemTipsPanel import ItemTipsPanel
-from panelObjs.rechargeEndlessPanel import RechargeEndlessPanel
+from panelObjs.RewardsPanel import RewardsPanel
+from panelObjs.ItemTipsPanel import ItemTipsPanel
+from panelObjs.RechargeEndlessPanel import RechargeEndlessPanel
 from configs.elementsData import ElementsData
 
 

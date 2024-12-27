@@ -3,9 +3,9 @@ import random
 from common import gameInit
 from common.basePage import BasePage
 from common.viewport import Viewport
-from panelObjs.careerPanel import CareerPanel
-from panelObjs.messageBoxPanel import MessageBoxPanel
-from panelObjs.playerLevelupPanel import PlayerLevelupPanel
+from panelObjs.CareerPanel import CareerPanel
+from panelObjs.MessageBoxPanel import MessageBoxPanel
+from panelObjs.PlayerLevelupPanel import PlayerLevelupPanel
 
 
 # 检查标题tips

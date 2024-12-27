@@ -1,17 +1,17 @@
 import random
 from common.basePage import BasePage
 from netMsg import csMsgAll
-from panelObjs.commonItemGetPanel import CommonItemGetPanel
-from panelObjs.playerLevelupPanel import PlayerLevelupPanel
+from panelObjs.CommonItemGetPanel import CommonItemGetPanel
+from panelObjs.PlayerLevelupPanel import PlayerLevelupPanel
 from tools.commonTools import *
 from common import resource, gameInit
-from panelObjs.gearPanel import GearPanel
-from panelObjs.gearLevelupPanel import GearLevelupPanel
-from panelObjs.gearEnhancePanel import GearEnhancePanel
-from panelObjs.storePanel import StorePanel
-from panelObjs.gearSkillTipsPanel import GearSkillTipsPanel
-from panelObjs.gearEnhanceSuccesPanel import GearEnhanceSuccesPanel
-from panelObjs.flashTipsPanel import FlashTipsPanel
+from panelObjs.GearPanel import GearPanel
+from panelObjs.GearLevelupPanel import GearLevelupPanel
+from panelObjs.GearEnhancePanel import GearEnhancePanel
+from panelObjs.StorePanel import StorePanel
+from panelObjs.GearSkillTipsPanel import GearSkillTipsPanel
+from panelObjs.GearEnhanceSuccesPanel import GearEnhanceSuccesPanel
+from panelObjs.FlashTipsPanel import FlashTipsPanel
 
 
 def lock_test(bp: BasePage):
@@ -428,7 +428,7 @@ def main(bp: BasePage):
 
 
 if __name__ == "__main__":
-    bp = BasePage("127.0.0.1:21553", is_mobile_device=True)
+    bp = BasePage("127.0.0.1:21573", is_mobile_device=True)
     # main(bp)
 
     one_star(bp)

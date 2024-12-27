@@ -1,15 +1,15 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from panelObjs.achievementWantedPanel import AchievementWantedPanel
-from panelObjs.battlePreparePanel import BattlePreparePanel
-from panelObjs.gearLevelupPanel import GearLevelupPanel
-from panelObjs.gearPanel import GearPanel
-from panelObjs.pveMultiRoomFriendPanel import PVEMultiRoomFriendPanel
+from panelObjs.AchievementWantedPanel import AchievementWantedPanel
+from panelObjs.BattlePreparePanel import BattlePreparePanel
+from panelObjs.GearLevelupPanel import GearLevelupPanel
+from panelObjs.GearPanel import GearPanel
+from panelObjs.PVEMultiRoomFriendPanel import PVEMultiRoomFriendPanel
 from tools.commonTools import *
-from panelObjs.baitAndRodShowPanel import BaitAndRodShowPanel
-from panelObjs.treasureChestPanel import TreasureChestPanel
+from panelObjs.BaitAndRodShowPanel import BaitAndRodShowPanel
+from panelObjs.TreasureChestPanel import TreasureChestPanel
 from threading import Thread
-from panelObjs.battlePanel import BattlePanel
+from panelObjs.BattlePanel import BattlePanel
 
 
 class NewbieGuidePanel(BasePage):

@@ -1,6 +1,6 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from panelObjs.tournamentsPanel import TournamentsPanel
+from panelObjs.TournamentsPanel import TournamentsPanel
 from scripts import battleTest
 from tools.commonTools import *
 from common.viewport import Viewport

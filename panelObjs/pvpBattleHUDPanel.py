@@ -1,6 +1,5 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from tools.commonTools import *
 
 class PVPBattleHUDPanel(BasePage):
     def is_panel_active(self):

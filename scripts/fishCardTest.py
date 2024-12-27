@@ -1,19 +1,19 @@
 import random
 from common.basePage import BasePage
 from netMsg import csMsgAll
-from panelObjs.eventsGiftCenterPanel import EventsGiftCenterPanel
-from panelObjs.fishCardMultipleLevelUpPanel import FishCardMultipleLevelUpPanel
-from panelObjs.achievementPopupPanel import AchievementPopupPanel
-from panelObjs.commonItemGetPanel import CommonItemGetPanel
-from panelObjs.fishCardMultipleLevelUpSuccessPanel import FishCardMultipleLevelUpSuccessPanel
-from panelObjs.fishCardPanel import FishCardPanel
-from panelObjs.fishCardUpgradePanel import FishCardUpgradePanel
-from panelObjs.fishCardGiftPackCustomizePanel import FishCardGiftPackCustomizePanel
-from panelObjs.playerLevelupPanel import PlayerLevelupPanel
-from panelObjs.rewardsPanel import RewardsPanel
-from panelObjs.itemTipsPanel import ItemTipsPanel
-from panelObjs.fishCardPackTipsPanel import FishCardPackTipsPanel
-from panelObjs.storePanel import StorePanel
+from panelObjs.EventsGiftCenterPanel import EventsGiftCenterPanel
+from panelObjs.FishCardMultipleLevelUpPanel import FishCardMultipleLevelUpPanel
+from panelObjs.AchievementPopupPanel import AchievementPopupPanel
+from panelObjs.CommonItemGetPanel import CommonItemGetPanel
+from panelObjs.FishCardMultipleLevelUpSuccessPanel import FishCardMultipleLevelUpSuccessPanel
+from panelObjs.FishCardPanel import FishCardPanel
+from panelObjs.FishCardUpgradePanel import FishCardUpgradePanel
+from panelObjs.FishCardGiftPackCustomizePanel import FishCardGiftPackCustomizePanel
+from panelObjs.PlayerLevelupPanel import PlayerLevelupPanel
+from panelObjs.RewardsPanel import RewardsPanel
+from panelObjs.ItemTipsPanel import ItemTipsPanel
+from panelObjs.FishCardPackTipsPanel import FishCardPackTipsPanel
+from panelObjs.StorePanel import StorePanel
 from common import resource, gameInit
 from tools.commonTools import *
 

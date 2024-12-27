@@ -2,8 +2,8 @@ import random
 
 from common import gameInit
 from common.basePage import BasePage
-from panelObjs.buyEnergyPanel import BuyEnergyPanel
-from panelObjs.rewardsPanel import RewardsPanel
+from panelObjs.BuyEnergyPanel import BuyEnergyPanel
+from panelObjs.RewardsPanel import RewardsPanel
 from tools.commonTools import *
 
 def energy_drink_test(bp: BasePage):

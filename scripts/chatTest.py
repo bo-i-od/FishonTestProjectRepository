@@ -4,8 +4,8 @@ import uuid
 import six
 
 from common.basePage import BasePage
-from panelObjs.chatPanel import ChatPanel
-from panelObjs.flashTipsPanel import FlashTipsPanel
+from panelObjs.ChatPanel import ChatPanel
+from panelObjs.FlashTipsPanel import FlashTipsPanel
 
 
 def send_test(bp: BasePage):

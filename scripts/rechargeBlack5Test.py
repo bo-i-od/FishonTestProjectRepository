@@ -1,9 +1,9 @@
 import random
 from common.basePage import BasePage
 from tools.commonTools import *
-from panelObjs.itemTipsPanel import ItemTipsPanel
-from panelObjs.rechargeBlack5Panel import RechargeBlack5Panel
-from panelObjs.rewardsPanel import RewardsPanel
+from panelObjs.ItemTipsPanel import ItemTipsPanel
+from panelObjs.RechargeBlack5Panel import RechargeBlack5Panel
+from panelObjs.RewardsPanel import RewardsPanel
 from common import resource
 
 

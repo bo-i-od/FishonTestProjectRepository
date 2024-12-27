@@ -1,10 +1,10 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from panelObjs.achievementPanel import AchievementPanel
-from panelObjs.battlePanel import BattlePanel
-from panelObjs.battlePreparePanel import BattlePreparePanel
-from panelObjs.loadingFisheryPanel import LoadingFisheryPanel
-from panelObjs.tournamentsPanel import TournamentsPanel
+from panelObjs.AchievementPanel import AchievementPanel
+from panelObjs.BattlePanel import BattlePanel
+from panelObjs.BattlePreparePanel import BattlePreparePanel
+from panelObjs.LoadingFisheryPanel import LoadingFisheryPanel
+from panelObjs.TournamentsPanel import TournamentsPanel
 from scripts import battleTest
 from tools.commonTools import *
 
