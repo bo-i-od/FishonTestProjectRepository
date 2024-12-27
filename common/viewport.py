@@ -1,4 +1,4 @@
-from common.basePage import BasePage
+# from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from tools.commonTools import merge_list
 
@@ -174,7 +174,7 @@ if __name__ == "__main__":
 
     bp = BasePage()
     # viewport = Viewport(bp, ElementsData.Login.DropdownList_Viewport, ElementsData.Login.DropdownList)
-    viewport = Viewport(bp, ElementsData.BattlePass.Viewport, ElementsData.BattlePass.reward_icon_list)
+    viewport = Viewport(bp, ElementsData.BattlePassPanel.Viewport, ElementsData.BattlePassPanel.reward_icon_list)
     index = 80
     viewport.move_until_appear(viewport.item_id_list[index])
 
