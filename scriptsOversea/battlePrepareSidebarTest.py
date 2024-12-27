@@ -6,7 +6,7 @@ from panelObjs.BattlePreparePanel import BattlePreparePanel
 from panelObjs.CareerPanel import CareerPanel
 from panelObjs.ClubApplyPanel import ClubApplyPanel
 from panelObjs.FriendPanel import FriendPanel
-from panelObjs.gearNewPanel import GearNewPanel
+from panelObjs.GearNewPanel import GearNewPanel
 from panelObjs.HomePanel import HomePanel
 from panelObjs.LoadingFisheryPanel import LoadingFisheryPanel
 from panelObjs.LoadingPanel import LoadingPanel

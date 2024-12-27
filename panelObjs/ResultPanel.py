@@ -1,8 +1,8 @@
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
-from panelObjs.battleFailedPanel import BattleFailedPanel
-from panelObjs.flashCardReceivePanel import FlashCardReceivePanel
-from panelObjs.rewardsPanel import RewardsPanel
+from panelObjs.BattleFailedPanel import BattleFailedPanel
+from panelObjs.FlashCardReceivePanel import FlashCardReceivePanel
+from panelObjs.RewardsPanel import RewardsPanel
 
 
 class ResultPanel(BasePage):
