@@ -4,11 +4,7 @@ from .AchievementPanel import AchievementPanel
 from .AchievementPopupPanel import AchievementPopupPanel
 from .AchievementWantedPanel import AchievementWantedPanel
 from .AlbumFishDetailPanel import AlbumFishDetailPanel
-from .AquariumBuildMainPanel import AquariumBuildMainPanel
-from .AquariumBuildPanel import AquariumBuildPanel
 from .AquariumFishNewPanel import AquariumFishNewPanel
-from .AquariumFishPanel import AquariumFishPanel
-from .AquariumPanel import AquariumPanel
 from .AvatarMainPanel import AvatarMainPanel
 from .AvatarSelectPanel import AvatarSelectPanel
 from .BaitAndRodShowPanel import BaitAndRodShowPanel

@@ -3,9 +3,6 @@ import random
 from common.basePage import BasePage
 from netMsg import fishingMsg
 from panelObjs.AlbumFishDetailPanel import AlbumFishDetailPanel
-from panelObjs.AquariumBuildMainPanel import AquariumBuildMainPanel
-from panelObjs.AquariumBuildPanel import AquariumBuildPanel
-from panelObjs.AquariumFishPanel import AquariumFishPanel
 from panelObjs.AvatarSelectPanel import AvatarSelectPanel
 from panelObjs.BattleFailedPanel import BattleFailedPanel
 from panelObjs.BattlePanel import BattlePanel
@@ -52,7 +49,6 @@ from panelObjs.TreasureChestRewardsPanel import TreasureChestRewardsPanel
 from scripts import guideTest, playerInfoTest
 from panelObjs.PlayerSettingPanel import PlayerSettingPanel
 from panelObjs.FishAlbum3DPanel import FishAlbum3DPanel
-from panelObjs.AquariumPanel import AquariumPanel
 from panelObjs.StorePanel import StorePanel
 from panelObjs.BaitAndRodShowPanel import BaitAndRodShowPanel
 from panelObjs.RewardsPanel import RewardsPanel

@@ -983,10 +983,12 @@ class BasePageMain:
         self.click_position_base(position_list[0])
         return position_list[0]
 
-    def click_object_of_plural_objects(self, object_id_list: list = None, element_data: dict = None, index=-1, element_viewport: dict =None,  viewport_direction=None, viewport_range=None, viewport_edge=None):
+    def click_object_of_plural_objects(self, object_id_list: list = None, element_data: dict = None, index=-1, viewport: Viewport = None, element_viewport: dict = None,  viewport_direction=None, viewport_range=None, viewport_edge=None, ignore_set=None):
+
         if element_viewport:
             viewport = Viewport(self, element_viewport=element_viewport, element_item_list=element_data, item_id_list=object_id_list, viewport_direction=viewport_direction, viewport_range=viewport_range, viewport_edge=viewport_edge)
-            # 如果index没有赋合法值，就随机点击一个
+
+        if viewport:
             if index < 0:
                 index = random.randint(0, len(viewport.item_id_list) - 1)
             target_id = viewport.item_id_list[index]
@@ -996,7 +998,7 @@ class BasePageMain:
         # 如果index没有赋合法值，就随机点击一个
         if index < 0:
             index = random.randint(0, len(position_list) - 1)
-        self.click_position(position=position_list[index])
+        self.click_position(position=position_list[index],ignore_set=ignore_set)
 
     # 在b元素出现前一直尝试点击a元素
     def click_a_until_b_appear(self, element_data_a: dict, element_data_b: dict, interval: float = 0.5, ignore_set=None):
@@ -1181,6 +1183,8 @@ class BasePageMain:
             if panel_name == "FishBagPanel":
                 self.click_position_base([0.5, 0.5])
                 self.sleep(0.5)
+            if "close_path" not in JumpData.panel_dict[panel_name]:
+                continue
             for close_element in JumpData.panel_dict[panel_name]["close_path"]:
                 self.click_element_safe(element_data=close_element)
                 self.sleep(1)

@@ -72,8 +72,23 @@ class AchievementCategoryPanel(BasePage):
     def click_btn_rewards(self):
         self.click_element(element_data=ElementsData.AchievementCategoryPanel.btn_rewards)
 
+    def click_reward_icon(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.AchievementCategoryPanel.reward_icon_list, index=index)
+
+    def click_category(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.AchievementCategoryPanel.item_list, index=index, element_viewport=ElementsData.AchievementCategoryPanel.category_viewport, viewport_direction="column")
+
+    operation_pool = [
+        {"element_data": ElementsData.AchievementCategoryPanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.AchievementCategoryPanel.reward_icon_list, "func": click_reward_icon, "weight": 2},
+        {"element_data": ElementsData.AchievementCategoryPanel.item_list, "func": click_category, "weight": 2},
+        ]
+
 if __name__ == '__main__':
     bp = BasePage()
-    a = bp.click_element(element_data=ElementsData.NewbieGuidePanel.NBG_system_club_apply)
-    print(a)
+
+    # AchievementCategoryPanel.click_reward_icon(bp)
+    #
+    AchievementCategoryPanel.click_category(bp, index=6)
+
     bp.connect_close()

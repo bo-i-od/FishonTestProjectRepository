@@ -1,3 +1,5 @@
+import random
+
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from tools.commonTools import *
@@ -82,23 +84,32 @@ class AchievementPanel(BasePage):
         group_name = self.get_text(object_id=group_name_id)
         return group_name
 
-    def switch_tab(self, index):
+    def switch_tab(self, index=-1):
         position_list = self.get_position_list(element_data=ElementsData.AchievementPanel.tab_list)
+        if index < 0:
+            index = random.randint(0, len(position_list) - 1)
         self.click_position(position_list[index])
 
+    def click_achievement(self, index=-1):
+        viewport = AchievementPanel.get_viewport(self)
+        self.click_object_of_plural_objects(element_data=ElementsData.AchievementPanel.achievement_list, index=index, viewport=viewport)
 
+    operation_pool = [
+        {"element_data": ElementsData.AchievementPanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.AchievementPanel.tab_list, "func": switch_tab, "weight": 2},
+        {"element_data": ElementsData.AchievementPanel.achievement_list, "func": click_achievement, "weight": 4},
+        {"element_data": ElementsData.AchievementPanel.task_mini_icon, "func": click_task_mini, "weight": 2},
+        {"element_data": ElementsData.AchievementPanel.btn_i, "func": click_btn_i, "weight": 2},
+        ]
 
 
 
 
 if __name__ == '__main__':
     bp = BasePage("R5CT22NJ44H")
-    a = bp.get_size_list(element_data=ElementsData.AchievementPanel.achievement_list)
-    achievement_id_list = bp.get_object_id_list(element_data=ElementsData.AchievementPanel.achievement_list)
-    print(bp.get_position_list(element_data=ElementsData.AchievementPanel.achievement_list))
-    print(bp.get_position_list(object_id_list=achievement_id_list))
-    print(AchievementPanel.get_viewport(bp).viewport_range)
-    print(a)
+    AchievementPanel.click_achievement(bp, index=0)
+
+    bp.connect_close()
 
 
 

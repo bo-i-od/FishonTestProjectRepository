@@ -4,7 +4,6 @@ import time
 from common import gameInit
 from common.basePage import BasePage
 from panelObjs.AchievementWantedPanel import AchievementWantedPanel
-from panelObjs.AquariumPanel import AquariumPanel
 from panelObjs.AvatarSelectPanel import AvatarSelectPanel
 from panelObjs.BattlePreparePanel import BattlePreparePanel
 from panelObjs.ClubApplyPanel import ClubApplyPanel

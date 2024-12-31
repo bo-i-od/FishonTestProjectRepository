@@ -219,25 +219,25 @@ class BattlePreparePanel(BasePage):
 
     class SideBar(BasePage):
         def click_btn_menu(self):
-                self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_menu)
+            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_menu)
 
         def click_btn_close(self):
-                self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_close)
+            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_close)
 
         def click_btn_player(self):
-                self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.head_img)
+            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.head_img)
 
         def click_btn_gears(self):
-                self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.gears)
+            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.gears)
 
         def click_btn_club(self):
-                self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_club)
+            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_club)
 
         def click_btn_friend(self):
-                self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_friend)
+            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_friend)
 
         def click_btn_aquarium(self):
-                self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_aquarium)
+            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_aquarium)
 
         def click_btn_career(self):
                 self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_career)
@@ -291,56 +291,6 @@ if __name__ == '__main__':
     #     cur += 1
     # print(res)
 
-    class SideBar(BasePage):
-        def click_btn_menu(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_menu)
 
-        def click_btn_close(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_close)
-
-        def click_btn_player(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.head_img)
-
-        def click_btn_gears(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.gears)
-
-        def click_btn_club(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_club)
-
-        def click_btn_friend(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_friend)
-
-        def click_btn_aquarium(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_aquarium)
-
-        def click_btn_career(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_career)
-
-        def click_btn_fishcard(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_fishcard)
-
-        def click_btn_store(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_store)
-
-        def click_btn_achievement(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_achievement)
-
-        def click_btn_fishalbum(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_fishalbum)
-
-        def click_btn_flashcard(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_flashcard)
-
-        def click_btn_mail(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_mail)
-
-        def click_btn_announcement(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_announcement)
-
-        def click_btn_changeroom(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_changeroom)
-
-        def click_btn_leaderboard(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_leaderboard)
 
 

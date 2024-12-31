@@ -187,7 +187,7 @@ def login(bp: BasePage, name):
     # gender_icon_position_list = AvatarSelectPanel.get_gender_icon_position_list(bp)
     # bp.click_position(gender_icon_position_list[0])
     # bp.sleep(0.5)
-    AvatarSelectPanel.click_first_icon(bp, is_ray_input=True)
+    AvatarSelectPanel.click_gender_icon(bp, is_ray_input=True)
     bp.sleep(0.5)
     AvatarSelectPanel.click_btn_start(bp, is_ray_input=True)
 
@@ -248,7 +248,14 @@ def friend(bp: BasePage):
 
     bp.cmd_list(["levelupto 20"])
     bp.sleep(0.2)
-    lua_code = csMsgAll.get_CSGlobalFriendsApplyMsg(targetSimpleId=10006471, source=0, type=2, targetCharId="677745af9050147ea9469e9f", simpleId=charSimpleId)
+    lua_code = csMsgAll.get_CSGlobalFriendsApplyMsg(targetSimpleId=10011470, source=0, type=2, targetCharId="67579c95c3930e4b0df050ba", simpleId=charSimpleId)
+    # "1734057963"
+    bp.lua_console(lua_code)
+
+def player_build(bp: BasePage):
+
+    bp.sleep(0.2)
+    lua_code = csMsgAll.get_CSCooperateAcceptMsg(simpleCharId=10011470, acceptType=1, charId="67579c95c3930e4b0df050ba")
     # "1734057963"
     bp.lua_console(lua_code)
 
@@ -488,28 +495,29 @@ def read_data():
 
 def main(bp: BasePage):
     # 登录号前缀
-    prefix = "yh_"
+    prefix = "release2013"
     # prefix_list = ["a", "b", "c", "d", "e"]
     init(bp)
     # 起始序号 终止序号
     cur = 4
-    limit = 110
+    limit = 7
     while cur < limit:
         name = prefix + str(cur)
         login(bp, name)
         # 前置gm命令
-        bp.cmd_list(["levelupto 69", "setUserIp 61.48.77.2", "add 1 100500 3000"])
+        # bp.cmd_list(["levelupto 69", "setUserIp 61.48.77.2", "add 1 100500 3000"])
         # bp.cmd(f"selfranksetip 180.175.{cur}.{cur}")
         # init(bp)
-        lua_code = csMsgAll.get_CSSelfRankCityChangeMsg(city=110105, cancel=False)
-        bp.lua_console(lua_code)
-        fish(bp,cur)
+        # lua_code = csMsgAll.get_CSSelfRankCityChangeMsg(city=110105, cancel=False)
+        # bp.lua_console(lua_code)
+        # fish(bp,cur)
         # bp.sleep(5)
         # 你要执行的初始化账号操作
         # add_gu(bp, cur)
         # dragon_boat(bp, cur)
         # apply_guild(bp)
         # friend(bp)
+        player_build(bp)
         # ndays(bp, cur)
         # rank(bp)
         # monopoly(bp, layer=1000, index=cur)

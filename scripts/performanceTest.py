@@ -34,7 +34,6 @@ from panelObjs.TreasureChestRewardsPanel import TreasureChestRewardsPanel
 from scripts import guideTest
 from panelObjs.PlayerSettingPanel import PlayerSettingPanel
 from panelObjs.FishAlbum3DPanel import FishAlbum3DPanel
-from panelObjs.AquariumPanel import AquariumPanel
 from panelObjs.StorePanel import StorePanel
 from panelObjs.BaitAndRodShowPanel import BaitAndRodShowPanel
 from panelObjs.RewardsPanel import RewardsPanel
