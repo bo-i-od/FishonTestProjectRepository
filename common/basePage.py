@@ -2205,9 +2205,19 @@ end
             return table_data_object_activity_double_week["fishSpotB"], True
         return table_data_object_activity_double_week["fishSpot"], False
 
+    def spot_id_to_fishery_id(self, spot_id):
+        table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="tpId", value=spot_id, book_name="NEW_PLOT_FISH_SPOT.xlsm")
+        if table_data_object_list:
+            return str(table_data_object_list[0]["newPlotFisheriesId"])
+        table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="tpId", value=spot_id, book_name="FISH_SPOT.xlsm")
+        if table_data_object_list:
+            return str(spot_id)[:6]
+
 
 if __name__ == '__main__':
-    bp = BasePage(is_mobile_device=True, serial_number="127.0.0.1:21543")
+    bp = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21543")
+    a = bp.spot_id_to_fishery_id(spot_id=10101)
+    print(a)
     # "127.0.0.1:21613"
     # "b6h65hd64p5pxcyh"
     # "TimeMgr:GetServerTime()"
