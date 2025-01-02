@@ -7,14 +7,16 @@ from netMsg import fishingMsg
 if __name__ == '__main__':
     bp = BasePage()
     # 设置体力
-    bp.set_item_count(target_count=1000000, item_tpid="100500")
+    # bp.set_item_count(target_count=1000000, item_tpid="100500")
+    # setSceneType x (x=1是pve，x=2是pvp, x=4是新主线)
+    bp.custom_cmd("setSceneType 4")
     # 重置清空log
     with open("../statistics/hook_log.txt", "w") as file:
         pass  # 不做任何操作,关闭文件即可清空内容
     with open("../statistics/cast_log.txt", "w") as file:
         pass  # 不做任何操作,关闭文件即可清空内容
     fishingMsg.fish(bp, [
-        {"spot_id": "40030911", "times": 10, "energy_cost": 50, "is_activity_spot": True},
+        {"spot_id": "10106", "times": 500, "energy_cost": 500, "is_activity_spot": False},
         # {"spot_id": f"40030214", "times": 1000, "energy_cost": 50},
     ])
 

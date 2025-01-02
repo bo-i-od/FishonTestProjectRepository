@@ -48,6 +48,8 @@ class ElementsData:
 
     class AchievementPopupPanel:
         AchievementPopupPanel = {"locator": "UICanvas>Important>AchievementPopupPanel"}
+        btn_orange = {"locator": "UICanvas>Important>AchievementPopupPanel>panel>btn_achv_fast>btn_orange"}
+
 
     class AchievementWantedPanel:
         AchievementWantedPanel = {"locator": "UICanvas>Default>AchievementWantedPanel"}
@@ -65,6 +67,9 @@ class ElementsData:
         AlbumFishDetailPanel = {"locator": "UICanvas>Default>AlbumFishDetailPanel"}
         btn_close = {"locator": "UICanvas>Default>AlbumFishDetailPanel>btn_close>img"}
         btn_share = {"locator": "UICanvas>Default>AlbumFishDetailPanel>btn_share>icon"}
+        btn_share_chat = {"locator": "UICanvas>Default>AlbumFishDetailPanel>btn_share_chat>icon"}
+        btn_close_share_chat = {"locator": "UICanvas>Default>AlbumFishDetailPanel>Panel_Popups_Tournaments>Panel>btn_close>img"}
+        btn_confirm_list = {"locator": "UICanvas>Default>AlbumFishDetailPanel>Panel_Popups_Tournaments>Panel>panel_list>list>Viewport>Content>>btn_confirm", "focus": (1, 0.5)}
 
     class AquariumPanel:
         AquariumPanel = {"locator": "UICanvas>Default>AquariumPanel"}
@@ -133,15 +138,52 @@ class ElementsData:
 
     class AquariumFishNewPanel:
         AquariumFishNewPanel = {"locator": "UICanvas>Default>AquariumFishNewPanel"}
+        btn_close = {"locator": "UICanvas>Default>AquariumFishNewPanel>panel>panel_fish>btn_close"}
         btn_accelerate_reddot_list = {"locator": "UICanvas>Default>AquariumFishNewPanel>panel>panel_fish>List>Viewport>Content>fish_model>aquarium_fish_new_model>btns>btn_accelerate>reddot"}
         btn_sell_reddot_list = {"locator": "UICanvas>Default>AquariumFishNewPanel>panel>panel_fish>List>Viewport>Content>fish_model>aquarium_fish_new_model>btns>btn_sell>reddot"}
         tab_list = {"locator": "UICanvas>Default>AquariumFishNewPanel>panel>panel_fish>tab>view_port>content>>bg"}
         btn_change = {"locator": "UICanvas>Default>AquariumFishNewPanel>panel>panel_fish>fish_num>panel_info>btn_change>icon"}
+        btn_fast = {"locator": "UICanvas>Default>AquariumFishNewPanel>panel>panel_fish>btn_fast>text"}
+        top_res_btns = {"locator": "UICanvas>Default>AquariumFishNewPanel>top_res>ResourceBar>>btn_add"}
+        btns = {"locator": "UICanvas>Default>AquariumFishNewPanel>panel>panel_fish>List>Viewport>Content>fish_model>aquarium_fish_new_model>btns>"}
+        btns_operate = {"locator": "UICanvas>Default>AquariumFishNewPanel>panel>panel_fish>List_operate>btn>>text"}
+        aquarium_fish_list = {"locator":"UICanvas>Default>AquariumFishNewPanel>panel>panel_fish>List_operate>Viewport>Content>list_fish>>aquarium_fish_new_model"}
 
     class AquariumMainPanel:
         AquariumMainPanel = {"locator":"UICanvas>Default>AquariumMainPanel"}
         btn_close = {"locator": "UICanvas>Default>AquariumMainPanel>panel>btn_close>img"}
         btn_fish = {"locator": "UICanvas>Default>AquariumMainPanel>panel>navbar>btns>btn_fish>bg"}
+        top_res_btns = {"locator": "UICanvas>Default>AquariumMainPanel>panel>top_res>ResourceBar>>btn_add"}
+        btn_i = {"locator": "UICanvas>Default>AquariumMainPanel>panel>title_group>content>btn_i>img"}
+        btns = {"locator": "UICanvas>Default>AquariumMainPanel>panel>navbar>btns>", "focus": (0.5, 1)}
+        btn_change = {"locator": "UICanvas>Default>AquariumMainPanel>panel>navbar>panel_down>panel_info>btn_change", "focus": (1, 1)}
+        btn_collect = {"locator": "UICanvas>Default>AquariumMainPanel>Panel_Popups_lvup>Panel>btn>btn_collect", "focus": (0.5, 1)}
+        btn_close_level_up = {"locator": "UICanvas>Default>AquariumMainPanel>Panel_Popups_lvup>Panel>btn_close>img"}
+
+    class AquariumNewSkinPanel:
+        AquariumNewSkinPanel = {"locator": "UICanvas>Default>AquariumNewSkinPanel"}
+        btn_close = {"locator": "UICanvas>Default>AquariumNewSkinPanel>panel>panel_fish>btn_close", "focus": (1, 0)}
+        viewport = {"locator": "UICanvas>Default>AquariumNewSkinPanel>panel>panel_fish>List>Viewport"}
+        btns = {"locator": "UICanvas>Default>AquariumNewSkinPanel>panel>panel_fish>List>Viewport>Content>>aquarium_skin_model>btns>>text"}
+
+    class AquariumShopPanel:
+        AquariumShopPanel = {"locator": "UICanvas>Default>AquariumShopPanel"}
+        btn_close = {"locator": "UICanvas>Default>AquariumShopPanel>Panel>btn_close>img"}
+        btn_magnifier = {"locator": "UICanvas>Default>AquariumShopPanel>Panel>panel_avatar>panel_name>btn_magnifier"}
+        viewport = {"locator": "UICanvas>Default>AquariumShopPanel>Panel>panel_list>Viewport"}
+        btn_buy_list = {"locator": "UICanvas>Default>AquariumShopPanel>Panel>panel_list>Viewport>content>>btn_buy"}
+        item_icon_list = {"locator": "UICanvas>Default>AquariumShopPanel>Panel>panel_list>Viewport>content>>item_list>item_model_mini(Clone)>icon"}
+        item_icon_purchase = {"locator": "UICanvas>Default>AquariumShopPanel>Panel_Popups_Purchase>Panel>item_info>item>item_model_mini>icon"}
+        btn_close_purchase = {"locator": "UICanvas>Default>AquariumShopPanel>Panel_Popups_Purchase>Panel>btn_close>img"}
+        btn_sub = {"locator": "UICanvas>Default>AquariumShopPanel>Panel_Popups_Purchase>Panel>cost>btn_sub"}
+        btn_add = {"locator": "UICanvas>Default>AquariumShopPanel>Panel_Popups_Purchase>Panel>cost>btn_add"}
+        btn_max = {"locator": "UICanvas>Default>AquariumShopPanel>Panel_Popups_Purchase>Panel>cost>btn_max"}
+        btn_min = {"locator": "UICanvas>Default>AquariumShopPanel>Panel_Popups_Purchase>Panel>cost>btn_min"}
+        btn_exchange = {"locator": "UICanvas>Default>AquariumShopPanel>Panel_Popups_Purchase>Panel>btn>btn_exchange", "focus": (0.5, 1)}
+        slider = {"locator": "UICanvas>Default>AquariumShopPanel>Panel_Popups_Purchase>Panel>cost>slider"}
+
+
+
 
     class AvatarSelectPanel:
         AvatarSelectPanel = {"locator": "UICanvas>Default>AvatarSelectPanel"}
@@ -158,28 +200,51 @@ class ElementsData:
         btn_close = {"locator": "UICanvas>Default>AvatarSkinPopPanel_subType_2>panel>btn_close>img"}
         btn_enter = {"locator": "UICanvas>Default>AvatarSkinPopPanel_subType_2>panel>btn_enter"}
 
+    class AvatarTipsView:
+        AvatarTipsView = {"locator": "UICanvas>Default>AvatarTipsView"}
+        tap_to_continue = {"locator": "UICanvas>Default>AvatarTipsView>panel>panel_rod_info>tap_to_continue", "focus": (1, 0.5)}
+        btn_changesex = {"locator": "UICanvas>Default>AvatarTipsView>panel>panel_rod_info>panel_left>btns>btn_changesex"}
+        btn_changecamera = {"locator": "UICanvas>Default>AvatarTipsView>panel>panel_rod_info>panel_left>btns>btn_changecamera"}
+
     class AvatarMainPanel:
         AvatarMainPanel = {"locator": "UICanvas>Default>AvatarMainPanel"}
         btn_close = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>btn_close>img"}
         tab_avatar = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_tab>tab>1>bg"}
         tab_rod = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_tab>tab>2>bg"}
         tab_bag = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_tab>tab>3>bg"}
-        btn_changesex = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Avatar>left>panel_btns_change>btn_changesex"}
-        btn_changecamera =  {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Avatar>left>panel_btns_change>btn_changecamera"}
-        avatar_tab_list = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Avatar>right>panel_tab>TabList>Viewport>Content>>bg"}
-        btn_confirm_avatar = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Avatar>right>panel_list>btn_confirm", "focus": (0.5, 1)}
-        tip_avatar = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Avatar>right>panel_list>tip"}
-        btn_confirm_rod = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_list>btn_confirm", "focus": (0.5, 1)}
-        tip_rod = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_list>tip"}
-        toggle_own = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Avatar>right>panel_list>panel_top>title_avatar>online>option>Toggle"}
-        tab_rod_list = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_tab>TabList>Viewport>Content>>bg"}
-        viewport_tab_rod = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_tab>TabList>Viewport", "focus": (0, 0)}
-        btn_bobox = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_tab>tab_bobox>btn_bobox>text"}
-        rod_list = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_list>list>Viewport>Content>>item_model_square>bg"}
-        viewport_rod = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_list>list>Viewport", "focus": (0, 0)}
-        tab_skin = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_list>panel_top>rod_tab>tabs>tab_1"}
-        tab_attach = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_list>panel_top>rod_tab>tabs>tab_2"}
-        bobox_on_list = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_tab>tab_bobox>bobox_on_list>>text"}
+        tab_list = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_tab>tab>"}
+
+        class panel_Avatar:
+            panel_Avatar = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Avatar"}
+            tab_list = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Avatar>right>panel_tab>TabList>Viewport>Content>>bg"}
+            viewport_tab = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Avatar>right>panel_tab>TabList>Viewport", "focus": (0, 0)}
+            tags = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Avatar>left>avatar_info>info>tags"}
+            btn_changesex = { "locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Avatar>left>panel_btns_change>btn_changesex"}
+            btn_changecamera = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Avatar>left>panel_btns_change>btn_changecamera"}
+            btn_hide = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Avatar>left>panel_btns_change>btn_hide"}
+            btns_change = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Avatar>left>panel_btns_change>"}
+            btn_confirm = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Avatar>right>panel_list>btn_confirm"}
+            tip = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Avatar>right>panel_list>tip"}
+            toggle_own = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Avatar>right>panel_list>panel_top>title_avatar>online>option>Toggle"}
+            item_list = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Avatar>right>panel_list>list>Viewport>Content>>item_model_square"}
+            viewport = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Avatar>right>panel_list>list>Viewport", "focus": (0, 0)}
+
+        class panel_Rod:
+            panel_Rod = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod"}
+            btn_hide = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>left>panel_btns_change>btn_hide"}
+            btn_changecamera = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_btns_change>btn_changecamera"}
+            tab_rod_list = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_tab>TabList>Viewport>Content>>bg"}
+            viewport_tab_rod = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_tab>TabList>Viewport", "focus": (0, 0)}
+            btn_bobox = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_tab>tab_bobox>btn_bobox>text"}
+            item_list = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_list>list>Viewport>Content>>item_model_square>bg"}
+            viewport = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_list>list>Viewport", "focus": (0, 0)}
+            tabs_top = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_list>panel_top>rod_tab>tabs>"}
+            bobox_on_list = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_tab>tab_bobox>bobox_on_list>>text"}
+            btn_confirm = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_list>btn_confirm", "focus": (0.5, 1)}
+            tip = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_list>tip"}
+            btn_form = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>avatar_info>btn_form"}
+            tags = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>avatar_info>info>tags"}
+            btn_fast = {"locator": "UICanvas>Default>AvatarMainPanel>panel_avatar>panel_Rod>panel_list>btns>btn_fast"}
 
     class BaitAndRodAlbumPanel:
         BaitAndRodAlbumPanel = {"locator": "UICanvas>Default>BaitAndRodAlbumPanel"}
@@ -199,7 +264,7 @@ class ElementsData:
         model_list = {"locator": "UICanvas>Default>BaitAndRodAlbumPanel>panel>>List>Viewport>Content>>model"}
         Viewport = {"locator": "UICanvas>Default>BaitAndRodAlbumPanel>panel>>List>Viewport", "focus": (0, 0)}
 
-    class BaitAndBaitAndRodShowPanel:
+    class BaitAndRodShowPanel:
         BaitAndRodShowPanel = {"locator": "UICanvas>Default>BaitAndRodShowPanel"}
         tap_to_continue = {"locator": "UICanvas>Default>BaitAndRodShowPanel>panel>panel_rod_info>panel_right>content>tap_to_continue"}
         talent = {"locator": "UICanvas>Default>BaitAndRodShowPanel>panel>panel_rod_info>panel_right>content>bg>sign"}
@@ -207,6 +272,7 @@ class ElementsData:
         five_dimension ={"locator": "UICanvas>Default>BaitAndRodShowPanel>panel>panel_rod_info>5d>bg"}
         tips_five_dimension = {"locator": "GGGanvas>Default>BaitAndRodShowPanel>panel>tips_5d"}
         name = {"locator":"UICanvas>Default>BaitAndRodShowPanel>panel>>panel_right>content>bg>nameBG>name"}
+        skill_list = {"locator":"UICanvas>Default>BaitAndRodShowPanel>panel>panel_rod_info>panel_right>content>bg>skill_list>>rod_skill"}
 
     class BattleExplainPanel:
         BattleExplainPanel = {"locator": "UICanvas>Default>BattleExplainPanel"}
@@ -216,6 +282,7 @@ class ElementsData:
         BattleFailedPanel = {"locator": "UICanvas>Default>BattleFailedPanel"}
         btn_upgrade = {"locator": "UICanvas>Default>BattleFailedPanel>panel_fail>btns>btn_upgrade>btn_normal"}
         btn_again = {"locator": "UICanvas>Default>BattleFailedPanel>panel_fail>btns>btn_again>btn_normal"}
+        btns = {"locator": "UICanvas>Default>BattleFailedPanel>panel_fail>btns>"}
 
     class BattlePanel:
         BattlePanel = {"locator": "UICanvas>Default>BattlePanel"}
@@ -851,6 +918,7 @@ class ElementsData:
 
     class GearSkillTipsPanel:
         GearSkillTipsPanel = {"locator": "UICanvas>Default>GearSkillTipsPanel"}
+        btn_close = {"locator": "UICanvas>Default>GearSkillTipsPanel>btn_close", "focus": (0.5, 1)}
         skill_icon = {"locator": "UICanvas>Default>GearSkillTipsPanel>panel>Content>title_group>rod_skill>rod_skill>icon_bg>icon"}
 
     class HomePanel:
@@ -1385,6 +1453,8 @@ class ElementsData:
     class PVENewbieGiftPackPanel:
         PVENewbieGiftPackPanel = {"locator": "UICanvas>Default>PVENewbieGiftPackPanel"}
         btn_close = {"locator": "UICanvas>Default>PVENewbieGiftPackPanel>btn_close>img"}
+        btn_buy = {"locator": "UICanvas>Default>PVENewbieGiftPackPanel>panel>btns>btn_buy"}
+        item_icon_list = {"locator":"UICanvas>Default>PVENewbieGiftPackPanel>panel>main>item_list_up>model(Clone)>item_model_mini(Clone)>icon"}
 
     class PVERuleTipsPanel:
         PVERuleTipsPanel = {"locator": "UICanvas>Default>PVERuleTipsPanel"}

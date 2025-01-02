@@ -162,6 +162,21 @@ class AchievementGroupPanel(BasePage):
         complete_denominator = int(complete[2].split('/')[1])
         return complete_numerator, complete_denominator
 
+    def click_achievement(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.AchievementGroupPanel.achievement_icon_list, index=index)
+
+    def click_item_icon(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.AchievementGroupPanel.item_icon_list, index=index)
+
+    operation_pool = [
+        {"element_data": ElementsData.AchievementGroupPanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.AchievementGroupPanel.box, "func": click_box, "weight": 2},
+        {"element_data": ElementsData.AchievementGroupPanel.achievement_icon_list, "func": click_achievement, "weight": 4},
+        {"element_data": ElementsData.AchievementGroupPanel.btn_go, "func": click_btn_go, "weight": 1},
+        {"element_data": ElementsData.AchievementGroupPanel.btn_collect, "func": click_btn_collect, "weight": 2},
+        {"element_data": ElementsData.AchievementGroupPanel.item_icon_list, "func": click_item_icon, "weight": 2},
+        ]
+
 
 
 
@@ -169,6 +184,16 @@ class AchievementGroupPanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    a = bp.click_element(element_data=ElementsData.FlashCardReceivePanel.btn_close)
+    # AchievementGroupPanel.click_btn_close(bp)
+
+    # AchievementGroupPanel.click_box(bp)
+    #
+    # AchievementGroupPanel.click_achievement(bp)
+    #
+    # AchievementGroupPanel.click_btn_go(bp)
+    #
+    # AchievementGroupPanel.click_btn_collect(bp)
+    #
+    AchievementGroupPanel.click_item_icon(bp)
     # a = AchievementGroupPanel.get_status_list(bp)
-    print(a)
+    bp.connect_close()

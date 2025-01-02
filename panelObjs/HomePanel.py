@@ -61,20 +61,13 @@ class HomePanel(BasePage):
     def click_panel_giftpack_btn(self, index=-1):
         self.click_object_of_plural_objects(element_data=ElementsData.HomePanel.panel_giftpack_btns, index=index)
 
-    def click_panel_entrance_btn(self, index=-1):
-        self.click_object_of_plural_objects(element_data=ElementsData.HomePanel.panel_entrance_btns, index=index)
-
     def click_top_res_btn(self, index=-1):
         self.click_object_of_plural_objects(element_data=ElementsData.HomePanel.top_res_btns, index=index)
 
     def click_navbar_btn(self, index=-1):
         self.click_object_of_plural_objects(element_data=ElementsData.HomePanel.navbar_btns, index=index)
 
-    def click_btn_avatar(self):
-        self.click_element(element_data=ElementsData.HomePanel.btn_avatar)
 
-    def click_btn_chest(self):
-        self.click_element(element_data=ElementsData.HomePanel.btn_chest)
 
 
 
@@ -105,11 +98,8 @@ class HomePanel(BasePage):
         {"element_data": ElementsData.HomePanel.panel_left_btns, "func": click_panel_left_btn, "weight": 1},
         {"element_data": ElementsData.HomePanel.btn_chat, "func": click_btn_chat, "weight": 1},
         {"element_data": ElementsData.HomePanel.panel_giftpack_btns, "func": click_panel_giftpack_btn, "weight": 1},
-        {"element_data": ElementsData.HomePanel.panel_entrance_btns, "func": click_panel_entrance_btn, "weight": 1},
         {"element_data": ElementsData.HomePanel.top_res_btns, "func": click_top_res_btn, "weight": 1},
         {"element_data": ElementsData.HomePanel.navbar_btns, "func": click_navbar_btn, "weight": 1},
-        {"element_data": ElementsData.HomePanel.btn_avatar, "func": click_btn_avatar, "weight": 1},
-        {"element_data": ElementsData.HomePanel.btn_chest, "func": click_btn_chest, "weight": 1},
         {"element_data": ElementsData.HomePanel.Panel_mini_task.btn_recommend, "func": Minitask.click_btn_recommend, "weight": 1},
         {"element_data": ElementsData.HomePanel.Panel_mini_task.btn_go, "func": Minitask.click_btn_go, "weight": 1},
         {"element_data": ElementsData.HomePanel.Panel_mini_task.btn_claim, "func": Minitask.click_btn_claim, "weight": 1},

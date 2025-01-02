@@ -983,10 +983,12 @@ class BasePageMain:
         self.click_position_base(position_list[0])
         return position_list[0]
 
-    def click_object_of_plural_objects(self, object_id_list: list = None, element_data: dict = None, index=-1, element_viewport: dict =None,  viewport_direction=None, viewport_range=None, viewport_edge=None):
+    def click_object_of_plural_objects(self, object_id_list: list = None, element_data: dict = None, index=-1, viewport: Viewport = None, element_viewport: dict = None,  viewport_direction=None, viewport_range=None, viewport_edge=None, ignore_set=None):
+
         if element_viewport:
             viewport = Viewport(self, element_viewport=element_viewport, element_item_list=element_data, item_id_list=object_id_list, viewport_direction=viewport_direction, viewport_range=viewport_range, viewport_edge=viewport_edge)
-            # 如果index没有赋合法值，就随机点击一个
+
+        if viewport:
             if index < 0:
                 index = random.randint(0, len(viewport.item_id_list) - 1)
             target_id = viewport.item_id_list[index]
@@ -996,7 +998,7 @@ class BasePageMain:
         # 如果index没有赋合法值，就随机点击一个
         if index < 0:
             index = random.randint(0, len(position_list) - 1)
-        self.click_position(position=position_list[index])
+        self.click_position(position=position_list[index],ignore_set=ignore_set)
 
     # 在b元素出现前一直尝试点击a元素
     def click_a_until_b_appear(self, element_data_a: dict, element_data_b: dict, interval: float = 0.5, ignore_set=None):
@@ -1181,6 +1183,8 @@ class BasePageMain:
             if panel_name == "FishBagPanel":
                 self.click_position_base([0.5, 0.5])
                 self.sleep(0.5)
+            if "close_path" not in JumpData.panel_dict[panel_name]:
+                continue
             for close_element in JumpData.panel_dict[panel_name]["close_path"]:
                 self.click_element_safe(element_data=close_element)
                 self.sleep(1)
@@ -1517,7 +1521,7 @@ class BasePageMain:
             command:str
                 autofish (下一杆自动钓鱼)
                 setTension x (x的范围在0~1)
-                setSceneType x (x=1是pve，x=2是pvp)
+                setSceneType x (x=1是pve，x=2是pvp, x=4是新主线)
         """
         if not command:
             return
@@ -1799,6 +1803,9 @@ class BasePage(BasePageMain):
             table_data_detail = self.excelTools.get_table_data_detail("FISH.xlsm")
         if fish_tpid == '':
             return "钓鱼失败"
+        if fish_tpid in ["399001", "399002"]:
+            return "藏宝图"
+
         table_data_object = self.excelTools.get_table_data_object_by_key_value(key="tpId", value=fish_tpid,
                                                                                table_data_detail=table_data_detail)
 
@@ -1827,7 +1834,20 @@ class BasePage(BasePageMain):
             return "超奇珍"
         if fishClass == 4:
             return "典藏"
-        return "其它"
+
+        fish_id = self.fish_bone_to_fish(fish_bone_id=fish_tpid)
+        if not fish_id:
+            print(fish_tpid)
+            return None
+        fish_type = self.get_fish_type(fish_tpid=fish_id)
+        if not fish_type:
+            return None
+        if fish_tpid[0:2] in ["37"]:
+            fish_type = fish_type + "黄金"
+        if fish_tpid[0:3] in ["385"]:
+            fish_type = fish_type + "黄金"
+        return fish_type + "鱼骨"
+
 
     def get_fish_type_list(self, fish_list):
         """函数功能简述
@@ -1844,6 +1864,10 @@ class BasePage(BasePageMain):
         cur = 0
         while cur < len(fish_list):
             fish_type = self.get_fish_type(fish_tpid=fish_list[cur], table_data_detail=table_data_detail)
+            if not fish_type:
+                fish_type_list.append("其它")
+                cur += 1
+                continue
             fish_type_list.append(fish_type)
             cur += 1
         return fish_type_list
@@ -2161,14 +2185,23 @@ end
             fish_bone_id: 鱼骨id
         """
         # 鱼骨tpid转missionConditionID
-        table_data_object = self.excelTools.get_table_data_object_by_key_value(key="triggerKeyS", value=fish_bone_id,
+        table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="triggerKeyS", value=fish_bone_id,
                                                                                book_name="MISSION_CONDITION.xlsm")
+
+        if not table_data_object_list:
+            return None
+
+        table_data_object = table_data_object_list[0]
         mission_condition_id = table_data_object["missionConditionID"]
 
         # missionConditionID转鱼id
-        table_data_object = self.excelTools.get_table_data_object_by_key_value(key="startConditionId",
+        table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="startConditionId",
                                                                                value=mission_condition_id,
                                                                                book_name="FISH_STATE.xlsm")
+        if not table_data_object_list:
+            return None
+
+        table_data_object = table_data_object_list[0]
         fish_id = table_data_object["fishChange"][0]["fish"]
 
         return str(fish_id)
@@ -2201,9 +2234,19 @@ end
             return table_data_object_activity_double_week["fishSpotB"], True
         return table_data_object_activity_double_week["fishSpot"], False
 
+    def spot_id_to_fishery_id(self, spot_id):
+        table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="tpId", value=spot_id, book_name="NEW_PLOT_FISH_SPOT.xlsm")
+        if table_data_object_list:
+            return str(table_data_object_list[0]["newPlotFisheriesId"])
+        table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="tpId", value=spot_id, book_name="FISH_SPOT.xlsm")
+        if table_data_object_list:
+            return str(spot_id)[:6]
+
 
 if __name__ == '__main__':
-    bp = BasePage(is_mobile_device=True, serial_number="127.0.0.1:21543")
+    bp = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21543")
+    a = bp.spot_id_to_fishery_id(spot_id=10101)
+    print(a)
     # "127.0.0.1:21613"
     # "b6h65hd64p5pxcyh"
     # "TimeMgr:GetServerTime()"

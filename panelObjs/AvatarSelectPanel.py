@@ -18,13 +18,17 @@ class AvatarSelectPanel(BasePage):
     def get_gender_icon_position_list(self):
         return self.get_position_list(element_data=ElementsData.AvatarSelectPanel.gender_icon_list)
 
-    def click_first_icon(self, is_ray_input=False):
+    def click_gender_icon(self, is_ray_input=False, index=-1):
         if is_ray_input:
             self.ray_input(kind="click", element_data=ElementsData.AvatarSelectPanel.gender_icon_list)
             return
-        position_list = self.get_position_list(element_data=ElementsData.AvatarSelectPanel.gender_icon_list)
-        self.click_position(position_list[0])
+        self.click_object_of_plural_objects(element_data=ElementsData.AvatarSelectPanel.gender_icon_list, index=index)
 
+
+    operation_pool = [
+        {"element_data": ElementsData.AvatarSelectPanel.gender_icon_list, "func": click_gender_icon, "weight": 2},
+        {"element_data": ElementsData.AvatarSelectPanel.btn_start, "func": click_btn_start, "weight": 1},
+        ]
 
 if __name__ == '__main__':
     bp = BasePage()

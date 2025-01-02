@@ -42,6 +42,20 @@ def count_target_occurrences(sequence, target):
             count += 1
     return count
 
+def get_fish_type_dict(bp: BasePage):
+    result_list = get_result_list()
+    type_sequence = bp.get_fish_type_list(result_list)
+    type_dict = {'小': 0, '中': 0, '大': 0, '特大': 0, '超巨': 0, '奇珍': 0, '超奇珍': 0, '典藏': 0, '藏宝图': 0, '超奇珍鱼骨': 0, '典藏鱼骨': 0, '超奇珍黄金鱼骨': 0, '典藏黄金鱼骨': 0}
+    cur = 0
+    while cur < len(type_sequence):
+        if type_sequence[cur] not in type_dict:
+            type_dict[type_sequence[cur]] = 1
+            cur += 1
+            continue
+        type_dict[type_sequence[cur]] += 1
+        cur += 1
+    return type_dict
+
 
 def main():
     # 自定义的目标序列，"小"，"中"，"大"，"特大"，"超巨"，"奇珍"，"超奇珍"，"典藏"
@@ -65,5 +79,6 @@ def main():
 
 if __name__ == '__main__':
     bp = BasePage()
-    main()
+    fish_type_dict = get_fish_type_dict(bp)
+    print(fish_type_dict)
     bp.connect_close()

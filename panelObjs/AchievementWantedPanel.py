@@ -70,10 +70,27 @@ class AchievementWantedPanel(BasePage):
     def click_btn_rewards(self):
         self.click_element(element_data=ElementsData.AchievementWantedPanel.btn_rewards)
 
+    def click_reward_icon(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.AchievementWantedPanel.reward_icon_list, index=index)
 
+    def click_wanted(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.AchievementWantedPanel.item_list, index=index)
+
+
+    operation_pool = [
+        {"element_data": ElementsData.AchievementWantedPanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.AchievementWantedPanel.reward_icon_list, "func": click_reward_icon, "weight": 2},
+        {"element_data": ElementsData.AchievementWantedPanel.item_list, "func": click_wanted, "weight": 2},
+        ]
 
 
 if __name__ == '__main__':
     bp = BasePage("192.168.111.78:20009")
+
+    # AchievementWantedPanel.click_reward_icon(bp)
+
+    AchievementWantedPanel.click_wanted(bp)
+
+    bp.connect_close()
 
 
