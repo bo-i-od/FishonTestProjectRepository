@@ -1521,7 +1521,7 @@ class BasePageMain:
             command:str
                 autofish (下一杆自动钓鱼)
                 setTension x (x的范围在0~1)
-                setSceneType x (x=1是pve，x=2是pvp)
+                setSceneType x (x=1是pve，x=2是pvp, x=4是新主线)
         """
         if not command:
             return

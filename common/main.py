@@ -8,6 +8,7 @@ if __name__ == '__main__':
     bp = BasePage()
     # 设置体力
     # bp.set_item_count(target_count=1000000, item_tpid="100500")
+    # setSceneType x (x=1是pve，x=2是pvp, x=4是新主线)
     bp.custom_cmd("setSceneType 4")
     # 重置清空log
     with open("../statistics/hook_log.txt", "w") as file:
