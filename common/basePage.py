@@ -1842,7 +1842,9 @@ class BasePage(BasePageMain):
         fish_type = self.get_fish_type(fish_tpid=fish_id)
         if not fish_type:
             return None
-        if fish_tpid[0:2] in ["38", "37"]:
+        if fish_tpid[0:2] in ["37"]:
+            fish_type = fish_type + "黄金"
+        if fish_tpid[0:4] in ["3805"]:
             fish_type = fish_type + "黄金"
         return fish_type + "鱼骨"
 
