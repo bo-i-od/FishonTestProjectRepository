@@ -1844,7 +1844,7 @@ class BasePage(BasePageMain):
             return None
         if fish_tpid[0:2] in ["37"]:
             fish_type = fish_type + "黄金"
-        if fish_tpid[0:4] in ["3805"]:
+        if fish_tpid[0:3] in ["385"]:
             fish_type = fish_type + "黄金"
         return fish_type + "鱼骨"
 
