@@ -17,3 +17,13 @@ class DailyTipsPanel(BasePage):
 
     def click_do_not_show_today(self):
         self.click_element(element_data=ElementsData.DailyTipsPanel.toggle)
+
+    operation_pool = [
+        {"element_data": ElementsData.DailyTipsPanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.DailyTipsPanel.toggle, "func": click_do_not_show_today, "weight": 1},
+        ]
+
+if __name__ == "__main__":
+    bp = BasePage("127.0.0.1:21573", is_mobile_device=False)
+
+    bp.connect_close()

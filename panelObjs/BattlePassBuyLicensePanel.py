@@ -34,6 +34,17 @@ class BattlePassBuyLicensePanel(BasePage):
                 return True
             self.sleep(1)
 
+    def click_btn_buy(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.BattlePassBuyLicensePanel.btn_buy_list, index=index)
+
+    operation_pool = [
+        {"element_data": ElementsData.BattlePassBuyLicensePanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.BattlePassBuyLicensePanel.btn_buy_list, "func": click_btn_buy, "weight": 2},
+
+    ]
+
+
+
 if __name__ == '__main__':
     bp = BasePage()
     position_list = BattlePassBuyLicensePanel.get_btn_buy_list(bp)

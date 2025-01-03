@@ -25,7 +25,7 @@ class CareerPanel(BasePage):
     def get_rating_total(self):
         self.get_text(element_data=ElementsData.CareerPanel.rating_total)
 
-    def click_rating_panel(self):
+    def click_rating_total(self):
         self.click_element(element_data=ElementsData.CareerPanel.rating_total)
 
     def is_rating_tips_active(self):
@@ -128,8 +128,39 @@ class CareerPanel(BasePage):
         CareerPanel.click_btn_enhance(self)
         self.sleep(0.5)
 
+    def click_top_res_btn(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.CareerPanel.top_res_btns, index=index)
 
-if __name__ == '__main__':
-    bp = BasePage()
-    CareerPanel.enhance_until_item_exist(bp,8)
-    # CareerPanel.enhance(bp)
+    def click_btn_guide(self):
+        self.click_element(element_data=ElementsData.CareerPanel.btn_guide)
+
+    def click_rating(self):
+        self.click_element(element_data=ElementsData.CareerPanel.rating)
+
+    def click_item(self, index=-1):
+        edge = [0.1, 0.1]
+        viewport = Viewport(self, element_viewport=ElementsData.CareerPanel.career_viewport, element_item_list=ElementsData.CareerPanel.item_list, viewport_edge=edge)
+        self.click_object_of_plural_objects(element_data=ElementsData.CareerPanel.item_list, viewport=viewport, index=index)
+
+
+    operation_pool = [
+        {"element_data": ElementsData.CareerPanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.CareerPanel.btn_i, "func": click_btn_i, "weight": 1},
+        {"element_data": ElementsData.CareerPanel.btn_enhance, "func": click_btn_enhance, "weight": 1},
+        {"element_data": ElementsData.CareerPanel.btn_guide, "func": click_btn_guide, "weight": 1},
+        {"element_data": ElementsData.CareerPanel.top_res_btns, "func": click_top_res_btn, "weight": 1},
+        {"element_data": ElementsData.CareerPanel.rating, "func": click_rating_total, "weight": 1},
+        {"element_data": ElementsData.CareerPanel.rating_total, "func": click_rating, "weight": 1},
+        {"element_data": ElementsData.CareerPanel.item_list, "func": click_item, "weight": 1},
+        ]
+
+
+if __name__ == "__main__":
+    bp = BasePage("127.0.0.1:21573", is_mobile_device=False)
+    # CareerPanel.click_rating_total(bp)
+    #
+    # CareerPanel.click_rating(bp)
+
+    CareerPanel.click_item(bp)
+
+    bp.connect_close()

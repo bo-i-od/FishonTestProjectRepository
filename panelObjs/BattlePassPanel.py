@@ -26,10 +26,10 @@ class BattlePassPanel(BasePage):
     def click_btn_task(self):
         self.click_element(element_data=ElementsData.BattlePassPanel.btn_task)
 
-    def click_btn_buy_levels(self):
+    def click_btn_buy(self):
         self.click_element(element_data=ElementsData.BattlePassPanel.btn_buy)
 
-    def click_btn_get_premium(self):
+    def click_btn_premium(self):
         if not self.exist(element_data=ElementsData.BattlePassPanel.btn_premium):
             return False
         self.click_element(element_data=ElementsData.BattlePassPanel.btn_premium)
@@ -186,9 +186,41 @@ class BattlePassPanel(BasePage):
         preview_gear_position_list = self.get_position_list(element_data=ElementsData.BattlePassPanel.preview_gear_icon_list)
         return preview_item_icon_list, preview_item_position_list, preview_gear_icon_list, preview_gear_position_list
 
+    def click_item(self, index=-1):
+        right_size = self.get_size_list(element_data=ElementsData.BattlePassPanel.item_icon_list)[0][0] + 0.05
+        viewport = Viewport(self, element_viewport=ElementsData.BattlePassPanel.Viewport, element_item_list=ElementsData.BattlePassPanel.item_icon_list, viewport_edge=[0, right_size])
+        self.click_object_of_plural_objects(element_data=ElementsData.BattlePassPanel.item_icon_list, viewport=viewport, index=index)
+
+    def click_preview(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.BattlePassPanel.preview_item_list, index=index)
+
+    operation_pool = [
+        {"element_data": ElementsData.BattlePassPanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.BattlePassPanel.btn_i, "func": click_btn_i, "weight": 1},
+        {"element_data": ElementsData.BattlePassPanel.btn_buy, "func": click_btn_buy, "weight": 1},
+        {"element_data": ElementsData.BattlePassPanel.btn_task, "func": click_btn_task, "weight": 1},
+        {"element_data": ElementsData.BattlePassPanel.btn_collect, "func": click_btn_collect_all, "weight": 1},
+        {"element_data": ElementsData.BattlePassPanel.btn_unlock, "func": click_btn_unlock_premium, "weight": 1},
+        {"element_data": ElementsData.BattlePassPanel.btn_i_goldbank, "func": click_btn_i_gold_band, "weight": 2},
+        {"element_data": ElementsData.BattlePassPanel.btn_detail, "func": click_btn_detail, "weight": 1},
+        {"element_data": ElementsData.BattlePassPanel.btn_premium, "func": click_btn_premium, "weight": 1},
+        {"element_data": ElementsData.BattlePassPanel.item_icon_list, "func": click_item, "weight": 1},
+        {"element_data": ElementsData.BattlePassPanel.preview_item_list, "func": click_preview, "weight": 1},
+        ]
+
 if __name__ == '__main__':
     bp = BasePage()
-    bp.click_element(element_data=ElementsData.DailyTipsPanel.btn_close)
+    # BattlePassPanel.click_preview(bp)
+    #
+    # BattlePassPanel.click_item(bp)
+
+    # BattlePassPanel.click_btn_detail(bp)
+
+    # BattlePassPanel.click_btn_premium(bp)
+    #
+    BattlePassPanel.click_btn_unlock_premium(bp)
+
+    bp.connect_close()
 
 
 

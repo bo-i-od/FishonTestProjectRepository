@@ -53,7 +53,7 @@ def change_level_test(bp:BasePage):
     bp.swipe(point_start=[slider.slider_range[0] + slider.slider_size[0] * 0.2, slider.slider_position[1]], point_end=[slider.slider_range[0] - slider.slider_size[0] * 0.2, slider.slider_position[1]])
     buy_level_0, new_level_0 = BattlePassBuyLevelPanel.get_buy_level_and_new_level(bp)
     # 点击-号
-    BattlePassBuyLevelPanel.click_sub_level(bp)
+    BattlePassBuyLevelPanel.click_btn_sub(bp)
     # 检查数值
     buy_level_1, new_level_1 = BattlePassBuyLevelPanel.get_buy_level_and_new_level(bp)
     if buy_level_0 > 1:
@@ -65,7 +65,7 @@ def change_level_test(bp:BasePage):
     bp.swipe(point_start=[slider.slider_range[1] - slider.slider_size[0] * 0.2, slider.slider_position[1]], point_end=[slider.slider_range[1] + slider.slider_size[0] * 0.2, slider.slider_position[1]])
     buy_level_0, new_level_0 = BattlePassBuyLevelPanel.get_buy_level_and_new_level(bp)
     # 点击+号
-    BattlePassBuyLevelPanel.click_add_level(bp)
+    BattlePassBuyLevelPanel.click_btn_add(bp)
     # 检查数值
     buy_level_1, new_level_1 = BattlePassBuyLevelPanel.get_buy_level_and_new_level(bp)
     if new_level_0 < 60:
@@ -91,12 +91,12 @@ def buy_level_test(bp:BasePage):
     cash_expect = cash_expect - cost
     cash = BattlePassBuyLevelPanel.get_cash(bp)
     compare(cash_expect, cash)
-    BattlePassRewardPanel.click_tap_to_continue(bp)
+    BattlePassRewardPanel.click_btn_close(bp)
 
 
 # 购买等级页面的测试
 def BattlePassBuyLevelPanel_test(bp:BasePage):
-    BattlePassPanel.click_btn_buy_levels(bp)
+    BattlePassPanel.click_btn_buy(bp)
     bp.sleep(1)
     change_level_test(bp)
     click_icon_buy_level_test(bp)
@@ -129,7 +129,7 @@ def jump_test(bp:BasePage):
 def buy_premium_test(bp:BasePage):
     # 买付费通行证
     r = random.randint(0, 1)
-    BattlePassPanel.click_btn_get_premium(bp)
+    BattlePassPanel.click_btn_premium(bp)
     bp.sleep(1)
 
     # 获得价格信息
@@ -171,7 +171,7 @@ def BattlePassRewardPanel_test(bp:BasePage):
     item_icon = ItemTipsPanel.get_item_icon(bp)
     compare(icon_premium_list[r1], item_icon)
     # 关闭页面
-    BattlePassRewardPanel.click_tap_to_continue(bp)
+    BattlePassRewardPanel.click_btn_close(bp)
     if BattlePassRewardPanel.is_panel_active(bp):
         raise FindElementError
 
@@ -186,7 +186,7 @@ def BattlePassPopPanel_test(bp:BasePage):
     bp.click_position(position_list[r])
     item_icon = ItemTipsPanel.get_item_icon(bp)
     compare(icon_list[r], item_icon)
-    BattlePassPopPanel.click_get_premium(bp)
+    BattlePassPopPanel.click_btn_confirm(bp)
     BattlePassBuyLicensePanel.click_btn_close(bp)
 
 
@@ -369,7 +369,7 @@ def main(bp:BasePage):
     bp.sleep(1)
 
     # 绿钞不足购买等级
-    BattlePassPanel.click_btn_buy_levels(bp)
+    BattlePassPanel.click_btn_buy(bp)
     buy_level_test(bp)
 
     # 购买通行证

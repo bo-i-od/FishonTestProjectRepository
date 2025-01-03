@@ -1,3 +1,6 @@
+import random
+import string
+
 from slpp import slpp
 from common.error import *
 import ctypes
@@ -214,7 +217,10 @@ def sort_dict_recursively(d):
     else:
         return d
 
-
+def generate_random_string(length):
+    characters = string.ascii_letters + string.digits
+    random_string = ''.join(random.choices(characters, k=length))
+    return random_string
 
 
 if __name__ == '__main__':
