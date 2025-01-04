@@ -2235,12 +2235,13 @@ end
         return table_data_object_activity_double_week["fishSpot"], False
 
     def spot_id_to_fishery_id(self, spot_id):
-        table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="tpId", value=spot_id, book_name="NEW_PLOT_FISH_SPOT.xlsm")
-        if table_data_object_list:
-            return str(table_data_object_list[0]["newPlotFisheriesId"])
         table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="tpId", value=spot_id, book_name="FISH_SPOT.xlsm")
         if table_data_object_list:
             return str(spot_id)[:6]
+        table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="tpId", value=spot_id, book_name="NEW_PLOT_FISH_SPOT.xlsm")
+        if table_data_object_list:
+            return str(table_data_object_list[0]["newPlotFisheriesId"])
+
 
 
 if __name__ == '__main__':
