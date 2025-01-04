@@ -14,7 +14,7 @@ class SharePanel(BasePage):
 
     operation_pool = [
         {"element_data": ElementsData.SharePanel.btn_close, "func": click_btn_close, "weight": 1},
-        {"element_data": ElementsData.SharePanel.btn_share, "func": click_btn_share, "weight": 2},
+        {"element_data": ElementsData.SharePanel.btn_share, "func": click_btn_share, "weight": 1},
 
         ]
 

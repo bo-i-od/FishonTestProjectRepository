@@ -4,7 +4,7 @@ import re
 
 from configs.pathConfig import thrift2py_folder_path
 
-type_dict = {"i64": "int", "i32": "int", "i16": "int", "i8": "int", "string": "str", "bool": "bool", "double": "float", "binary": "bytes", "MergeProductType": "str", "CSAquariumNewFish": "str", "CSAquariumNewSpeedUpFish":"str" }
+type_dict = {"i64": "int", "i32": "int", "i16": "int", "i8": "int", "string": "str", "bool": "bool", "double": "float", "binary": "bytes", "MergeProductType": "str", "CSAquariumNewFish": "str", "CSAquariumNewSpeedUpFish": "str", "NewLotteryDrawType": "str" }
 
 # 把thrift文件需要的内容解析出来
 def get_thrift_data(file_name):
@@ -267,5 +267,10 @@ def main(self):
 
 if __name__ == '__main__':
     folder_path = thrift2py_folder_path
-    main()
+    try:
+        main()
+        print("协议解析生成成功")
+    except Exception as e:
+        print(e)
+        print("协议解析生成失败")
 

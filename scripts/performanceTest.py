@@ -275,7 +275,7 @@ def division(bp: BasePage):
     bp.sleep(1)
 
     # 所有段位
-    DivisionLeaderboardPanel.click_btn_alldivisions(bp)
+    DivisionLeaderboardPanel.panel_myleague.click_btn_alldivisions(bp)
     bp.sleep(1)
     DivisionListPanel.click_btn_close(bp)
     bp.sleep(1)
@@ -678,7 +678,7 @@ def store(bp: BasePage):
         bp.sleep(1)
         RewardsPanel.click_tap_to_claim(bp)
     FishBagPanel.wait_for_panel_appear(bp)
-    FishBagPanel.click_tap_to_continue(bp)
+    bp.clear_popup()
     bp.sleep(1)
     if RewardsPanel.is_panel_active(bp):
         RewardsPanel.wait_for_panel_appear(bp)

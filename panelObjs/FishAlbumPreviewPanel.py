@@ -11,3 +11,8 @@ class FishAlbumPreviewPanel(BasePage):
 
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.FishAlbumPreviewPanel.FishAlbumPreviewPanel)
+
+    operation_pool = [
+        {"element_data": ElementsData.FishAlbumPreviewPanel.btn_close, "func": click_btn_close, "weight": 1},
+
+        ]

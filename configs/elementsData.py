@@ -737,12 +737,12 @@ class ElementsData:
         tab_list = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_tab>content>TabList>Viewport>Content>", "focus": (0, 0.5)}
         class panel_myleague:
             btn_alldivisions = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_myleague>banner>btn_alldivisions"}
-            crown = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_myleague>banner>crown"}
+            crown = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_myleague>banner>crown", "focus": (0.5, 1)}
             btn_playercard_list = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_myleague>panel_ranking>Viewport>Content>>rank_info>info>playerInfo>btn_playercard"}
             btn_playercard_self = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_myleague>panel_ranking>list_myself>rank_info>info>playerInfo>btn_playercard"}
             item_list = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_myleague>panel_ranking>Viewport>Content>>rank_info>info>rewards>item>"}
             item_self = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_myleague>panel_ranking>list_myself>rank_info>info>rewards>item>"}
-            viewport = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_myleague>panel_ranking>Viewport"}
+            viewport = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_myleague>panel_ranking>Viewport", "focus": (0, 0)}
 
         class panel_arena:
             tab_list = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_arena>tab>"}
@@ -750,12 +750,14 @@ class ElementsData:
             btn_playercard_self = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_arena>panel_ranking>list_myself>rank_info>info>playerInfo>btn_playercard"}
             item_list = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_arena>panel_ranking>Viewport>Content>>rank_info>info>rewards>item>"}
             item_self = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_arena>panel_ranking>list_myself>rank_info>info>rewards>item>"}
-            viewport = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_arena>panel_ranking>Viewport"}
+            viewport = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_arena>panel_ranking>Viewport", "focus": (0, 0)}
 
 
     class DivisionListPanel:
         DivisionListPanel = {"locator":"UICanvas>Default>DivisionListPanel"}
         btn_close = {"locator": "UICanvas>Default>DivisionListPanel>Panel>btn_close>img"}
+        item_list = {"locator": "UICanvas>Default>DivisionListPanel>Panel>divisions>List>Viewport>Content>>rewards>item>"}
+        viewport = {"locator": "UICanvas>Default>DivisionListPanel>Panel>divisions>List>Viewport", "focus": (0, 0)}
 
 
     class DLCDownloadPanel:
@@ -788,6 +790,8 @@ class ElementsData:
     class EventsGiftCenterPanel:
         EventsGiftCenterPanel = {"locator": "UICanvas>Important>EventsGiftCenterPanel"}
         btn_close = {"locator": "UICanvas>Important>EventsGiftCenterPanel>panel>btn_close>img"}
+        tab_list = {"locator": "UICanvas>Important>EventsGiftCenterPanel>panel>panel_tab>list>Viewport>Content>"}
+        viewport = {"locator": "UICanvas>Important>EventsGiftCenterPanel>panel>panel_tab>list>Viewport", "focus": (0, 0)}
 
     class FishAlbum3DPanel:
         FishAlbum3DPanel = {"locator": "UICanvas>Default>FishAlbum3DPanel"}
@@ -801,6 +805,7 @@ class ElementsData:
         panel_fisheries = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_fisheries"}
         fisheries_list_viewport = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_fisheries>panel>FisheriesList>Viewport", "focus": (0, 0)}
         fisheries_list = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_fisheries>panel>FisheriesList>Viewport>Content>", "focus": (0, 0.5)}
+        btn_close_tab = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_fisheries>btn_closeb"}
         progress_cur_list = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_album>panel_top>>progress_value>ValueLayout>cur"}
         photo_name = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_album>panel_left>photo_paper>detail>name"}
         photo_bg = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_album>panel_left>photo_paper>img_mask>img"}
@@ -823,6 +828,8 @@ class ElementsData:
         btn_buy = {"locator": "UICanvas>Default>FishCardGiftPackCustomizePanel>panel>btns>btn_buy"}
         icon_list = {"locator": "UICanvas>Default>FishCardGiftPackCustomizePanel>panel>main>>>item_model_mini(Clone)>icon"}
         quantity_list = {"locator": "UICanvas>Default>FishCardGiftPackCustomizePanel>panel>main>>>item_model_mini(Clone)>quantity>value"}
+        tab_list = {"locator": "UICanvas>Default>FishCardGiftPackCustomizePanel>panel>panel_tab>content>TabList>Viewport>Content>", "focus": (0, 0.5)}
+        viewport = {"locator": "UICanvas>Default>FishCardGiftPackCustomizePanel>panel>panel_tab>content>TabList>Viewport"}
 
     class FishCardPackTipsPanel:
         FishCardPackTipsPanel = {"locator": "UICanvas>Default>FishCardPackTipsPanel"}
@@ -875,7 +882,8 @@ class ElementsData:
         btn_draw = {"locator": "UICanvas>Default>FishCardMultipleLevelUpPanel>Panel>content_fishcard>btns>btn_draw>text"}
         choice_all = {"locator": "UICanvas>Default>FishCardMultipleLevelUpPanel>Panel>content_fishcard>choice>choice>Toggle>Background"}
         choice_list = {"locator": "UICanvas>Default>FishCardMultipleLevelUpPanel>Panel>content_fishcard>fishcard_list>Viewport>Content>>group>level>Toggle>Background"}
-
+        card_list = {"locator": "UICanvas>Default>FishCardMultipleLevelUpPanel>Panel>content_fishcard>fishcard_list>Viewport>Content>>group>card"}
+        viewport = {"locator": "UICanvas>Default>FishCardMultipleLevelUpPanel>Panel>content_fishcard>fishcard_list>Viewport"}
     class FishCardMultipleLevelUpSuccessPanel:
         FishCardMultipleLevelUpSuccessPanel = {"locator": "UICanvas>Default>FishCardMultipleLevelUpSuccessPanel"}
         btn_close = {"locator": "UICanvas>Default>FishCardMultipleLevelUpSuccessPanel>btn_close>text"}

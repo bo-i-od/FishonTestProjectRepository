@@ -231,13 +231,13 @@ def pvp_fish(bp, is_quick=False):
         cur += 1
     if cur >= 30:
         raise FindNoElementError("超时")
-    duel_log = ""
-    # 获取掉落列表
-    duel_log += str(get_to_drops(bp)) + '\n'
-    duel_log += str(get_avg_score(bp)) + '\n'
-    duel_log += str(get_report(bp)) + '\n'
-    duel_log += str(get_robot(bp)) + '\n'
-    bp.log_list_duel.clear()
+    # duel_log = ""
+    # # 获取掉落列表
+    # duel_log += str(get_to_drops(bp)) + '\n'
+    # duel_log += str(get_avg_score(bp)) + '\n'
+    # duel_log += str(get_report(bp)) + '\n'
+    # duel_log += str(get_robot(bp)) + '\n'
+    # bp.log_list_duel.clear()
 
     while True:
         # try:
@@ -287,13 +287,13 @@ def pvp_fish(bp, is_quick=False):
             # print(f"体型列表：{fish_type_list}")
             bp.sleep(3)
             break
-    duel_info = get_result(bp)
-    duel_log += str(duel_info) + '\n'
-    duel_log += str(get_chara(bp, duel_info)) + '\n'
-    file_path = "C:/Users/TU/Desktop/duel/" + serial_number.split(':')[1] + '.txt'
-    # 写入文件
-    with open(file_path, "a", encoding="utf-8") as file:
-        file.write(duel_log)
+    # duel_info = get_result(bp)
+    # duel_log += str(duel_info) + '\n'
+    # duel_log += str(get_chara(bp, duel_info)) + '\n'
+    # file_path = "C:/Users/TU/Desktop/duel/" + serial_number.split(':')[1] + '.txt'
+    # # 写入文件
+    # with open(file_path, "a", encoding="utf-8") as file:
+    #     file.write(duel_log)
 
 
 
@@ -407,7 +407,7 @@ def division_test(bp:BasePage):
     bp.sleep(1)
 
     # 所有段位
-    DivisionLeaderboardPanel.click_btn_alldivisions(bp)
+    DivisionLeaderboardPanel.panel_myleague.click_btn_alldivisions(bp)
     bp.sleep(1)
     DivisionListPanel.click_btn_close(bp)
     bp.sleep(1)

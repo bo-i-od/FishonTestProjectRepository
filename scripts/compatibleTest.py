@@ -370,7 +370,7 @@ def division(bp: BasePage):
     bp.sleep(1)
 
     # 所有段位
-    DivisionLeaderboardPanel.click_btn_alldivisions(bp)
+    DivisionLeaderboardPanel.panel_myleague.click_btn_alldivisions(bp)
     bp.sleep(1)
     DivisionListPanel.click_btn_close(bp)
     bp.sleep(1)

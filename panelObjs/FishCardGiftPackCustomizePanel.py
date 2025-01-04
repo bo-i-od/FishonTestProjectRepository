@@ -26,7 +26,21 @@ class FishCardGiftPackCustomizePanel(BasePage):
     def click_btn_buy(self):
         self.click_element(element_data=ElementsData.FishCardGiftPackCustomizePanel.btn_buy)
 
+    def click_item(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.FishCardGiftPackCustomizePanel.icon_list, index=index)
+
+    def switch_tab(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.FishCardGiftPackCustomizePanel.tab_list,  element_viewport=ElementsData.FishCardGiftPackCustomizePanel.viewport, viewport_direction="column", index=index)
+
+    operation_pool = [
+        {"element_data": ElementsData.FishCardGiftPackCustomizePanel.btn_buy, "func": click_btn_buy, "weight": 1},
+        {"element_data": ElementsData.FishCardGiftPackCustomizePanel.tab_list, "func": switch_tab, "weight": 1},
+        ]
+
 if __name__ == "__main__":
     bp = BasePage()
-    FishCardGiftPackCustomizePanel.click_btn_close(bp)
+    # FishCardGiftPackCustomizePanel.click_btn_close(bp)
+    # FishCardGiftPackCustomizePanel.click_item(bp)
+    FishCardGiftPackCustomizePanel.switch_tab(bp)
+    bp.connect_close()
 
