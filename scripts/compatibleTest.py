@@ -260,7 +260,7 @@ def battle_pass(bp: BasePage):
         BattlePassIntroPanel.close_battlePassIntroPanel(bp, is_test=False)
     # 通行证升级奖励
     elif BattlePassRewardPanel.is_panel_active(bp):
-        BattlePassRewardPanel.click_tap_to_continue(bp)
+        BattlePassRewardPanel.click_btn_close(bp)
     bp.sleep(1)
 
     # 通行证倒数弹窗
@@ -275,19 +275,19 @@ def battle_pass(bp: BasePage):
     # bp.sleep(1)
 
     # 购买等级
-    BattlePassPanel.click_btn_buy_levels(bp)
+    BattlePassPanel.click_btn_buy(bp)
     bp.sleep(1)
     slider = BattlePassBuyLevelPanel.get_slider(bp)
     bp.swipe(point_start=[slider.slider_range[1] - slider.slider_size[0] * 0.2, slider.slider_position[1]], point_end=[slider.slider_range[1] + slider.slider_size[0] * 0.2, slider.slider_position[1]])
-    BattlePassBuyLevelPanel.click_add_level(bp)
+    BattlePassBuyLevelPanel.click_btn_add(bp)
     bp.sleep(0.5)
     BattlePassBuyLevelPanel.click_btn_buy(bp)
     bp.sleep(1)
-    BattlePassRewardPanel.click_tap_to_continue(bp)
+    BattlePassRewardPanel.click_btn_close(bp)
     bp.sleep(1)
 
     # 购买通行证
-    BattlePassPanel.click_btn_get_premium(bp)
+    BattlePassPanel.click_btn_premium(bp)
     bp.sleep(1)
     BattlePassBuyLicensePanel.click_btn_close(bp)
     bp.sleep(1)
@@ -370,7 +370,7 @@ def division(bp: BasePage):
     bp.sleep(1)
 
     # 所有段位
-    DivisionLeaderboardPanel.click_btn_alldivisions(bp)
+    DivisionLeaderboardPanel.panel_myleague.click_btn_alldivisions(bp)
     bp.sleep(1)
     DivisionListPanel.click_btn_close(bp)
     bp.sleep(1)
@@ -697,7 +697,7 @@ def pve(bp: BasePage):
     # 体力面板
     BattlePreparePanel.click_btn_add_100500(bp)
     bp.sleep(1)
-    BuyEnergyPanel.click_tap_to_close(bp)
+    BuyEnergyPanel.click_btn_close(bp)
     bp.sleep(1)
 
     # 多倍钓点按钮

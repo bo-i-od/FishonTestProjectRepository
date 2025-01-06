@@ -1,3 +1,5 @@
+import random
+
 from common.basePage import BasePage
 from common.slider import Slider
 from configs.elementsData import ElementsData
@@ -44,7 +46,33 @@ class BugMultiplePanel(BasePage):
     def get_slider(self):
         return Slider(self, element_slider=ElementsData.BugMultiplePanel.slider)
 
+    def swipe_slider(self, value_start=None, value_end=None):
+        if not value_start:
+            value_start = random.random()
+        if not value_end:
+            value_end = random.random()
+        slider = BugMultiplePanel.get_slider(self)
+        point_start, point_end = slider.get_slide_point_start_and_end(slide_range=[value_start, value_end])
+        if value_start > value_end:
+            t = value_start - value_end
+        else:
+            t = value_end - value_start
+        self.swipe(point_start=point_start, point_end=point_end, t=t)
 
+
+    operation_pool = [
+        {"element_data": ElementsData.BugMultiplePanel.btn_cancel, "func": click_btn_cancel, "weight": 1},
+        {"element_data": ElementsData.BugMultiplePanel.btn_confirm, "func": click_btn_confirm, "weight": 1},
+        {"element_data": ElementsData.BugMultiplePanel.btn_add, "func": click_btn_add, "weight": 1},
+        {"element_data": ElementsData.BugMultiplePanel.btn_sub, "func": click_btn_sub, "weight": 1},
+        {"element_data": ElementsData.BugMultiplePanel.btn_max, "func": click_btn_max, "weight": 1},
+        {"element_data": ElementsData.BugMultiplePanel.btn_min, "func": click_btn_min, "weight": 1},
+        ]
+
+if __name__ == '__main__':
+    bp = BasePage()
+    BugMultiplePanel.swipe_slider(bp)
+    bp.connect_close()
 
 
 

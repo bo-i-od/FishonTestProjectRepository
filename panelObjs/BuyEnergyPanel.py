@@ -6,8 +6,9 @@ from tools.commonTools import *
 
 
 class BuyEnergyPanel(BasePage):
-    def click_tap_to_close(self):
+    def click_btn_close(self):
         self.click_element(element_data=ElementsData.BuyEnergyPanel.btn_close)
+
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.BuyEnergyPanel.BuyEnergyPanel)
 
@@ -93,4 +94,28 @@ class BuyEnergyPanel(BasePage):
             return 0
         return 1
 
+    def click_btn_buy(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.BuyEnergyPanel.btn_buy_list, index=index)
 
+    def click_top_res_btn(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.BuyEnergyPanel.top_res_btns, index=index)
+
+    def click_item(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.BuyEnergyPanel.item_list, index=index)
+
+    operation_pool = [
+        {"element_data": ElementsData.BuyEnergyPanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.BuyEnergyPanel.btn_buy_list, "func": click_btn_buy, "weight": 2},
+        {"element_data": ElementsData.BuyEnergyPanel.top_res_btns, "func": click_top_res_btn, "weight": 1},
+        {"element_data": ElementsData.BuyEnergyPanel.item_list, "func": click_item, "weight": 1},
+
+        ]
+
+if __name__ == '__main__':
+    bp = BasePage()
+    # BuyEnergyPanel.click_item(bp)
+
+    BuyEnergyPanel.click_btn_buy(bp)
+
+    # BuyEnergyPanel.click_top_res_btn(bp)
+    bp.connect_close()

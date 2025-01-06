@@ -37,7 +37,7 @@ def energy_drink_single_test(bp: BasePage):
     bp.set_item_count(target_count=drink_count, item_tpid="200600")
 
     # 关闭打开刷新
-    BuyEnergyPanel.click_tap_to_close(bp)
+    BuyEnergyPanel.click_btn_close(bp)
     bp.sleep(1)
     bp.go_to_panel("BuyEnergyPanel")
     bp.sleep(1)
@@ -71,7 +71,7 @@ def energy_drink_multiple_test(bp: BasePage):
     bp.set_item_count(target_count=drink_count, item_tpid="200600")
 
     # 关闭打开刷新
-    BuyEnergyPanel.click_tap_to_close(bp)
+    BuyEnergyPanel.click_btn_close(bp)
     bp.sleep(1)
     bp.go_to_panel("BuyEnergyPanel")
     bp.sleep(1)
@@ -159,7 +159,7 @@ def energy_cash_test(bp: BasePage):
     # 设定绿钞
     bp.set_item_count(target_count=10000, item_tpid="100100")
     # 关闭打开刷新
-    BuyEnergyPanel.click_tap_to_close(bp)
+    BuyEnergyPanel.click_btn_close(bp)
     bp.sleep(1)
     bp.go_to_panel("BuyEnergyPanel")
     bp.sleep(1)
@@ -206,7 +206,7 @@ def energy_cash_usd_test(bp:BasePage):
         bp.debug_log(f"当前分层为{layer}")
         cmd = f"setPlayerLayer " + layer
         bp.cmd(command=cmd)
-        BuyEnergyPanel.click_tap_to_close(bp)
+        BuyEnergyPanel.click_btn_close(bp)
         # 关闭打开刷新
         bp.go_to_panel("BuyEnergyPanel")
         bp.sleep(1)
@@ -226,7 +226,7 @@ def main(bp: BasePage):
     energy_cash_usd_test(bp)
 
     # 关闭页面
-    BuyEnergyPanel.click_tap_to_close(bp)
+    BuyEnergyPanel.click_btn_close(bp)
 
 
 if __name__ == '__main__':

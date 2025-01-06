@@ -21,6 +21,9 @@ class FishAlbum3DPanel(BasePage):
     def get_reward_icon_position(self):
         return self.get_position(element_data=ElementsData.FishAlbum3DPanel.reward_icon)
 
+    def click_reward(self):
+        self.click_element(element_data=ElementsData.FishAlbum3DPanel.reward_icon)
+
     def click_btn_preview(self):
         self.click_element(element_data=ElementsData.FishAlbum3DPanel.btn_preview)
 
@@ -33,13 +36,12 @@ class FishAlbum3DPanel(BasePage):
     def is_panel_fisheries_active(self):
         return self.exist(element_data=ElementsData.FishAlbum3DPanel.panel_fisheries)
 
-    def switch_tab(self, index):
-        target_id = self.get_object_id_list(element_data=ElementsData.FishAlbum3DPanel.fisheries_list)[index]
-        viewport = Viewport(self, element_viewport=ElementsData.FishAlbum3DPanel.fisheries_list_viewport,
-                            element_item_list=ElementsData.FishAlbum3DPanel.fisheries_list)
-        viewport.move_until_appear(target_id)
-        position_list = self.get_position_list(element_data=ElementsData.FishAlbum3DPanel.fisheries_list)
-        self.click_position(position_list[index])
+    def switch_tab(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.FishAlbum3DPanel.fisheries_list, element_viewport=ElementsData.FishAlbum3DPanel.fisheries_list_viewport, index=index)
+
+    def click_btn_close_tab(self):
+        self.click_element(element_data=ElementsData.FishAlbum3DPanel.btn_close_tab)
+
 
     def get_tab_status(self, tab_id_list):
         unlock_tab_list = []
@@ -93,9 +95,22 @@ class FishAlbum3DPanel(BasePage):
     def get_star_position_list(self):
         return self.get_position_list(element_data=ElementsData.FishAlbum3DPanel.star_list)
 
+    def click_star(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.FishAlbum3DPanel.star_list, index=index)
+
+    operation_pool = [
+        {"element_data": ElementsData.FishAlbum3DPanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.FishAlbum3DPanel.btn_share, "func": click_btn_share, "weight": 1},
+        {"element_data": ElementsData.FishAlbum3DPanel.btn_switch, "func": click_btn_switch, "weight": 1},
+        {"element_data": ElementsData.FishAlbum3DPanel.fisheries_list, "func": switch_tab, "weight": 1},
+        {"element_data": ElementsData.FishAlbum3DPanel.btn_close_tab, "func": click_btn_close_tab, "weight": 1},
+        {"element_data": ElementsData.FishAlbum3DPanel.btn_preview, "func": click_btn_preview, "weight": 1},
+        {"element_data": ElementsData.FishAlbum3DPanel.btn_i, "func": click_btn_i, "weight": 1},
+        {"element_data": ElementsData.FishAlbum3DPanel.reward_icon, "func": click_reward, "weight": 1},
+        {"element_data": ElementsData.FishAlbum3DPanel.star_list, "func": click_star, "weight": 1},
+        ]
 
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     bp = BasePage()
-    FishAlbum3DPanel.guide(bp)
+

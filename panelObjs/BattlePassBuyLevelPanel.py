@@ -1,3 +1,4 @@
+import random
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from common.resource import *
@@ -12,10 +13,10 @@ class BattlePassBuyLevelPanel(BasePage):
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.BattlePassBuyLevelPanel.BattlePassBuyLevelPanel)
 
-    def click_add_level(self):
+    def click_btn_add(self):
         self.click_element(element_data=ElementsData.BattlePassBuyLevelPanel.btn_add)
 
-    def click_sub_level(self):
+    def click_btn_sub(self):
         self.click_element(element_data=ElementsData.BattlePassBuyLevelPanel.btn_sub)
 
     def get_buy_level_and_new_level(self):
@@ -27,7 +28,7 @@ class BattlePassBuyLevelPanel(BasePage):
         return buy_level, new_level
 
     def get_cost(self):
-        btn_buy_text = self.get_text(element_data=ElementsData.BattlePassBuyLevelPanel.btn_buy_text)
+        btn_buy_text = self.get_text(element_data=ElementsData.BattlePassBuyLevelPanel.btn_buy)
         cost = int(btn_buy_text)
         return cost
 
@@ -36,7 +37,7 @@ class BattlePassBuyLevelPanel(BasePage):
         return cash
 
     def click_btn_buy(self):
-        self.click_element(element_data=ElementsData.BattlePassBuyLevelPanel.btn_buy_text)
+        self.click_element(element_data=ElementsData.BattlePassBuyLevelPanel.btn_buy)
 
     def get_clickable_icon_and_position_list(self):
         viewport = Viewport(self, element_viewport=ElementsData.BattlePassBuyLevelPanel.Viewport,
@@ -61,6 +62,33 @@ class BattlePassBuyLevelPanel(BasePage):
     def go_to_RechargeStorePanel(self):
         self.click_element(element_data=ElementsData.BattlePassBuyLevelPanel.btn_add_100100)
 
+    def click_top_res_btn(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.BattlePassBuyLevelPanel.top_res_btns, index=index)
 
-if __name__ == "__main__":
-    bp = BattlePassBuyLevelPanel()
+    def swipe_slider(self, value_start=None, value_end=None):
+        if not value_start:
+            value_start = random.random()
+        if not value_end:
+            value_end = random.random()
+        slider = BattlePassBuyLevelPanel.get_slider(self)
+        point_start, point_end = slider.get_slide_point_start_and_end(slide_range=[value_start, value_end])
+        if value_start > value_end:
+            t = value_start - value_end
+        else:
+            t = value_end - value_start
+        self.swipe(point_start=point_start, point_end=point_end, t=t)
+
+    operation_pool = [
+        {"element_data": ElementsData.BattlePassBuyLevelPanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.BattlePassBuyLevelPanel.btn_add, "func": click_btn_add, "weight": 1},
+        {"element_data": ElementsData.BattlePassBuyLevelPanel.btn_sub, "func": click_btn_sub, "weight": 1},
+        {"element_data": ElementsData.BattlePassBuyLevelPanel.btn_buy, "func": click_btn_buy, "weight": 1},
+        {"element_data": ElementsData.BattlePassBuyLevelPanel.top_res_btns, "func": click_top_res_btn, "weight": 1},
+        {"element_data": ElementsData.BattlePassBuyLevelPanel.slider, "func": swipe_slider, "weight": 1},
+    ]
+
+if __name__ == '__main__':
+    bp = BasePage()
+    BattlePassBuyLevelPanel.swipe_slider(bp)
+    bp.connect_close()
+

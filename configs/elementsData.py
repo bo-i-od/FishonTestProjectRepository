@@ -306,11 +306,12 @@ class ElementsData:
     class BattlePassBuyLevelPanel:
         BattlePassBuyLevelPanel = {"locator": "UICanvas>Default>BattlePassBuyLevelPanel"}
         btn_close = {"locator": "UICanvas>Default>BattlePassBuyLevelPanel>panel_BP_Lv_buy>panel_popup>btn_close>img"}
-        btn_buy_text = {"locator": "UICanvas>Default>BattlePassBuyLevelPanel>panel_BP_Lv_buy>panel_popup>btns>btn_confirm>text"}
+        btn_buy = {"locator": "UICanvas>Default>BattlePassBuyLevelPanel>panel_BP_Lv_buy>panel_popup>btns>btn_confirm>text"}
         btn_buy_disabled = {"locator": "UICanvas>Default>BattlePassBuyLevelPanel>panel_BP_Lv_buy>panel_popup>btns>btn_confirm>btn_disabled"}
         btn_add = {"locator": "UICanvas>Default>BattlePassBuyLevelPanel>panel_BP_Lv_buy>panel_popup>continuous_upgrade>btn_add>img"}
         btn_sub = {"locator": "UICanvas>Default>BattlePassBuyLevelPanel>panel_BP_Lv_buy>panel_popup>continuous_upgrade>btn_sub>img"}
         level_cal = {"locator": "UICanvas>Default>BattlePassBuyLevelPanel>panel_BP_Lv_buy>panel_popup>continuous_upgrade>title>title"}
+        top_res_btns = {"locator": "UICanvas>Default>BattlePassBuyLevelPanel>panel_BP_Lv_buy>top_res>ResourceBar>>btn_add"}
         btn_add_100100 = {"locator": "UICanvas>Default>BattlePassBuyLevelPanel>panel_BP_Lv_buy>top_res>ResourceBar>100100>btn_add>btn_normal"}
         text_100100 = {"locator": "UICanvas>Default>BattlePassBuyLevelPanel>panel_BP_Lv_buy>top_res>ResourceBar>100100>value"}
         Viewport = {"locator": "UICanvas>Default>BattlePassBuyLevelPanel>panel_BP_Lv_buy>panel_popup>List>Viewport", "focus": (0, 0)}
@@ -370,6 +371,7 @@ class ElementsData:
         reward_gear_list = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>List>Viewport>Content>>model>>item>gear_model_new(Clone)>icon"}
         licenseLock_list = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>List>Viewport>Content>>model>licenseLock>lock"}
         title_bg = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>title_bg>img_1"}
+        item_icon_list =  {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>List>Viewport>Content>>model>>item>item_model_new(Clone)>icon"}
         free_icon_list = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>List>Viewport>Content>>model>free>item>item_model_new(Clone)>icon"}
         premium_icon_list = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>List>Viewport>Content>>model>premium>item>item_model_new(Clone)>icon"}
         free_quantity_list = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>List>Viewport>Content>>model>free>item>item_model_new(Clone)>quantity>value"}
@@ -378,6 +380,7 @@ class ElementsData:
         premium_list = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>List>Viewport>Content>>model>premium"}
         preview_item_icon_list ={"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>list_preview>reward_model>model>>item>item_model_new(Clone)>icon"}
         preview_gear_icon_list = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>list_preview>reward_model>model>>item>gear_model_new(Clone)>icon"}
+        preview_item_list = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>list_preview>reward_model>model>>item>"}
         btn_i_goldbank = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>List>Viewport>Content>goldbank>btn_i>img"}
         Tip_goldbank = {"locator": "UICanvas>Default>BattlePassPanel>panel_BP>panel_right>Tip_goldbank"}
 
@@ -398,6 +401,8 @@ class ElementsData:
         reward_icon_premium_list = {"locator": "UICanvas>Default>BattlePassRewardPanel>panel_BP_Lv_up>panel_right>panel_premium>List>Viewport>Content>>model>premium>item>item_model_new(Clone)>icon"}
         reward_quantity_premium_list = {"locator": "UICanvas>Default>BattlePassRewardPanel>panel_BP_Lv_up>panel_right>panel_premium>List>Viewport>Content>>model>premium>item>item_model_new(Clone)>quantity>value"}
         reward_gear_premium_list = {"locator": "UICanvas>Default>BattlePassRewardPanel>panel_BP_Lv_up>panel_right>panel_premium>List>Viewport>Content>>model>premium>item>gear_model_new(Clone)>icon"}
+        item_list_free = {"locator": "UICanvas>Default>BattlePassRewardPanel>panel_BP_Lv_up>panel_right>panel_free>List>Viewport>Content>>model>free>item>"}
+        item_list_premium = {"locator": "UICanvas>Default>BattlePassRewardPanel>panel_BP_Lv_up>panel_right>panel_premium>List>Viewport>Content>>model>premium>item>"}
         Viewport_free = {"locator": "UICanvas>Default>BattlePassRewardPanel>panel_BP_Lv_up>panel_right>panel_free>List>Viewport", "focus": (0, 0)}
         Viewport_premium = {"locator": "UICanvas>Default>BattlePassRewardPanel>panel_BP_Lv_up>panel_right>panel_premium>List>Viewport", "focus": (0, 0)}
 
@@ -534,6 +539,9 @@ class ElementsData:
         text_100100 = {"locator": "UICanvas>Default>BuyEnergyPanel>top_res>ResourceBar>100100>value"}
         text_100500 = {"locator": "UICanvas>Default>BuyEnergyPanel>top_res>ResourceBar>100500>value"}
         btn_add_100100 = {"locator": "UICanvas>Default>BuyEnergyPanel>top_res>ResourceBar>100100>btn_add>btn_normal"}
+        btn_buy_list =  {"locator": "UICanvas>Default>BuyEnergyPanel>tab>>btn"}
+        top_res_btns = {"locator": "UICanvas>Default>BuyEnergyPanel>top_res>ResourceBar>>btn_add"}
+        item_list = {"locator": "UICanvas>Default>BuyEnergyPanel>tab>month_card>group_rewards>>item_icon>item_model_mini"}
 
     class CareerPanel:
         CareerPanel = {"locator": "UICanvas>Default>CareerPanel"}
@@ -545,8 +553,7 @@ class ElementsData:
         cost_quantity_list = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list_tips>btns>cost>>value"}
         rating = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list_tips>tips>top>rating>num"}
         rating_total = {"locator": "UICanvas>Default>CareerPanel>panel_talent>rating>num"}
-        item_icon = {
-            "locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list_tips>tips>item>item_model>icon_bg>icon"}
+        item_icon = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list_tips>tips>item>item_model>icon_bg>icon"}
         rating_tips = {"locator": "UICanvas>Default>RatingTipsPanel>panel>Content>text_child"}
         rating_child = {"locator": "UICanvas>Default>RatingTipsPanel>panel>Content>rating_child>num"}
         item_lv = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list_tips>tips>item>item_model>text"}
@@ -555,18 +562,15 @@ class ElementsData:
         tips_max = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list_tips>tips_max"}
         text_100000 = {"locator": "UICanvas>Default>CareerPanel>panel_talent>top_res>ResourceBar>100000>value"}
         text_100400 = {"locator": "UICanvas>Default>CareerPanel>panel_talent>top_res>ResourceBar>100400>value"}
-        btn_add_100000 = {
-            "locator": "UICanvas>Default>CareerPanel>panel_talent>top_res>ResourceBar>100000>btn_add>btn_normal"}
+        btn_add_100000 = {"locator": "UICanvas>Default>CareerPanel>panel_talent>top_res>ResourceBar>100000>btn_add>btn_normal"}
+        top_res_btns = {"locator": "UICanvas>Default>CareerPanel>panel_talent>top_res>ResourceBar>>btn_add"}
         describe = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list_tips>tips>describe"}
-        group_list = {
-            "locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list>panel_list_main>list>Viewport>Content>>"}
-        career_viewport = {
-            "locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list>panel_list_main>list>Viewport",
-            "focus": (0, 0)}
-        page_item_middle_list = {
-            "locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list>panel_list_main>list>Viewport>Content>>>item_Middle>"}
-        list_lockbg_mask = {
-            "locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list>list_lockbg_mask>img_back1"}
+        group_list = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list>panel_list_main>list>Viewport>Content>>"}
+        career_viewport = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list>panel_list_main>list>Viewport", "focus": (0, 0)}
+        page_item_middle_list = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list>panel_list_main>list>Viewport>Content>>>item_Middle>"}
+        list_lockbg_mask = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list>list_lockbg_mask>img_back1"}
+        btn_guide = {"locator": "UICanvas>Default>CareerPanel>panel_talent>btn_guide"}
+        item_list = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list>panel_list_main>list>Viewport>Content>>>>>icon_bg"}
 
 
 
@@ -583,10 +587,122 @@ class ElementsData:
         btn_close = {"locator": "UICanvas>Default>ChatPanel>panel>btn_close"}
         Input_enter = {"locator":"UICanvas>Default>ChatPanel>panel>panel_info>panel_info>panel_down>chat_enter>Input_enter"}
         btn_enter = {"locator":"UICanvas>Default>ChatPanel>panel>panel_info>panel_info>panel_down>chat_enter>btn_enter"}
+        btn_share = {"locator":"UICanvas>Default>ChatPanel>panel>panel_info>panel_info>panel_down>chat_enter>btn_share"}
+        btn_emoji = {"locator": "UICanvas>Default>ChatPanel>panel>panel_info>panel_info>panel_down>chat_enter>btn_emoji"}
+        tab_list = {"locator":"UICanvas>Default>ChatPanel>panel>panel_info>panel_tab>content>TabList>Viewport>Content>"}
+        viewport_tab = {"locator":"UICanvas>Default>ChatPanel>panel>panel_info>panel_tab>content>TabList>Viewport"}
+        btns_nothing ={"locator": "UICanvas>Default>ChatPanel>panel>panel_info>panel_info>panel_nothing>btns>"}
+        tab_list_emoji = {"locator": "UICanvas>Default>ChatPanel>panel>panel_info>panel_info>panel_down>panel_emoji>tab_list>view_port>content>", "focus": (0, 0.5)}
+        viewport_tab_list_emoji = {"locator": "UICanvas>Default>ChatPanel>panel>panel_info>panel_info>panel_down>panel_emoji>tab_list>view_port"}
+        emoji_list = {"locator": "UICanvas>Default>ChatPanel>panel>panel_info>panel_info>panel_down>panel_emoji>emoji_list>Viewport>Content>>icon"}
+        viewport_emoji = {"locator": "UICanvas>Default>ChatPanel>panel>panel_info>panel_info>panel_down>panel_emoji>emoji_list>Viewport", "focus": (0, 0)}
+        btn_fisheries = {"locator": "UICanvas>Default>ChatPanel>panel>panel_info>panel_info>panel_down>panel_share>panel>btns>btn_fisheries"}
+        toggle = {"locator": "UICanvas>Default>ChatPanel>panel>panel_info>panel_info>panel_top>screen>option>Toggle"}
+        btn_share_list = {"locator":"UICanvas>Default>ChatPanel>panel>panel_info>panel_info>panel_down>panel_share>panel>list>Viewport>Content>fish_info_1>info>btn_share"}
+        viewport_share = {"locator":"UICanvas>Default>ChatPanel>panel>panel_info>panel_info>panel_down>panel_share>panel>list>Viewport", "focus": (0, 0)}
+        head_list = {"locator":"UICanvas>Default>ChatPanel>panel>panel_info>panel_info>panel_List>list>Viewport>Content>>playerInfo>head>head_mask>head_img"}
+        btn_more_list = {"locator":"UICanvas>Default>ChatPanel>panel>panel_info>panel_info>panel_List>list>Viewport>Content>>fish_info>fast>btn_more"}
+        btn_fast_list = {"locator":"UICanvas>Default>ChatPanel>panel>panel_info>panel_info>panel_List>list>Viewport>Content>>fish_info>fast>Viewport>Content>"}
+        viewport_info = {"locator":"UICanvas>Default>ChatPanel>panel>panel_info>panel_info>panel_List>list>Viewport", "focus": (0, 0)}
 
     class ClubApplyPanel:
         ClubApplyPanel = {"locator":"UICanvas>Default>ClubApplyPanel"}
         btn_close = {"locator":"UICanvas>Default>ClubApplyPanel>panel>btn_close>img"}
+        btn_apply = {"locator":"UICanvas>Default>ClubApplyPanel>panel>panel_clubhome>panel_info>content>btns>btn_apply"}
+        btn_report = {"locator":"UICanvas>Default>ClubApplyPanel>panel>panel_clubhome>panel_info>content>top>btn_report>img"}
+        btn_copy = {"locator":"UICanvas>Default>ClubApplyPanel>panel>panel_clubhome>panel_info>content>info>clubid>btn_copy>img", "focus": (1, 0.5)}
+        club_id = {"locator":"UICanvas>Default>ClubApplyPanel>panel>panel_clubhome>panel_info>content>info>clubid>value"}
+        club_list = {"locator":"UICanvas>Default>ClubApplyPanel>panel>panel_clubhome>panel_clublist>panel_list>Viewport>Content>InfoItem"}
+        viewport = {"locator":"UICanvas>Default>ClubApplyPanel>panel>panel_clubhome>panel_clublist>panel_list>Viewport"}
+        btn_create = {"locator":"UICanvas>Default>ClubApplyPanel>panel>panel_clubhome>panel_clublist>btns>btn_create"}
+        btn_fast = {"locator":"UICanvas>Default>ClubApplyPanel>panel>panel_clubhome>panel_clublist>btns>btn_fast"}
+        btn_refresh = {"locator":"UICanvas>Default>ClubApplyPanel>panel>panel_clubhome>panel_clublist>refresh>btn_refresh"}
+        toggle = {"locator":"UICanvas>Default>ClubApplyPanel>panel>panel_clubhome>panel_clublist>applyed>option>Toggle"}
+        Input_clubid = {"locator":"UICanvas>Default>ClubApplyPanel>panel>panel_clubhome>panel_clublist>clubid_search>Input_clubid"}
+        btn_search = {"locator":"UICanvas>Default>ClubApplyPanel>panel>panel_clubhome>panel_clublist>clubid_search>btn_search"}
+        btn_delete = {"locator":"UICanvas>Default>ClubApplyPanel>panel>panel_clubhome>panel_clublist>clubid_search>btn_close>img"}
+
+    class ClubCreatePanel:
+        ClubCreatePanel = {"locator": "UICanvas>Default>ClubCreatePanel"}
+        btn_close = {"locator": "UICanvas>Default>ClubCreatePanel>panel>panel_popup_clubedit>btn_close>img"}
+        btn_cast = {"locator": "UICanvas>Default>ClubCreatePanel>panel>panel_popup_clubedit>btns>btn_cast", "focus": (0.5, 1)}
+        Input_clubintroduction = {"locator": "UICanvas>Default>ClubCreatePanel>panel>panel_popup_clubedit>club_introduction>Input_clubintroduction", "focus": (0.5, 1)}
+        Input_clubname = {"locator": "UICanvas>Default>ClubCreatePanel>panel>panel_popup_clubedit>club_name>Input_clubname", "focus": (0.5, 1)}
+        tag_list = {"locator": "UICanvas>Default>ClubCreatePanel>panel>panel_popup_clubedit>club_tags>type>>Toggle"}
+        btns_limit =  {"locator": "UICanvas>Default>ClubCreatePanel>panel>panel_popup_clubedit>club_limit>>>img"}
+        tabs_flag = {"locator": "UICanvas>Default>ClubCreatePanel>panel>panel_popup_clubedit>club_flag>flag_tab>tabs>"}
+        block_list = {"locator": "UICanvas>Default>ClubCreatePanel>panel>panel_popup_clubedit>club_flag>bg_block>type>>Toggle"}
+        flag_list = {"locator": "UICanvas>Default>ClubCreatePanel>panel>panel_popup_clubedit>club_flag>bg_flags>Viewport>type>>Toggle"}
+        viewport_flag = {"locator": "UICanvas>Default>ClubCreatePanel>panel>panel_popup_clubedit>club_flag>bg_flags>Viewport", "focus": (0, 0)}
+
+    class ClubModifyPanel:
+        ClubModifyPanel = {"locator": "UICanvas>Default>ClubModifyPanel"}
+        btn_close = {"locator": "UICanvas>Default>ClubModifyPanel>panel>panel_popup_clubedit>btn_close>img"}
+        btn_disband = {"locator": "UICanvas>Default>ClubModifyPanel>panel>panel_popup_clubedit>btns>btn_disband"}
+        btn_confirm = {"locator": "UICanvas>Default>ClubModifyPanel>panel>panel_popup_clubedit>btns>btn_confirm", "focus": (0.5, 1)}
+        Input_clubintroduction = {"locator": "UICanvas>Default>ClubModifyPanel>panel>panel_popup_clubedit>club_introduction>Input_clubintroduction", "focus": (0.5, 1)}
+        Input_clubname = {"locator": "UICanvas>Default>ClubModifyPanel>panel>panel_popup_clubedit>club_name>Input_clubname", "focus": (0.5, 1)}
+        tag_list = {"locator": "UICanvas>Default>ClubModifyPanel>panel>panel_popup_clubedit>club_tags>type>>Toggle"}
+        btns_limit =  {"locator": "UICanvas>Default>ClubModifyPanel>panel>panel_popup_clubedit>club_limit>>>img"}
+        tabs_flag = {"locator": "UICanvas>Default>ClubModifyPanel>panel>panel_popup_clubedit>club_flag>flag_tab>tabs>"}
+        block_list = {"locator": "UICanvas>Default>ClubModifyPanel>panel>panel_popup_clubedit>club_flag>bg_block>type>>Toggle"}
+        flag_list = {"locator": "UICanvas>Default>ClubModifyPanel>panel>panel_popup_clubedit>club_flag>bg_flags>Viewport>type>>Toggle"}
+        viewport_flag = {"locator": "UICanvas>Default>ClubModifyPanel>panel>panel_popup_clubedit>club_flag>bg_flags>Viewport", "focus": (0, 0)}
+
+
+    class ClubPanel:
+        ClubPanel = {"locator": "UICanvas>Default>ClubPanel"}
+        btn_close = {"locator": "UICanvas>Default>ClubPanel>panel>btn_close>img"}
+        tab_list = {"locator": "UICanvas>Default>ClubPanel>panel>panel_tab>content>TabList>Viewport>Content>", "focus": (0, 0.5)}
+
+        class panel_clubhome:
+            btn_chat = {"locator": "UICanvas>Default>ClubPanel>panel>panel_clubhome>btn_chat"}
+            task_mini = {"locator": "UICanvas>Default>ClubPanel>panel>panel_clubhome>task_mini"}
+            toggle = {"locator": "UICanvas>Default>ClubPanel>panel>panel_clubhome>panel_chat>content>option>Toggle"}
+            btn_goweek = {"locator": "UICanvas>Default>ClubPanel>panel>panel_clubhome>panel_week_mini>bar_rewards>Rewards>btn_goweek"}
+            btn_copy = {"locator": "UICanvas>Default>ClubPanel>panel>panel_clubhome>panel_info>content>clubid>btn_copy"}
+            red_envelope_list = {"locator": "UICanvas>Default>ClubPanel>panel>panel_clubhome>panel_chat>content>chatinfo>Viewport>Content>red_envelope", "focus": (0, 0)}
+            viewport = {"locator": "UICanvas>Default>ClubPanel>panel>panel_clubhome>panel_chat>content>chatinfo>Viewport", "focus": (0, 0)}
+            btn_list = {"locator": "UICanvas>Default>ClubPanel>panel>panel_clubhome>panel_chat>content>chatinfo>Viewport>Content>>btn"}
+            btn_flashcard = {"locator": "UICanvas>Default>ClubPanel>panel>panel_clubhome>panel_events>btn_flashcard", "focus": (1, 0.5)}
+            btn_dragonboat = {"locator": "UICanvas>Default>ClubPanel>panel>panel_clubhome>panel_events>btn_dragonboat", "focus": (1, 0.5)}
+            btn_edit = {"locator": "UICanvas>Default>ClubPanel>panel>panel_clubhome>panel_info>content>btn_edit>icon"}
+
+        class panel_clubmember:
+            btn_leave = {"locator": "UICanvas>Default>ClubPanel>panel>panel_clubmember>btns>btns>btn_leave"}
+            btn_list = {"locator": "UICanvas>Default>ClubPanel>panel>panel_clubmember>btns>btns>btn_list"}
+            btn_playercard_list = {"locator": "UICanvas>Default>ClubPanel>panel>panel_clubmember>panel_list>Viewport>Content>>memberInfo>btn_playercard"}
+            btn_edit_list = {"locator": "UICanvas>Default>ClubPanel>panel>panel_clubmember>panel_list>Viewport>Content>>btn_edit"}
+            viewport = {"locator": "UICanvas>Default>ClubPanel>panel>panel_clubmember>panel_list>Viewport", "focus": (0, 0)}
+            btns = {"locator": "UICanvas>Default>ClubPanel>panel>panel_clubmember>panel_list>tips_clubpoint>panel>btns>"}
+
+        class panel_clubweek:
+            reward_list = {"locator": "UICanvas>Default>ClubPanel>panel>panel_clubweek>rewards>content>>Rewards"}
+            top_list = {"locator": "UICanvas>Default>ClubPanel>panel>panel_clubweek>rank>>btn"}
+            btn_i = {"locator": "UICanvas>Default>ClubPanel>panel>panel_clubweek>rewards>singlenum>btn_i>img"}
+
+        class Panel_Flashcard:
+            btn_close = {"locator": "UICanvas>Default>ClubPanel>panel>Panel_Flashcard>Panel>btn_close>img"}
+            btn_save = {"locator": "UICanvas>Default>ClubPanel>panel>Panel_Flashcard>Panel>panel_list>btns>btn_save", "focus": (0.5, 1)}
+            btn_cancel = {"locator": "UICanvas>Default>ClubPanel>panel>Panel_Flashcard>Panel>panel_list>btns>btn_cancel", "focus": (0.5, 1)}
+            tab_list = {"locator": "UICanvas>Default>ClubPanel>panel>Panel_Flashcard>Panel>panel_tab>TabList>Viewport>Content>", "focus": (0, 0.5)}
+            viewport_tab = {"locator": "UICanvas>Default>ClubPanel>panel>Panel_Flashcard>Panel>panel_tab>TabList>Viewport", "focus": (0, 0)}
+            flashcard_list = {"locator": "UICanvas>Default>ClubPanel>panel>Panel_Flashcard>Panel>panel_list>group>FlashcardList>Viewport>Content>"}
+            viewport_flashcard = {"locator": "UICanvas>Default>ClubPanel>panel>Panel_Flashcard>Panel>panel_list>group>FlashcardList>Viewport", "focus": (0, 0)}
+
+
+        class panel_popups_confirm:
+            btn_close = {"locator": "UICanvas>Default>ClubPanel>panel>panel_popups_confirm>Panel>btn_close>img"}
+            btn_exchange = {"locator": "UICanvas>Default>ClubPanel>panel>panel_popups_confirm>Panel>btn>btn_exchange", "focus": (0.5, 1)}
+
+        class panel_popup_applylist:
+            btn_close = {"locator": "UICanvas>Default>ClubPanel>panel>panel_popup_applylist>btn_close>img"}
+            btn_leave = {"locator": "UICanvas>Default>ClubPanel>panel>panel_popup_applylist>btns>btn_leave"}
+            btn_list = {"locator": "UICanvas>Default>ClubPanel>panel>panel_popup_applylist>btns>btn_list"}
+            btn_cancel_list =  {"locator": "UICanvas>Default>ClubPanel>panel>panel_popup_applylist>panel_applylist>Viewport>Content>>btns>btn_cancel", "focus": (0, 0.5)}
+            btn_confirm_list = {"locator": "UICanvas>Default>ClubPanel>panel>panel_popup_applylist>panel_applylist>Viewport>Content>>btns>btn_confirm"}
+            viewport = {"locator": "UICanvas>Default>ClubPanel>panel>panel_popup_applylist>panel_applylist>Viewport", "focus": (0, 0)}
+
 
     class ClubRedEnvelopePanel:
         ClubRedEnvelopePanel = {"locator": "UICanvas>Default>ClubRedEnvelopePanel"}
@@ -595,6 +711,9 @@ class ElementsData:
     class CommonItemGetPanel:
         CommonItemGetPanel = {"locator":"UICanvas>Default>CommonItemGetPanel"}
         btn_close = {"locator":"UICanvas>Default>CommonItemGetPanel>panel>btn_close>img"}
+        btn_list = {"locator":"UICanvas>Default>CommonItemGetPanel>panel>panel_sources>panel_list>sourcesList>Viewport>Content>>btn_purchase", "focus": (0.5, 1)}
+        viewport = {"locator":"UICanvas>Default>CommonItemGetPanel>panel>panel_sources>panel_list>sourcesList>Viewport", "focus": (0, 0)}
+
 
     class CommonWebViewPanel:
         CommonWebViewPanel = {"locator":"UICanvas>Default>CommonWebViewPanel"}
@@ -616,11 +735,29 @@ class ElementsData:
         DivisionLeaderboardPanel = {"locator":"UICanvas>Default>DivisionLeaderboardPanel"}
         btn_close = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>btn_close>img"}
         tab_list = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_tab>content>TabList>Viewport>Content>", "focus": (0, 0.5)}
-        btn_alldivisions = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_myleague>banner>btn_alldivisions"}
+        class panel_myleague:
+            btn_alldivisions = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_myleague>banner>btn_alldivisions"}
+            crown = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_myleague>banner>crown", "focus": (0.5, 1)}
+            btn_playercard_list = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_myleague>panel_ranking>Viewport>Content>>rank_info>info>playerInfo>btn_playercard"}
+            btn_playercard_self = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_myleague>panel_ranking>list_myself>rank_info>info>playerInfo>btn_playercard"}
+            item_list = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_myleague>panel_ranking>Viewport>Content>>rank_info>info>rewards>item>"}
+            item_self = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_myleague>panel_ranking>list_myself>rank_info>info>rewards>item>"}
+            viewport = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_myleague>panel_ranking>Viewport", "focus": (0, 0)}
+
+        class panel_arena:
+            tab_list = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_arena>tab>"}
+            btn_playercard_list = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_arena>panel_ranking>Viewport>Content>>rank_info>info>playerInfo>btn_playercard"}
+            btn_playercard_self = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_arena>panel_ranking>list_myself>rank_info>info>playerInfo>btn_playercard"}
+            item_list = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_arena>panel_ranking>Viewport>Content>>rank_info>info>rewards>item>"}
+            item_self = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_arena>panel_ranking>list_myself>rank_info>info>rewards>item>"}
+            viewport = {"locator": "UICanvas>Default>DivisionLeaderboardPanel>Panel>panel_arena>panel_ranking>Viewport", "focus": (0, 0)}
+
 
     class DivisionListPanel:
         DivisionListPanel = {"locator":"UICanvas>Default>DivisionListPanel"}
         btn_close = {"locator": "UICanvas>Default>DivisionListPanel>Panel>btn_close>img"}
+        item_list = {"locator": "UICanvas>Default>DivisionListPanel>Panel>divisions>List>Viewport>Content>>rewards>item>"}
+        viewport = {"locator": "UICanvas>Default>DivisionListPanel>Panel>divisions>List>Viewport", "focus": (0, 0)}
 
 
     class DLCDownloadPanel:
@@ -653,6 +790,8 @@ class ElementsData:
     class EventsGiftCenterPanel:
         EventsGiftCenterPanel = {"locator": "UICanvas>Important>EventsGiftCenterPanel"}
         btn_close = {"locator": "UICanvas>Important>EventsGiftCenterPanel>panel>btn_close>img"}
+        tab_list = {"locator": "UICanvas>Important>EventsGiftCenterPanel>panel>panel_tab>list>Viewport>Content>"}
+        viewport = {"locator": "UICanvas>Important>EventsGiftCenterPanel>panel>panel_tab>list>Viewport", "focus": (0, 0)}
 
     class FishAlbum3DPanel:
         FishAlbum3DPanel = {"locator": "UICanvas>Default>FishAlbum3DPanel"}
@@ -666,6 +805,7 @@ class ElementsData:
         panel_fisheries = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_fisheries"}
         fisheries_list_viewport = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_fisheries>panel>FisheriesList>Viewport", "focus": (0, 0)}
         fisheries_list = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_fisheries>panel>FisheriesList>Viewport>Content>", "focus": (0, 0.5)}
+        btn_close_tab = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_fisheries>btn_closeb"}
         progress_cur_list = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_album>panel_top>>progress_value>ValueLayout>cur"}
         photo_name = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_album>panel_left>photo_paper>detail>name"}
         photo_bg = {"locator": "UICanvas>Default>FishAlbum3DPanel>panel_album>panel_left>photo_paper>img_mask>img"}
@@ -688,6 +828,8 @@ class ElementsData:
         btn_buy = {"locator": "UICanvas>Default>FishCardGiftPackCustomizePanel>panel>btns>btn_buy"}
         icon_list = {"locator": "UICanvas>Default>FishCardGiftPackCustomizePanel>panel>main>>>item_model_mini(Clone)>icon"}
         quantity_list = {"locator": "UICanvas>Default>FishCardGiftPackCustomizePanel>panel>main>>>item_model_mini(Clone)>quantity>value"}
+        tab_list = {"locator": "UICanvas>Default>FishCardGiftPackCustomizePanel>panel>panel_tab>content>TabList>Viewport>Content>", "focus": (0, 0.5)}
+        viewport = {"locator": "UICanvas>Default>FishCardGiftPackCustomizePanel>panel>panel_tab>content>TabList>Viewport"}
 
     class FishCardPackTipsPanel:
         FishCardPackTipsPanel = {"locator": "UICanvas>Default>FishCardPackTipsPanel"}
@@ -740,7 +882,8 @@ class ElementsData:
         btn_draw = {"locator": "UICanvas>Default>FishCardMultipleLevelUpPanel>Panel>content_fishcard>btns>btn_draw>text"}
         choice_all = {"locator": "UICanvas>Default>FishCardMultipleLevelUpPanel>Panel>content_fishcard>choice>choice>Toggle>Background"}
         choice_list = {"locator": "UICanvas>Default>FishCardMultipleLevelUpPanel>Panel>content_fishcard>fishcard_list>Viewport>Content>>group>level>Toggle>Background"}
-
+        card_list = {"locator": "UICanvas>Default>FishCardMultipleLevelUpPanel>Panel>content_fishcard>fishcard_list>Viewport>Content>>group>card"}
+        viewport = {"locator": "UICanvas>Default>FishCardMultipleLevelUpPanel>Panel>content_fishcard>fishcard_list>Viewport"}
     class FishCardMultipleLevelUpSuccessPanel:
         FishCardMultipleLevelUpSuccessPanel = {"locator": "UICanvas>Default>FishCardMultipleLevelUpSuccessPanel"}
         btn_close = {"locator": "UICanvas>Default>FishCardMultipleLevelUpSuccessPanel>btn_close>text"}

@@ -25,7 +25,7 @@ def tips_test(bp:BasePage):
 def rating_tips_test(bp:BasePage):
     bp.debug_log("测试天赋介绍开始")
     bp.sleep(0.5)
-    CareerPanel.click_rating_panel(bp)
+    CareerPanel.click_rating_total(bp)
     bp.sleep(0.5)
     if not CareerPanel.is_rating_tips_active(bp):
         bp.debug_log("erro:if not CareerPanel.is_rating_tips_active(bp)")

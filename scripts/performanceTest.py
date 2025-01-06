@@ -177,7 +177,7 @@ def battle_pass(bp: BasePage):
         BattlePassIntroPanel.close_battlePassIntroPanel(bp, is_test=False)
     # 通行证升级奖励
     elif BattlePassRewardPanel.is_panel_active(bp):
-        BattlePassRewardPanel.click_tap_to_continue(bp)
+        BattlePassRewardPanel.click_btn_close(bp)
     bp.sleep(1)
 
     # 通行证倒数弹窗
@@ -186,15 +186,15 @@ def battle_pass(bp: BasePage):
         bp.sleep(1)
 
     # 购买等级
-    BattlePassPanel.click_btn_buy_levels(bp)
+    BattlePassPanel.click_btn_buy(bp)
     bp.sleep(1)
     BattlePassBuyLevelPanel.click_btn_buy(bp)
     bp.sleep(1)
-    BattlePassRewardPanel.click_tap_to_continue(bp)
+    BattlePassRewardPanel.click_btn_close(bp)
     bp.sleep(1)
 
     # 购买通行证
-    BattlePassPanel.click_btn_get_premium(bp)
+    BattlePassPanel.click_btn_premium(bp)
     bp.sleep(1)
     BattlePassBuyLicensePanel.click_btn_close(bp)
     bp.sleep(1)
@@ -275,7 +275,7 @@ def division(bp: BasePage):
     bp.sleep(1)
 
     # 所有段位
-    DivisionLeaderboardPanel.click_btn_alldivisions(bp)
+    DivisionLeaderboardPanel.panel_myleague.click_btn_alldivisions(bp)
     bp.sleep(1)
     DivisionListPanel.click_btn_close(bp)
     bp.sleep(1)
@@ -678,7 +678,7 @@ def store(bp: BasePage):
         bp.sleep(1)
         RewardsPanel.click_tap_to_claim(bp)
     FishBagPanel.wait_for_panel_appear(bp)
-    FishBagPanel.click_tap_to_continue(bp)
+    bp.clear_popup()
     bp.sleep(1)
     if RewardsPanel.is_panel_active(bp):
         RewardsPanel.wait_for_panel_appear(bp)

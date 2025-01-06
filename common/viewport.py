@@ -66,10 +66,10 @@ class Viewport:
                 return False
             if target_position[0] > edge_start:
                 point_end[0] -= self.delta_len
-                self.basePage.swipe(point_start=self.viewport_position, point_end=point_end)
+                self.basePage.swipe(point_start=self.viewport_position, point_end=point_end, t=self.delta_len)
                 return True
             point_end[0] += self.delta_len
-            self.basePage.swipe(point_start=self.viewport_position, point_end=point_end)
+            self.basePage.swipe(point_start=self.viewport_position, point_end=point_end, t=self.delta_len)
             return True
 
         # edge_start = self.viewport_range[0] + self.delta_len * 0.2
@@ -80,15 +80,15 @@ class Viewport:
             return False
         if target_position[1] > edge_start:
             point_end[1] = self.viewport_position[1] - self.delta_len
-            self.basePage.swipe(point_start=self.viewport_position, point_end=point_end)
+            self.basePage.swipe(point_start=self.viewport_position, point_end=point_end, t=self.delta_len)
             return True
         point_end[1] = self.viewport_position[1] + self.delta_len
-        self.basePage.swipe(point_start=self.viewport_position, point_end=point_end)
+        self.basePage.swipe(point_start=self.viewport_position, point_end=point_end, t=self.delta_len)
         return True
 
     def move_until_appear(self, target_id):
         while self.move_delta_len(target_id):
-            self.basePage.sleep(0.5)
+            self.basePage.sleep(0.3)
 
     def get_viewport_range(self):
         size = self.viewport_size
@@ -172,10 +172,6 @@ class Viewport:
 
 if __name__ == "__main__":
 
-    bp = BasePage()
-    # viewport = Viewport(bp, ElementsData.Login.DropdownList_Viewport, ElementsData.Login.DropdownList)
-    viewport = Viewport(bp, ElementsData.BattlePassPanel.Viewport, ElementsData.BattlePassPanel.reward_icon_list)
-    index = 80
-    viewport.move_until_appear(viewport.item_id_list[index])
+    pass
 
 
