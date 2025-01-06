@@ -6,4 +6,4 @@ class LoginAnnouncementPanel(BasePage):
         return self.exist(element_data=ElementsData.LoginAnnouncementPanel.LoginAnnouncementPanel)
 
     def click_btn_close(self):
-        self.click_element(element_data=ElementsData.LoginAnnouncementPanel.btn_close)
+        self.click_element(element_data=ElementsData.LoginAnnouncementPanel.btn_close, ignore_set={"LoginAnnouncementPanel"})
