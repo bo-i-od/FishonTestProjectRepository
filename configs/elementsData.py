@@ -504,6 +504,14 @@ class ElementsData:
             btn_fishalbum = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_fishalbum>btn"}
 
 
+    class AquariumFishGuardSideBarPanel:
+        AquariumFishGuardSideBarPanel = {"locator": "UICanvas>Default>AquariumFishGuardSideBarPanel"}
+        btn_close = {"locator": "UICanvas>Default>AquariumFishGuardSideBarPanel>btn_close"}
+        tab_1 = {"locator": "UICanvas>Default>AquariumFishGuardSideBarPanel>panel>panel_sidebar>panel_info>panel_tab>flag_tab>tabs>1"}
+        tab_2 = {"locator": "UICanvas>Default>AquariumFishGuardSideBarPanel>panel>panel_sidebar>panel_info>panel_tab>flag_tab>tabs>2"}
+        btn_i = {"locator": "UICanvas>Default>AquariumFishGuardSideBarPanel>panel>panel_sidebar>panel_top>btn_i>img"}
+        btn_aquarium = {"locator": "UICanvas>Default>AquariumFishGuardSideBarPanel>panel>panel_sidebar>panel_down>btns>btn_aquarium"}
+
     class BattleTreasureMapPanel:
         BattleTreasureMapPanel = {"locator": "UICanvas>Default>BattleTreasureMapPanel"}
         btn_close = {"locator": "UICanvas>Default>BattleTreasureMapPanel>panel>Panel>btn_close>img"}
@@ -1985,6 +1993,8 @@ class ElementsData:
         btn_magnifier = {"locator": "UICanvas>Default>TreasureChestPanel>panel>ChestInfo>items_bg>btn_magnifier>icon"}
         tips = {"locator": "UICanvas>Default>TreasureChestPanel>panel>ChestInfo>tips"}
         preview_icon_list = {"locator": "UICanvas>Default>TreasureChestPanel>panel>ChestInfo>items_bg>items>>icon"}
+
+
 
 
 
