@@ -80,8 +80,8 @@ def get_position(poco, element):
 
 
 @sync_wrapper
-def get_position_by_id(poco, id_list, offspring_path):
-    return poco.agent.c.call("GetPositionById", id_list, offspring_path)
+def get_position_by_id(poco, id_list, offspring_path, camera_name):
+    return poco.agent.c.call("GetPositionById", id_list, offspring_path, camera_name)
 
 
 @sync_wrapper

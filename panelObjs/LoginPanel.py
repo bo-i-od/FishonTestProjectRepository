@@ -37,8 +37,12 @@ class LoginPanel(BasePage):
     def set_server(self, index):
         self.set_dropdown_value(element_data=ElementsData.LoginPanel.Dropdown, index=index)
 
-if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21503", is_mobile_device=False)
-    bp.click_element(element_data=ElementsData.LoginPanel.btn_login)
+    operation_pool = [
+        {"element_data": ElementsData.LoginPanel.btn_login, "func": click_btn_login, "weight": 1},
+    ]
+
+
+if __name__ == "__main__":
+    bp = BasePage()
 
     bp.connect_close()

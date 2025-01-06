@@ -414,10 +414,9 @@ def login(bp: BasePage):
 def mail(bp: BasePage):
     bp.go_to_panel("MailPanel")
     bp.sleep(1)
-    tab_position_list = MailPanel.get_tab_position_list(bp)
-    MailPanel.switch_tab(bp, position_list=tab_position_list, index=0)
+    MailPanel.switch_tab(bp, index=0)
     bp.sleep(1)
-    MailPanel.switch_tab(bp, position_list=tab_position_list, index=1)
+    MailPanel.switch_tab(bp, index=1)
     bp.sleep(1)
     MailPanel.click_btn_close(bp)
 

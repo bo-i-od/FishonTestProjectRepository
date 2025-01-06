@@ -47,3 +47,36 @@ class LeaderBoardPanel(BasePage):
         quantity_list = self.get_text_list(element_data=ElementsData.LeaderBoardPanel.rewards_quantity_list)
         resource.str_to_int_list(quantity_list)
         return quantity_list
+
+    def click_btn_playercard(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.LeaderBoardPanel.btn_playercard_list, element_viewport=ElementsData.LeaderBoardPanel.viewport, viewport_direction="column", index=index)
+
+    def click_item(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.LeaderBoardPanel.item_list, element_viewport=ElementsData.LeaderBoardPanel.viewport, viewport_direction="column", index=index)
+
+    def click_btn_playercard_myself(self):
+        self.click_element(element_data=ElementsData.LeaderBoardPanel.btn_playercard_myself)
+
+    def click_item_myself(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.LeaderBoardPanel.item_list_myself, index=index)
+
+
+    operation_pool = [
+        {"element_data": ElementsData.LeaderBoardPanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.LeaderBoardPanel.btn_i, "func": click_btn_i, "weight": 1},
+        {"element_data": ElementsData.LeaderBoardPanel.btn_playercard_list, "func": click_btn_playercard, "weight": 1},
+        {"element_data": ElementsData.LeaderBoardPanel.btn_playercard_myself, "func": click_btn_playercard_myself, "weight": 1},
+        {"element_data": ElementsData.LeaderBoardPanel.item_list, "func": click_item, "weight": 1},
+        {"element_data": ElementsData.LeaderBoardPanel.item_list_myself, "func": click_item_myself, "weight": 1},
+        {"element_data": ElementsData.LeaderBoardPanel.tap_to_close, "func": click_tap_to_close, "weight": 1},
+    ]
+if __name__ == "__main__":
+    bp = BasePage()
+    # LeaderBoardPanel.click_btn_close(bp)
+    # LeaderBoardPanel.click_btn_i(bp)
+    # LeaderBoardPanel.click_btn_playercard(bp, 5)
+    # LeaderBoardPanel.click_btn_playercard_myself(bp)
+    LeaderBoardPanel.click_item(bp, 18)
+    # LeaderBoardPanel.click_item_myself(bp)
+    # LeaderBoardPanel.click_tap_to_close(bp)
+    bp.connect_close()

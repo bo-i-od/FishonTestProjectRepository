@@ -14,10 +14,10 @@ from panelObjs.BaitAndRodShowPanel import BaitAndRodShowPanel
 
 def switch_tab_test(bp:BasePage):
     # 切换tab
-    tab_position_list = MailPanel.get_tab_position_list(bp)
-    MailPanel.switch_tab(bp, tab_position_list, 0)
+
+    MailPanel.switch_tab(bp, 0)
     bp.sleep(1)
-    MailPanel.switch_tab(bp, tab_position_list, 1)
+    MailPanel.switch_tab(bp, 1)
     bp.sleep(1)
 
 def select_mail_test(bp:BasePage):

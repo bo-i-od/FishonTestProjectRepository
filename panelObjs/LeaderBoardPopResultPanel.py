@@ -12,11 +12,14 @@ class LeaderBoardPopResultPanel(BasePage):
             self.sleep(0.1)
 
     def click_btn_claim(self):
-        self.click_element(element_data=ElementsData.LeaderBoardPopResultPanel.btn_claim)
+        self.click_element(element_data=ElementsData.LeaderBoardPopResultPanel.btn_claim, ignore_set={"LeaderBoardPopResultPanel"})
 
     def get_reward_position_list(self):
         reward_position_list = self.get_position_list(element_data=ElementsData.LeaderBoardPopResultPanel.reward_icon_list)
         return reward_position_list
+
+    def click_item(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.LeaderBoardPopResultPanel.reward_icon_list, index=index, ignore_set={"LeaderBoardPopResultPanel"})
 
     def get_reward_icon_list(self):
         reward_icon_list = self.get_icon_list(element_data=ElementsData.LeaderBoardPopResultPanel.reward_icon_list)

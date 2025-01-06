@@ -80,8 +80,24 @@ class GearLevelupPanel(BasePage):
     def click_btn_add_100000(self):
         self.click_element(element_data=ElementsData.GearLevelupPanel.btn_add_100000)
 
-if __name__ == '__main__':
+    def click_top_res_btn(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.GearLevelupPanel.top_res_btns, index=index)
+
+    operation_pool = [
+        {"element_data": ElementsData.GearLevelupPanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.GearLevelupPanel.btn_next, "func": click_btn_next, "weight": 1},
+        {"element_data": ElementsData.GearLevelupPanel.btn_previous, "func": click_btn_previous, "weight": 1},
+        {"element_data": ElementsData.GearLevelupPanel.btn_upgrade, "func": click_btn_upgrade, "weight": 1},
+        {"element_data": ElementsData.GearLevelupPanel.top_res_btns, "func": click_top_res_btn, "weight": 1},
+    ]
+
+
+if __name__ == "__main__":
     bp = BasePage()
+    GearLevelupPanel.click_btn_close(bp)
     GearLevelupPanel.click_btn_next(bp)
     GearLevelupPanel.click_btn_previous(bp)
+    GearLevelupPanel.click_btn_upgrade(bp)
+    GearLevelupPanel.click_top_res_btn(bp)
+    bp.connect_close()
 

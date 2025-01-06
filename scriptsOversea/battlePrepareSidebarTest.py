@@ -6,9 +6,9 @@ from panelObjs.BattlePreparePanel import BattlePreparePanel
 from panelObjs.CareerPanel import CareerPanel
 from panelObjs.ClubApplyPanel import ClubApplyPanel
 from panelObjs.FriendPanel import FriendPanel
-from panelObjs.GearNewPanel import GearNewPanel
 from panelObjs.HomePanel import HomePanel
 from panelObjs.LoadingFisheryPanel import LoadingFisheryPanel
+from panelObjs.FlashCardBoxesPanel import FlashCardBoxesPanel
 from panelObjs.LoadingPanel import LoadingPanel
 from panelObjs.PlayerInfoPanel import PlayerInfoPanel
 from panelObjs.PlayerInteractPanel import PlayerInteractPanel
@@ -54,8 +54,8 @@ def main(bp: BasePage):
     # 点击查看鱼册
     BattlePreparePanel.SideBar.click_btn_fishalbum(bp)
     bp.sleep(1)
-    fishAlbum3DPanel.FishAlbum3DPanel.is_panel_active(bp)
-    fishAlbum3DPanel.FishAlbum3DPanel.click_btn_close(bp)
+    FishAlbum3DPanel.is_panel_active(bp)
+    FishAlbum3DPanel.click_btn_close(bp)
 
     BattlePreparePanel.SideBar.click_btn_menu(bp)
     bp.sleep(1)
@@ -63,8 +63,8 @@ def main(bp: BasePage):
     # 点击查看闪卡
     BattlePreparePanel.SideBar.click_btn_flashcard(bp)
     bp.sleep(1)
-    flashCardBoxesPanel.FlashCardBoxesPanel.is_panel_active(bp)
-    flashCardBoxesPanel.FlashCardBoxesPanel.click_btn_close(bp)
+    FlashCardBoxesPanel.is_panel_active(bp)
+    FlashCardBoxesPanel.click_btn_close(bp)
 
     BattlePreparePanel.SideBar.click_btn_menu(bp)
     bp.sleep(1)
@@ -72,8 +72,8 @@ def main(bp: BasePage):
     # 点击查看鱼卡
     BattlePreparePanel.SideBar.click_btn_fishcard(bp)
     bp.sleep(1)
-    fishCardPanel.FishCardPanel.is_panel_active(bp)
-    fishCardPanel.FishCardPanel.click_btn_close(bp)
+    FishCardPanel.is_panel_active(bp)
+    FishCardPanel.click_btn_close(bp)
 
     BattlePreparePanel.SideBar.click_btn_menu(bp)
     bp.sleep(1)
@@ -122,8 +122,8 @@ def main(bp: BasePage):
     # 点击查看鱼竿
     BattlePreparePanel.SideBar.click_btn_gears(bp)
     bp.sleep(1)
-    GearNewPanel.is_panel_active(bp)
-    GearNewPanel.click_btn_cancel(bp)
+
+    BattlePreparePanel.panel_gears_switch.click_btn_cancel(bp)
     BattlePreparePanel.SideBar.click_btn_menu(bp)
     bp.sleep(1)
 

@@ -19,8 +19,8 @@ class ClubCreatePanel(BasePage):
         if text is None:
             letters = string.ascii_letters
             text = random.choice(letters) + generate_random_string(random.randint(0, 7))
-        self.set_text(element_data=ElementsData.ClubCreatePanel.Input_clubname, text=text)
         self.click_element(element_data=ElementsData.ClubCreatePanel.Input_clubname)
+        self.set_text(element_data=ElementsData.ClubCreatePanel.Input_clubname, text=text)
         self.sleep(0.1)
         self.click_position([0.5, 0.5])
 
@@ -28,8 +28,8 @@ class ClubCreatePanel(BasePage):
     def input_club_introduction(self, text=None):
         if text is None:
             text = generate_random_string(random.randint(0, 40))
-        self.set_text(element_data=ElementsData.ClubCreatePanel.Input_clubintroduction, text=text)
         self.click_element(element_data=ElementsData.ClubCreatePanel.Input_clubintroduction)
+        self.set_text(element_data=ElementsData.ClubCreatePanel.Input_clubintroduction, text=text)
         self.sleep(0.1)
         self.click_position([0.5, 0.5])
 
@@ -65,7 +65,7 @@ if __name__ == "__main__":
     bp = BasePage("127.0.0.1:21573", is_mobile_device=False)
     # ClubCreatePanel.click_btn_close(bp)
     # ClubCreatePanel.click_btn_create(bp)
-    ClubCreatePanel.input_club_name(bp)
+    # ClubCreatePanel.input_club_name(bp)
     ClubCreatePanel.input_club_introduction(bp)
     # ClubCreatePanel.click_tag(bp)
     # ClubCreatePanel.click_btn_limit(bp)

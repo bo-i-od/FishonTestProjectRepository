@@ -67,6 +67,7 @@ class BasePageMain:
             self.dev = self.get_device(serial_number=serial_number)
 
         self.poco = UnityPoco(addr, device=dev)
+        self.custom_cmd("setCamera UICamera_Front")
         self.poco_listen = None
 
         # 不是ios就可以开启Unity log接收
@@ -805,7 +806,7 @@ class BasePageMain:
 
     # 获取位置
     def get_position_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None,
-                          element_data_list: list = None, offspring_path=""):
+                          element_data_list: list = None, offspring_path="", camera_name=""):
         """函数功能简述
             定位元素后取元素的position值
 
@@ -822,10 +823,10 @@ class BasePageMain:
             输入object_id_list或element_data_list时，返回list[list[[float, float]]]
         """
         if object_id_list is not None:
-            return rpcMethodRequest.get_position_by_id(self.poco, object_id_list, offspring_path)
+            return rpcMethodRequest.get_position_by_id(self.poco, object_id_list, offspring_path, camera_name)
 
         if object_id != 0:
-            return self.get_position_list(object_id_list=[object_id], offspring_path=offspring_path)[0]
+            return self.get_position_list(object_id_list=[object_id], offspring_path=offspring_path, camera_name=camera_name)[0]
 
         if element_data_list is not None:
             element_data_copy_list = self.get_element_data_list(element_data_list, offspring_path)
@@ -833,7 +834,7 @@ class BasePageMain:
 
         return self.get_position_list(element_data_list=[element_data], offspring_path=offspring_path)[0]
 
-    def get_position(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
+    def get_position(self, object_id: int = 0, element_data: dict = None, offspring_path="", camera_name=""):
         """函数功能简述
             定位元素后取元素的position值
 
@@ -858,7 +859,7 @@ class BasePageMain:
                (0, 1)    (0.5, 1)   (1, 1)
         """
         if object_id != 0:
-            position_list = self.get_position_list(object_id=object_id, offspring_path=offspring_path)
+            position_list = self.get_position_list(object_id=object_id, offspring_path=offspring_path, camera_name=camera_name)
             self.is_single_element(position_list)
             return position_list[0]
 
@@ -949,7 +950,7 @@ class BasePageMain:
         self.click_position_base(position)
 
     # 元素点击
-    def click_element(self, object_id: int = 0, element_data: dict = None, offspring_path="", ignore_set=None,  focus=None):
+    def click_element(self, object_id: int = 0, element_data: dict = None, offspring_path="", camera_name="", ignore_set=None,  focus=None):
         """函数功能简述
             定位元素后取元素的position值
 
@@ -965,7 +966,7 @@ class BasePageMain:
             position_list有且只有一个元素时，返回[float, float]
         """
         if object_id != 0:
-            position = self.get_position(object_id=object_id, offspring_path=offspring_path)
+            position = self.get_position(object_id=object_id, offspring_path=offspring_path, camera_name=camera_name)
             if focus is None:
                 self.click_position(position)
                 return position
@@ -983,10 +984,9 @@ class BasePageMain:
         self.click_position_base(position_list[0])
         return position_list[0]
 
-    def click_object_of_plural_objects(self, object_id_list: list = None, element_data: dict = None, index=-1, viewport: Viewport = None, element_viewport: dict = None,  viewport_direction=None, viewport_range=None, viewport_edge=None, ignore_set=None):
-
+    def click_object_of_plural_objects(self, object_id_list: list = None, element_data: dict = None, index=-1, viewport: Viewport = None, element_viewport: dict = None,  viewport_direction=None, viewport_range=None, viewport_edge=None, delta_len=None, camera_name="", ignore_set=None):
         if element_viewport:
-            viewport = Viewport(self, element_viewport=element_viewport, element_item_list=element_data, item_id_list=object_id_list, viewport_direction=viewport_direction, viewport_range=viewport_range, viewport_edge=viewport_edge)
+            viewport = Viewport(self, element_viewport=element_viewport, element_item_list=element_data, item_id_list=object_id_list, viewport_direction=viewport_direction, viewport_range=viewport_range, viewport_edge=viewport_edge, delta_len=delta_len,camera_name=camera_name)
 
         if viewport:
             if index < 0:
@@ -994,11 +994,13 @@ class BasePageMain:
             target_id = viewport.item_id_list[index]
             viewport.move_until_appear(target_id=target_id)
 
-        position_list = self.get_position_list(element_data=element_data)
+        position_list = self.get_position_list(element_data=element_data, object_id_list=object_id_list, camera_name=camera_name)
+        if object_id_list is not None:
+            position_list = tools.commonTools.merge_list(position_list)
         # 如果index没有赋合法值，就随机点击一个
         if index < 0:
             index = random.randint(0, len(position_list) - 1)
-        self.click_position(position=position_list[index],ignore_set=ignore_set)
+        self.click_position(position=position_list[index], ignore_set=ignore_set)
 
     # 在b元素出现前一直尝试点击a元素
     def click_a_until_b_appear(self, element_data_a: dict, element_data_b: dict, interval: float = 0.5, ignore_set=None):
@@ -2246,12 +2248,14 @@ end
 
 if __name__ == '__main__':
     bp = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21543")
-    a = bp.spot_id_to_fishery_id(spot_id=10101)
-    print(a)
+    # a = bp.spot_id_to_fishery_id(spot_id=10101)
+    # print(a)
     # "127.0.0.1:21613"
     # "b6h65hd64p5pxcyh"
     # "TimeMgr:GetServerTime()"
-    # t = bp.lua_console_with_response(lua_code_print="_G.PassiveNewbieGuideEnum")
+    t = bp.lua_console_with_response(lua_code_return="_G.PassiveNewbieGuideEnum")
+    print(t)
+
     # bp.cmd_list(["levelupto 69", "guideskip"])
     # bp.sleep(1)
 

@@ -63,6 +63,9 @@ class GearPanel(BasePage):
     def get_skill_icon_list(self):
         return self.get_icon_list(element_data=ElementsData.GearPanel.skill_list)
 
+    def click_skill(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.GearPanel.skill_list, index=index)
+
     def get_rod_id_list(self):
         rod_id_list = self.get_object_id_list(element_data=ElementsData.GearPanel.rod_list)
         return rod_id_list
@@ -86,6 +89,10 @@ class GearPanel(BasePage):
 
     def get_rod_position_list(self):
         return self.get_position_list(element_data=ElementsData.GearPanel.rod_bg_list)
+
+    def click_rod(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.GearPanel.rod_bg_list, element_viewport=ElementsData.GearPanel.rodlist_viewport, index=index)
+
 
     def select_unlock_rod(self):
         # 获取鱼竿列表
@@ -170,19 +177,46 @@ class GearPanel(BasePage):
     def click_btn_equip(self):
         self.click_element(element_data=ElementsData.GearPanel.btn_equip)
 
+    def click_option(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.GearPanel.option_list, index=index)
+
+    def click_option_hide(self):
+        self.click_element(element_data=ElementsData.GearPanel.option_hide)
+
+    def click_btn_close_tip_filter_rod(self):
+        self.click_element(element_data=ElementsData.GearPanel.btn_close)
 
 
 
-
+    operation_pool = [
+        {"element_data": ElementsData.GearPanel.btn_apply, "func": click_btn_apply, "weight": 1},
+        {"element_data": ElementsData.GearPanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.GearPanel.tip_filter_rod, "func": click_btn_close_tip_filter_rod, "weight": 1},
+        {"element_data": ElementsData.GearPanel.btn_enhence, "func": click_btn_enhance, "weight": 1},
+        {"element_data": ElementsData.GearPanel.btn_equip, "func": click_btn_equip, "weight": 1},
+        {"element_data": ElementsData.GearPanel.btn_filter, "func": click_btn_filter, "weight": 1},
+        {"element_data": ElementsData.GearPanel.btn_reset, "func": click_btn_reset, "weight": 1},
+        {"element_data": ElementsData.GearPanel.btn_upgrade, "func": click_btn_upgrade, "weight": 1},
+        {"element_data": ElementsData.GearPanel.option_list, "func": click_option, "weight": 1},
+        {"element_data": ElementsData.GearPanel.option_hide, "func": click_option_hide, "weight": 1},
+        {"element_data": ElementsData.GearPanel.rod_bg_list, "func": click_rod, "weight": 1},
+        {"element_data": ElementsData.GearPanel.skill_list, "func": click_skill, "weight": 1},
+    ]
 if __name__ == "__main__":
-    bp = GearPanel()
-    a = bp.click_btn_reset()
-    print(a)
-    # rod_id_list = GearPanel.get_rod_id_list(bp)
-    # a = GearPanel.get_rod_status(bp, rod_id_list)
-    # print(rod_id_list)
-    # a = BaitAndRodAlbumPanel.get_all_rod_list(bp)
-    # b = BaitAndRodAlbumPanel.get_all_bait_list(bp)
+    bp = BasePage()
+    # GearPanel.click_btn_apply(bp)
+    # GearPanel.click_btn_close(bp)
+    # GearPanel.click_btn_close_tip_filter_rod(bp)
+    # GearPanel.click_btn_enhance(bp)
+    # GearPanel.click_btn_equip(bp)
+    # GearPanel.click_btn_filter(bp)
+    # GearPanel.click_btn_reset(bp)
+    # GearPanel.click_btn_upgrade(bp)
+    # GearPanel.click_option(bp)
+    # GearPanel.click_option_hide(bp)
+    GearPanel.click_rod(bp)
+    # GearPanel.click_skill(bp)
+    bp.connect_close()
 
 
 

@@ -5,8 +5,8 @@ from tools.commonTools import *
 
 
 class FishCardGiftPackCustomizePanel(BasePage):
-    def click_btn_close(self):
-        self.click_element(element_data=ElementsData.EventsGiftCenterPanel.btn_close)
+    # def click_btn_close(self):
+    #     self.click_element(element_data=ElementsData.EventsGiftCenterPanel.btn_close)
 
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.FishCardGiftPackCustomizePanel.FishCardGiftPackCustomizePanel)
@@ -24,10 +24,10 @@ class FishCardGiftPackCustomizePanel(BasePage):
         return position_list
 
     def click_btn_buy(self):
-        self.click_element(element_data=ElementsData.FishCardGiftPackCustomizePanel.btn_buy)
+        self.click_element(element_data=ElementsData.FishCardGiftPackCustomizePanel.btn_buy, ignore_set={"FishCardGiftPackCustomizePanel"})
 
     def click_item(self, index=-1):
-        self.click_object_of_plural_objects(element_data=ElementsData.FishCardGiftPackCustomizePanel.icon_list, index=index)
+        self.click_object_of_plural_objects(element_data=ElementsData.FishCardGiftPackCustomizePanel.icon_list, index=index, ignore_set={"FishCardGiftPackCustomizePanel"})
 
     def switch_tab(self, index=-1):
         self.click_object_of_plural_objects(element_data=ElementsData.FishCardGiftPackCustomizePanel.tab_list,  element_viewport=ElementsData.FishCardGiftPackCustomizePanel.viewport, viewport_direction="column", index=index)

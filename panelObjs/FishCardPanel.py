@@ -9,31 +9,27 @@ class FishCardPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.FishCardPanel.btn_close)
 
+    def click_btn_close_i(self):
+        self.click_element(element_data=ElementsData.FishCardPanel.btn_close)
+
+    def click_btn_close_rating(self):
+        self.click_element(element_data=ElementsData.FishCardPanel.btn_close)
+
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.FishCardPanel.FishCardPanel)
 
     def click_btn_upgrade(self):
         self.click_element(element_data=ElementsData.FishCardPanel.btn_upgrade)
 
-    def switch_tab(self, index):
-        target_id = self.get_object_id_list(element_data=ElementsData.FishCardPanel.tab_list)[index]
-        viewport = Viewport(self, element_viewport=ElementsData.FishCardPanel.fisheries_viewport, element_item_list=ElementsData.FishCardPanel.tab_list)
-        viewport.move_until_appear(target_id)
-        position_list = self.get_position_list(element_data=ElementsData.FishCardPanel.tab_list)
-        self.click_position(position_list[index])
+    def switch_tab(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.FishCardPanel.tab_list, element_viewport=ElementsData.FishCardPanel.fisheries_viewport, index=index)
 
     def get_fisheries_list(self):
         fisheries_title_list = self.get_text_list(element_data=ElementsData.FishCardPanel.fisheries_title_list)
         return fisheries_title_list
 
-    def select_card(self, index):
-        card_id_list = FishCardPanel.get_card_id_list(self)
-
-        target_id = card_id_list[index]
-        viewport = Viewport(self, element_viewport=ElementsData.FishCardPanel.fish_card_viewport, item_id_list=card_id_list, viewport_direction="column")
-        viewport.move_until_appear(target_id)
-        # position_list = self.get_position_list(element_data=ElementsData.FishCard.fisheries_title_list)
-        self.click_element(object_id=card_id_list[index])
+    def select_card(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.FishCardPanel.fish_card_model_list, element_viewport=ElementsData.FishCardPanel.fish_card_viewport, viewport_direction="column", index=index)
 
     # 得到卡模型id列表
     # 选中的卡记作selected_index 如果没有选中selected_index = -1
@@ -123,15 +119,11 @@ class FishCardPanel(BasePage):
             cur += 1
         return unlock_tab_list, lock_tab_list
 
-
     def click_btn_events(self):
         self.click_element(element_data=ElementsData.FishCardPanel.btn_events)
 
-    def switch_sub_tab(self, index):
-        position_list = self.get_position_list(element_data=ElementsData.FishCardPanel.sub_tab_list)
-        if len(position_list) - 1 < index:
-            index = len(position_list) - 1
-        self.click_position(position_list[index])
+    def switch_sub_tab(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.FishCardPanel.sub_tab_list)
 
     def click_btn_i(self):
         self.click_element(element_data=ElementsData.FishCardPanel.btn_i)
@@ -142,29 +134,35 @@ class FishCardPanel(BasePage):
     def get_rating(self):
         rating = int(self.get_text(element_data=ElementsData.FishCardPanel.rating))
         return rating
+    
+    def click_rating(self):
+        self.click_element(element_data=ElementsData.FishCardPanel.rating)
 
     def get_rating_fisheries(self):
         rating = int(self.get_text(element_data=ElementsData.FishCardPanel.rating_fisheries))
         return rating
 
 
-    @staticmethod
-    def bg_to_tier(bg:str):
-        if bg == "FishCard_namebg01":
-            return "result_tier_small"
-        if bg == "FishCard_namebg02":
-            return "result_tier_medium"
-        if bg == "FishCard_namebg03":
-            return "result_tier_large"
-        if bg == "FishCard_namebg04":
-            return "result_tier_hidden"
-        if bg == "FishCard_namebg05":
-            return "result_tier_boss"
-
-
-
-if __name__ == '__main__':
+    operation_pool = [
+        {"element_data": ElementsData.FishCardPanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.FishCardPanel.tips_cardbonus, "func": click_btn_close_i, "weight": 1},
+        {"element_data": ElementsData.FishCardPanel.tips_rating, "func": click_btn_close_rating, "weight": 1},
+        {"element_data": ElementsData.FishCardPanel.btn_events, "func": click_btn_events, "weight": 1},
+        {"element_data": ElementsData.FishCardPanel.btn_i, "func": click_btn_i, "weight": 1},
+        {"element_data": ElementsData.FishCardPanel.btn_upgrade, "func": click_btn_upgrade, "weight": 1},
+        {"element_data": ElementsData.FishCardPanel.rating, "func": click_rating, "weight": 1},
+        {"element_data": ElementsData.FishCardPanel.fish_card_model_list, "func": select_card, "weight": 1},
+        {"element_data": ElementsData.FishCardPanel.sub_tab_list, "func": switch_sub_tab, "weight": 1},
+        {"element_data": ElementsData.FishCardPanel.tab_list, "func": switch_tab, "weight": 1},
+    ]
+if __name__ == "__main__":
     bp = BasePage()
-    progress_list = FishCardPanel.switch_tab(bp, 11)
-    print(progress_list)
-
+    # FishCardPanel.click_btn_close(bp)
+    # FishCardPanel.click_btn_events(bp)
+    # FishCardPanel.click_btn_i(bp)
+    # FishCardPanel.click_btn_upgrade(bp)
+    # FishCardPanel.click_rating(bp)
+    # FishCardPanel.select_card(bp)
+    # FishCardPanel.switch_sub_tab(bp)
+    FishCardPanel.switch_tab(bp)
+    bp.connect_close()

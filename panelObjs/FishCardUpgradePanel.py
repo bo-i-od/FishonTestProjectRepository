@@ -109,6 +109,9 @@ class FishCardUpgradePanel(BasePage):
     def click_btn_add_100000(self):
         self.click_element(element_data=ElementsData.FishCardUpgradePanel.btn_add_100000)
 
+    def click_top_res_btn(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.FishCardUpgradePanel.top_res_btns, index=index)
+
     def click_btn_next(self):
         self.click_element(element_data=ElementsData.FishCardUpgradePanel.btn_next)
 
@@ -128,8 +131,20 @@ class FishCardUpgradePanel(BasePage):
     def click_fishcard(self):
         self.click_element(element_data=ElementsData.FishCardUpgradePanel.cotent_fishcard)
 
-
+    operation_pool = [
+        {"element_data": ElementsData.FishCardUpgradePanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.FishCardUpgradePanel.btn_level_up, "func": click_btn_level_up, "weight": 1},
+        {"element_data": ElementsData.FishCardUpgradePanel.btn_next, "func": click_btn_next, "weight": 1},
+        {"element_data": ElementsData.FishCardUpgradePanel.btn_previous, "func": click_btn_previous, "weight": 1},
+        {"element_data": ElementsData.FishCardUpgradePanel.cotent_fishcard, "func": click_fishcard, "weight": 1},
+        {"element_data": ElementsData.FishCardUpgradePanel.top_res_btns, "func": click_top_res_btn, "weight": 1},
+    ]
 if __name__ == "__main__":
     bp = BasePage()
-    img = bp.get_element_shot(element_data=ElementsData.FishCardUpgradePanel.cotent_fishcard)
-    bp.save_img(img)
+    # FishCardUpgradePanel.click_btn_close(bp)
+    FishCardUpgradePanel.click_btn_level_up(bp)
+    FishCardUpgradePanel.click_btn_next(bp)
+    FishCardUpgradePanel.click_btn_previous(bp)
+    FishCardUpgradePanel.click_fishcard(bp)
+    FishCardUpgradePanel.click_top_res_btn(bp)
+    bp.connect_close()

@@ -93,3 +93,20 @@ class GearEnhancePanel(BasePage):
 
     def click_skill_icon(self):
         self.click_element(element_data=ElementsData.GearEnhancePanel.skill_icon)
+
+
+    operation_pool = [
+        {"element_data": ElementsData.GearEnhancePanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.GearEnhancePanel.btn_enhance, "func": click_btn_enhance, "weight": 1},
+        {"element_data": ElementsData.GearEnhancePanel.btn_next, "func": click_btn_next, "weight": 1},
+        {"element_data": ElementsData.GearEnhancePanel.btn_previous, "func": click_btn_previous, "weight": 1},
+        {"element_data": ElementsData.GearEnhancePanel.skill_icon, "func": click_skill_icon, "weight": 1},
+    ]
+if __name__ == "__main__":
+    bp = BasePage()
+    GearEnhancePanel.click_btn_close(bp)
+    GearEnhancePanel.click_btn_enhance(bp)
+    GearEnhancePanel.click_btn_next(bp)
+    GearEnhancePanel.click_btn_previous(bp)
+    GearEnhancePanel.click_skill_icon(bp)
+    bp.connect_close()

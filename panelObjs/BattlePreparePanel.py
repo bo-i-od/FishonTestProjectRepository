@@ -272,6 +272,16 @@ class BattlePreparePanel(BasePage):
         def click_btn_avatar(self):
             self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_avatar)
 
+    class panel_gears_switch(BasePage):
+        def is_panel_active(self):
+            return self.exist(element_data=ElementsData.BattlePreparePanel.gears)
+
+        def click_btn_cancel(self):
+            self.click_element(element_data=ElementsData.BattlePreparePanel.panel_gears_switch.btn_cancel)
+
+        def click_btn_go(self):
+            self.click_element(element_data=ElementsData.BattlePreparePanel.panel_gears_switch.btn_go)
+
 if __name__ == '__main__':
     bp = BasePage()
 

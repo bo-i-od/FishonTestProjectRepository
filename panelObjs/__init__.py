@@ -56,7 +56,6 @@ from .FriendPanel import FriendPanel
 from .GearEnhancePanel import GearEnhancePanel
 from .GearEnhanceSuccesPanel import GearEnhanceSuccesPanel
 from .GearLevelupPanel import GearLevelupPanel
-from .GearNewPanel import GearNewPanel
 from .GearPanel import GearPanel
 from .GearSkillTipsPanel import GearSkillTipsPanel
 from .Home3DPanel import Home3DPanel

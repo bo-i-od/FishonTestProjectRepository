@@ -4,7 +4,7 @@ from tools.commonTools import merge_list
 
 
 class Viewport:
-    def __init__(self, bp, element_viewport, element_item_list=None, item_id_list=None, viewport_direction=None,viewport_range=None, viewport_edge=None):
+    def __init__(self, bp, element_viewport, element_item_list=None, item_id_list=None, viewport_direction=None,viewport_range=None, viewport_edge=None, delta_len=None,camera_name=""):
         self.basePage = bp
         self.element_viewport = element_viewport
         self.element_item_list = element_item_list
@@ -13,6 +13,7 @@ class Viewport:
         self.item_id_list = item_id_list
         self.viewport_range = viewport_range
         self.viewport_edge = viewport_edge
+        self.delta_len = delta_len
         if self.item_id_list is None:
             self.item_id_list = self.get_item_id_list()
         self.viewport_direction = viewport_direction
@@ -23,8 +24,9 @@ class Viewport:
             self.viewport_range = self.get_viewport_range()
         if self.viewport_edge is not None:
             self.viewport_range_shift()
-
-        self.delta_len = self.get_delta_len()
+        if self.delta_len is None:
+            self.delta_len = self.get_delta_len()
+        self.camera_name = camera_name
 
     def get_viewport_object_id(self):
         return self.basePage.get_object_id(element_data=self.element_viewport)
@@ -55,7 +57,7 @@ class Viewport:
         return 0
 
     def move_delta_len(self, target_id):
-        target_position = self.basePage.get_position(object_id=target_id)
+        target_position = self.basePage.get_position(object_id=target_id, camera_name=self.camera_name)
         point_end = [0, 0]
         point_end[0] = self.viewport_position[0]
         point_end[1] = self.viewport_position[1]
@@ -68,6 +70,7 @@ class Viewport:
                 point_end[0] -= self.delta_len
                 self.basePage.swipe(point_start=self.viewport_position, point_end=point_end, t=self.delta_len)
                 return True
+
             point_end[0] += self.delta_len
             self.basePage.swipe(point_start=self.viewport_position, point_end=point_end, t=self.delta_len)
             return True
@@ -96,7 +99,7 @@ class Viewport:
         if self.viewport_direction == "column":
             range_start = position[1] - size[1] * 0.5
             range_end = position[1] + size[1] * 0.5
-        else :
+        else:
             range_start = position[0] - size[0] * 0.5
             range_end = position[0] + size[0] * 0.5
         return [range_start, range_end]

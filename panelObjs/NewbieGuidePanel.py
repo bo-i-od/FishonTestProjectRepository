@@ -206,3 +206,45 @@ class NewbieGuidePanel(BasePage):
 
     def guide_fish_point(self):
         pass
+
+    def click_NewbieGuidePanel(self):
+        self.click_element(element_data=ElementsData.NewbieGuidePanel.NewbieGuidePanel)
+
+    def click_NBG_1(self):
+        self.click_object_of_plural_objects(element_data=ElementsData.NewbieGuidePanel.NBG_1)
+
+    def click_NBG_2(self):
+        self.click_object_of_plural_objects(element_data=ElementsData.NewbieGuidePanel.NBG_2)
+
+    def click_NBG_3(self):
+        self.click_object_of_plural_objects(element_data=ElementsData.NewbieGuidePanel.NBG_3)
+
+    def click_btn_text_051(self):
+        self.click_object_of_plural_objects(element_data=ElementsData.NewbieGuidePanel.btn_text_051)
+
+    def click_NBG_multiRoom_1(self):
+        self.click_object_of_plural_objects(element_data=ElementsData.NewbieGuidePanel.NBG_multiRoom_1)
+
+    def click_NBG_system_click_Club(self):
+        self.click_object_of_plural_objects(element_data=ElementsData.NewbieGuidePanel.NBG_system_click_Club)
+
+    operation_pool = [
+        {"element_data": ElementsData.NewbieGuidePanel.NBG_1, "func": click_NBG_1, "weight": 1},
+        {"element_data": ElementsData.NewbieGuidePanel.NBG_2, "func": click_NBG_2, "weight": 1},
+        {"element_data": ElementsData.NewbieGuidePanel.NBG_3, "func": click_NBG_3, "weight": 1},
+        {"element_data": ElementsData.NewbieGuidePanel.NBG_multiRoom_1, "func": click_NBG_multiRoom_1, "weight": 1},
+        {"element_data": ElementsData.NewbieGuidePanel.NBG_system_click_Club, "func": click_NBG_system_click_Club, "weight": 1},
+        {"element_data": ElementsData.NewbieGuidePanel.NewbieGuidePanel, "func": click_NewbieGuidePanel, "weight": 1},
+        {"element_data": ElementsData.NewbieGuidePanel.btn_text_051, "func": click_btn_text_051, "weight": 1},
+    ]
+if __name__ == "__main__":
+    bp = BasePage()
+    NewbieGuidePanel.click_NBG_1(bp)
+    NewbieGuidePanel.click_NBG_2(bp)
+    NewbieGuidePanel.click_NBG_3(bp)
+    NewbieGuidePanel.click_NBG_multiRoom_1(bp)
+    NewbieGuidePanel.click_NBG_system_click_Club(bp)
+    NewbieGuidePanel.click_NewbieGuidePanel(bp)
+    NewbieGuidePanel.click_btn_text_051(bp)
+
+    bp.connect_close()

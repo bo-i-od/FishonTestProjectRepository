@@ -34,7 +34,7 @@ def get_name_by_id(poco:Poco, id_list: list, offspring_path:str) -> list:
 def get_position(poco:Poco, element: list) -> list:
     ...
 
-def get_position_by_id(poco:Poco, id_list: list, offspring_path:str) -> list:
+def get_position_by_id(poco:Poco, id_list: list, offspring_path:str, camera_name:str) -> list:
     ...
 
 def get_size(poco:Poco, element: list) -> list:
