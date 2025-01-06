@@ -240,34 +240,37 @@ class BattlePreparePanel(BasePage):
             self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_aquarium)
 
         def click_btn_career(self):
-                self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_career)
+            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_career)
 
         def click_btn_fishcard(self):
-                self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_fishcard)
+            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_fishcard)
 
         def click_btn_store(self):
-                self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_store)
+            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_store)
 
         def click_btn_achievement(self):
-                self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_achievement)
+            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_achievement)
 
         def click_btn_fishalbum(self):
-                self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_fishalbum)
+            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_fishalbum)
 
         def click_btn_flashcard(self):
-                self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_flashcard)
+            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_flashcard)
 
         def click_btn_mail(self):
-                self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_mail)
+            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_mail)
 
         def click_btn_announcement(self):
-                self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_announcement)
+            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_announcement)
 
         def click_btn_changeroom(self):
-                self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_changeroom)
+            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_changeroom)
 
         def click_btn_leaderboard(self):
-                self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_leaderboard)
+            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_leaderboard)
+
+        def click_btn_avatar(self):
+            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_avatar)
 
 if __name__ == '__main__':
     bp = BasePage()
@@ -290,7 +293,6 @@ if __name__ == '__main__':
     #     print(res)
     #     cur += 1
     # print(res)
-
 
 
 
