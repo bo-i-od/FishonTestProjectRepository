@@ -1,5 +1,5 @@
 from common.basePage import BasePage
-
+from load_log import load_log_new
 def get_result_list():
     result_list = []
     f = open("../statistics/hook_log.txt", "r")
@@ -10,6 +10,11 @@ def get_result_list():
         fish_id = str_to_dict(lines[cur])['fish_id']
         result_list.append(fish_id)
         cur += 1
+    return result_list
+
+def get_result_list_new():
+    data=load_log_new("../statistics/new_hook_log.txt")
+    result_list = [str(i['fishes']['1']['tpId']) for i in data]
     return result_list
 
 
@@ -43,7 +48,7 @@ def count_target_occurrences(sequence, target):
     return count
 
 def get_fish_type_dict(bp: BasePage):
-    result_list = get_result_list()
+    result_list = get_result_list_new()
     type_sequence = bp.get_fish_type_list(result_list)
     type_dict = {'小': 0, '中': 0, '大': 0, '特大': 0, '超巨': 0, '奇珍': 0, '超奇珍': 0, '典藏': 0, '藏宝图': 0, '超奇珍鱼骨': 0, '典藏鱼骨': 0, '超奇珍黄金鱼骨': 0, '典藏黄金鱼骨': 0}
     cur = 0
@@ -60,7 +65,7 @@ def get_fish_type_dict(bp: BasePage):
 def main():
     # 自定义的目标序列，"小"，"中"，"大"，"特大"，"超巨"，"奇珍"，"超奇珍"，"典藏"
     target_type_sequence = ["典藏", "典藏", "大"]
-    result_list = get_result_list()
+    result_list = get_result_list_new()
     type_sequence = bp.get_fish_type_list(result_list)
     print(f"目标序列为{target_type_sequence}")
     type_sequence_fish = []
