@@ -32,10 +32,7 @@ def load_log_new(file_name):
     with open(file_name, 'r') as file:
         data = file.read().strip()
     lines = data.split("\n")
-    result=[]
-    for line in lines:
-        result.append(json.loads(line))
-    return result
+    return [json.loads(line) for line in lines]
 
 
 if __name__ == '__main__':
