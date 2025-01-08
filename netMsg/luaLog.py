@@ -1,4 +1,5 @@
-
+from tools.commonTools import lua_dict_to_python_dict
+import json
 
 def deal_with_msg(msg):
     # if '<==== [Lua] Receive Net Msg "SC' in msg:
@@ -7,10 +8,12 @@ def deal_with_msg(msg):
     # print(msg)
     if '<==== [Lua] Receive Net Msg "SCFishingHookMsg" ====>' in msg:
         deal_with_SCFishingHookMsg(msg)
+        deal_with_SCFishingHookMsg_new(msg)
         return
 
     if '<==== [Lua] Receive Net Msg "SCFishingCastMsg" ====>' in msg:
         deal_with_SCFishingCastMsg(msg)
+        deal_with_SCFishingCastMsg_new(msg)
         return
 
     if '<==== [Lua] Receive Net Msg "SCHiddenTreasureFreeShovelProgressChangedMsg" ====>' in msg:
@@ -30,8 +33,20 @@ def deal_with_msg(msg):
     #     return
 
 
+def deal_with_SCFishingCastMsg_new(msg):
+    # print(msg)
+    msg_data=lua_dict_to_python_dict(msg)
+    f = open("../statistics/new_cast_log.txt", "a")
+    f.write(json.dumps(msg_data)+"\n")
+    f.close()
 
 
+def deal_with_SCFishingHookMsg_new(msg):
+    # print(msg)
+    msg_data = lua_dict_to_python_dict(msg)
+    f = open("../statistics/new_hook_log.txt", "a")
+    f.write(json.dumps(msg_data)+"\n")
+    f.close()
 
 def deal_with_SCFishingHookMsg(msg):
     # print(msg)

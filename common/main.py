@@ -28,6 +28,10 @@ if __name__ == '__main__':
         pass  # 不做任何操作,关闭文件即可清空内容
     with open("../statistics/cast_log.txt", "w") as file:
         pass  # 不做任何操作,关闭文件即可清空内容
+    with open("../statistics/new_hook_log.txt", "w") as file:
+        pass  # 不做任何操作,关闭文件即可清空内容
+    with open("../statistics/new_cast_log.txt", "w") as file:
+        pass  # 不做任何操作,关闭文件即可清空内容
 
     # 钓一张藏宝图
     bp.cmd("mode 500301 399002")
