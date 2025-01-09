@@ -16,8 +16,8 @@ class DivisionListPanel(BasePage):
         self.click_object_of_plural_objects(element_data=ElementsData.DivisionListPanel.item_list, element_viewport=ElementsData.DivisionListPanel.viewport, viewport_direction="row", index=index, viewport_edge=[0, 0.2])
 
     operation_pool = [
-        {"element_data": ElementsData.DivisionListPanel.btn_close, "func": click_btn_close, "weight": 1},
-        {"element_data": ElementsData.DivisionListPanel.item_list, "func": click_item, "weight": 1},
+        {"element_data": ElementsData.DivisionListPanel.btn_close, "func": click_btn_close, "weight": 10},
+        {"element_data": ElementsData.DivisionListPanel.item_list, "func": click_item, "weight": 10},
         ]
 
 

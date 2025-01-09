@@ -11,7 +11,7 @@ class PartySalePanel(BasePage):
 
     # 点击关闭按钮
     def click_btn_close(self):
-        self.click_element(element_data=ElementsData.PartySalePanel.btn_close)
+        self.click_element(element_data=ElementsData.PartySalePanel.btn_close, ignore_set={"PartySalePanel"})
 
     # 点击购买
     def click_btn_buy(self):
@@ -41,8 +41,24 @@ class PartySalePanel(BasePage):
         resource.str_to_int_list(quantity_list)
         return quantity_list
 
+    def click_item(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.PartySalePanel.item_icon_list, index=index, ignore_set={"PartySalePanel"})
 
 
-if __name__ == '__main__':
+    operation_pool = [
+        {"element_data": ElementsData.PartySalePanel.btn_buy, "func": click_btn_buy, "weight": 1},
+        {"element_data": ElementsData.PartySalePanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.PartySalePanel.item_icon_list, "func": click_item, "weight": 1},
+    ]
+if __name__ == "__main__":
     bp = BasePage()
-    PartySalePanel.click_btn_buy(bp)
+    # PartySalePanel.click_btn_buy(bp)
+    # PartySalePanel.click_btn_close(bp)
+    PartySalePanel.click_item(bp)
+    # PartySalePanel.get_cost_icon(bp)
+    # PartySalePanel.get_cost_quantity(bp)
+    # PartySalePanel.get_item_icon_list(bp)
+    # PartySalePanel.get_item_position_list(bp)
+    # PartySalePanel.get_item_quantity_list(bp)
+    # PartySalePanel.is_panel_active(bp)
+    bp.connect_close()

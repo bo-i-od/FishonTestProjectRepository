@@ -94,12 +94,16 @@ class AchievementPanel(BasePage):
         viewport = AchievementPanel.get_viewport(self)
         self.click_object_of_plural_objects(element_data=ElementsData.AchievementPanel.achievement_list, index=index, viewport=viewport)
 
+    def click_btn_close_tips(self):
+        self.click_element(element_data=ElementsData.AchievementPanel.btn_close_tips)
+
     operation_pool = [
         {"element_data": ElementsData.AchievementPanel.btn_close, "func": click_btn_close, "weight": 1},
         {"element_data": ElementsData.AchievementPanel.tab_list, "func": switch_tab, "weight": 2},
         {"element_data": ElementsData.AchievementPanel.achievement_list, "func": click_achievement, "weight": 4},
         {"element_data": ElementsData.AchievementPanel.task_mini_icon, "func": click_task_mini, "weight": 2},
         {"element_data": ElementsData.AchievementPanel.btn_i, "func": click_btn_i, "weight": 2},
+        {"element_data": ElementsData.AchievementPanel.btn_close_tips, "func": click_btn_close_tips, "weight": 4},
         ]
 
 
@@ -107,8 +111,8 @@ class AchievementPanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage("R5CT22NJ44H")
-    AchievementPanel.click_achievement(bp, index=0)
-
+    # AchievementPanel.click_achievement(bp, index=0)
+    AchievementPanel.click_btn_close_tips(bp)
     bp.connect_close()
 
 

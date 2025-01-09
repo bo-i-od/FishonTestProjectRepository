@@ -9,11 +9,11 @@ class FishCardPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.FishCardPanel.btn_close)
 
-    def click_btn_close_i(self):
-        self.click_element(element_data=ElementsData.FishCardPanel.btn_close)
+    def click_btn_close_tips(self):
+        self.click_element(element_data=ElementsData.FishCardPanel.btn_close_tips)
 
     def click_btn_close_rating(self):
-        self.click_element(element_data=ElementsData.FishCardPanel.btn_close)
+        self.click_element(element_data=ElementsData.FishCardPanel.btn_close_rating)
 
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.FishCardPanel.FishCardPanel)
@@ -143,10 +143,11 @@ class FishCardPanel(BasePage):
         return rating
 
 
+
     operation_pool = [
         {"element_data": ElementsData.FishCardPanel.btn_close, "func": click_btn_close, "weight": 1},
-        {"element_data": ElementsData.FishCardPanel.tips_cardbonus, "func": click_btn_close_i, "weight": 1},
-        {"element_data": ElementsData.FishCardPanel.tips_rating, "func": click_btn_close_rating, "weight": 1},
+        {"element_data": ElementsData.FishCardPanel.btn_close_tips, "func": click_btn_close_tips, "weight": 10},
+        {"element_data": ElementsData.FishCardPanel.btn_close_rating, "func": click_btn_close_rating , "weight": 10},
         {"element_data": ElementsData.FishCardPanel.btn_events, "func": click_btn_events, "weight": 1},
         {"element_data": ElementsData.FishCardPanel.btn_i, "func": click_btn_i, "weight": 1},
         {"element_data": ElementsData.FishCardPanel.btn_upgrade, "func": click_btn_upgrade, "weight": 1},
@@ -164,5 +165,7 @@ if __name__ == "__main__":
     # FishCardPanel.click_rating(bp)
     # FishCardPanel.select_card(bp)
     # FishCardPanel.switch_sub_tab(bp)
-    FishCardPanel.switch_tab(bp)
+    # FishCardPanel.switch_tab(bp)
+    # FishCardPanel.click_btn_close_i(bp)
+    # FishCardPanel.click_btn_close_rating(bp)
     bp.connect_close()

@@ -45,6 +45,9 @@ class ResultPanel(BasePage):
 
             self.clear_popup()
             self.sleep(1)
+            if self.is_ray_input:
+                self.ray_input(kind="click", element_data=element_btn)
+                continue
             self.click_element_safe(element_data=element_btn)
 
 

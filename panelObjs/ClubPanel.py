@@ -56,6 +56,9 @@ class ClubPanel(BasePage):
         def click_btn_edit(self, index=-1):
             self.click_object_of_plural_objects(element_data=ElementsData.ClubPanel.panel_clubmember.btn_edit_list, element_viewport=ElementsData.ClubPanel.panel_clubmember.viewport,viewport_direction="column",  index=index)
 
+        def click_btn_close_edit(self):
+            self.click_element(element_data=ElementsData.ClubPanel.panel_clubmember.btn_close_edit)
+
         def click_btn(self, index=-1):
             self.click_object_of_plural_objects(element_data=ElementsData.ClubPanel.panel_clubmember.btns, index=index)
 
@@ -68,6 +71,9 @@ class ClubPanel(BasePage):
 
         def click_btn_i(self):
             self.click_element(element_data=ElementsData.ClubPanel.panel_clubweek.btn_i)
+
+        def click_btn_close_tips(self):
+            self.click_element(element_data=ElementsData.ClubPanel.panel_clubweek.btn_close_tips)
 
     class Panel_Flashcard(BasePage):
         def click_btn_close(self):
@@ -122,14 +128,16 @@ class ClubPanel(BasePage):
         {"element_data": ElementsData.ClubPanel.panel_clubhome.btn_flashcard, "func": panel_clubhome.click_btn_flashcard, "weight": 2},
         {"element_data": ElementsData.ClubPanel.panel_clubhome.btn_dragonboat, "func": panel_clubhome.click_btn_dragonboat, "weight": 2},
         {"element_data": ElementsData.ClubPanel.panel_clubhome.btn_edit, "func": panel_clubhome.click_btn_edit, "weight": 2},
+        {"element_data": ElementsData.ClubPanel.panel_clubmember.btn_close_edit, "func": panel_clubmember.click_btn_close_edit, "weight": 10},
         {"element_data": ElementsData.ClubPanel.panel_clubmember.btn_leave, "func": panel_clubmember.click_btn_leave, "weight": 1},
         {"element_data": ElementsData.ClubPanel.panel_clubmember.btn_list, "func": panel_clubmember.click_btn_list, "weight": 1},
         {"element_data": ElementsData.ClubPanel.panel_clubmember.btn_playercard_list, "func": panel_clubmember.click_btn_playercard, "weight": 1},
         {"element_data": ElementsData.ClubPanel.panel_clubmember.btn_edit_list, "func": panel_clubmember.click_btn_edit, "weight": 1},
-        {"element_data": ElementsData.ClubPanel.panel_clubmember.btns, "func": panel_clubmember.click_btn, "weight": 1},
+        {"element_data": ElementsData.ClubPanel.panel_clubmember.btns, "func": panel_clubmember.click_btn, "weight": 10},
         {"element_data": ElementsData.ClubPanel.panel_clubweek.reward_list, "func": panel_clubweek.click_reward, "weight": 1},
         {"element_data": ElementsData.ClubPanel.panel_clubweek.top_list, "func": panel_clubweek.click_top, "weight": 1},
         {"element_data": ElementsData.ClubPanel.panel_clubweek.btn_i, "func": panel_clubweek.click_btn_i, "weight": 1},
+        {"element_data": ElementsData.ClubPanel.panel_clubweek.btn_close_tips, "func": panel_clubweek.click_btn_close_tips, "weight": 1},
         {"element_data": ElementsData.ClubPanel.Panel_Flashcard.btn_close, "func": Panel_Flashcard.click_btn_close, "weight": 1},
         {"element_data": ElementsData.ClubPanel.Panel_Flashcard.btn_save, "func": Panel_Flashcard.click_btn_save, "weight": 1},
         {"element_data": ElementsData.ClubPanel.Panel_Flashcard.btn_cancel, "func": Panel_Flashcard.click_btn_cancel, "weight": 1},
@@ -160,7 +168,7 @@ if __name__ == "__main__":
     # ClubPanel.panel_clubhome.click_btn_chat(bp)
     # ClubPanel.panel_clubhome.click_btn_copy(bp)
     # ClubPanel.panel_clubhome.click_btn_dragonboat(bp)
-    ClubPanel.panel_clubhome.click_btn_edit(bp)
+    # ClubPanel.panel_clubhome.click_btn_edit(bp)
     # ClubPanel.panel_clubhome.click_btn_flashcard(bp)
     # ClubPanel.panel_clubhome.click_btn_goweek(bp)
     # ClubPanel.panel_clubhome.click_red_envelope(bp)
@@ -168,10 +176,11 @@ if __name__ == "__main__":
     # ClubPanel.panel_clubhome.click_toggle(bp)
     # ClubPanel.panel_clubmember.click_btn(bp)
     # ClubPanel.panel_clubmember.click_btn_edit(bp)
+    # ClubPanel.panel_clubmember.click_btn_close_edit(bp)
     # ClubPanel.panel_clubmember.click_btn_leave(bp)
     # ClubPanel.panel_clubmember.click_btn_list(bp)
     # ClubPanel.panel_clubmember.click_btn_playercard(bp)
-    # ClubPanel.panel_clubweek.click_btn_i(bp)
+    ClubPanel.panel_clubweek.click_btn_close_tips(bp)
     # ClubPanel.panel_clubweek.click_reward(bp)
     # ClubPanel.panel_clubweek.click_top(bp)
     # ClubPanel.panel_popup_applylist.click_btn_cancel(bp)

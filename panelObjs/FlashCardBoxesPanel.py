@@ -14,8 +14,8 @@ class FlashCardBoxesPanel(BasePage):
     def click_btn_i(self):
         self.click_element(element_data=ElementsData.FlashCardBoxesPanel.FlashCardBoxes_btn_i)
 
-    def click_btn_close_i(self):
-        self.click_element(element_data=ElementsData.FlashCardBoxesPanel.FlashCardBoxes_btn_close)
+    def click_btn_close_tips(self):
+        self.click_element(element_data=ElementsData.FlashCardBoxesPanel.btn_close_tips)
 
     def switch_tab(self, index=-1):
         self.click_object_of_plural_objects(element_data=ElementsData.FlashCardBoxesPanel.tab_list, index=index)
@@ -33,7 +33,7 @@ class FlashCardBoxesPanel(BasePage):
         {"element_data": ElementsData.FlashCardBoxesRoot.book_list, "func": click_book, "weight": 1},
         {"element_data": ElementsData.FlashCardBoxesPanel.FlashCardBoxes_btn_close, "func": click_btn_close, "weight": 1},
         {"element_data": ElementsData.FlashCardBoxesPanel.FlashCardBoxes_btn_i, "func": click_btn_i, "weight": 1},
-        {"element_data": ElementsData.FlashCardBoxesPanel.tips, "func": click_btn_close_i, "weight": 1},
+        {"element_data": ElementsData.FlashCardBoxesPanel.btn_close_tips, "func": click_btn_close_tips, "weight": 1},
         {"element_data": ElementsData.FlashCardBoxesPanel.tab_list, "func": switch_tab, "weight": 1},
     ]
 if __name__ == "__main__":
@@ -42,5 +42,6 @@ if __name__ == "__main__":
     # FlashCardBoxesPanel.click_btn_close(bp)
     # FlashCardBoxesPanel.click_btn_i(bp)
     # FlashCardBoxesPanel.is_panel_active(bp)
-    FlashCardBoxesPanel.switch_tab(bp)
+    # FlashCardBoxesPanel.switch_tab(bp)
+    FlashCardBoxesPanel.click_btn_close_tips(bp)
     bp.connect_close()

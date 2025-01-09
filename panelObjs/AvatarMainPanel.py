@@ -48,6 +48,12 @@ class AvatarMainPanel(BasePage):
         def switch_tab(self, index=-1):
             self.click_object_of_plural_objects(element_data=ElementsData.AvatarMainPanel.panel_Avatar.tab_list, element_viewport=ElementsData.AvatarMainPanel.panel_Avatar.viewport_tab, index=index)
 
+        def click_tags(self):
+            self.click_element(element_data=ElementsData.AvatarMainPanel.panel_Avatar.tags)
+
+        def click_btn_close_tags(self):
+            self.click_element(element_data=ElementsData.AvatarMainPanel.panel_Avatar.btn_close_tags)
+
     class panel_Rod(BasePage):
         def switch_tab_rod(self, index=-1):
             self.click_object_of_plural_objects(element_data=ElementsData.AvatarMainPanel.panel_Rod.tab_rod_list, element_viewport=ElementsData.AvatarMainPanel.panel_Rod.viewport_tab_rod, index=index)
@@ -76,6 +82,8 @@ class AvatarMainPanel(BasePage):
         def click_tags(self):
             self.click_element(element_data=ElementsData.AvatarMainPanel.panel_Rod.tags)
 
+        def click_btn_close_tags(self):
+            self.click_element(element_data=ElementsData.AvatarMainPanel.panel_Rod.btn_close_tags)
         def click_btn_fast(self):
             self.click_element(element_data=ElementsData.AvatarMainPanel.panel_Rod.btn_fast)
 
@@ -90,6 +98,8 @@ class AvatarMainPanel(BasePage):
         {"element_data": ElementsData.AvatarMainPanel.panel_Avatar.toggle_own, "func": panel_Avatar.click_toggle_own, "weight": 1},
         {"element_data": ElementsData.AvatarMainPanel.panel_Avatar.item_list, "func": panel_Avatar.click_item, "weight": 3},
         {"element_data": ElementsData.AvatarMainPanel.panel_Avatar.tab_list, "func": panel_Avatar.switch_avatar_tab, "weight": 2},
+        {"element_data": ElementsData.AvatarMainPanel.panel_Avatar.tags, "func": panel_Avatar.click_tags, "weight": 1},
+        {"element_data": ElementsData.AvatarMainPanel.panel_Avatar.btn_close_tags, "func": panel_Avatar.click_btn_close_tags, "weight": 10},
         {"element_data": ElementsData.AvatarMainPanel.panel_Rod.tab_rod_list, "func": panel_Rod.switch_tab_rod, "weight": 1},
         {"element_data": ElementsData.AvatarMainPanel.panel_Rod.item_list, "func": panel_Rod.switch_rod, "weight": 1},
         {"element_data": ElementsData.AvatarMainPanel.panel_Rod.btn_bobox, "func": panel_Rod.click_btn_bobox, "weight": 1},
@@ -99,6 +109,7 @@ class AvatarMainPanel(BasePage):
         {"element_data": ElementsData.AvatarMainPanel.panel_Rod.tabs_top, "func": panel_Rod.switch_tab_top, "weight": 1},
         {"element_data": ElementsData.AvatarMainPanel.panel_Rod.btn_form, "func": panel_Rod.click_btn_form, "weight": 1},
         {"element_data": ElementsData.AvatarMainPanel.panel_Rod.tags, "func": panel_Rod.click_tags, "weight": 1},
+        {"element_data": ElementsData.AvatarMainPanel.panel_Rod.btn_close_tags, "func": panel_Rod.click_btn_close_tags, "weight": 10},
         {"element_data": ElementsData.AvatarMainPanel.panel_Rod.btn_fast, "func": panel_Rod.click_btn_fast, "weight": 1},
         ]
 
@@ -122,7 +133,9 @@ if __name__ == '__main__':
     # AvatarMainPanel.panel_Rod.switch_tab_top(bp)
     # AvatarMainPanel.panel_Rod.click_btn_form(bp)
     # AvatarMainPanel.panel_Rod.click_tags(bp)
-    AvatarMainPanel.panel_Rod.click_btn_fast(bp)
+    # AvatarMainPanel.panel_Rod.click_btn_fast(bp)
+    # AvatarMainPanel.panel_Avatar.click_btn_close_tags(bp)
+    AvatarMainPanel.panel_Rod.click_btn_close_tags(bp)
 
 
     bp.connect_close()

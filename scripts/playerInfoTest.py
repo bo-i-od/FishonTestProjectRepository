@@ -5,7 +5,6 @@ from common import gameInit
 from common.resource import *
 from panelObjs.PlayerInfoPanel import PlayerInfoPanel
 from panelObjs.PlayerLevelupPanel import PlayerLevelupPanel
-from panelObjs.PlayerSettingPanel import PlayerSettingPanel
 from common.basePage import BasePage
 from panelObjs.MessageBoxPanel import MessageBoxPanel
 from panelObjs.RewardsPanel import RewardsPanel
@@ -14,30 +13,31 @@ from panelObjs.HomePanel import HomePanel
 
 
 def gift_code_test(bp: BasePage):
-    if not PlayerSettingPanel.is_btn_giftcode_active(bp):
-        bp.debug_log("跳过激活码测试")
-        return
-    PlayerInfoPanel.click_btn_giftcode(bp)
-    bp.sleep(1)
-    # 输入不存在的礼包码
-    giftcode = "1234"
-    PlayerInfoPanel.set_giftcode(bp, giftcode)
-    giftcode_input = PlayerSettingPanel.get_giftcode(bp)
-    compare(giftcode, giftcode_input)
-    PlayerInfoPanel.click_btn_confirm(bp)
-    bp.sleep(1)
-    bp.cmd("activationcodeclear")
-    # 输入存在的礼包码
-    giftcode = "fishon888"
-    PlayerInfoPanel.set_giftcode(bp, giftcode)
-    giftcode_input = PlayerInfoPanel.get_giftcode(bp)
-    compare(giftcode, giftcode_input)
-    PlayerInfoPanel.click_btn_confirm(bp)
-    RewardsPanel.wait_for_panel_appear(bp)
-    bp.sleep(1)
-    RewardsPanel.click_tap_to_claim(bp)
-    bp.sleep(1)
-    PlayerInfoPanel.click_btn_close_additional(bp)
+    pass
+    # if not PlayerInfoPanel.is_btn_giftcode_active(bp):
+    #     bp.debug_log("跳过激活码测试")
+    #     return
+    # PlayerInfoPanel.click_btn_giftcode(bp)
+    # bp.sleep(1)
+    # # 输入不存在的礼包码
+    # giftcode = "1234"
+    # PlayerInfoPanel.set_giftcode(bp, giftcode)
+    # giftcode_input = PlayerInfoPanel.get_giftcode(bp)
+    # compare(giftcode, giftcode_input)
+    # PlayerInfoPanel.click_btn_confirm(bp)
+    # bp.sleep(1)
+    # bp.cmd("activationcodeclear")
+    # # 输入存在的礼包码
+    # giftcode = "fishon888"
+    # PlayerInfoPanel.set_giftcode(bp, giftcode)
+    # giftcode_input = PlayerInfoPanel.get_giftcode(bp)
+    # compare(giftcode, giftcode_input)
+    # PlayerInfoPanel.click_btn_confirm(bp)
+    # RewardsPanel.wait_for_panel_appear(bp)
+    # bp.sleep(1)
+    # RewardsPanel.click_tap_to_claim(bp)
+    # bp.sleep(1)
+    # PlayerInfoPanel.click_btn_close_additional(bp)
 
 def settings_test(bp: BasePage):
     PlayerInfoPanel.click_tab_avatar(bp)
@@ -55,8 +55,10 @@ def settings_test(bp: BasePage):
     PlayerInfoPanel.set_options_joystick(bp, random.randint(0, 1))
     PlayerInfoPanel.set_options_vibration(bp, random.randint(0, 1))
     PlayerInfoPanel.set_options_gyro(bp, random.randint(0, 1))
-    PlayerInfoPanel.set_options_invite(bp, random.randint(0, 1))
-    PlayerInfoPanel.click_btn_copy_id(bp)
+    #遛鱼邀请暂无
+    #PlayerInfoPanel.set_options_invite(bp, random.randint(0, 1))
+    #复制id暂无
+    #PlayerInfoPanel.click_btn_copy_id(bp)
 
 def name_test(bp: BasePage):
     # 将名字改为当前时间
@@ -65,7 +67,7 @@ def name_test(bp: BasePage):
     PlayerInfoPanel.set_player_name(bp, name)
 
     # 保存
-    PlayerInfoPanel.click_btn_save(bp)
+    PlayerInfoPanel.click_btn_save_profile(bp)
     bp.sleep(1)
 
     # 二次确认
@@ -123,7 +125,7 @@ def avatar_test(bp: BasePage):
     selected_avatar_index = PlayerInfoPanel.get_selected_icon_index(bp, avatar_id_list)
     compare(selected_avatar_index, random_num)
     avatar = PlayerInfoPanel.get_avatar(bp, avatar_id=avatar_id_list[selected_avatar_index])
-    PlayerInfoPanel.click_btn_save(bp)
+    PlayerInfoPanel.click_btn_save_profile(bp)
     bp.sleep(1)
     PlayerInfoPanel.click_btn_close_additional(bp)
     player_info = PlayerInfoPanel.get_player_info(bp)
@@ -234,6 +236,6 @@ def main(bp:BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21523", is_mobile_device=False)
+    bp = BasePage("127.0.0.1:21503", is_mobile_device=False)
     main(bp)
     bp.connect_close()

@@ -82,6 +82,11 @@ class FriendPanel(BasePage):
     def click_toggle_receive(self):
         self.click_element(element_data=ElementsData.FriendPanel.toggle_receive)
 
+    def click_btn_tips(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.FriendPanel.btns_tips, index=index)
+
+    def click_btn_close_tips(self):
+        self.click_element(element_data=ElementsData.FriendPanel.btn_close_tips)
 
     operation_pool = [
         {"element_data": ElementsData.FriendPanel.btn_add_list, "func": click_btn_add, "weight": 1},
@@ -103,6 +108,8 @@ class FriendPanel(BasePage):
         {"element_data": ElementsData.FriendPanel.toggle_online, "func": click_toggle_online, "weight": 1},
         {"element_data": ElementsData.FriendPanel.toggle_receive, "func": click_toggle_receive, "weight": 1},
         {"element_data": ElementsData.FriendPanel.input_search, "func": input_search, "weight": 1},
+        {"element_data": ElementsData.FriendPanel.btns_tips, "func": click_btn_tips, "weight": 1},
+        {"element_data": ElementsData.FriendPanel.btn_close_tips, "func": click_btn_close_tips, "weight": 1},
     ]
 if __name__ == "__main__":
     bp = BasePage()
@@ -116,7 +123,7 @@ if __name__ == "__main__":
     # FriendPanel.click_btn_fastgive(bp)
     # FriendPanel.click_btn_invite(bp)
     # FriendPanel.click_btn_power(bp)
-    FriendPanel.click_btn_receive(bp)
+    # FriendPanel.click_btn_receive(bp)
     # FriendPanel.click_btn_refresh(bp)
     # FriendPanel.click_player_info(bp)
     # FriendPanel.is_panel_active(bp)
@@ -126,4 +133,6 @@ if __name__ == "__main__":
     # FriendPanel.click_toggle_receive(bp)
     # FriendPanel.input_search(bp)
     # FriendPanel.click_btn_close_search(bp)
+    # FriendPanel.click_btn_tips(bp)
+    FriendPanel.click_btn_close_tips(bp)
     bp.connect_close()

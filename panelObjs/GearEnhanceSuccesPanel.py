@@ -15,7 +15,7 @@ class GearEnhanceSuccesPanel(BasePage):
             self.sleep(0.1)
 
     operation_pool = [
-        {"element_data": ElementsData.GearEnhanceSuccesPanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.GearEnhanceSuccesPanel.btn_close, "func": click_btn_close, "weight": 10},
 
     ]
 if __name__ == "__main__":

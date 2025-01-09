@@ -17,10 +17,6 @@ class NewbieTaskPanel(BasePage):
         remain_time = self.get_text(element_data=ElementsData.NewbieTaskPanel.remain_time)
         return int(remain_time.split('D')[0])
 
-    # 点击左上角问号弹出tips
-    def click_btn_i(self):
-        self.click_element(element_data=ElementsData.NewbieTaskPanel.btn_i)
-
     # 关闭tips
     def click_tap_to_close(self):
         self.click_element(element_data=ElementsData.NewbieTaskPanel.tap_to_close)
@@ -42,7 +38,7 @@ class NewbieTaskPanel(BasePage):
 
     def get_progress_reward_viewport(self, progress_reward_id_list):
         size = self.get_size(object_id=progress_reward_id_list[0])
-        progress_reward_viewport = Viewport(self, element_viewport=ElementsData.NewbieTaskPanel.progress_reward_viewport, item_id_list=progress_reward_id_list, viewport_edge=[0, 2 * size[0]])
+        progress_reward_viewport = Viewport(self, element_viewport=ElementsData.NewbieTaskPanel.viewport_progress, item_id_list=progress_reward_id_list, viewport_edge=[0, 2 * size[0]])
         return progress_reward_viewport
 
     def get_progress_reward_position_list(self, progress_reward_id_list):
@@ -77,7 +73,7 @@ class NewbieTaskPanel(BasePage):
         locked_list = []
         collectable_list = []
         collected_list = []
-        progress_reward_item_id_list = self.get_object_id_list(element_data=ElementsData.NewbieTaskPanel.progress_reward_list, offspring_path="item")
+        progress_reward_item_id_list = self.get_object_id_list(element_data=ElementsData.NewbieTaskPanel.reward_list_progress, offspring_path="item")
         progress_reward_id_list = self.get_parent_id_list(object_id_list=progress_reward_item_id_list)
         progress_reward_id_list = merge_list(progress_reward_id_list)
         coin = NewbieTaskPanel.get_coin(self)
@@ -105,27 +101,25 @@ class NewbieTaskPanel(BasePage):
         return locked_list, collectable_list, collected_list
 
     def get_max_reward_icon(self):
-        max_reward_icon = self.get_icon(element_data=ElementsData.NewbieTaskPanel.max_reward, offspring_path="item>item_model_mini(Clone)>icon")
+        max_reward_icon = self.get_icon(element_data=ElementsData.NewbieTaskPanel.reward_max, offspring_path="item>item_model_mini(Clone)>icon")
         return max_reward_icon
 
     def get_max_reward_position(self):
-        max_reward_position = self.get_position(element_data=ElementsData.NewbieTaskPanel.max_reward,
+        max_reward_position = self.get_position(element_data=ElementsData.NewbieTaskPanel.reward_max,
                                                 offspring_path="item>item_model_mini(Clone)>icon")
         return max_reward_position
 
     def get_max_reward_quantity(self):
-        max_reward_quantity = int(self.get_text(element_data=ElementsData.NewbieTaskPanel.max_reward, offspring_path="item>item_model_mini(Clone)>quantity>value"))
+        max_reward_quantity = int(self.get_text(element_data=ElementsData.NewbieTaskPanel.reward_max, offspring_path="item>item_model_mini(Clone)>quantity>value"))
         return max_reward_quantity
 
     def get_max_reward_threshold(self):
-        max_reward_threshold = int(self.get_text(element_data=ElementsData.NewbieTaskPanel.max_reward, offspring_path="value"))
+        max_reward_threshold = int(self.get_text(element_data=ElementsData.NewbieTaskPanel.reward_max, offspring_path="value"))
         return max_reward_threshold
 
     # 切换页签
-    def switch_tab(self, index):
-        position_list = self.get_position_list(element_data=ElementsData.NewbieTaskPanel.tab_list)
-        position = position_list[index]
-        self.click_position(position)
+    def switch_tab(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.NewbieTaskPanel.tab_list, index=index)
 
     def get_task_viewport(self, task_id_list):
         size = self.get_size_list(object_id=task_id_list[0])[0]
@@ -233,13 +227,76 @@ class NewbieTaskPanel(BasePage):
 
         return challenge_position_list
 
+    def click_btn_task(self, index=-1):
+        size = self.get_size_list(element_data=ElementsData.NewbieTaskPanel.task_list)[0]
+        self.click_object_of_plural_objects(element_data=ElementsData.NewbieTaskPanel.btn_task_list, element_viewport=ElementsData.NewbieTaskPanel.task_viewport, viewport_direction="column", viewport_edge=[0, 2 * size[1]], index=index)
+
+    def click_btn_collect(self, index=-1):
+        size = self.get_size_list(element_data=ElementsData.NewbieTaskPanel.challenge_list)[0]
+        self.click_object_of_plural_objects(element_data=ElementsData.NewbieTaskPanel.btn_collect_list, element_viewport=ElementsData.NewbieTaskPanel.challenge_viewport, viewport_direction="column", viewport_edge=[0, 0.75 * size[1]], index=index)
+
+    def click_btn_go(self, index=-1):
+        size = self.get_size_list(element_data=ElementsData.NewbieTaskPanel.challenge_list)[0]
+        self.click_object_of_plural_objects(element_data=ElementsData.NewbieTaskPanel.btn_go_list, element_viewport=ElementsData.NewbieTaskPanel.challenge_viewport, viewport_direction="column", viewport_edge=[0, 0.75 * size[1]], index=index)
+
+    def click_item_progress(self, index=-1):
+        size = self.get_size_list(element_data=ElementsData.NewbieTaskPanel.item_list_progress)[0]
+        self.click_object_of_plural_objects(element_data=ElementsData.NewbieTaskPanel.item_list_progress, element_viewport=ElementsData.NewbieTaskPanel.viewport_progress, viewport_edge=[0, 2 * size[0]],index=index)
+
+    def click_item_max(self):
+        self.click_element(element_data=ElementsData.NewbieTaskPanel.item_max)
+
+    def click_item(self, index=-1):
+        size = self.get_size_list(element_data=ElementsData.NewbieTaskPanel.task_list)[0]
+        self.click_object_of_plural_objects(element_data=ElementsData.NewbieTaskPanel.item_list, element_viewport=ElementsData.NewbieTaskPanel.task_viewport, viewport_direction="column", viewport_edge=[0, 2 * size[1]], index=index)
 
 
-
-
-
-
-if __name__ == '__main__':
-    bp = BasePage("192.168.111.77:20013")
-    NewbieTaskPanel.switch_tab(bp, 0)
+    operation_pool = [
+        {"element_data": ElementsData.NewbieTaskPanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.NewbieTaskPanel.btn_collect_list, "func": click_btn_collect, "weight": 1},
+        {"element_data": ElementsData.NewbieTaskPanel.btn_go_list, "func": click_btn_go, "weight": 1},
+        {"element_data": ElementsData.NewbieTaskPanel.btn_leaderboard, "func": click_btn_leaderboard, "weight": 1},
+        {"element_data": ElementsData.NewbieTaskPanel.btn_sale, "func": click_btn_sale, "weight": 1},
+        {"element_data": ElementsData.NewbieTaskPanel.btn_task_list, "func": click_btn_task, "weight": 1},
+        {"element_data": ElementsData.NewbieTaskPanel.item_list, "func": click_item, "weight": 1},
+        {"element_data": ElementsData.NewbieTaskPanel.item_max, "func": click_item_max, "weight": 1},
+        {"element_data": ElementsData.NewbieTaskPanel.item_list_progress, "func": click_item_progress, "weight": 1},
+        {"element_data": ElementsData.NewbieTaskPanel.tap_to_close, "func": click_tap_to_close, "weight": 1},
+        {"element_data": ElementsData.NewbieTaskPanel.tab_list, "func": switch_tab, "weight": 1},
+    ]
+if __name__ == "__main__":
+    bp = BasePage()
+    # NewbieTaskPanel.click_btn_close(bp)
+    # NewbieTaskPanel.click_btn_collect(bp)
+    # NewbieTaskPanel.click_btn_go(bp)
+    # NewbieTaskPanel.click_btn_leaderboard(bp)
+    # NewbieTaskPanel.click_btn_sale(bp)
+    # NewbieTaskPanel.click_btn_task(bp)
+    # NewbieTaskPanel.click_item(bp)
+    NewbieTaskPanel.click_item_max(bp)
+    # NewbieTaskPanel.click_item_progress(bp, 4)
+    # NewbieTaskPanel.click_tap_to_close(bp)
+    # NewbieTaskPanel.get_challenge_id_list(bp)
+    # NewbieTaskPanel.get_challenge_point_list(bp)
+    # NewbieTaskPanel.get_challenge_position_list(bp)
+    # NewbieTaskPanel.get_challenge_viewport(bp)
+    # NewbieTaskPanel.get_coin(bp)
+    # NewbieTaskPanel.get_max_reward_icon(bp)
+    # NewbieTaskPanel.get_max_reward_position(bp)
+    # NewbieTaskPanel.get_max_reward_quantity(bp)
+    # NewbieTaskPanel.get_max_reward_threshold(bp)
+    # NewbieTaskPanel.get_progress_reward_icon_list(bp)
+    # NewbieTaskPanel.get_progress_reward_position_list(bp)
+    # NewbieTaskPanel.get_progress_reward_quantity_list(bp)
+    # NewbieTaskPanel.get_progress_reward_status(bp)
+    # NewbieTaskPanel.get_progress_reward_viewport(bp)
+    # NewbieTaskPanel.get_remain_day(bp)
+    # NewbieTaskPanel.get_task_id_list(bp)
+    # NewbieTaskPanel.get_task_position_list(bp)
+    # NewbieTaskPanel.get_task_reward_dict_list(bp)
+    # NewbieTaskPanel.get_task_status(bp)
+    # NewbieTaskPanel.get_task_viewport(bp)
+    # NewbieTaskPanel.is_panel_active(bp)
+    # NewbieTaskPanel.switch_tab(bp)
+    bp.connect_close()
 

@@ -15,7 +15,11 @@ class DivisionLeaderboardPanel(BasePage):
     def switch_tab(self, index=-1):
         self.click_object_of_plural_objects(element_data=ElementsData.DivisionLeaderboardPanel.tab_list, index=index)
 
+    def click_btn_i(self):
+        self.click_element(element_data=ElementsData.DivisionLeaderboardPanel.btn_i)
 
+    def click_btn_close_tips(self):
+        self.click_element(element_data=ElementsData.DivisionLeaderboardPanel.btn_close_tips)
 
 
     class panel_myleague(BasePage):
@@ -55,6 +59,8 @@ class DivisionLeaderboardPanel(BasePage):
 
     operation_pool = [
         {"element_data": ElementsData.DivisionLeaderboardPanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.DivisionLeaderboardPanel.btn_i, "func": click_btn_i, "weight": 1},
+        {"element_data": ElementsData.DivisionLeaderboardPanel.btn_close_tips, "func": click_btn_close_tips, "weight": 10},
         {"element_data": ElementsData.DivisionLeaderboardPanel.tab_list, "func": switch_tab, "weight": 1},
         {"element_data": ElementsData.DivisionLeaderboardPanel.panel_myleague.btn_alldivisions, "func": panel_myleague.click_btn_alldivisions, "weight": 1},
         {"element_data": ElementsData.DivisionLeaderboardPanel.panel_myleague.crown, "func": panel_myleague.click_crown, "weight": 1},
@@ -84,5 +90,9 @@ if __name__ == '__main__':
     # DivisionLeaderboardPanel.panel_myleague.click_btn_playercard_self(bp)
     # DivisionLeaderboardPanel.panel_myleague.click_crown(bp)
     # DivisionLeaderboardPanel.panel_myleague.click_item(bp)
-    DivisionLeaderboardPanel.panel_myleague.click_item_self(bp)
+    # DivisionLeaderboardPanel.panel_myleague.click_item_self(bp)
+    DivisionLeaderboardPanel.click_btn_i(bp)
+    DivisionLeaderboardPanel.click_btn_close_tips(bp)
+
+
     bp.connect_close()

@@ -9,14 +9,15 @@ from common.viewport import Viewport
 class CareerPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.CareerPanel.btn_close)
-        if CareerPanel.is_panel_active(self):
-            return FindElementError
 
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.CareerPanel.CareerPanel)
 
     def click_btn_i(self):
         self.click_element(element_data=ElementsData.CareerPanel.btn_i)
+
+    def click_btn_close_tips(self):
+        self.click_element(element_data=ElementsData.CareerPanel.btn_close_tips)
 
     def is_tips_active(self):
         return self.exist(element_data=ElementsData.CareerPanel.tips)
@@ -146,6 +147,7 @@ class CareerPanel(BasePage):
     operation_pool = [
         {"element_data": ElementsData.CareerPanel.btn_close, "func": click_btn_close, "weight": 1},
         {"element_data": ElementsData.CareerPanel.btn_i, "func": click_btn_i, "weight": 1},
+        {"element_data": ElementsData.CareerPanel.btn_close_tips, "func": click_btn_close_tips, "weight": 10},
         {"element_data": ElementsData.CareerPanel.btn_enhance, "func": click_btn_enhance, "weight": 1},
         {"element_data": ElementsData.CareerPanel.btn_guide, "func": click_btn_guide, "weight": 1},
         {"element_data": ElementsData.CareerPanel.top_res_btns, "func": click_top_res_btn, "weight": 1},
@@ -160,7 +162,7 @@ if __name__ == "__main__":
     # CareerPanel.click_rating_total(bp)
     #
     # CareerPanel.click_rating(bp)
-
-    CareerPanel.click_item(bp)
+    CareerPanel.click_btn_close_tips(bp)
+    # CareerPanel.click_item(bp)
 
     bp.connect_close()
