@@ -1,4 +1,4 @@
-from load_log import load_log
+from load_log import load_log_new
 from tools.excelRead import ExcelTools
 from configs.pathConfig import EXCEL_PATH
 S=1
@@ -12,7 +12,7 @@ Monster=13
 
 excelTools =  ExcelTools(EXCEL_PATH)
 
-fish_table_data=excelTools.get_table_data("FISH.xlsm")
+fish_table_data = excelTools.get_table_data("FISH.xlsm")
 fish_tpId_list = fish_table_data['tpId']
 fishType_list = fish_table_data['fishType']
 fishClass_list = fish_table_data['fishClass']
@@ -81,7 +81,8 @@ def statistic_fish_size(numbers):
 
 if __name__ == '__main__':
     # 测试
-    data=load_log()
-    numbers=[int(i['fish_id']) for i in data]
+    # 测试
+    data=load_log_new("new_hook_log.txt")
+    numbers=[i['fishes']['1']['tpId'] for i in data]
     count=statistic_fish_size(numbers)
     print(len(numbers),count)
