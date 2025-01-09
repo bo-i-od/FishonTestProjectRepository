@@ -1,3 +1,6 @@
+import random
+
+import tools.commonTools
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from common.viewport import Viewport
@@ -11,10 +14,10 @@ class PlayerEditNamePanel(BasePage):
         return self.exist(element_data=ElementsData.PlayerEditNamePanel_oversea.PlayerEditNamePanel)
 
     def wait_for_panel_appear(self):
-        self.wait_for_appear(element_data=ElementsData.PlayerEditNamePanel.PlayerEditNamePanel, is_click=False, ignore_set={"PlayerEditNamePanel"})
+        self.wait_for_appear(element_data=ElementsData.PlayerEditNamePanel.PlayerEditNamePanel, is_click=False)
 
     def wait_for_panel_appear_oversea(self):
-        self.wait_for_appear(element_data=ElementsData.PlayerEditNamePanel_oversea.PlayerEditNamePanel, is_click=False, ignore_set={"PlayerEditNamePanel"})
+        self.wait_for_appear(element_data=ElementsData.PlayerEditNamePanel_oversea.PlayerEditNamePanel, is_click=False)
 
     def get_player_name(self):
         return self.get_text(element_data=ElementsData.PlayerEditNamePanel.Input_PlayerName)
@@ -23,7 +26,9 @@ class PlayerEditNamePanel(BasePage):
         return self.get_text(element_data=ElementsData.PlayerEditNamePanel_oversea.Input_PlayerName)
 
     # 编辑名称
-    def set_player_name(self, name: str):
+    def set_player_name(self, name: str=None):
+        if name is None:
+            name = tools.commonTools.generate_random_string(random.randint(0, 30))
         object_id_list = self.get_object_id_list(element_data_list=[ElementsData.PlayerEditNamePanel.Input_PlayerName, ElementsData.PlayerEditNamePanel.Input_PlayerName_oversea])
         if object_id_list[0]:
             self.set_text(element_data=ElementsData.PlayerEditNamePanel.Input_PlayerName, text=name)
@@ -98,8 +103,21 @@ class PlayerEditNamePanel(BasePage):
             self.click_position(position_list[1][0])
             return
 
+    def click_head(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.PlayerEditNamePanel.head_list, element_viewport=ElementsData.PlayerEditNamePanel.head_viewport, viewport_direction="column", index=index)
+
+    operation_pool = [
+        {"element_data": ElementsData.PlayerEditNamePanel.btn_confirm, "func": click_confirm, "weight": 1},
+        {"element_data": ElementsData.PlayerEditNamePanel.head_list, "func": click_head, "weight": 1},
+        {"element_data": ElementsData.PlayerEditNamePanel.Input_PlayerName, "func": set_player_name, "weight": 1},
+
+    ]
+
 
 if __name__ == "__main__":
     bp = BasePage()
-    head_id_list = PlayerEditNamePanel.click_confirm(bp, is_ray_input=True)
+    PlayerEditNamePanel.click_head(bp)
+    PlayerEditNamePanel.set_player_name(bp)
+    PlayerEditNamePanel.click_confirm(bp)
+
     bp.connect_close()

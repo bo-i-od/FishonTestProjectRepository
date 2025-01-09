@@ -17,11 +17,14 @@ class BattlePassPanel(BasePage):
     def click_btn_i(self):
         self.click_element(element_data=ElementsData.BattlePassPanel.btn_i)
 
-    def click_btn_i_gold_band(self):
+    def click_btn_i_gold_bank(self):
         self.click_element(element_data=ElementsData.BattlePassPanel.btn_i_goldbank)
 
+    def click_btn_close_tips_gold_bank(self):
+        self.click_element(element_data=ElementsData.BattlePassPanel.btn_close_tips_goldbank)
+
     def is_Tip_goldbank_active(self):
-        return self.exist(element_data=ElementsData.BattlePassPanel.Tip_goldbank)
+        return self.exist(element_data=ElementsData.BattlePassPanel.tips_goldbank)
 
     def click_btn_task(self):
         self.click_element(element_data=ElementsData.BattlePassPanel.btn_task)
@@ -201,7 +204,8 @@ class BattlePassPanel(BasePage):
         {"element_data": ElementsData.BattlePassPanel.btn_task, "func": click_btn_task, "weight": 1},
         {"element_data": ElementsData.BattlePassPanel.btn_collect, "func": click_btn_collect_all, "weight": 1},
         {"element_data": ElementsData.BattlePassPanel.btn_unlock, "func": click_btn_unlock_premium, "weight": 1},
-        {"element_data": ElementsData.BattlePassPanel.btn_i_goldbank, "func": click_btn_i_gold_band, "weight": 2},
+        {"element_data": ElementsData.BattlePassPanel.btn_i_goldbank, "func": click_btn_i_gold_bank, "weight": 2},
+        {"element_data": ElementsData.BattlePassPanel.btn_close_tips_goldbank, "func": click_btn_close_tips_gold_bank, "weight": 10},
         {"element_data": ElementsData.BattlePassPanel.btn_detail, "func": click_btn_detail, "weight": 1},
         {"element_data": ElementsData.BattlePassPanel.btn_premium, "func": click_btn_premium, "weight": 1},
         {"element_data": ElementsData.BattlePassPanel.item_icon_list, "func": click_item, "weight": 1},
@@ -218,7 +222,9 @@ if __name__ == '__main__':
 
     # BattlePassPanel.click_btn_premium(bp)
     #
-    BattlePassPanel.click_btn_unlock_premium(bp)
+    # BattlePassPanel.click_btn_unlock_premium(bp)
+
+    BattlePassPanel.click_btn_close_tips_gold_bank(bp)
 
     bp.connect_close()
 

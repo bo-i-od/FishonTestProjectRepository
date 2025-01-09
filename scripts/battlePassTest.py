@@ -290,7 +290,7 @@ def collect_all_test(bp: BasePage, icon_list, quantity_list):
 
 
 def glod_bank_test(bp:BasePage):
-    BattlePassPanel.click_btn_i_gold_band(bp)
+    BattlePassPanel.click_btn_i_gold_bank(bp)
     if not BattlePassPanel.is_Tip_goldbank_active(bp):
         raise FindNoElementError
     bp.click_position([0.5, 0.9])

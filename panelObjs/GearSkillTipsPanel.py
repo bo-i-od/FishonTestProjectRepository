@@ -15,7 +15,7 @@ class GearSkillTipsPanel(BasePage):
 
 
     operation_pool = [
-        {"element_data": ElementsData.GearSkillTipsPanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.GearSkillTipsPanel.btn_close, "func": click_btn_close, "weight": 10},
 
     ]
 if __name__ == "__main__":

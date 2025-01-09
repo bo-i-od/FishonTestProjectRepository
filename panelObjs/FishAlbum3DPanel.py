@@ -30,6 +30,9 @@ class FishAlbum3DPanel(BasePage):
     def click_btn_i(self):
         self.click_element(element_data=ElementsData.FishAlbum3DPanel.btn_i)
 
+    def click_btn_close_tips(self):
+        self.click_element(element_data=ElementsData.FishAlbum3DPanel.btn_close_tips)
+
     def is_panel_rewards_tip_active(self):
         return self.exist(element_data=ElementsData.FishAlbum3DPanel.panel_rewards_tip)
 
@@ -98,6 +101,9 @@ class FishAlbum3DPanel(BasePage):
     def click_star(self, index=-1):
         self.click_object_of_plural_objects(element_data=ElementsData.FishAlbum3DPanel.star_list, index=index)
 
+    def click_btn_close_star(self):
+        self.click_element(element_data=ElementsData.FishAlbum3DPanel.btn_close_star)
+
     operation_pool = [
         {"element_data": ElementsData.FishAlbum3DPanel.btn_close, "func": click_btn_close, "weight": 1},
         {"element_data": ElementsData.FishAlbum3DPanel.btn_share, "func": click_btn_share, "weight": 1},
@@ -106,11 +112,16 @@ class FishAlbum3DPanel(BasePage):
         {"element_data": ElementsData.FishAlbum3DPanel.btn_close_tab, "func": click_btn_close_tab, "weight": 1},
         {"element_data": ElementsData.FishAlbum3DPanel.btn_preview, "func": click_btn_preview, "weight": 1},
         {"element_data": ElementsData.FishAlbum3DPanel.btn_i, "func": click_btn_i, "weight": 1},
+        {"element_data": ElementsData.FishAlbum3DPanel.btn_close_tips, "func": click_btn_close_tips, "weight": 10},
         {"element_data": ElementsData.FishAlbum3DPanel.reward_icon, "func": click_reward, "weight": 1},
         {"element_data": ElementsData.FishAlbum3DPanel.star_list, "func": click_star, "weight": 1},
+        {"element_data": ElementsData.FishAlbum3DPanel.btn_close_star, "func": click_btn_close_star, "weight": 10},
         ]
 
 
 if __name__ == '__main__':
     bp = BasePage()
+    # FishAlbum3DPanel.click_btn_close_i(bp)
+    FishAlbum3DPanel.click_btn_close_star(bp)
+    bp.connect_close()
 

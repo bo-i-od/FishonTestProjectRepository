@@ -27,6 +27,12 @@ class AquariumFishNewPanel(BasePage):
     def click_btn_fast(self):
         self.click_element(element_data=ElementsData.AquariumFishNewPanel.btn_fast)
 
+    def click_btn_i(self):
+        self.click_element(element_data=ElementsData.AquariumFishNewPanel.btn_i)
+
+    def click_btn_close_tips(self):
+        self.click_element(element_data=ElementsData.AquariumFishNewPanel.btn_close_tips)
+
     def click_top_res_btn(self, index=-1):
         self.click_object_of_plural_objects(element_data=ElementsData.AquariumFishNewPanel.top_res_btns, index=index)
 
@@ -45,7 +51,8 @@ class AquariumFishNewPanel(BasePage):
         {"element_data": ElementsData.AquariumFishNewPanel.btn_fast, "func": click_btn_fast, "weight": 1},
         {"element_data": ElementsData.AquariumFishNewPanel.btn_change, "func": click_btn_change, "weight": 2},
         {"element_data": ElementsData.AquariumMainPanel.top_res_btns, "func": click_top_res_btn, "weight": 1},
-        {"element_data": ElementsData.AquariumFishNewPanel.btn_fast, "func": click_btn_fast, "weight": 2},
+        {"element_data": ElementsData.AquariumFishNewPanel.btn_i, "func": click_btn_i, "weight": 2},
+        {"element_data": ElementsData.AquariumFishNewPanel.btn_close_tips, "func": click_btn_close_tips, "weight": 2},
         {"element_data": ElementsData.AquariumFishNewPanel.btns, "func": click_btn, "weight": 4},
         {"element_data": ElementsData.AquariumFishNewPanel.btns_operate, "func": click_btn_operate, "weight": 2},
         {"element_data": ElementsData.AquariumFishNewPanel.aquarium_fish_list, "func": click_aquarium_fish, "weight": 4},
@@ -53,7 +60,7 @@ class AquariumFishNewPanel(BasePage):
 
 if __name__ == "__main__":
     bp = BasePage("127.0.0.1:21573", is_mobile_device=False)
-    AquariumFishNewPanel.switch_tab(bp)
+    # AquariumFishNewPanel.switch_tab(bp)
 
     # AquariumFishNewPanel.click_btn_fast(bp)
 
@@ -66,6 +73,10 @@ if __name__ == "__main__":
     # AquariumFishNewPanel.click_btn_operate(bp)
     #
     # AquariumFishNewPanel.click_aquarium_fish(bp)
+
+    AquariumFishNewPanel.click_btn_i(bp)
+
+    AquariumFishNewPanel.click_btn_close_tips(bp)
 
 
     bp.connect_close()

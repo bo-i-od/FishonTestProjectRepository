@@ -32,7 +32,6 @@ from panelObjs.TreasureChestGearsShardsPanel import TreasureChestGearsShardsPane
 from panelObjs.TreasureChestPanel import TreasureChestPanel
 from panelObjs.TreasureChestRewardsPanel import TreasureChestRewardsPanel
 from scripts import guideTest
-from panelObjs.PlayerSettingPanel import PlayerSettingPanel
 from panelObjs.FishAlbum3DPanel import FishAlbum3DPanel
 from panelObjs.StorePanel import StorePanel
 from panelObjs.BaitAndRodShowPanel import BaitAndRodShowPanel
@@ -200,7 +199,7 @@ def battle_pass(bp: BasePage):
     bp.sleep(1)
 
     # 银行
-    BattlePassPanel.click_btn_i_gold_band(bp)
+    BattlePassPanel.click_btn_i_gold_bank(bp)
     bp.sleep(1)
     bp.click_position_base([0.9, 0.1])
 

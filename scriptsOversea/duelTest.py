@@ -28,7 +28,6 @@ from panelObjs.BattlePanel import BattlePanel
 from panelObjs.PVPRoomPanel import PVPRoomPanel
 from panelObjs.ResultPanel import ResultPanel
 from panelObjs.PlayerEditNamePanel import PlayerEditNamePanel
-from panelObjs.PlayerSettingPanel import PlayerSettingPanel
 from panelObjs.LoginPanel import LoginPanel
 from panelObjs.BattleFailedPanel import BattleFailedPanel
 from panelObjs.RoulettePanel import RoulettePanel

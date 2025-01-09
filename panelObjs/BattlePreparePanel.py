@@ -2,6 +2,7 @@ import common.resource
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from common import resource
+
 from panelObjs.MessageBoxPanel import MessageBoxPanel
 from panelObjs.RewardsPanel import RewardsPanel
 from panelObjs.TournamentsInfoPanel import TournamentsInfoPanel
@@ -47,7 +48,10 @@ class BattlePreparePanel(BasePage):
     # 点击抛竿
     def click_btn_cast(self):
         self.wait_for_appear(element_data=ElementsData.BattlePreparePanel.btn_cast, is_click=False)
-        self.click_element_safe(element_data=ElementsData.BattlePreparePanel.btn_cast)
+        if self.is_ray_input:
+            self.ray_input(kind="click", element_data=ElementsData.BattlePreparePanel.btn_cast)
+        else:
+            self.click_element_safe(element_data=ElementsData.BattlePreparePanel.btn_cast)
         self.sleep(1)
         if self.exist(element_data=ElementsData.BattlePanel.BattlePanel):
             return
@@ -57,9 +61,6 @@ class BattlePreparePanel(BasePage):
     def click_btn_quick_switch(self):
         self.wait_for_appear(element_data=ElementsData.BattlePreparePanel.quick_switch, is_click=True)
 
-    #
-    def click_rod_model(self):
-        self.wait_for_appear(element_data=ElementsData.BattlePreparePanel.rod_model, is_click=True)
 
     def get_location(self):
         return self.get_text(element_data=ElementsData.BattlePreparePanel.location)
@@ -282,13 +283,7 @@ class BattlePreparePanel(BasePage):
         def click_btn_go(self):
             self.click_element(element_data=ElementsData.BattlePreparePanel.panel_gears_switch.btn_go)
 
-if __name__ == '__main__':
-    bp = BasePage()
 
-    a = BattlePreparePanel.get_current_rewards_icon_list(bp)
-    b= BattlePreparePanel.get_current_rewards_quantity_list(bp)
-    c = common.resource.make_item_dict(item_icon_list=a, item_quantity_list=b)
-    print(c)
     # c = bp.excelTools.get_table_data("POINT_PROGRESS_REWARD.xlsm")["progressRewards"]
     # # c = bp.excelTools.get_table_data("POINT_PROGRESS_REWARD_ENDLESS.xlsm")["progressRewards"]
     # r = 8

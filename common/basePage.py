@@ -42,7 +42,7 @@ class BasePageMain:
         self.is_mobile_device = is_mobile_device
 
         # 是否截图记录
-        self.record = False
+        self.is_record = False
 
         # 是否打印日志
         self.is_debug_log = False
@@ -52,6 +52,9 @@ class BasePageMain:
 
         # 是否开启战斗倍速
         self.is_time_scale = False
+
+        # 是否在可以光线点击的地方使用光线点击
+        self.is_ray_input = True
 
         self.is_ios = False
         if is_mobile_device is True and serial_number is None:
@@ -912,7 +915,7 @@ class BasePageMain:
         if not (0 <= position[0] <= 1) or not (0 <= position[1] <= 1):
             raise InvalidOperationError('Click position out of screen. pos={}'.format(repr(position)))
         # 点击前进行截图保存
-        if self.record:
+        if self.is_record:
             img = self.get_full_screen_shot()
             self.draw_circle(img, (position[0], position[1]))
             self.save_img(img)
@@ -1329,6 +1332,18 @@ class BasePageMain:
         element_data_copy = self.get_element_data(element_data, offspring_path)
         point_start = self.get_position(element_data=element_data_copy)
         self.poco.swipe(p1=point_start, p2=point_end, duration=t)
+
+    def swipe_slider(self, slider, value_start=None, value_end=None):
+        if not value_start:
+            value_start = random.random()
+        if not value_end:
+            value_end = random.random()
+        point_start, point_end = slider.get_slide_point_start_and_end(slide_range=[value_start, value_end])
+        if value_start > value_end:
+            t = value_start - value_end
+        else:
+            t = value_end - value_start
+        self.swipe(point_start=point_start, point_end=point_end, t=t)
 
     def get_screen_shot(self, x, y, w, h):
         """函数功能简述
@@ -2253,8 +2268,8 @@ if __name__ == '__main__':
     # "127.0.0.1:21613"
     # "b6h65hd64p5pxcyh"
     # "TimeMgr:GetServerTime()"
-    t = bp.lua_console_with_response(lua_code_return="_G.PassiveNewbieGuideEnum")
-    print(t)
+    # t = bp.lua_console_with_response(lua_code_return="_G.PassiveNewbieGuideEnum")
+    # str(t)
 
     # bp.cmd_list(["levelupto 69", "guideskip"])
     # bp.sleep(1)

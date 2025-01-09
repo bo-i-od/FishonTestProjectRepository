@@ -18,3 +18,20 @@ class RewardsPreviewPanel(BasePage):
     def get_reward_position_list(self):
         reward_position_list = self.get_position_list(element_data=ElementsData.RewardsPreviewPanel.reward_icon_list)
         return reward_position_list
+
+    def click_btn_close(self):
+        self.click_element(element_data=ElementsData.RewardsPreviewPanel.btn_close)
+
+    operation_pool = [
+        {"element_data": ElementsData.RewardsPreviewPanel.btn_close, "func": click_btn_close, "weight": 1},
+    ]
+
+
+if __name__ == "__main__":
+    bp = BasePage()
+    RewardsPreviewPanel.click_btn_close(bp)
+    # RewardsPreviewPanel.get_reward_icon_list(bp)
+    # RewardsPreviewPanel.get_reward_position_list(bp)
+    # RewardsPreviewPanel.get_reward_quantity_list(bp)
+    # RewardsPreviewPanel.is_panel_active(bp)
+    bp.connect_close()

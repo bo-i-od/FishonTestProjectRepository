@@ -9,6 +9,9 @@ class FishBagPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.FishBagPanel.btn_close, ignore_set={"FishBagPanel"})
 
+    def click_fish_bag(self):
+        self.click_element(element_data=ElementsData.FishBagPanel.fish_bag, ignore_set={"FishBagPanel"})
+
     def click_btn_next(self):
         self.click_element(element_data=ElementsData.FishBagPanel.btn_next, ignore_set={"FishBagPanel"})
 
@@ -18,8 +21,13 @@ class FishBagPanel(BasePage):
     operation_pool = [
         {"element_data": ElementsData.FishBagPanel.btn_close, "func": click_btn_close, "weight": 1},
         {"element_data": ElementsData.FishBagPanel.btn_next, "func": click_btn_next, "weight": 1},
-
+        {"element_data": ElementsData.FishBagPanel.fish_bag, "func": click_fish_bag, "weight": 1},
         ]
 
+
+if __name__ == '__main__':
+    bp = BasePage()
+    FishBagPanel.click_fish_bag(bp)
+    bp.connect_close()
 
 

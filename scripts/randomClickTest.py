@@ -100,7 +100,6 @@ def registry_panels():
     panels.register_panel(name="PlayerInfoPanel", panel=PlayerInfoPanel)
     panels.register_panel(name="PlayerInteractPanel", panel=PlayerInteractPanel)
     panels.register_panel(name="PlayerLevelupPanel", panel=PlayerLevelupPanel)
-    panels.register_panel(name="PlayerSettingPanel", panel=PlayerSettingPanel)
     panels.register_panel(name="ProgressRewardsPanel", panel=ProgressRewardsPanel)
     panels.register_panel(name="PVEMultiRoomFriendPanel", panel=PVEMultiRoomFriendPanel)
     panels.register_panel(name="PVENewbieGiftPackPanel", panel=PVENewbieGiftPackPanel)

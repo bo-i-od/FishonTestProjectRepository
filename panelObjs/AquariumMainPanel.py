@@ -15,6 +15,9 @@ class AquariumMainPanel(BasePage):
     def click_btn_i(self):
         self.click_element(element_data=ElementsData.AquariumMainPanel.btn_i)
 
+    def click_btn_close_tips(self):
+        self.click_element(element_data=ElementsData.AquariumMainPanel.btn_close_tips)
+
     def click_btn(self, index=-1):
         self.click_object_of_plural_objects(element_data=ElementsData.AquariumMainPanel.btns, index=index)
 
@@ -27,16 +30,24 @@ class AquariumMainPanel(BasePage):
     def click_btn_close_level_up(self):
         self.click_element(element_data=ElementsData.AquariumMainPanel.btn_close_level_up)
 
+    def click_btn_rank(self):
+        self.click_element(element_data=ElementsData.AquariumMainPanel.btn_rank)
+
+    def click_btn_task(self):
+        self.click_element(element_data=ElementsData.AquariumMainPanel.btn_task)
 
 
     operation_pool = [
         {"element_data": ElementsData.AquariumMainPanel.btn_close, "func": click_btn_close, "weight": 1},
         {"element_data": ElementsData.AquariumMainPanel.btns, "func": click_btn, "weight": 4},
         {"element_data": ElementsData.AquariumMainPanel.btn_i, "func": click_btn_i, "weight": 1},
+        {"element_data": ElementsData.AquariumMainPanel.btn_close_tips, "func": click_btn_close_tips, "weight": 1},
         {"element_data": ElementsData.AquariumMainPanel.top_res_btns, "func": click_top_res_btn, "weight": 1},
         {"element_data": ElementsData.AquariumMainPanel.top_res_btns, "func": click_btn_change, "weight": 2},
         {"element_data": ElementsData.AquariumMainPanel.btn_collect, "func": click_btn_collect, "weight": 2},
         {"element_data": ElementsData.AquariumMainPanel.btn_close_level_up, "func": click_btn_close_level_up, "weight": 1},
+        {"element_data": ElementsData.AquariumMainPanel.btn_rank, "func": click_btn_rank, "weight": 1},
+        {"element_data": ElementsData.AquariumMainPanel.btn_task, "func": click_btn_task, "weight": 1},
 
         ]
 
@@ -55,7 +66,9 @@ if __name__ == "__main__":
     # AquariumMainPanel.click_btn_close(bp)
 
     # AquariumMainPanel.click_btn_collect(bp)
-
-    AquariumMainPanel.click_btn_close_level_up(bp)
+    # AquariumMainPanel.click_btn_close_i(bp)
+    # AquariumMainPanel.click_btn_close_level_up(bp)
+    AquariumMainPanel.click_btn_rank(bp)
+    # AquariumMainPanel.click_btn_task(bp)
 
     bp.connect_close()

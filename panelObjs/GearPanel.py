@@ -183,30 +183,32 @@ class GearPanel(BasePage):
     def click_option_hide(self):
         self.click_element(element_data=ElementsData.GearPanel.option_hide)
 
-    def click_btn_close_tip_filter_rod(self):
-        self.click_element(element_data=ElementsData.GearPanel.btn_close)
+    def click_btn_close_filter(self):
+        self.click_element(element_data=ElementsData.GearPanel.btn_close_filter)
 
 
 
     operation_pool = [
-        {"element_data": ElementsData.GearPanel.btn_apply, "func": click_btn_apply, "weight": 1},
+        {"element_data": ElementsData.GearPanel.btn_apply, "func": click_btn_apply, "weight": 10},
         {"element_data": ElementsData.GearPanel.btn_close, "func": click_btn_close, "weight": 1},
-        {"element_data": ElementsData.GearPanel.tip_filter_rod, "func": click_btn_close_tip_filter_rod, "weight": 1},
+        {"element_data": ElementsData.GearPanel.btn_close_filter, "func": click_btn_close_filter, "weight": 10},
         {"element_data": ElementsData.GearPanel.btn_enhence, "func": click_btn_enhance, "weight": 1},
         {"element_data": ElementsData.GearPanel.btn_equip, "func": click_btn_equip, "weight": 1},
         {"element_data": ElementsData.GearPanel.btn_filter, "func": click_btn_filter, "weight": 1},
-        {"element_data": ElementsData.GearPanel.btn_reset, "func": click_btn_reset, "weight": 1},
+        {"element_data": ElementsData.GearPanel.btn_reset, "func": click_btn_reset, "weight": 10},
         {"element_data": ElementsData.GearPanel.btn_upgrade, "func": click_btn_upgrade, "weight": 1},
-        {"element_data": ElementsData.GearPanel.option_list, "func": click_option, "weight": 1},
-        {"element_data": ElementsData.GearPanel.option_hide, "func": click_option_hide, "weight": 1},
+        {"element_data": ElementsData.GearPanel.option_list, "func": click_option, "weight": 10},
+        {"element_data": ElementsData.GearPanel.option_hide, "func": click_option_hide, "weight": 10},
         {"element_data": ElementsData.GearPanel.rod_bg_list, "func": click_rod, "weight": 1},
         {"element_data": ElementsData.GearPanel.skill_list, "func": click_skill, "weight": 1},
     ]
+
+
 if __name__ == "__main__":
     bp = BasePage()
     # GearPanel.click_btn_apply(bp)
     # GearPanel.click_btn_close(bp)
-    # GearPanel.click_btn_close_tip_filter_rod(bp)
+    GearPanel.click_btn_close_filter(bp)
     # GearPanel.click_btn_enhance(bp)
     # GearPanel.click_btn_equip(bp)
     # GearPanel.click_btn_filter(bp)
@@ -214,7 +216,7 @@ if __name__ == "__main__":
     # GearPanel.click_btn_upgrade(bp)
     # GearPanel.click_option(bp)
     # GearPanel.click_option_hide(bp)
-    GearPanel.click_rod(bp)
+    # GearPanel.click_rod(bp)
     # GearPanel.click_skill(bp)
     bp.connect_close()
 

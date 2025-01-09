@@ -169,7 +169,8 @@ class BattlePanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    BattlePanel.hook(bp)
+    ResultPanel.automatic_settlement(bp, element_btn=ElementsData.ResultPanel.btn_claim_token_fish)
+    # bp.ray_input(kind="click", element_data=ElementsData.ResultPanel.btn_claim_token_fish)
     bp.connect_close()
     # while True:
     #     hud_escaping = bp.get_text_list(element_data=ElementsData.Battle.hud_escaping)
