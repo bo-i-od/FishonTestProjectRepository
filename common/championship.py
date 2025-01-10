@@ -71,7 +71,7 @@ def championship(bp, index, times, cost=1, is_monitor=False, overflow_factor: fl
     fishery_id = fishery_id_list[entrance_index]
     TournamentsPanel.go_to_fishery_by_index(bp, index=entrance_index)
 
-    spot_id_list, is_in_double_week = bp.get_spot_id_list(fishery_id=fishery_id)
+    spot_id_list, is_in_double_week, is_new_plot = bp.get_spot_id_list(fishery_id=fishery_id)
     if cost < 1:
         cost = 1
     if cost > 4:
@@ -142,7 +142,7 @@ if __name__ == '__main__':
     gameInit.set_joystick(base_page)
     base_page.custom_cmd("setTension 0.95")
     # cur = 0
-    # while cur < 2:
+    # while cur < 5:
     #     duel_once(base_page, 0)
     #     cur += 1
     #     print(f"第{cur}次钓鱼")
@@ -152,6 +152,6 @@ if __name__ == '__main__':
 
     while True:
         base_page = aquarium(base_page, is_monitor=True)
-        base_page = championship(base_page, 0, 10, cost=2, overflow_factor=1, is_monitor=True)
+        base_page = championship(base_page, 0, 10, cost=1, overflow_factor=1, is_monitor=True)
         # base_page.sleep(60)
         base_page = championship(base_page, 1, 10, cost=1, overflow_factor=1, is_monitor=True)
