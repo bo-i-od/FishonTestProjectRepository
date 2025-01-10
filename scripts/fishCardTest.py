@@ -246,6 +246,7 @@ def fish_card_one_key_level_up(bp: BasePage):
         if fish_card_list:
             lua_code = csMsgAll.get_CSFishCardOneKeyLevelUpMsg(fishCardTpIds=fish_card_list)
             bp.lua_console(lua_code)
+            bp.sleep(0.1)
         fish_card_list.clear()
         fish_card_list.append(table_data_object["tpId"])
     if fish_card_list:

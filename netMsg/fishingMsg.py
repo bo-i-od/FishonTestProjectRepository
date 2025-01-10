@@ -70,25 +70,20 @@ def fish(bp: BasePage, arg_list):
 def fish_all(bp: BasePage):
     bp.cmd("add 1 100500 1000000")
     fishery_id_list = bp.get_fishery_id_list()
+
     cur = 0
     while cur < len(fishery_id_list):
         fishery_id = fishery_id_list[cur]
         fish_id_list = bp.get_fish_id_list(fishery_id)
+        spot_id_list, is_in_double_week, _ = bp.get_spot_id_list(fishery_id=fishery_id)
+        spot_id = spot_id_list[0]
         for fish_id in fish_id_list:
             cmd = f"mode {fishery_id} {fish_id}"
             print(cmd)
             bp.cmd(cmd)
             bp.sleep(0.1)
             fish(bp, [
-                 {"spot_id": f"{fishery_id}13", "times": 1, "is_activity_spot": True}])
-            bp.sleep(0.4)
-            fish(bp, [
-                {"spot_id": f"{fishery_id}03", "times": 1, "is_activity_spot": False}
-            ])
-            bp.sleep(0.4)
-            fish(bp, [
-                 {"spot_id": f"{fishery_id}13", "times": 1, "is_activity_spot": False}
-            ])
+                 {"spot_id": f"{spot_id}", "times": 1, "is_activity_spot": is_in_double_week}])
             bp.sleep(0.4)
         cur += 1
 

@@ -32,26 +32,30 @@ def unlock_fish_album(bp: BasePage, fishery_id):
     fish_id_list = bp.get_fish_id_list(fishery_id=fishery_id)
     for fish_id in fish_id_list:
         fish_quick(bp, fish_id=fish_id)
+        bp.sleep(0.1)
 
 
 def achievement_done(bp):
     bp.cmd("missiondone 10")
 
 
-def wanted_done(bp: BasePage, fishery_id, is_gold=False):
-    gold = 0
-    if is_gold:
-        gold = 1
+def wanted_done(bp: BasePage, fishery_id):
     fishery_id = int(fishery_id)
-    table_data_object_list = bp.excelTools.get_table_data_object_by_key_value_list(book_name="ACHIEVEMENT_CATEGORY.xlsm")
+    table_data_object_list = bp.excelTools.get_table_data_object_list_by_key_value(key="fishery", value=fishery_id,book_name="ACHIEVEMENT_WANTED.xlsm")
+    fish_id_set = set()
     for table_data_object in table_data_object_list:
+        if "fishery" not in table_data_object:
+            continue
         if table_data_object["fishery"] != fishery_id:
             continue
-        if table_data_object["isGolden"] != gold:
+        if "isOpen" not in table_data_object:
             continue
+
         fish_id_list = table_data_object["target"]
-        for fish_id in fish_id_list:
-            fish_quick(bp, fish_id=fish_id, is_map=is_gold)
+        fish_id_set.update(fish_id_list)
+    for fish_id in fish_id_set:
+        fish_quick(bp, fish_id=fish_id, is_map=True)
+        bp.sleep(0.1)
 
 
 def category_done(bp: BasePage, category_id):
@@ -65,6 +69,8 @@ def category_done(bp: BasePage, category_id):
 
 
 def fish_quick(bp: BasePage, fish_id, is_map=False):
+    if fish_id in [0, "0"]:
+        return
     fishery_id = bp.fish_id_to_fishery_id(fish_id=fish_id)
     spot_id_list, is_in_double_week, is_new_plot = bp.get_spot_id_list(fishery_id=fishery_id)
     spot_id = spot_id_list[0]
@@ -114,7 +120,7 @@ def fish_quick(bp: BasePage, fish_id, is_map=False):
 
     bp.cmd(f"mode {fishery_id} {fish_id}")
     bp.sleep(0.1)
-    # fishingMsg.fish(bp, [{"spot_id": f"{spot_id}", "times": 1, "is_activity_spot": is_in_double_week, "is_limited": is_limited}])
+    fishingMsg.fish(bp, [{"spot_id": f"{spot_id}", "times": 1, "is_activity_spot": is_in_double_week, "is_limited": is_limited}])
 
 
 
@@ -135,13 +141,13 @@ if __name__ == '__main__':
     # fishCardTest.fish_card_one_key_level_up(base_page)
 
     # 指定渔场渔册满
-    # unlock_fish_album(base_page, fishery_id=400301)
+    # unlock_fish_album(base_page, fishery_id=400302)
 
     # 完成全部成就
     # achievement_done(base_page)
 
-    # 照片墙
-    # wanted_done(base_page, fishery_id=400301)
+    # 照片墙 奇珍黄金鱼没有鱼骨 该方法完成不了
+    # wanted_done(base_page, fishery_id=400302)
 
     # 鱼种
     # category_done(base_page, category_id=10004)
@@ -156,12 +162,12 @@ if __name__ == '__main__':
     # 体感抛竿
     # battleTest.vibration_cast(base_page)
 
+    # 设定指定对决杯数
+    # duelTest.set_duelcup(base_page, 3000)
+
     # 对决一次 运行界面：对决大厅界面
     # rank0-7代表黑铁到传奇
     # duelTest.duel_once(base_page, rank=1)
-
-    # 设定指定对决杯数
-    # duelTest.set_duelcup(base_page, 3000)
 
     # 该渔场闪卡获得一张
     # flashCardTest.get_flash_card(base_page, fishery_id="400302")
