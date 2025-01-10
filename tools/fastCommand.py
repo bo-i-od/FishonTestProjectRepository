@@ -175,4 +175,16 @@ if __name__ == '__main__':
     # 任意界面接口钓鱼
     # fish_quick(base_page, fish_id=350115, is_map=False)
 
+    # 设定道具数量
+    # base_page.set_item_count(item_tpid="100100", target_count=1000)
+
+    # 读取道具数量
+    # print(base_page.get_item_count(item_tpid="100100"))
+
+    # 发送gm命令
+    # base_page.cmd("levelupto 50")
+
+    # 获取鱼体型
+    # print(base_page.get_fish_type(fish_tpid="390005"))
+
     base_page.connect_close()
