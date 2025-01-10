@@ -232,7 +232,7 @@ def rating_test(bp: BasePage, rating_expect, rating_fisheries_expect):
 
 
 def fish_card_one_key_level_up(bp: BasePage):
-    bp.cmd_list(["add 1 100000 100000000000", "fishcardall 50000"])
+    bp.cmd_list(["add 1 100000 10000000000", "fishcardall 50000"])
 
     table_data_object_list = bp.excelTools.get_table_data_object_list("FISHCARD.xlsm")
     fish_card_list = []

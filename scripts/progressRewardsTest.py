@@ -16,7 +16,7 @@ def collect_test(bp: BasePage):
     next_reward_icon = BattlePreparePanel.get_next_reward_icon(bp)
 
     # 钓一条鱼
-    battleTest.fish_once(bp, fishery_id="400301", fish_id="390001", is_quick=True)
+    battleTest.fish_once(bp, fish_id="390001", is_quick=True)
 
     bp.sleep(10)
 

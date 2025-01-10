@@ -63,7 +63,7 @@ class AchievementWantedPanel(BasePage):
             if target == "0" or target == 0:
                 cur += 1
                 continue
-            battleTest.fish_once(self, fishery_id=fishery, fish_id=target, is_quick=True)
+            battleTest.fish_once(self, fish_id=target, is_quick=True)
             # battleTest.fish_once(self, fishery_id=fishery, fish_id=target, is_quick=False)
             cur += 1
 

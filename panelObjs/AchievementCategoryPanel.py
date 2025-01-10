@@ -61,7 +61,7 @@ class AchievementCategoryPanel(BasePage):
                 TournamentsPanel.go_to_fishery_by_tpid(self, fishery_tpid=fishery)
 
             fish = str(table_data["fishList"][cur]["fish"][index])
-            battleTest.fish_once(self, fishery_id=fishery, fish_id=fish, is_quick=True)
+            battleTest.fish_once(self, fish_id=fish, is_quick=True)
 
             cur += 1
 

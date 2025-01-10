@@ -134,8 +134,11 @@ def deal_with_struct(structs, lines, struct, start):
 def convert_to_json(path, prefix):
     decl_file = path + prefix + '.decl.h'
     data_file = path + prefix + '.data.txt'
-    structs = parse_decl_file(decl_file)
-    blocks = parse_data_file(data_file)
+    try:
+        structs = parse_decl_file(decl_file)
+        blocks = parse_data_file(data_file)
+    except FileNotFoundError:
+        return [], {}, ""
     res = deal_with_blocks(structs, blocks, prefix)
     return res, structs, prefix
 

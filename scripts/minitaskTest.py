@@ -51,7 +51,7 @@ def main(bp: BasePage):
     BattlePreparePanel.Minitask.click_btn_gift(bp)
 
     # 钓一次鱼
-    battleTest.fish_once(bp, fishery_id="400301", fish_id="301013", is_quick=True)
+    battleTest.fish_once(bp, fish_id="301013", is_quick=True)
 
     # 推荐切换
     text_task_1 = recommend_test(bp)

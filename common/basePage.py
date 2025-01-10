@@ -987,19 +987,51 @@ class BasePageMain:
         self.click_position_base(position_list[0])
         return position_list[0]
 
-    def click_object_of_plural_objects(self, object_id_list: list = None, element_data: dict = None, index=-1, viewport: Viewport = None, element_viewport: dict = None,  viewport_direction=None, viewport_range=None, viewport_edge=None, delta_len=None, camera_name="", ignore_set=None):
+    def click_object_of_plural_objects(self, object_id: int = None, object_id_list: list = None, element_data: dict = None, element_data_list: list = None, offspring_path="", index=-1, viewport: Viewport = None, element_viewport: dict = None,  viewport_direction=None, viewport_range=None, viewport_edge=None, delta_len=None, camera_name="", ignore_set=None):
+        """函数功能简述
+            点击一堆物体中的其中一个
+
+        参数:
+            object_id、object_id_list、element_data、element_data_list选择一个输入
+            index: 目标索引
+            如果使用滑动窗口viewport和element_viewport选择一个输入
+            viewport: 目标viewport
+            element_viewport、viewport_direction=None, viewport_range=None, viewport_edge=None, delta_len=None
+        输出:
+            int
+        """
+
+        # object_id或element_data转成object_id_list或element_data_list输入
+        if object_id is not None:
+            self.click_object_of_plural_objects(object_id_list=[object_id], offspring_path=offspring_path,
+                                                index=index, viewport=viewport, element_viewport=element_viewport,
+                                                viewport_direction=viewport_direction, viewport_range=viewport_range,
+                                                viewport_edge=viewport_edge, delta_len=delta_len,
+                                                camera_name=camera_name, ignore_set=ignore_set)
+            return
+        if element_data is not None:
+            self.click_object_of_plural_objects(element_data_list=[element_data], offspring_path=offspring_path,
+                                                index=index, viewport=viewport, element_viewport=element_viewport,
+                                                viewport_direction=viewport_direction, viewport_range=viewport_range,
+                                                viewport_edge=viewport_edge, delta_len=delta_len,
+                                                camera_name=camera_name, ignore_set=ignore_set)
+            return
+
+        # 如果传入viewport的定位就得到viewport
         if element_viewport:
             viewport = Viewport(self, element_viewport=element_viewport, element_item_list=element_data, item_id_list=object_id_list, viewport_direction=viewport_direction, viewport_range=viewport_range, viewport_edge=viewport_edge, delta_len=delta_len,camera_name=camera_name)
 
+        # 如果有viewport就挪动到元素出现
         if viewport:
             if index < 0:
                 index = random.randint(0, len(viewport.item_id_list) - 1)
             target_id = viewport.item_id_list[index]
             viewport.move_until_appear(target_id=target_id)
 
-        position_list = self.get_position_list(element_data=element_data, object_id_list=object_id_list, camera_name=camera_name)
-        if object_id_list is not None:
-            position_list = tools.commonTools.merge_list(position_list)
+        # 得到位置
+        position_list = self.get_position_list(element_data_list=element_data_list, object_id_list=object_id_list, offspring_path=offspring_path, camera_name=camera_name)
+        position_list = tools.commonTools.merge_list(position_list)
+
         # 如果index没有赋合法值，就随机点击一个
         if index < 0:
             index = random.randint(0, len(position_list) - 1)
@@ -1816,6 +1848,7 @@ class BasePage(BasePageMain):
             str
             "小"，"中"，"大"，"特大"，"超巨"，"奇珍"，"超奇珍"，"典藏"，"其它"
         """
+        fish_tpid = str(fish_tpid)
         if table_data_detail is None:
             table_data_detail = self.excelTools.get_table_data_detail("FISH.xlsm")
         if fish_tpid == '':
@@ -1852,7 +1885,7 @@ class BasePage(BasePageMain):
         if fishClass == 4:
             return "典藏"
 
-        fish_id = self.fish_bone_to_fish(fish_bone_id=fish_tpid)
+        fish_id = self.fish_bone_id_to_fish_id(fish_bone_id=fish_tpid)
         if not fish_id:
             print(fish_tpid)
             return None
@@ -2141,6 +2174,44 @@ end
         """
         return rpcMethodRequest.get_scene_list(self.poco)
 
+    def get_drop_fish_id_list(self, spot_id):
+        # 旧渔场
+        fish_id_list = []
+        table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="tpId", value=spot_id, book_name="FISH_SPOT.xlsm")
+        for table_data_object in table_data_object_list:
+            if "fishInfo" not in table_data_object:
+                continue
+            fish_info_list = table_data_object["fishInfo"]
+            for fish_info in fish_info_list:
+                if "fish" not in fish_info:
+                    continue
+                fish_id = fish_info["fish"]
+                fish_id_list.append(fish_id)
+        if table_data_object_list:
+            return fish_id_list
+
+        # 新渔场
+        table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="tpId", value=spot_id, book_name="NEW_PLOT_FISH_SPOT.xlsm")
+        fish_id_set = set()
+        for table_data_object in table_data_object_list:
+            fish_info = []
+            fish_info += table_data_object["smallInfo"]
+            fish_info += table_data_object["mediumInfo"]
+            fish_info += table_data_object["largeInfo"]
+            fish_info += table_data_object["hugeInfo"]
+            fish_info += table_data_object["giantInfo"]
+            fish_info += table_data_object["rareInfo"]
+            fish_info += table_data_object["eliteInfo"]
+            fish_info += table_data_object["monsterInfo"]
+
+            for info in fish_info:
+                if "fishId" not in info:
+                    continue
+                fish_id_set.add(info["fishId"])
+
+        return list(fish_id_set)
+
+
     def get_drop_item_id_list(self, spot_id):
         """函数功能简述
             获取钓点的出鱼列表
@@ -2148,15 +2219,40 @@ end
         参数:
             spot_id: 钓点id
         """
+
+        table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="tpId", value=spot_id, book_name="FISH_SPOT.xlsm")
+        # 新渔场
+        if not table_data_object_list:
+            drop_item_id_list = []
+            table_data_detail = self.excelTools.get_table_data_detail(book_name="FISH.xlsm")
+            fish_id_list = self.get_drop_fish_id_list(spot_id=spot_id)
+            for fish_id in fish_id_list:
+                table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(
+                    table_data_detail=table_data_detail, key="tpId", value=fish_id)
+                if not table_data_object_list:
+                    continue
+                table_data_object = table_data_object_list[0]
+                if "boneId" in table_data_object:
+                    drop_item_id_list.append(table_data_object["boneId"])
+                if "glodBoneId" in table_data_object:
+                    drop_item_id_list.append(table_data_object["glodBoneId"])
+            return drop_item_id_list
+
+        # 旧渔场
         fishDropInfo_list = []
         # 鱼骨tpid转missionConditionID
-        table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="tpId", value=spot_id,
-                                                                                         book_name="FISH_SPOT.xlsm")
-
         for table_data_object in table_data_object_list:
             fishDropInfo = table_data_object["fishDropInfo"]
-            for f in fishDropInfo:
-                fishDropInfo_list.append(f)
+            fishDropInfo_list += fishDropInfo
+
+        #
+        # fishery_id = self.spot_id_to_fishery_id(spot_id=spot_id)
+        # table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="newPlotFisheriesId", value=fishery_id,
+        #                                                                                  book_name="NEW_PLOT_FISH_TYPE_DROP.xlsm")
+        # for table_data_object in table_data_object_list:
+        #     fishDropInfo = table_data_object["fishDropInfo"]
+        #     fishDropInfo_list += fishDropInfo
+
 
         # 拿到对应钓点的DropID列表
         drop_id_list = []
@@ -2174,7 +2270,7 @@ end
                                                                                              value=drop_id,
                                                                                              table_data_detail=table_data_detail)
             for table_data_object in table_data_object_list:
-                if table_data_object["enabled"] in [0, "0"]:
+                if "enabled" not in table_data_object:
                     continue
                 dropPackId = table_data_object["dropPackId"]
                 drop_pack_id_list.append(dropPackId)
@@ -2187,14 +2283,14 @@ end
                                                                                              value=int(drop_pack_id),
                                                                                              table_data_detail=table_data_detail)
             for table_data_object in table_data_object_list:
-                if table_data_object["enabled"] in [0, "0"]:
+                if "enabled" not in table_data_object:
                     continue
                 itemID = table_data_object["itemID"]
                 item_id_list.append(itemID)
 
         return item_id_list
 
-    def fish_bone_to_fish(self, fish_bone_id):
+    def fish_bone_id_to_fish_id(self, fish_bone_id):
         """函数功能简述
             获得鱼骨id对应的鱼id
 
@@ -2223,18 +2319,102 @@ end
 
         return str(fish_id)
 
+    def fish_id_to_spot_id(self, fish_id):
+        fish_id = int(fish_id)
+        spot_id_list = []
+        table_data_object_list = self.excelTools.get_table_data_object_list(book_name="FISH_SPOT.xlsm")
+        for table_data_object in table_data_object_list:
+            fish_list = []
+            for info in table_data_object["fishInfo"]:
+                if "fish" not in info:
+                    continue
+                fish_list.append(info["fish"])
+            if fish_id not in fish_list:
+                continue
+            if "enabled" not in table_data_object:
+                continue
+            if table_data_object["spotType"] not in [1, 2]:
+                continue
+            spot_id_list.append(table_data_object["tpId"])
+        if spot_id_list:
+            return spot_id_list
+        table_data_object_list = self.excelTools.get_table_data_object_list(book_name="NEW_PLOT_FISH_SPOT.xlsm")
+        for table_data_object in table_data_object_list:
+            fish_info = []
+            fish_info += table_data_object["smallInfo"]
+            fish_info += table_data_object["mediumInfo"]
+            fish_info += table_data_object["largeInfo"]
+            fish_info += table_data_object["hugeInfo"]
+            fish_info += table_data_object["giantInfo"]
+            fish_info += table_data_object["rareInfo"]
+            fish_info += table_data_object["eliteInfo"]
+            fish_info += table_data_object["monsterInfo"]
+            fish_list = []
+
+            for info in fish_info:
+                if "fishId" not in info:
+                    continue
+                fish_list.append(info["fishId"])
+
+            if fish_id not in fish_list:
+                continue
+            if "enabled" not in table_data_object:
+                continue
+            spot_id_list.append(table_data_object["tpId"])
+
+        return spot_id_list
+    #     key="tpId", value=spot_id,
+    # def fish_id_to_fish_bone_id(self, fish_id):
+    #
+    #     drop_item_id_list = self.get_drop_item_id_list(spot_id)
+
+    def fish_id_to_fishery_id(self, fish_id):
+        fish_id = int(fish_id)
+        table_data_object_list = self.excelTools.get_table_data_object_list(book_name="FISHERIES.xlsm")
+        for table_data_object in table_data_object_list:
+            fish_list = table_data_object["fish"]
+            if fish_id not in fish_list:
+                continue
+            return table_data_object["tpId"]
+
+        table_data_object_list = self.excelTools.get_table_data_object_list(book_name="NEW_PLOT_FISH_SPOT.xlsm")
+        for table_data_object in table_data_object_list:
+            fish_list = []
+            fish_list += table_data_object["smallInfo"]
+            fish_list += table_data_object["mediumInfo"]
+            fish_list += table_data_object["largeInfo"]
+            fish_list += table_data_object["hugeInfo"]
+            fish_list += table_data_object["giantInfo"]
+            fish_list += table_data_object["rareInfo"]
+            fish_list += table_data_object["eliteInfo"]
+            fish_list += table_data_object["monsterInfo"]
+            if fish_id not in fish_list:
+                continue
+            return table_data_object["newPlotFisheriesId"]
+        return ""
+
     def get_spot_id_list(self, fishery_id):
         """函数功能简述
             获得渔场的钓点id列表
 
         参数:
             fishery_id: 钓场id
+
+        返回:
+            钓点列表（list）， 是否是双周活动钓点（bool）， 是否是新主线钓点（bool）
         """
-        table_data_object_activity_double_week = self.excelTools.get_table_data_object_by_key_value(key="fishSceneTpId",
+        table_data_object_list_activity_double_week = self.excelTools.get_table_data_object_list_by_key_value(key="fishSceneTpId",
                                                                                                     value=fishery_id,
                                                                                                     book_name="ACTIVITY_DOUBLE_WEEK.xlsm")
+        if not table_data_object_list_activity_double_week:
+            spot_id_list = []
+            table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="newPlotFisheriesId", value= fishery_id,book_name="NEW_PLOT_FISH_SPOT.xlsm")
+            for table_data_object in table_data_object_list:
+                spot_id_list.append(table_data_object["tpId"])
+            return spot_id_list, False, True
+        table_data_object_activity_double_week = table_data_object_list_activity_double_week[0]
         if "TimerId" not in table_data_object_activity_double_week:
-            return table_data_object_activity_double_week["fishSpot"], False
+            return table_data_object_activity_double_week["fishSpot"], False, False
         timer_id = table_data_object_activity_double_week["TimerId"]
         table_data_object_timer_main = self.excelTools.get_table_data_object_by_key_value(key="timerID", value=timer_id,
                                                                                           book_name="TIMER_MAIN.xlsm")
@@ -2246,12 +2426,19 @@ end
         end_time = int(time.mktime(end_time.timetuple()))
         cur_time = time.time()
         if cur_time > end_time:
-            return table_data_object_activity_double_week["fishSpotB"], False
+            return table_data_object_activity_double_week["fishSpotB"], False, False
         if cur_time > open_time:
-            return table_data_object_activity_double_week["fishSpotB"], True
-        return table_data_object_activity_double_week["fishSpot"], False
+            return table_data_object_activity_double_week["fishSpotB"], True, False
+        return table_data_object_activity_double_week["fishSpot"], False, False
+
 
     def spot_id_to_fishery_id(self, spot_id):
+        """函数功能简述
+            钓点id转渔场id
+
+        参数:
+            spot_id: 钓点id
+        """
         table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="tpId", value=spot_id, book_name="FISH_SPOT.xlsm")
         if table_data_object_list:
             return str(spot_id)[:6]
@@ -2264,7 +2451,13 @@ end
 if __name__ == '__main__':
     bp = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21543")
     # a = bp.spot_id_to_fishery_id(spot_id=10101)
+    # a = bp.fish_id_to_spot_id(fish_id="350115")
+    # a = bp.fish_bone_id_to_fish_id(fish_bone_id=385001)
     # print(a)
+    a = bp.get_drop_item_id_list(spot_id="40030103")
+    # a = bp.get_drop_fish_id_list(spot_id="40030104")
+    print(a)
+
     # "127.0.0.1:21613"
     # "b6h65hd64p5pxcyh"
     # "TimeMgr:GetServerTime()"

@@ -151,6 +151,8 @@ class ExcelTools:
         table_data_object_list, structs, prefix = table_data_detail
 
         # 给值转为正确的类型
+        if prefix.upper() not in structs:
+            return res
         type_value = structs[prefix.upper()][key][0]
         if type_value == "int":
             value = int(value)
