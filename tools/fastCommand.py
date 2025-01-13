@@ -13,22 +13,25 @@ def guide_skip(bp: BasePage):
     for r in result:
         lua_code = csMsgAll.get_CSNewGuideStoreMsg(key=r)
         lua_code_list.append(lua_code)
+    lua_code_list.append("OPENING_STAGE_FISHERY_1")
+    lua_code_list.append("OPENING_STAGE_FISHERY_1_500301")
     bp.lua_console_list(command_list=lua_code_list)
-    lua_code = csMsgAll.get_CSNewGuideStoreMsg(key="OPENING_STAGE_FISHERY_1")
-    bp.lua_console(lua_code)
 
 
 def quest_done(bp: BasePage):
-    questTpId = 80000001
-    while questTpId < 80000031:
-        bp.cmd(f"questFinish {questTpId}")
+    table_data_object_list = bp.excelTools.get_table_data_object_list(book_name="NEW_PLOT_QUEST.xlsm")
+    cur = 0
+    while cur < len(table_data_object_list) - 1:
+        table_data_object = table_data_object_list[cur]
+        quest_id = table_data_object["tpId"]
+        bp.cmd(f"questFinish {quest_id}")
         bp.sleep(0.1)
-        lua_code = csMsgAll.get_CSGetQuestRewardsMsg(questTpId=questTpId)
+        lua_code = csMsgAll.get_CSGetQuestRewardsMsg(questTpId=quest_id)
 
         # 发送消息
         bp.lua_console(lua_code)
         bp.sleep(0.1)
-        questTpId += 1
+        cur += 1
 
 
 
@@ -204,7 +207,7 @@ if __name__ == '__main__':
     # print(base_page.get_item_count(item_tpid="100100"))
 
     # 发送gm命令
-    base_page.cmd("levelupto 51")
+    # base_page.cmd("levelupto 51")
 
     # 获取鱼体型
     # print(base_page.get_fish_type(fish_tpid="390005"))
