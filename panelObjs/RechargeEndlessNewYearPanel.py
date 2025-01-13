@@ -3,15 +3,18 @@ from configs.elementsData import ElementsData
 from common.resource import *
 
 
-class RechargeEndlessPanel(BasePage):
+class RechargeEndlessNewYearPanel(BasePage):
     def is_panel_active(self):
-        return self.exist(element_data=ElementsData.EventsGiftCenterPanel.EventsGiftCenterPanel)
+        return self.exist(element_data=ElementsData.RechargeEndlessNewYearPanel.RechargeEndlessNewYearPanel)
+
+    def click_btn_close(self):
+        self.click_element(element_data=ElementsData.RechargeEndlessNewYearPanel.btn_close, ignore_set={"CommonRewardsTipsPanel", "RechargeEndlessNewYearPanel"})
 
     def get_item_id_list(self):
-        return self.get_object_id_list(element_data=ElementsData.RechargeEndlessPanel.item_model_list)
+        return self.get_object_id_list(element_data=ElementsData.RechargeEndlessNewYearPanel.item_model_list)
 
     def get_item_info_list(self):
-        item_id_list = RechargeEndlessPanel.get_item_id_list(self)
+        item_id_list = RechargeEndlessNewYearPanel.get_item_id_list(self)
         icon_main_list = self.get_icon_list(object_id_list=item_id_list, offspring_path=">group>icon")
         quantity_main_list = self.get_text_list(object_id_list=item_id_list, offspring_path=">group>icon>quantity>value")
         icon_sub_list = self.get_icon_list(object_id_list=item_id_list, offspring_path=">group>item_list>>icon")
@@ -29,7 +32,7 @@ class RechargeEndlessPanel(BasePage):
         return item_info_list
 
     def get_item_icon_position_list(self):
-        item_id_list = RechargeEndlessPanel.get_item_id_list(self)
+        item_id_list = RechargeEndlessNewYearPanel.get_item_id_list(self)
         icon_main_position_list = self.get_position_list(object_id_list=item_id_list, offspring_path=">group>icon")
         icon_sub_position_list = self.get_position_list(object_id_list=item_id_list, offspring_path=">group>item_list>>icon")
         item_icon_position_list = []
@@ -42,7 +45,7 @@ class RechargeEndlessPanel(BasePage):
 
 
     def get_item_cost_list(self):
-        item_id_list = RechargeEndlessPanel.get_item_id_list(self)
+        item_id_list = RechargeEndlessNewYearPanel.get_item_id_list(self)
         cost_list = []
         for item_id in item_id_list:
             value_list = self.get_text_list(object_id=item_id, offspring_path="item_buy>btn>value")
@@ -53,10 +56,10 @@ class RechargeEndlessPanel(BasePage):
         return cost_list
 
     def get_btn_buy_position_list(self):
-        return self.get_position_list(element_data=ElementsData.RechargeEndlessPanel.btn_buy_list)
+        return self.get_position_list(element_data=ElementsData.RechargeEndlessNewYearPanel.btn_buy_list)
 
     def get_btn_status(self):
-        btn_buy_position_list = RechargeEndlessPanel.get_btn_buy_position_list(self)
+        btn_buy_position_list = RechargeEndlessNewYearPanel.get_btn_buy_position_list(self)
         unlocked_index = 0
         locked_list = []
         cur = 0
@@ -70,12 +73,26 @@ class RechargeEndlessPanel(BasePage):
 
         return unlocked_index, locked_list
 
+    def click_icon_main(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.RechargeEndlessNewYearPanel.icon_main_list, index=index, ignore_set={"CommonRewardsTipsPanel", "RechargeEndlessNewYearPanel"})
+
+    def click_icon_sub(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.RechargeEndlessNewYearPanel.icon_sub_list, index=index, ignore_set={"CommonRewardsTipsPanel", "RechargeEndlessNewYearPanel"})
+
+    def click_btn_buy(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.RechargeEndlessNewYearPanel.btn_buy_list, index=index, ignore_set={"CommonRewardsTipsPanel", "RechargeEndlessNewYearPanel"})
 
 
+    operation_pool = [
+        {"element_data": ElementsData.RechargeEndlessNewYearPanel.icon_main_list, "func": click_icon_main, "weight": 1},
+        {"element_data": ElementsData.RechargeEndlessNewYearPanel.icon_sub_list, "func": click_icon_sub, "weight": 1},
+        {"element_data": ElementsData.RechargeEndlessNewYearPanel.btn_buy_list, "func": click_btn_buy, "weight": 1},
+        {"element_data": ElementsData.RechargeEndlessNewYearPanel.btn_close, "func": click_btn_close, "weight": 1},
+    ]
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     bp = BasePage()
-    a = RechargeEndlessPanel.get_item_info_list(bp)
-    b = RechargeEndlessPanel.get_item_cost_list(bp)
-    print(a)
-    print(b)
+    RechargeEndlessNewYearPanel.click_icon_main(bp)
+    RechargeEndlessNewYearPanel.click_icon_sub(bp)
+    bp.connect_close()

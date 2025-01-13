@@ -50,7 +50,7 @@ def RechargeBlack5Panel_test(bp:BasePage):
     click_icon_test(bp)
     buy_test(bp)
     collect_test(bp)
-    RechargeBlack5Panel.close_Recharge1And1Panel(bp)
+    RechargeBlack5Panel.click_btn_close(bp)
 
 if __name__ == '__main__':
     bp = BasePage()

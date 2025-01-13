@@ -35,7 +35,6 @@ from panelObjs.PVPBattleHUDPanel import PVPBattleHUDPanel
 from panelObjs.PVPHallPanel import PVPHallPanel
 from panelObjs.PVPMatchPanel import PVPMatchPanel
 from panelObjs.PVPResultPanel import PVPResultPanel
-from panelObjs.PVPRuleTipsPanel import PVPRuleTipsPanel
 from panelObjs.QuestionnairePanel import QuestionnairePanel
 from panelObjs.RodMoreToOnePanel import RodMoreToOnePanel
 from panelObjs.RoulettePanel import RoulettePanel

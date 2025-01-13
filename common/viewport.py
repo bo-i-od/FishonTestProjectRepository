@@ -4,7 +4,7 @@ from tools.commonTools import merge_list
 
 
 class Viewport:
-    def __init__(self, bp, element_viewport, element_item_list=None, item_id_list=None, viewport_direction=None,viewport_range=None, viewport_edge=None, delta_len=None,camera_name=""):
+    def __init__(self, bp, element_viewport, element_item_list=None, item_id_list=None, viewport_direction=None,viewport_range=None, viewport_edge=None, delta_len=None, camera_name=""):
         self.basePage = bp
         self.element_viewport = element_viewport
         self.element_item_list = element_item_list
@@ -56,7 +56,7 @@ class Viewport:
         # print("列表元素不足,无法判断是row还是column")
         return 0
 
-    def move_delta_len(self, target_id):
+    def move_delta_len(self, target_id, ignore_set=None):
         target_position = self.basePage.get_position(object_id=target_id, camera_name=self.camera_name)
         point_end = [0, 0]
         point_end[0] = self.viewport_position[0]
@@ -68,11 +68,11 @@ class Viewport:
                 return False
             if target_position[0] > edge_start:
                 point_end[0] -= self.delta_len
-                self.basePage.swipe(point_start=self.viewport_position, point_end=point_end, t=self.delta_len)
+                self.basePage.swipe(point_start=self.viewport_position, point_end=point_end, t=self.delta_len, ignore_set=ignore_set)
                 return True
 
             point_end[0] += self.delta_len
-            self.basePage.swipe(point_start=self.viewport_position, point_end=point_end, t=self.delta_len)
+            self.basePage.swipe(point_start=self.viewport_position, point_end=point_end, t=self.delta_len, ignore_set=ignore_set)
             return True
 
         # edge_start = self.viewport_range[0] + self.delta_len * 0.2
@@ -83,14 +83,14 @@ class Viewport:
             return False
         if target_position[1] > edge_start:
             point_end[1] = self.viewport_position[1] - self.delta_len
-            self.basePage.swipe(point_start=self.viewport_position, point_end=point_end, t=self.delta_len)
+            self.basePage.swipe(point_start=self.viewport_position, point_end=point_end, t=self.delta_len, ignore_set=ignore_set)
             return True
         point_end[1] = self.viewport_position[1] + self.delta_len
-        self.basePage.swipe(point_start=self.viewport_position, point_end=point_end, t=self.delta_len)
+        self.basePage.swipe(point_start=self.viewport_position, point_end=point_end, t=self.delta_len, ignore_set=ignore_set)
         return True
 
-    def move_until_appear(self, target_id):
-        while self.move_delta_len(target_id):
+    def move_until_appear(self, target_id, ignore_set=None):
+        while self.move_delta_len(target_id, ignore_set=ignore_set):
             self.basePage.sleep(0.3)
 
     def get_viewport_range(self):

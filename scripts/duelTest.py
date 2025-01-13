@@ -32,7 +32,7 @@ from panelObjs.LoginPanel import LoginPanel
 from panelObjs.BattleFailedPanel import BattleFailedPanel
 from panelObjs.RoulettePanel import RoulettePanel
 from panelObjs.TournamentsPanel import TournamentsPanel
-from scripts import battleTest, createUsers
+from scripts import battleTest
 from scripts.battleTest import circulate_fish
 
 # 0-7分别对应 0新手 1青铜 2白银 3黄金 4白金 5钻石 6冠军 7传奇

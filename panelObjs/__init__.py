@@ -13,6 +13,7 @@ from .AquariumShopPanel import AquariumShopPanel
 from .AvatarMainPanel import AvatarMainPanel
 from .AquariumNewActivityPopupPanel import AquariumNewActivityPopupPanel
 from .AvatarSelectPanel import AvatarSelectPanel
+from .AvatarSkinPopPanel_subType_2 import AvatarSkinPopPanel_subType_2
 from .AvatarTipsView import AvatarTipsView
 from .BaitAndRodShowPanel import BaitAndRodShowPanel
 from .BattleFailedPanel import BattleFailedPanel
@@ -24,6 +25,7 @@ from .BattlePassPanel import BattlePassPanel
 from .BattlePassPopPanel import BattlePassPopPanel
 from .BattlePassRewardPanel import BattlePassRewardPanel
 from .BattlePreparePanel import BattlePreparePanel
+from .BattleResultSharePanel import BattleResultSharePanel
 from .BugMultiplePanel import BugMultiplePanel
 from .BuyEnergyPanel import BuyEnergyPanel
 from .CareerPanel import CareerPanel
@@ -55,6 +57,7 @@ from .FlashCardBoxesPanel import FlashCardBoxesPanel
 from .FlashCardReceivePanel import FlashCardReceivePanel
 from .FlashTipsPanel import FlashTipsPanel
 from .FriendPanel import FriendPanel
+from .GachaPackPopupPanel import GachaPackPopupPanel
 from .GearEnhancePanel import GearEnhancePanel
 from .GearEnhanceSuccesPanel import GearEnhanceSuccesPanel
 from .GearLevelupPanel import GearLevelupPanel
@@ -67,6 +70,7 @@ from .LeaderBoardPanel import LeaderBoardPanel
 from .LeaderBoardPopResultPanel import LeaderBoardPopResultPanel
 from .LoadingFisheryPanel import LoadingFisheryPanel
 from .LoadingPanel import LoadingPanel
+from .LocationPanel import LocationPanel
 from .LoginAnnouncementPanel import LoginAnnouncementPanel
 from .LoginPanel import LoginPanel
 from .MailPanel import MailPanel
@@ -88,14 +92,15 @@ from .PVPMatchPanel import PVPMatchPanel
 from .PVPResultPanel import PVPResultPanel
 from .PVPRoomInvitePanel import PVPRoomInvitePanel
 from .PVPRoomPanel import PVPRoomPanel
-from .PVPRuleTipsPanel import PVPRuleTipsPanel
 from .QuestionnairePanel import QuestionnairePanel
+from .RankFishCardDetailPanel import RankFishCardDetailPanel
 from .RankFishLeaderboardPanel import RankFishLeaderboardPanel
 from .RankPanel import RankPanel
 from .RatingTipsPanel import RatingTipsPanel
 from .Recharge1And1Panel import Recharge1And1Panel
 from .RechargeBlack5Panel import RechargeBlack5Panel
-from .RechargeEndlessPanel import RechargeEndlessPanel
+from .RechargeEndlessNewYearPanel import RechargeEndlessNewYearPanel
+from .RechargeEndlessThanksPanel import RechargeEndlessThanksPanel
 from .ResultPanel import ResultPanel
 from .RewardsPanel import RewardsPanel
 from .RewardsPreviewPanel import RewardsPreviewPanel

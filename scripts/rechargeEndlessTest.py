@@ -8,7 +8,8 @@ from tools.commonTools import *
 from common.basePage import BasePage
 from panelObjs.RewardsPanel import RewardsPanel
 from panelObjs.ItemTipsPanel import ItemTipsPanel
-from panelObjs.RechargeEndlessPanel import RechargeEndlessPanel
+from panelObjs.RechargeEndlessNewYearPanel import RechargeEndlessNewYearPanel
+from panelObjs.RechargeEndlessThanksPanel import RechargeEndlessThanksPanel
 from configs.elementsData import ElementsData
 
 
@@ -30,20 +31,25 @@ def click_icon_test(bp: BasePage,item_icon_list, item_icon_position_list):
 
 
 def buy_test(bp: BasePage):
+    panel = None
+    if RechargeEndlessNewYearPanel.is_panel_active(bp):
+        panel = RechargeEndlessNewYearPanel
+    elif RechargeEndlessThanksPanel.is_panel_active(bp):
+        panel = RechargeEndlessThanksPanel
     # 获取当前点卷
     money_expect = bp.get_item_count(item_tpid="101900")
 
     # 获取商品信息
-    unlocked_index, locked_index_list = RechargeEndlessPanel.get_btn_status(bp)
-    item_info_list = RechargeEndlessPanel.get_item_info_list(bp)
+    unlocked_index, locked_index_list = panel.get_btn_status(bp)
+    item_info_list = panel.get_item_info_list(bp)
 
     item_info_buy = item_info_list[unlocked_index]
     # item_icon_list = list(item_info_buy)
     # item_icon_position_list = RechargeEndlessPanel.get_item_icon_position_list(bp)[unlocked_index]
     # click_icon_test(bp, item_icon_list, item_icon_position_list)
-    btn_buy_position_list = RechargeEndlessPanel.get_btn_buy_position_list(bp)
+    btn_buy_position_list = panel.get_btn_buy_position_list(bp)
 
-    cost_list = RechargeEndlessPanel.get_item_cost_list(bp)
+    cost_list = panel.get_item_cost_list(bp)
     money_expect = money_expect - cost_list[unlocked_index]
 
 
@@ -71,6 +77,11 @@ def buy_test(bp: BasePage):
 
 
 def main(bp: BasePage):
+    panel = None
+    if RechargeEndlessNewYearPanel.is_panel_active(bp):
+        panel = RechargeEndlessNewYearPanel
+    elif RechargeEndlessThanksPanel.is_panel_active(bp):
+        panel = RechargeEndlessThanksPanel
     # cmd_list = ["guideskip", f"add 1 101900 1000000", f"levelupto 16"]
     # bp.cmd("add 1 101900 1000000")
     # gameInit.login_to_hall(bp, cmd_list=cmd_list)
@@ -81,7 +92,7 @@ def main(bp: BasePage):
     # bp.go_to_panel("RechargeEndlessPanel")
 
     # 若干次购买
-    while RechargeEndlessPanel.get_item_id_list(bp):
+    while panel.get_item_id_list(bp):
         buy_test(bp)
 
     # 返回大厅，但由于购买过多卡包，所以只用返回看到开卡包面板

@@ -20,7 +20,6 @@ from panelObjs.PlayerLevelupPanel import PlayerLevelupPanel
 from panelObjs.ProgressRewardsPanel import ProgressRewardsPanel
 from panelObjs.PVPHallPanel import PVPHallPanel
 from panelObjs.PVPResultPanel import PVPResultPanel
-from panelObjs.PVPRuleTipsPanel import PVPRuleTipsPanel
 from panelObjs.QuestionnairePanel import QuestionnairePanel
 from panelObjs.RodMoreToOnePanel import RodMoreToOnePanel
 from panelObjs.RoulettePanel import RoulettePanel

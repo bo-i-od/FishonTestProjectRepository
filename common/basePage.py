@@ -1019,14 +1019,14 @@ class BasePageMain:
 
         # 如果传入viewport的定位就得到viewport
         if element_viewport:
-            viewport = Viewport(self, element_viewport=element_viewport, element_item_list=element_data, item_id_list=object_id_list, viewport_direction=viewport_direction, viewport_range=viewport_range, viewport_edge=viewport_edge, delta_len=delta_len,camera_name=camera_name)
+            viewport = Viewport(self, element_viewport=element_viewport, element_item_list=element_data_list[0], item_id_list=object_id_list, viewport_direction=viewport_direction, viewport_range=viewport_range, viewport_edge=viewport_edge, delta_len=delta_len,camera_name=camera_name)
 
         # 如果有viewport就挪动到元素出现
         if viewport:
             if index < 0:
                 index = random.randint(0, len(viewport.item_id_list) - 1)
             target_id = viewport.item_id_list[index]
-            viewport.move_until_appear(target_id=target_id)
+            viewport.move_until_appear(target_id=target_id, ignore_set=ignore_set)
 
         # 得到位置
         position_list = self.get_position_list(element_data_list=element_data_list, object_id_list=object_id_list, offspring_path=offspring_path, camera_name=camera_name)
@@ -2372,6 +2372,8 @@ end
         fish_id = int(fish_id)
         table_data_object_list = self.excelTools.get_table_data_object_list(book_name="FISHERIES.xlsm")
         for table_data_object in table_data_object_list:
+            if "enabled" not in table_data_object:
+                continue
             fish_list = table_data_object["fish"]
             if fish_id not in fish_list:
                 continue

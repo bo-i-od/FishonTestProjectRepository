@@ -3,17 +3,17 @@ from configs.elementsData import ElementsData
 from tools.commonTools import *
 
 class RechargeBlack5Panel(BasePage):
-    def close_Recharge1And1Panel(self):
-        self.click_element(element_data=ElementsData.RechargeBlack5Panel.btn_close)
+    def click_btn_close(self):
+        self.click_element(element_data=ElementsData.RechargeBlack5Panel.btn_close, ignore_set={"EventsGiftCenterPanel", "RechargeBlack5Panel"})
 
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.RechargeBlack5Panel.RechargeBlack5Panel)
 
     def click_btn_buy(self):
-        self.click_element(element_data=ElementsData.RechargeBlack5Panel.btn_buy)
+        self.click_element(element_data=ElementsData.RechargeBlack5Panel.btn_buy, ignore_set={"EventsGiftCenterPanel", "RechargeBlack5Panel"})
 
     def click_btn_collect(self):
-        self.click_element(element_data=ElementsData.RechargeBlack5Panel.btn_collect)
+        self.click_element(element_data=ElementsData.RechargeBlack5Panel.btn_collect, ignore_set={"EventsGiftCenterPanel", "RechargeBlack5Panel"})
     def is_btn_collect_clickable(self):
         if self.get_offspring_id_list("btn_disabled", element_data=ElementsData.RechargeBlack5Panel.btn_collect):
             return False
@@ -49,3 +49,23 @@ class RechargeBlack5Panel(BasePage):
     def get_item_position_list(self):
         position_list = self.get_position_list(element_data=ElementsData.RechargeBlack5Panel.icon_list)
         return position_list
+
+    def click_item(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.RechargeBlack5Panel.item_list, index=index, ignore_set={"EventsGiftCenterPanel", "RechargeBlack5Panel"})
+
+
+    operation_pool = [
+        {"element_data": ElementsData.RechargeBlack5Panel.btn_buy, "func": click_btn_buy, "weight": 1},
+        {"element_data": ElementsData.RechargeBlack5Panel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.RechargeBlack5Panel.btn_collect, "func": click_btn_collect, "weight": 1},
+        {"element_data": ElementsData.RechargeBlack5Panel.item_list, "func": click_item, "weight": 1},
+    ]
+
+
+if __name__ == "__main__":
+    bp = BasePage()
+    # RechargeBlack5Panel.click_btn_buy(bp)
+    # RechargeBlack5Panel.click_btn_close(bp)
+    # RechargeBlack5Panel.click_btn_collect(bp)
+    RechargeBlack5Panel.click_item(bp)
+    bp.connect_close()

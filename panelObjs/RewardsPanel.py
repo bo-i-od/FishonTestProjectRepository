@@ -7,7 +7,7 @@ class RewardsPanel(BasePage):
         return self.exist(element_data=ElementsData.RewardsPanel.RewardsPanel)
 
     def click_tap_to_claim(self):
-        self.click_element(element_data=ElementsData.RewardsPanel.tap_to_claim)
+        self.click_element(element_data=ElementsData.RewardsPanel.tap_to_claim, ignore_set={"RewardsPanel"})
 
 
     def wait_for_panel_appear(self):
@@ -36,6 +36,9 @@ class RewardsPanel(BasePage):
     def get_reward_position_list(self):
         reward_position_list = self.get_position_list(element_data=ElementsData.RewardsPanel.reward_icon_list)
         return reward_position_list
+
+    def click_item(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.RewardsPanel.item_list, index=index)
 
 
 

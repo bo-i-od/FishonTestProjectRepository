@@ -70,6 +70,38 @@ class RankPanel(BasePage):
             "points": self.get_text(object_id=photo_id_list[index], offspring_path="points")}
         return rank_data
 
-if __name__ == '__main__':
+    def switch_fishery(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.RankPanel.fisheries_list, element_viewport=ElementsData.RankPanel.fisheries_viewport, viewport_edge=[0.05, 0.05], index=index)
+
+    def switch_tab_area(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.RankPanel.tab_area_list, index=index)
+
+    def switch_tab_time(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.RankPanel.tab_time_list, index=index)
+
+    def click_btn_playercard(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.RankPanel.btn_playercard_list, element_viewport=ElementsData.RankPanel.photo_viewport, viewport_direction="column", index=index)
+
+    def click_photo(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.RankPanel.photo_list, element_viewport=ElementsData.RankPanel.photo_viewport, viewport_direction="column", index=index)
+
+
+    operation_pool = [
+        {"element_data": ElementsData.RankPanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.RankPanel.btn_playercard_list, "func": click_btn_playercard, "weight": 1},
+        {"element_data": ElementsData.RankPanel.photo_list, "func": click_photo, "weight": 1},
+        {"element_data": ElementsData.RankPanel.fisheries_list, "func": switch_fishery, "weight": 1},
+        {"element_data": ElementsData.RankPanel.tab_area_list, "func": switch_tab_area, "weight": 1},
+        {"element_data": ElementsData.RankPanel.tab_time_list, "func": switch_tab_time, "weight": 1},
+    ]
+
+
+if __name__ == "__main__":
     bp = BasePage()
-    print(RankPanel.get_photo_status(bp))
+    # RankPanel.click_btn_close(bp)
+    # RankPanel.click_btn_playercard(bp)
+    # RankPanel.click_photo(bp)
+    # RankPanel.switch_fishery(bp)
+    # RankPanel.switch_tab_area(bp)
+    RankPanel.switch_tab_time(bp)
+    bp.connect_close()

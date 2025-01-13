@@ -84,6 +84,25 @@ class RankFishLeaderboardPanel(BasePage):
             return True
         return False
 
+    def click_btn_playercard(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.RankFishLeaderboardPanel.btn_playercard_list,
+                                            element_viewport=ElementsData.RankFishLeaderboardPanel.viewport,
+                                            viewport_direction="column", index=index)
+
+    def click_btn_playercard_myself(self):
+        self.click_element(element_data=ElementsData.RankFishLeaderboardPanel.btn_playercard_myself)
+
+    def click_btn_playercard_photo(self):
+        self.click_element(element_data=ElementsData.RankFishLeaderboardPanel.btn_playercard_photo)
+
+    def click_btn_fishcard(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.RankFishLeaderboardPanel.fishcard_list,
+                                            element_viewport=ElementsData.RankFishLeaderboardPanel.viewport,
+                                            viewport_direction="column", index=index)
+
+    def click_btn_fishcard_myself(self):
+        self.click_element(element_data=ElementsData.RankFishLeaderboardPanel.fishcard_myself)
+
 
 if __name__ == '__main__':
     bp = BasePage()

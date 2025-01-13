@@ -58,25 +58,25 @@ class ResultPanel(BasePage):
     def click_btn_claim_token_fish(self):
         self.click_until_disappear(element_data=ElementsData.ResultPanel.btn_claim_token_fish, ignore_set={"ResultPanel"})
 
+    def click_btn_share(self):
+        self.click_element(element_data=ElementsData.ResultPanel.btn_share)
 
-    def duel_sundries(self):
-        if self.exist(element_data=ElementsData.ResultPanel.panel_pve_result.btn_open_by_key):
-            self.click_element(element_data=ElementsData.ResultPanel.panel_pve_result.btn_open_by_key)
-        elif self.exist(element_data=ElementsData.ResultPanel.panel_pve_result.btn_open_by_cash):
-            self.click_element(element_data=ElementsData.ResultPanel.panel_pve_result.btn_open_by_cash)
-        elif self.exist(element_data=ElementsData.ResultPanel.panel_pve_result.btn_open_and_cast_again):
-            self.click_element(element_data=ElementsData.ResultPanel.panel_pve_result.btn_open_and_cast_again)
-        else:
-            self.click_element(element_data=ElementsData.ResultPanel.panel_pve_result.btn_throw)
-        RewardsPanel.wait_for_panel_appear(self)
-        self.sleep(0.5)
-        RewardsPanel.click_tap_to_claim(self)
-        return
+    def click_btn_i(self):
+        self.click_element(element_data=ElementsData.ResultPanel.btn_i)
 
 
 
-if __name__ == '__main__':
+    operation_pool = [
+        {"element_data": ElementsData.ResultPanel.btn_claim, "func": click_btn_claim, "weight": 1},
+        {"element_data": ElementsData.ResultPanel.btn_claim_token_fish, "func": click_btn_claim_token_fish, "weight": 1},
+        {"element_data": ElementsData.ResultPanel.btn_i, "func": click_btn_i, "weight": 1},
+        {"element_data": ElementsData.ResultPanel.btn_share, "func": click_btn_share, "weight": 1},
+
+    ]
+if __name__ == "__main__":
     bp = BasePage()
-    ResultPanel.wait_for_result(bp)
-    print(bp.cur)
+    # ResultPanel.click_btn_claim(bp)
+    # ResultPanel.click_btn_claim_token_fish(bp)
+    # ResultPanel.click_btn_i(bp)
+    ResultPanel.click_btn_share(bp)
     bp.connect_close()
