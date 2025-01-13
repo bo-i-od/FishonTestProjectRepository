@@ -13,8 +13,10 @@ def guide_skip(bp: BasePage):
     for r in result:
         lua_code = csMsgAll.get_CSNewGuideStoreMsg(key=r)
         lua_code_list.append(lua_code)
-    lua_code_list.append("OPENING_STAGE_FISHERY_1")
-    lua_code_list.append("OPENING_STAGE_FISHERY_1_500301")
+    lua_code = csMsgAll.get_CSNewGuideStoreMsg(key="OPENING_STAGE_FISHERY_1")
+    lua_code_list.append(lua_code)
+    lua_code = csMsgAll.get_CSNewGuideStoreMsg(key="OPENING_STAGE_FISHERY_1_500301")
+    lua_code_list.append(lua_code)
     bp.lua_console_list(command_list=lua_code_list)
 
 
