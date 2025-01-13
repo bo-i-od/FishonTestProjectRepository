@@ -2,6 +2,7 @@ import re
 from common.basePage import BasePage
 from netMsg import csMsgAll, fishingMsg
 from scripts import battleTest, duelTest, gearTest, fishCardTest, flashCardTest
+from tools import commonTools
 
 
 def guide_skip(bp: BasePage):
@@ -13,6 +14,24 @@ def guide_skip(bp: BasePage):
         lua_code = csMsgAll.get_CSNewGuideStoreMsg(key=r)
         lua_code_list.append(lua_code)
     bp.lua_console_list(command_list=lua_code_list)
+    lua_code = csMsgAll.get_CSNewGuideStoreMsg(key="OPENING_STAGE_FISHERY_1")
+    bp.lua_console(lua_code)
+
+
+def quest_done(bp: BasePage):
+    questTpId = 80000001
+    while questTpId < 80000031:
+        bp.cmd(f"questFinish {questTpId}")
+        bp.sleep(0.1)
+        lua_code = csMsgAll.get_CSGetQuestRewardsMsg(questTpId=questTpId)
+
+        # 发送消息
+        bp.lua_console(lua_code)
+        bp.sleep(0.1)
+        questTpId += 1
+
+
+
 
 
 def talent_all(bp: BasePage):
@@ -129,7 +148,10 @@ if __name__ == '__main__':
     base_page = BasePage()
 
     # # 跳过引导
-    # guide_skip(base_page)
+    guide_skip(base_page)
+
+    # 完成新主线剧情任务
+    quest_done(base_page)
 
     # 天赋满级
     # talent_all(base_page)
@@ -172,17 +194,17 @@ if __name__ == '__main__':
     # 该渔场闪卡获得一张
     # flashCardTest.get_flash_card(base_page, fishery_id="400302")
 
-    # 任意界面接口钓鱼
+    # 任意界面接口钓鱼 1021
     # fish_quick(base_page, fish_id=350115, is_map=False)
 
     # 设定道具数量
-    # base_page.set_item_count(item_tpid="100100", target_count=1000)
+    # base_page.set_item_count(item_tpid="102100", target_count=10)
 
     # 读取道具数量
     # print(base_page.get_item_count(item_tpid="100100"))
 
     # 发送gm命令
-    # base_page.cmd("levelupto 50")
+    base_page.cmd("levelupto 51")
 
     # 获取鱼体型
     # print(base_page.get_fish_type(fish_tpid="390005"))
