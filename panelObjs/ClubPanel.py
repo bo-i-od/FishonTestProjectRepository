@@ -51,10 +51,10 @@ class ClubPanel(BasePage):
             self.click_element(element_data=ElementsData.ClubPanel.panel_clubmember.btn_list)
 
         def click_btn_playercard(self, index=-1):
-            self.click_object_of_plural_objects(element_data=ElementsData.ClubPanel.panel_clubmember.btn_playercard_list, element_viewport=ElementsData.ClubPanel.panel_clubmember.viewport,viewport_direction="column", index=index)
+            self.click_object_of_plural_objects(element_data=ElementsData.ClubPanel.panel_clubmember.btn_playercard_list, element_viewport=ElementsData.ClubPanel.panel_clubmember.viewport, viewport_edge=[0, -0.15],viewport_direction="column", index=index)
 
         def click_btn_edit(self, index=-1):
-            self.click_object_of_plural_objects(element_data=ElementsData.ClubPanel.panel_clubmember.btn_edit_list, element_viewport=ElementsData.ClubPanel.panel_clubmember.viewport,viewport_direction="column",  index=index)
+            self.click_object_of_plural_objects(element_data=ElementsData.ClubPanel.panel_clubmember.btn_edit_list, element_viewport=ElementsData.ClubPanel.panel_clubmember.viewport, viewport_edge=[0, -0.15],viewport_direction="column",  index=index)
 
         def click_btn_close_edit(self):
             self.click_element(element_data=ElementsData.ClubPanel.panel_clubmember.btn_close_edit)
@@ -179,8 +179,8 @@ if __name__ == "__main__":
     # ClubPanel.panel_clubmember.click_btn_close_edit(bp)
     # ClubPanel.panel_clubmember.click_btn_leave(bp)
     # ClubPanel.panel_clubmember.click_btn_list(bp)
-    # ClubPanel.panel_clubmember.click_btn_playercard(bp)
-    ClubPanel.panel_clubweek.click_btn_close_tips(bp)
+    ClubPanel.panel_clubmember.click_btn_playercard(bp, 20)
+    # ClubPanel.panel_clubweek.click_btn_close_tips(bp)
     # ClubPanel.panel_clubweek.click_reward(bp)
     # ClubPanel.panel_clubweek.click_top(bp)
     # ClubPanel.panel_popup_applylist.click_btn_cancel(bp)

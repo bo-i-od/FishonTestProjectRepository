@@ -18,7 +18,13 @@ def get_small_reward_dict(bp: BasePage, price_list, wave):
     table_data_object = table_data_object_list[0]
     cur = 0
     while cur < len(table_data_object_list):
-        if activity_name not in table_data_object_list[cur]["name"]:
+        if "groupId" not in table_data_object_list[cur]:
+            cur += 1
+            continue
+        if "enabled" not in table_data_object_list[cur]:
+            cur += 1
+            continue
+        if group_id != table_data_object_list[cur]["groupId"]:
             cur += 1
             continue
         table_data_object = table_data_object_list[cur]
@@ -43,7 +49,7 @@ def get_small_reward_dict(bp: BasePage, price_list, wave):
 def lottery_draw(bp: BasePage, target_index=None):
     count_init = 10000
     bp.set_item_count(item_tpid="102200", target_count=count_init)
-    lua_code = csMsgAll.get_CSLotteryDrawOnceMsg(groupId=4000104)
+    lua_code = csMsgAll.get_CSLotteryDrawOnceMsg(groupId=group_id)
     wave = 1
     count_last = count_init
     res = {}
@@ -170,7 +176,7 @@ def main(bp: BasePage):
 
 
 if __name__ == '__main__':
-    activity_name = "20241108抽奖"
+    group_id = 4000106
     bp = BasePage("192.168.111.77:20052")
     main(bp)
     bp.connect_close()

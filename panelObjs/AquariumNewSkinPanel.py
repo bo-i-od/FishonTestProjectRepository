@@ -10,7 +10,7 @@ class AquariumNewSkinPanel(BasePage):
         self.click_element(element_data=ElementsData.AquariumNewSkinPanel.btn_close)
 
     def click_btn(self, index=-1):
-        self.click_object_of_plural_objects(element_data=ElementsData.AquariumNewSkinPanel.btns, element_viewport=ElementsData.AquariumNewSkinPanel.viewport, index=index)
+        self.click_object_of_plural_objects(element_data=ElementsData.AquariumNewSkinPanel.btns, element_viewport=ElementsData.AquariumNewSkinPanel.viewport, viewport_direction="row", index=index)
 
     operation_pool = [
         {"element_data": ElementsData.AquariumNewSkinPanel.btn_close, "func": click_btn_close, "weight": 1},
@@ -23,6 +23,6 @@ if __name__ == "__main__":
 
     # AquariumNewSkinPanel.click_btn_close(bp)
 
-    AquariumNewSkinPanel.click_btn(bp)
+    AquariumNewSkinPanel.click_btn(bp, 0)
 
     bp.connect_close()

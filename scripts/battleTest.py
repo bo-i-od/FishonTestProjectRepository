@@ -1,3 +1,5 @@
+import time
+
 from common import gameInit
 from common.basePage import BasePage
 from netMsg import csMsgAll, fishingMsg
@@ -25,6 +27,8 @@ def fish_once(bp: BasePage, fish_id="", is_quick=False):
     if bp.is_monitor:
         bp.monitor.add_task("schedule_next_check", cur=0)
     BattlePanel.hook(bp)
+    start_time = time.time()
+
     bp.set_time_scale()
     if BattlePanel.is_reel_active(bp):
         bp.custom_cmd("autofish")
@@ -33,9 +37,9 @@ def fish_once(bp: BasePage, fish_id="", is_quick=False):
     if is_quick:
         reel_quick_thread = Thread(target=BattlePanel.reel_quick, args=[bp])
         reel_quick_thread.start()
-    BattlePanel.qte(bp)
+    BattlePanel.qte(bp, start_time=start_time)
 
-        # BattlePanel.reel_quick(bp)
+    # BattlePanel.reel_quick(bp)
     # bp.set_time_scale()
     # element_btn = ResultPanel.wait_for_result(bp)
     # ResultPanel.automatic_settlement(bp, element_btn=element_btn)

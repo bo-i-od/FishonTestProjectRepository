@@ -1,3 +1,5 @@
+import time
+
 from poco.utils.simplerpc.utils import RemoteError
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
@@ -11,8 +13,8 @@ class BattlePanel(BasePage):
     def is_reel_active(self):
         return self.exist(element_data=ElementsData.BattlePanel.btn_reel)
 
-    def qte(self):
-        element_data_list = [ElementsData.BattlePanel.qte_left, ElementsData.BattlePanel.qte_right, ElementsData.BattlePanel.qte_up, ElementsData.BattlePanel.qte_jump_left, ElementsData.BattlePanel.qte_jump_right, ElementsData.BattlePanel.hud_power_list, ElementsData.BattlePanel.hud_power_list_old, ElementsData.ResultPanel.btn_claim, ElementsData.ResultPanel.btn_claim_token_fish, ElementsData.BattleFailedPanel.btn_again, ElementsData.FlashCardReceivePanel.FlashCardReceivePanel]
+    def qte(self, start_time=None):
+        element_data_list = [ElementsData.BattlePanel.qte_left, ElementsData.BattlePanel.qte_right, ElementsData.BattlePanel.qte_up, ElementsData.BattlePanel.qte_jump_left, ElementsData.BattlePanel.qte_jump_right, ElementsData.BattlePanel.hud_power_list, ElementsData.BattlePanel.hud_power_list_old, ElementsData.ResultPanel.btn_claim_pve, ElementsData.ResultPanel.btn_claim_pvp, ElementsData.ResultPanel.btn_claim_token_fish, ElementsData.BattleFailedPanel.btn_again, ElementsData.FlashCardReceivePanel.FlashCardReceivePanel, ElementsData.BattlePanel.BattlePanel]
         qte_left_index = element_data_list.index(ElementsData.BattlePanel.qte_left)
         qte_right_index = element_data_list.index(ElementsData.BattlePanel.qte_right)
         qte_up_index = element_data_list.index(ElementsData.BattlePanel.qte_up)
@@ -20,11 +22,13 @@ class BattlePanel(BasePage):
         qte_jump_right_index = element_data_list.index(ElementsData.BattlePanel.qte_jump_right)
         hud_power_list_index = element_data_list.index(ElementsData.BattlePanel.hud_power_list)
         hud_power_list_old_index = element_data_list.index(ElementsData.BattlePanel.hud_power_list_old)
-        btn_claim_index = element_data_list.index(ElementsData.ResultPanel.btn_claim)
+        btn_claim_pve_index = element_data_list.index(ElementsData.ResultPanel.btn_claim_pve)
+        btn_claim_pvp_index = element_data_list.index(ElementsData.ResultPanel.btn_claim_pvp)
         btn_claim_token_fish_index = element_data_list.index(ElementsData.ResultPanel.btn_claim_token_fish)
         btn_again_index = element_data_list.index(ElementsData.BattleFailedPanel.btn_again)
         FlashCardReceivePanel_index = element_data_list.index(ElementsData.FlashCardReceivePanel.FlashCardReceivePanel)
-
+        BattlePanel_index = element_data_list.index(ElementsData.BattlePanel.BattlePanel)
+        end_time = None
         while True:
             object_id_list = self.get_object_id_list(element_data_list=element_data_list)
             if len(object_id_list[hud_power_list_index]) > 2:
@@ -48,8 +52,14 @@ class BattlePanel(BasePage):
             if object_id_list[qte_right_index]:
                 BattlePanel.slide(self, "right")
                 continue
-            if object_id_list[btn_claim_index]:
-                ResultPanel.automatic_settlement(self, element_btn=ElementsData.ResultPanel.btn_claim)
+            if (not object_id_list[BattlePanel_index]) and (end_time is None) and (start_time is not None):
+                end_time = time.time()
+                print(f"战斗用时{end_time - start_time}s")
+            if object_id_list[btn_claim_pve_index]:
+                ResultPanel.automatic_settlement(self, element_btn=ElementsData.ResultPanel.btn_claim_pve)
+                break
+            if object_id_list[btn_claim_pvp_index]:
+                ResultPanel.automatic_settlement(self, element_btn=ElementsData.ResultPanel.btn_claim_pvp)
                 break
             if object_id_list[btn_claim_token_fish_index]:
                 ResultPanel.automatic_settlement(self, element_btn=ElementsData.ResultPanel.btn_claim_token_fish)
@@ -64,16 +74,16 @@ class BattlePanel(BasePage):
 
     def slide(self, dir):
         if dir == "left":
-            self.swipe(point_start=[0.4, 0.6], point_end=[0.2, 0.6], t=0.15)
+            self.swipe(point_start=[0.4, 0.6], point_end=[0.2, 0.6], t=0.1)
             return
         if dir == "right":
-            self.swipe(point_start=[0.4, 0.6], point_end=[0.6, 0.6], t=0.15)
+            self.swipe(point_start=[0.4, 0.6], point_end=[0.6, 0.6], t=0.1)
             return
         if dir == "up":
-            self.swipe(point_start=[0.4, 0.6], point_end=[0.4, 0.4], t=0.15)
+            self.swipe(point_start=[0.4, 0.6], point_end=[0.4, 0.4], t=0.1)
             return
         if dir == "down":
-            self.swipe(point_start=[0.4, 0.6], point_end=[0.4, 0.8], t=0.15)
+            self.swipe(point_start=[0.4, 0.6], point_end=[0.4, 0.8], t=0.1)
             return
 
     def release_btn_reel(self):
@@ -117,7 +127,7 @@ class BattlePanel(BasePage):
             pass
 
     def hook(self):
-        self.wait_for_appear(element_data_list=[ElementsData.BattlePanel.btn_reel, ElementsData.ResultPanel.btn_claim], is_click=False, timeout=25)
+        self.wait_for_appear(element_data_list=[ElementsData.BattlePanel.btn_reel, ElementsData.ResultPanel.btn_claim_pve, ElementsData.ResultPanel.btn_claim_pvp], is_click=False, timeout=25)
         # 如果没有刺鱼就跳过
         progress_position, arrow_position = self.get_position_list(element_data_list=[ElementsData.BattlePanel.progress, ElementsData.BattlePanel.arrow])
         if not progress_position:

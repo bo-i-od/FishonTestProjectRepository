@@ -24,9 +24,9 @@ class ResultPanel(BasePage):
             #     self.save_img(img)
             #     self.clear_popup()
             #     self.cur += 1
-            position_list = self.get_position_list(element_data_list=[ElementsData.ResultPanel.btn_claim, ElementsData.ResultPanel.btn_claim_token_fish, ElementsData.BattleFailedPanel.btn_again])
+            position_list = self.get_position_list(element_data_list=[ElementsData.ResultPanel.btn_claim_pve, ElementsData.ResultPanel.btn_claim_token_fish, ElementsData.BattleFailedPanel.btn_again])
             if position_list[0]:
-                return ElementsData.ResultPanel.btn_claim
+                return ElementsData.ResultPanel.btn_claim_pve
             if position_list[1]:
                 return ElementsData.ResultPanel.btn_claim_token_fish
             if position_list[2]:
@@ -52,8 +52,11 @@ class ResultPanel(BasePage):
 
 
 
-    def click_btn_claim(self):
-        self.click_until_disappear(element_data=ElementsData.ResultPanel.btn_claim, ignore_set={"ResultPanel"})
+    def click_btn_claim_pve(self):
+        self.click_until_disappear(element_data=ElementsData.ResultPanel.btn_claim_pve, ignore_set={"ResultPanel"})
+
+    def click_btn_claim_pvp(self):
+        self.click_until_disappear(element_data=ElementsData.ResultPanel.btn_claim_pvp, ignore_set={"ResultPanel"})
 
     def click_btn_claim_token_fish(self):
         self.click_until_disappear(element_data=ElementsData.ResultPanel.btn_claim_token_fish, ignore_set={"ResultPanel"})
@@ -67,7 +70,8 @@ class ResultPanel(BasePage):
 
 
     operation_pool = [
-        {"element_data": ElementsData.ResultPanel.btn_claim, "func": click_btn_claim, "weight": 1},
+        {"element_data": ElementsData.ResultPanel.btn_claim_pve, "func": click_btn_claim_pve, "weight": 1},
+        {"element_data": ElementsData.ResultPanel.btn_claim_pvp, "func": click_btn_claim_pvp, "weight": 1},
         {"element_data": ElementsData.ResultPanel.btn_claim_token_fish, "func": click_btn_claim_token_fish, "weight": 1},
         {"element_data": ElementsData.ResultPanel.btn_i, "func": click_btn_i, "weight": 1},
         {"element_data": ElementsData.ResultPanel.btn_share, "func": click_btn_share, "weight": 1},

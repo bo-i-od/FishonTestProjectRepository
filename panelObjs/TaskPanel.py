@@ -16,10 +16,7 @@ class TaskPanel(BasePage):
         return False
 
     def get_viewport(self):
-        # 右边界偏移半个任务的宽度，防止点到屏幕外
-        size = self.get_size_list(element_data=ElementsData.TaskPanel.task_list)[0]
-        edge = [0.05, 0.5 * size[0]]
-        viewport = Viewport(self, element_viewport=ElementsData.TaskPanel.view_port, element_item_list=ElementsData.TaskPanel.task_list, viewport_edge=edge)
+        viewport = Viewport(self, element_viewport=ElementsData.TaskPanel.viewport, element_item_list=ElementsData.TaskPanel.task_list,  viewport_direction="row")
         return viewport
 
 
@@ -88,17 +85,9 @@ class TaskPanel(BasePage):
             btn_position_list.append([0, 0])
         return btn_position_list
 
-    def switch_tab(self, index:int):
+    def switch_tab(self, index=-1):
         # 0是日常 1是周常 2是月常
-        if index == 0:
-            self.click_element(element_data=ElementsData.TaskPanel.tab_daily)
-            return
-        if index == 1:
-            self.click_element(element_data=ElementsData.TaskPanel.tab_weekly)
-            return
-        if index == 2:
-            self.click_element(element_data=ElementsData.TaskPanel.tab_month)
-
+        self.click_object_of_plural_objects(element_data=ElementsData.TaskPanel.tab_list, index=index)
 
     def get_task_award_icon_list(self):
         task_award_icon_list = self.get_icon_list(element_data=ElementsData.TaskPanel.task_award_icon_list)
@@ -107,7 +96,6 @@ class TaskPanel(BasePage):
     def get_task_award_position_list(self):
         task_award_position_list = self.get_position_list(element_data=ElementsData.TaskPanel.task_award_icon_list)
         return task_award_position_list
-
 
     def get_box_status(self):
         box_id_list = self.get_object_id_list(element_data=ElementsData.TaskPanel.box_list)
@@ -286,17 +274,39 @@ class TaskPanel(BasePage):
             return 2
         return -1
 
+    def click_box(self, index=-1):
+        self.click_object_of_plural_objects(element_data_list=[ElementsData.TaskPanel.box_list_done, ElementsData.TaskPanel.box_list_award, ElementsData.TaskPanel.box_list_ing], index=index)
+
+    def click_btn(self, index=-1):
+        viewport = TaskPanel.get_viewport(self)
+        self.click_object_of_plural_objects(element_data_list=[ElementsData.TaskPanel.btn_completed_list,ElementsData.TaskPanel.btn_undone_list,ElementsData.TaskPanel.btn_finish_list], viewport=viewport, index=index)
 
 
-if __name__ == '__main__':
+    def click_item(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.TaskPanel.item_list, element_viewport=ElementsData.TaskPanel.viewport, delta_len=0.1, viewport_edge=[-0.05, 0],viewport_direction="row", index=index)
+
+    def click_item_detail(self, index=-1):
+        self.click_object_of_plural_objects(element_data=ElementsData.TaskPanel.item_list_detail, index=index)
+
+    operation_pool = [
+        {"element_data": ElementsData.TaskPanel.box_list, "func": click_box, "weight": 1},
+        {"element_data": ElementsData.TaskPanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.TaskPanel.TaskPanel, "func": click_btn, "weight": 1},
+        {"element_data": ElementsData.TaskPanel.item_list, "func": click_item, "weight": 1},
+        {"element_data": ElementsData.TaskPanel.item_list_detail, "func": click_item_detail, "weight": 10},
+        {"element_data": ElementsData.TaskPanel.tab_list, "func": switch_tab, "weight": 1},
+    ]
+
+
+if __name__ == "__main__":
     bp = BasePage()
-
-    task_id_list = TaskPanel.get_task_id_list(bp)
-    print(TaskPanel.get_task_award_dict(bp, task_id_list, 1))
-    # # btn_status_list, btn_position_list = TaskPanel.get_btn_status_and_position_list(bp, task_id_list)
-    # # bp.click_position(btn_position_list[1])
-    # # v.move_until_appear(task_id_list[8])
-    # print(TaskPanel.get_box_award_icon_list(bp))
+    # TaskPanel.click_box(bp, 3)
+    # TaskPanel.click_btn_close(bp)
+    # TaskPanel.click_btn(bp, 0)
+    TaskPanel.click_item(bp,6)
+    # TaskPanel.click_item_detail(bp)
+    # TaskPanel.switch_tab(bp)
+    bp.connect_close()
 
 
 
