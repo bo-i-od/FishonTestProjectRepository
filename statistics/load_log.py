@@ -16,9 +16,16 @@ def get_flashcard_data(data):
     else:
         return {}
 
-def get_debug_info(data):
-    """cast log"""
-    return data['debugInfos']
+def get_flashcard_id(data):
+    """hook log"""
+    other_item=data['otherItems']
+    if 'tiacs' in other_item:
+        return other_item['tiacs']['1']['id']
+    else:
+        return 0
+
+DebugInfo='debugInfos'
+ProtectiveId='protectiveId'
 
 def parse_data(file_path):
     with open(file_path, 'r') as file:

@@ -32,21 +32,28 @@ def deal_with_msg(msg):
     #     print(msg)
     #     return
 
+def check_msg_success(msg_data):
+    if msg_data.get('notify',{}).get('code',-1)==0:
+        return True
+    else:
+        return False
 
 def deal_with_SCFishingCastMsg_new(msg):
     # print(msg)
     msg_data=lua_dict_to_python_dict(msg)
-    f = open("../statistics/new_cast_log.txt", "a")
-    f.write(json.dumps(msg_data)+"\n")
-    f.close()
+    if check_msg_success(msg_data):
+        f = open("../statistics/new_cast_log.txt", "a")
+        f.write(json.dumps(msg_data)+"\n")
+        f.close()
 
 
 def deal_with_SCFishingHookMsg_new(msg):
     # print(msg)
     msg_data = lua_dict_to_python_dict(msg)
-    f = open("../statistics/new_hook_log.txt", "a")
-    f.write(json.dumps(msg_data)+"\n")
-    f.close()
+    if check_msg_success(msg_data):
+        f = open("../statistics/new_hook_log.txt", "a")
+        f.write(json.dumps(msg_data)+"\n")
+        f.close()
 
 def deal_with_SCFishingHookMsg(msg):
     # print(msg)

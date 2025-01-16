@@ -1,7 +1,7 @@
 from statistics.base_func import get_fish_size
 from statistics.load_log import *
 
-cast_log=load_log_new('../new_cast_log1.txt')
+cast_log=load_log_new('../new_cast_log.txt')
 
 total_dict={}
 
