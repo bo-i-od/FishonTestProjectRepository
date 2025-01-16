@@ -217,7 +217,7 @@ def fish_once(bp: BasePage):
     BattlePanel.reel_quick(bp)
     ResultPanel.wait_for_result(bp)
     bp.sleep(130)
-    ResultPanel.click_btn_claim(bp)
+    ResultPanel.click_btn_claim_pvp(bp)
 
 
 def wait_for_ResultPanel(bp):

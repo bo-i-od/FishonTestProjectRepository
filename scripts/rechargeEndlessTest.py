@@ -57,12 +57,12 @@ def buy_test(bp: BasePage):
     if locked_index_list:
         r = random.randint(0, len(locked_index_list) - 1)
         btn_buy_locked_index = locked_index_list[r]
-        bp.click_position(btn_buy_position_list[btn_buy_locked_index])
+        bp.click_position(btn_buy_position_list[btn_buy_locked_index], ignore_set={panel.__name__})
         bp.sleep(1)
 
     # 点非锁定的
-    bp.click_position(btn_buy_position_list[unlocked_index])
-    RewardsPanel.wait_for_panel_appear(bp)
+    bp.click_position(btn_buy_position_list[unlocked_index], ignore_set={panel.__name__})
+    RewardsPanel.wait_for_panel_appear(bp, ignore_set={panel.__name__, "RewardsPanel"})
 
     # 对照数量
     money = bp.get_item_count(item_tpid="101900")
@@ -71,9 +71,9 @@ def buy_test(bp: BasePage):
     compare_dict(item_info_buy, reward_dict)
 
     bp.sleep(1)
-    RewardsPanel.click_tap_to_claim(bp)
+    RewardsPanel.click_tap_to_claim(bp, ignore_set={panel.__name__, "RewardsPanel"})
     bp.sleep(1)
-    bp.clear_popup()
+    bp.clear_popup(ignore_set={panel.__name__})
 
 
 def main(bp: BasePage):

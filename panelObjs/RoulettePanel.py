@@ -40,7 +40,27 @@ class RoulettePanel(BasePage):
     def click_btn_announcement(self):
         self.click_element(element_data=ElementsData.RoulettePanel.btn_announcement)
 
+    def click_btn_close_tips(self):
+        self.click_element(element_data=ElementsData.RoulettePanel.btn_close_tips)
 
-if __name__ == '__main__':
+
+    operation_pool = [
+        {"element_data": ElementsData.RoulettePanel.btn_announcement, "func": click_btn_announcement, "weight": 1},
+        {"element_data": ElementsData.RoulettePanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.RoulettePanel.btn_close_tips, "func": click_btn_close_tips, "weight": 1},
+        {"element_data": ElementsData.RoulettePanel.btn_i, "func": click_btn_i, "weight": 1},
+        {"element_data": ElementsData.RoulettePanel.btn_spin, "func": click_btn_spin, "weight": 1},
+
+        {"element_data": ElementsData.RoulettePanel.btn_spin, "func": press_btn_spin, "weight": 1},
+    ]
+
+
+if __name__ == "__main__":
     bp = BasePage()
+    RoulettePanel.click_btn_announcement(bp)
+    RoulettePanel.click_btn_close(bp)
+    RoulettePanel.click_btn_close_tips(bp)
+    RoulettePanel.click_btn_i(bp)
     RoulettePanel.click_btn_spin(bp)
+    RoulettePanel.press_btn_spin(bp)
+    bp.connect_close()

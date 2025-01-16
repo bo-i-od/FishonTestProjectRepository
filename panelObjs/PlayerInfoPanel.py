@@ -199,11 +199,11 @@ class PlayerInfoPanel(BasePage):
 
     def swipe_slider_music(self, value_start=None, value_end=None):
         slider = Slider(self, element_slider=ElementsData.PlayerInfoPanel.options_music)
-        self.swipe_slider(slider=slider, value_start=value_start, value_end=value_end)
+        self.swipe_slider_base(slider=slider, value_start=value_start, value_end=value_end)
 
     def swipe_slider_sound(self, value_start=None, value_end=None):
         slider = Slider(self, element_slider=ElementsData.PlayerInfoPanel.options_sound)
-        self.swipe_slider(slider=slider, value_start=value_start, value_end=value_end)
+        self.swipe_slider_base(slider=slider, value_start=value_start, value_end=value_end)
 
     def get_slider_sound(self):
         return self.get_slider_value(element_data=ElementsData.PlayerInfoPanel.options_sound)

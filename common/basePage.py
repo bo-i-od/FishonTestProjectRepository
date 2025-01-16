@@ -1365,7 +1365,7 @@ class BasePageMain:
         point_start = self.get_position(element_data=element_data_copy)
         self.poco.swipe(p1=point_start, p2=point_end, duration=t)
 
-    def swipe_slider(self, slider, value_start=None, value_end=None):
+    def swipe_slider_base(self, slider, value_start=None, value_end=None):
         if not value_start:
             value_start = random.random()
         if not value_end:
@@ -2181,6 +2181,8 @@ end
         for table_data_object in table_data_object_list:
             if "fishInfo" not in table_data_object:
                 continue
+            if "enabled" not in table_data_object:
+                continue
             fish_info_list = table_data_object["fishInfo"]
             for fish_info in fish_info_list:
                 if "fish" not in fish_info:
@@ -2194,6 +2196,8 @@ end
         table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="tpId", value=spot_id, book_name="NEW_PLOT_FISH_SPOT.xlsm")
         fish_id_set = set()
         for table_data_object in table_data_object_list:
+            if "enabled" not in table_data_object:
+                continue
             fish_info = []
             fish_info += table_data_object["smallInfo"]
             fish_info += table_data_object["mediumInfo"]
@@ -2227,8 +2231,7 @@ end
             table_data_detail = self.excelTools.get_table_data_detail(book_name="FISH.xlsm")
             fish_id_list = self.get_drop_fish_id_list(spot_id=spot_id)
             for fish_id in fish_id_list:
-                table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(
-                    table_data_detail=table_data_detail, key="tpId", value=fish_id)
+                table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(table_data_detail=table_data_detail, key="tpId", value=fish_id)
                 if not table_data_object_list:
                     continue
                 table_data_object = table_data_object_list[0]
@@ -2303,9 +2306,12 @@ end
 
         if not table_data_object_list:
             return None
-
-        table_data_object = table_data_object_list[0]
-        mission_condition_id = table_data_object["missionConditionID"]
+        mission_condition_id = 0
+        for table_data_object in table_data_object_list:
+            if "enabled" not in table_data_object:
+                continue
+            mission_condition_id = table_data_object["missionConditionID"]
+            break
 
         # missionConditionID转鱼id
         table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="startConditionId",
@@ -2314,8 +2320,12 @@ end
         if not table_data_object_list:
             return None
 
-        table_data_object = table_data_object_list[0]
-        fish_id = table_data_object["fishChange"][0]["fish"]
+        fish_id = 0
+        for table_data_object in table_data_object_list:
+            if "enabled" not in table_data_object:
+                continue
+            fish_id = table_data_object["fishChange"][0]["fish"]
+            break
 
         return str(fish_id)
 
@@ -2340,6 +2350,8 @@ end
             return spot_id_list
         table_data_object_list = self.excelTools.get_table_data_object_list(book_name="NEW_PLOT_FISH_SPOT.xlsm")
         for table_data_object in table_data_object_list:
+            if "enabled" not in table_data_object:
+                continue
             fish_info = []
             fish_info += table_data_object["smallInfo"]
             fish_info += table_data_object["mediumInfo"]
@@ -2358,8 +2370,7 @@ end
 
             if fish_id not in fish_list:
                 continue
-            if "enabled" not in table_data_object:
-                continue
+
             spot_id_list.append(table_data_object["tpId"])
 
         return spot_id_list
@@ -2452,13 +2463,7 @@ end
 
 if __name__ == '__main__':
     bp = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21543")
-    # a = bp.spot_id_to_fishery_id(spot_id=10101)
-    # a = bp.fish_id_to_spot_id(fish_id="350115")
-    # a = bp.fish_bone_id_to_fish_id(fish_bone_id=385001)
-    # print(a)
-    a = bp.get_drop_item_id_list(spot_id="40030103")
-    # a = bp.get_drop_fish_id_list(spot_id="40030104")
-    print(a)
+    print(bp.get_drop_item_id_list(spot_id="40030104"))
 
     # "127.0.0.1:21613"
     # "b6h65hd64p5pxcyh"

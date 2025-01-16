@@ -47,17 +47,8 @@ class BugMultiplePanel(BasePage):
         return Slider(self, element_slider=ElementsData.BugMultiplePanel.slider)
 
     def swipe_slider(self, value_start=None, value_end=None):
-        if not value_start:
-            value_start = random.random()
-        if not value_end:
-            value_end = random.random()
         slider = BugMultiplePanel.get_slider(self)
-        point_start, point_end = slider.get_slide_point_start_and_end(slide_range=[value_start, value_end])
-        if value_start > value_end:
-            t = value_start - value_end
-        else:
-            t = value_end - value_start
-        self.swipe(point_start=point_start, point_end=point_end, t=t)
+        self.swipe_slider_base(slider=slider, value_start=value_start, value_end=value_end)
 
 
     operation_pool = [
@@ -71,7 +62,7 @@ class BugMultiplePanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    BugMultiplePanel.swipe_slider(bp)
+    BugMultiplePanel.swipe_slider_base(bp)
     bp.connect_close()
 
 

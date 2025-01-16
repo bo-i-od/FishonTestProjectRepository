@@ -1,3 +1,5 @@
+import random
+
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from common.viewport import Viewport
@@ -63,8 +65,11 @@ class TournamentsPanel(BasePage):
         TournamentsPanel.go_to_fishery_by_index(self, index)
 
     # 跳转指定索引渔场
-    def go_to_fishery_by_index(self, index):
+    def go_to_fishery_by_index(self, index=-1):
         entrance_viewport = TournamentsPanel.get_entrance_viewport(self)
+
+        if index < 0:
+            index = random.randint(0, len(entrance_viewport.item_id_list) - 1)
         while self.exist(object_id=entrance_viewport.item_id_list[index]):
             entrance_viewport.move_until_appear(entrance_viewport.item_id_list[index])
             entrance_position = self.get_position(object_id=entrance_viewport.item_id_list[index])
@@ -96,15 +101,75 @@ class TournamentsPanel(BasePage):
             cur += 1
         return tournaments_index_list
 
+    def click_btn_setting(self):
+        self.click_element(element_data=ElementsData.TournamentsPanel.btn_setting)
+
+    def click_btn_magnifier(self):
+        self.click_element(element_data=ElementsData.TournamentsPanel.btn_magnifier)
+
+    def click_btn_turntable(self):
+        self.click_element(element_data=ElementsData.TournamentsPanel.btn_turntable)
+
+    def click_btn_flashcard_banner(self):
+        self.click_element(element_data=ElementsData.TournamentsPanel.btn_flashcard_banner)
+
+    def click_btn_players_tab(self, index=-1):
+        viewport = TournamentsPanel.get_entrance_viewport(self)
+        viewport.viewport_range[0] = viewport.viewport_range[0] + 0.15
+        viewport.item_id_list = self.get_object_id_list(element_data=ElementsData.TournamentsPanel.btn_players_tab_list)
+        self.click_object_of_plural_objects(element_data=ElementsData.TournamentsPanel.btn_players_tab_list, viewport=viewport, index=index)
+
+    def click_flashcard_buff(self, index=-1):
+        viewport = TournamentsPanel.get_entrance_viewport(self)
+        viewport.item_id_list = self.get_object_id_list(element_data=ElementsData.TournamentsPanel.flashcard_buff_list)
+        self.click_object_of_plural_objects(element_data=ElementsData.TournamentsPanel.flashcard_buff_list, viewport=viewport, index=index)
+
+
+    class panel_popups_setting(BasePage):
+        def click_btn_close(self):
+            self.click_element(element_data=ElementsData.TournamentsPanel.panel_popups_setting.btn_close)
+
+        def click_btn_i(self):
+            self.click_element(element_data=ElementsData.TournamentsPanel.panel_popups_setting.btn_i)
+
+        def click_btn_close_tips(self):
+            self.click_element(element_data=ElementsData.TournamentsPanel.panel_popups_setting.btn_close_tips)
+
+        def click_btn_switch(self, index=-1):
+            self.click_object_of_plural_objects(element_data=ElementsData.TournamentsPanel.panel_popups_setting.btn_switch_list, index=index)
+
+    operation_pool = [
+        {"element_data": ElementsData.TournamentsPanel.btn_close, "func": click_btn_close, "weight": 1},
+        {"element_data": ElementsData.TournamentsPanel.btn_flashcard_banner, "func": click_btn_flashcard_banner, "weight": 1},
+        {"element_data": ElementsData.TournamentsPanel.btn_leaderboard, "func": click_btn_leaderboard, "weight": 1},
+        {"element_data": ElementsData.TournamentsPanel.btn_magnifier, "func": click_btn_magnifier, "weight": 1},
+        {"element_data": ElementsData.TournamentsPanel.btn_players_tab_list, "func": click_btn_players_tab, "weight": 1},
+        {"element_data": ElementsData.TournamentsPanel.btn_setting, "func": click_btn_setting, "weight": 1},
+        {"element_data": ElementsData.TournamentsPanel.btn_turntable, "func": click_btn_turntable, "weight": 1},
+        {"element_data": ElementsData.TournamentsPanel.flashcard_buff_list, "func": click_flashcard_buff, "weight": 1},
+        {"element_data": ElementsData.TournamentsPanel.TournamentsPanel, "func": go_to_fishery_by_index, "weight": 1},
+        {"element_data": ElementsData.TournamentsPanel.panel_popups_setting.btn_close, "func": panel_popups_setting.click_btn_close, "weight": 1},
+        {"element_data": ElementsData.TournamentsPanel.panel_popups_setting.btn_close_tips, "func": panel_popups_setting.click_btn_close_tips, "weight": 10},
+        {"element_data": ElementsData.TournamentsPanel.panel_popups_setting.btn_i, "func": panel_popups_setting.click_btn_i, "weight": 1},
+        {"element_data": ElementsData.TournamentsPanel.panel_popups_setting.btn_switch_list, "func": panel_popups_setting.click_btn_switch, "weight": 1},
+    ]
+
 
 if __name__ == "__main__":
-    bp = BasePage(serial_number="127.0.0.1:21503", is_mobile_device=True)
-    # TournamentsPanel.get_fishery_list(bp)
-    # a = TournamentsPanel.get_fishery_tpid_list(bp)
-    parent_id_list = TournamentsPanel.go_to_fishery_by_index(bp)
-
-    print(parent_id_list)
-    # print(a)
+    bp = BasePage()
+    # TournamentsPanel.click_btn_close(bp)
+    # TournamentsPanel.click_btn_flashcard_banner(bp)
+    # TournamentsPanel.click_btn_leaderboard(bp)
+    # TournamentsPanel.click_btn_magnifier(bp)
+    # TournamentsPanel.click_btn_players_tab(bp, 1)
+    # TournamentsPanel.click_btn_setting(bp)
+    # TournamentsPanel.click_btn_turntable(bp)
+    # TournamentsPanel.click_flashcard_buff(bp)
+    # TournamentsPanel.go_to_fishery_by_index(bp)
+    # TournamentsPanel.panel_popups_setting.click_btn_close(bp)
+    # TournamentsPanel.panel_popups_setting.click_btn_close_tips(bp)
+    # TournamentsPanel.panel_popups_setting.click_btn_i(bp)
+    # TournamentsPanel.panel_popups_setting.click_btn_switch(bp, 0)
     bp.connect_close()
 
 

@@ -6,12 +6,16 @@ class RewardsPanel(BasePage):
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.RewardsPanel.RewardsPanel)
 
-    def click_tap_to_claim(self):
-        self.click_element(element_data=ElementsData.RewardsPanel.tap_to_claim, ignore_set={"RewardsPanel"})
+    def click_tap_to_claim(self, ignore_set=None):
+        if ignore_set is None:
+            ignore_set = {"RewardsPanel"}
+        self.click_element(element_data=ElementsData.RewardsPanel.tap_to_claim, ignore_set=ignore_set)
 
 
-    def wait_for_panel_appear(self):
-        self.wait_for_appear(element_data=ElementsData.RewardsPanel.tap_to_claim, is_click=False, ignore_set={"RewardsPanel"})
+    def wait_for_panel_appear(self, ignore_set=None):
+        if ignore_set is None:
+            ignore_set = {"RewardsPanel"}
+        self.wait_for_appear(element_data=ElementsData.RewardsPanel.tap_to_claim, is_click=False, ignore_set=ignore_set)
 
     def get_reward_dict(self):
         reward_icon_list = self.get_icon_list(element_data=ElementsData.RewardsPanel.reward_icon_list)
@@ -37,11 +41,14 @@ class RewardsPanel(BasePage):
         reward_position_list = self.get_position_list(element_data=ElementsData.RewardsPanel.reward_icon_list)
         return reward_position_list
 
-    def click_item(self, index=-1):
-        self.click_object_of_plural_objects(element_data=ElementsData.RewardsPanel.item_list, index=index)
+    def click_item(self, index=-1, ignore_set=None):
+        if ignore_set is None:
+            ignore_set = {"RewardsPanel"}
+        self.click_object_of_plural_objects(element_data=ElementsData.RewardsPanel.item_list,element_viewport=ElementsData.RewardsPanel.viewport, viewport_direction="row", index=index, ignore_set=ignore_set)
 
 
 
 if __name__ == '__main__':
     bp = RewardsPanel()
-
+    RewardsPanel.click_item(bp, 0)
+    bp.connect_close()

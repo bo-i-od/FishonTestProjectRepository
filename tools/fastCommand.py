@@ -147,16 +147,33 @@ def fish_quick(bp: BasePage, fish_id, is_map=False):
     fishingMsg.fish(bp, [{"spot_id": f"{spot_id}", "times": 1, "is_activity_spot": is_in_double_week, "is_limited": is_limited}])
 
 
+def level_up_to_new_plot(bp: BasePage, level, tp_id="102600"):
+    item_count = bp.get_item_count(item_tpid=tp_id)
+    table_data_object_list = bp.excelTools.get_table_data_object_list(book_name="NEW_PLOT_LEVEL_UP.xlsm")
+    exp = 0
+    for table_data_object in table_data_object_list:
+        if table_data_object["level"] > level:
+            break
+        if "exp" not in table_data_object:
+            continue
+        exp += table_data_object["exp"]
+    if item_count >= exp:
+        return
+    bp.cmd(f"add 1 {tp_id} {exp - item_count}")
+    print(exp - item_count)
 
 
 if __name__ == '__main__':
-    base_page = BasePage()
+    base_page = BasePage(serial_number="127.0.0.1:21583", is_mobile_device=False)
 
-    # # 跳过引导
+    # # # # 跳过引导
     guide_skip(base_page)
-
-    # 完成新主线剧情任务
+    # #
+    # # # 完成新主线剧情任务
     quest_done(base_page)
+
+    # 新主线升到指定等级
+    # level_up_to_new_plot(base_page, 5)
 
     # 天赋满级
     # talent_all(base_page)
@@ -180,7 +197,7 @@ if __name__ == '__main__':
     # category_done(base_page, category_id=10004)
 
     # # 钓一次鱼 运行界面：备战界面
-    # battleTest.fish_once(base_page, is_quick=False)
+    # battleTest.fish_once(base_page, fish_id="360101",is_quick=False)
 
     # 循环钓鱼 运行界面：备战界面
     # 填渔场id会将该渔场鱼钓一遍
@@ -194,13 +211,13 @@ if __name__ == '__main__':
 
     # 对决一次 运行界面：对决大厅界面
     # rank0-7代表黑铁到传奇
-    # duelTest.duel_once(base_page, rank=1)
+    # duelTest.duel_once(base_page, rank=0)
 
     # 该渔场闪卡获得一张
     # flashCardTest.get_flash_card(base_page, fishery_id="400302")
 
     # 任意界面接口钓鱼 1021
-    # fish_quick(base_page, fish_id=350115, is_map=False)
+    # fish_quick(base_page, fish_id=315015, is_map=True)
 
     # 设定道具数量
     # base_page.set_item_count(item_tpid="102100", target_count=10)
