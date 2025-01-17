@@ -8,7 +8,7 @@ total_dict={}
 BASE_TYPE=["Small","Median","Large","Huge","Giant","Rare","Elite","Monster"]
 TITLE_TYPE=["Rare","Elite","Monster"]
 
-for i in cast_log:
+for i_index,i in enumerate(cast_log):
     fisheries_id=i['sceneArg1']
     if fisheries_id not in total_dict:
         total_dict[fisheries_id]={key:{'count':0} for key in BASE_TYPE}
@@ -18,6 +18,12 @@ for i in cast_log:
     fish_type=get_fish_size(fish_id)
     if fish_type!='Special':
         total_dict[fisheries_id]['count']+= 1
+        # if fish_type=='Monster':
+        #     if fish_id not in total_dict[fisheries_id][fish_type]:
+        #         total_dict[fisheries_id][fish_type][fish_id]={'count':0,'index':[]}
+        #     total_dict[fisheries_id][fish_type][fish_id]['count']+=1
+        #     total_dict[fisheries_id][fish_type][fish_id]['index'].append(i_index)
+        # else:
         if fish_id not in total_dict[fisheries_id][fish_type]:
             total_dict[fisheries_id][fish_type][fish_id]=0
         total_dict[fisheries_id][fish_type][fish_id]+=1
@@ -30,12 +36,13 @@ if __name__ == '__main__':
     from icecream import ic
     # ic(total_dict)
     for key,value in total_dict.items():
-        print("fisheries_id",key,' count',value['count'])
-        ic_data={i:value[i] for i in TITLE_TYPE}
-        ic(ic_data)
-        # 每种鱼的概率
-        final_rate = {i: round(value[i]['count']/value['count'], 3) for i in TITLE_TYPE}
-        ic(final_rate)
+        if value['count']>0:
+            print("fisheries_id",key,' count',value['count'])
+            ic_data={i:value[i] for i in TITLE_TYPE}
+            ic(ic_data)
+            # 每种鱼的概率
+            final_rate = {i: round(value[i]['count']/value['count'], 3) for i in TITLE_TYPE}
+            ic(final_rate)
 
 
 

@@ -27,6 +27,18 @@ def get_flashcard_id(data):
 DebugInfo='debugInfos'
 ProtectiveId='protectiveId'
 
+def check_3001_control():
+    cast_log = load_log_new('new_cast_log.txt')
+    data = cast_log[0]
+    return data[DebugInfo]['abTestOpen3001'],data[DebugInfo].get('abTestControlLevel',0)
+
+def check_msg_success(msg_data):
+    if msg_data.get('notify',{}).get('code',-1)==0:
+        return True
+    else:
+        return False
+
+
 def parse_data(file_path):
     with open(file_path, 'r') as file:
         data = file.read().strip()
@@ -57,4 +69,5 @@ def load_log(file_name):
 
 
 if __name__ == '__main__':
-    print(load_log_new('new_hook_log.txt'))
+    # print(load_log_new('new_hook_log.txt'))
+    print(check_3001_control())
