@@ -346,7 +346,7 @@ def chest(bp: BasePage):
     TreasureChestRewardsPanel.click_btn_close(bp)
     bp.sleep(1)
     if TreasureChestGearsShardsPanel.is_panel_active(bp):
-        TreasureChestGearsShardsPanel.click_tap_to_continue(bp)
+        TreasureChestGearsShardsPanel.click_btn_close(bp)
         bp.sleep(1)
 
     TreasureChestPanel.click_progressbar_box(bp)

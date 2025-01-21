@@ -7,7 +7,8 @@ def get_flash_card(bp: BasePage, fishery_id=None):
         if not table_data_object_list:
             return
         collection_chapter_id = table_data_object_list[0]["collectionChapterId"]
-        bp.cmd(f"flashcard 1 {collection_chapter_id} 0")
+        collection_season_id = table_data_object_list[0]["collectionSeasonId"]
+        bp.cmd(f"flashcard {collection_season_id} {collection_chapter_id} 0")
         return
     table_data_object_list = bp.excelTools.get_table_data_object_list(book_name="COLLECTION_BASE.xlsm")
     collection_chapter_id_set = set()

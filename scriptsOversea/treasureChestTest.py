@@ -110,11 +110,11 @@ def box_fragment_test(bp:BasePage):
     if r == 0:
         bp.click_position(box_fragment_position)
         bp.sleep(1)
-        TreasureChestGearsShardsPanel.click_tap_to_continue(bp)
+        TreasureChestGearsShardsPanel.click_btn_close(bp)
         bp.sleep(1)
         TreasureChestRewardsPanel.click_btn_close(bp)
         bp.sleep(1)
-        TreasureChestGearsShardsPanel.click_tap_to_continue(bp)
+        TreasureChestGearsShardsPanel.click_btn_close(bp)
     elif r == 1:
         bp.click_position(box_fragment_position)
         bp.sleep(1)
@@ -129,7 +129,7 @@ def box_fragment_test(bp:BasePage):
     elif r == 2:
         TreasureChestRewardsPanel.click_btn_close(bp)
         bp.sleep(1)
-        TreasureChestGearsShardsPanel.click_tap_to_continue(bp)
+        TreasureChestGearsShardsPanel.click_btn_close(bp)
         return
     elif r == 3:
         TreasureChestRewardsPanel.click_btn_close(bp)

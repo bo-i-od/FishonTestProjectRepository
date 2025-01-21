@@ -296,9 +296,11 @@ class ElementsData:
         qte_right = {"locator": "UICanvas>Default>BattlePanel>FishHUD>qte_right>qte"}
         qte_jump_left = {"locator": "UICanvas>Default>BattlePanel>FishHUD>qte_left_fishJump>qte"}
         qte_jump_right = {"locator": "UICanvas>Default>BattlePanel>FishHUD>qte_right_fishJump>qte"}
+        qte_dance_left = {"locator": "UICanvas>Default>BattlePanel>FishHUD>qte_left_wildDance>qte"}
+        qte_dance_right = {"locator": "UICanvas>Default>BattlePanel>FishHUD>qte_right_wildDance>qte"}
         qte_up = {"locator": "UICanvas>Default>BattlePanel>FishHUD>qte_up>qte"}
         m_value = {"locator": "UICanvas>Default>BattlePanel>FishHUD>fish_HP>m_value"}
-        warning = {"locator": "UICanvas>Default>BattlePanel>Warning"}
+        warning = {"locator": "UICanvas>Default>BattlePanel>Warning>"}
         hud_power_list = {"locator":"UICanvas>Default>BattlePanel>hud_power>barPanel>list>>baseParticle"}
         hud_power_list_old = {"locator":"UICanvas>Default>BattlePanel>hud_power>bar_normal>"}
         hud_escaping = {"locator":"UICanvas>Default>BattlePanel>FishHUD>fish_HP>m_value>hud_escaping>text"}
@@ -825,6 +827,10 @@ class ElementsData:
         btn_close = {"locator": "UICanvas>Important>EventsGiftCenterPanel>panel>btn_close>img"}
         tab_list = {"locator": "UICanvas>Important>EventsGiftCenterPanel>panel>panel_tab>list>Viewport>Content>"}
         viewport = {"locator": "UICanvas>Important>EventsGiftCenterPanel>panel>panel_tab>list>Viewport", "focus": (0, 0)}
+
+    class FacePopNewYear1Panel:
+        FacePopNewYear1Panel = {"locator": "UICanvas>Default>FacePopNewYear1Panel"}
+        btn_close = {"locator": "UICanvas>Default>FacePopNewYear1Panel>btn_close>img"}
 
     class FacePopNewYear2Panel:
         FacePopNewYear2Panel = {"locator": "UICanvas>Default>FacePopNewYear2Panel"}
@@ -2116,6 +2122,8 @@ class ElementsData:
         TreasureChestGearsShardsPanel = {"locator": "UICanvas>Default>TreasureChestGearsShardsPanel"}
         btn_close = {"locator": "UICanvas>Default>TreasureChestGearsShardsPanel>btn_close>text"}
         btn_enhance_list = {"locator": "UICanvas>Default>TreasureChestGearsShardsPanel>rewards_list>Viewport>Content>>btn_enhance", "focus":(0.5, 1)}
+        item_list = {"locator": "UICanvas>Default>TreasureChestGearsShardsPanel>rewards_list>Viewport>Content>>gear_model>gear_model_new(Clone)>bg"}
+        viewport = {"locator": "UICanvas>Default>TreasureChestGearsShardsPanel>rewards_list>Viewport", "focus":(0, 0)}
 
     # 宝箱
     class TreasureChestPanel:

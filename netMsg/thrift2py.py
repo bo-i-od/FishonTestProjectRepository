@@ -107,7 +107,7 @@ def gen_py_function(struct):
         
 def get_{msg_name}(addition_part="", {args_str}):
     lua_code = ('local cmd = NetworkMgr:NewMsg("{msg_name}")\n'
-    f'{{addition_part}}'
+    f'{{addition_part}}\n'
     'NetworkMgr:Send(cmd)')
     return lua_code
     """
@@ -121,7 +121,7 @@ def get_{msg_name}(addition_part="", {args_str}):
     {ignore_check}
     lua_code = ('local cmd = NetworkMgr:NewMsg("{msg_name}")\n'
     f'{{cmd_part}}'
-    f'{{addition_part}}'
+    f'{{addition_part}}\n'
     'NetworkMgr:Send(cmd)')
     return lua_code
     """
