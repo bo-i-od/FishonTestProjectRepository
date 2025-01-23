@@ -1,11 +1,12 @@
 import time
-
 from poco.utils.simplerpc.utils import RemoteError
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from panelObjs.FlashCardReceivePanel import FlashCardReceivePanel
 from panelObjs.ResultPanel import ResultPanel
 from tools.commonTools import *
+
+
 class BattlePanel(BasePage):
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.BattlePanel.BattlePanel)
@@ -14,7 +15,22 @@ class BattlePanel(BasePage):
         return self.exist(element_data=ElementsData.BattlePanel.btn_reel)
 
     def qte(self, start_time=None):
-        element_data_list = [ElementsData.BattlePanel.qte_left, ElementsData.BattlePanel.qte_right, ElementsData.BattlePanel.qte_up, ElementsData.BattlePanel.qte_jump_left, ElementsData.BattlePanel.qte_jump_right, ElementsData.BattlePanel.hud_power_list, ElementsData.BattlePanel.hud_power_list_old, ElementsData.ResultPanel.btn_claim_pve, ElementsData.ResultPanel.btn_claim_pvp, ElementsData.ResultPanel.btn_claim_token_fish, ElementsData.BattleFailedPanel.btn_again, ElementsData.FlashCardReceivePanel.FlashCardReceivePanel, ElementsData.BattlePanel.BattlePanel]
+        element_data_list = [
+            ElementsData.BattlePanel.qte_left,
+            ElementsData.BattlePanel.qte_right,
+            ElementsData.BattlePanel.qte_up,
+            ElementsData.BattlePanel.qte_jump_left,
+            ElementsData.BattlePanel.qte_jump_right,
+            ElementsData.BattlePanel.hud_power_list,
+            ElementsData.BattlePanel.hud_power_list_old,
+            ElementsData.ResultPanel.btn_claim_pve,
+            ElementsData.ResultPanel.btn_claim_pvp,
+            ElementsData.ResultPanel.btn_claim_token_fish,
+            ElementsData.BattleFailedPanel.btn_again,
+            ElementsData.FlashCardReceivePanel.FlashCardReceivePanel,
+            ElementsData.BattlePanel.BattlePanel,
+            ElementsData.BattlePanel.crt,
+        ]
         qte_left_index = element_data_list.index(ElementsData.BattlePanel.qte_left)
         qte_right_index = element_data_list.index(ElementsData.BattlePanel.qte_right)
         qte_up_index = element_data_list.index(ElementsData.BattlePanel.qte_up)
@@ -28,9 +44,28 @@ class BattlePanel(BasePage):
         btn_again_index = element_data_list.index(ElementsData.BattleFailedPanel.btn_again)
         FlashCardReceivePanel_index = element_data_list.index(ElementsData.FlashCardReceivePanel.FlashCardReceivePanel)
         BattlePanel_index = element_data_list.index(ElementsData.BattlePanel.BattlePanel)
+        crt_index = element_data_list.index(ElementsData.BattlePanel.crt)
+        size_tension = None
+        is_in_crt_pre = False
+        # False且当前在张力区间代表首次进入，变为True
+        # True且当前在张力区间代表非首次进入
+        # True且不在张力区间代表非首次退出， 变为False
         end_time = None
         while True:
             object_id_list = self.get_object_id_list(element_data_list=element_data_list)
+
+            if object_id_list[crt_index]:
+                if size_tension is None:
+                    size_tension = self.get_size(element_data=ElementsData.BattlePanel.hud_tension)
+                if not is_in_crt_pre:
+                    is_in_crt_pre = True
+                crt_center = BattlePanel.get_crt_center(self, size_tension=size_tension)
+                self.custom_cmd(f"setTension {crt_center}")
+            else:
+                if is_in_crt_pre:
+                    is_in_crt_pre = False
+                    self.custom_cmd(f"setTension {self.tension_default}")
+
             if len(object_id_list[hud_power_list_index]) > 2:
                 BattlePanel.unleash_power(self)
                 continue
@@ -52,6 +87,7 @@ class BattlePanel(BasePage):
             if object_id_list[qte_right_index]:
                 BattlePanel.slide(self, "right")
                 continue
+
             if (not object_id_list[BattlePanel_index]) and (end_time is None) and (start_time is not None):
                 end_time = time.time()
                 print(f"战斗用时{end_time - start_time}s")
@@ -71,19 +107,18 @@ class BattlePanel(BasePage):
                 self.clear_popup()
                 continue
 
-
     def slide(self, dir):
         if dir == "left":
-            self.swipe(point_start=[0.4, 0.6], point_end=[0.2, 0.6], t=0.1)
+            self.swipe_base(point_start=[0.4, 0.6], point_end=[0.2, 0.6], t=0.1)
             return
         if dir == "right":
-            self.swipe(point_start=[0.4, 0.6], point_end=[0.6, 0.6], t=0.1)
+            self.swipe_base(point_start=[0.4, 0.6], point_end=[0.6, 0.6], t=0.1)
             return
         if dir == "up":
-            self.swipe(point_start=[0.4, 0.6], point_end=[0.4, 0.4], t=0.1)
+            self.swipe_base(point_start=[0.4, 0.6], point_end=[0.4, 0.4], t=0.1)
             return
         if dir == "down":
-            self.swipe(point_start=[0.4, 0.6], point_end=[0.4, 0.8], t=0.1)
+            self.swipe_base(point_start=[0.4, 0.6], point_end=[0.4, 0.8], t=0.1)
             return
 
     def release_btn_reel(self):
@@ -92,10 +127,8 @@ class BattlePanel(BasePage):
     def hold_btn_reel(self):
         self.ray_input(element_data=ElementsData.BattlePanel.btn_reel, kind="down")
 
-
     def click_btn_reel(self):
         self.click_element(element_data=ElementsData.BattlePanel.btn_reel)
-
 
     def reel_quick(self):
         while not ResultPanel.is_panel_active(self):
@@ -111,7 +144,6 @@ class BattlePanel(BasePage):
             # # 海外
             # self.lua_console(command="GameRoot:GetFishingMatch().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
             self.sleep(1)
-
 
     def unleash_power(self):
         # 得到reel按钮的位置
@@ -155,13 +187,10 @@ class BattlePanel(BasePage):
         except RemoteError:
             pass
 
-
-
     def hook_guide_oversea(self):
         perform_list_oversea = [ElementsData.NewbieGuidePanel.NBG_hook_4, ElementsData.NewbieGuidePanel.NBG_hook_5]
         self.click_a_until_b_appear_list(perform_list_oversea)
         self.click_until_disappear(ElementsData.NewbieGuidePanel.NBG_hook_5)
-
 
     def get_distance(self):
         m_value = self.get_text_list(element_data=ElementsData.BattlePanel.m_value)
@@ -174,6 +203,13 @@ class BattlePanel(BasePage):
 
     def is_warning_active(self):
         return self.exist(element_data=ElementsData.BattlePanel.warning)
+
+    def get_crt_center(self, size_tension):
+        position_list_tension, position_list_crt = self.get_position_list(
+            element_data_list=[ElementsData.BattlePanel.hud_tension, ElementsData.BattlePanel.crt])
+        position_crt = position_list_crt[0]
+        position_tension = position_list_tension[0]
+        return 0.5 + (position_crt[0] - position_tension[0]) / size_tension[0]
 
 
 

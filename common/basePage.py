@@ -1531,7 +1531,7 @@ class BasePageMain:
         self.set_object_active_list(active=active, element_data=element_data, offspring_path=offspring_path)
 
     # 设置时间缩放
-    def set_time_scale(self, time_scale=5):
+    def set_time_scale(self, time_scale: float = 5):
         """函数功能简述
             设定Unity时间倍率
 
@@ -1720,6 +1720,9 @@ class BasePage(BasePageMain):
         if self.is_monitor:
             self.monitor = UIMonitor(self)
             self.monitor.start_monitoring(threading.current_thread())
+
+        self.tension_default = 0.95
+        self.custom_cmd(f"setTension {self.tension_default}")
 
     def get_fishery_id_list(self):
         """函数功能简述
@@ -2463,7 +2466,7 @@ end
 
 if __name__ == '__main__':
     bp = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21543")
-    print(bp.get_drop_item_id_list(spot_id="40030104"))
+    bp.set_time_scale(time_scale=6)
 
     # "127.0.0.1:21613"
     # "b6h65hd64p5pxcyh"
@@ -2482,5 +2485,6 @@ if __name__ == '__main__':
     # bp.cmd("levelupto 12")
     # bp.lua_console('PanelMgr:OpenPanel("HomePanel")')
     # bp.set_text(element_data={"locator":"UICanvas>Default>PlayerInfoPanel>panel>Panel_PlayerCard_new>panel>panel_playerinfo>playerinfo>player_id>value"}, text="1000002002")
+
     bp.connect_close()
 

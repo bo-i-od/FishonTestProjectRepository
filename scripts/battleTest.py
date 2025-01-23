@@ -16,9 +16,9 @@ from panelObjs.TournamentsPanel import TournamentsPanel
 
 
 
-def fish_once(bp: BasePage, fish_id="", is_quick=False):
+def fish_once(bp: BasePage, fish_id=None, is_quick=False):
     bp.set_time_scale()
-    if fish_id != "":
+    if fish_id:
         fishery_id = bp.fish_id_to_fishery_id(fish_id=fish_id)
         c = f"mode {fishery_id} {fish_id}"
         print(c)
@@ -40,18 +40,19 @@ def fish_once(bp: BasePage, fish_id="", is_quick=False):
     BattlePanel.qte(bp, start_time=start_time)
 
     # BattlePanel.reel_quick(bp)
-    # bp.set_time_scale()
+
     # element_btn = ResultPanel.wait_for_result(bp)
     # ResultPanel.automatic_settlement(bp, element_btn=element_btn)
 
-    if fish_id != "":
+    if fish_id:
         bp.cmd("mode 0 0")
 
 # mode=0是超距失败
 # mode!=0是超张力失败
-def fail_once(bp: BasePage, fishery_id="", fish_id="", mode=0):
+def fail_once(bp: BasePage, fish_id=None, mode=0):
     bp.set_time_scale()
-    if fish_id != "":
+    if fish_id:
+        fishery_id = bp.fish_id_to_fishery_id(fish_id=fish_id)
         c = f"mode {fishery_id} {fish_id}"
         print(c)
         bp.cmd(c)
@@ -63,7 +64,7 @@ def fail_once(bp: BasePage, fishery_id="", fish_id="", mode=0):
     element_btn = ResultPanel.wait_for_result(bp)
     ResultPanel.automatic_settlement(bp, element_btn=element_btn)
 
-    if fish_id != "":
+    if fish_id:
         bp.cmd("mode 0 0")
 
 
@@ -293,7 +294,7 @@ def fail_all(bp: BasePage, fishery_id, is_gold=False, is_double_week=False, is_i
         # 黄金钓点
         if not is_gold:
             # 触发失败鱼情
-            fail_once(bp, fishery_id=fishery_id, fish_id=fish_id)
+            fail_once(bp, fish_id=fish_id)
 
             # 点击图标截图
             bp.sleep(3)
@@ -403,13 +404,14 @@ def main(bp: BasePage, fishery_id, is_double_week=False, is_in_double_week=False
 
 if __name__ == '__main__':
     # 连接设备号为127.0.0.1:21533的设备
-    bp = BasePage("127.0.0.1:21523", is_mobile_device=False)
+    bp = BasePage("127.0.0.1:21603", is_mobile_device=True)
     bp.is_time_scale = False
     gameInit.set_joystick(bp)
     bp.custom_cmd("setTension 0.9")
 
-    fishbone_all(bp, fishery_id=400302, is_gold=True, is_double_week=True, is_in_double_week=False)
-
+    # fishbone_all(bp, fishery_id=400302, is_gold=True, is_double_week=True, is_in_double_week=False)
+    circulate_fish(bp, fishery_id="400320",is_quick=False)
+    # fish_once(bp, fish_id="390012", is_quick=True)
     # 断开连接
     bp.connect_close()
 

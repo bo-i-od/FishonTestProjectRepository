@@ -274,6 +274,10 @@ class ElementsData:
         name = {"locator":"UICanvas>Default>BaitAndRodShowPanel>panel>>panel_right>content>bg>nameBG>name"}
         skill_list = {"locator":"UICanvas>Default>BaitAndRodShowPanel>panel>panel_rod_info>panel_right>content>bg>skill_list>>rod_skill"}
 
+    class BattleDebugPanel:
+        BattleDebugPanel = {"locator": "UICanvas>Important>BattleDebugPanel"}
+        hold_status = {"locator": "UICanvas>Important>BattleDebugPanel>bg>battleDetail>hold_status>value"}
+
     class BattleExplainPanel:
         BattleExplainPanel = {"locator": "UICanvas>Default>BattleExplainPanel"}
         close = {"locator": "UICanvas>Default>BattleExplainPanel>close"}
@@ -301,9 +305,11 @@ class ElementsData:
         qte_up = {"locator": "UICanvas>Default>BattlePanel>FishHUD>qte_up>qte"}
         m_value = {"locator": "UICanvas>Default>BattlePanel>FishHUD>fish_HP>m_value"}
         warning = {"locator": "UICanvas>Default>BattlePanel>Warning>"}
-        hud_power_list = {"locator":"UICanvas>Default>BattlePanel>hud_power>barPanel>list>>baseParticle"}
-        hud_power_list_old = {"locator":"UICanvas>Default>BattlePanel>hud_power>bar_normal>"}
-        hud_escaping = {"locator":"UICanvas>Default>BattlePanel>FishHUD>fish_HP>m_value>hud_escaping>text"}
+        hud_power_list = {"locator": "UICanvas>Default>BattlePanel>hud_power>barPanel>list>>baseParticle"}
+        hud_power_list_old = {"locator": "UICanvas>Default>BattlePanel>hud_power>bar_normal>"}
+        hud_escaping = {"locator": "UICanvas>Default>BattlePanel>FishHUD>fish_HP>m_value>hud_escaping>text"}
+        hud_tension = {"locator": "UICanvas>Default>BattlePanel>FishHUD>hud_tension>bar"}
+        crt = {"locator":"UICanvas>Default>BattlePanel>FishHUD>hud_tension>crt>crt_box>bg"}
 
     class BattlePassBuyLevelPanel:
         BattlePassBuyLevelPanel = {"locator": "UICanvas>Default>BattlePassBuyLevelPanel"}
