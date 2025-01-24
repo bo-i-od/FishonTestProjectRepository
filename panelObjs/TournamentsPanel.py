@@ -14,16 +14,19 @@ class TournamentsPanel(BasePage):
 
     def get_fishery_tpid_list(self):
         table_data_detail = self.excelTools.get_table_data_detail(book_name="FISHERIES.xlsm")
+        table_data_detail_activity = self.excelTools.get_table_data_detail(book_name="FISHERIES_ACTIVITY.xlsm")
         bg_list = self.get_icon_list(element_data=ElementsData.TournamentsPanel.bg_list)
+
         cur = 0
         while cur < len(bg_list):
-            bg_list[cur] = "icon_fisheries_" + bg_list[cur].split('_')[2]
+            bg_list[cur] = "bg_fisheries_blur_" + bg_list[cur].split('_')[2]
             cur += 1
 
         res_list = []
         cur = 0
         while cur < len(bg_list):
-            table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="displayicon", value=bg_list[cur], table_data_detail=table_data_detail)
+            table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="displayBlurBG", value=bg_list[cur], table_data_detail=table_data_detail) + self.excelTools.get_table_data_object_list_by_key_value(key="displayBlurBG", value=bg_list[cur], table_data_detail=table_data_detail_activity)
+
             if not table_data_object_list:
                 res_list.append("")
                 cur += 1
