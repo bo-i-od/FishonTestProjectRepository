@@ -9,19 +9,16 @@ from panelObjs.BattleDebugPanel import BattleDebugPanel
 
 class Personality:
     qte_rate = 0
-    qte_up_rate = 0
     tension = 0
 
 
 class PersonalityNB(Personality):
     qte_rate = 1
-    qte_up_rate = 1
     tension = 0.9
 
 
 class PersonalityLJ(Personality):
     qte_rate = 0.66
-    qte_up_rate = 0.5
     tension = 0.6
 
 
@@ -74,6 +71,7 @@ def qte(bp, personality: Personality = None):
             t = time.time() - start_time
             t_ten = int(t) // 10
             t_one = t - t_ten * 10
+
         text_list = bp.get_text_list(element_data_list=[ElementsData.BattlePanel.m_value, ElementsData.BattlePanel.hud_escaping])
         if text_list[0]:
             m_cur = text_list[0][0]
@@ -85,47 +83,47 @@ def qte(bp, personality: Personality = None):
             bp.sleep(0.1)
             hold_status = BattleDebugPanel.get_hold_status(bp)
             hold_status_start = deal_with_hold_status(hold_status)
-        if len(object_id_list[hud_power_list_index]) > 2:
-            BattlePanel.unleash_power(bp)
-            continue
-        if len(object_id_list[hud_power_list_old_index]) > 2:
-            BattlePanel.unleash_power(bp)
-            continue
-        if object_id_list[qte_up_index]:
-            if t_one > personality.qte_up_rate * 10:
-                continue
-            BattlePanel.slide(bp, "up")
-            continue
-        if object_id_list[qte_jump_left_index]:
-            if t_one > personality.qte_rate * 10:
-                continue
-            BattlePanel.slide(bp, "left")
-            continue
-        if object_id_list[qte_jump_right_index]:
-            if t_one > personality.qte_rate * 10:
-                continue
-            BattlePanel.slide(bp, "right")
-            continue
-        if object_id_list[qte_dance_left_index]:
-            if t_one > personality.qte_rate * 10:
-                continue
-            BattlePanel.slide(bp, "left")
-            continue
-        if object_id_list[qte_dance_right_index]:
-            if t_one > personality.qte_rate * 10:
-                continue
-            BattlePanel.slide(bp, "right")
-            continue
-        if object_id_list[qte_left_index]:
-            if t_one > personality.qte_rate * 10:
-                continue
-            BattlePanel.slide(bp, "left")
-            continue
-        if object_id_list[qte_right_index]:
-            if t_one > personality.qte_rate * 10:
-                continue
-            BattlePanel.slide(bp, "right")
-            continue
+        # if len(object_id_list[hud_power_list_index]) > 2:
+        #     BattlePanel.unleash_power(bp)
+        #     continue
+        # if len(object_id_list[hud_power_list_old_index]) > 2:
+        #     BattlePanel.unleash_power(bp)
+        #     continue
+        # if object_id_list[qte_up_index]:
+        #     if t_one > personality.qte_up_rate * 10:
+        #         continue
+        #     BattlePanel.slide(bp, "up")
+        #     continue
+        # if object_id_list[qte_jump_left_index]:
+        #     if t_one > personality.qte_rate * 10:
+        #         continue
+        #     BattlePanel.slide(bp, "left")
+        #     continue
+        # if object_id_list[qte_jump_right_index]:
+        #     if t_one > personality.qte_rate * 10:
+        #         continue
+        #     BattlePanel.slide(bp, "right")
+        #     continue
+        # if object_id_list[qte_dance_left_index]:
+        #     if t_one > personality.qte_rate * 10:
+        #         continue
+        #     BattlePanel.slide(bp, "left")
+        #     continue
+        # if object_id_list[qte_dance_right_index]:
+        #     if t_one > personality.qte_rate * 10:
+        #         continue
+        #     BattlePanel.slide(bp, "right")
+        #     continue
+        # if object_id_list[qte_left_index]:
+        #     if t_one > personality.qte_rate * 10:
+        #         continue
+        #     BattlePanel.slide(bp, "left")
+        #     continue
+        # if object_id_list[qte_right_index]:
+        #     if t_one > personality.qte_rate * 10:
+        #         continue
+        #     BattlePanel.slide(bp, "right")
+        #     continue
         if (not object_id_list[warning_index]) and (end_time is None) and (start_time is not None):
             end_time = time.time()
             print(f"{(end_time - start_time):.1f}s")
@@ -152,6 +150,10 @@ def qte(bp, personality: Personality = None):
         if object_id_list[FlashCardReceivePanel_index]:
             bp.clear_popup()
             continue
+        if t_one > personality.qte_rate * 10:
+            bp.custom_cmd("setQuickQTE 0")
+        else:
+            bp.custom_cmd("setQuickQTE 1")
         bp.sleep(0.1)
 
     
@@ -220,12 +222,13 @@ def main(bp: BasePage):
 
 if __name__ == '__main__':
     bp = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
+    bp.custom_cmd("setQuickQTE 1")
     # 360107智 360113速 360115力
     fish_id = "360115"
-    star = 7
-    lv = 30
-    is_restrain = True
-    personality = PersonalityNB()
+    star = 11
+    lv = 45
+    is_restrain = False
+    personality = PersonalityLJ()
     res = f"{lv}级_{star}星"
     fish_kind = ""
     if fish_id == "360113":

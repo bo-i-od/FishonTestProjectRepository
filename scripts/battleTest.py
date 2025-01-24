@@ -16,10 +16,11 @@ from panelObjs.TournamentsPanel import TournamentsPanel
 
 
 
-def fish_once(bp: BasePage, fish_id=None, is_quick=False):
+def fish_once(bp: BasePage,fishery_id=None, fish_id=None, is_quick=False):
     bp.set_time_scale()
     if fish_id:
-        fishery_id = bp.fish_id_to_fishery_id(fish_id=fish_id)
+        if not fishery_id:
+            fishery_id = bp.fish_id_to_fishery_id(fish_id=fish_id)
         c = f"mode {fishery_id} {fish_id}"
         print(c)
         bp.cmd(c)
@@ -71,7 +72,7 @@ def fail_once(bp: BasePage, fish_id=None, mode=0):
 def circulate_fish(bp: BasePage, fishery_id=None, is_quick=False, times=500, start=0):
     fish_list = []
     cur = start
-    if fishery_id is not None:
+    if fishery_id:
         fish_list = bp.get_fish_id_list(fishery_id)
         times = len(fish_list)
     while cur < times:
@@ -91,7 +92,7 @@ def circulate_fish(bp: BasePage, fishery_id=None, is_quick=False, times=500, sta
         #     select_rod(bp, 3)
         # if cur == 9:
         #     select_rod(bp, 2)
-        fish_once(bp, fish_id=fish_id, is_quick=is_quick)
+        fish_once(bp, fishery_id=fishery_id,fish_id=fish_id, is_quick=is_quick)
         # print(f"第{cur}次钓鱼")
         cur += 1
 
@@ -260,6 +261,7 @@ def fishbone_all(bp: BasePage, fishery_id, is_gold=False, is_double_week=False, 
         leave_treasure_map(bp, fishery_id=fishery_id, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
     spot_id = fishery_to_spot(fishery_id, is_gold, is_double_week)
     drop_item_id_list = bp.get_drop_item_id_list(spot_id)
+    print(drop_item_id_list)
     for drop_item_id in drop_item_id_list:
         drop_item_id = str(drop_item_id)
         # 跳过藏宝图
@@ -385,11 +387,11 @@ def main(bp: BasePage, fishery_id, is_double_week=False, is_in_double_week=False
     # # # 渔场全部闪卡
     # flashcard_all(bp, fishery_id, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
 
-    # 渔场全部普通鱼骨
-    fishbone_all(bp, fishery_id, is_gold=False, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
-
-    # 渔场全部失败鱼情
-    fail_all(bp, fishery_id, is_gold=False, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
+    # # 渔场全部普通鱼骨
+    # fishbone_all(bp, fishery_id, is_gold=False, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
+    #
+    # # 渔场全部失败鱼情
+    # fail_all(bp, fishery_id, is_gold=False, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
 
     # 渔场全部黄金鱼骨
     fishbone_all(bp, fishery_id, is_gold=True, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
@@ -398,19 +400,19 @@ def main(bp: BasePage, fishery_id, is_double_week=False, is_in_double_week=False
     fail_all(bp, fishery_id, is_gold=True, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
 
     # 渔场全部黄金鱼
-    goldfish_all(bp, fishery_id, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
+    # goldfish_all(bp, fishery_id, is_double_week=is_double_week, is_in_double_week=is_in_double_week)
 
 
 
 if __name__ == '__main__':
     # 连接设备号为127.0.0.1:21533的设备
-    bp = BasePage("127.0.0.1:21603", is_mobile_device=True)
+    bp = BasePage("127.0.0.1:21603", is_mobile_device=False)
     bp.is_time_scale = False
     gameInit.set_joystick(bp)
     bp.custom_cmd("setTension 0.9")
 
-    # fishbone_all(bp, fishery_id=400302, is_gold=True, is_double_week=True, is_in_double_week=False)
-    circulate_fish(bp, fishery_id="400320",is_quick=False)
+    fishbone_all(bp, fishery_id=400320, is_gold=False, is_double_week=True, is_in_double_week=False)
+    # circulate_fish(bp, fishery_id="400320",is_quick=False)
     # fish_once(bp, fish_id="390012", is_quick=True)
     # 断开连接
     bp.connect_close()
