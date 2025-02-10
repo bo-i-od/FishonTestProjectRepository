@@ -309,7 +309,7 @@ class ElementsData:
         hud_power_list_old = {"locator": "UICanvas>Default>BattlePanel>hud_power>bar_normal>"}
         hud_escaping = {"locator": "UICanvas>Default>BattlePanel>FishHUD>fish_HP>m_value>hud_escaping>text"}
         hud_tension = {"locator": "UICanvas>Default>BattlePanel>FishHUD>hud_tension>bar"}
-        crt = {"locator":"UICanvas>Default>BattlePanel>FishHUD>hud_tension>crt>crt_box>bg"}
+        crt = {"locator":"UICanvas>Default>BattlePanel>FishHUD>hud_tension>>crt_box>bg"}
 
     class BattlePassBuyLevelPanel:
         BattlePassBuyLevelPanel = {"locator": "UICanvas>Default>BattlePassBuyLevelPanel"}
