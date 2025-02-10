@@ -1723,6 +1723,11 @@ class BasePage(BasePageMain):
 
         self.tension_default = 0.95
         self.custom_cmd(f"setTension {self.tension_default}")
+        self.quick_qte = False
+        if self.quick_qte:
+            bp.custom_cmd("setQuickQTE 1")
+        else:
+            bp.custom_cmd("setQuickQTE 0")
 
     def get_fishery_id_list(self):
         """函数功能简述

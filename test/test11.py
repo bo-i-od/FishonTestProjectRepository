@@ -222,13 +222,13 @@ def main(bp: BasePage):
 
 if __name__ == '__main__':
     bp = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
-    bp.custom_cmd("setQuickQTE 1")
-    # 360107智 360113速 360115力
-    fish_id = "360115"
-    star = 11
-    lv = 45
+
+    # 360107智 360113力 360115速
+    fish_id = "360107"
+    star = 25
+    lv = 80
     is_restrain = False
-    personality = PersonalityLJ()
+    personality = PersonalityNB()
     res = f"{lv}级_{star}星"
     fish_kind = ""
     if fish_id == "360113":

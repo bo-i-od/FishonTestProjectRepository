@@ -66,27 +66,28 @@ class BattlePanel(BasePage):
                     is_in_crt_pre = False
                     self.custom_cmd(f"setTension {self.tension_default}")
 
-            if len(object_id_list[hud_power_list_index]) > 2:
-                BattlePanel.unleash_power(self)
-                continue
-            if len(object_id_list[hud_power_list_old_index]) > 2:
-                BattlePanel.unleash_power(self)
-                continue
-            if object_id_list[qte_up_index]:
-                BattlePanel.slide(self, "up")
-                continue
-            if object_id_list[qte_jump_left_index]:
-                BattlePanel.slide(self, "left")
-                continue
-            if object_id_list[qte_jump_right_index]:
-                BattlePanel.slide(self, "right")
-                continue
-            if object_id_list[qte_left_index]:
-                BattlePanel.slide(self, "left")
-                continue
-            if object_id_list[qte_right_index]:
-                BattlePanel.slide(self, "right")
-                continue
+            if not self.quick_qte:
+                if len(object_id_list[hud_power_list_index]) > 2:
+                    BattlePanel.unleash_power(self)
+                    continue
+                if len(object_id_list[hud_power_list_old_index]) > 2:
+                    BattlePanel.unleash_power(self)
+                    continue
+                if object_id_list[qte_up_index]:
+                    BattlePanel.slide(self, "up")
+                    continue
+                if object_id_list[qte_jump_left_index]:
+                    BattlePanel.slide(self, "left")
+                    continue
+                if object_id_list[qte_jump_right_index]:
+                    BattlePanel.slide(self, "right")
+                    continue
+                if object_id_list[qte_left_index]:
+                    BattlePanel.slide(self, "left")
+                    continue
+                if object_id_list[qte_right_index]:
+                    BattlePanel.slide(self, "right")
+                    continue
 
             if (not object_id_list[BattlePanel_index]) and (end_time is None) and (start_time is not None):
                 end_time = time.time()
@@ -174,7 +175,7 @@ class BattlePanel(BasePage):
         progress_range = [progress_position[0][1] - 0.5 * h, progress_position[0][1] + 0.5 * h]
 
         progress = (arrow_position[0][1] - progress_range[0]) / h
-        while progress < 0.7:
+        while progress < 0.8:
             arrow_position = self.get_position_list(element_data=ElementsData.BattlePanel.arrow)
             if not arrow_position:
                 return
@@ -216,6 +217,7 @@ class BattlePanel(BasePage):
 if __name__ == '__main__':
     bp = BasePage()
     ResultPanel.automatic_settlement(bp, element_btn=ElementsData.ResultPanel.btn_claim_token_fish)
+
     # bp.ray_input(kind="click", element_data=ElementsData.ResultPanel.btn_claim_token_fish)
     bp.connect_close()
     # while True:
