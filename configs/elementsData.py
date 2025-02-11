@@ -430,6 +430,7 @@ class ElementsData:
         switch_tip_quantity_list = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears>panel_gears_preview>item_sys>buff>>switch_tip>items>>quantity>value"}
         tag_equipped = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears>panel_gears_preview>item_sys>buff>>switch_tip>items>>tag_equipped"}
         btn_cast = {"locator": "UICanvas>Default>BattlePreparePanel>>>btn_cast", "focus": (1, 1)}
+        btn_start = {"locator": "UICanvas>Default>BattlePreparePanel>>>btn_start", "focus": (1, 1)}
         location = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears>panel_gears_switch>location_info>bg>location>value"}
 
         btn_tournaments = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_activity>btn_activity>btn_tournaments>img"}
@@ -1894,6 +1895,12 @@ class ElementsData:
     class RodSkinGiftPack030Panel:
         RodSkinGiftPack030Panel = {"locator": "UICanvas>Default>RodSkinGiftPack030Panel"}
         btn_close = {"locator": "UICanvas>Default>RodSkinGiftPack030Panel>btn_close>img"}
+
+    class RogueSelectSkillPanel:
+        RogueSelectSkillPanel = {"locator": "UICanvas>Default>RogueSelectSkillPanel"}
+        btn_orange = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>btn_orange"}
+        btn_blue = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>btn_blue"}
+        skill_list = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>centerAnchor>bg>>icon"}
 
     class RookiePanel:
         RookiePanel = {"locator": "UICanvas>Default>RookiePanel"}

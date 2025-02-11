@@ -47,11 +47,22 @@ class BattlePreparePanel(BasePage):
 
     # 点击抛竿
     def click_btn_cast(self):
-        self.wait_for_appear(element_data=ElementsData.BattlePreparePanel.btn_cast, is_click=False)
+        element_data_list = [ElementsData.BattlePreparePanel.btn_cast, ElementsData.BattlePreparePanel.btn_start]
+        position_list = self.wait_for_appear(element_data_list=element_data_list, is_click=False)
+        element_data = element_data_list[0]
+        cur = 0
+        while cur < len(position_list):
+            position = position_list[cur]
+            if not position:
+                cur += 1
+                continue
+            element_data = element_data_list[cur]
+            break
         if self.is_ray_input:
-            self.ray_input(kind="click", element_data=ElementsData.BattlePreparePanel.btn_cast)
+            self.ray_input(kind="click", element_data=element_data)
+
         else:
-            self.click_element_safe(element_data=ElementsData.BattlePreparePanel.btn_cast)
+            self.click_element_safe(element_data=element_data)
         self.sleep(1)
         if self.exist(element_data=ElementsData.BattlePanel.BattlePanel):
             return

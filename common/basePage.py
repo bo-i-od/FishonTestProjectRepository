@@ -1119,31 +1119,31 @@ class BasePageMain:
 
         # element_data转为element_data_list
         if element_data_list is None:
-            self.wait_for_appear(element_data_list=[element_data], is_click=is_click, interval=interval,
-                                 timeout=timeout, ignore_set=ignore_set)
-            return
+            return self.wait_for_appear(element_data_list=[element_data], is_click=is_click, interval=interval, timeout=timeout, ignore_set=ignore_set)
 
         cur = 0
         position_list = []
+        position_list_merge = []
         while cur < timeout:
             self.clear_popup(ignore_set=ignore_set)
             position_list = self.get_position_list(element_data_list=element_data_list)
-            position_list = tools.commonTools.merge_list(position_list)
-            if position_list:
+            position_list_merge = tools.commonTools.merge_list(position_list)
+            if position_list_merge:
                 break
             self.sleep(interval)
             cur += interval
 
         # 没找到直接返回
-        if not position_list:
-            return
+        if not position_list_merge:
+            return position_list
 
         # 找到后不点击
         if not is_click:
-            return
+            return position_list
 
         # 找到后点击
-        self.click_position(position_list[0])
+        self.click_position(position_list_merge[0])
+        return position_list
 
     # 等待指定元素消失
     def wait_for_disappear(self, element_data: dict, interval: float = 0.2, ignore_set=None):
@@ -1177,7 +1177,8 @@ class BasePageMain:
         if not position_list:
             return
         try:
-            self.click_position_base(position_list[0])
+            r = random.randint(0, len(position_list) - 1)
+            self.click_position_base(position_list[r])
         except:
             pass
             # print("超出屏幕范围，没有进行点击")
