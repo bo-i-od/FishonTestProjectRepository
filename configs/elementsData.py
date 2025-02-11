@@ -1320,6 +1320,10 @@ class ElementsData:
         btn_del_read = {"locator": "UICanvas>Default>MailPanel>MailList>btn_del"}
         btn_del = {"locator": "UICanvas>Default>MailPanel>MailDetail>panel>Content>Scroll View>Viewport>Content>del_group>btn_del", "focus": (1, 0.5)}
 
+    class MainlineFlashCardReceivePanel:
+        MainlineFlashCardReceivePanel = {"locator": "UICanvas>Default>MainlineFlashCardReceivePanel"}
+        btn_close = {"locator": "UICanvas>Default>MainlineFlashCardReceivePanel>panel_flashcard>btn_close>tip"}
+
 
     class MessageBoxPanel:
         MessageBoxPanel = {"locator": "UICanvas>Important>MessageBoxPanel"}
