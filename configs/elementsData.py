@@ -1892,6 +1892,17 @@ class ElementsData:
         btn_close = {"locator": "UICanvas>Default>RodMoreToOnePanel>btn_close>img"}
         btn_confirm = {"locator": "UICanvas>Default>RodMoreToOnePanel>btn>btn_normal"}
 
+    class RogueMainStagePanel:
+        RogueMainStagePanel = {"locator": "UICanvas>Default>RogueMainStagePanel"}
+        btn_close = {"locator": "UICanvas>Default>RogueMainStagePanel>panel>btn_close>img"}
+        btn_challenge = {"locator": "UICanvas>Default>RogueMainStagePanel>panel>btn_challenge", "focus": (1, 0.5)}
+        class panel_tips_up:
+            btn_close = {"locator": "UICanvas>Default>RogueMainStagePanel>panel_tips_up>panel>btn_close>text"}
+
+    class RogueResultPanel:
+        RogueResultPanel = {"locator": "UICanvas>Default>RogueResultPanel"}
+        btn_orange = {"locator": "UICanvas>Default>RogueResultPanel>panel_succeed>btn_group>btn_orange"}
+
     class RodSkinGiftPack027Panel:
         RodSkinGiftPack027Panel = {"locator": "UICanvas>Default>RodSkinGiftPack027Panel"}
         btn_close = {"locator": "UICanvas>Default>RodSkinGiftPack027Panel>btn_close>img"}

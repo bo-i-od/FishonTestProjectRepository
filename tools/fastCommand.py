@@ -1,16 +1,21 @@
 import re
 from common.basePage import BasePage
 from netMsg import csMsgAll, fishingMsg
-from scripts import battleTest, duelTest, gearTest, fishCardTest, flashCardTest
+from panelObjs.RogueMainStagePanel import RogueMainStagePanel
+from panelObjs.RogueResultPanel import RogueResultPanel
+from scripts import battleTest, duelTest, gearTest, fishCardTest, flashCardTest, createUsers
 from tools import commonTools
 
 
 def guide_skip(bp: BasePage):
     text = bp.lua_console_with_response(lua_code_return="_G.PassiveNewbieGuideEnum")
+    # print(text)
     pattern = '"([^"]*)"'
     result = re.findall(pattern, text)
     lua_code_list = []
     for r in result:
+        # if "NBG_ROOKIE" not in r:
+        #     continue
         lua_code = csMsgAll.get_CSNewGuideStoreMsg(key=r)
         lua_code_list.append(lua_code)
     lua_code = csMsgAll.get_CSNewGuideStoreMsg(key="OPENING_STAGE_FISHERY_1")
@@ -44,12 +49,15 @@ def talent_all(bp: BasePage):
 
 
 def full_gear(bp: BasePage):
+    # 旧装备升级
     bp.cmd("allrod 500")
     bp.sleep(1)
     bp.set_item_count(target_count=10000000000, item_tpid="100000")
     bp.set_item_count(target_count=10000000, item_tpid="200300")
     gearTest.full_star(bp)
     gearTest.full_level(bp)
+
+    # 新装备
 
 
 def unlock_fish_album(bp: BasePage, fishery_id):
@@ -163,17 +171,32 @@ def level_up_to_new_plot(bp: BasePage, level, tp_id="102600"):
     print(exp - item_count)
 
 
+def tower_level_up(bp: BasePage, tag, lv):
+    cur = 0
+    while cur < lv:
+        RogueMainStagePanel.click_btn_challenge(bp)
+        bp.sleep(1)
+        bp.cmd(f"towerPass 1 {tag} 3 10000")
+        bp.sleep(4)
+        RogueResultPanel.click_btn_orange(bp)
+        bp.sleep(1)
+        RogueMainStagePanel.panel_tips_up.click_btn_close(bp)
+        bp.sleep(1)
+        cur += 1
+
+
 if __name__ == '__main__':
     base_page = BasePage(serial_number="127.0.0.1:21583", is_mobile_device=False)
-
-    # # # # 跳过引导
-    guide_skip(base_page)
+    # base_page.is_time_scale = True
+    #
+    # # # 跳过引导
+    # guide_skip(base_page)
     # #
     # # # 完成新主线剧情任务
-    quest_done(base_page)
+    # quest_done(base_page)
 
     # 新主线升到指定等级
-    # level_up_to_new_plot(base_page, 5)
+    # level_up_to_new_plot(base_page, 25)
 
     # 天赋满级
     # talent_all(base_page)
@@ -190,31 +213,31 @@ if __name__ == '__main__':
     # 完成全部成就
     # achievement_done(base_page)
 
-    # 照片墙 奇珍黄金鱼没有鱼骨 该方法完成不了
-    # wanted_done(base_page, fishery_id=400302)
+    # 照片墙 奇珍黄金鱼没有鱼骨 该方法完成不了a
+    # wanted_done(base_page, fishery_id=400303)
 
     # 鱼种
     # category_done(base_page, category_id=10004)
 
     # # 钓一次鱼 运行界面：备战界面
-    # battleTest.fish_once(base_page, fish_id="360101",is_quick=False)
+    # battleTest.fish_once(base_page)
 
     # 循环钓鱼 运行界面：备战界面
     # 填渔场id会将该渔场鱼钓一遍
-    # battleTest.circulate_fish(base_page, is_quick=True, times=100)
+    # battleTest.circulate_fish(base_page, is_quick=False)
 
     # 体感抛竿
     # battleTest.vibration_cast(base_page)
 
     # 设定指定对决杯数
-    # duelTest.set_duelcup(base_page, 3000)
+    # duelTest.set_duelcup(base_page, 3990)
 
     # 对决一次 运行界面：对决大厅界面
     # rank0-7代表黑铁到传奇
     # duelTest.duel_once(base_page, rank=0)
 
     # 该渔场闪卡获得一张
-    # flashCardTest.get_flash_card(base_page, fishery_id="400302")
+    # flashCardTest.get_flash_card(base_page, fishery_id="500301")
 
     # 任意界面接口钓鱼 1021
     # fish_quick(base_page, fish_id=315015, is_map=True)
@@ -223,12 +246,21 @@ if __name__ == '__main__':
     # base_page.set_item_count(item_tpid="102100", target_count=10)
 
     # 读取道具数量
-    # print(base_page.get_item_count(item_tpid="100100"))
+    # print(base_page.get_item_count(item_tpid="103100"))
 
     # 发送gm命令
     # base_page.cmd("levelupto 51")
 
     # 获取鱼体型
     # print(base_page.get_fish_type(fish_tpid="390005"))
+
+    # 爬塔难度升若干级，在RogueMainStagePanel界面运行
+    # tag 1强壮 2敏捷 3多变
+    tower_level_up(base_page, tag=1, lv=7)
+
+    # base_page.lua_console("DebugLog=true")
+
+    # createUsers.logout(base_page)
+
 
     base_page.connect_close()

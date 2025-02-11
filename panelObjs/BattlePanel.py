@@ -28,6 +28,7 @@ class BattlePanel(BasePage):
             ElementsData.ResultPanel.btn_claim_token_fish,
             ElementsData.BattleFailedPanel.btn_again,
             ElementsData.FlashCardReceivePanel.FlashCardReceivePanel,
+            ElementsData.MainlineFlashCardReceivePanel.MainlineFlashCardReceivePanel,
             ElementsData.BattlePanel.BattlePanel,
             ElementsData.BattlePanel.crt,
         ]
@@ -43,6 +44,7 @@ class BattlePanel(BasePage):
         btn_claim_token_fish_index = element_data_list.index(ElementsData.ResultPanel.btn_claim_token_fish)
         btn_again_index = element_data_list.index(ElementsData.BattleFailedPanel.btn_again)
         FlashCardReceivePanel_index = element_data_list.index(ElementsData.FlashCardReceivePanel.FlashCardReceivePanel)
+        MainlineFlashCardReceivePanel_index = element_data_list.index(ElementsData.MainlineFlashCardReceivePanel.MainlineFlashCardReceivePanel)
         BattlePanel_index = element_data_list.index(ElementsData.BattlePanel.BattlePanel)
         crt_index = element_data_list.index(ElementsData.BattlePanel.crt)
         size_tension = None
@@ -105,6 +107,9 @@ class BattlePanel(BasePage):
                 ResultPanel.automatic_settlement(self, element_btn=ElementsData.BattleFailedPanel.btn_again)
                 break
             if object_id_list[FlashCardReceivePanel_index]:
+                self.clear_popup()
+                continue
+            if object_id_list[MainlineFlashCardReceivePanel_index]:
                 self.clear_popup()
                 continue
 
@@ -175,7 +180,7 @@ class BattlePanel(BasePage):
         progress_range = [progress_position[0][1] - 0.5 * h, progress_position[0][1] + 0.5 * h]
 
         progress = (arrow_position[0][1] - progress_range[0]) / h
-        while progress < 0.8:
+        while progress < 0.7:
             arrow_position = self.get_position_list(element_data=ElementsData.BattlePanel.arrow)
             if not arrow_position:
                 return
