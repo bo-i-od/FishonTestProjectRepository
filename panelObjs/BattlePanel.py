@@ -14,7 +14,7 @@ class BattlePanel(BasePage):
     def is_reel_active(self):
         return self.exist(element_data=ElementsData.BattlePanel.btn_reel)
 
-    def qte(self, start_time=None):
+    def qte(self):
         element_data_list = [
             ElementsData.BattlePanel.qte_left,
             ElementsData.BattlePanel.qte_right,
@@ -45,14 +45,13 @@ class BattlePanel(BasePage):
         btn_again_index = element_data_list.index(ElementsData.BattleFailedPanel.btn_again)
         FlashCardReceivePanel_index = element_data_list.index(ElementsData.FlashCardReceivePanel.FlashCardReceivePanel)
         MainlineFlashCardReceivePanel_index = element_data_list.index(ElementsData.MainlineFlashCardReceivePanel.MainlineFlashCardReceivePanel)
-        BattlePanel_index = element_data_list.index(ElementsData.BattlePanel.BattlePanel)
         crt_index = element_data_list.index(ElementsData.BattlePanel.crt)
         size_tension = None
         is_in_crt_pre = False
         # False且当前在张力区间代表首次进入，变为True
         # True且当前在张力区间代表非首次进入
         # True且不在张力区间代表非首次退出， 变为False
-        end_time = None
+
         while True:
             object_id_list = self.get_object_id_list(element_data_list=element_data_list)
 
@@ -91,9 +90,6 @@ class BattlePanel(BasePage):
                     BattlePanel.slide(self, "right")
                     continue
 
-            if (not object_id_list[BattlePanel_index]) and (end_time is None) and (start_time is not None):
-                end_time = time.time()
-                print(f"战斗用时{end_time - start_time}s")
             if object_id_list[btn_claim_pve_index]:
                 ResultPanel.automatic_settlement(self, element_btn=ElementsData.ResultPanel.btn_claim_pve)
                 break
@@ -213,6 +209,8 @@ class BattlePanel(BasePage):
     def get_crt_center(self, size_tension):
         position_list_tension, position_list_crt = self.get_position_list(
             element_data_list=[ElementsData.BattlePanel.hud_tension, ElementsData.BattlePanel.crt])
+        if not position_list_crt:
+            return 0.5
         position_crt = position_list_crt[0]
         position_tension = position_list_tension[0]
         return 0.5 + (position_crt[0] - position_tension[0]) / size_tension[0]

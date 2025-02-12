@@ -42,7 +42,10 @@ def qte(bp, personality: Personality = None):
                          ElementsData.ResultPanel.btn_claim_pvp, ElementsData.ResultPanel.btn_claim_token_fish,
                          ElementsData.BattleFailedPanel.btn_again,
                          ElementsData.FlashCardReceivePanel.FlashCardReceivePanel,
-                         ElementsData.BattlePanel.warning
+                         ElementsData.BattlePanel.warning,
+                         ElementsData.MainlineFlashCardReceivePanel.MainlineFlashCardReceivePanel,
+                         ElementsData.BattlePanel.BattlePanel,
+                         ElementsData.BattlePanel.crt,
                          ]
     qte_left_index = element_data_list.index(ElementsData.BattlePanel.qte_left)
     qte_right_index = element_data_list.index(ElementsData.BattlePanel.qte_right)
@@ -59,6 +62,11 @@ def qte(bp, personality: Personality = None):
     btn_again_index = element_data_list.index(ElementsData.BattleFailedPanel.btn_again)
     FlashCardReceivePanel_index = element_data_list.index(ElementsData.FlashCardReceivePanel.FlashCardReceivePanel)
     warning_index = element_data_list.index(ElementsData.BattlePanel.warning)
+    MainlineFlashCardReceivePanel_index = element_data_list.index(ElementsData.MainlineFlashCardReceivePanel.MainlineFlashCardReceivePanel)
+    BattlePanel_index = element_data_list.index(ElementsData.BattlePanel.BattlePanel)
+    crt_index = element_data_list.index(ElementsData.BattlePanel.crt)
+    size_tension = None
+    is_in_crt_pre = False
 
     m_cur = ""
     m_max = ""
@@ -78,6 +86,19 @@ def qte(bp, personality: Personality = None):
         if text_list[1]:
             m_max = text_list[1][0]
         object_id_list = bp.get_object_id_list(element_data_list=element_data_list)
+
+        if object_id_list[crt_index]:
+            if size_tension is None:
+                size_tension = bp.get_size(element_data=ElementsData.BattlePanel.hud_tension)
+            if not is_in_crt_pre:
+                is_in_crt_pre = True
+            crt_center = BattlePanel.get_crt_center(bp, size_tension=size_tension)
+            bp.custom_cmd(f"setTension {crt_center}")
+        else:
+            if is_in_crt_pre:
+                is_in_crt_pre = False
+                bp.custom_cmd(f"setTension {bp.tension_default}")
+
         if object_id_list[warning_index] and not start_time:
             start_time = time.time()
             bp.sleep(0.1)
@@ -133,7 +154,7 @@ def qte(bp, personality: Personality = None):
             time_hold = (hold_status_end[0] - hold_status_start[0])
             time_release = (hold_status_end[1] - hold_status_start[1])
             print(f"收线占比{100 * time_hold // (time_release + time_hold)}%")
-            print(time_hold, time_release)
+            # print(time_hold, time_release)
 
         if object_id_list[btn_claim_pve_index]:
             ResultPanel.automatic_settlement(bp, element_btn=ElementsData.ResultPanel.btn_claim_pve)
@@ -148,6 +169,9 @@ def qte(bp, personality: Personality = None):
             ResultPanel.automatic_settlement(bp, element_btn=ElementsData.BattleFailedPanel.btn_again)
             break
         if object_id_list[FlashCardReceivePanel_index]:
+            bp.clear_popup()
+            continue
+        if object_id_list[MainlineFlashCardReceivePanel_index]:
             bp.clear_popup()
             continue
         if t_one > personality.qte_rate * 10:
@@ -174,41 +198,70 @@ def fish_once(bp: BasePage, fish_id="", personality=None):
     if fish_id != "":
         bp.cmd("mode 0 0")
 
-def change_gear(bp: BasePage, level, kind):
-    part_id_line = 0
-    if level < 15:
-        if kind == 1:
-            part_id_line = 1700001
-        elif kind == 2:
-            part_id_line = 1700027
-        elif kind == 3:
-            part_id_line = 1700029
-
-
-    elif level < 120:
-        if kind == 1:
-            part_id_line = 1700031
-        elif kind == 2:
-            part_id_line = 1700033
-        elif kind == 3:
-            part_id_line = 1700035
-
-    elif level < 210:
-        if kind == 1:
-            part_id_line = 1700015
-        elif kind == 2:
-            part_id_line = 1700017
-        elif kind == 3:
-            part_id_line = 1700019
-
+def change_gear(bp: BasePage, kind):
+    # part_id_line = 0
+    if kind == 1:
+        part_id_line = 1700003
+        part_id_lure = 1700006
+    elif kind == 2:
+        part_id_line = 1700004
+        part_id_lure = 1700007
+    elif kind == 3:
+        part_id_line = 1700005
+        part_id_lure = 1700008
+    elif kind == 4:
+        part_id_line = 1700009
+        part_id_lure = 1700010
+    elif kind == 5:
+        part_id_line = 1700011
+        part_id_lure = 1700012
+    elif kind == 6:
+        part_id_line = 1700013
+        part_id_lure = 1700014
+    elif kind == 7:
+        part_id_line = 1700015
+        part_id_lure = 1700016
+    elif kind == 8:
+        part_id_line = 1700017
+        part_id_lure = 1700018
+    elif kind == 9:
+        part_id_line = 1700019
+        part_id_lure = 1700020
     else:
-        if kind == 1:
-            part_id_line = 1700021
-        elif kind == 2:
-            part_id_line = 1700023
-        elif kind == 3:
-            part_id_line = 1700025
-    part_id_lure = part_id_line + 1
+        part_id_line = 1700001
+        part_id_lure = 1700002
+    # if level < 15:
+    #     if kind == 1:
+    #         part_id_line = 1700001
+    #     elif kind == 2:
+    #         part_id_line = 1700027
+    #     elif kind == 3:
+    #         part_id_line = 1700029
+    #
+    # elif level < 120:
+    #     if kind == 1:
+    #         part_id_line = 1700031
+    #     elif kind == 2:
+    #         part_id_line = 1700033
+    #     elif kind == 3:
+    #         part_id_line = 1700035
+    #
+    # elif level < 210:
+    #     if kind == 1:
+    #         part_id_line = 1700015
+    #     elif kind == 2:
+    #         part_id_line = 1700017
+    #     elif kind == 3:
+    #         part_id_line = 1700019
+    #
+    # else:
+    #     if kind == 1:
+    #         part_id_line = 1700021
+    #     elif kind == 2:
+    #         part_id_line = 1700023
+    #     elif kind == 3:
+    #         part_id_line = 1700025
+    # part_id_lure = part_id_line + 1
     lua_code_line = csMsgAll.get_CSEquipPrepareReplaceMsg(prepareIndex=1, dlc=1, partId=part_id_line)
     lua_code_lure = csMsgAll.get_CSEquipPrepareReplaceMsg(prepareIndex=1, dlc=1, partId=part_id_lure)
     bp.lua_console_list([lua_code_line, lua_code_lure])
@@ -218,50 +271,56 @@ def main(bp: BasePage):
     bp.cmd(f"fishscenestarset 500301 {star}")
     fish_once(bp, fish_id=fish_id, personality=personality)
 
-# 7 8 12 13 14 15
 
 if __name__ == '__main__':
     bp = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
 
-    # 360107智 360113力 360115速
-    fish_id = "360107"
-    star = 25
-    lv = 80
-    is_restrain = False
-    personality = PersonalityNB()
-    res = f"{lv}级_{star}星"
-    fish_kind = ""
-    if fish_id == "360113":
-        fish_kind = 1
-        res += "力"
-    elif fish_id == "360115":
-        fish_kind = 2
-        res += "敏"
-    elif fish_id == "360107":
-        fish_kind = 3
-        res += "智"
-    elif fish_id == "360101":
-        fish_kind = 1
-        res += "力"
-    elif fish_id == "360104":
-        fish_kind = 2
-        res += "敏"
-    elif fish_id == "360102":
-        fish_kind = 3
-        res += "智"
-    if is_restrain:
-        res += "_克制"
-    else:
-        res += "_非克制"
-        fish_kind += 1
-    if fish_kind > 3:
-        fish_kind = 1
+    # # 装备等级
+    # lv = 30
 
-    if personality.__class__ is PersonalityLJ:
-        res += "_菜鸡"
-    else:
-        res += "_高手"
-    change_gear(bp, level=lv, kind=fish_kind)
+    # 1力 2敏 3智
+    fish_kind = 1
+
+    # 套装0-9
+    # 0.初始 1.强力收线/强力爆气 2.强力回拉/强力刺鱼 3.技巧拔竿/技巧压制 4.超负荷气 5.长线绝杀 6.不动如山 7.乘胜追击 8.背水一战 9.一刺入魂
+    gear_kind = 1
+
+    # 渔场难度
+    star = 3
+
+    # is_restrain = False
+
+    # PersonalityNB是挂机高手
+    # PersonalityLJ是挂机菜鸡
+    personality = PersonalityNB()
+
+    # res = f"{lv}级_{star}星"
+    res = f"套装{gear_kind}"
+    res += f"_{star}星"
+    if fish_kind == 1:
+        fish_id = "360113"
+        res += "力"
+    elif fish_kind == 2:
+        fish_id = "360115"
+        res += "敏"
+    elif fish_kind == 3:
+        fish_id = "360107"
+        res += "智"
+
+    # if is_restrain:
+    #     res += "_克制"
+    # else:
+    #     res += "_非克制"
+    #     fish_kind += 1
+    # if fish_kind > 3:
+    #     fish_kind = 1
+
+    # if personality.__class__ is PersonalityLJ:
+    #     res += "_菜鸡"
+    # else:
+    #     res += "_高手"
+
+    change_gear(bp, kind=gear_kind)
     print(res)
     bp.lua_console('PanelMgr:OpenPanel("GearPanelNew")')
     bp.sleep(0.5)

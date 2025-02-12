@@ -12,6 +12,7 @@ from panelObjs.LoginPanel import LoginPanel
 from panelObjs.ResultPanel import ResultPanel
 from panelObjs.BattlePanel import BattlePanel
 from threading import Thread
+
 from panelObjs.TournamentsPanel import TournamentsPanel
 
 
@@ -28,7 +29,6 @@ def fish_once(bp: BasePage,fishery_id=None, fish_id=None, is_quick=False):
     if bp.is_monitor:
         bp.monitor.add_task("schedule_next_check", cur=0)
     BattlePanel.hook(bp)
-    start_time = time.time()
 
     bp.set_time_scale()
     if BattlePanel.is_reel_active(bp):
@@ -38,7 +38,7 @@ def fish_once(bp: BasePage,fishery_id=None, fish_id=None, is_quick=False):
     if is_quick:
         reel_quick_thread = Thread(target=BattlePanel.reel_quick, args=[bp])
         reel_quick_thread.start()
-    BattlePanel.qte(bp, start_time=start_time)
+    BattlePanel.qte(bp)
 
     # BattlePanel.reel_quick(bp)
 
@@ -47,6 +47,8 @@ def fish_once(bp: BasePage,fishery_id=None, fish_id=None, is_quick=False):
 
     if fish_id:
         bp.cmd("mode 0 0")
+
+
 
 # mode=0是超距失败
 # mode!=0是超张力失败
