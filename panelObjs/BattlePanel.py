@@ -176,7 +176,7 @@ class BattlePanel(BasePage):
         progress_range = [progress_position[0][1] - 0.5 * h, progress_position[0][1] + 0.5 * h]
 
         progress = (arrow_position[0][1] - progress_range[0]) / h
-        while progress < 0.7:
+        while progress < 0.8:
             arrow_position = self.get_position_list(element_data=ElementsData.BattlePanel.arrow)
             if not arrow_position:
                 return
