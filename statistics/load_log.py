@@ -24,6 +24,11 @@ def get_flashcard_id(data):
     else:
         return 0
 
+def get_energy_cost(data):
+    """hook log"""
+    energyMultiplying = data["energyMultiplying"]
+    return energyMultiplying*10
+
 DebugInfo='debugInfos'
 ProtectiveId='protectiveId'
 
