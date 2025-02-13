@@ -24,10 +24,6 @@ if __name__ == '__main__':
     # setSceneType x (x=1是pve，x=2是pvp, x=3是钓者挑战, x=4是新主线, x=5是爬塔)
     bp.custom_cmd("setSceneType 4")
     # 重置清空log
-    with open("../statistics/hook_log.txt", "w") as file:
-        pass  # 不做任何操作,关闭文件即可清空内容
-    with open("../statistics/cast_log.txt", "w") as file:
-        pass  # 不做任何操作,关闭文件即可清空内容
     with open("../statistics/new_hook_log.txt", "w") as file:
         pass  # 不做任何操作,关闭文件即可清空内容
     with open("../statistics/new_cast_log.txt", "w") as file:

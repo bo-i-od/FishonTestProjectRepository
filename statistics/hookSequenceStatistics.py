@@ -1,17 +1,5 @@
 from common.basePage import BasePage
 from load_log import load_log_new
-def get_result_list():
-    result_list = []
-    f = open("../statistics/hook_log.txt", "r")
-    lines = f.readlines()
-    f.close()
-    cur = 0
-    while cur < len(lines):
-        fish_id = str_to_dict(lines[cur])['fish_id']
-        result_list.append(fish_id)
-        cur += 1
-    return result_list
-
 def get_result_list_new():
     data=load_log_new("../statistics/new_hook_log.txt")
     result_list = [str(i['fishes']['1']['tpId']) for i in data]
