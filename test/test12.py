@@ -1,5 +1,75 @@
 from common.basePage import BasePage
+from netMsg import csMsgAll
 from scripts import battleTest
+
+
+def change_gear(bp: BasePage, kind):
+    # part_id_line = 0
+    if kind == 1:
+        part_id_line = 1700003
+        part_id_lure = 1700006
+    elif kind == 2:
+        part_id_line = 1700004
+        part_id_lure = 1700007
+    elif kind == 3:
+        part_id_line = 1700005
+        part_id_lure = 1700008
+    elif kind == 4:
+        part_id_line = 1700009
+        part_id_lure = 1700010
+    elif kind == 5:
+        part_id_line = 1700011
+        part_id_lure = 1700012
+    elif kind == 6:
+        part_id_line = 1700013
+        part_id_lure = 1700014
+    elif kind == 7:
+        part_id_line = 1700015
+        part_id_lure = 1700016
+    elif kind == 8:
+        part_id_line = 1700017
+        part_id_lure = 1700018
+    elif kind == 9:
+        part_id_line = 1700019
+        part_id_lure = 1700020
+    else:
+        part_id_line = 1700001
+        part_id_lure = 1700002
+    # if level < 15:
+    #     if kind == 1:
+    #         part_id_line = 1700001
+    #     elif kind == 2:
+    #         part_id_line = 1700027
+    #     elif kind == 3:
+    #         part_id_line = 1700029
+    #
+    # elif level < 120:
+    #     if kind == 1:
+    #         part_id_line = 1700031
+    #     elif kind == 2:
+    #         part_id_line = 1700033
+    #     elif kind == 3:
+    #         part_id_line = 1700035
+    #
+    # elif level < 210:
+    #     if kind == 1:
+    #         part_id_line = 1700015
+    #     elif kind == 2:
+    #         part_id_line = 1700017
+    #     elif kind == 3:
+    #         part_id_line = 1700019
+    #
+    # else:
+    #     if kind == 1:
+    #         part_id_line = 1700021
+    #     elif kind == 2:
+    #         part_id_line = 1700023
+    #     elif kind == 3:
+    #         part_id_line = 1700025
+    # part_id_lure = part_id_line + 1
+    lua_code_line = csMsgAll.get_CSEquipPrepareReplaceMsg(prepareIndex=1, dlc=1, partId=part_id_line)
+    lua_code_lure = csMsgAll.get_CSEquipPrepareReplaceMsg(prepareIndex=1, dlc=1, partId=part_id_lure)
+    bp.lua_console_list([lua_code_line, lua_code_lure])
 
 if __name__ == '__main__':
     bp = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
@@ -13,7 +83,14 @@ if __name__ == '__main__':
     # 90级以上用 力7 敏8 智9
     # 非克制情况， 打力鱼用敏，打敏鱼用智，打智鱼用力
 
-    battleTest.circulate_fish(bp)
+    # battleTest.circulate_fish(bp)
+    change_gear(bp, kind=8)
+
+    bp.lua_console('PanelMgr:OpenPanel("GearPanelNew")')
+    bp.sleep(0.5)
+    bp.lua_console('PanelMgr:ClosePanel("GearPanelNew")')
+
+    battleTest.fish_once(bp)
 
 
     bp.connect_close()
