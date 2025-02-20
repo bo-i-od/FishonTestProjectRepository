@@ -1902,7 +1902,6 @@ class BasePage(BasePageMain):
 
         fish_id = self.fish_bone_id_to_fish_id(fish_bone_id=fish_tpid)
         if not fish_id:
-            print(fish_tpid)
             return None
         fish_type = self.get_fish_type(fish_tpid=fish_id)
         if not fish_type:
@@ -2475,6 +2474,28 @@ end
         if table_data_object_list:
             return str(table_data_object_list[0]["newPlotFisheriesId"])
 
+    def fish_id_to_flash_card_id(self, fish_id, table_data_detail=None):
+        if table_data_detail is None:
+            table_data_detail = self.excelTools.get_table_data_detail(book_name="COLLECTION_BASE.xlsm")
+
+        table_data_object = self.excelTools.get_table_data_object_by_key_value(key="fishId", value=fish_id, table_data_detail=table_data_detail)
+        flash_card_id = table_data_object['collectionId']
+        return flash_card_id
+
+    def flash_card_id_to_fish_id(self, flash_card_id, table_data_detail=None):
+        if table_data_detail is None:
+            table_data_detail = self.excelTools.get_table_data_detail(book_name="COLLECTION_BASE.xlsm")
+
+        table_data_object = self.excelTools.get_table_data_object_by_key_value(key="collectionId", value=flash_card_id, table_data_detail=table_data_detail)
+        fish_id = table_data_object['fishId']
+        return fish_id
+
+    def get_flash_card_type(self, flash_card_id, table_data_detail=None):
+        if table_data_detail is None:
+            table_data_detail = self.excelTools.get_table_data_detail(book_name="COLLECTION_BASE.xlsm")
+        table_data_object = self.excelTools.get_table_data_object_by_key_value(key="collectionId", value=flash_card_id, table_data_detail=table_data_detail)
+        flash_card_type = table_data_object['collectionLevel']
+        return flash_card_type
 
 
 if __name__ == '__main__':
