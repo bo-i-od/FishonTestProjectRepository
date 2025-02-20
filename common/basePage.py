@@ -987,7 +987,7 @@ class BasePageMain:
         self.click_position_base(position_list[0])
         return position_list[0]
 
-    def click_object_of_plural_objects(self, object_id: int = None, object_id_list: list = None, element_data: dict = None, element_data_list: list = None, offspring_path="", index=-1, viewport: Viewport = None, element_viewport: dict = None,  viewport_direction=None, viewport_range=None, viewport_edge=None, delta_len=None, camera_name="", ignore_set=None):
+    def click_object_of_plural_objects(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None, element_data_list: list = None, offspring_path="", index=None, viewport: Viewport = None, element_viewport: dict = None,  viewport_direction=None, viewport_range=None, viewport_edge=None, delta_len=None, camera_name="", ignore_set=None):
         """函数功能简述
             点击一堆物体中的其中一个
 
@@ -1002,7 +1002,7 @@ class BasePageMain:
         """
 
         # object_id或element_data转成object_id_list或element_data_list输入
-        if object_id is not None:
+        if object_id != 0:
             self.click_object_of_plural_objects(object_id_list=[object_id], offspring_path=offspring_path,
                                                 index=index, viewport=viewport, element_viewport=element_viewport,
                                                 viewport_direction=viewport_direction, viewport_range=viewport_range,
@@ -1023,8 +1023,10 @@ class BasePageMain:
 
         # 如果有viewport就挪动到元素出现
         if viewport:
-            if index < 0:
+            if index is None:
                 index = random.randint(0, len(viewport.item_id_list) - 1)
+            if index < 0:
+                index = len(viewport.item_id_list) + index
             target_id = viewport.item_id_list[index]
             viewport.move_until_appear(target_id=target_id, ignore_set=ignore_set)
 
@@ -1032,9 +1034,12 @@ class BasePageMain:
         position_list = self.get_position_list(element_data_list=element_data_list, object_id_list=object_id_list, offspring_path=offspring_path, camera_name=camera_name)
         position_list = tools.commonTools.merge_list(position_list)
 
+        if index is None:
+            index = random.randint(0, len(position_list) - 1)
         # 如果index没有赋合法值，就随机点击一个
         if index < 0:
-            index = random.randint(0, len(position_list) - 1)
+            index = len(position_list) + index
+
         self.click_position(position=position_list[index], ignore_set=ignore_set)
 
     # 在b元素出现前一直尝试点击a元素
@@ -1056,8 +1061,8 @@ class BasePageMain:
 
     def click_a_until_b_appear_list(self, perform_list: list):
         """函数功能简述
-            第一次循环element_data_a=perform_lis[0], element_data_b=perform_lis[1]
-            第一次循环element_data_a=perform_lis[1], element_data_b=perform_lis[2]
+            第一次循环element_data_a=perform_list[0], element_data_b=perform_list[1]
+            第一次循环element_data_a=perform_list[1], element_data_b=perform_list[2]
             以此类推进行click_a_until_b_appear
 
         参数:
@@ -1435,7 +1440,7 @@ class BasePageMain:
         return img
 
     # 对指定元素进行截取
-    def get_element_shot(self, object_id: int = None, element_data: dict = None, offspring_path=""):
+    def get_element_shot(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
         """函数功能简述
             指定元素截图
 
@@ -1658,6 +1663,7 @@ class BasePageMain:
         """
         if 'msg' not in data:
             return
+        # print(data)
         msg = data['msg']
         if self.log_list_flag:
             self.log_list.append(msg)
@@ -2400,6 +2406,7 @@ end
             return table_data_object["tpId"]
 
         table_data_object_list = self.excelTools.get_table_data_object_list(book_name="NEW_PLOT_FISH_SPOT.xlsm")
+
         for table_data_object in table_data_object_list:
             fish_list = []
             fish_list += table_data_object["smallInfo"]
