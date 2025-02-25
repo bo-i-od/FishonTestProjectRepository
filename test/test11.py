@@ -1,3 +1,4 @@
+import os
 import time
 
 from common.basePage import BasePage
@@ -5,7 +6,8 @@ from configs.elementsData import ElementsData
 from netMsg import csMsgAll
 from panelObjs import BattlePreparePanel, BattlePanel, ResultPanel
 from panelObjs.BattleDebugPanel import BattleDebugPanel
-
+import matplotlib.pyplot as plt
+from matplotlib import rcParams
 
 class Personality:
     qte_rate = 0
@@ -13,8 +15,8 @@ class Personality:
 
 
 class PersonalityNB(Personality):
-    qte_rate = 1
-    tension = 0.9
+    qte_rate = 0.66
+    tension = 0.85
 
 
 class PersonalityLJ(Personality):
@@ -32,6 +34,10 @@ def deal_with_hold_status(hold_status):
     if not release:
         release = '0'
     return int(hold), int(release)
+
+def get_m_max(content: str):
+    m_max = content.split("LINE_LENGTH:")[1].split("STAR")[0].strip()
+    return float(m_max)
 
 def qte(bp, personality: Personality = None):
     element_data_list = [ElementsData.BattlePanel.qte_left, ElementsData.BattlePanel.qte_right,
@@ -69,22 +75,25 @@ def qte(bp, personality: Personality = None):
     is_in_crt_pre = False
 
     m_cur = ""
-    m_max = ""
+    content = bp.get_text(element_data=ElementsData.BattleDebugPanel.content)
+    m_max = get_m_max(content)
     start_time = None
     end_time = None
     t_one = 10
     hold_status_start = 0, 0
+    m_list = []
+    t = None
     while True:
         if start_time:
             t = time.time() - start_time
             t_ten = int(t) // 10
             t_one = t - t_ten * 10
 
-        text_list = bp.get_text_list(element_data_list=[ElementsData.BattlePanel.m_value, ElementsData.BattlePanel.hud_escaping])
-        if text_list[0]:
-            m_cur = text_list[0][0]
-        if text_list[1]:
-            m_max = text_list[1][0]
+        text_list = bp.get_text_list(element_data=ElementsData.BattlePanel.m_value)
+        if text_list:
+            m_cur = text_list[0].split("米")[0]
+        if t:
+            m_list.append((t, float(m_cur)))
         object_id_list = bp.get_object_id_list(element_data_list=element_data_list)
 
         if object_id_list[crt_index]:
@@ -111,7 +120,7 @@ def qte(bp, personality: Personality = None):
         #     BattlePanel.unleash_power(bp)
         #     continue
         # if object_id_list[qte_up_index]:
-        #     if t_one > personality.qte_up_rate * 10:
+        #     if t_one > personality.qte_rate * 10:
         #         continue
         #     BattlePanel.slide(bp, "up")
         #     continue
@@ -147,8 +156,8 @@ def qte(bp, personality: Personality = None):
         #     continue
         if (not object_id_list[warning_index]) and (end_time is None) and (start_time is not None):
             end_time = time.time()
-            print(f"{(end_time - start_time):.1f}s")
-            print(f"{m_cur}/{m_max}")
+            battle_time = f"{(end_time - start_time):.1f}s"
+            print(battle_time)
             hold_status = BattleDebugPanel.get_hold_status(bp)
             hold_status_end = deal_with_hold_status(hold_status)
             time_hold = (hold_status_end[0] - hold_status_start[0])
@@ -179,6 +188,7 @@ def qte(bp, personality: Personality = None):
         else:
             bp.custom_cmd("setQuickQTE 1")
         bp.sleep(0.1)
+    return m_list, m_max
 
     
 
@@ -194,9 +204,11 @@ def fish_once(bp: BasePage, fish_id="", personality=None):
     if BattlePanel.is_reel_active(bp):
         bp.custom_cmd("autofish")
 
-    qte(bp, personality)
+    m_list, m_max = qte(bp, personality)
+    save_plt(m_list, m_max)
     if fish_id != "":
         bp.cmd("mode 0 0")
+
 
 def change_gear(bp: BasePage, kind):
     # part_id_line = 0
@@ -266,6 +278,93 @@ def change_gear(bp: BasePage, kind):
     lua_code_lure = csMsgAll.get_CSEquipPrepareReplaceMsg(prepareIndex=1, dlc=1, partId=part_id_lure)
     bp.lua_console_list([lua_code_line, lua_code_lure])
 
+def save_plt(m_list, m_max):
+    # 设置全局字体
+    rcParams['font.family'] = 'sans-serif'  # 通用字体族
+    rcParams['font.sans-serif'] = ['SimHei']  # Windows系统中文黑体
+    rcParams['axes.unicode_minus'] = False  # 解决负号显示问题
+
+    # 后续绘图代码保持原样...
+
+    # 数据预处理
+    t_values = [item[0] for item in m_list]  # 提取时间序列
+    d_normalized = [item[1] / m_max for item in m_list]  # 计算归一化距离
+
+    # 创建可视化画布
+    plt.figure(figsize=(12, 6), dpi=100)
+
+    # 绘制归一化距离曲线
+    plt.plot(t_values, d_normalized,
+             linewidth=1.5,
+             color='#2c7bb6',
+             marker='o',
+             markersize=4,
+             markerfacecolor='#fdae61',
+             markeredgewidth=0,
+             label='归一化距离')
+
+    # 图表装饰
+    plt.title('归一化距离随时间变化趋势', fontsize=14, pad=15)
+    plt.xlabel('时间 (秒)', fontsize=12, labelpad=10)
+    plt.ylabel('归一化距离', fontsize=12, labelpad=10)
+
+    # 坐标轴设置
+    plt.xticks(fontsize=10)
+    plt.yticks([i / 10 for i in range(11)],
+               [f'{i * 10}%' for i in range(11)],  # 百分比格式显示
+               fontsize=10)
+
+    # 辅助元素
+    plt.grid(True,
+             linestyle='--',
+             linewidth=0.5,
+             alpha=0.7,
+             color='#636363')
+    plt.axhline(y=1,
+                color='#d7191c',
+                linestyle=':',
+                linewidth=1.5,
+                label='鱼线极限')
+
+    # 显示图例
+    plt.legend(loc='upper left',
+               frameon=True,
+               framealpha=0.8)
+
+    # 优化显示范围
+    plt.xlim(0, max(t_values) * 1.05)
+    plt.ylim(0, 1.05)
+
+    # 显示图表
+    plt.tight_layout()
+    savefig_autoname(f"{res}.png")  # 默认格式为PNG
+
+
+def savefig_autoname(base_name):
+    """
+    自动编号保存图片函数
+    参数：
+    base_name : 期望的文件名 (如 "plot.png")
+    """
+    # 分离文件名和扩展名
+    name_part, ext = os.path.splitext(base_name)
+
+    # 优先尝试原始文件名
+    if not os.path.exists(base_name):
+        plt.savefig(base_name)
+        print(f"保存成功: {base_name}")
+        return
+
+    # 查找可用编号
+    counter = 1
+    while True:
+        new_name = f"{name_part}_{counter}{ext}"
+        if not os.path.exists(new_name):
+            plt.savefig(new_name)
+            print(f"检测到重名文件，已保存为: {new_name}")
+            return
+        counter += 1
+
 
 def main(bp: BasePage):
     bp.cmd(f"fishscenestarset 500301 {star}")
@@ -274,6 +373,8 @@ def main(bp: BasePage):
 
 if __name__ == '__main__':
     bp = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
+    bp.is_time_scale = True
+    bp.set_time_scale(time_scale=5)
 
     # # 装备等级
     # lv = 30
@@ -283,10 +384,10 @@ if __name__ == '__main__':
 
     # 套装0-9
     # 0.初始 1.强力收线/强力爆气 2.强力回拉/强力刺鱼 3.技巧拔竿/技巧压制 4.超负荷气 5.长线绝杀 6.不动如山 7.乘胜追击 8.背水一战 9.一刺入魂
-    gear_kind = 1
+    gear_kind = 8
 
     # 渔场难度
-    star = 3
+    star = 19
 
     # is_restrain = False
 
