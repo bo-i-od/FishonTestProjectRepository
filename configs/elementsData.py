@@ -277,6 +277,7 @@ class ElementsData:
     class BattleDebugPanel:
         BattleDebugPanel = {"locator": "UICanvas>Important>BattleDebugPanel"}
         hold_status = {"locator": "UICanvas>Important>BattleDebugPanel>bg>battleDetail>hold_status>value"}
+        content = {"locator": "UICanvas>Important>BattleDebugPanel>bg>Scroll View>Viewport>Content>content"}
 
     class BattleExplainPanel:
         BattleExplainPanel = {"locator": "UICanvas>Default>BattleExplainPanel"}
