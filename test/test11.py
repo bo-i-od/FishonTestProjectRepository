@@ -15,7 +15,7 @@ class Personality:
 
 
 class PersonalityNB(Personality):
-    qte_rate = 0.66
+    qte_rate = 0.75
     tension = 0.85
 
 
@@ -353,7 +353,7 @@ def savefig_autoname(base_name):
     # 优先尝试原始文件名
     if not os.path.exists(base_name):
         plt.savefig(base_name)
-        print(f"保存成功: {base_name}")
+        # print(f"保存成功: {base_name}")
         return
 
     # 查找可用编号
@@ -403,7 +403,7 @@ def save_text(content, filename, mode='w', encoding='utf-8'):
     with open(target_file, mode, encoding=encoding) as f:
         f.write(content)
 
-    print(f"文件已保存到：{os.path.abspath(target_file)}")
+    # print(f"文件已保存到：{os.path.abspath(target_file)}")
     return target_file
 
 
@@ -425,10 +425,10 @@ if __name__ == '__main__':
 
     # 套装0-9
     # 0.初始 1.强力收线/强力爆气 2.强力回拉/强力刺鱼 3.技巧拔竿/技巧压制 4.超负荷气 5.长线绝杀 6.不动如山 7.乘胜追击 8.背水一战 9.一刺入魂
-    gear_kind = 8
+    gear_kind = 1
 
     # 渔场难度
-    star = 19
+    star = 3
 
     # is_restrain = False
 
