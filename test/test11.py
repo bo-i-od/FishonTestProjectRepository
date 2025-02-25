@@ -37,6 +37,7 @@ def deal_with_hold_status(hold_status):
 
 def get_m_max(content: str):
     m_max = content.split("LINE_LENGTH:")[1].split("STAR")[0].strip()
+    save_text(content=content, filename=res)
     return float(m_max)
 
 def qte(bp, personality: Personality = None):
@@ -364,6 +365,46 @@ def savefig_autoname(base_name):
             print(f"检测到重名文件，已保存为: {new_name}")
             return
         counter += 1
+
+
+def save_text(content, filename, mode='w', encoding='utf-8'):
+    """
+    智能保存文本内容到文件
+
+    参数：
+    - content : 要保存的内容（支持字符串/列表/字典）
+    - filename : 目标文件名（如 "data.txt"）
+    - mode : 写入模式，'w'覆盖 / 'a'追加
+    - encoding : 文件编码
+    """
+    # 创建文件目录（如果不存在）
+    dir_path = os.path.dirname(filename)
+    if dir_path and not os.path.exists(dir_path):
+        os.makedirs(dir_path, exist_ok=True)
+
+    # 处理不同数据类型
+    if isinstance(content, (list, tuple)):
+        content = '\n'.join(map(str, content))
+    elif isinstance(content, dict):
+        content = '\n'.join(f"{k}: {v}" for k, v in content.items())
+    else:
+        content = str(content)
+
+    # 生成唯一文件名
+    base, ext = os.path.splitext(filename)
+    counter = 0
+    while True:
+        target_file = f"{base}_{counter}{ext}" if counter else filename
+        if not os.path.exists(target_file) or mode == 'a':
+            break
+        counter += 1
+
+    # 写入文件
+    with open(target_file, mode, encoding=encoding) as f:
+        f.write(content)
+
+    print(f"文件已保存到：{os.path.abspath(target_file)}")
+    return target_file
 
 
 def main(bp: BasePage):
