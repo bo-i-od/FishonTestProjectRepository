@@ -1,6 +1,8 @@
 import os
 import time
 
+from matplotlib.lines import Line2D
+
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from netMsg import csMsgAll
@@ -9,13 +11,14 @@ from panelObjs.BattleDebugPanel import BattleDebugPanel
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 
+
 class Personality:
     qte_rate = 0
     tension = 0
 
 
 class PersonalityNB(Personality):
-    qte_rate = 0.75
+    qte_rate = 1
     tension = 0.85
 
 
@@ -35,10 +38,31 @@ def deal_with_hold_status(hold_status):
         release = '0'
     return int(hold), int(release)
 
+
 def get_m_max(content: str):
-    m_max = content.split("LINE_LENGTH:")[1].split("STAR")[0].strip()
-    save_text(content=content, filename=res)
-    return float(m_max)
+    try:
+        m_max = content.split("LINE_LENGTH:")[1].split("STAR")[0].strip()
+    except IndexError:
+        m_max = None
+    # save_text(content=content, filename=res)
+    return m_max
+
+
+def get_base_hp(content: str):
+    try:
+        base_hp = content.split("BaseHP:")[1].split("DamageReduceRate")[0].strip()
+    except IndexError:
+        base_hp = None
+    return base_hp
+
+
+def get_current_hp(content: str):
+    try:
+        current_hp = content.split("CURRENT_HP:")[1].split("VELOCITY_Z")[0].strip()
+    except IndexError:
+        current_hp = None
+    return current_hp
+
 
 def qte(bp, personality: Personality = None):
     element_data_list = [ElementsData.BattlePanel.qte_left, ElementsData.BattlePanel.qte_right,
@@ -75,14 +99,15 @@ def qte(bp, personality: Personality = None):
     size_tension = None
     is_in_crt_pre = False
 
-    m_cur = ""
-    content = bp.get_text(element_data=ElementsData.BattleDebugPanel.content)
-    m_max = get_m_max(content)
+    m_cur = 0
+    current_hp = 0
+    m_max = 0
+    base_hp = 0
     start_time = None
     end_time = None
     t_one = 10
     hold_status_start = 0, 0
-    m_list = []
+    data_list = []
     battle_time = 0
     line_data = ""
     t = None
@@ -92,11 +117,25 @@ def qte(bp, personality: Personality = None):
             t_ten = int(t) // 10
             t_one = t - t_ten * 10
 
-        text_list = bp.get_text_list(element_data=ElementsData.BattlePanel.m_value)
-        if text_list:
-            m_cur = text_list[0].split("米")[0]
+        text_list = bp.get_text_list(element_data_list=[ElementsData.BattlePanel.m_value, ElementsData.BattleDebugPanel.content])
+        if text_list[0]:
+            m_cur = float(text_list[0][0].split("米")[0])
+        if text_list[1]:
+            content = text_list[1][0]
+            current_hp = get_current_hp(content)
+            m_max_temp = get_m_max(content)
+            if m_max_temp:
+                m_max = float(m_max_temp)
+            base_hp_temp = get_base_hp(content)
+            if base_hp_temp:
+                base_hp = float(base_hp_temp)
+
         if t:
-            m_list.append((t, float(m_cur)))
+            if not m_cur:
+                return
+            if not current_hp:
+                return
+            data_list.append((t, float(m_cur), float(current_hp)))
         object_id_list = bp.get_object_id_list(element_data_list=element_data_list)
 
         if object_id_list[crt_index]:
@@ -190,7 +229,7 @@ def qte(bp, personality: Personality = None):
         else:
             bp.custom_cmd("setQuickQTE 1")
         bp.sleep(0.1)
-    return m_list, m_max, battle_time, line_data
+    return data_list, m_max, base_hp, battle_time, line_data
 
     
 
@@ -206,12 +245,12 @@ def fish_once(bp: BasePage, fish_id="", personality=None):
     if BattlePanel.is_reel_active(bp):
         bp.custom_cmd("autofish")
 
-    m_list, m_max, battle_time, line_data = qte(bp, personality)
+    data_list, m_max, base_hp, battle_time, line_data = qte(bp, personality)
     print(bp.serial_number)
     print(res)
     print(battle_time)
     print(line_data)
-    save_plt(m_list, m_max)
+    save_plt(data_list, m_max, base_hp)
     if fish_id != "":
         bp.cmd("mode 0 0")
 
@@ -284,66 +323,79 @@ def change_gear(bp: BasePage, kind):
     lua_code_lure = csMsgAll.get_CSEquipPrepareReplaceMsg(prepareIndex=1, dlc=1, partId=part_id_lure)
     bp.lua_console_list([lua_code_line, lua_code_lure])
 
-def save_plt(m_list, m_max):
-    # 设置全局字体
-    rcParams['font.family'] = 'sans-serif'  # 通用字体族
-    rcParams['font.sans-serif'] = ['SimHei']  # Windows系统中文黑体
-    rcParams['axes.unicode_minus'] = False  # 解决负号显示问题
 
-    # 后续绘图代码保持原样...
+def save_plt(data_list, m_max, base_hp):
+    # 设置全局字体
+    rcParams['font.family'] = 'sans-serif'
+    rcParams['font.sans-serif'] = ['SimHei']
+    rcParams['axes.unicode_minus'] = False
 
     # 数据预处理
-    t_values = [item[0] for item in m_list]  # 提取时间序列
-    d_normalized = [item[1] / m_max for item in m_list]  # 计算归一化距离
+    t_values = [item[0] for item in data_list]
+    d_normalized = [item[1] / m_max for item in data_list]
+    hp_normalized = [item[2] / base_hp for item in data_list]
 
     # 创建可视化画布
     plt.figure(figsize=(12, 6), dpi=100)
+    ax = plt.gca()
 
-    # 绘制归一化距离曲线
-    plt.plot(t_values, d_normalized,
-             linewidth=1.5,
-             color='#2c7bb6',
-             marker='o',
-             markersize=4,
-             markerfacecolor='#fdae61',
-             markeredgewidth=0,
-             label='归一化距离')
+    # 绘制纯折线（修改点1：移除所有marker相关参数）
+    line1, = ax.plot(t_values, d_normalized,
+                     linewidth=1.5,
+                     color='#2c7bb6',
+                     label='线长')  # 移除marker参数
 
-    # 图表装饰
-    plt.title('归一化距离随时间变化趋势', fontsize=14, pad=15)
+    line2, = ax.plot(t_values, hp_normalized,
+                     linewidth=1.5,
+                     color='#d7191c',
+                     linestyle='--',  # 保留线型区分
+                     label='鱼血量')  # 移除marker参数
+
+    # 图表元数据
+    plt.title('钓鱼状态监控', fontsize=14, pad=15)
     plt.xlabel('时间 (秒)', fontsize=12, labelpad=10)
-    plt.ylabel('归一化距离', fontsize=12, labelpad=10)
+    plt.ylabel('归一化值', fontsize=12, labelpad=10)
 
     # 坐标轴设置
     plt.xticks(fontsize=10)
     plt.yticks([i / 10 for i in range(11)],
-               [f'{i * 10}%' for i in range(11)],  # 百分比格式显示
+               [f'{i * 10}%' for i in range(11)],
                fontsize=10)
 
-    # 辅助元素
-    plt.grid(True,
-             linestyle='--',
-             linewidth=0.5,
-             alpha=0.7,
-             color='#636363')
-    plt.axhline(y=1,
-                color='#d7191c',
-                linestyle=':',
-                linewidth=1.5,
-                label='鱼线极限')
+    # 辅助线
+    plt.grid(True, linestyle='--', linewidth=0.5, alpha=0.7, color='#636363')
+    ax.axhline(y=1, color='#d7191c', linestyle=':', linewidth=1.5)
 
-    # 显示图例
-    plt.legend(loc='upper left',
+    # 简化图例（修改点2：移除图例中的marker元素）
+    legend_elements = [
+        Line2D([0], [0],
+               color='#2c7bb6',
+               lw=1.5,
+               label='线长'),
+        Line2D([0], [0],
+               color='#d7191c',
+               lw=1.5,
+               linestyle='--',
+               label='鱼血量'),
+        Line2D([0], [0],
+               color='#d7191c',
+               linestyle=':',
+               lw=1.5,
+               label='极限阈值')
+    ]
+
+    plt.legend(handles=legend_elements,
+               loc='upper left',
                frameon=True,
                framealpha=0.8)
 
-    # 优化显示范围
+    # 显示范围
     plt.xlim(0, max(t_values) * 1.05)
-    plt.ylim(0, 1.05)
+    plt.ylim(0, 1.1)
 
-    # 显示图表
+    # 输出
     plt.tight_layout()
-    savefig_autoname(f"{res}.png")  # 默认格式为PNG
+    savefig_autoname(f"{res}.png")
 
 
 def savefig_autoname(base_name):
@@ -415,6 +467,7 @@ def save_text(content, filename, mode='w', encoding='utf-8'):
 def main(bp: BasePage):
     bp.is_time_scale = True
     bp.set_time_scale(time_scale=5)
+    bp.custom_cmd("setQTECD 1")
     change_gear(bp, kind=gear_kind)
     bp.lua_console('PanelMgr:OpenPanel("GearPanelNew")')
     bp.sleep(0.5)
@@ -432,14 +485,14 @@ if __name__ == '__main__':
     # lv = 30
 
     # 1力 2敏 3智
-    fish_kind = 3
+    fish_kind = 2
 
     # 套装0-9
     # 0.初始 1.强力收线/强力爆气 2.强力回拉/强力刺鱼 3.技巧拔竿/技巧压制 4.超负荷气 5.长线绝杀 6.不动如山 7.乘胜追击 8.背水一战 9.一刺入魂
-    gear_kind = 1
+    gear_kind = 5
 
     # 渔场难度
-    star = 61
+    star = 53
 
     # is_restrain = False
 
