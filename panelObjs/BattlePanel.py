@@ -176,7 +176,8 @@ class BattlePanel(BasePage):
         progress_range = [progress_position[0][1] - 0.5 * h, progress_position[0][1] + 0.5 * h]
 
         progress = (arrow_position[0][1] - progress_range[0]) / h
-        while progress < 0.8:
+        self.set_time_scale(time_scale=1)
+        while progress < 0.75:
             arrow_position = self.get_position_list(element_data=ElementsData.BattlePanel.arrow)
             if not arrow_position:
                 return
@@ -219,7 +220,8 @@ class BattlePanel(BasePage):
 
 if __name__ == '__main__':
     bp = BasePage()
-    ResultPanel.automatic_settlement(bp, element_btn=ElementsData.ResultPanel.btn_claim_token_fish)
+
+    # ResultPanel.automatic_settlement(bp, element_btn=ElementsData.ResultPanel.btn_claim_token_fish)
 
     # bp.ray_input(kind="click", element_data=ElementsData.ResultPanel.btn_claim_token_fish)
     bp.connect_close()
