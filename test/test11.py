@@ -83,6 +83,8 @@ def qte(bp, personality: Personality = None):
     t_one = 10
     hold_status_start = 0, 0
     m_list = []
+    battle_time = 0
+    line_data = ""
     t = None
     while True:
         if start_time:
@@ -158,12 +160,11 @@ def qte(bp, personality: Personality = None):
         if (not object_id_list[warning_index]) and (end_time is None) and (start_time is not None):
             end_time = time.time()
             battle_time = f"{(end_time - start_time):.1f}s"
-            print(battle_time)
             hold_status = BattleDebugPanel.get_hold_status(bp)
             hold_status_end = deal_with_hold_status(hold_status)
             time_hold = (hold_status_end[0] - hold_status_start[0])
             time_release = (hold_status_end[1] - hold_status_start[1])
-            print(f"收线占比{100 * time_hold // (time_release + time_hold)}%")
+            line_data = f"收线占比{100 * time_hold // (time_release + time_hold)}%"
             # print(time_hold, time_release)
 
         if object_id_list[btn_claim_pve_index]:
@@ -189,7 +190,7 @@ def qte(bp, personality: Personality = None):
         else:
             bp.custom_cmd("setQuickQTE 1")
         bp.sleep(0.1)
-    return m_list, m_max
+    return m_list, m_max, battle_time, line_data
 
     
 
@@ -205,7 +206,11 @@ def fish_once(bp: BasePage, fish_id="", personality=None):
     if BattlePanel.is_reel_active(bp):
         bp.custom_cmd("autofish")
 
-    m_list, m_max = qte(bp, personality)
+    m_list, m_max, battle_time, line_data = qte(bp, personality)
+    print(bp.serial_number)
+    print(res)
+    print(battle_time)
+    print(line_data)
     save_plt(m_list, m_max)
     if fish_id != "":
         bp.cmd("mode 0 0")
@@ -408,27 +413,33 @@ def save_text(content, filename, mode='w', encoding='utf-8'):
 
 
 def main(bp: BasePage):
+    bp.is_time_scale = True
+    bp.set_time_scale(time_scale=5)
+    change_gear(bp, kind=gear_kind)
+    bp.lua_console('PanelMgr:OpenPanel("GearPanelNew")')
+    bp.sleep(0.5)
+    bp.lua_console('PanelMgr:ClosePanel("GearPanelNew")')
     bp.cmd(f"fishscenestarset 500301 {star}")
     fish_once(bp, fish_id=fish_id, personality=personality)
+    bp.connect_close()
 
 
 if __name__ == '__main__':
-    bp = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
-    bp.is_time_scale = True
-    bp.set_time_scale(time_scale=5)
+    bp1 = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
+    # bp2 = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
 
     # # 装备等级
     # lv = 30
 
     # 1力 2敏 3智
-    fish_kind = 1
+    fish_kind = 3
 
     # 套装0-9
     # 0.初始 1.强力收线/强力爆气 2.强力回拉/强力刺鱼 3.技巧拔竿/技巧压制 4.超负荷气 5.长线绝杀 6.不动如山 7.乘胜追击 8.背水一战 9.一刺入魂
     gear_kind = 1
 
     # 渔场难度
-    star = 3
+    star = 61
 
     # is_restrain = False
 
@@ -461,12 +472,5 @@ if __name__ == '__main__':
     #     res += "_菜鸡"
     # else:
     #     res += "_高手"
-
-    change_gear(bp, kind=gear_kind)
-    print(res)
-    bp.lua_console('PanelMgr:OpenPanel("GearPanelNew")')
-    bp.sleep(0.5)
-    bp.lua_console('PanelMgr:ClosePanel("GearPanelNew")')
-
-    main(bp)
-    bp.connect_close()
+    main(bp1)
+    # main(bp2)

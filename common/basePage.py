@@ -41,6 +41,8 @@ class BasePageMain:
         # 是否在手机, Unity需要改为False
         self.is_mobile_device = is_mobile_device
 
+        self.serial_number = None
+
         # 是否截图记录
         self.is_record = False
 
@@ -67,6 +69,7 @@ class BasePageMain:
         self.dev = dev
         if self.dev is None:
             print("self.dev is None")
+            self.serial_number = serial_number
             self.dev = self.get_device(serial_number=serial_number)
 
         self.poco = UnityPoco(addr, device=dev)
