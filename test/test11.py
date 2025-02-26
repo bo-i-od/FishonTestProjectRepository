@@ -130,11 +130,7 @@ def qte(bp, personality: Personality = None):
             if base_hp_temp:
                 base_hp = float(base_hp_temp)
 
-        if t:
-            if not m_cur:
-                return
-            if not current_hp:
-                return
+        if t and m_cur and current_hp:
             data_list.append((t, float(m_cur), float(current_hp)))
         object_id_list = bp.get_object_id_list(element_data_list=element_data_list)
 
@@ -489,10 +485,10 @@ if __name__ == '__main__':
 
     # 套装0-9
     # 0.初始 1.强力收线/强力爆气 2.强力回拉/强力刺鱼 3.技巧拔竿/技巧压制 4.超负荷气 5.长线绝杀 6.不动如山 7.乘胜追击 8.背水一战 9.一刺入魂
-    gear_kind = 5
+    gear_kind = 0
 
     # 渔场难度
-    star = 53
+    star = 13
 
     # is_restrain = False
 
