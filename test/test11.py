@@ -39,6 +39,48 @@ def deal_with_hold_status(hold_status):
     return int(hold), int(release)
 
 
+def parse_key_value(text):
+    """
+    扁平化解析所有键值对（最后出现的同名键会覆盖之前的值）
+    输入示例文本返回格式：{ 'HOOK_DAMAGE': '15000', 'ULT_MODIFIER': '250', ... }
+    """
+    data = {}
+    for line in text.split('\n'):
+        # 清理行首尾空白并跳过空行
+        cleaned_line = line.strip()
+        if not cleaned_line:
+            continue
+
+        # 提取键值对（兼容包含多个冒号的情况）
+        if ':' in cleaned_line and not cleaned_line.startswith(('------', 'Skill')):
+            # 找到第一个冒号的位置
+            colon_pos = cleaned_line.find(':')
+            key = cleaned_line[:colon_pos].strip()
+            value = cleaned_line[colon_pos + 1:].strip()
+
+            # 特殊处理包含管道的行（如BUFF/SKILL中的复杂结构）
+            if '|' in key:
+                continue  # 跳过非简单键值对的行
+
+            data[key] = value
+    return data
+
+
+def get_value(data_dict, key):
+    """支持带类型的值获取（自动转换数字类型）"""
+    value = data_dict.get(key)
+    if value is None:
+        return None
+    # 类型转换逻辑
+    if value.lower() == 'true':
+        return True
+    elif value.lower() == 'false':
+        return False
+    elif value == 'table':  # 特殊值处理
+        return None
+    return value
+
+
 def get_m_max(content: str):
     try:
         m_max = content.split("LINE_LENGTH:")[1].split("STAR")[0].strip()
@@ -103,6 +145,8 @@ def qte(bp, personality: Personality = None):
     current_hp = 0
     m_max = 0
     base_hp = 0
+    battle_damage = 0
+    reel_velocity_z = 0
     start_time = None
     end_time = None
     t_one = 10
@@ -122,13 +166,25 @@ def qte(bp, personality: Personality = None):
             m_cur = float(text_list[0][0].split("米")[0])
         if text_list[1]:
             content = text_list[1][0]
-            current_hp = get_current_hp(content)
-            m_max_temp = get_m_max(content)
+            content_dict = parse_key_value(content)
+            # current_hp = get_current_hp(content)
+            current_hp =get_value(content_dict,"CURRENT_HP")
+            # m_max_temp = get_m_max(content)
+            m_max_temp = get_value(content_dict, "LINE_LENGTH")
             if m_max_temp:
                 m_max = float(m_max_temp)
-            base_hp_temp = get_base_hp(content)
+            # base_hp_temp = get_base_hp(content)
+            base_hp_temp = get_value(content_dict, "BaseHP")
             if base_hp_temp:
                 base_hp = float(base_hp_temp)
+            battle_damage_temp = get_value(content_dict, "STAMINA_DECREASE")
+            if battle_damage_temp:
+                battle_damage = float(battle_damage_temp)
+            reel_velocity_z_temp = get_value(content_dict, "REEL_VELOCITY_Z")
+            if reel_velocity_z_temp:
+                reel_velocity_z = float(reel_velocity_z_temp)
+
+
 
         if t and m_cur and current_hp:
             data_list.append((t, float(m_cur), float(current_hp)))
@@ -225,7 +281,7 @@ def qte(bp, personality: Personality = None):
         else:
             bp.custom_cmd("setQuickQTE 1")
         bp.sleep(0.1)
-    return data_list, m_max, base_hp, battle_time, line_data
+    return data_list, m_max, base_hp, battle_time, line_data, battle_damage, reel_velocity_z
 
     
 
@@ -242,10 +298,11 @@ def fish_once(bp: BasePage, fish_id="", personality=None):
     if BattlePanel.is_reel_active(bp):
         bp.custom_cmd("autofish")
 
-    data_list, m_max, base_hp, battle_time, line_data = qte(bp, personality)
+    data_list, m_max, base_hp, battle_time, line_data, battle_damage, reel_velocity_z = qte(bp, personality)
     print(bp.serial_number)
     print(res)
     print(battle_time)
+    print(f"伤害：{battle_damage} 线长：{m_max} 跑线：{reel_velocity_z}")
     print(line_data)
     save_plt(data_list, m_max, base_hp)
     if fish_id != "":
@@ -483,14 +540,14 @@ if __name__ == '__main__':
     # lv = 30
 
     # 1力 2敏 3智
-    fish_kind = 2
+    fish_kind = 1
 
     # 套装0-9
     # 0.初始 1.强力收线/强力爆气 2.强力回拉/强力刺鱼 3.技巧拔竿/技巧压制 4.超负荷气 5.长线绝杀 6.不动如山 7.乘胜追击 8.背水一战 9.一刺入魂
-    gear_kind = 0
+    gear_kind = 5
 
     # 渔场难度
-    star = 41
+    star = 31
 
     # is_restrain = False
 
