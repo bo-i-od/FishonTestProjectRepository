@@ -238,6 +238,7 @@ def fish_once(bp: BasePage, fish_id="", personality=None):
     bp.custom_cmd(f"setTension {personality.tension}")
     BattlePreparePanel.click_btn_cast(bp)
     BattlePanel.hook(bp)
+    bp.set_time_scale(time_scale=1)
     if BattlePanel.is_reel_active(bp):
         bp.custom_cmd("autofish")
 
@@ -462,7 +463,7 @@ def save_text(content, filename, mode='w', encoding='utf-8'):
 
 def main(bp: BasePage):
     bp.is_time_scale = True
-    bp.set_time_scale(time_scale=5)
+    bp.set_time_scale(time_scale=time_scale)
     bp.custom_cmd("setQTECD 1")
     change_gear(bp, kind=gear_kind)
     bp.lua_console('PanelMgr:OpenPanel("GearPanelNew")')
@@ -475,6 +476,7 @@ def main(bp: BasePage):
 
 if __name__ == '__main__':
     bp1 = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
+    time_scale = 4
     # bp2 = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
 
     # # 装备等级
@@ -488,7 +490,7 @@ if __name__ == '__main__':
     gear_kind = 0
 
     # 渔场难度
-    star = 13
+    star = 41
 
     # is_restrain = False
 
