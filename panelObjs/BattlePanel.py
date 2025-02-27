@@ -31,6 +31,7 @@ class BattlePanel(BasePage):
             ElementsData.MainlineFlashCardReceivePanel.MainlineFlashCardReceivePanel,
             ElementsData.BattlePanel.BattlePanel,
             ElementsData.BattlePanel.crt,
+            ElementsData.BattlePanel.crt2,
         ]
         qte_left_index = element_data_list.index(ElementsData.BattlePanel.qte_left)
         qte_right_index = element_data_list.index(ElementsData.BattlePanel.qte_right)
