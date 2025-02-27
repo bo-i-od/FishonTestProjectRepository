@@ -302,7 +302,7 @@ def fish_once(bp: BasePage, fish_id="", personality=None):
     print(bp.serial_number)
     print(res)
     print(battle_time)
-    print(f"伤害：{battle_damage} 线长：{m_max} 跑线：{reel_velocity_z}")
+    print(f"伤害：{battle_damage} 线长：{m_max} 跑线：{reel_velocity_z} 鱼血量上限：{base_hp}")
     print(line_data)
     save_plt(data_list, m_max, base_hp)
     if fish_id != "":
