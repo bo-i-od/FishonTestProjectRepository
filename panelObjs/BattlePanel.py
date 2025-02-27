@@ -46,6 +46,7 @@ class BattlePanel(BasePage):
         FlashCardReceivePanel_index = element_data_list.index(ElementsData.FlashCardReceivePanel.FlashCardReceivePanel)
         MainlineFlashCardReceivePanel_index = element_data_list.index(ElementsData.MainlineFlashCardReceivePanel.MainlineFlashCardReceivePanel)
         crt_index = element_data_list.index(ElementsData.BattlePanel.crt)
+        crt2_index = element_data_list.index(ElementsData.BattlePanel.crt2)
         size_tension = None
         is_in_crt_pre = False
         # False且当前在张力区间代表首次进入，变为True
@@ -55,7 +56,7 @@ class BattlePanel(BasePage):
         while True:
             object_id_list = self.get_object_id_list(element_data_list=element_data_list)
 
-            if object_id_list[crt_index]:
+            if object_id_list[crt_index] or object_id_list[crt2_index]:
                 if size_tension is None:
                     size_tension = self.get_size(element_data=ElementsData.BattlePanel.hud_tension)
                 if not is_in_crt_pre:
