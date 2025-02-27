@@ -119,6 +119,7 @@ def qte(bp, personality: Personality = None):
                          ElementsData.MainlineFlashCardReceivePanel.MainlineFlashCardReceivePanel,
                          ElementsData.BattlePanel.BattlePanel,
                          ElementsData.BattlePanel.crt,
+                         ElementsData.BattlePanel.crt2,
                          ]
     qte_left_index = element_data_list.index(ElementsData.BattlePanel.qte_left)
     qte_right_index = element_data_list.index(ElementsData.BattlePanel.qte_right)
@@ -138,6 +139,7 @@ def qte(bp, personality: Personality = None):
     MainlineFlashCardReceivePanel_index = element_data_list.index(ElementsData.MainlineFlashCardReceivePanel.MainlineFlashCardReceivePanel)
     BattlePanel_index = element_data_list.index(ElementsData.BattlePanel.BattlePanel)
     crt_index = element_data_list.index(ElementsData.BattlePanel.crt)
+    crt2_index = element_data_list.index(ElementsData.BattlePanel.crt2)
     size_tension = None
     is_in_crt_pre = False
 
@@ -190,7 +192,7 @@ def qte(bp, personality: Personality = None):
             data_list.append((t, float(m_cur), float(current_hp)))
         object_id_list = bp.get_object_id_list(element_data_list=element_data_list)
 
-        if object_id_list[crt_index]:
+        if object_id_list[crt_index] or object_id_list[crt2_index]:
             if size_tension is None:
                 size_tension = bp.get_size(element_data=ElementsData.BattlePanel.hud_tension)
             if not is_in_crt_pre:
@@ -540,14 +542,14 @@ if __name__ == '__main__':
     # lv = 30
 
     # 1力 2敏 3智
-    fish_kind = 1
+    fish_kind = 3
 
     # 套装0-9
     # 0.初始 1.强力收线/强力爆气 2.强力回拉/强力刺鱼 3.技巧拔竿/技巧压制 4.超负荷气 5.长线绝杀 6.不动如山 7.乘胜追击 8.背水一战 9.一刺入魂
-    gear_kind = 5
+    gear_kind = 4
 
     # 渔场难度
-    star = 31
+    star = 59
 
     # is_restrain = False
 

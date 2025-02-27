@@ -311,6 +311,7 @@ class ElementsData:
         hud_escaping = {"locator": "UICanvas>Default>BattlePanel>FishHUD>fish_HP>m_value>hud_escaping>text"}
         hud_tension = {"locator": "UICanvas>Default>BattlePanel>FishHUD>hud_tension>bar"}
         crt = {"locator":"UICanvas>Default>BattlePanel>FishHUD>hud_tension>>crt_box>bg"}
+        crt2 = {"locator":"UICanvas>Default>BattlePanel>FishHUD>hud_tension>tensionSpan>root>crt_box>bg"}
 
     class BattlePassBuyLevelPanel:
         BattlePassBuyLevelPanel = {"locator": "UICanvas>Default>BattlePassBuyLevelPanel"}
