@@ -301,15 +301,13 @@ def fish_once(bp: BasePage, fish_id="", personality=None):
         bp.custom_cmd("autofish")
 
     data_list, m_max, base_hp, battle_time, line_data, battle_damage, reel_velocity_z = qte(bp, personality)
-    print(bp.serial_number)
-    print(res)
+    print(f"伤害：{battle_damage} 线长：{m_max} 跑线：{reel_velocity_z}")
     print(battle_time)
-    print(f"伤害：{battle_damage} 线长：{m_max} 跑线：{reel_velocity_z} 鱼血量上限：{base_hp}")
+    print(f"鱼血量上限：{base_hp}")
     print(line_data)
-    save_plt(data_list, m_max, base_hp)
     if fish_id != "":
         bp.cmd("mode 0 0")
-
+    return data_list, m_max, base_hp
 
 def change_gear(bp: BasePage, kind):
     # part_id_line = 0
@@ -380,7 +378,7 @@ def change_gear(bp: BasePage, kind):
     bp.lua_console_list([lua_code_line, lua_code_lure])
 
 
-def save_plt(data_list, m_max, base_hp):
+def save_plt(data_list, m_max, base_hp, name):
     # 设置全局字体
     rcParams['font.family'] = 'sans-serif'
     rcParams['font.sans-serif'] = ['SimHei']
@@ -451,7 +449,7 @@ def save_plt(data_list, m_max, base_hp):
 
     # 输出
     plt.tight_layout()
-    savefig_autoname(f"{res}.png")
+    savefig_autoname(f"{name}.png")
 
 
 def savefig_autoname(base_name):
@@ -520,7 +518,7 @@ def save_text(content, filename, mode='w', encoding='utf-8'):
     return target_file
 
 
-def main(bp: BasePage):
+def main(bp: BasePage, name):
     bp.is_time_scale = True
     bp.set_time_scale(time_scale=time_scale)
     bp.custom_cmd("setQTECD 1")
@@ -529,7 +527,9 @@ def main(bp: BasePage):
     bp.sleep(0.5)
     bp.lua_console('PanelMgr:ClosePanel("GearPanelNew")')
     bp.cmd(f"fishscenestarset 500301 {star}")
-    fish_once(bp, fish_id=fish_id, personality=personality)
+    data_list, m_max, base_hp = fish_once(bp, fish_id=fish_id, personality=personality)
+    print(name)
+    save_plt(data_list, m_max, base_hp, name=name)
     bp.connect_close()
 
 
@@ -542,14 +542,14 @@ if __name__ == '__main__':
     # lv = 30
 
     # 1力 2敏 3智
-    fish_kind = 3
+    fish_kind = 1
 
     # 套装0-9
     # 0.初始 1.强力收线/强力爆气 2.强力回拉/强力刺鱼 3.技巧拔竿/技巧压制 4.超负荷气 5.长线绝杀 6.不动如山 7.乘胜追击 8.背水一战 9.一刺入魂
-    gear_kind = 4
+    gear_kind = 7
 
     # 渔场难度
-    star = 59
+    star = 49
 
     # is_restrain = False
 
@@ -582,5 +582,5 @@ if __name__ == '__main__':
     #     res += "_菜鸡"
     # else:
     #     res += "_高手"
-    main(bp1)
+    main(bp1, name=res)
     # main(bp2)

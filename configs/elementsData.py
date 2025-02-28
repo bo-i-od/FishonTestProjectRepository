@@ -606,6 +606,11 @@ class ElementsData:
         item_list = {"locator": "UICanvas>Default>CareerPanel>panel_talent>panel_list>panel_list_main>list>Viewport>Content>>>>>icon_bg"}
 
 
+    class ChallengeMainStagePanel:
+        ChallengeMainStagePanel = {"locator": "UICanvas>Default>ChallengeMainStagePanel"}
+        btn_close = {"locator": "UICanvas>Default>ChallengeMainStagePanel>panel>btn_close>img"}
+        btn_orange = {"locator":"UICanvas>Default>ChallengeMainStagePanel>panel>right>btn_orange"}
+
 
 
     class ChampointshipResultPopup:
@@ -1325,6 +1330,11 @@ class ElementsData:
     class MainlineFlashCardReceivePanel:
         MainlineFlashCardReceivePanel = {"locator": "UICanvas>Default>MainlineFlashCardReceivePanel"}
         btn_close = {"locator": "UICanvas>Default>MainlineFlashCardReceivePanel>panel_flashcard>btn_close>tip"}
+
+    class MainStageSettlePanel:
+        MainStageSettlePanel = {"locator": "UICanvas>Default>MainStageSettlePanel"}
+        btn_blue = {"locator": "UICanvas>Default>MainStageSettlePanel>>btn_group>btn_blue"}
+        btn_orange = {"locator": "UICanvas>Default>MainStageSettlePanel>>btn_group>btn_orange"}
 
 
     class MessageBoxPanel:

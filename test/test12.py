@@ -1,6 +1,9 @@
 from common.basePage import BasePage
 from netMsg import csMsgAll
-from scripts import battleTest
+from panelObjs.ChallengeMainStagePanel import ChallengeMainStagePanel
+from panelObjs.MainStageSettlePanel import MainStageSettlePanel
+from test import test11
+
 
 
 def change_gear(bp: BasePage, kind):
@@ -71,12 +74,29 @@ def change_gear(bp: BasePage, kind):
     lua_code_lure = csMsgAll.get_CSEquipPrepareReplaceMsg(prepareIndex=1, dlc=1, partId=part_id_lure)
     bp.lua_console_list([lua_code_line, lua_code_lure])
 
+def main(bp: BasePage):
+    cur = start
+    while cur <= end:
+        index = str(cur)
+        if cur < 10:
+            index = "0" + index
+        bp.cmd(f"setChallenge 1 10000{index}")
+        ChallengeMainStagePanel.click_btn_orange(bp)
+        name = f"关卡{cur}"
+
+        data_list, m_max, base_hp = test11.fish_once(bp, personality=personality)
+        test11.save_plt(data_list, m_max, base_hp, name=name)
+        status = MainStageSettlePanel.get_status(bp)
+        print(name + status)
+        MainStageSettlePanel.click_btn_blue(bp)
+        cur += 1
+
 if __name__ == '__main__':
     bp = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
     bp.quick_qte = True
     bp.custom_cmd("setQuickQTE 1")
-    bp.custom_cmd(f"setTension 0.9")
-
+    bp.custom_cmd("setQTECD 1")
+    personality = test11.PersonalityNB()
     # 0.初始 1.强力收线/强力爆气 2.强力回拉/强力刺鱼 3.技巧拔竿/技巧压制 4.超负荷气 5.长线绝杀 6.不动如山 7.乘胜追击 8.背水一战 9.一刺入魂
     # 力克制 1 4 7, 敏克制 2 5 8, 智克制 3 6 9
     # 90级及以下用 力1 敏2 智3
@@ -84,13 +104,16 @@ if __name__ == '__main__':
     # 非克制情况， 打力鱼用敏，打敏鱼用智，打智鱼用力
 
     # battleTest.circulate_fish(bp)
-    change_gear(bp, kind=8)
+    start = 20
+    end = 23
+    gear_kind = 4
+    change_gear(bp, kind=gear_kind)
+    print(f"装备{gear_kind}")
+    # bp.lua_console('PanelMgr:OpenPanel("GearPanelNew")')
+    # bp.sleep(0.5)
+    # bp.lua_console('PanelMgr:ClosePanel("GearPanelNew")')
 
-    bp.lua_console('PanelMgr:OpenPanel("GearPanelNew")')
-    bp.sleep(0.5)
-    bp.lua_console('PanelMgr:ClosePanel("GearPanelNew")')
-
-    battleTest.fish_once(bp)
+    main(bp)
 
 
     bp.connect_close()
