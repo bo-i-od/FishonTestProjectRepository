@@ -82,12 +82,13 @@ def main(bp: BasePage):
             index = "0" + index
         bp.cmd(f"setChallenge 1 10000{index}")
         ChallengeMainStagePanel.click_btn_orange(bp)
-        name = f"关卡{cur}"
-
         data_list, m_max, base_hp = test11.fish_once(bp, personality=personality)
-        test11.save_plt(data_list, m_max, base_hp, name=name)
+
         status = MainStageSettlePanel.get_status(bp)
-        print(name + status)
+        name = f"关卡{cur}"+ status
+        print(name)
+        test11.save_plt(data_list, m_max, base_hp, name=name)
+
         MainStageSettlePanel.click_btn_blue(bp)
         cur += 1
 
@@ -104,9 +105,9 @@ if __name__ == '__main__':
     # 非克制情况， 打力鱼用敏，打敏鱼用智，打智鱼用力
 
     # battleTest.circulate_fish(bp)
-    start = 20
-    end = 23
-    gear_kind = 4
+    start = 37
+    end = 51
+    gear_kind = 6
     change_gear(bp, kind=gear_kind)
     print(f"装备{gear_kind}")
     # bp.lua_console('PanelMgr:OpenPanel("GearPanelNew")')
