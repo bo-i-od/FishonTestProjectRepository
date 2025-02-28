@@ -17,7 +17,7 @@ def click_icon_test(bp: BasePage,item_icon_list, item_icon_position_list):
     # 随机选中一个图标
     cur = 0
     while cur < len(item_icon_list):
-        bp.click_position(item_icon_position_list[cur])
+        bp.click_position(item_icon_position_list[cur], ignore_set={"CommonRewardsTipsPanel", "RechargeEndlessThanksPanel", "RechargeEndlessNewYearPanel"})
         bp.sleep(0.5)
         if ItemTipsPanel.is_panel_active(bp):
             item_icon = ItemTipsPanel.get_item_icon(bp)
@@ -25,7 +25,7 @@ def click_icon_test(bp: BasePage,item_icon_list, item_icon_position_list):
             item_icon = FishCardPackTipsPanel.get_item_icon(bp)
         # 对比物品图标和浮窗物品图标
         compare(item_icon, item_icon_list[cur])
-        bp.click_position([0.5, 0.1])
+        bp.click_position([0.5, 0.1], ignore_set={"CommonRewardsTipsPanel", "RechargeEndlessThanksPanel", "RechargeEndlessNewYearPanel"})
         bp.sleep(0.5)
         cur += 1
 
@@ -44,9 +44,9 @@ def buy_test(bp: BasePage):
     item_info_list = panel.get_item_info_list(bp)
 
     item_info_buy = item_info_list[unlocked_index]
-    # item_icon_list = list(item_info_buy)
-    # item_icon_position_list = RechargeEndlessPanel.get_item_icon_position_list(bp)[unlocked_index]
-    # click_icon_test(bp, item_icon_list, item_icon_position_list)
+    item_icon_list = list(item_info_buy)
+    item_icon_position_list = panel.get_item_icon_position_list(bp)[unlocked_index]
+    click_icon_test(bp, item_icon_list, item_icon_position_list)
     btn_buy_position_list = panel.get_btn_buy_position_list(bp)
 
     cost_list = panel.get_item_cost_list(bp)
