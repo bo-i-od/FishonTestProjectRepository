@@ -211,6 +211,8 @@ class BattlePanel(BasePage):
     def get_crt_center(self, size_tension):
         position_list_tension, position_list_crt, position_list_crt2 = self.get_position_list(
             element_data_list=[ElementsData.BattlePanel.hud_tension, ElementsData.BattlePanel.crt, ElementsData.BattlePanel.crt2])
+        if not position_list_tension:
+            return 0.5
         position_tension = position_list_tension[0]
         if position_list_crt:
             position_crt = position_list_crt[0]
