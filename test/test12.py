@@ -85,7 +85,7 @@ def main(bp: BasePage):
         data_list, m_max, base_hp = test11.fish_once(bp, personality=personality)
 
         status = MainStageSettlePanel.get_status(bp)
-        name = f"关卡{cur}"+ status
+        name = f"关卡{cur}" + status
         print(name)
         test11.save_plt(data_list, m_max, base_hp, name=name)
 
@@ -97,7 +97,10 @@ if __name__ == '__main__':
     bp.quick_qte = True
     bp.custom_cmd("setQuickQTE 1")
     bp.custom_cmd("setQTECD 1")
+    bp.custom_cmd("setQTECD 1")
+
     personality = test11.PersonalityNB()
+    bp.custom_cmd(f"setTensionEscape {personality.tension}")
     # 0.初始 1.强力收线/强力爆气 2.强力回拉/强力刺鱼 3.技巧拔竿/技巧压制 4.超负荷气 5.长线绝杀 6.不动如山 7.乘胜追击 8.背水一战 9.一刺入魂
     # 力克制 1 4 7, 敏克制 2 5 8, 智克制 3 6 9
     # 90级及以下用 力1 敏2 智3
@@ -105,9 +108,9 @@ if __name__ == '__main__':
     # 非克制情况， 打力鱼用敏，打敏鱼用智，打智鱼用力
 
     # battleTest.circulate_fish(bp)
-    start = 37
-    end = 51
-    gear_kind = 6
+    start = 30
+    end = 50
+    gear_kind = 3
     change_gear(bp, kind=gear_kind)
     print(f"装备{gear_kind}")
     # bp.lua_console('PanelMgr:OpenPanel("GearPanelNew")')

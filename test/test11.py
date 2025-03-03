@@ -119,7 +119,7 @@ def qte(bp, personality: Personality = None):
                          ElementsData.MainlineFlashCardReceivePanel.MainlineFlashCardReceivePanel,
                          ElementsData.BattlePanel.BattlePanel,
                          ElementsData.BattlePanel.crt,
-                         ElementsData.BattlePanel.crt2,
+                         ElementsData.BattlePanel.crt2
                          ]
     qte_left_index = element_data_list.index(ElementsData.BattlePanel.qte_left)
     qte_right_index = element_data_list.index(ElementsData.BattlePanel.qte_right)
@@ -155,6 +155,7 @@ def qte(bp, personality: Personality = None):
     hold_status_start = 0, 0
     data_list = []
     battle_time = 0
+    time_remain = 0
     line_data = ""
     t = None
     while True:
@@ -163,7 +164,7 @@ def qte(bp, personality: Personality = None):
             t_ten = int(t) // 10
             t_one = t - t_ten * 10
 
-        text_list = bp.get_text_list(element_data_list=[ElementsData.BattlePanel.m_value, ElementsData.BattleDebugPanel.content])
+        text_list = bp.get_text_list(element_data_list=[ElementsData.BattlePanel.m_value, ElementsData.BattleDebugPanel.content, ElementsData.BattleChallengeTimerHUD.time])
         if text_list[0]:
             m_cur = float(text_list[0][0].split("米")[0])
         if text_list[1]:
@@ -185,6 +186,8 @@ def qte(bp, personality: Personality = None):
             reel_velocity_z_temp = get_value(content_dict, "REEL_VELOCITY_Z")
             if reel_velocity_z_temp:
                 reel_velocity_z = float(reel_velocity_z_temp)
+        if text_list[2]:
+            time_remain = float(text_list[2][0])
 
 
 
@@ -283,7 +286,7 @@ def qte(bp, personality: Personality = None):
         else:
             bp.custom_cmd("setQuickQTE 1")
         bp.sleep(0.1)
-    return data_list, m_max, base_hp, battle_time, line_data, battle_damage, reel_velocity_z
+    return data_list, m_max, base_hp, battle_time, line_data, battle_damage, reel_velocity_z, time_remain
 
     
 
@@ -300,9 +303,9 @@ def fish_once(bp: BasePage, fish_id="", personality=None):
     if BattlePanel.is_reel_active(bp):
         bp.custom_cmd("autofish")
 
-    data_list, m_max, base_hp, battle_time, line_data, battle_damage, reel_velocity_z = qte(bp, personality)
+    data_list, m_max, base_hp, battle_time, line_data, battle_damage, reel_velocity_z, time_remain = qte(bp, personality)
     print(f"伤害：{battle_damage} 线长：{m_max} 跑线：{reel_velocity_z}")
-    print(battle_time)
+    print(f"剩余时间：{time_remain}s, 战斗时间：{battle_time}s")
     print(f"鱼血量上限：{base_hp}")
     print(line_data)
     if fish_id != "":
@@ -464,6 +467,7 @@ def savefig_autoname(base_name):
     # 优先尝试原始文件名
     if not os.path.exists(base_name):
         plt.savefig(base_name)
+        plt.close()
         # print(f"保存成功: {base_name}")
         return
 
@@ -473,6 +477,7 @@ def savefig_autoname(base_name):
         new_name = f"{name_part}_{counter}{ext}"
         if not os.path.exists(new_name):
             plt.savefig(new_name)
+            plt.close()
             print(f"检测到重名文件，已保存为: {new_name}")
             return
         counter += 1

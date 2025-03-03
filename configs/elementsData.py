@@ -274,6 +274,9 @@ class ElementsData:
         name = {"locator":"UICanvas>Default>BaitAndRodShowPanel>panel>>panel_right>content>bg>nameBG>name"}
         skill_list = {"locator":"UICanvas>Default>BaitAndRodShowPanel>panel>panel_rod_info>panel_right>content>bg>skill_list>>rod_skill"}
 
+    class BattleChallengeTimerHUD:
+        time = {"locator": "UICanvas>Default>BattleChallengeTimerHUD>time_hud>time>text"}
+
     class BattleDebugPanel:
         BattleDebugPanel = {"locator": "UICanvas>Important>BattleDebugPanel"}
         hold_status = {"locator": "UICanvas>Important>BattleDebugPanel>bg>battleDetail>hold_status>value"}
@@ -649,6 +652,10 @@ class ElementsData:
         btns_tips_title_edit = {"locator": "UICanvas>Default>ChatPanel>panel>panel_info>panel_info>panel_top>tips_title_edit>panel>btns>"}
         btn_send = {"locator": "UICanvas>Default>ChatPanel>panel>panel_info>panel_info>panel_top>tips_title_edit>panel>btns>btn_send"}
         btn_fast = {"locator": "UICanvas>Default>ChatPanel>panel>panel_info>panel_info>panel_top>title_world>btn_fast"}
+
+    class ChallengeMainStageAFKPanel:
+        ChallengeMainStageAFKPanel= {"locator": "UICanvas>Default>ChallengeMainStageAFKPanel"}
+        btn_close = {"locator": "UICanvas>Default>ChallengeMainStageAFKPanel>panel>btn_close>img"}
 
     class ClubApplyPanel:
         ClubApplyPanel = {"locator":"UICanvas>Default>ClubApplyPanel"}
