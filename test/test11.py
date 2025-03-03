@@ -305,7 +305,7 @@ def fish_once(bp: BasePage, fish_id="", personality=None):
 
     data_list, m_max, base_hp, battle_time, line_data, battle_damage, reel_velocity_z, time_remain = qte(bp, personality)
     print(f"伤害：{battle_damage} 线长：{m_max} 跑线：{reel_velocity_z}")
-    print(f"剩余时间：{time_remain}s, 战斗时间：{battle_time}s")
+    print(f"剩余时间：{time_remain}s, 战斗时间：{battle_time}")
     print(f"鱼血量上限：{base_hp}")
     print(line_data)
     if fish_id != "":
