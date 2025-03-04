@@ -23,23 +23,39 @@ def guide_skip(bp: BasePage):
     lua_code = csMsgAll.get_CSNewGuideStoreMsg(key="OPENING_STAGE_FISHERY_1_500301")
     lua_code_list.append(lua_code)
     bp.lua_console_list(command_list=lua_code_list)
+    bp.sleep(1)
 
 
 def quest_done(bp: BasePage):
-    table_data_object_list = bp.excelTools.get_table_data_object_list(book_name="NEW_PLOT_QUEST.xlsm")
-    cur = 0
-    while cur < len(table_data_object_list) - 1:
-        table_data_object = table_data_object_list[cur]
-        quest_id = table_data_object["tpId"]
-        bp.cmd(f"questFinish {quest_id}")
+    table_data_detail = bp.excelTools.get_table_data_detail(book_name="NEW_PLOT_QUEST.xlsm")
+    table_data_object_list, _, _ = table_data_detail
+    table_data_object = table_data_object_list[0]
+    quest_id = table_data_object["tpId"]
+    while True:
+        # bp.cmd(f"questFinish {quest_id}")
+        bp.cmd(f"questFinish")
         bp.sleep(0.1)
         lua_code = csMsgAll.get_CSGetQuestRewardsMsg(questTpId=quest_id)
 
         # 发送消息
         bp.lua_console(lua_code)
         bp.sleep(0.1)
-        cur += 1
+        if "nextQuestId" not in table_data_object:
+            break
+        quest_id = table_data_object["nextQuestId"]
+        table_data_object = bp.excelTools.get_table_data_object_by_key_value(key="tpId", value=quest_id, table_data_detail=table_data_detail)
 
+
+
+def quest_done_once(bp: BasePage, table_data_object):
+    quest_id = table_data_object["tpId"]
+    if "triggerKeyS" in table_data_object:
+        i = 0
+        while i < table_data_object["triggerValue"]:
+            fish_quick(bp, fish_id=table_data_object["triggerKeyS"])
+            i += 1
+
+    bp.cmd(f"questFinish {quest_id}")
 
 
 
@@ -168,7 +184,6 @@ def level_up_to_new_plot(bp: BasePage, level, tp_id="102600"):
     if item_count >= exp:
         return
     bp.cmd(f"add 1 {tp_id} {exp - item_count}")
-    print(exp - item_count)
 
 
 def tower_level_up(bp: BasePage, tag, lv):
@@ -186,17 +201,19 @@ def tower_level_up(bp: BasePage, tag, lv):
 
 
 if __name__ == '__main__':
-    base_page = BasePage(serial_number="127.0.0.1:21583", is_mobile_device=False)
-    # base_page.is_time_scale = True
+    base_page = BasePage(serial_number="127.0.0.1:21593", is_mobile_device=True)
+    base_page.is_time_scale = True
     #
-    # # # 跳过引导
+    # # # # 跳过引导
     # guide_skip(base_page)
     # #
-    # # # 完成新主线剧情任务
+    # # # 新主线升到指定等级
+    # level_up_to_new_plot(base_page, 50)
+    # # # #
+    # # # # 完成新主线剧情任务
     # quest_done(base_page)
 
-    # 新主线升到指定等级
-    # level_up_to_new_plot(base_page, 25)
+
 
     # 天赋满级
     # talent_all(base_page)
@@ -220,11 +237,11 @@ if __name__ == '__main__':
     # category_done(base_page, category_id=10004)
 
     # # 钓一次鱼 运行界面：备战界面
-    # battleTest.fish_once(base_page)
+    # battleTest.fish_once(base_page, is_quick=True)
 
     # 循环钓鱼 运行界面：备战界面
     # 填渔场id会将该渔场鱼钓一遍
-    # battleTest.circulate_fish(base_page, is_quick=False)
+    battleTest.circulate_fish(base_page, is_quick=True)
 
     # 体感抛竿
     # battleTest.vibration_cast(base_page)
@@ -256,11 +273,10 @@ if __name__ == '__main__':
 
     # 爬塔难度升若干级，在RogueMainStagePanel界面运行
     # tag 1强壮 2敏捷 3多变
-    tower_level_up(base_page, tag=1, lv=7)
+    # tower_level_up(base_page, tag=1, lv=1)
 
-    # base_page.lua_console("DebugLog=true")
+    # base_page.lua_console('PanelMgr:OpenPanel("HomePanelNew")')
 
     # createUsers.logout(base_page)
-
 
     base_page.connect_close()
