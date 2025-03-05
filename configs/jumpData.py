@@ -13,6 +13,7 @@ class JumpData:
         "BaitAndRodShowPanel",
         "BattleTreasureMapPanel",
         "BattleTreasureMapDescriptionPanel",
+        "ChallengeMainStageAFKPanel",
         "ChampointshipResultPopup",
         "ClubRedEnvelopePanel",
         "DailyTipsPanel",
@@ -37,6 +38,7 @@ class JumpData:
         "PVENewbieGiftPackPanel",
         "PVPBoosterGiftPackPanel",
         "PVPRoomInvitePanel",
+        "QuestBossTipsPanel",
         "RankFishSettleResultPanel",
         "Recharge1And1Panel",
         "RechargeBlack5Panel",
@@ -51,6 +53,7 @@ class JumpData:
         "MessageBoxPanel",
         "MidAutumnPackPopupPanel",
         "MonthCardPopPanel",
+
     }
 
     panel_dict = {
@@ -91,6 +94,7 @@ class JumpData:
         "BuyEnergyPanel": {"element_data": ElementsData.BuyEnergyPanel.BuyEnergyPanel, "open_path": [ElementsData.HomePanel.btn_add_100500], "close_path": [ElementsData.BuyEnergyPanel.btn_close]},
         "CareerPanel": {"element_data": ElementsData.CareerPanel.CareerPanel, "open_path": [ElementsData.HomePanel.btn_career], "close_path": [ElementsData.CareerPanel.btn_close]},
         "ChatPanel": {"element_data": ElementsData.ChatPanel.ChatPanel, "close_path": [ElementsData.ChatPanel.btn_close]},
+        "ChallengeMainStageAFKPanel": {"element_data": ElementsData.ChallengeMainStageAFKPanel.ChallengeMainStageAFKPanel,"close_path": [ElementsData.ChallengeMainStageAFKPanel.btn_close]},
         "ChampointshipResultPopup": {"element_data": ElementsData.ChampointshipResultPopup.ChampointshipResultPopup, "close_path": [ElementsData.ChampointshipResultPopup.btn_close]},
         "CommonWebViewPanel": {"element_data": ElementsData.CommonWebViewPanel.CommonWebViewPanel, "close_path": [ElementsData.CommonWebViewPanel.btn_close]},
         "ClubApplyPanel": {"element_data": ElementsData.ClubApplyPanel.ClubApplyPanel, "close_path": [ElementsData.ClubApplyPanel.btn_close]},
@@ -143,6 +147,7 @@ class JumpData:
         "PVPResultPanel": {"element_data": ElementsData.PVPResultPanel.PVPResultPanel, "close_path": [ElementsData.PVPResultPanel.tap_to_close]},
         "PVPRoomInvitePanel": {"element_data": ElementsData.PVPRoomInvitePanel.PVPRoomInvitePanel, "close_path": [ElementsData.PVPRoomInvitePanel.btn_close]},
         "PVPRuleTipsPanel": {"element_data": ElementsData.PVPRuleTipsPanel.PVPRuleTipsPanel, "close_path": [ElementsData.PVPRuleTipsPanel.btn_close]},
+        "QuestBossTipsPanel":{"element_data": ElementsData.QuestBossTipsPanel.QuestBossTipsPanel, "close_path": [ElementsData.QuestBossTipsPanel.QuestBossTipsPanel]},
         "QuestionnairePanel": {"element_data": ElementsData.QuestionnairePanel.QuestionnairePanel, "open_path": [ElementsData.HomePanel.btn_questionnaire], "close_path": [ElementsData.QuestionnairePanel.btn_close]},
         "RankPanel": {"element_data": ElementsData.RankPanel.RankPanel, "open_path": [ElementsData.HomePanel.btn_fishranking], "close_path": [ElementsData.RankPanel.btn_close]},
         "RankFishLeaderboardPanel": {"element_data": ElementsData.RankFishLeaderboardPanel.RankFishLeaderboardPanel, "close_path": [ElementsData.RankFishLeaderboardPanel.btn_close]},

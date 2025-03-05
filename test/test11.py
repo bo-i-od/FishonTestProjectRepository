@@ -189,8 +189,6 @@ def qte(bp, personality: Personality = None):
         if text_list[2]:
             time_remain = float(text_list[2][0])
 
-
-
         if t and m_cur and current_hp:
             data_list.append((t, float(m_cur), float(current_hp)))
         object_id_list = bp.get_object_id_list(element_data_list=element_data_list)
@@ -261,6 +259,7 @@ def qte(bp, personality: Personality = None):
             time_hold = (hold_status_end[0] - hold_status_start[0])
             time_release = (hold_status_end[1] - hold_status_start[1])
             line_data = f"收线占比{100 * time_hold // (time_release + time_hold)}%"
+            print(line_data)
             # print(time_hold, time_release)
 
         if object_id_list[btn_claim_pve_index]:
@@ -527,14 +526,21 @@ def main(bp: BasePage, name):
     bp.is_time_scale = True
     bp.set_time_scale(time_scale=time_scale)
     bp.custom_cmd("setQTECD 1")
+    bp.custom_cmd("setQuickQTE 1")
     change_gear(bp, kind=gear_kind)
     bp.lua_console('PanelMgr:OpenPanel("GearPanelNew")')
     bp.sleep(0.5)
     bp.lua_console('PanelMgr:ClosePanel("GearPanelNew")')
-    bp.cmd(f"fishscenestarset 500301 {star}")
-    data_list, m_max, base_hp = fish_once(bp, fish_id=fish_id, personality=personality)
-    print(name)
-    save_plt(data_list, m_max, base_hp, name=name)
+    print(name + f"{star_start}至{star_end}星")
+    star = star_start
+    while star <= star_end:
+        bp.cmd(f"fishscenestarset 500301 {star}")
+        bp.set_text(element_data={"locator": "UICanvas>star"}, text=f"{star}星")
+        data_list, m_max, base_hp = fish_once(bp, fish_id=fish_id, personality=personality)
+        plt_name = name + str(star) + '星'
+        save_plt(data_list, m_max, base_hp, name=plt_name)
+        bp.set_text(element_data={"locator": "UICanvas>star"}, text=f"")
+        star += 2
     bp.connect_close()
 
 
@@ -554,7 +560,8 @@ if __name__ == '__main__':
     gear_kind = 7
 
     # 渔场难度
-    star = 49
+    star_start = 19
+    star_end = 29
 
     # is_restrain = False
 
@@ -564,7 +571,6 @@ if __name__ == '__main__':
 
     # res = f"{lv}级_{star}星"
     res = f"套装{gear_kind}"
-    res += f"_{star}星"
     if fish_kind == 1:
         fish_id = "360113"
         res += "力"

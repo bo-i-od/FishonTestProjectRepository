@@ -1779,6 +1779,9 @@ class ElementsData:
         PVPRuleTipsPanel = {"locator": "UICanvas>Default>PVPRuleTipsPanel"}
         btn_close = {"locator": "UICanvas>Default>PVPRuleTipsPanel>Panel_Popups_Edit>Panel>btn_close>img"}
 
+    class QuestBossTipsPanel:
+        QuestBossTipsPanel = {"locator": "UICanvas>Default>QuestBossTipsPanel"}
+
     class QuestionnairePanel:
         QuestionnairePanel = {"locator": "UICanvas>Important>QuestionnairePanel"}
         btn_close = {"locator": "UICanvas>Important>QuestionnairePanel>Panel>btn_close>img"}
