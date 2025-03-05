@@ -1932,9 +1932,16 @@ class ElementsData:
 
     class RogueSelectSkillPanel:
         RogueSelectSkillPanel = {"locator": "UICanvas>Default>RogueSelectSkillPanel"}
+        centerAnchor = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>centerAnchor"}
+        challenge = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>challenge"}
+
         btn_orange = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>btn_orange"}
         btn_blue = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>btn_blue"}
         skill_list = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>centerAnchor>bg>>icon"}
+        skill_attribute_list = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>centerAnchor>bg>>bg_group>bg"}
+        challenge_list = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>challenge>bg>>tag>text"}
+        challenge_position_list = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>challenge>bg>>icon"}
+
 
     class RookiePanel:
         RookiePanel = {"locator": "UICanvas>Default>RookiePanel"}
