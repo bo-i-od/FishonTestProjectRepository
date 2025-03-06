@@ -147,7 +147,7 @@ class BattlePanel(BasePage):
             self.lua_console(command="GameRoot:GetFishingMatch():GetPlayer().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
             # # 海外
             # self.lua_console(command="GameRoot:GetFishingMatch().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
-            self.sleep(1)
+            self.sleep(0.5)
 
     def unleash_power(self):
         # 得到reel按钮的位置
@@ -164,6 +164,7 @@ class BattlePanel(BasePage):
 
     def hook(self):
         self.wait_for_appear(element_data_list=[ElementsData.BattlePanel.btn_reel, ElementsData.ResultPanel.btn_claim_pve, ElementsData.ResultPanel.btn_claim_pvp], is_click=False, timeout=25)
+        self.set_time_scale(time_scale=1)
         # 如果没有刺鱼就跳过
         progress_position, arrow_position = self.get_position_list(element_data_list=[ElementsData.BattlePanel.progress, ElementsData.BattlePanel.arrow])
         if not progress_position:
@@ -178,7 +179,8 @@ class BattlePanel(BasePage):
         progress_range = [progress_position[0][1] - 0.5 * h, progress_position[0][1] + 0.5 * h]
 
         progress = (arrow_position[0][1] - progress_range[0]) / h
-        while progress < 0.75:
+
+        while progress < 0.7:
             arrow_position = self.get_position_list(element_data=ElementsData.BattlePanel.arrow)
             if not arrow_position:
                 return
@@ -186,7 +188,7 @@ class BattlePanel(BasePage):
             self.sleep(0.05)
         try:
             BattlePanel.hold_btn_reel(self)
-            self.sleep(0.1)
+            self.sleep(0.05)
             BattlePanel.release_btn_reel(self)
         except RemoteError:
             pass

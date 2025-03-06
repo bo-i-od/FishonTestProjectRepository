@@ -5,6 +5,7 @@ class JumpData:
     element_data_home = ElementsData.HomePanel.HomePanel
     panel_list = [ElementsData.Panels, ElementsData.Home3DPanel.Home3DPanel]
     pop_window_set = {
+        "AnniversaryEventMainPanel",
         "AquariumCommonFishChangePanel",
         "AquariumNewActivityInnerPopupPanel",
         "AquariumNewActivityPopupPanel",
@@ -63,6 +64,7 @@ class JumpData:
         "AchievementPopupPanel": {"element_data": ElementsData.AchievementPopupPanel.AchievementPopupPanel},
         "AchievementWantedPanel": {"element_data": ElementsData.AchievementWantedPanel.AchievementWantedPanel, "close_path": [ElementsData.AchievementWantedPanel.btn_close]},
         "AlbumFishDetailPanel": {"element_data": ElementsData.AlbumFishDetailPanel.AlbumFishDetailPanel, "close_path": [ElementsData.AlbumFishDetailPanel.btn_close_share_chat, ElementsData.AlbumFishDetailPanel.btn_close]},
+        "AnniversaryEventMainPanel": {"element_data": ElementsData.AnniversaryEventMainPanel.AnniversaryEventMainPanel, "close_path": [ElementsData.AnniversaryEventMainPanel.btn_close]},
         "AquariumFishNewPanel": {"element_data": ElementsData.AquariumFishNewPanel.AquariumFishNewPanel, "open_path": [ElementsData.HomePanel.btn_aquarium, ElementsData.AquariumMainPanel.btn_fish]},
         "AquariumMainPanel": {"element_data": ElementsData.AquariumMainPanel.AquariumMainPanel, "open_path": [ElementsData.HomePanel.btn_aquarium], "close_path": [ElementsData.AquariumMainPanel.btn_close]},
         "AquariumNewSkinPanel": {"element_data": ElementsData.AquariumNewSkinPanel.AquariumNewSkinPanel, "close_path": [ElementsData.AquariumNewSkinPanel.btn_close]},
@@ -124,6 +126,7 @@ class JumpData:
         "GearLevelupPanel": {"element_data": ElementsData.GearLevelupPanel.GearLevelupPanel, "close_path": [ElementsData.GearLevelupPanel.btn_close]},
         "GearEnhancePanel": {"element_data": ElementsData.GearEnhancePanel.GearEnhancePanel, "close_path": [ElementsData.GearEnhancePanel.btn_close]},
         "GearEnhanceSuccesPanel": {"element_data": ElementsData.GearEnhanceSuccesPanel.GearEnhanceSuccesPanel, "close_path": [ElementsData.GearEnhanceSuccesPanel.btn_close]},
+        "HomePanelNew": {"element_data": ElementsData.HomePanelNew.HomePanelNew, "open_path": [ElementsData.Home3DPanel.btn_mainstage],},
         "HomePanel": {"element_data": ElementsData.HomePanel.HomePanel},
         "IAAPanel": {"element_data": ElementsData.IAAPanel.IAAPanel, "close_path": [ElementsData.IAAPanel.btn_close]},
         "KatanaPackPopupPanel": {"element_data": ElementsData.KatanaPackPopupPanel.KatanaPackPopupPanel, "close_path": [ElementsData.KatanaPackPopupPanel.btn_close]},
