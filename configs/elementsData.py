@@ -72,6 +72,11 @@ class ElementsData:
         btn_close_share_chat = {"locator": "UICanvas>Default>AlbumFishDetailPanel>Panel_Popups_Tournaments>Panel>btn_close>img"}
         btn_confirm_list = {"locator": "UICanvas>Default>AlbumFishDetailPanel>Panel_Popups_Tournaments>Panel>panel_list>list>Viewport>Content>>btn_confirm", "focus": (1, 0.5)}
 
+    class AnniversaryEventMainPanel:
+        AnniversaryEventMainPanel = {"locator":"UICanvas>Default>AnniversaryEventMainPanel"}
+        btn_close = {"locator": "UICanvas>Default>AnniversaryEventMainPanel>panel>btn_close>img"}
+
+
     class AquariumPanel:
         AquariumPanel = {"locator": "UICanvas>Default>AquariumPanel"}
         btn_close = {"locator": "UICanvas>Default>AquariumPanel>panel>btn_close>img"}
@@ -1170,6 +1175,9 @@ class ElementsData:
         btn_close = {"locator": "UICanvas>Default>GearSkillTipsPanel>panel", "focus": (0.5, -0.2)}
         skill_icon = {"locator": "UICanvas>Default>GearSkillTipsPanel>panel>Content>title_group>rod_skill>rod_skill>icon_bg>icon"}
 
+    class HomePanelNew:
+        HomePanelNew = {"locator": "UICanvas>Default>HomePanelNew"}
+
     class HomePanel:
         #panel_left
         HomePanel = {"locator": "UICanvas>Default>HomePanel"}
@@ -1246,6 +1254,7 @@ class ElementsData:
         btn_pve = {"locator": "HomeCanvas>Home3DPanel>panel>panel_entrance>btn_pve>text", "camera": "Camera3D"}
         btn_pvp = {"locator": "HomeCanvas>Home3DPanel>panel>panel_entrance>btn_pvp", "camera": "Camera3D"}
         btn_avatar = {"locator": "HomeCanvas>Home3DPanel>panel>panel_avatar>btn_avatar", "camera": "Camera3D"}
+        btn_mainstage = {"locator": "HomeCanvas>Home3DPanel>panel>panel_entrance>btn_mainstage", "camera": "Camera3D"}
 
 
     class KatanaPackPopupPanel:
@@ -1338,7 +1347,7 @@ class ElementsData:
 
     class MainlineFlashCardReceivePanel:
         MainlineFlashCardReceivePanel = {"locator": "UICanvas>Default>MainlineFlashCardReceivePanel"}
-        btn_close = {"locator": "UICanvas>Default>MainlineFlashCardReceivePanel>panel_flashcard>btn_close>tip"}
+        btn_close = {"locator": "UICanvas>Default>MainlineFlashCardReceivePanel>>btn_close>tip"}
 
     class MainStageSettlePanel:
         MainStageSettlePanel = {"locator": "UICanvas>Default>MainStageSettlePanel"}
@@ -1947,7 +1956,7 @@ class ElementsData:
 
         btn_orange = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>btn_orange"}
         btn_blue = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>btn_blue"}
-        skill_list = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>centerAnchor>bg>>icon"}
+        skill_list = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>>bg>>icon"}
         skill_attribute_list = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>centerAnchor>bg>>bg_group>bg"}
         challenge_list = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>challenge>bg>>tag>text"}
         challenge_position_list = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>challenge>bg>>icon"}
