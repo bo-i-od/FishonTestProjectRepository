@@ -28,5 +28,6 @@ class RogueResultPanel(BasePage):
             value = self.get_text(element_data=ElementsData.RogueResultPanel.lost_item2_value)
             res += f"难度{value}失败_"
             jindu = self.get_text(element_data=ElementsData.RogueResultPanel.title_text1)
+            jindu = jindu.replace("/","_")
             res += f"进度{jindu}"
         print(res)
