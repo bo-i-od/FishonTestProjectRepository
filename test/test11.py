@@ -251,16 +251,15 @@ def qte(bp, personality: Personality = None):
         #         continue
         #     BattlePanel.slide(bp, "right")
         #     continue
-        if (not object_id_list[warning_index]) and (start_time is not None):
-            if end_time is None:
-                end_time = time.time()
-                battle_time = f"{(end_time - start_time):.1f}s"
-                hold_status = BattleDebugPanel.get_hold_status(bp)
-                hold_status_end = deal_with_hold_status(hold_status)
-                time_hold = (hold_status_end[0] - hold_status_start[0])
-                time_release = (hold_status_end[1] - hold_status_start[1])
-                line_data = f"收线占比{100 * time_hold // (time_release + time_hold)}%"
-            bp.set_time_scale(time_scale=time_scale)
+        if (not object_id_list[warning_index]) and (end_time is None) and (start_time is not None):
+            end_time = time.time()
+            battle_time = f"{(end_time - start_time):.1f}s"
+            hold_status = BattleDebugPanel.get_hold_status(bp)
+            hold_status_end = deal_with_hold_status(hold_status)
+            time_hold = (hold_status_end[0] - hold_status_start[0])
+            time_release = (hold_status_end[1] - hold_status_start[1])
+            line_data = f"收线占比{100 * time_hold // (time_release + time_hold)}%"
+            # print(line_data)
             # print(time_hold, time_release)
 
         if object_id_list[btn_claim_pve_index]:
@@ -290,6 +289,15 @@ def qte(bp, personality: Personality = None):
         bp.sleep(0.1)
     return data_list, m_max, base_hp, battle_time, line_data, battle_damage, reel_velocity_z, time_remain
 
+def show_data(bp: BasePage):
+    text_list = bp.get_text(element_data=ElementsData.BattleDebugPanel.content)
+    content_dict = parse_key_value(text_list)
+    m_max_temp = get_value(content_dict, "LINE_LENGTH")
+    base_hp_temp = get_value(content_dict, "BaseHP")
+    battle_damage_temp = get_value(content_dict, "STAMINA_DECREASE")
+    reel_velocity_z_temp = get_value(content_dict, "REEL_VELOCITY_Z")
+    bp.set_text(element_data={"locator": "UICanvas>star(Clone)"},
+                text=f"伤害：{battle_damage_temp}, 线长：{m_max_temp}, 跑线：{reel_velocity_z_temp}, 鱼血量上限：{base_hp_temp}")
     
 
 def fish_once(bp: BasePage, fish_id="", personality=None):
@@ -304,6 +312,8 @@ def fish_once(bp: BasePage, fish_id="", personality=None):
     bp.set_time_scale(time_scale=1)
     if BattlePanel.is_reel_active(bp):
         bp.custom_cmd("autofish")
+    show_data(bp)
+
 
     data_list, m_max, base_hp, battle_time, line_data, battle_damage, reel_velocity_z, time_remain = qte(bp, personality)
     print(f"伤害：{battle_damage} 线长：{m_max} 跑线：{reel_velocity_z}")
@@ -528,7 +538,7 @@ def save_text(content, filename, mode='w', encoding='utf-8'):
 
 def main(bp: BasePage, name):
     bp.is_time_scale = True
-
+    bp.set_time_scale(time_scale=time_scale)
     bp.custom_cmd("setQTECD 1")
     bp.custom_cmd("setQuickQTE 1")
     change_gear(bp, kind=gear_kind)
@@ -542,7 +552,6 @@ def main(bp: BasePage, name):
         print(plt_name)
         bp.cmd(f"fishscenestarset 500301 {star}")
         bp.set_text(element_data={"locator": "UICanvas>star(Clone)"}, text=f"{star}星")
-        bp.set_time_scale(time_scale=time_scale)
         data_list, m_max, base_hp = fish_once(bp, fish_id=fish_id, personality=personality)
         save_plt(data_list, m_max, base_hp, name=plt_name)
         bp.set_text(element_data={"locator": "UICanvas>star(Clone)"}, text=f"")
@@ -553,27 +562,30 @@ def main(bp: BasePage, name):
 if __name__ == '__main__':
     bp1 = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
     time_scale = 4
+    # bp2 = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
+
+    # 装备等级
+    lv = 90
 
     # 1力 2敏 3智
-    fish_kind = 2
+    fish_kind = 3
 
     # 套装0-9
     # 0.初始 1.强力收线/强力爆气 2.强力回拉/强力刺鱼 3.技巧拔竿/技巧压制 4.超负荷气 5.长线绝杀 6.不动如山 7.乘胜追击 8.背水一战 9.一刺入魂
-    gear_kind = 6
+    gear_kind = 3
 
     # 渔场难度
-    star_start = 25
-    star_end = 45
+    star_start = 7
+    star_end = 27
 
-    lv_gear = 255
-
+    # is_restrain = False
 
     # PersonalityNB是挂机高手
     # PersonalityLJ是挂机菜鸡
     personality = PersonalityNB()
 
     # res = f"{lv}级_{star}星"
-    res = f"{lv_gear}级套装{gear_kind}"
+    res = f"{lv}级_套装{gear_kind}"
     if fish_kind == 1:
         fish_id = "360113"
         res += "力"
@@ -584,6 +596,17 @@ if __name__ == '__main__':
         fish_id = "360107"
         res += "智"
 
+    # if is_restrain:
+    #     res += "_克制"
+    # else:
+    #     res += "_非克制"
+    #     fish_kind += 1
+    # if fish_kind > 3:
+    #     fish_kind = 1
 
+    # if personality.__class__ is PersonalityLJ:
+    #     res += "_菜鸡"
+    # else:
+    #     res += "_高手"
     main(bp1, name=res)
     # main(bp2)
