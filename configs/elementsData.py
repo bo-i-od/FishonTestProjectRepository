@@ -521,6 +521,8 @@ class ElementsData:
             btn_cancel = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears_new>panel_gears_switch>btns>btn_cancel>text"}
             btn_go = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears_new>panel_gears_switch>panel_gears_preview>btns>btn_go"}
 
+        class rogue_prepare:
+            task03 = {"locator":"UICanvas>Default>BattlePreparePanel>panel_MainStage_rogue_prepare>panel_right>task_group>task03>text"}
 
     class AquariumFishGuardSideBarPanel:
         AquariumFishGuardSideBarPanel = {"locator": "UICanvas>Default>AquariumFishGuardSideBarPanel"}
@@ -1924,6 +1926,11 @@ class ElementsData:
     class RogueResultPanel:
         RogueResultPanel = {"locator": "UICanvas>Default>RogueResultPanel"}
         btn_orange = {"locator": "UICanvas>Default>RogueResultPanel>panel_succeed>btn_group>btn_orange"}
+        panel_succeed = {"locator": "UICanvas>Default>RogueResultPanel>panel_succeed"}
+        panel_lost = {"locator": "UICanvas>Default>RogueResultPanel>panel_lost"}
+        succeed_item2_value = {"locator":"UICanvas>Default>RogueResultPanel>panel_succeed>current>message>item2>value"}
+        lost_item2_value = {"locator": "UICanvas>Default>RogueResultPanel>panel_lost>current>message>item2>value"}
+        tips = {"locator": "UICanvas>Default>RogueResultPanel>panel_succeed>current>title>tips>text"}
 
     class RodSkinGiftPack027Panel:
         RodSkinGiftPack027Panel = {"locator": "UICanvas>Default>RodSkinGiftPack027Panel"}
@@ -1944,6 +1951,12 @@ class ElementsData:
         skill_attribute_list = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>centerAnchor>bg>>bg_group>bg"}
         challenge_list = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>challenge>bg>>tag>text"}
         challenge_position_list = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>challenge>bg>>icon"}
+
+    class RogueShowSkillsPanel:
+        raise_all = {"locator":"UICanvas>Default>RogueShowSkillsPanel>Panel>list_info>raise_all>text"}
+        btn_close = {"locator":"UICanvas>Default>RogueShowSkillsPanel>Panel>btn_close>img"}
+        tab_1 = {"locator": "UICanvas>Default>RogueShowSkillsPanel>Panel>list_info>tab>tab_1"}
+        tab_2 = {"locator": "UICanvas>Default>RogueShowSkillsPanel>Panel>list_info>tab>tab_2"}
 
 
     class RookiePanel:
