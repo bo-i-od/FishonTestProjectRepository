@@ -26,5 +26,7 @@ class RogueResultPanel(BasePage):
                 res += "非无损"
         elif self.exist(element_data=ElementsData.RogueResultPanel.panel_lost):
             value = self.get_text(element_data=ElementsData.RogueResultPanel.lost_item2_value)
-            res += f"难度{value}失败"
+            res += f"难度{value}失败_"
+            jindu = self.get_text(element_data=ElementsData.RogueResultPanel.title_text1)
+            res += f"进度{jindu}"
         print(res)
