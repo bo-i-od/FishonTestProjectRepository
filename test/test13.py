@@ -48,11 +48,16 @@ def main(bp:BasePage):
 if __name__ == '__main__':
     bp = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
     gear_lv = 30
-    kind = 3
-    # test11.change_gear(bp=bp,kind=kind)
+    # 1力 2敏 3智
+    fish_kind = 3
+
+    # 套装0-9
+    # 0.初始 1.强力收线/强力爆气 2.强力回拉/强力刺鱼 3.技巧拔竿/技巧压制 4.超负荷气 5.长线绝杀 6.不动如山 7.乘胜追击 8.背水一战 9.一刺入魂
+    gear_kind = 3
+    test11.change_gear(bp=bp,kind=gear_kind)
     difficulty = 0
     # 升爬塔难度
-    # level_up(difficulty=difficulty)
-    # main(bp=bp)
-    RogueResultPanel.result(bp,gear_lv=gear_lv,kind=kind)
+    level_up(difficulty=difficulty)
+    main(bp=bp)
+    RogueResultPanel.result(bp,gear_lv=gear_lv,kind=fish_kind)
     bp.connect_close()
