@@ -18,7 +18,7 @@ class RogueSelectSkillPanel(BasePage):
         self.click_object_of_plural_objects(element_data=ElementsData.RogueSelectSkillPanel.skill_list, index=index, ignore_set={"RogueSelectSkillPanel"})
 
     def choose_skill(self):
-        self.wait_for_appear(element_data=ElementsData.RogueSelectSkillPanel.skill_attribute_list, interval=0.5,timeout=10)
+        # self.wait_for_appear(element_data=ElementsData.RogueSelectSkillPanel.skill_attribute_list, interval=0.5,timeout=10)
         skill_list = self.get_icon_list(element_data=ElementsData.RogueSelectSkillPanel.skill_attribute_list)
         skill_attribute_list = [int(s.split("_")[-1]) for s in skill_list]
         # print(skill_list)
@@ -33,23 +33,25 @@ class RogueSelectSkillPanel(BasePage):
         # print(f"选择第{index + 1}个技能")
         self.click_element(element_data=ElementsData.RogueSelectSkillPanel.btn_orange)
 
-    def choose_challenge(self,angry_target, angry_now):
+    def choose_challenge(self, angry_target, angry_now):
+        choose_dict = {0: "1", 1: "1", 2: "3"}
         challenge_list = self.get_text_list(element_data=ElementsData.RogueSelectSkillPanel.challenge_list)
-        challenge_list = [int(s) for s in challenge_list]
-        choose_num = 0
-        # 选择怒气值最高/低的事件
-        max_challenge = max(challenge_list)
-        if (angry_target - angry_now) > max_challenge:
-            choose_num = max_challenge
-        else:
-            choose_num = angry_target - angry_now
-        index = challenge_list.index(choose_num)
+        # challenge_list = [int(s) for s in challenge_list]
+        # choose_num = 0
+        # # 选择怒气值最高/低的事件
+        # max_challenge = max(challenge_list)
+        # if (angry_target - angry_now) > max_challenge:
+        #     choose_num = max_challenge
+        # else:
+        #     choose_num = angry_target - angry_now
+        # index = challenge_list.index(choose_num)
+        index = challenge_list.index(choose_dict[angry_now])
 
         challenge_position_list = self.get_position_list(element_data=ElementsData.RogueSelectSkillPanel.challenge_position_list)
         self.click_position(position=challenge_position_list[index])
 
         # print(f"已选择第{index+1}个事件")
-        self.ray_input(kind='click',element_data=ElementsData.RogueSelectSkillPanel.btn_orange)
+        self.ray_input(kind='click', element_data=ElementsData.RogueSelectSkillPanel.btn_orange)
 
     def get_now_num(self):
         self.ray_input(kind='click',element_data=ElementsData.RogueSelectSkillPanel.btn_blue)

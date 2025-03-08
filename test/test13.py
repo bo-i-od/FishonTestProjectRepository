@@ -29,34 +29,42 @@ def level_up(fish_kind,difficulty):
 
 
 def main(bp:BasePage):
+    bp.custom_cmd("setQTECD 0.8")
+    bp.custom_cmd("setQuickQTE 1")
     RogueMainStagePanel.click_btn_challenge(bp)
     bp.sleep(3)
 
     while not bp.exist(element_data=ElementsData.RogueResultPanel.RogueResultPanel):
         angry_target = RoguePrepare.get_target_num(bp)
         test11.fish_once(bp=bp, personality=PersonalityNB())
-        bp.wait_for_appear(element_data=ElementsData.RogueSelectSkillPanel.centerAnchor,interval=0.5,timeout=10)
+        bp.set_time_scale(time_scale=time_scale)
+        bp.wait_for_appear(element_data=ElementsData.RogueSelectSkillPanel.centerAnchor,interval=1, timeout=3)
         while bp.exist(element_data=ElementsData.RogueSelectSkillPanel.centerAnchor):
-            # bp.sleep(3)
+            bp.sleep(2)
             RogueSelectSkillPanel.choose_skill(bp)
-        bp.wait_for_appear(element_data=ElementsData.RogueSelectSkillPanel.challenge,interval=0.5,timeout=10)
+        bp.wait_for_appear(element_data=ElementsData.RogueSelectSkillPanel.challenge,interval=1, timeout=3)
         while bp.exist(element_data=ElementsData.RogueSelectSkillPanel.challenge):
+            bp.sleep(2)
             angry_now = RogueSelectSkillPanel.get_now_num(bp)
             RogueSelectSkillPanel.choose_challenge(bp,angry_target=angry_target, angry_now=angry_now)
 
 
 if __name__ == '__main__':
     bp = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
-    gear_lv = 60
-    # 1力 2敏 3智
-    fish_kind = 3
+    bp.is_time_scale = True
 
+    time_scale = 4
+    gear_lv = 255
+    # 1力 2敏 3智
+    fish_kind = 2
+    bp.set_time_scale(time_scale=time_scale)
     # 套装0-9
     # 0.初始 1.强力收线/强力爆气 2.强力回拉/强力刺鱼 3.技巧拔竿/技巧压制 4.超负荷气 5.长线绝杀 6.不动如山 7.乘胜追击 8.背水一战 9.一刺入魂
-    gear_kind = 3
-    # test11.change_gear(bp=bp,kind=gear_kind)
-    difficulty = 0
+    gear_kind = 6
+    test11.change_gear(bp=bp,kind=gear_kind)
+    difficulty =3
     # 升爬塔难度
+    # bp.cmd(f"towerReset 1 {fish_kind} 3")
     level_up(fish_kind=fish_kind,difficulty=difficulty)
     main(bp=bp)
     RogueResultPanel.result(bp,gear_lv=gear_lv,kind=fish_kind)

@@ -1940,6 +1940,7 @@ class ElementsData:
         succeed_item2_value = {"locator":"UICanvas>Default>RogueResultPanel>panel_succeed>current>message>item2>value"}
         lost_item2_value = {"locator": "UICanvas>Default>RogueResultPanel>panel_lost>current>message>item2>value"}
         tips = {"locator": "UICanvas>Default>RogueResultPanel>panel_succeed>current>title>tips>text"}
+        title_text1 = {"locator":"UICanvas>Default>RogueResultPanel>panel_lost>current>title>text1"}
 
     class RodSkinGiftPack027Panel:
         RodSkinGiftPack027Panel = {"locator": "UICanvas>Default>RodSkinGiftPack027Panel"}

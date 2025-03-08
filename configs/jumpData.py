@@ -47,7 +47,6 @@ class JumpData:
         "RechargeEndlessNewYearPanel",
         "RodSkinGiftPack027Panel",
         "RodSkinGiftPack030Panel",
-        "RogueSelectSkillPanel",
         "StoreSuitPopupPanel",
         "StoreChristmasPopupPanel",
         "MainlineFlashCardReceivePanel",
