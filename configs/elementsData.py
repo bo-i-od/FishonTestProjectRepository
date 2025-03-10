@@ -528,6 +528,7 @@ class ElementsData:
 
         class rogue_prepare:
             task03 = {"locator":"UICanvas>Default>BattlePreparePanel>panel_MainStage_rogue_prepare>panel_right>task_group>task03>text"}
+            btn_gohome = {"locator":"UICanvas>Default>BattlePreparePanel>panel_MainStage_rogue_prepare>panel_gohome>btn_gohome>img"}
 
     class AquariumFishGuardSideBarPanel:
         AquariumFishGuardSideBarPanel = {"locator": "UICanvas>Default>AquariumFishGuardSideBarPanel"}
@@ -1960,7 +1961,13 @@ class ElementsData:
         skill_list = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>>bg>>icon"}
         skill_attribute_list = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>centerAnchor>bg>>bg_group>bg"}
         challenge_list = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>challenge>bg>>tag>text"}
+        tag_lv1 = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>centerAnchor>bg>skill1>tag_lv>text"}
+        tag_lv2 = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>centerAnchor>bg>skill2>tag_lv>text"}
+        tag_lv3 = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>centerAnchor>bg>skill3>tag_lv>text"}
         challenge_position_list = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>challenge>bg>>icon"}
+        skill1_tag = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>centerAnchor>bg>skill1>tag_lv"}
+        skill2_tag = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>centerAnchor>bg>skill2>tag_lv"}
+        skill3_tag = {"locator": "UICanvas>Default>RogueSelectSkillPanel>Panel>centerAnchor>bg>skill3>tag_lv"}
 
     class RogueShowSkillsPanel:
         raise_all = {"locator":"UICanvas>Default>RogueShowSkillsPanel>Panel>list_info>raise_all>text"}

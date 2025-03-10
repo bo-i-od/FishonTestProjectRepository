@@ -26,27 +26,43 @@ def level_up(fish_kind,difficulty):
         cur += 1
 
 
-
+def settle(bp: BasePage, flag, angry_target):
+    t = 0
+    while t < 3:
+        object_id_list = bp.get_object_id_list(element_data_list=[ElementsData.RogueResultPanel.RogueResultPanel,
+                                                                  ElementsData.RogueSelectSkillPanel.centerAnchor,
+                                                                  ElementsData.RogueSelectSkillPanel.challenge])
+        if object_id_list[0]:
+            flag = False
+            print(flag)
+            return flag
+        if object_id_list[1]:
+            bp.sleep(2)
+            RogueSelectSkillPanel.choose_skill(bp)
+            continue
+        if object_id_list[2]:
+            bp.sleep(2)
+            angry_now = RogueSelectSkillPanel.get_now_num(bp)
+            RogueSelectSkillPanel.choose_challenge(bp, angry_target=angry_target, angry_now=angry_now)
+            continue
+        bp.sleep(1)
+        t += 1
+    flag = True
+    return flag
 
 def main(bp:BasePage):
     bp.custom_cmd("setQTECD 0.8")
     bp.custom_cmd("setQuickQTE 1")
     RogueMainStagePanel.click_btn_challenge(bp)
     bp.sleep(3)
-
-    while not bp.exist(element_data=ElementsData.RogueResultPanel.RogueResultPanel):
+    flag = True
+    while flag is True:
         angry_target = RoguePrepare.get_target_num(bp)
         test11.fish_once(bp=bp, personality=PersonalityNB())
         bp.set_time_scale(time_scale=time_scale)
-        bp.wait_for_appear(element_data=ElementsData.RogueSelectSkillPanel.centerAnchor,interval=1, timeout=3)
-        while bp.exist(element_data=ElementsData.RogueSelectSkillPanel.centerAnchor):
-            bp.sleep(2)
-            RogueSelectSkillPanel.choose_skill(bp)
-        bp.wait_for_appear(element_data=ElementsData.RogueSelectSkillPanel.challenge,interval=1, timeout=3)
-        while bp.exist(element_data=ElementsData.RogueSelectSkillPanel.challenge):
-            bp.sleep(2)
-            angry_now = RogueSelectSkillPanel.get_now_num(bp)
-            RogueSelectSkillPanel.choose_challenge(bp,angry_target=angry_target, angry_now=angry_now)
+        flag = settle(bp, flag, angry_target)
+        print(flag)
+
 
 
 if __name__ == '__main__':
@@ -67,5 +83,6 @@ if __name__ == '__main__':
     # bp.cmd(f"towerReset 1 {fish_kind} 3")
     level_up(fish_kind=fish_kind,difficulty=difficulty)
     main(bp=bp)
+    bp.sleep(2)
     RogueResultPanel.result(bp,gear_lv=gear_lv,kind=fish_kind)
     bp.connect_close()
