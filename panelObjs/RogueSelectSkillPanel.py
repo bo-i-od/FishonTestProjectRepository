@@ -27,7 +27,7 @@ class RogueSelectSkillPanel(BasePage):
         # 选择最强的技能组成新列表
         best_attribute = min(skill_attribute_list)
         best_attribute_list = [i for i, x in enumerate(skill_attribute_list) if x == best_attribute]
-        print(best_attribute_list)
+        # print(best_attribute_list)
         if 0 in best_attribute_list:
             try:
                 skill_lv_list.append(self.get_text(element_data=ElementsData.RogueSelectSkillPanel.tag_lv1))
@@ -49,7 +49,7 @@ class RogueSelectSkillPanel(BasePage):
                 skill_lv_list.append(None)  # 静默跳过
         else:
             skill_lv_list.append(None)  # 静默跳过
-        print(skill_lv_list)
+        # print(skill_lv_list)
         for i in range(len(skill_lv_list)):
             if skill_lv_list[i] is None:
                 continue
@@ -70,19 +70,24 @@ class RogueSelectSkillPanel(BasePage):
         self.click_element(element_data=ElementsData.RogueSelectSkillPanel.btn_orange)
 
     def choose_challenge(self, angry_target, angry_now):
-        choose_dict = {0: "1", 1: "1", 2: "3"}
-        challenge_list = self.get_text_list(element_data=ElementsData.RogueSelectSkillPanel.challenge_list)
-        # challenge_list = [int(s) for s in challenge_list]
-        # choose_num = 0
-        # # 选择怒气值最高/低的事件
-        # max_challenge = max(challenge_list)
-        # if (angry_target - angry_now) > max_challenge:
-        #     choose_num = max_challenge
-        # else:
-        #     choose_num = angry_target - angry_now
-        # index = challenge_list.index(choose_num)
-        index = challenge_list.index(choose_dict[angry_now])
 
+        # 初始化调用计数器
+        if not hasattr(self, '_choose_challenge_counter'):
+            self._choose_challenge_counter = 0
+
+        # 处理第一次调用
+        if self._choose_challenge_counter == 0:
+            challenge_list = self.get_text_list(element_data=ElementsData.RogueSelectSkillPanel.challenge_list)
+            index = challenge_list.index("0")
+            self._choose_challenge_counter += 1
+        else:
+            choose_dict_2 = {0: "2"}
+            choose_dict_4 = {0: "1", 1: "3"}
+            challenge_list = self.get_text_list(element_data=ElementsData.RogueSelectSkillPanel.challenge_list)
+            if angry_target == 2:
+                index = challenge_list.index(choose_dict_2[angry_now])
+            else:
+                index = challenge_list.index(choose_dict_4[angry_now])
         challenge_position_list = self.get_position_list(element_data=ElementsData.RogueSelectSkillPanel.challenge_position_list)
         self.click_position(position=challenge_position_list[index])
 

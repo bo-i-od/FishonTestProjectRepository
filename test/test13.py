@@ -2,6 +2,7 @@ import random
 import re
 
 from common.basePage import BasePage
+from common.error import FindNoElementError
 from configs.elementsData import ElementsData
 from netMsg import csMsgAll
 from panelObjs.RoguePrepare import RoguePrepare
@@ -26,7 +27,7 @@ def level_up(fish_kind,difficulty):
         cur += 1
 
 
-def settle(bp: BasePage, flag, angry_target):
+def settle(bp: BasePage, angry_target):
     t = 0
     while t < 3:
         object_id_list = bp.get_object_id_list(element_data_list=[ElementsData.RogueResultPanel.RogueResultPanel,
@@ -34,7 +35,6 @@ def settle(bp: BasePage, flag, angry_target):
                                                                   ElementsData.RogueSelectSkillPanel.challenge])
         if object_id_list[0]:
             flag = False
-            print(flag)
             return flag
         if object_id_list[1]:
             bp.sleep(2)
@@ -43,7 +43,7 @@ def settle(bp: BasePage, flag, angry_target):
         if object_id_list[2]:
             bp.sleep(2)
             angry_now = RogueSelectSkillPanel.get_now_num(bp)
-            RogueSelectSkillPanel.choose_challenge(bp, angry_target=angry_target, angry_now=angry_now)
+            RogueSelectSkillPanel.choose_challenge(bp,angry_target=angry_target, angry_now=angry_now)
             continue
         bp.sleep(1)
         t += 1
@@ -60,8 +60,7 @@ def main(bp:BasePage):
         angry_target = RoguePrepare.get_target_num(bp)
         test11.fish_once(bp=bp, personality=PersonalityNB())
         bp.set_time_scale(time_scale=time_scale)
-        flag = settle(bp, flag, angry_target)
-        print(flag)
+        flag = settle(bp, angry_target)
 
 
 
