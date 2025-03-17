@@ -5,6 +5,9 @@ class AquariumFishGuardSideBarPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.AquariumFishGuardSideBarPanel.btn_close)
 
+    def wait_for_panel_appear(self):
+        self.wait_for_appear(element_data=ElementsData.AquariumFishGuardSideBarPanel.AquariumFishGuardSideBarPanel, interval=1, timeout=3)
+
     def click_tab_1(self):
         self.click_element(element_data=ElementsData.AquariumFishGuardSideBarPanel.tab_1)
 

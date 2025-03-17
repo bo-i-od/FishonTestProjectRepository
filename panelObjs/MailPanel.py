@@ -9,6 +9,9 @@ class MailPanel(BasePage):
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.MailPanel.MailPanel)
 
+    def wait_for_panel_appear(self):
+        self.wait_for_appear(element_data=ElementsData.MailPanel.MailPanel, interval=1, timeout=3)
+
     def switch_tab(self, index=-1):
         self.click_object_of_plural_objects(element_data=ElementsData.MailPanel.tab_list, index=index)
 

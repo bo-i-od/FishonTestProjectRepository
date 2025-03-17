@@ -4,6 +4,9 @@ class PlayerInteractPanel(BasePage):
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.PlayerInteractPanel.PlayerInteractPanel)
 
+    def wait_for_panel_appear(self):
+        self.wait_for_appear(element_data=ElementsData.PlayerInteractPanel.PlayerInteractPanel, interval=1, timeout=3)
+
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.PlayerInteractPanel.btn_close)
 

@@ -53,9 +53,9 @@ class TournamentsPanel(BasePage):
                 continue
             btn_players_id_list = self.get_offspring_id_list(object_id=model_id, offspring_path="btn_players>btn_players>text")
             if btn_players_id_list:
-                item_id_list.append(btn_players_id_list [0])
+                item_id_list.append(btn_players_id_list[0])
                 continue
-        entrance_viewport = Viewport(self, element_viewport=ElementsData.TournamentsPanel.entrance_viewport, item_id_list= item_id_list)
+        entrance_viewport = Viewport(self, element_viewport=ElementsData.TournamentsPanel.entrance_viewport, item_id_list= item_id_list, viewport_direction="column")
         entrance_viewport.viewport_range = [entrance_viewport.viewport_range[0], 1]
         entrance_viewport.viewport_edge = [edge_left, 0.05]
         entrance_viewport.viewport_range_shift()

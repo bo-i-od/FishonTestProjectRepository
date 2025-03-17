@@ -1112,7 +1112,7 @@ class BasePageMain:
 
     # 等待指定元素出现
     def wait_for_appear(self, element_data: dict = None, element_data_list=None, is_click: bool = False,
-                        interval: float = 0.2, timeout=120, ignore_set=None):
+                        interval: float = 0.5, timeout=40, ignore_set=None):
         """函数功能简述
             等待元素出现
 
@@ -1155,7 +1155,7 @@ class BasePageMain:
         return position_list
 
     # 等待指定元素消失
-    def wait_for_disappear(self, element_data: dict, interval: float = 0.2, ignore_set=None):
+    def wait_for_disappear(self, element_data: dict, interval: float = 0.5, ignore_set=None):
         """函数功能简述
             等待元素消失
 
@@ -1772,14 +1772,14 @@ if not skillCounter:IsHaveEnoughEnergy(caBeCounter:GetType()) then
 end
 fishingMatch:TriggerActiveSkill(skillCounter:GetSlotIndex())"""
         cmd_list.append(f"addElement joystickUp UICanvas>Default>BattlePanel>FishHUD>qte_up>qte {lua_code}")
-        lua_code = """local BattlePanel = PanelMgr:Find("BattlePanel")
-if not BattlePanel then
-    return
-end
-if not BattlePanel:IsActive() then
- return
-end
-BattlePanel:OnCastDragDirUp()"""
+#         lua_code = """local BattlePanel = PanelMgr:Find("BattlePanel")
+# if not BattlePanel then
+#     return
+# end
+# if not BattlePanel:IsActive() then
+#  return
+# end
+# BattlePanel:OnCastDragDirUp()"""
         # cmd_list.append(f"addElement reelUp UICanvas>Default>BattlePanel>hud_power>barPanel>list> {lua_code}")
         cmd_list.append(f"addElement tensionSpecial UICanvas>Default>BattlePanel>FishHUD>hud_tension>tensileStress>lock>left")
         cmd_list.append(f"addElement tensionSpecial UICanvas>Default>BattlePanel>FishHUD>hud_tension>tensileStress>lock>right")

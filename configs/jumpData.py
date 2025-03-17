@@ -90,7 +90,7 @@ class JumpData:
         "BattlePassPanel": {"element_data": ElementsData.BattlePassPanel.BattlePassPanel, "open_path": [ElementsData.HomePanel.btn_bp], "close_path": [ElementsData.BattlePassPanel.btn_close]},
         "BattlePassPopPanel": {"element_data": ElementsData.BattlePassPopPanel.BattlePassPopPanel, "close_path": [ElementsData.BattlePassPopPanel.btn_close]},
         "BattlePassRewardPanel": {"element_data": ElementsData.BattlePassRewardPanel.BattlePassRewardPanel, "close_path": [ElementsData.BattlePassRewardPanel.btn_close]},
-        "BattlePreparePanel": {"element_data": ElementsData.BattlePreparePanel.BattlePreparePanel, "close_path": [ElementsData.BattlePreparePanel.panel_gears_switch.btn_cancel, ElementsData.BattlePreparePanel.btn_close]},
+        "BattlePreparePanel": {"element_data": ElementsData.BattlePreparePanel.BattlePreparePanel, "close_path": [ElementsData.BattlePreparePanel.panel_gears_new.btn_cancel, ElementsData.BattlePreparePanel.btn_close]},
         "BattleTreasureMapPanel": {"element_data": ElementsData.BattleTreasureMapPanel.BattleTreasureMapPanel, "close_path": [ElementsData.BattleTreasureMapPanel.btn_close]},
         "BattleTreasureMapDescriptionPanel": {"element_data": ElementsData.BattleTreasureMapDescriptionPanel.BattleTreasureMapDescriptionPanel, "close_path": [ElementsData.BattleTreasureMapDescriptionPanel.btn_close]},
         "BugMultiplePanel": {"element_data": ElementsData.BugMultiplePanel.BugMultiplePanel, "close_path": [ElementsData.BugMultiplePanel.btn_cancel]},

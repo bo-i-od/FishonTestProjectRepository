@@ -16,6 +16,9 @@ class AchievementWantedPanel(BasePage):
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.AchievementWantedPanel.AchievementWantedPanel)
 
+    def wait_for_panel_appear(self):
+        self.wait_for_appear(element_data=ElementsData.AchievementWantedPanel.AchievementWantedPanel, interval=1, timeout=3)
+
     # 悬赏图位置
     def get_wanted_position_list(self):
         return self.get_position_list(element_data=ElementsData.AchievementWantedPanel.item_list)

@@ -18,6 +18,9 @@ class FishCardPanel(BasePage):
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.FishCardPanel.FishCardPanel)
 
+    def wait_for_panel_appear(self):
+        self.wait_for_appear(element_data=ElementsData.FishCardPanel.FishCardPanel, interval=1, timeout=3)
+
     def click_btn_upgrade(self):
         self.click_element(element_data=ElementsData.FishCardPanel.btn_upgrade)
 
