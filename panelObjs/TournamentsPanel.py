@@ -42,7 +42,7 @@ class TournamentsPanel(BasePage):
 
     def get_entrance_viewport(self):
         size = self.get_size(element_data=ElementsData.TournamentsPanel.panel_sidebar_bg)
-        edge_left = 0.75 * size[0]
+        edge_left = 0 * size[0]
         # 多人房进入按钮和单人房加一起
         model_id_list = self.get_object_id_list(element_data=ElementsData.TournamentsPanel.model_list)
         item_id_list = []
@@ -53,9 +53,9 @@ class TournamentsPanel(BasePage):
                 continue
             btn_players_id_list = self.get_offspring_id_list(object_id=model_id, offspring_path="btn_players>btn_players>text")
             if btn_players_id_list:
-                item_id_list.append(btn_players_id_list [0])
+                item_id_list.append(btn_players_id_list[0])
                 continue
-        entrance_viewport = Viewport(self, element_viewport=ElementsData.TournamentsPanel.entrance_viewport, item_id_list= item_id_list)
+        entrance_viewport = Viewport(self, element_viewport=ElementsData.TournamentsPanel.entrance_viewport, item_id_list= item_id_list, viewport_direction="column")
         entrance_viewport.viewport_range = [entrance_viewport.viewport_range[0], 1]
         entrance_viewport.viewport_edge = [edge_left, 0.05]
         entrance_viewport.viewport_range_shift()
@@ -70,9 +70,9 @@ class TournamentsPanel(BasePage):
     # 跳转指定索引渔场
     def go_to_fishery_by_index(self, index=-1):
         entrance_viewport = TournamentsPanel.get_entrance_viewport(self)
-
         if index < 0:
             index = random.randint(0, len(entrance_viewport.item_id_list) - 1)
+
         while self.exist(object_id=entrance_viewport.item_id_list[index]):
             entrance_viewport.move_until_appear(entrance_viewport.item_id_list[index])
             entrance_position = self.get_position(object_id=entrance_viewport.item_id_list[index])
@@ -168,7 +168,7 @@ if __name__ == "__main__":
     # TournamentsPanel.click_btn_setting(bp)
     # TournamentsPanel.click_btn_turntable(bp)
     # TournamentsPanel.click_flashcard_buff(bp)
-    # TournamentsPanel.go_to_fishery_by_index(bp)
+    TournamentsPanel.go_to_fishery_by_index(bp, index=1)
     # TournamentsPanel.panel_popups_setting.click_btn_close(bp)
     # TournamentsPanel.panel_popups_setting.click_btn_close_tips(bp)
     # TournamentsPanel.panel_popups_setting.click_btn_i(bp)

@@ -16,6 +16,9 @@ class StorePanel(BasePage):
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.StorePanel.StorePanel)
 
+    def wait_for_panel_appear(self):
+        self.wait_for_appear(element_data=ElementsData.StorePanel.StorePanel, interval=1, timeout=3)
+
     def click_btn_refresh(self):
         position_list = self.get_position_list(element_data=ElementsData.StorePanel.Box.btn_refresh_text)
         if position_list:

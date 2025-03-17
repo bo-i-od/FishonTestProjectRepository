@@ -9,6 +9,9 @@ class FishAlbum3DPanel(BasePage):
     def click_btn_close(self):
         self.click_until_disappear(element_data=ElementsData.FishAlbum3DPanel.btn_close, ignore_set={"FishAlbum3DPanel"})
 
+    def wait_for_panel_appear(self):
+        self.wait_for_appear(element_data=ElementsData.FishAlbum3DPanel.FishAlbum3DPanel, interval=1, timeout=3)
+
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.FishAlbum3DPanel.FishAlbum3DPanel)
 

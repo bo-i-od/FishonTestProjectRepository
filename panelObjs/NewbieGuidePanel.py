@@ -133,12 +133,6 @@ class NewbieGuidePanel(BasePage):
         qteThread.start()
         self.click_until_disappear(element_data=ElementsData.NewbieGuidePanel.NBG_rookie_13_Guide_ULTUp)
         self.custom_cmd("autofish")
-        # self.debug_log("NBG_rookie_13_Guide_QTEInfo")
-        # self.click_a_until_b_disappear(element_data_a=ElementsData.NewbieGuide.NBG_rookie_13_2, element_data_b=ElementsData.NewbieGuide.NBG_rookie_13_Guide_QTEInfo)
-        # self.click_a_until_b_disappear(element_data_a=ElementsData.NewbieGuide.NBG_rookie_13_2, element_data_b=ElementsData.NewbieGuide.NBG_rookie_13_Guide_QTE_left)
-        # position_start = self.get_position(element_data=ElementsData.Battle.btn_reel)
-        # position_end = [position_start[0], position_start[1] - 0.2]
-        # self.swipe(point_start=position_start,point_end=position_end)
 
     def guide_rookie_4(self):
         perform_list = [ElementsData.NewbieGuidePanel.NBG_rookie_13_Guide_ULTInfoCloseBtn, ElementsData.NewbieGuidePanel.NBG_rookie_14, ElementsData.NewbieGuidePanel.NBG_rookie_15]

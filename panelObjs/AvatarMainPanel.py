@@ -10,6 +10,9 @@ class AvatarMainPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.AvatarMainPanel.btn_close)
 
+    def wait_for_panel_appear(self):
+        self.wait_for_appear(element_data=ElementsData.AvatarMainPanel.AvatarMainPanel, interval=1, timeout=3)
+
     def click_tab_avatar(self):
         self.click_element(element_data=ElementsData.AvatarMainPanel.tab_avatar)
 

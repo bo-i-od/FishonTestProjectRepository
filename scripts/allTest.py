@@ -66,7 +66,7 @@ if __name__ == '__main__':
         "achievementWantedTest": {"name": "成就照片墙", "active": True},
         "rankTest": {"name": "渔获排行榜", "active": True},
         "playerInfoTest": {"name": "玩家信息、设置", "active": True},
-        "battlePassTest": {"name": "通行证", "active": True},
+        "battlePassTest": {"name": "通行证", "active": False},
         "dlcDownloadTest": {"name": "dlc下载", "active": True},
         "energyTest": {"name": "体力", "active": True},
         "fishCardTest": {"name": "鱼卡", "active": True},
@@ -76,14 +76,15 @@ if __name__ == '__main__':
         "mailTest": {"name": "邮箱", "active": True},
         "minitaskTest": {"name": "minitask", "active": True},
         "storeTest": {"name": "商城", "active": False},
-        "newbieTaskTest": {"name": "新手7天", "active": True},
+        "newbieTaskTest": {"name": "新手7天", "active": False},
         "treasureChestTest": {"name": "鱼箱", "active": True},
         "duelTest": {"name": "对决、对决排行榜", "active": True},
         "achievementTest": {"name": "成就", "active": True},
-        "taskTest": {"name": "任务", "active": True},
+        "taskTest": {"name": "任务", "active": False},
         "rouletteTest": {"name": "转盘", "active": True},
         "progressRewardsTest": {"name": "珍珠、贝壳进度条", "active": True},
         "careerTest": {"name": "天赋", "active": True},
+        "battlePrepareSidebarTest": {"name": "系统收纳", "active": True},
     })
 
     task_list = manager.list()
@@ -100,7 +101,7 @@ if __name__ == '__main__':
     print(f"当前测试模块共计 {len(task_list)} 个")
 
     # 设备列表
-    serial_number_list = ["127.0.0.1:21523", "127.0.0.1:21533"]
+    serial_number_list = ["127.0.0.1:21583", "127.0.0.1:21593"]
 
     is_monitor = True
 

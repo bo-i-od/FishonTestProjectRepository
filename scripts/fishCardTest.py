@@ -177,7 +177,7 @@ def FishCardGiftPackPanel_test(bp: BasePage):
 
     # 跳过购买测试
     if not bp.is_pay:
-        FishCardGiftPackCustomizePanel.click_btn_close(bp)
+        EventsGiftCenterPanel.click_btn_close(bp)
         return
 
     # 购买测试
@@ -205,14 +205,14 @@ def FishCardGiftPackPanel_test(bp: BasePage):
 def click_pack_icon_test(bp: BasePage, icon_list):
     position_list = FishCardGiftPackCustomizePanel.get_item_position_list(bp)
     r = random.randint(0, len(position_list) - 1)
-    bp.click_position(position_list[r])
+    bp.click_position(position_list[r], ignore_set={"EventsGiftCenterPanel"})
     item_icon = ""
     if ItemTipsPanel.is_panel_active(bp):
         item_icon = ItemTipsPanel.get_item_icon(bp)
     elif FishCardPackTipsPanel.is_panel_active(bp):
         item_icon = FishCardPackTipsPanel.get_item_icon(bp)
     compare(item_icon, icon_list[r])
-    bp.click_position([0.5, 0.1])
+    bp.click_position([0.5, 0.1], ignore_set={"EventsGiftCenterPanel"})
 
 
 def click_tips_test(bp: BasePage):
@@ -267,7 +267,7 @@ def main(bp: BasePage):
     r2 = random.randint(23, 37)
     r3 = random.randint(1, 5)
     print(f"付费分层{r3}000")
-    cmd_list = [ "guideskip", f"add 10 1000{str(r1).zfill(3)} 1", f"add 10 1000{str(r2).zfill(3)} 500000", f"setPlayerLayer {r3}000", "add 1 100000 1234567890", "levelupto 15", "add 1 101900 1000"]
+    cmd_list = [f"add 10 1000{str(r1).zfill(3)} 1", f"add 10 1000{str(r2).zfill(3)} 500000", f"setPlayerLayer {r3}000", "add 1 100000 1234567890", "levelupto 15", "add 1 101900 1000"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     PlayerLevelupPanel.wait_for_panel_appear(bp)
@@ -305,9 +305,8 @@ def main(bp: BasePage):
 
 
 if __name__ == "__main__":
-    bp = BasePage("127.0.0.1:21573", is_mobile_device=True)
-    # main(bp)
-    fish_card_one_key_level_up(bp)
+    bp = BasePage("127.0.0.1:21573", is_mobile_device=False)
+    main(bp)
     bp.connect_close()
 
 

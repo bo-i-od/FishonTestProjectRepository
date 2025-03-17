@@ -14,9 +14,8 @@ class PVPHallPanel(BasePage):
 
     def click_btn_play(self, index=-1):
         size_list = self.get_size_list(element_data=ElementsData.PVPHallPanel.btn_play_list)
-        edge_left = size_list[0][0] * 1.2
-        edge_right = size_list[0][0]
-        self.click_object_of_plural_objects(element_data=ElementsData.PVPHallPanel.btn_play_list, element_viewport=ElementsData.PVPHallPanel.Viewport,  viewport_edge=[edge_left, edge_right], viewport_direction="row", index=index)
+        edge_left = size_list[0][0] * 1.5
+        self.click_object_of_plural_objects(element_data=ElementsData.PVPHallPanel.btn_play_list, element_viewport=ElementsData.PVPHallPanel.Viewport,  viewport_edge=[edge_left, 0], viewport_direction="row", index=index)
 
     def get_btn_play_position_list(self):
         position_list = self.get_position_list(element_data=ElementsData.PVPHallPanel.btn_play_list)

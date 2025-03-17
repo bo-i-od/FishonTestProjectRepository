@@ -69,7 +69,7 @@ class BattlePanel(BasePage):
                     is_in_crt_pre = False
                     self.custom_cmd(f"setTension {self.tension_default}")
 
-            if not self.quick_qte:
+            if not self.is_quick_qte:
                 if len(object_id_list[hud_power_list_index]) > 2:
                     BattlePanel.unleash_power(self)
                     continue

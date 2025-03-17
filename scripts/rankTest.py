@@ -7,18 +7,51 @@ from panelObjs.RankPanel import RankPanel
 from tools.commonTools import *
 from common.basePage import BasePage
 
+# 单鱼排行榜测试
+def leaderboard_test(bp: BasePage, data_list, is_like):
+    photo_viewport = RankPanel.get_photo_viewport(bp)
+
+    # 随机选择一条
+    r = random.randint(0, len(data_list) - 1)
+    photo_viewport.move_until_appear(target_id=photo_viewport.item_id_list[data_list[r]])
+    bp.sleep(1)
+    photo_position_list = RankPanel.get_photo_position_list(bp)
+
+    # 记录信息
+    rank_data = RankPanel.get_rank_data(bp, r)
+    bp.click_position(photo_position_list[r])
+    bp.sleep(1)
+    compare(rank_data, RankFishLeaderboardPanel.get_rank_data(bp))
+
+    # 点赞
+    if not is_like:
+        # 返回上级界面
+        RankFishLeaderboardPanel.click_btn_close(bp)
+        bp.sleep(1)
+        return
+    like_value = RankFishLeaderboardPanel.get_like_value(bp)
+    RankFishLeaderboardPanel.click_btn_like(bp)
+    bp.sleep(1)
+    if RankFishLeaderboardPanel.is_btn_like_normal(bp):
+        bp.debug_log("error:RankFishLeaderboardPanel.is_btn_like_normal(bp)")
+    compare(like_value + 1, RankFishLeaderboardPanel.get_like_value(bp))
+
+    # 返回上级界面
+    RankFishLeaderboardPanel.click_btn_close(bp)
+    bp.sleep(1)
+
 def main(bp: BasePage):
     # 查询邮件的解锁等级
     unlock_lv = bp.get_unlock_lv("鱼类排行榜")
 
     # 进入大厅
-    cmd_list = ["guideskip", f"levelupto {unlock_lv}"]
+    cmd_list = [ f"levelupto {unlock_lv}"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     # 关闭升级弹窗
     PlayerLevelupPanel.wait_for_panel_appear(bp)
     bp.clear_popup()
-
+    #
     # 进入排行榜界面
     bp.go_to_panel("RankPanel")
 
@@ -78,38 +111,7 @@ def main(bp: BasePage):
     bp.go_home()
 
     #
-# 单鱼排行榜测试
-def leaderboard_test(bp: BasePage, data_list, is_like):
-    photo_viewport = RankPanel.get_photo_viewport(bp)
 
-    # 随机选择一条
-    r = random.randint(0, len(data_list) - 1)
-    photo_viewport.move_until_appear(target_id=photo_viewport.item_id_list[data_list[r]])
-    bp.sleep(1)
-    photo_position_list = RankPanel.get_photo_position_list(bp)
-
-    # 记录信息
-    rank_data = RankPanel.get_rank_data(bp, r)
-    bp.click_position(photo_position_list[r])
-    bp.sleep(1)
-    compare(rank_data, RankFishLeaderboardPanel.get_rank_data(bp))
-
-    # 点赞
-    if not is_like:
-        # 返回上级界面
-        RankFishLeaderboardPanel.click_btn_close(bp)
-        bp.sleep(1)
-        return
-    like_value = RankFishLeaderboardPanel.get_like_value(bp)
-    RankFishLeaderboardPanel.click_btn_like(bp)
-    bp.sleep(1)
-    if RankFishLeaderboardPanel.is_btn_like_normal(bp):
-        bp.debug_log("error:RankFishLeaderboardPanel.is_btn_like_normal(bp)")
-    compare(like_value + 1, RankFishLeaderboardPanel.get_like_value(bp))
-
-    # 返回上级界面
-    RankFishLeaderboardPanel.click_btn_close(bp)
-    bp.sleep(1)
 
 
 
@@ -118,3 +120,4 @@ def leaderboard_test(bp: BasePage, data_list, is_like):
 if __name__ == '__main__':
     bp = BasePage("192.168.111.77:20017")
     main(bp)
+    bp.connect_close()

@@ -9,6 +9,9 @@ class ClubApplyPanel(BasePage):
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.ClubApplyPanel.ClubApplyPanel)
 
+    def wait_for_panel_appear(self):
+        self.wait_for_appear(element_data=ElementsData.ClubApplyPanel.ClubApplyPanel, interval=1, timeout=3)
+
 
     def click_btn_apply(self):
         self.click_element(element_data=ElementsData.ClubApplyPanel.btn_apply)

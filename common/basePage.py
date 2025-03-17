@@ -1026,6 +1026,7 @@ class BasePageMain:
 
         # 如果有viewport就挪动到元素出现
         if viewport:
+
             if index is None:
                 index = random.randint(0, len(viewport.item_id_list) - 1)
             if index < 0:
@@ -1111,7 +1112,7 @@ class BasePageMain:
 
     # 等待指定元素出现
     def wait_for_appear(self, element_data: dict = None, element_data_list=None, is_click: bool = False,
-                        interval: float = 0.2, timeout=120, ignore_set=None):
+                        interval: float = 0.5, timeout=40, ignore_set=None):
         """函数功能简述
             等待元素出现
 
@@ -1154,7 +1155,7 @@ class BasePageMain:
         return position_list
 
     # 等待指定元素消失
-    def wait_for_disappear(self, element_data: dict, interval: float = 0.2, ignore_set=None):
+    def wait_for_disappear(self, element_data: dict, interval: float = 0.5, ignore_set=None):
         """函数功能简述
             等待元素消失
 
@@ -1492,7 +1493,7 @@ class BasePageMain:
             rpcMethodRequest.ray_input_by_id(self.poco,[object_id], offspring_path, kind)
             return
         element_data_copy = self.get_element_data(element_data, offspring_path)
-        rpcMethodRequest.ray_input(self.poco,[element_data_copy], kind)
+        rpcMethodRequest.ray_input(self.poco, [element_data_copy], kind)
 
     # 设定节点激活状态
     def set_object_active_list(self, active: bool = False, object_id=0, object_id_list: list = None, element_data: dict = None,
@@ -1733,11 +1734,61 @@ class BasePage(BasePageMain):
 
         self.tension_default = 0.95
         self.custom_cmd(f"setTension {self.tension_default}")
-        self.quick_qte = False
-        if self.quick_qte:
+        self.is_quick_qte = False
+        if self.is_quick_qte:
             self.custom_cmd("setQuickQTE 1")
         else:
             self.custom_cmd("setQuickQTE 0")
+        self.auto_fish_init()
+
+    def auto_fish_init(self):
+        cmd_list = []
+        cmd_list.append(f"clearElements")
+        lua_code = "Gameplay.Joystick.HorizontalValue = -1"
+        cmd_list.append(f"addElement joystickLeftLong UICanvas>Default>BattlePanel>FishHUD>qte_left>qte {lua_code}")
+        cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_2>qte {lua_code}")
+        cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_3>qte {lua_code}")
+        cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_4>qte {lua_code}")
+        cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_fishJump>qte {lua_code}")
+        lua_code = "Gameplay.Joystick.HorizontalValue = 1"
+        cmd_list.append(f"addElement joystickRightLong UICanvas>Default>BattlePanel>FishHUD>qte_right>qte {lua_code}")
+        cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_2>qte {lua_code}")
+        cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_3>qte {lua_code}")
+        cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_4>qte {lua_code}")
+        cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_fishJump>qte {lua_code}")
+        lua_code = """local fishingMatch = GameRoot:GetFishingMatch()
+local actorPlayer  = fishingMatch:GetPlayer()
+local actorFish = actorPlayer:GetCurrentFish()
+local caBeCounter = actorFish:GetGEByClass(BATTLE_GE.CAN_BE_COUNTER, true)
+local skillCounter = actorPlayer:GetSkillByClass(BATTLE_SKILL.PLAYER.COUNTER)
+if not caBeCounter then
+    return
+end
+if not skillCounter then
+    return
+end
+if not skillCounter:IsHaveEnoughEnergy(caBeCounter:GetType()) then
+    return
+end
+fishingMatch:TriggerActiveSkill(skillCounter:GetSlotIndex())"""
+        cmd_list.append(f"addElement joystickUp UICanvas>Default>BattlePanel>FishHUD>qte_up>qte {lua_code}")
+#         lua_code = """local BattlePanel = PanelMgr:Find("BattlePanel")
+# if not BattlePanel then
+#     return
+# end
+# if not BattlePanel:IsActive() then
+#  return
+# end
+# BattlePanel:OnCastDragDirUp()"""
+        # cmd_list.append(f"addElement reelUp UICanvas>Default>BattlePanel>hud_power>barPanel>list> {lua_code}")
+        cmd_list.append(f"addElement tensionSpecial UICanvas>Default>BattlePanel>FishHUD>hud_tension>tensileStress>lock>left")
+        cmd_list.append(f"addElement tensionSpecial UICanvas>Default>BattlePanel>FishHUD>hud_tension>tensileStress>lock>right")
+        cmd_list.append(f"addElement fishJack UICanvas>Default>BattlePanel>FishHUD>hud_tension>fish_jack")
+        cmd_list.append(f"addElement fishJackPerfect UICanvas>Default>BattlePanel>FishHUD>hud_tension>fish_jack>bar_2")
+        self.custom_cmd_list(cmd_list)
+
+
+
 
     def get_fishery_id_list(self):
         """函数功能简述
@@ -2502,8 +2553,8 @@ end
 
 
 if __name__ == '__main__':
-    bp = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21543")
-    bp.set_time_scale(time_scale=6)
+    bp = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21593")
+    bp.set_time_scale(time_scale=4)
 
     # "127.0.0.1:21613"
     # "b6h65hd64p5pxcyh"

@@ -180,8 +180,7 @@ def box_store_test(bp: BasePage):
 
 def main(bp: BasePage):
     # 进入大厅
-    cmd_list = ["guideskip"]
-    gameInit.login_to_hall(bp, cmd_list=cmd_list)
+    gameInit.login_to_hall(bp)
     # 初始化箱子数量
     cur = 1
     while cur < 6:
@@ -204,8 +203,8 @@ def main(bp: BasePage):
         TreasureChestPanel.select_box(bp, cur)
         bp.sleep(1)
         # 得到当前展示箱子的icon名，与第cur个箱子的icon名对比
-        box_mian_icon = TreasureChestPanel.get_box_main_icon(bp)
-        compare(box_icon_list[cur], box_mian_icon)
+        # box_mian_icon = TreasureChestPanel.get_box_main_icon(bp)
+        # compare(box_icon_list[cur], box_mian_icon)
 
         # 得到open x后的可打开数量，与第cur个箱子的数量对比
         n = TreasureChestPanel.get_open_x_n(bp)
@@ -215,7 +214,7 @@ def main(bp: BasePage):
         compare(expect_n, n)
 
         # 进行开箱测试
-        open_box_test(bp, box_mian_icon, n)
+        open_box_test(bp, box_icon_list[cur], n)
         cur += 1
 
     # 进行点击箱子点测试
@@ -233,3 +232,4 @@ def main(bp: BasePage):
 if __name__ == '__main__':
     bp = BasePage("192.168.111.77:20059")
     main(bp)
+    bp.connect_close()

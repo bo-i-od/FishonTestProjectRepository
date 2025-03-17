@@ -115,7 +115,9 @@ def avatar_test(bp: BasePage):
     # 排除当前选中的头像
     avatar_id_list = PlayerInfoPanel.get_avatar_id_list(bp)
     selected_avatar_index = PlayerInfoPanel.get_selected_icon_index(bp, avatar_id_list)
-    excluded_nums = [selected_avatar_index]  # 要跳过的数
+    locked_avatar_index_list = PlayerInfoPanel.get_locked_icon_index_list(bp, avatar_id_list)
+    excluded_nums = locked_avatar_index_list  # 要跳过的数
+    excluded_nums.append(selected_avatar_index)
     start_num = 0
     end_num = len(avatar_id_list) - 1
 
@@ -125,7 +127,7 @@ def avatar_test(bp: BasePage):
     selected_avatar_index = PlayerInfoPanel.get_selected_icon_index(bp, avatar_id_list)
     compare(selected_avatar_index, random_num)
     avatar = PlayerInfoPanel.get_avatar(bp, avatar_id=avatar_id_list[selected_avatar_index])
-    PlayerInfoPanel.click_btn_save_profile(bp)
+    PlayerInfoPanel.click_btn_save_head(bp)
     bp.sleep(1)
     PlayerInfoPanel.click_btn_close_additional(bp)
     player_info = PlayerInfoPanel.get_player_info(bp)
@@ -146,7 +148,7 @@ def head_frame_test(bp: BasePage):
 
 def main(bp:BasePage):
     # 登录到大厅
-    cmd_list = ["guideskip", "levelupto 16", "add 1 100100 300"]
+    cmd_list = [ "levelupto 16", "add 1 100100 300"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     PlayerLevelupPanel.wait_for_panel_appear(bp)

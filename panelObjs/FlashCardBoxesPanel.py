@@ -11,6 +11,9 @@ class FlashCardBoxesPanel(BasePage):
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.FlashCardBoxesPanel.FlashCardBoxes_btn_close)
 
+    def wait_for_panel_appear(self):
+        self.wait_for_appear(element_data=ElementsData.FlashCardBoxesPanel.FlashCardBoxesPanel, interval=1, timeout=3)
+
     def click_btn_i(self):
         self.click_element(element_data=ElementsData.FlashCardBoxesPanel.FlashCardBoxes_btn_i)
 

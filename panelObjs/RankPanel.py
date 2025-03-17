@@ -13,9 +13,7 @@ class RankPanel(BasePage):
         return self.get_position_list(element_data=ElementsData.RankPanel.fisheries_list)
 
     def get_fisheries_viewport(self):
-        edge_up = 0.05
-        edge_down = 0.05
-        fisheries_viewport = Viewport(self, element_viewport=ElementsData.RankPanel.fisheries_viewport, element_item_list=ElementsData.RankPanel.fisheries_list, viewport_edge=[edge_up, edge_down])
+        fisheries_viewport = Viewport(self, element_viewport=ElementsData.RankPanel.fisheries_viewport, element_item_list=ElementsData.RankPanel.fisheries_list, viewport_range=[0.1, 0.95])
         return fisheries_viewport
 
     def get_tab_area_position_list(self):
@@ -71,7 +69,7 @@ class RankPanel(BasePage):
         return rank_data
 
     def switch_fishery(self, index=-1):
-        self.click_object_of_plural_objects(element_data=ElementsData.RankPanel.fisheries_list, element_viewport=ElementsData.RankPanel.fisheries_viewport, viewport_edge=[0.05, 0.05], index=index)
+        self.click_object_of_plural_objects(element_data=ElementsData.RankPanel.fisheries_list, element_viewport=ElementsData.RankPanel.fisheries_viewport, viewport_range=[0.1, 0.95], index=index)
 
     def switch_tab_area(self, index=-1):
         self.click_object_of_plural_objects(element_data=ElementsData.RankPanel.tab_area_list, index=index)
@@ -101,7 +99,7 @@ if __name__ == "__main__":
     # RankPanel.click_btn_close(bp)
     # RankPanel.click_btn_playercard(bp)
     # RankPanel.click_photo(bp)
-    # RankPanel.switch_fishery(bp)
+    RankPanel.switch_fishery(bp, index=0)
     # RankPanel.switch_tab_area(bp)
-    RankPanel.switch_tab_time(bp)
+    # RankPanel.switch_tab_time(bp)
     bp.connect_close()

@@ -75,7 +75,8 @@ class GearPanel(BasePage):
         lock_list = []
         unlock_list = []
         while cur < len(rod_id_list):
-            if self.get_offspring_id_list(offspring_path="lock", object_id=rod_id_list[cur]):
+            rod_id = self.get_parent_id(object_id=rod_id_list[cur])
+            if self.get_offspring_id_list(offspring_path="lock", object_id=rod_id):
                 lock_list.append(cur)
                 cur += 1
                 continue
@@ -206,9 +207,10 @@ class GearPanel(BasePage):
 
 if __name__ == "__main__":
     bp = BasePage()
+    GearPanel.select_lock_rod(bp)
     # GearPanel.click_btn_apply(bp)
     # GearPanel.click_btn_close(bp)
-    GearPanel.click_btn_close_filter(bp)
+    # GearPanel.click_btn_close_filter(bp)
     # GearPanel.click_btn_enhance(bp)
     # GearPanel.click_btn_equip(bp)
     # GearPanel.click_btn_filter(bp)

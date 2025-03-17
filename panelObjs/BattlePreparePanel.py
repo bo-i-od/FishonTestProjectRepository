@@ -284,15 +284,16 @@ class BattlePreparePanel(BasePage):
         def click_btn_avatar(self):
             self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_avatar)
 
-    class panel_gears_switch(BasePage):
+    class panel_gears_new(BasePage):
         def is_panel_active(self):
             return self.exist(element_data=ElementsData.BattlePreparePanel.gears)
 
         def click_btn_cancel(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.panel_gears_switch.btn_cancel)
+            self.click_element(element_data=ElementsData.BattlePreparePanel.panel_gears_new.btn_cancel)
 
         def click_btn_go(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.panel_gears_switch.btn_go)
+            self.click_element(element_data=ElementsData.BattlePreparePanel.panel_gears_new.btn_go)
+
 
 
     # c = bp.excelTools.get_table_data("POINT_PROGRESS_REWARD.xlsm")["progressRewards"]

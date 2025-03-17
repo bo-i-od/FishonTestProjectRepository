@@ -6,6 +6,9 @@ class FriendPanel(BasePage):
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.FriendPanel.FriendPanel)
 
+    def wait_for_panel_appear(self):
+        self.wait_for_appear(element_data=ElementsData.FriendPanel.FriendPanel, interval=1, timeout=3)
+
     def add_friend(self, id):
         self.click_element(element_data=ElementsData.FriendPanel.btn_add_friend)
         FriendPanel.input_search(text=id)
