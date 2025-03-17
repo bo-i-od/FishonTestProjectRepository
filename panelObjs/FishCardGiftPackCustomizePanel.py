@@ -24,13 +24,13 @@ class FishCardGiftPackCustomizePanel(BasePage):
         return position_list
 
     def click_btn_buy(self):
-        self.click_element(element_data=ElementsData.FishCardGiftPackCustomizePanel.btn_buy, ignore_set={"FishCardGiftPackCustomizePanel"})
+        self.click_element(element_data=ElementsData.FishCardGiftPackCustomizePanel.btn_buy, ignore_set={"FishCardGiftPackCustomizePanel", "EventsGiftCenterPanel"})
 
     def click_item(self, index=-1):
-        self.click_object_of_plural_objects(element_data=ElementsData.FishCardGiftPackCustomizePanel.icon_list, index=index, ignore_set={"FishCardGiftPackCustomizePanel"})
+        self.click_object_of_plural_objects(element_data=ElementsData.FishCardGiftPackCustomizePanel.icon_list, index=index, ignore_set={"FishCardGiftPackCustomizePanel", "EventsGiftCenterPanel"})
 
     def switch_tab(self, index=-1):
-        self.click_object_of_plural_objects(element_data=ElementsData.FishCardGiftPackCustomizePanel.tab_list,  element_viewport=ElementsData.FishCardGiftPackCustomizePanel.viewport, viewport_direction="column", index=index)
+        self.click_object_of_plural_objects(element_data=ElementsData.FishCardGiftPackCustomizePanel.tab_list,  element_viewport=ElementsData.FishCardGiftPackCustomizePanel.viewport, viewport_direction="column", index=index, ignore_set={"FishCardGiftPackCustomizePanel", "EventsGiftCenterPanel"})
 
     operation_pool = [
         {"element_data": ElementsData.FishCardGiftPackCustomizePanel.btn_buy, "func": click_btn_buy, "weight": 1},

@@ -1,7 +1,6 @@
 import random
-import time
 
-import scripts
+from common import gameInit
 from netMsg import csMsgAll, fishingMsg, luaLog
 from panelObjs.AvatarSelectPanel import AvatarSelectPanel
 from panelObjs.BattlePreparePanel import BattlePreparePanel
@@ -15,81 +14,9 @@ from panelObjs.FriendPanel import FriendPanel
 from scripts import battleTest
 import json
 
+from scripts.duelTest import set_duelcup
 from tools import commonTools
-
-
-def set_duelcup_random(bp:BasePage, rank):
-    duelcup = random.randint(0,5)
-    bp.cmd(f"duelcup 1001 {duelcup}")
-    duelcup_all = duelcup
-    if rank > 0:
-        bp.cmd(f"duelcup 1001 {5}")
-        duelcup_all = 5
-        duelcup = random.randint(15 - duelcup_all, 20)
-        bp.cmd(f"duelcup 1002 {duelcup}")
-        duelcup_all += duelcup
-    if rank > 1:
-        duelcup = random.randint(80 - duelcup_all, 80)
-        bp.cmd(f"duelcup 1003 {duelcup}")
-        duelcup_all += duelcup
-    if rank > 2:
-        duelcup = random.randint(200 - duelcup_all, 160)
-        bp.cmd(f"duelcup 1004 {duelcup}")
-        duelcup_all += duelcup
-    if rank > 3:
-        duelcup = random.randint(600 - duelcup_all, 480)
-        bp.cmd(f"duelcup 1005 {duelcup}")
-        duelcup_all += duelcup
-    if rank > 4:
-        duelcup = random.randint(1200 - duelcup_all, 960)
-        bp.cmd(f"duelcup 1006 {duelcup}")
-        duelcup_all += duelcup
-    if rank > 5:
-        duelcup = random.randint(2100 - duelcup_all, 1920)
-        bp.cmd(f"duelcup 1007 {duelcup}")
-        duelcup_all += duelcup
-    if rank > 6:
-        duelcup = random.randint(0, 3000)
-        bp.cmd(f"duelcup 1008 {duelcup}")
-        duelcup_all += duelcup
-    return duelcup_all
-
-def set_duelcup(bp:BasePage, duelcup):
-    if duelcup <= 5:
-        bp.cmd(f"duelcup 1001 {duelcup}")
-        return
-    bp.cmd(f"duelcup 1001 {5}")
-
-    if duelcup <= 25:
-        bp.cmd(f"duelcup 1002 {duelcup - 5}")
-        return
-    bp.cmd(f"duelcup 1002 {20}")
-
-    if duelcup <= 105:
-        bp.cmd(f"duelcup 1003 {duelcup - 25}")
-        return
-    bp.cmd(f"duelcup 1003 {80}")
-
-    if duelcup <= 265:
-        bp.cmd(f"duelcup 1004 {duelcup - 105}")
-        return
-    bp.cmd(f"duelcup 1004 {160}")
-
-    if duelcup <= 745:
-        bp.cmd(f"duelcup 1005 {duelcup - 265}")
-        return
-    bp.cmd(f"duelcup 1005 {480}")
-
-    if duelcup <= 1705:
-        bp.cmd(f"duelcup 1006 {duelcup - 745}")
-        return
-    bp.cmd(f"duelcup 1006 {960}")
-
-    if duelcup <= 3625:
-        bp.cmd(f"duelcup 1007 {duelcup - 1705}")
-        return
-    bp.cmd(f"duelcup 1007 {1920}")
-    bp.cmd(f"duelcup 1008 {duelcup - 3625}")
+from tools import fastCommand
 
 
 def init(bp: BasePage):
@@ -168,15 +95,16 @@ def login(bp: BasePage, name):
 
     if not PlayerEditNamePanel.is_panel_active(bp):
         return
-    bp.cmd_list(["guideskip"])
+    # bp.cmd_list(["guideskip"])
+    gameInit.guide_skip(bp)
     bp.sleep(1)
     while True:
-        PlayerEditNamePanel.set_player_name(bp, name)
+        # PlayerEditNamePanel.set_player_name(bp, name)
         PlayerEditNamePanel.click_confirm(bp, is_ray_input=True)
         bp.sleep(1)
         if not PlayerEditNamePanel.is_panel_active(bp):
             break
-        name = name.replace("64", "000")
+        # name = name.replace("64", "000")
         # name = "t" + str(time.time()).split('.')[0]
 
     bp.sleep(1)
@@ -208,13 +136,33 @@ def go_leaderborad(bp:BasePage):
     bp.sleep(1)
 
 def fish(bp: BasePage, index):
-
+    # fastCommand.quest_done(bp)
+    # bp.custom_cmd("setSceneType 4")
+    bp.set_item_count(item_tpid="100500", target_count=1000)
+    bp.cmd("mode 400320 390197")
+    bp.sleep(0.1)
     fishingMsg.fish(bp, [
         # {"spot_id": f"40030203", "times": 1000, "energy_cost": 50, "targetIdList": ["391011"]},
-        {"spot_id": f"40030703", "times": 30, "is_activity_spot": False},
+        {"spot_id": "40032013", "times": 1},
         #
     ])
-    bp.sleep(10)
+    bp.sleep(0.1)
+    bp.cmd("mode 400320 390198")
+    bp.sleep(0.1)
+    fishingMsg.fish(bp, [
+        # {"spot_id": f"40030203", "times": 1000, "energy_cost": 50, "targetIdList": ["391011"]},
+        {"spot_id": "40032013", "times": 1},
+        #
+    ])
+    bp.sleep(0.1)
+    bp.cmd("mode 400320 390199")
+    bp.sleep(0.1)
+    fishingMsg.fish(bp, [
+        # {"spot_id": f"40030203", "times": 1000, "energy_cost": 50, "targetIdList": ["391011"]},
+        {"spot_id": "40032013", "times": 1},
+        #
+    ])
+    bp.sleep(0.5)
 
 
 
@@ -248,14 +196,14 @@ def friend(bp: BasePage):
 
     bp.cmd_list(["levelupto 20"])
     bp.sleep(0.2)
-    lua_code = csMsgAll.get_CSGlobalFriendsApplyMsg(targetSimpleId=10011470, source=0, type=2, targetCharId="67579c95c3930e4b0df050ba", simpleId=charSimpleId)
+    lua_code = csMsgAll.get_CSGlobalFriendsApplyMsg(targetSimpleId=2554, source=0, type=2, targetCharId="6764bd6182e01366e9a574d3", simpleId=charSimpleId)
     # "1734057963"
     bp.lua_console(lua_code)
 
 def player_build(bp: BasePage):
 
     bp.sleep(0.2)
-    lua_code = csMsgAll.get_CSCooperateAcceptMsg(simpleCharId=10011470, acceptType=1, charId="67579c95c3930e4b0df050ba")
+    lua_code = csMsgAll.get_CSCooperateAcceptMsg(simpleCharId=2554, acceptType=1, charId="6764bd6182e01366e9a574d3")
     # "1734057963"
     bp.lua_console(lua_code)
 
@@ -495,18 +443,23 @@ def read_data():
 
 def main(bp: BasePage):
     # 登录号前缀
-    prefix = "release2013"
-    # prefix_list = ["a", "b", "c", "d", "e"]
+    prefix = "cc"
+    index_list = [1, 15, 30, 45, 60, 70, 80, 90, 100]
     init(bp)
     # 起始序号 终止序号
-    cur = 4
-    limit = 7
+    cur = 3
+    limit = 300
+    # limit = len(index_list)
     while cur < limit:
         name = prefix + str(cur)
         login(bp, name)
         # 前置gm命令
-        # bp.cmd_list(["levelupto 69", "setUserIp 61.48.77.2", "add 1 100500 3000"])
-        # bp.cmd(f"selfranksetip 180.175.{cur}.{cur}")
+
+        # r = random.randint(61, 79)
+        bp.set_item_count(target_count=cur, item_tpid="101200")
+        bp.cmd("levelupto 12")
+        bp.lua_console('PanelMgr:OpenPanel("DivisionLeaderboardPanel")')
+
         # init(bp)
         # lua_code = csMsgAll.get_CSSelfRankCityChangeMsg(city=110105, cancel=False)
         # bp.lua_console(lua_code)
@@ -517,7 +470,7 @@ def main(bp: BasePage):
         # dragon_boat(bp, cur)
         # apply_guild(bp)
         # friend(bp)
-        player_build(bp)
+        # player_build(bp)
         # ndays(bp, cur)
         # rank(bp)
         # monopoly(bp, layer=1000, index=cur)
@@ -531,9 +484,9 @@ def main(bp: BasePage):
 
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21583", is_mobile_device=False)
+    bp = BasePage("127.0.0.1:21503", is_mobile_device=False)
     main(bp)
     # logout(bp)
-    # bp.lua_console('PanelMgr:OpenPanel("PlayerBuildPanel")')
+    # bp.lua_console('PanelMgr:OpenPanel("HomePanel")')
 
     bp.connect_close()

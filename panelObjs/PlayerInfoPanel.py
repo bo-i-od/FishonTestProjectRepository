@@ -195,7 +195,7 @@ class PlayerInfoPanel(BasePage):
         delta = abs(target_val - slider_music)
         # if delta > 0.1:
         #     raise DifferError
-        print(delta)
+
 
     def swipe_slider_music(self, value_start=None, value_end=None):
         slider = Slider(self, element_slider=ElementsData.PlayerInfoPanel.options_music)
@@ -225,7 +225,7 @@ class PlayerInfoPanel(BasePage):
         delta = abs(target - slider_sound)
         # if delta > 0.1:
         #     raise DifferError
-        print(delta)
+
 
     def click_options(self, index=-1):
         self.click_object_of_plural_objects(element_data=ElementsData.PlayerInfoPanel.options_list, index=index)
@@ -339,6 +339,9 @@ class PlayerInfoPanel(BasePage):
     def click_btn_save_head_frame(self):
         self.click_element(element_data=ElementsData.PlayerInfoPanel.btn_save_head_frame)
 
+    def click_btn_save_head(self):
+        self.click_element(element_data=ElementsData.PlayerInfoPanel.btn_save_head)
+
     def click_btn_save_profile(self):
         self.click_element(element_data=ElementsData.PlayerInfoPanel.btn_save_profile)
 
@@ -396,6 +399,17 @@ class PlayerInfoPanel(BasePage):
         icon_id = self.get_parent_id(object_id=select_id_list[0])
         index = icon_id_list.index(icon_id)
         return index
+
+    def get_locked_icon_index_list(self, icon_id_list):
+        locked_id_list = self.get_offspring_id_list(object_id_list=icon_id_list, offspring_path="locked")
+        locked_id_list = merge_list(locked_id_list)
+        parent_id_list = self.get_parent_id_list(object_id_list=locked_id_list)
+
+        index_list = []
+        for parent_id in parent_id_list:
+            index = icon_id_list.index(parent_id[0])
+            index_list.append(index)
+        return index_list
 
     def get_avatar(self, avatar_id):
         head_img_id = self.get_offspring_id(object_id=avatar_id, offspring_path="head>head_mask>head_img")

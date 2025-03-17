@@ -49,6 +49,7 @@ class ResultPanel(BasePage):
                 self.ray_input(kind="click", element_data=element_btn)
                 continue
             self.click_element_safe(element_data=element_btn)
+            bp.set_time_scale()
 
 
 

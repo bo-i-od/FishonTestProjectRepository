@@ -338,6 +338,7 @@ def duel_once(bp:BasePage, rank, is_quick=False):
     # rank = 0
     # print(rank)
     # bp.set_item_count(target_count=250000, item_tpid="100200")
+    bp.go_to_panel("PVPHallPanel")
     lua_code = csMsgAll.get_CSGlobalEnterMatchMsg(matcherId=1, seriesId=1001 + rank, source=0)
     bp.lua_console(lua_code)
     # r = random.random()
@@ -555,21 +556,20 @@ def duel_test(bp, is_monitor=False):
 
 
 if __name__ == '__main__':
-    serial_number = "127.0.0.1:21553"
-    print(serial_number)
-
-    base_page = BasePage(serial_number=serial_number, is_mobile_device=False, is_monitor=True)
+    serial_number = "127.0.0.1:21593"
+    base_page = BasePage(serial_number=serial_number, is_mobile_device=False)
     gameInit.set_joystick(base_page)
+    # base_page.is_time_scale=True
     # duel_test(base_page, is_monitor=True)
     # base_page.cmd_list(["levelupto 69", "guideskip"])
-    set_duelcup_random(base_page, rank=7)
+    # set_duelcup_random(base_page, rank=7)
     # base_page.cmd("globalgm duelScene 400313")
     # cur = 0
-    # while cur < 2:
-    #     duel_once(base_page, 7, is_quick=True)
+    # while cur < 100:
+    #     duel_once(base_page, 1, is_quick=True)
     #     cur += 1
     #     print(f"第{cur}次钓鱼")
-    # main(base_page)
+    main(base_page)
 
     base_page.connect_close()
     # set_duelcup_random(base_page, rank=7)

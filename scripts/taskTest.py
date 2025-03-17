@@ -341,6 +341,7 @@ if __name__ == '__main__':
     bp = BasePage("192.168.111.77:20059")
     # bp.set_item_count(target_count=60000, item_tpid="100200")
     main(bp)
+    bp.connect_close()
 
 
 

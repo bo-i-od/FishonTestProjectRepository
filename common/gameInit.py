@@ -1,11 +1,13 @@
 import os
 import random
+import re
 import traceback
 from threading import Thread
 from airtest.core.api import connect_device,  install, Template, start_app, shell, click, sleep, stop_app
 from airtest.core.helper import G
 from poco.drivers.android.uiautomation import AndroidUiautomationPoco
 
+from netMsg import csMsgAll
 from panelObjs.AvatarSelectPanel import AvatarSelectPanel
 from panelObjs.LoginPanel import LoginPanel
 from panelObjs.HomePanel import HomePanel
@@ -46,7 +48,7 @@ def login(bp: BasePage, username):
     # while not LoginPanel.is_panel_active(bp):
     #     EntryUpdateLoading.click_tap_to_start(bp)
     # 选服务器 输入名称 点击登录
-    LoginPanel.set_server(bp, 1)
+    LoginPanel.set_server(bp, 4)
     LoginPanel.set_login_name(bp, username)
     LoginPanel.click_btn_login(bp)
     bp.sleep(2)
@@ -64,11 +66,30 @@ def set_joystick(bp: BasePage, state="FLOATING"):
         bp.lua_console("SettingMgr:Write(_G.FISH_SETTING_JOYSTICK.JOYSTICK_NAME, _G.FISH_SETTING_JOYSTICK.TYPE_FIXED)")
         return
 
+def guide_skip(bp: BasePage):
+    text = bp.lua_console_with_response(lua_code_return="_G.PassiveNewbieGuideEnum")
+    # print(text)
+    pattern = '"([^"]*)"'
+    result = re.findall(pattern, text)
+    lua_code_list = []
+    for r in result:
+        # if "NBG_ROOKIE" not in r:
+        #     continue
+        lua_code = csMsgAll.get_CSNewGuideStoreMsg(key=r)
+        lua_code_list.append(lua_code)
+    lua_code = csMsgAll.get_CSNewGuideStoreMsg(key="OPENING_STAGE_FISHERY_1")
+    lua_code_list.append(lua_code)
+    lua_code = csMsgAll.get_CSNewGuideStoreMsg(key="OPENING_STAGE_FISHERY_1_500301")
+    lua_code_list.append(lua_code)
+    bp.lua_console_list(command_list=lua_code_list)
+    bp.sleep(2)
 
 # 初始化账号
-def account_init(bp: BasePage, player_name, cmd_list):
+def account_init(bp: BasePage, player_name, cmd_list, is_skip_guide=True):
     while not PlayerEditNamePanel.is_panel_active(bp):
         bp.sleep(0.1)
+    if is_skip_guide:
+        guide_skip(bp)
     bp.cmd_list(cmd_list)
     set_joystick(bp)
     while True:
@@ -92,13 +113,13 @@ def account_init(bp: BasePage, player_name, cmd_list):
 
 
 # 登录到大厅
-def login_to_hall(bp: BasePage,cmd_list=None):
+def login_to_hall(bp: BasePage, cmd_list=None, is_skip_guide=True):
     LoginPanel.wait_for_btn_login(bp)
     t = str(time.time()).split('.')
     username = "t" +t[0][-2:]+ t[1]
     login(bp, username)
 
-    account_init(bp, username, cmd_list)
+    account_init(bp, username, cmd_list, is_skip_guide=is_skip_guide)
 
 
 def app_start_to_login(dev=None, is_monitor=False):
@@ -334,8 +355,8 @@ def start_time_test():
 
 if __name__ == '__main__':
     # connect_device(f"android://127.0.0.1:5037/{serial_number}")
-    start_app("com.xuejing.smallfish.official")
-
+    # start_app("com.xuejing.smallfish.official")
+    pass
 
 
     # start_time_test()

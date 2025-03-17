@@ -123,7 +123,7 @@ class FishCardPanel(BasePage):
         self.click_element(element_data=ElementsData.FishCardPanel.btn_events)
 
     def switch_sub_tab(self, index=-1):
-        self.click_object_of_plural_objects(element_data=ElementsData.FishCardPanel.sub_tab_list)
+        self.click_object_of_plural_objects(element_data=ElementsData.FishCardPanel.sub_tab_list, index=index)
 
     def click_btn_i(self):
         self.click_element(element_data=ElementsData.FishCardPanel.btn_i)

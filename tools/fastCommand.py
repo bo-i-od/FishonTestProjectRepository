@@ -1,4 +1,6 @@
 import re
+
+from common import gameInit
 from common.basePage import BasePage
 from netMsg import csMsgAll, fishingMsg
 from panelObjs.RogueMainStagePanel import RogueMainStagePanel
@@ -7,57 +9,33 @@ from scripts import battleTest, duelTest, gearTest, fishCardTest, flashCardTest,
 from tools import commonTools
 
 
-def guide_skip(bp: BasePage):
-    text = bp.lua_console_with_response(lua_code_return="_G.PassiveNewbieGuideEnum")
-    # print(text)
-    pattern = '"([^"]*)"'
-    result = re.findall(pattern, text)
-    lua_code_list = []
-    for r in result:
-        # if "NBG_ROOKIE" not in r:
-        #     continue
-        lua_code = csMsgAll.get_CSNewGuideStoreMsg(key=r)
-        lua_code_list.append(lua_code)
-    lua_code = csMsgAll.get_CSNewGuideStoreMsg(key="OPENING_STAGE_FISHERY_1")
-    lua_code_list.append(lua_code)
-    lua_code = csMsgAll.get_CSNewGuideStoreMsg(key="OPENING_STAGE_FISHERY_1_500301")
-    lua_code_list.append(lua_code)
-    bp.lua_console_list(command_list=lua_code_list)
-    bp.sleep(1)
-
 
 def quest_done(bp: BasePage):
     table_data_detail = bp.excelTools.get_table_data_detail(book_name="NEW_PLOT_QUEST.xlsm")
     table_data_object_list, _, _ = table_data_detail
     table_data_object = table_data_object_list[0]
     quest_id = table_data_object["tpId"]
-    while True:
-        # bp.cmd(f"questFinish {quest_id}")
-        bp.cmd(f"questFinish")
-        bp.sleep(0.1)
-        lua_code = csMsgAll.get_CSGetQuestRewardsMsg(questTpId=quest_id)
 
-        # 发送消息
-        bp.lua_console(lua_code)
-        bp.sleep(0.1)
+
+    # # 发送消息
+    # lua_code = csMsgAll.get_CSQuestCancelNewMsg(questTpId=quest_id)
+    # bp.lua_console(lua_code)
+    # bp.sleep(0.1)
+    while True:
+
+        # bp.cmd(f"questFinish {quest_id}")
+
         if "nextQuestId" not in table_data_object:
             break
+        bp.cmd(f"questFinish {quest_id}")
+        bp.sleep(0.1)
+
+        # 发送消息
+        lua_code = csMsgAll.get_CSGetQuestRewardsMsg(questTpId=quest_id)
+        bp.lua_console(lua_code)
+        bp.sleep(0.1)
         quest_id = table_data_object["nextQuestId"]
         table_data_object = bp.excelTools.get_table_data_object_by_key_value(key="tpId", value=quest_id, table_data_detail=table_data_detail)
-
-
-
-def quest_done_once(bp: BasePage, table_data_object):
-    quest_id = table_data_object["tpId"]
-    if "triggerKeyS" in table_data_object:
-        i = 0
-        while i < table_data_object["triggerValue"]:
-            fish_quick(bp, fish_id=table_data_object["triggerKeyS"])
-            i += 1
-
-    bp.cmd(f"questFinish {quest_id}")
-
-
 
 
 def talent_all(bp: BasePage):
@@ -116,7 +94,10 @@ def category_done(bp: BasePage, category_id):
         fish_quick(bp, fish_id=fish_id)
 
 
-def fish_quick(bp: BasePage, fish_id, is_map=False):
+def fish_quick(bp: BasePage, fish_id, is_map=False, times=1):
+    if times > 1:
+        times -= 1
+        fish_quick(bp=bp, fish_id=fish_id, is_map=is_map, times=times)
     if fish_id in [0, "0"]:
         return
     fishery_id = bp.fish_id_to_fishery_id(fish_id=fish_id)
@@ -201,19 +182,26 @@ def tower_level_up(bp: BasePage, tag, lv):
 
 
 if __name__ == '__main__':
-    base_page = BasePage(serial_number="127.0.0.1:21593", is_mobile_device=True)
+    base_page = BasePage(serial_number="127.0.0.1:21593", is_mobile_device=False)
+    # base_page.sleep(3)
+    # base_page.go_to_panel("AchievementPanel")
     base_page.is_time_scale = True
+    base_page.custom_cmd("setQuickQTE 1")
+    base_page.tension_default = 0.65
+    base_page.custom_cmd("setTension 0.65")
+    base_page.is_quick_qte = True
     #
-    # # # # 跳过引导
-    # guide_skip(base_page)
+    # # # 跳过引导
+    # gameInit.guide_skip(base_page)
+    #
     # #
-    # # # 新主线升到指定等级
-    # level_up_to_new_plot(base_page, 50)
-    # # # #
-    # # # # 完成新主线剧情任务
+    # base_page.cmd_list(["levelupto 21"])
+    # # #
+    # # # # # # 新主线升到指定等级
+    # level_up_to_new_plot(base_page, 60)
+    # # #
+    # # # 完成新主线剧情任务
     # quest_done(base_page)
-
-
 
     # 天赋满级
     # talent_all(base_page)
@@ -227,7 +215,7 @@ if __name__ == '__main__':
     # 指定渔场渔册满
     # unlock_fish_album(base_page, fishery_id=400302)
 
-    # 完成全部成就
+    # 完成全部成就gg
     # achievement_done(base_page)
 
     # 照片墙 奇珍黄金鱼没有鱼骨 该方法完成不了a
@@ -237,11 +225,11 @@ if __name__ == '__main__':
     # category_done(base_page, category_id=10004)
 
     # # 钓一次鱼 运行界面：备战界面
-    # battleTest.fish_once(base_page, is_quick=True)
+    battleTest.fish_once(base_page, is_quick=False, fish_id="360113")
 
     # 循环钓鱼 运行界面：备战界面
     # 填渔场id会将该渔场鱼钓一遍
-    battleTest.circulate_fish(base_page, is_quick=True)
+    # battleTest.circulate_fish(base_page, is_quick=False, fishery_id="400304", start=13)
 
     # 体感抛竿
     # battleTest.vibration_cast(base_page)
@@ -257,7 +245,7 @@ if __name__ == '__main__':
     # flashCardTest.get_flash_card(base_page, fishery_id="500301")
 
     # 任意界面接口钓鱼 1021
-    # fish_quick(base_page, fish_id=315015, is_map=True)
+    # fish_quick(base_page, fish_id=360101, is_map=False, times=1)
 
     # 设定道具数量
     # base_page.set_item_count(item_tpid="102100", target_count=10)
