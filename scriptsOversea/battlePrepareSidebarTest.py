@@ -123,7 +123,7 @@ def main(bp: BasePage):
     BattlePreparePanel.SideBar.click_btn_gears(bp)
     bp.sleep(1)
 
-    BattlePreparePanel.panel_gears_switch.click_btn_cancel(bp)
+    BattlePreparePanel.panel_gears_new.click_btn_cancel(bp)
     BattlePreparePanel.SideBar.click_btn_menu(bp)
     bp.sleep(1)
 

@@ -163,16 +163,18 @@ class BattlePanel(BasePage):
             pass
 
     def hook(self):
-        self.wait_for_appear(element_data_list=[ElementsData.BattlePanel.btn_reel, ElementsData.ResultPanel.btn_claim_pve, ElementsData.ResultPanel.btn_claim_pvp], is_click=False, timeout=25)
         self.set_time_scale(time_scale=1)
+        self.wait_for_appear(element_data_list=[ElementsData.BattlePanel.btn_reel, ElementsData.ResultPanel.btn_claim_pve, ElementsData.ResultPanel.btn_claim_pvp], is_click=False, timeout=25)
         # 如果没有刺鱼就跳过
         progress_position, arrow_position = self.get_position_list(element_data_list=[ElementsData.BattlePanel.progress, ElementsData.BattlePanel.arrow])
         if not progress_position:
             return
         if not arrow_position:
             return
-        progress_size_list = self.get_size_list(element_data=ElementsData.BattlePanel.progress)
+        progress_size_list, arrow_size_list = self.get_size_list(element_data_list=[ElementsData.BattlePanel.progress, ElementsData.BattlePanel.arrow])
         if not progress_size_list:
+            return
+        if not arrow_position:
             return
         progress_size = progress_size_list[0]
         h = progress_size[1]
@@ -180,7 +182,7 @@ class BattlePanel(BasePage):
 
         progress = (arrow_position[0][1] - progress_range[0]) / h
 
-        while progress < 0.7:
+        while progress < self.hook_progress:
             arrow_position = self.get_position_list(element_data=ElementsData.BattlePanel.arrow)
             if not arrow_position:
                 return

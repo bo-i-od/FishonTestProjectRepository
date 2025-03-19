@@ -81,7 +81,7 @@ def main(bp: BasePage):
 
 
     # 升级测试
-    bp.cmd_list(["missiondone 10", "add 1 100200 123456"])
+    bp.cmd_list(["guideskip","missiondone 10", "add 1 100200 123456"])
     bp.sleep(1)
 
     # 领取跳转应该不在主界面了
@@ -103,12 +103,12 @@ def main(bp: BasePage):
     BattlePreparePanel.Minitask.click_btn_claim(bp)
     bp.sleep(1)
     if BattlePreparePanel.is_panel_active(bp):
-        raise FindElementError
+        raise FindElementError("BattlePreparePanel")
 
     # 回到主界面
     bp.go_home()
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21553", is_mobile_device=True)
+    bp = BasePage("192.168.111.34:20089", is_mobile_device=True)
     main(bp)
     bp.connect_close()

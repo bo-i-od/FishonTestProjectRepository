@@ -14,7 +14,7 @@ class PVPHallPanel(BasePage):
 
     def click_btn_play(self, index=-1):
         size_list = self.get_size_list(element_data=ElementsData.PVPHallPanel.btn_play_list)
-        edge_left = size_list[0][0] * 1.5
+        edge_left = size_list[0][0]
         self.click_object_of_plural_objects(element_data=ElementsData.PVPHallPanel.btn_play_list, element_viewport=ElementsData.PVPHallPanel.Viewport,  viewport_edge=[edge_left, 0], viewport_direction="row", index=index)
 
     def get_btn_play_position_list(self):
@@ -67,17 +67,17 @@ class PVPHallPanel(BasePage):
 
 
 if __name__ == "__main__":
-    bp = BasePage()
+    bp = BasePage("127.0.0.1:21593", is_mobile_device=True)
     # PVPHallPanel.click_btn_close(bp)
     # PVPHallPanel.click_btn_close_tips(bp)
     # PVPHallPanel.click_btn_create(bp)
     # PVPHallPanel.click_btn_friendly(bp)
     # PVPHallPanel.click_btn_join(bp)
     # PVPHallPanel.click_btn_leaderboard(bp)
-    # PVPHallPanel.click_btn_play(bp)
+    PVPHallPanel.click_btn_play(bp, 0)
     # PVPHallPanel.click_btn_turntable(bp)
     # PVPHallPanel.click_crown(bp)
     # PVPHallPanel.click_rule(bp)
-    PVPHallPanel.click_top_res_btn(bp)
+    # PVPHallPanel.click_top_res_btn(bp)
     bp.connect_close()
 

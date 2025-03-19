@@ -38,9 +38,9 @@ def main(bp: BasePage):
     # 去渔场
     bp.go_to_panel("TournamentsPanel")
     bp.sleep(1)
-    TournamentsPanel.go_to_fishery_by_index(bp, 0)
+    TournamentsPanel.go_to_fishery_by_tpid(bp, 400301)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
-
+    bp.sleep(1)
     # 点击打开备战收纳界面
     #  点击查看玩家名片
     BattlePreparePanel.SideBar.click_btn_menu(bp)
@@ -49,8 +49,7 @@ def main(bp: BasePage):
     PlayerInteractPanel.wait_for_panel_appear(bp)
     PlayerInteractPanel.click_btn_close(bp)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
-
-
+    bp.sleep(1)
     # 点击查看鱼册
     BattlePreparePanel.SideBar.click_btn_menu(bp)
     bp.sleep(1)
@@ -58,7 +57,7 @@ def main(bp: BasePage):
     FishAlbum3DPanel.wait_for_panel_appear(bp)
     FishAlbum3DPanel.click_btn_close(bp)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
-
+    bp.sleep(1)
 
     # 点击查看闪卡
     BattlePreparePanel.SideBar.click_btn_menu(bp)
@@ -67,7 +66,7 @@ def main(bp: BasePage):
     FlashCardBoxesPanel.wait_for_panel_appear(bp)
     FlashCardBoxesPanel.click_btn_close(bp)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
-
+    bp.sleep(1)
 
     # 点击查看鱼卡
     BattlePreparePanel.SideBar.click_btn_menu(bp)
@@ -76,7 +75,7 @@ def main(bp: BasePage):
     FishCardPanel.wait_for_panel_appear(bp)
     FishCardPanel.click_btn_close(bp)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
-
+    bp.sleep(1)
 
     # 点击查看照片墙
     BattlePreparePanel.SideBar.click_btn_menu(bp)
@@ -85,7 +84,7 @@ def main(bp: BasePage):
     AchievementWantedPanel.wait_for_panel_appear(bp)
     AchievementWantedPanel.click_btn_close(bp)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
-
+    bp.sleep(1)
 
     # 点击查看商城
     BattlePreparePanel.SideBar.click_btn_menu(bp)
@@ -94,7 +93,7 @@ def main(bp: BasePage):
     StorePanel.wait_for_panel_appear(bp)
     StorePanel.click_btn_close(bp)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
-
+    bp.sleep(1)
 
     # 点击查看钓者生涯
     BattlePreparePanel.SideBar.click_btn_menu(bp)
@@ -103,7 +102,7 @@ def main(bp: BasePage):
     CareerPanel.wait_for_panel_appear(bp)
     CareerPanel.click_btn_close(bp)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
-
+    bp.sleep(1)
 
     # 点击查看好友
     BattlePreparePanel.SideBar.click_btn_menu(bp)
@@ -112,7 +111,7 @@ def main(bp: BasePage):
     FriendPanel.wait_for_panel_appear(bp)
     FriendPanel.click_btn_close(bp)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
-
+    bp.sleep(1)
 
     # 点击查看俱乐部
     BattlePreparePanel.SideBar.click_btn_menu(bp)
@@ -121,7 +120,7 @@ def main(bp: BasePage):
     ClubApplyPanel.wait_for_panel_appear(bp)
     ClubApplyPanel.click_btn_close(bp)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
-
+    bp.sleep(1)
 
     # 点击查看鱼竿
     BattlePreparePanel.SideBar.click_btn_menu(bp)
@@ -138,7 +137,7 @@ def main(bp: BasePage):
     AquariumFishGuardSideBarPanel.wait_for_panel_appear(bp)
     AquariumFishGuardSideBarPanel.click_btn_close(bp)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
-
+    bp.sleep(1)
 
     # 点击查看邮件
     BattlePreparePanel.SideBar.click_btn_menu(bp)
@@ -147,16 +146,16 @@ def main(bp: BasePage):
     MailPanel.wait_for_panel_appear(bp)
     MailPanel.click_btn_close(bp)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
-
+    bp.sleep(1)
 
     # 点击查看公告
     BattlePreparePanel.SideBar.click_btn_menu(bp)
     bp.sleep(1)
     BattlePreparePanel.SideBar.click_btn_announcement(bp)
-    LoginAnnouncementPanel.wait_for_panel_appear(bp)
-    LoginAnnouncementPanel.click_btn_close(bp)
+    if LoginAnnouncementPanel.is_panel_active(bp):
+        LoginAnnouncementPanel.click_btn_close(bp)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
-
+    bp.sleep(1)
 
     # 点击查看avatar
     BattlePreparePanel.SideBar.click_btn_menu(bp)
@@ -165,7 +164,7 @@ def main(bp: BasePage):
     AvatarMainPanel.wait_for_panel_appear(bp)
     AvatarMainPanel.click_btn_close(bp)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
-
+    bp.sleep(1)
     bp.go_home()
 
 
@@ -173,6 +172,6 @@ def main(bp: BasePage):
 
 if __name__ == '__main__':
 
-    bp = BasePage("127.0.0.1:21503", is_mobile_device=False)
+    bp = BasePage("192.168.111.36:20076", is_mobile_device=True)
     main(bp)
     bp.connect_close()

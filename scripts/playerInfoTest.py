@@ -148,7 +148,7 @@ def head_frame_test(bp: BasePage):
 
 def main(bp:BasePage):
     # 登录到大厅
-    cmd_list = [ "levelupto 16", "add 1 100100 300"]
+    cmd_list = ["guideskip", "levelupto 16", "add 1 100100 300"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     PlayerLevelupPanel.wait_for_panel_appear(bp)

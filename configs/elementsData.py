@@ -130,6 +130,10 @@ class ElementsData:
         item_list = {"locator": "UICanvas>Default>AquariumNewActivityPopupPanel>panel>bg>down>rewards>"}
         btn_enter = {"locator": "UICanvas>Default>AquariumNewActivityPopupPanel>panel>bg>down>btn_enter"}
 
+    class AquariumNewAnniversaryPopupPanel:
+        AquariumNewAnniversaryPopupPanel = {"locator": "UICanvas>Default>AquariumNewAnniversaryPopupPanel"}
+        btn_close = {"locator": "UICanvas>Default>AquariumNewAnniversaryPopupPanel>panel>btn_close>img"}
+
     class AquariumFishNewPanel:
         AquariumFishNewPanel = {"locator": "UICanvas>Default>AquariumFishNewPanel"}
         btn_close = {"locator": "UICanvas>Default>AquariumFishNewPanel>panel>panel_fish>btn_close"}
@@ -919,7 +923,7 @@ class ElementsData:
 
     class FishCardPanel:
         FishCardPanel = {"locator": "UICanvas>Default>FishCardPanel"}
-        tab_list = {"locator": "UICanvas>Default>FishCardPanel>panel_tab>content>TabList>Viewport>Content>", "focus": (0, 0.5)}
+        tab_list = {"locator": "UICanvas>Default>FishCardPanel>panel_tab>content>TabList>Viewport>Content>>bg", "focus": (0.5, 0.5)}
         fisheries_bg_list = {"locator": "UICanvas>Default>FishCardPanel>panel_tab>content>TabList>Viewport>Content>>bg"}
         fisheries_viewport = {"locator": "UICanvas>Default>FishCardPanel>panel_tab>content>TabList>Viewport", "focus": (0, 0)}
         fisheries_title_list = {"locator": "UICanvas>Default>FishCardPanel>panel_tab>content>TabList>Viewport>Content>>title"}
@@ -1398,7 +1402,7 @@ class ElementsData:
         NBG_rookie_6 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_rookie_6(Clone)>Guide_Highlight>ep_UI_novice guide"}
         NBG_rookie_7 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_rookie_7(Clone)>Guide_Highlight>ep_UI_novice guide"}
         NBG_rookie_8 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_rookie_8(Clone)>Guide_HighTensionCloseBtn>text", "focus": (0.5, 1)}
-        NBG_rookie_9 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_rookie_9(Clone)>Guide_VirtualBtn>Guide_Highlight>ep_UI_novice guide"}
+        NBG_rookie_9 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_rookie_9(Clone)>Guide_Highlight>ep_UI_novice guide"}
         NBG_rookie_10 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_rookie_10(Clone)"}
         NBG_rookie_11 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_rookie_11(Clone)"}
         NBG_rookie_12 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_rookie_12(Clone)>Guide_Highlight>ep_UI_novice guide"}
@@ -1416,9 +1420,11 @@ class ElementsData:
         NBG_rookie_18 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_rookie_18(Clone)>Guide_VirtualBtn"}
         NBG_system_1 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_system_1(Clone)>Guide_VirtualBtn"}
         NBG_system_2 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_system_2(Clone)>Guide_VirtualBtn"}
+        NBG_system_click_Pve = {"locator":"UICanvas>Default>NewbieGuidePanel>NBG_system_click_Pve(Clone)>Guide_Arrow>arrow>ep_UI_novice guide_arrow"}
         NBG_system_click_TreasureChest = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_system_click_TreasureChest(Clone)>Guide_Highlight>ep_UI_novice guide"}
         NBG_system_get_reward_TreasureChest_01 = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_system_get_reward_TreasureChest_01(Clone)>Guide_Highlight>ep_UI_novice guide"}
         NBG_system_close_TreasureChest = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_system_close_TreasureChest(Clone)>Guide_Highlight>ep_UI_novice guide"}
+        NBG_system_selectFishery_weakGuide = {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_system_selectFishery_weakGuide(Clone)>Guide_Highlight>ep_UI_novice guide"}
 
         # 鱼册引导
         NBG_prepare_2_album_01= {"locator": "UICanvas>Default>NewbieGuidePanel>NBG_prepare_2_album_01(Clone)>Guide_VirtualBtn>text", "focus": (0.5, 1)}

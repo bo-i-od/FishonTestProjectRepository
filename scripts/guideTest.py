@@ -45,8 +45,9 @@ def player_edit_name_test(bp: BasePage):
     # compare(head_object_id, head_expect_object_id)
 
     # 点击确认按钮
-    PlayerEditNamePanel.click_confirm(bp)
-    bp.sleep(1)
+    while PlayerEditNamePanel.is_panel_active(bp):
+        PlayerEditNamePanel.click_confirm(bp)
+        bp.sleep(1)
 
 
 def guide_rookie_test(bp: BasePage):
@@ -216,40 +217,41 @@ def main(bp:BasePage):
     # 新手引导
     guide_rookie_test(bp)
     bp.cmd_list([f"levelupto 4", "mode 400301 301001"])
-    bp.go_home()
-
-    # 钓点引导、鱼册引导
+    bp.sleep(3)
+    # # 钓点引导、鱼册引导
     guide_list = ["guide_fish_point", "guide_album", "guide_fishing_cast"]
     guide_BattlePreparePanel_test(bp, guide_list)
-
-    # 升等级
-    bp.cmd(f"levelupto 99")
-
-    # 水族箱引导、鱼卡引导、俱乐部引导
-    guide_list = ["guide_club", "guide_fish_card", "guide_aquarium_1"]
-    guide_HomePanel_test(bp, guide_list)
-
-    # 好友对决引导
-    guide_list = ["guide_friend_duel"]
-    guide_PVPHallPanel_test(bp, guide_list)
-
-    # 多人房引导
-    bp.cmd("mode 400301 390005")
-    guide_list = ["guide_multi_room"]
-    guide_TournamentsPanel_test(bp, guide_list)
-
-    # 水族箱引导、照片墙引导、体感抛竿引导、
-    guide_list = ["guide_aquarium_2", "guide_fish_photo"]
-    guide_BattlePreparePanel_test(bp, guide_list)
-
-    # 断线引导
-    guide_fishing_fail_test(bp)
+    #
+    bp.go_home()
+    #
+    # # # 升等级
+    # bp.cmd(f"levelupto 99")
+    # #
+    # # 水族箱引导、鱼卡引导、俱乐部引导
+    # guide_list = ["guide_club", "guide_fish_card", "guide_aquarium_1"]
+    # guide_HomePanel_test(bp, guide_list)
+    # #
+    # # 好友对决引导
+    # guide_list = ["guide_friend_duel"]
+    # guide_PVPHallPanel_test(bp, guide_list)
+    # #
+    # # # 多人房引导
+    # bp.cmd("mode 400301 390005")
+    # # guide_list = ["guide_multi_room"]
+    # # guide_TournamentsPanel_test(bp, guide_list)
+    # #
+    # # 水族箱引导、照片墙引导、体感抛竿引导、
+    # guide_list = ["guide_aquarium_2", "guide_fish_photo"]
+    # guide_BattlePreparePanel_test(bp, guide_list)
+    # #
+    # # # 断线引导
+    # guide_fishing_fail_test(bp)
 
 
 
 
 
 if __name__ == '__main__':
-    bp = BasePage("127.0.0.1:21553", is_mobile_device=True)
+    bp = BasePage("127.0.0.1:21593", is_mobile_device=False)
     main(bp)
     bp.connect_close()

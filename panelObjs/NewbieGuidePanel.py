@@ -146,11 +146,13 @@ class NewbieGuidePanel(BasePage):
 
     def guide_rookie_6(self):
         perform_list = [ElementsData.NewbieGuidePanel.NBG_system_1, ElementsData.NewbieGuidePanel.NBG_system_2,
+                        ElementsData.NewbieGuidePanel.NBG_system_click_Pve,
                         ElementsData.NewbieGuidePanel.NBG_system_click_TreasureChest,
                         ElementsData.NewbieGuidePanel.NBG_system_get_reward_TreasureChest_01]
         self.click_a_until_b_appear_list(perform_list)
         self.click_until_disappear(element_data=ElementsData.NewbieGuidePanel.NBG_system_get_reward_TreasureChest_01)
-        self.go_home()
+        self.go_home(target_panel="TournamentsPanel")
+        self.click_until_disappear(element_data=ElementsData.NewbieGuidePanel.NBG_system_selectFishery_weakGuide)
 
     def guide_album(self):
         pass

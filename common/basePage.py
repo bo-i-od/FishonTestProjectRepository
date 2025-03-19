@@ -1732,30 +1732,35 @@ class BasePage(BasePageMain):
             self.monitor = UIMonitor(self)
             self.monitor.start_monitoring(threading.current_thread())
 
-        self.tension_default = 0.95
-        self.custom_cmd(f"setTension {self.tension_default}")
-        self.is_quick_qte = False
-        if self.is_quick_qte:
-            self.custom_cmd("setQuickQTE 1")
-        else:
-            self.custom_cmd("setQuickQTE 0")
+        # 设置默认张力
+        self.tension_default = None
+        self.set_tension_default(0.95)
+
+        # 设置是否使用快速qte
+        self.is_quick_qte = None
+        self.set_is_quick_qte(False)
+
         self.auto_fish_init()
+
+        # 设置默认拉线张力
+        self.hook_progress = None
+        self.set_hook_progress(0.75)
 
     def auto_fish_init(self):
         cmd_list = []
         cmd_list.append(f"clearElements")
         lua_code = "Gameplay.Joystick.HorizontalValue = -1"
-        cmd_list.append(f"addElement joystickLeftLong UICanvas>Default>BattlePanel>FishHUD>qte_left>qte {lua_code}")
-        cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_2>qte {lua_code}")
-        cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_3>qte {lua_code}")
-        cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_4>qte {lua_code}")
-        cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_fishJump>qte {lua_code}")
+        cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left>qte 0 {lua_code}")
+        cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_2>qte 0 {lua_code}")
+        cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_3>qte 0 {lua_code}")
+        cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_4>qte 0 {lua_code}")
+        cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_fishJump>qte 0 {lua_code}")
         lua_code = "Gameplay.Joystick.HorizontalValue = 1"
-        cmd_list.append(f"addElement joystickRightLong UICanvas>Default>BattlePanel>FishHUD>qte_right>qte {lua_code}")
-        cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_2>qte {lua_code}")
-        cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_3>qte {lua_code}")
-        cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_4>qte {lua_code}")
-        cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_fishJump>qte {lua_code}")
+        cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right>qte 0 {lua_code}")
+        cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_2>qte 0 {lua_code}")
+        cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_3>qte 0 {lua_code}")
+        cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_4>qte 0 {lua_code}")
+        cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_fishJump>qte 0 {lua_code}")
         lua_code = """local fishingMatch = GameRoot:GetFishingMatch()
 local actorPlayer  = fishingMatch:GetPlayer()
 local actorFish = actorPlayer:GetCurrentFish()
@@ -1771,7 +1776,7 @@ if not skillCounter:IsHaveEnoughEnergy(caBeCounter:GetType()) then
     return
 end
 fishingMatch:TriggerActiveSkill(skillCounter:GetSlotIndex())"""
-        cmd_list.append(f"addElement joystickUp UICanvas>Default>BattlePanel>FishHUD>qte_up>qte {lua_code}")
+        cmd_list.append(f"addElement joystickUp UICanvas>Default>BattlePanel>FishHUD>qte_up>qte 0 {lua_code}")
 #         lua_code = """local BattlePanel = PanelMgr:Find("BattlePanel")
 # if not BattlePanel then
 #     return
@@ -1785,12 +1790,44 @@ fishingMatch:TriggerActiveSkill(skillCounter:GetSlotIndex())"""
         cmd_list.append(f"addElement tensionSpecial UICanvas>Default>BattlePanel>FishHUD>hud_tension>tensileStress>lock>right")
         cmd_list.append(f"addElement fishJack UICanvas>Default>BattlePanel>FishHUD>hud_tension>fish_jack")
         cmd_list.append(f"addElement fishJackPerfect UICanvas>Default>BattlePanel>FishHUD>hud_tension>fish_jack>bar_2")
+        cmd_list.append(f"addElement hookProgress UICanvas>Default>BattlePanel>hook>progress")
+        cmd_list.append(f"addElement hookArrow UICanvas>Default>BattlePanel>hook>progress>arrow")
         self.custom_cmd_list(cmd_list)
 
+    def go_to_fishery(self, fishery_id):
+        lua_code = f'ControllerMgr:Get("BattleController"):GoToPVE({fishery_id})'
+        self.lua_console(lua_code)
+
+    def get_rod_list(self, rarity=None, fisheries_living=None, fisheries_rank=None, fishery_id=None):
+        rod_list = []
+        if fishery_id:
+            table_data_object_list = self.excelTools.get_table_data_object_list(book_name="FISHERIES.xlsm")
+            for table_data_object in table_data_object_list:
+                if "tpId" not in table_data_object:
+                    continue
+                if table_data_object["tpId"] != fishery_id:
+                    continue
+                if "fisheriesLiving" not in table_data_object:
+                    continue
+                if "fisheriesRank" not in table_data_object:
+                    continue
+                fisheries_living = table_data_object["fisheriesLiving"]
+                fisheries_rank = table_data_object["fisheriesRank"]
+        table_data_object_list = self.excelTools.get_table_data_object_list(book_name="FISHING_ROD.xlsm")
+        for table_data_object in table_data_object_list:
+            if table_data_object["isFreshWater"] != fisheries_living:
+                continue
+            if table_data_object["fisheriesRank"] != fisheries_rank:
+                continue
+            if rarity and table_data_object["rank"] != rarity:
+                continue
+            rod_list.append(table_data_object["tpId"])
+        return rod_list
 
 
 
-    def get_fishery_id_list(self):
+
+    def get_fishery_id_list(self, is_new_plot=False):
         """函数功能简述
             根据配置表获取渔场id列表
         """
@@ -1803,9 +1840,14 @@ fishingMatch:TriggerActiveSkill(skillCounter:GetSlotIndex())"""
                 continue
             if table_data_object["enabled"] != 1:
                 continue
+            if "fisheriesType" in table_data_object and not is_new_plot:
+                continue
+            if "fisheriesType" not in table_data_object and is_new_plot:
+                continue
             fishery_id = table_data_object["tpId"]
             fishery_id_list.append(fishery_id)
         return fishery_id_list
+
 
     def get_fish_id_list(self, fishery_id):
         """函数功能简述
@@ -1817,9 +1859,12 @@ fishingMatch:TriggerActiveSkill(skillCounter:GetSlotIndex())"""
         table_data_object = self.excelTools.get_table_data_object_by_key_value(key="tpId", value=fishery_id,
                                                                                book_name="FISHERIES.xlsm")
         fish_list = table_data_object["fish"]
+        activity_fish_list = table_data_object["activityFishNotShow"]
         res_list = []
         for fish in fish_list:
             if not fish:
+                continue
+            if activity_fish_list and fish in activity_fish_list:
                 continue
             res_list.append(str(fish))
         return res_list
@@ -2550,6 +2595,21 @@ end
         table_data_object = self.excelTools.get_table_data_object_by_key_value(key="collectionId", value=flash_card_id, table_data_detail=table_data_detail)
         flash_card_type = table_data_object['collectionLevel']
         return flash_card_type
+
+    def set_is_quick_qte(self, is_quick_qte):
+        self.is_quick_qte = is_quick_qte
+        if is_quick_qte:
+            self.custom_cmd(f"setHookProgress 1")
+        else:
+            self.custom_cmd(f"setHookProgress 0")
+
+    def set_hook_progress(self, hook_progress):
+        self.hook_progress = hook_progress
+        self.custom_cmd(f"setHookProgress {hook_progress}")
+
+    def set_tension_default(self, tension_default):
+        self.tension_default = tension_default
+        self.custom_cmd(f"setTension {tension_default}")
 
 
 if __name__ == '__main__':

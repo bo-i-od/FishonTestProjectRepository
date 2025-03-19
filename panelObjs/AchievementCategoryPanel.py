@@ -66,7 +66,12 @@ class AchievementCategoryPanel(BasePage):
             cur += 1
 
     def get_category_viewport(self):
-        category_viewport = Viewport(self, element_viewport=ElementsData.AchievementCategoryPanel.category_viewport, element_item_list=ElementsData.AchievementCategoryPanel.item_list, viewport_direction="column")
+        size_list = self.get_size_list(element_data=ElementsData.AchievementCategoryPanel.item_list)
+        size = [0, 0]
+        if size_list:
+            size = size_list[0]
+
+        category_viewport = Viewport(self, element_viewport=ElementsData.AchievementCategoryPanel.category_viewport, element_item_list=ElementsData.AchievementCategoryPanel.item_list, viewport_direction="column", viewport_edge=[0, 0.5 * size[1]])
         return category_viewport
 
     def click_btn_rewards(self):

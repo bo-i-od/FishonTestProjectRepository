@@ -41,14 +41,14 @@ def reset_bp(dev, is_monitor=False):
     return bp
 
 
-def login(bp: BasePage, username):
+def login(bp: BasePage, username, index=0):
     # if not LoginPanel.is_panel_active(bp):
     #     EntryUpdateLoading.wait_for_EntryUpdateLoading(bp)
     # # 在登录界面出现前，点击tap to start
     # while not LoginPanel.is_panel_active(bp):
     #     EntryUpdateLoading.click_tap_to_start(bp)
     # 选服务器 输入名称 点击登录
-    LoginPanel.set_server(bp, 4)
+    LoginPanel.set_server(bp, index)
     LoginPanel.set_login_name(bp, username)
     LoginPanel.click_btn_login(bp)
     bp.sleep(2)

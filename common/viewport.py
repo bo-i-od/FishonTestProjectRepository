@@ -22,8 +22,7 @@ class Viewport:
         self.viewport_size = self.get_viewport_size()
         if self.viewport_range is None:
             self.viewport_range = self.get_viewport_range()
-        if self.viewport_edge is not None:
-            self.viewport_range_shift()
+        self.viewport_range_shift()
         if self.delta_len is None:
             self.delta_len = self.get_delta_len()
         self.camera_name = camera_name
@@ -102,11 +101,20 @@ class Viewport:
         else:
             range_start = position[0] - size[0] * 0.5
             range_end = position[0] + size[0] * 0.5
+        if range_start < 0:
+            range_start = 0
+        if range_end > 1:
+            range_end = 1
         return [range_start, range_end]
 
     def viewport_range_shift(self):
-        self.viewport_range[0] += self.viewport_edge[0]
-        self.viewport_range[1] -= self.viewport_edge[1]
+        if self.viewport_edge:
+            self.viewport_range[0] += self.viewport_edge[0]
+            self.viewport_range[1] -= self.viewport_edge[1]
+        if self.viewport_range[0] < 0:
+            self.viewport_range[0] = 0
+        if self.viewport_range[1] > 1:
+            self.viewport_range[1] = 1
 
     def get_viewport_size(self):
         viewport_size = self.basePage.get_size(element_data=self.element_viewport)
