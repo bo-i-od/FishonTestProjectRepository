@@ -27,6 +27,7 @@ class BattlePanel(BasePage):
             ElementsData.ResultPanel.btn_claim_pvp,
             ElementsData.ResultPanel.btn_claim_token_fish,
             ElementsData.BattleFailedPanel.btn_again,
+            ElementsData.MainStageBattleFailedPanel.btn_again,
             ElementsData.FlashCardReceivePanel.FlashCardReceivePanel,
             ElementsData.MainlineFlashCardReceivePanel.MainlineFlashCardReceivePanel,
             ElementsData.BattlePanel.BattlePanel,
@@ -44,6 +45,7 @@ class BattlePanel(BasePage):
         btn_claim_pvp_index = element_data_list.index(ElementsData.ResultPanel.btn_claim_pvp)
         btn_claim_token_fish_index = element_data_list.index(ElementsData.ResultPanel.btn_claim_token_fish)
         btn_again_index = element_data_list.index(ElementsData.BattleFailedPanel.btn_again)
+        btn_again_2_index = element_data_list.index(ElementsData.MainStageBattleFailedPanel.btn_again)
         FlashCardReceivePanel_index = element_data_list.index(ElementsData.FlashCardReceivePanel.FlashCardReceivePanel)
         MainlineFlashCardReceivePanel_index = element_data_list.index(ElementsData.MainlineFlashCardReceivePanel.MainlineFlashCardReceivePanel)
         crt_index = element_data_list.index(ElementsData.BattlePanel.crt)
@@ -103,6 +105,9 @@ class BattlePanel(BasePage):
                 break
             if object_id_list[btn_again_index]:
                 ResultPanel.automatic_settlement(self, element_btn=ElementsData.BattleFailedPanel.btn_again)
+                break
+            if object_id_list[btn_again_2_index]:
+                ResultPanel.automatic_settlement(bp, element_btn=ElementsData.MainStageBattleFailedPanel.btn_again)
                 break
             if object_id_list[FlashCardReceivePanel_index]:
                 self.clear_popup()

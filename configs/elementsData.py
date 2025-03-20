@@ -1361,6 +1361,10 @@ class ElementsData:
         MainlineFlashCardReceivePanel = {"locator": "UICanvas>Default>MainlineFlashCardReceivePanel"}
         btn_close = {"locator": "UICanvas>Default>MainlineFlashCardReceivePanel>>btn_close>tip"}
 
+    class MainStageBattleFailedPanel:
+        MainStageBattleFailedPanel = {"locator": "UICanvas>Default>MainStageBattleFailedPanel"}
+        btn_again = {"locator": "UICanvas>Default>MainStageBattleFailedPanel>panel_fail>btns>btn_again"}
+
     class MainStageSettlePanel:
         MainStageSettlePanel = {"locator": "UICanvas>Default>MainStageSettlePanel"}
         btn_blue = {"locator": "UICanvas>Default>MainStageSettlePanel>>btn_group>btn_blue"}

@@ -113,6 +113,7 @@ def qte(bp, personality: Personality = None):
                          ElementsData.BattlePanel.qte_jump_right, ElementsData.BattlePanel.hud_power_list,
                          ElementsData.BattlePanel.hud_power_list_old, ElementsData.ResultPanel.btn_claim_pve,
                          ElementsData.ResultPanel.btn_claim_pvp, ElementsData.ResultPanel.btn_claim_token_fish,
+                         ElementsData.MainStageBattleFailedPanel.btn_again,
                          ElementsData.BattleFailedPanel.btn_again,
                          ElementsData.FlashCardReceivePanel.FlashCardReceivePanel,
                          ElementsData.BattlePanel.warning,
@@ -134,6 +135,7 @@ def qte(bp, personality: Personality = None):
     btn_claim_pvp_index = element_data_list.index(ElementsData.ResultPanel.btn_claim_pvp)
     btn_claim_token_fish_index = element_data_list.index(ElementsData.ResultPanel.btn_claim_token_fish)
     btn_again_index = element_data_list.index(ElementsData.BattleFailedPanel.btn_again)
+    btn_again_2_index = element_data_list.index(ElementsData.MainStageBattleFailedPanel.btn_again)
     FlashCardReceivePanel_index = element_data_list.index(ElementsData.FlashCardReceivePanel.FlashCardReceivePanel)
     warning_index = element_data_list.index(ElementsData.BattlePanel.warning)
     MainlineFlashCardReceivePanel_index = element_data_list.index(ElementsData.MainlineFlashCardReceivePanel.MainlineFlashCardReceivePanel)
@@ -275,6 +277,10 @@ def qte(bp, personality: Personality = None):
             break
         if object_id_list[btn_again_index]:
             ResultPanel.automatic_settlement(bp, element_btn=ElementsData.BattleFailedPanel.btn_again)
+            print("失败")
+            break
+        if object_id_list[btn_again_2_index]:
+            ResultPanel.automatic_settlement(bp, element_btn=ElementsData.MainStageBattleFailedPanel.btn_again)
             print("失败")
             break
         if object_id_list[FlashCardReceivePanel_index]:
@@ -573,7 +579,7 @@ if __name__ == '__main__':
     # bp2 = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
 
     # 装备等级
-    lv = 195
+    lv = 30
 
     # 1力 2敏 3智
     fish_kind = "力"
