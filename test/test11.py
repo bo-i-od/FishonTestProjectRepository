@@ -546,7 +546,7 @@ def increase_star(bp: BasePage):
         save_plt(data_list, m_max, base_hp, name=plt_name)
         bp.set_text(element_data={"locator": "UICanvas>star(Clone)"}, text=f"")
         star += 2
-    bp.connect_close()
+
 
 def increase_gear(bp: BasePage):
     print(f"{lv}级装备_{fish_kind}鱼_{star_start}至{star_end}星渔场")
@@ -557,9 +557,9 @@ def increase_gear(bp: BasePage):
         if (gear_kind % 3 == 1 and fish_kind == "力") or (gear_kind % 3 == 2 and fish_kind == "敏" or (gear_kind % 3 == 1 and fish_kind == "智")):
             bp.kezhi = "克制"
 
-        bp.lua_console('PanelMgr:OpenPanel("GearPanelNew")')
+        bp.lua_console('PanelMgr:OpenPanel("GearMainPanel")')
         bp.sleep(0.5)
-        bp.lua_console('PanelMgr:ClosePanel("GearPanelNew")')
+        bp.lua_console('PanelMgr:ClosePanel("GearMainPanel")')
         increase_star(bp)
         gear_kind += 1
 
@@ -569,8 +569,10 @@ def main(bp: BasePage):
     bp.is_time_scale = True
     bp.set_time_scale(time_scale=time_scale)
     bp.set_is_quick_qte(is_quick_qte=True)
-    bp.custom_cmd("setQTECD 1")
+    bp.set_hook_progress(hook_progress=0.8)
+    bp.custom_cmd("setQTECD 0.5")
     increase_gear(bp)
+    bp.connect_close()
 
 if __name__ == '__main__':
     bp1 = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
@@ -593,7 +595,7 @@ if __name__ == '__main__':
 
     # 渔场难度
     star_start = 3
-    star_end = 13
+    star_end = 11
 
     # is_restrain = False
 
@@ -626,4 +628,6 @@ if __name__ == '__main__':
     # else:
     #     res += "_高手"
     main(bp1)
+
+
     # main(bp2)
