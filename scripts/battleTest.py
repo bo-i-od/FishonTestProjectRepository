@@ -111,10 +111,10 @@ def fish_all(bp: BasePage, is_quick=False):
         fishery_id = fishery_id_list[cur]
         bp.go_to_panel("TournamentsPanel")
         TournamentsPanel.go_to_fishery_by_id(bp, fishery_id)
-        # circulate_fish(bp, fishery_id=fishery_id, is_quick=is_quick)
-        # fishbone_all(bp, fishery_id, is_gold=False)
-        # fail_all(bp, fishery_id=fishery_id, is_gold=False)
-        # fishbone_all(bp, fishery_id, is_gold=True)
+        circulate_fish(bp, fishery_id=fishery_id, is_quick=is_quick)
+        fishbone_all(bp, fishery_id, is_gold=False)
+        fail_all(bp, fishery_id=fishery_id, is_gold=False)
+        fishbone_all(bp, fishery_id, is_gold=True)
         fail_all(bp, fishery_id=fishery_id, is_gold=True)
         cur += 1
 
@@ -267,13 +267,13 @@ def fishbone_all(bp: BasePage, fishery_id, is_gold=False):
         if is_gold:
             go_to_treasure_map(bp, fishery_id=fishery_id)
         fish_once(bp, fishery_id=fishery_id, fish_id=drop_item_id, is_quick=True)
-        # bp.sleep(3)
-        # btn_icon_warning_position = BattlePreparePanel.get_btn_icon_warning_position(bp)[0]
-        # bp.click_position(btn_icon_warning_position)
-        #
-        # bp.sleep(1)
-        # img = bp.get_full_screen_shot()
-        # bp.save_img(img)
+        bp.sleep(3)
+        btn_icon_warning_position = BattlePreparePanel.get_btn_icon_warning_position(bp)[0]
+        bp.click_position(btn_icon_warning_position)
+
+        bp.sleep(1)
+        img = bp.get_full_screen_shot()
+        bp.save_img(img)
         fish_id = bp.fish_bone_id_to_fish_id(fish_bone_id=drop_item_id)
         fish_once(bp, fish_id=fish_id, is_quick=True)
 
@@ -294,13 +294,13 @@ def fail_all(bp: BasePage, fishery_id, is_gold=False):
             # 触发失败鱼情
             fail_once(bp, fish_id=fish_id, mode=1)
 
-            # # 点击图标截图
-            # bp.sleep(3)
-            # btn_icon_warning_position = BattlePreparePanel.get_btn_icon_warning_position(bp)[0]
-            # bp.click_position(btn_icon_warning_position)
-            # bp.sleep(1)
-            # img = bp.get_full_screen_shot()
-            # bp.save_img(img)
+            # 点击图标截图
+            bp.sleep(3)
+            btn_icon_warning_position = BattlePreparePanel.get_btn_icon_warning_position(bp)[0]
+            bp.click_position(btn_icon_warning_position)
+            bp.sleep(1)
+            img = bp.get_full_screen_shot()
+            bp.save_img(img)
 
             # 钓上来
             fish_once(bp, fish_id=fish_id, is_quick=True)
@@ -379,22 +379,12 @@ def vibration_cast(bp: BasePage):
 # is_in_double_week 当前的双周渔场
 def main(bp: BasePage, fishery_id):
     # # # 渔场全部闪卡
-    # flashcard_all(bp, fishery_id)
-
-    # # 渔场全部普通鱼骨
-    # fishbone_all(bp, fishery_id, is_gold=False)
-    #
-    # # 渔场全部失败鱼情
-    # fail_all(bp, fishery_id, is_gold=False)
-
-    # 渔场全部黄金鱼骨
+    flashcard_all(bp, fishery_id)
+    circulate_fish(bp, fishery_id=fishery_id, is_quick=False)
+    fishbone_all(bp, fishery_id, is_gold=False)
+    fail_all(bp, fishery_id=fishery_id, is_gold=False)
     fishbone_all(bp, fishery_id, is_gold=True)
-
-    # 渔场全部黄金失败鱼情
-    fail_all(bp, fishery_id, is_gold=True)
-
-    # 渔场全部黄金鱼
-    # goldfish_all(bp, fishery_id)
+    fail_all(bp, fishery_id=fishery_id, is_gold=True)
 
 
 
@@ -405,8 +395,9 @@ if __name__ == '__main__':
     gameInit.set_joystick(bp)
     bp.custom_cmd("setTension 0.9")
     bp.set_is_quick_qte(True)
+    main(bp, fishery_id=400319)
     # select_rod(bp, 500011)
-    fish_all(bp=bp, is_quick=False)
+    # fish_all(bp=bp, is_quick=False)
     # fishbone_all(bp, fishery_id=400320, is_gold=False, is_double_week=True, is_in_double_week=False)
     # circulate_fish(bp, fishery_id="400320",is_quick=False)
     # fish_once(bp, fish_id="390012", is_quick=True)
