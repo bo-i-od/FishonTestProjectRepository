@@ -190,11 +190,9 @@ def goldfish_all(bp: BasePage, fishery_id):
         bp.log_list.clear()
         bp.log_list_flag = True
 
-        BattlePanel.hook(bp)
-        if BattlePanel.is_reel_active(bp):
-            bp.custom_cmd("autofish")
-            qteThread = Thread(target=BattlePanel.qte, args=[bp])
-            qteThread.start()
+        if not bp.is_quick_qte:
+            BattlePanel.hook(bp)
+        bp.custom_cmd("autofish")
         BattlePanel.reel_quick(bp)
         element_btn = ResultPanel.wait_for_result(bp)
         bp.log_list_flag = False
@@ -229,12 +227,10 @@ def flashcard_all(bp: BasePage, fishery_id):
         print(c)
         bp.cmd(c)
         BattlePreparePanel.click_btn_cast(bp)
+        if not bp.is_quick_qte:
+            BattlePanel.hook(bp)
+        bp.custom_cmd("autofish")
 
-        BattlePanel.hook(bp)
-        if BattlePanel.is_reel_active(bp):
-            bp.custom_cmd("autofish")
-            qteThread = Thread(target=BattlePanel.qte, args=[bp])
-            qteThread.start()
         while not ResultPanel.is_panel_active(bp):
             if FlashCardReceivePanel.is_panel_active(bp):
                 bp.sleep(6)
@@ -245,6 +241,8 @@ def flashcard_all(bp: BasePage, fishery_id):
             bp.lua_console(command="GameRoot:GetFishingMatch():GetPlayer().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
             # bp.lua_console(command="GameRoot:GetFishingMatch().fsm:NotifyEvent(FishingMatch_FSM_EVENT.AIRTEST_G)")
             bp.sleep(1)
+        element_btn = ResultPanel.wait_for_result(bp)
+        ResultPanel.automatic_settlement(bp, element_btn=element_btn)
         if fish_id != "":
             bp.cmd("mode 0 0")
 
@@ -380,7 +378,6 @@ def vibration_cast(bp: BasePage):
 def main(bp: BasePage, fishery_id):
     # # # 渔场全部闪卡
     flashcard_all(bp, fishery_id)
-    circulate_fish(bp, fishery_id=fishery_id, is_quick=False)
     fishbone_all(bp, fishery_id, is_gold=False)
     fail_all(bp, fishery_id=fishery_id, is_gold=False)
     fishbone_all(bp, fishery_id, is_gold=True)
@@ -390,9 +387,10 @@ def main(bp: BasePage, fishery_id):
 
 if __name__ == '__main__':
     # 连接设备号为127.0.0.1:21533的设备
-    bp = BasePage("192.168.111.37:20051", is_mobile_device=True)
+    bp = BasePage("192.168.111.37:20051", is_mobile_device=False)
     bp.is_time_scale = True
     gameInit.set_joystick(bp)
+    bp.lua_console("DebugLog=true")
     bp.custom_cmd("setTension 0.9")
     bp.set_is_quick_qte(True)
     main(bp, fishery_id=400319)
