@@ -2603,9 +2603,9 @@ end
     def set_is_quick_qte(self, is_quick_qte):
         self.is_quick_qte = is_quick_qte
         if is_quick_qte:
-            self.custom_cmd(f"setQuickQte 1")
+            self.custom_cmd(f"setQuickQTE 1")
         else:
-            self.custom_cmd(f"setQuickQte 0")
+            self.custom_cmd(f"setQuickQTE 0")
 
     def set_hook_progress(self, hook_progress):
         self.hook_progress = hook_progress
