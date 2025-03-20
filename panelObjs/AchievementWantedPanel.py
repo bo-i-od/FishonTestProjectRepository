@@ -56,7 +56,7 @@ class AchievementWantedPanel(BasePage):
         # 进入指定渔场
         fishery = table_data_object["fishery"]
         self.go_to_panel("TournamentsPanel")
-        TournamentsPanel.go_to_fishery_by_tpid(self, fishery_tpid=fishery)
+        TournamentsPanel.go_to_fishery_by_id(self, fishery_id=fishery)
 
 
         target_list = table_data_object["target"]

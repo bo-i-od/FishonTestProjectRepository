@@ -536,7 +536,7 @@ def pve(bp: BasePage):
     r = 0
     table_data_object = table_data_object_list[r]
     fishery = str(table_data_object["fishery"])
-    TournamentsPanel.go_to_fishery_by_tpid(bp, fishery_tpid=fishery)
+    TournamentsPanel.go_to_fishery_by_id(bp, fishery_id=fishery)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
 
     # 进行刺鱼引导

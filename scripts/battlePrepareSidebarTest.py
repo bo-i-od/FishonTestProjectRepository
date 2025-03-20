@@ -30,7 +30,7 @@ from tools.commonTools import *
 
 def main(bp: BasePage):
     # 登录到大厅
-    cmd_list = ["guideskip", "levelupto 20"]
+    cmd_list = ["levelupto 20"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     bp.clear_popup()
@@ -38,7 +38,7 @@ def main(bp: BasePage):
     # 去渔场
     bp.go_to_panel("TournamentsPanel")
     bp.sleep(1)
-    TournamentsPanel.go_to_fishery_by_tpid(bp, 400301)
+    TournamentsPanel.go_to_fishery_by_id(bp, 400301)
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
     bp.sleep(1)
     # 点击打开备战收纳界面

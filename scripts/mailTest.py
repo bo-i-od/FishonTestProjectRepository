@@ -95,7 +95,7 @@ def main(bp:BasePage):
     unlock_lv = bp.get_unlock_lv("邮件")
 
     # 进入大厅
-    cmd_list = ["guideskip", f"levelupto {unlock_lv}"]
+    cmd_list = [f"levelupto {unlock_lv}"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     # 关闭升级弹窗

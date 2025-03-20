@@ -147,7 +147,7 @@ def wanted_test(bp: BasePage):
 
 def main(bp: BasePage):
     # 登录到大厅
-    cmd_list = ["guideskip", "levelupto 90", "add 1 100500 1000"]
+    cmd_list = ["levelupto 90", "add 1 100500 1000"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     # # 关闭升级弹窗

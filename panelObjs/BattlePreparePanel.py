@@ -194,7 +194,8 @@ class BattlePreparePanel(BasePage):
         return int(value_cost)
 
     def is_wait_for_join(self):
-        position_list = self.get_position_list(element_data=ElementsData.BattlePreparePanel.wait_for_join)
+        position_list = self.get_position_list(element_data_list=[ElementsData.BattlePreparePanel.wait_for_join, ElementsData.BattlePreparePanel.wait_for_join_new])
+        position_list = merge_list(position_list)
         if position_list:
             return True
         return False

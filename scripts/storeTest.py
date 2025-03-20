@@ -888,7 +888,7 @@ def main(bp: BasePage):
     # 设置分层
     layer = f"{random.randint(1, 5)}000"
     bp.debug_log(f"当前分层{layer}")
-    cmd_list = ["guideskip", f"setPlayerLayer {layer}", f"levelupto {unlock_lv}"]
+    cmd_list = [f"setPlayerLayer {layer}", f"levelupto {unlock_lv}"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     # # 关闭升级弹窗

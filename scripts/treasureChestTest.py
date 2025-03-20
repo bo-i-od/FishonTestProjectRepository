@@ -179,9 +179,8 @@ def box_store_test(bp: BasePage):
 
 
 def main(bp: BasePage):
-    cmd_list = ["guideskip"]
     # 进入大厅
-    gameInit.login_to_hall(bp, cmd_list=cmd_list)
+    gameInit.login_to_hall(bp)
     # 初始化箱子数量
     cur = 1
     while cur < 6:

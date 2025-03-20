@@ -137,7 +137,7 @@ def anime_test(bp: BasePage):
 
 def main(bp: BasePage):
     # 进入大厅
-    cmd_list = ["guideskip","levelupto 36"]
+    cmd_list = ["levelupto 36"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     PlayerLevelupPanel.wait_for_panel_appear(bp)

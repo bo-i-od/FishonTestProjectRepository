@@ -437,7 +437,7 @@ def emoji(bp: BasePage):
 
 def main(bp:BasePage):
     # 进入大厅
-    cmd_list = ["guideskip", "levelupto 56"]
+    cmd_list = ["levelupto 56"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     PlayerLevelupPanel.wait_for_panel_appear(bp)
@@ -556,8 +556,8 @@ def duel_test(bp, is_monitor=False):
 
 
 if __name__ == '__main__':
-    serial_number = "127.0.0.1:21593"
-    base_page = BasePage(serial_number=serial_number, is_mobile_device=False)
+    serial_number = "192.168.111.37:20080"
+    base_page = BasePage(serial_number=serial_number, is_mobile_device=True)
     gameInit.set_joystick(base_page)
     # base_page.is_time_scale=True
     # duel_test(base_page, is_monitor=True)

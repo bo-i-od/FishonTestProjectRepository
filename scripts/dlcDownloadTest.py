@@ -9,8 +9,7 @@ from tools.commonTools import *
 
 def main(bp: BasePage):
     # 登录到大厅
-    cmd_list = ["guideskip"]
-    gameInit.login_to_hall(bp, cmd_list=cmd_list)
+    gameInit.login_to_hall(bp)
     # 进入界面
     bp.go_to_panel("DLCDownloadPanel")
     bp.sleep(1)

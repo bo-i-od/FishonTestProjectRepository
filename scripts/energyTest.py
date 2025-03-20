@@ -213,7 +213,7 @@ def energy_cash_usd_test(bp:BasePage):
 
 def main(bp: BasePage):
     # 登录到大厅
-    cmd_list = ["guideskip", "add 1 101900 100000"]
+    cmd_list = ["add 1 101900 100000"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     # 喝饮料测试

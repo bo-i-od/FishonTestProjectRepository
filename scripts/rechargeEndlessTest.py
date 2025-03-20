@@ -82,7 +82,7 @@ def main(bp: BasePage):
         panel = RechargeEndlessNewYearPanel
     elif RechargeEndlessThanksPanel.is_panel_active(bp):
         panel = RechargeEndlessThanksPanel
-    # cmd_list = ["guideskip", f"add 1 101900 1000000", f"levelupto 16"]
+    # cmd_list = [ f"add 1 101900 1000000", f"levelupto 16"]
     # bp.cmd("add 1 101900 1000000")
     # gameInit.login_to_hall(bp, cmd_list=cmd_list)
     #

@@ -190,7 +190,7 @@ def draw_to_level(bp: BasePage, lv, n):
 
 def main(bp: BasePage):
     # 进入大厅
-    cmd_list = ["guideskip", "levelupto 21", "add 2 201001 10000"]
+    cmd_list = ["levelupto 21", "add 2 201001 10000"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     PlayerLevelupPanel.wait_for_panel_appear(bp)

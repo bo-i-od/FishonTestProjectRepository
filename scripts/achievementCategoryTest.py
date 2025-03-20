@@ -146,7 +146,7 @@ def category_test(bp: BasePage):
 
 def main(bp: BasePage):
     # 登录到大厅
-    cmd_list = ["guideskip", "levelupto 99", "add 1 100500 1000"]
+    cmd_list = ["levelupto 99", "add 1 100500 1000"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     PlayerLevelupPanel.wait_for_panel_appear(bp)

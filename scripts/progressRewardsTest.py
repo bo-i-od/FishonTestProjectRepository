@@ -32,7 +32,7 @@ def collect_test(bp: BasePage):
     # 把进度条设为马上可以领下几档奖励
     cmd_list = [f"progressSetPoint 100"]
     bp.cmd_list(cmd_list)
-    TournamentsPanel.go_to_fishery_by_tpid(bp, "400301")
+    TournamentsPanel.go_to_fishery_by_id(bp, "400301")
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
     LoadingPanel.wait_until_panel_disappear(bp, is_wait_for_appear=False)
     bp.sleep(1)
@@ -121,13 +121,12 @@ def mini_panel_test(bp: BasePage):
 def main(bp: BasePage):
     # 进入渔场
     # 登录到大厅
-    cmd_list = ["guideskip"]
-    gameInit.login_to_hall(bp, cmd_list=cmd_list)
+    gameInit.login_to_hall(bp)
     bp.go_to_panel("TournamentsPanel")
     bp.sleep(1)
 
 
-    TournamentsPanel.go_to_fishery_by_tpid(bp, "400301")
+    TournamentsPanel.go_to_fishery_by_id(bp, "400301")
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
     LoadingPanel.wait_until_panel_disappear(bp, is_wait_for_appear=False)
     bp.sleep(1)

@@ -463,6 +463,7 @@ class ElementsData:
 
         wait_for_join = {"locator":"UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_activity>btn_activity>btn_tournaments>rank>value_3"}
 
+        wait_for_join_new = {"locator":"UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_activity>btn_activity>btn_tournaments>tips>text"}
         gears = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears_new>panel_gears_preview>gears>bg"}
         btn_apply = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears_new>panel_gears_switch>btns>btn_apply>btn_normal"}
 

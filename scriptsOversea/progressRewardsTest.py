@@ -32,7 +32,7 @@ def collect_test(bp: BasePage):
     # 把进度条设为马上可以领下几档奖励
     cmd_list = [f"progressSetPoint 100"]
     bp.cmd_list(cmd_list)
-    TournamentsPanel.go_to_fishery_by_tpid(bp, "400301")
+    TournamentsPanel.go_to_fishery_by_id(bp, "400301")
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
     LoadingPanel.wait_until_panel_disappear(bp, is_wait_for_appear=False)
     bp.sleep(1)
@@ -126,7 +126,7 @@ def main(bp: BasePage):
     bp.sleep(1)
 
 
-    TournamentsPanel.go_to_fishery_by_tpid(bp, "400301")
+    TournamentsPanel.go_to_fishery_by_id(bp, "400301")
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
     LoadingPanel.wait_until_panel_disappear(bp, is_wait_for_appear=False)
     bp.sleep(1)

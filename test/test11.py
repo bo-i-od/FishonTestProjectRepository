@@ -206,6 +206,7 @@ def qte(bp, personality: Personality = None):
                 bp.custom_cmd(f"setTension {bp.tension_default}")
 
         if object_id_list[warning_index] and not start_time:
+            show_data(bp)
             start_time = time.time()
             bp.sleep(0.1)
             hold_status = BattleDebugPanel.get_hold_status(bp)
@@ -282,10 +283,10 @@ def qte(bp, personality: Personality = None):
         if object_id_list[MainlineFlashCardReceivePanel_index]:
             bp.clear_popup()
             continue
-        if t_one > personality.qte_rate * 10:
-            bp.custom_cmd("setQuickQTE 0")
-        else:
-            bp.custom_cmd("setQuickQTE 1")
+        # if t_one > personality.qte_rate * 10:
+        #     bp.custom_cmd("setQuickQTE 0")
+        # else:
+        #     bp.custom_cmd("setQuickQTE 1")
         bp.sleep(0.1)
     return data_list, m_max, base_hp, battle_time, line_data, battle_damage, reel_velocity_z, time_remain
 
@@ -297,7 +298,10 @@ def show_data(bp: BasePage):
     battle_damage_temp = get_value(content_dict, "STAMINA_DECREASE")
     reel_velocity_z_temp = get_value(content_dict, "REEL_VELOCITY_Z")
     bp.set_text(element_data={"locator": "UICanvas>star(Clone)"},
-                text=f"伤害：{battle_damage_temp}, 线长：{m_max_temp}, 跑线：{reel_velocity_z_temp}, 鱼血量上限：{base_hp_temp}")
+                text=f"{lv}级装备 {bp.star}星渔场 鱼{fish_id} {bp.name_line} {bp.name_lure}  伤害：{battle_damage_temp}, 线长：{m_max_temp}, 收线：{reel_velocity_z_temp}, 鱼血量上限：{base_hp_temp}")
+
+
+
     
 
 def fish_once(bp: BasePage, fish_id="", personality=None):
@@ -308,12 +312,8 @@ def fish_once(bp: BasePage, fish_id="", personality=None):
         bp.cmd(c)
     bp.custom_cmd(f"setTension {personality.tension}")
     BattlePreparePanel.click_btn_cast(bp)
-    BattlePanel.hook(bp)
     bp.set_time_scale(time_scale=1)
-    if BattlePanel.is_reel_active(bp):
-        bp.custom_cmd("autofish")
-    show_data(bp)
-
+    bp.custom_cmd("autofish")
 
     data_list, m_max, base_hp, battle_time, line_data, battle_damage, reel_velocity_z, time_remain = qte(bp, personality)
     print(f"伤害：{battle_damage} 线长：{m_max} 跑线：{reel_velocity_z}")
@@ -337,61 +337,52 @@ def change_gear(bp: BasePage, kind):
         part_id_line = 1700005
         part_id_lure = 1700008
     elif kind == 4:
+        part_id_line = 1700031
+        part_id_lure = 1700032
+    elif kind == 5:
+        part_id_line = 1700033
+        part_id_lure = 1700034
+    elif kind == 6:
+        part_id_line = 1700035
+        part_id_lure = 1700036
+    elif kind == 7:
         part_id_line = 1700009
         part_id_lure = 1700010
-    elif kind == 5:
+    elif kind == 8:
         part_id_line = 1700011
         part_id_lure = 1700012
-    elif kind == 6:
+    elif kind == 9:
         part_id_line = 1700013
         part_id_lure = 1700014
-    elif kind == 7:
+    elif kind == 10:
         part_id_line = 1700015
         part_id_lure = 1700016
-    elif kind == 8:
+    elif kind == 11:
         part_id_line = 1700017
         part_id_lure = 1700018
-    elif kind == 9:
+    elif kind == 12:
         part_id_line = 1700019
         part_id_lure = 1700020
     else:
         part_id_line = 1700001
         part_id_lure = 1700002
-    # if level < 15:
-    #     if kind == 1:
-    #         part_id_line = 1700001
-    #     elif kind == 2:
-    #         part_id_line = 1700027
-    #     elif kind == 3:
-    #         part_id_line = 1700029
-    #
-    # elif level < 120:
-    #     if kind == 1:
-    #         part_id_line = 1700031
-    #     elif kind == 2:
-    #         part_id_line = 1700033
-    #     elif kind == 3:
-    #         part_id_line = 1700035
-    #
-    # elif level < 210:
-    #     if kind == 1:
-    #         part_id_line = 1700015
-    #     elif kind == 2:
-    #         part_id_line = 1700017
-    #     elif kind == 3:
-    #         part_id_line = 1700019
-    #
-    # else:
-    #     if kind == 1:
-    #         part_id_line = 1700021
-    #     elif kind == 2:
-    #         part_id_line = 1700023
-    #     elif kind == 3:
-    #         part_id_line = 1700025
-    # part_id_lure = part_id_line + 1
+
+    if kind % 3 == 1:
+        part_id_rod = 1801001
+    elif kind % 3 == 2:
+        part_id_rod = 1801002
+    else:
+        part_id_rod = 1801003
+
     lua_code_line = csMsgAll.get_CSEquipPrepareReplaceMsg(prepareIndex=1, dlc=1, partId=part_id_line)
     lua_code_lure = csMsgAll.get_CSEquipPrepareReplaceMsg(prepareIndex=1, dlc=1, partId=part_id_lure)
-    bp.lua_console_list([lua_code_line, lua_code_lure])
+    lua_code_rod = csMsgAll.get_CSEquipPrepareReplaceMsg(prepareIndex=1, dlc=1, partId=part_id_rod)
+    bp.lua_console_list([lua_code_line, lua_code_lure, lua_code_rod])
+    table_data_detail = bp.excelTools.get_table_data_detail(book_name="ADV_GEAR_LANGUAGE.xlsm")
+    name_line = bp.excelTools.get_table_data_object_by_key_value(key="tpId", value=part_id_line, table_data_detail=table_data_detail)["name"]
+    name_lure = bp.excelTools.get_table_data_object_by_key_value(key="tpId", value=part_id_lure, table_data_detail=table_data_detail)["name"]
+    bp.name_line = name_line
+    bp.name_lure = name_lure
 
 
 def save_plt(data_list, m_max, base_hp, name):
@@ -536,47 +527,67 @@ def save_text(content, filename, mode='w', encoding='utf-8'):
     return target_file
 
 
-def main(bp: BasePage, name):
-    bp.is_time_scale = True
-    bp.set_time_scale(time_scale=time_scale)
-    bp.custom_cmd("setQTECD 1")
-    bp.custom_cmd("setQuickQTE 1")
-    change_gear(bp, kind=gear_kind)
-    bp.lua_console('PanelMgr:OpenPanel("GearPanelNew")')
-    bp.sleep(0.5)
-    bp.lua_console('PanelMgr:ClosePanel("GearPanelNew")')
-    print(name + f"{star_start}至{star_end}星")
+def increase_star(bp: BasePage):
+
+    print(f"{lv}级装备_{fish_kind}鱼_{star_start}至{star_end}星渔场_{bp.kezhi}_{bp.name_line}{bp.name_lure}")
     star = star_start
     while star <= star_end:
-        plt_name = name + str(star) + '星'
+        plt_name = f"{lv}级装备_{fish_kind}鱼_{star}星渔场_{bp.kezhi}_{bp.name_line}{bp.name_lure}"
         print(plt_name)
         bp.cmd(f"fishscenestarset 500301 {star}")
-        bp.set_text(element_data={"locator": "UICanvas>star(Clone)"}, text=f"{star}星")
+        bp.star = star
         data_list, m_max, base_hp = fish_once(bp, fish_id=fish_id, personality=personality)
         save_plt(data_list, m_max, base_hp, name=plt_name)
         bp.set_text(element_data={"locator": "UICanvas>star(Clone)"}, text=f"")
         star += 2
     bp.connect_close()
 
+def increase_gear(bp: BasePage):
+    print(f"{lv}级装备_{fish_kind}鱼_{star_start}至{star_end}星渔场")
+    gear_kind = gear_kind_start
+    while gear_kind <= gear_kind_end:
+        change_gear(bp, kind=gear_kind)
+        bp.kezhi = "非克制"
+        if (gear_kind % 3 == 1 and fish_kind == "力") or (gear_kind % 3 == 2 and fish_kind == "敏" or (gear_kind % 3 == 1 and fish_kind == "智")):
+            bp.kezhi = "克制"
+
+        bp.lua_console('PanelMgr:OpenPanel("GearPanelNew")')
+        bp.sleep(0.5)
+        bp.lua_console('PanelMgr:ClosePanel("GearPanelNew")')
+        increase_star(bp)
+        gear_kind += 1
+
+
+
+def main(bp: BasePage):
+    bp.is_time_scale = True
+    bp.set_time_scale(time_scale=time_scale)
+    bp.set_is_quick_qte(is_quick_qte=True)
+    bp.custom_cmd("setQTECD 1")
+    increase_gear(bp)
 
 if __name__ == '__main__':
     bp1 = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
+
     time_scale = 4
     # bp2 = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
 
     # 装备等级
-    lv = 90
+    lv = 195
 
     # 1力 2敏 3智
-    fish_kind = 3
+    fish_kind = "力"
 
     # 套装0-9
-    # 0.初始 1.强力收线/强力爆气 2.强力回拉/强力刺鱼 3.技巧拔竿/技巧压制 4.超负荷气 5.长线绝杀 6.不动如山 7.乘胜追击 8.背水一战 9.一刺入魂
-    gear_kind = 3
+    # 0.初始 1.强力收线/强力爆气 2.强力回拉/强力刺鱼 3.技巧拔竿/技巧压制 4.远交近攻/鱼跃反制 5.绝佳时机/暴力挥杆 6.越挫越勇/贴身肉搏 7.超负荷气 8.长线绝杀 9.不动如山 10.乘胜追击 11.背水一战 12.一刺入魂
+
+
+    gear_kind_start = 1
+    gear_kind_end = 6
 
     # 渔场难度
-    star_start = 7
-    star_end = 27
+    star_start = 3
+    star_end = 13
 
     # is_restrain = False
 
@@ -585,16 +596,16 @@ if __name__ == '__main__':
     personality = PersonalityNB()
 
     # res = f"{lv}级_{star}星"
-    res = f"{lv}级_套装{gear_kind}"
-    if fish_kind == 1:
+
+    if fish_kind == "力":
         fish_id = "360113"
-        res += "力"
-    elif fish_kind == 2:
+
+    elif fish_kind == "敏":
         fish_id = "360115"
-        res += "敏"
-    elif fish_kind == 3:
+
+    elif fish_kind == "智":
         fish_id = "360107"
-        res += "智"
+
 
     # if is_restrain:
     #     res += "_克制"
@@ -608,5 +619,5 @@ if __name__ == '__main__':
     #     res += "_菜鸡"
     # else:
     #     res += "_高手"
-    main(bp1, name=res)
+    main(bp1)
     # main(bp2)

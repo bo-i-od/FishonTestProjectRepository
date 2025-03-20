@@ -81,7 +81,7 @@ def main(bp: BasePage):
 
 
     # 升级测试
-    bp.cmd_list(["guideskip","missiondone 10", "add 1 100200 123456"])
+    bp.cmd_list(["missiondone 10", "add 1 100200 123456"])
     bp.sleep(1)
 
     # 领取跳转应该不在主界面了
@@ -96,7 +96,7 @@ def main(bp: BasePage):
     # 去渔场
     bp.go_to_panel("TournamentsPanel")
     bp.sleep(1)
-    TournamentsPanel.go_to_fishery_by_tpid(bp, '400301')
+    TournamentsPanel.go_to_fishery_by_id(bp, '400301')
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
 
     # 领取跳转应该不在备战界面了

@@ -295,7 +295,7 @@ def click_icon_test(bp: BasePage):
 
 def main(bp: BasePage):
     # # 登录到大厅
-    cmd_list = ["guideskip", "add 1 100200 12345"]
+    cmd_list = [ "add 1 100200 12345"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     # # 关闭升级弹窗

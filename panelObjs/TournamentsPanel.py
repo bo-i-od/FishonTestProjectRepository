@@ -62,8 +62,8 @@ class TournamentsPanel(BasePage):
         return entrance_viewport
 
     # 跳转指定tpid渔场
-    def go_to_fishery_by_tpid(self, fishery_tpid):
-        self.go_to_fishery(fishery_id=fishery_tpid)
+    def go_to_fishery_by_id(self, fishery_id):
+        self.go_to_fishery(fishery_id=fishery_id)
 
     # 跳转指定索引渔场
     def go_to_fishery_by_index(self, index=-1):

@@ -73,7 +73,7 @@ def enhance_item(bp:BasePage):
 
 def main(bp:BasePage):
     # 进入大厅
-    cmd_list = ["guideskip", "levelupto 56"]
+    cmd_list = ["levelupto 56"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
     PlayerLevelupPanel.wait_for_panel_appear(bp)
     bp.clear_popup()

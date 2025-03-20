@@ -110,7 +110,7 @@ def fish_all(bp: BasePage, is_quick=False):
     while cur < len(fishery_id_list):
         fishery_id = fishery_id_list[cur]
         bp.go_to_panel("TournamentsPanel")
-        TournamentsPanel.go_to_fishery_by_tpid(bp, fishery_id)
+        TournamentsPanel.go_to_fishery_by_id(bp, fishery_id)
         # circulate_fish(bp, fishery_id=fishery_id, is_quick=is_quick)
         # fishbone_all(bp, fishery_id, is_gold=False)
         # fail_all(bp, fishery_id=fishery_id, is_gold=False)

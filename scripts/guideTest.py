@@ -115,7 +115,7 @@ def guide_BattlePreparePanel_test(bp: BasePage, guide_list):
     # 不在备战界面就进洪湖
     if not BattlePreparePanel.is_panel_active(bp):
         bp.go_to_panel("TournamentsPanel")
-        TournamentsPanel.go_to_fishery_by_tpid(bp, fishery_tpid='400301')
+        TournamentsPanel.go_to_fishery_by_id(bp, fishery_id='400301')
         LoadingFisheryPanel.wait_until_panel_disappear(bp)
 
     # 有备战界面引导就进行
@@ -184,7 +184,7 @@ def guide_PVPHallPanel_test(bp: BasePage, guide_list):
 def guide_fishing_fail_test(bp: BasePage):
     if not BattlePreparePanel.is_panel_active(bp):
         bp.go_to_panel("TournamentsPanel")
-        TournamentsPanel.go_to_fishery_by_tpid(bp, fishery_tpid='400301')
+        TournamentsPanel.go_to_fishery_by_id(bp, fishery_id='400301')
         LoadingFisheryPanel.wait_until_panel_disappear(bp)
     BattlePreparePanel.click_btn_cast(bp)
     BattlePanel.hook(bp)

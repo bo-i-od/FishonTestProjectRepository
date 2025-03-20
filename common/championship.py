@@ -69,7 +69,7 @@ def championship(bp, index, times, cost=1, is_monitor=False, overflow_factor: fl
         entrance_index = tournaments_index_list[index]
     fishery_id_list = TournamentsPanel.get_fishery_tpid_list(bp)
     fishery_id = fishery_id_list[entrance_index]
-    TournamentsPanel.go_to_fishery_by_index(bp, index=entrance_index)
+    TournamentsPanel.go_to_fishery_by_id(bp, fishery_id=fishery_id)
 
     spot_id_list, is_in_double_week, is_new_plot = bp.get_spot_id_list(fishery_id=fishery_id)
     if cost < 1:
@@ -138,20 +138,26 @@ if __name__ == '__main__':
     serial_number = "127.0.0.1:21503"
     base_page = BasePage(serial_number=serial_number, is_mobile_device=True, is_monitor=True)
     print(serial_number)
-    # base_page.set_send_log_flag(False)
+
+    # 设置摇杆浮动
     gameInit.set_joystick(base_page)
-    base_page.custom_cmd("setTension 0.95")
+
+    # 设定张力
+    base_page.custom_cmd(f"setTension {base_page.tension_default}")
+
+    # 设定log输出
+    base_page.lua_console("DebugLog=true")
     # cur = 0
-    # while cur < 5:
+    # while cur < 2:
     #     duel_once(base_page, 0)
     #     cur += 1
     #     print(f"第{cur}次钓鱼")
-    # circulate_fish(bp=base_page, is_quick=False, times=13)
+    # circulate_fish(bp=base_page, is_quick=False, times=25)
     # base_page.sleep(3600)
     # aquarium(bp=base_page)
 
     while True:
-        base_page = aquarium(base_page, is_monitor=True)
-        base_page = championship(base_page, 0, 10, cost=1, overflow_factor=1, is_monitor=True)
+        # base_page = aquarium(base_page, is_monitor=True)
+        base_page = championship(base_page, 0, 10, cost=2, overflow_factor=1, is_monitor=True)
         # base_page.sleep(60)
         base_page = championship(base_page, 1, 10, cost=1, overflow_factor=1, is_monitor=True)

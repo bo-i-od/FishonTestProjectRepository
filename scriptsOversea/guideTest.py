@@ -62,7 +62,7 @@ def newbieGuidePanelTest(bp: BasePage):
 
 def hookTest(bp: BasePage):
     # 去卡多湖渔场抛竿
-    TournamentsPanel.go_to_fishery_by_tpid(bp, fishery_tpid='400301')
+    TournamentsPanel.go_to_fishery_by_id(bp, fishery_id='400301')
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
     BattlePreparePanel.click_btn_cast(bp)
 

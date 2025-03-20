@@ -82,6 +82,7 @@ def guide_skip(bp: BasePage):
     lua_code = csMsgAll.get_CSNewGuideStoreMsg(key="OPENING_STAGE_FISHERY_1_500301")
     lua_code_list.append(lua_code)
     bp.lua_console_list(command_list=lua_code_list)
+    bp.cmd("guideskip")
     bp.sleep(2)
 
 # 初始化账号

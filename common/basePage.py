@@ -1754,12 +1754,16 @@ class BasePage(BasePageMain):
         cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_2>qte 0 {lua_code}")
         cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_3>qte 0 {lua_code}")
         cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_4>qte 0 {lua_code}")
+        cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_5>qte 0 {lua_code}")
+        cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_6>qte 0.75 {lua_code}")
         cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_fishJump>qte 0 {lua_code}")
         lua_code = "Gameplay.Joystick.HorizontalValue = 1"
         cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right>qte 0 {lua_code}")
         cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_2>qte 0 {lua_code}")
         cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_3>qte 0 {lua_code}")
         cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_4>qte 0 {lua_code}")
+        cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_5>qte 0 {lua_code}")
+        cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_6>qte 0.75 {lua_code}")
         cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_fishJump>qte 0 {lua_code}")
         lua_code = """local fishingMatch = GameRoot:GetFishingMatch()
 local actorPlayer  = fishingMatch:GetPlayer()
@@ -2599,9 +2603,9 @@ end
     def set_is_quick_qte(self, is_quick_qte):
         self.is_quick_qte = is_quick_qte
         if is_quick_qte:
-            self.custom_cmd(f"setHookProgress 1")
+            self.custom_cmd(f"setQuickQte 1")
         else:
-            self.custom_cmd(f"setHookProgress 0")
+            self.custom_cmd(f"setQuickQte 0")
 
     def set_hook_progress(self, hook_progress):
         self.hook_progress = hook_progress

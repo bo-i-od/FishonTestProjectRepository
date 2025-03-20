@@ -428,7 +428,7 @@ def challenge_test(bp:BasePage):
 
 def main(bp: BasePage):
     # 进入大厅
-    cmd_list = ["guideskip", "add 1 101900 10000"]
+    cmd_list = ["add 1 101900 10000"]
     gameInit.login_to_hall(bp, cmd_list=cmd_list)
 
     # # 去新手三天界面

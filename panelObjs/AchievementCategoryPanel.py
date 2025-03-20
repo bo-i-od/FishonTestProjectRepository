@@ -58,7 +58,7 @@ class AchievementCategoryPanel(BasePage):
                 fishery_pre = fishery
                 # 进入指定渔场
                 self.go_to_panel("TournamentsPanel")
-                TournamentsPanel.go_to_fishery_by_tpid(self, fishery_tpid=fishery)
+                TournamentsPanel.go_to_fishery_by_id(self, fishery_id=fishery)
 
             fish = str(table_data["fishList"][cur]["fish"][index])
             battleTest.fish_once(self, fish_id=fish, is_quick=True)
