@@ -1550,6 +1550,7 @@ class BasePageMain:
             正常速率为1
         """
         if not self.is_time_scale:
+            rpcMethodRequest.set_time_scale(self.poco, 1)
             return
         rpcMethodRequest.set_time_scale(self.poco, time_scale)
 
@@ -2555,7 +2556,8 @@ end
         end_time = table_data_object_timer_main["endTime"]
         end_time = datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S')
         end_time = int(time.mktime(end_time.timetuple()))
-        cur_time = time.time()
+        game_server_time = self.lua_console_with_response(lua_code_return="_G.game_server_time")
+        cur_time = float(game_server_time) / 1000
         if cur_time > end_time:
             return table_data_object_activity_double_week["fishSpotB"], False, False
         if cur_time > open_time:
