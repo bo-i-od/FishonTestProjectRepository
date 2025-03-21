@@ -3,6 +3,7 @@ import time
 
 from matplotlib.lines import Line2D
 
+from common import gameInit
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from netMsg import csMsgAll
@@ -10,6 +11,7 @@ from panelObjs import BattlePreparePanel, BattlePanel, ResultPanel
 from panelObjs.BattleDebugPanel import BattleDebugPanel
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
+
 
 
 class Personality:
@@ -120,7 +122,8 @@ def qte(bp, personality: Personality = None):
                          ElementsData.MainlineFlashCardReceivePanel.MainlineFlashCardReceivePanel,
                          ElementsData.BattlePanel.BattlePanel,
                          ElementsData.BattlePanel.crt,
-                         ElementsData.BattlePanel.crt2
+                         ElementsData.BattlePanel.crt2,
+                         ElementsData.BattlePanel.progress
                          ]
     qte_left_index = element_data_list.index(ElementsData.BattlePanel.qte_left)
     qte_right_index = element_data_list.index(ElementsData.BattlePanel.qte_right)
@@ -142,6 +145,7 @@ def qte(bp, personality: Personality = None):
     BattlePanel_index = element_data_list.index(ElementsData.BattlePanel.BattlePanel)
     crt_index = element_data_list.index(ElementsData.BattlePanel.crt)
     crt2_index = element_data_list.index(ElementsData.BattlePanel.crt2)
+    progress_index = element_data_list.index(ElementsData.BattlePanel.progress)
     size_tension = None
     is_in_crt_pre = False
 
@@ -194,6 +198,11 @@ def qte(bp, personality: Personality = None):
         if t and m_cur and current_hp:
             data_list.append((t, float(m_cur), float(current_hp)))
         object_id_list = bp.get_object_id_list(element_data_list=element_data_list)
+
+        if object_id_list[progress_index]:
+            bp.set_time_scale(1)
+            bp.sleep(1)
+            continue
 
         if object_id_list[crt_index] or object_id_list[crt2_index]:
             if size_tension is None:
@@ -254,14 +263,16 @@ def qte(bp, personality: Personality = None):
         #         continue
         #     BattlePanel.slide(bp, "right")
         #     continue
-        if (not object_id_list[warning_index]) and (end_time is None) and (start_time is not None):
-            end_time = time.time()
-            battle_time = f"{(end_time - start_time):.1f}s"
-            hold_status = BattleDebugPanel.get_hold_status(bp)
-            hold_status_end = deal_with_hold_status(hold_status)
-            time_hold = (hold_status_end[0] - hold_status_start[0])
-            time_release = (hold_status_end[1] - hold_status_start[1])
-            line_data = f"收线占比{100 * time_hold // (time_release + time_hold)}%"
+        if (not object_id_list[warning_index]) and (start_time is not None):
+            if end_time is None:
+                end_time = time.time()
+                battle_time = f"{(end_time - start_time):.1f}s"
+                hold_status = BattleDebugPanel.get_hold_status(bp)
+                hold_status_end = deal_with_hold_status(hold_status)
+                time_hold = (hold_status_end[0] - hold_status_start[0])
+                time_release = (hold_status_end[1] - hold_status_start[1])
+                line_data = f"收线占比{100 * time_hold // (time_release + time_hold)}%"
+            bp.set_time_scale(time_scale=time_scale)
             # print(line_data)
             # print(time_hold, time_release)
 
@@ -318,7 +329,7 @@ def fish_once(bp: BasePage, fish_id="", personality=None):
         bp.cmd(c)
     bp.custom_cmd(f"setTension {personality.tension}")
     BattlePreparePanel.click_btn_cast(bp)
-    bp.set_time_scale(time_scale=1)
+
     bp.custom_cmd("autofish")
 
     data_list, m_max, base_hp, battle_time, line_data, battle_damage, reel_velocity_z, time_remain = qte(bp, personality)
@@ -485,12 +496,14 @@ def savefig_autoname(base_name):
     counter = 1
     while True:
         new_name = f"{name_part}_{counter}{ext}"
-        if not os.path.exists(new_name):
-            plt.savefig(new_name)
-            plt.close()
-            print(f"检测到重名文件，已保存为: {new_name}")
-            return
-        counter += 1
+        if os.path.exists(new_name):
+            counter += 1
+            continue
+        plt.savefig(new_name)
+        plt.close()
+        print(f"检测到重名文件，已保存为: {new_name}")
+        return
+
 
 
 def save_text(content, filename, mode='w', encoding='utf-8'):
@@ -549,7 +562,9 @@ def increase_star(bp: BasePage):
 
 
 def increase_gear(bp: BasePage):
-    print(f"{lv}级装备_{fish_kind}鱼_{star_start}至{star_end}星渔场")
+    file_name = f"{lv}级装备_{fish_kind}鱼_{star_start}至{star_end}星渔场"
+    # bp.video = record_start(file_name=f"{file_name}.mp4")
+    print(file_name)
     gear_kind = gear_kind_start
     while gear_kind <= gear_kind_end:
         change_gear(bp, kind=gear_kind)
@@ -566,13 +581,17 @@ def increase_gear(bp: BasePage):
 
 
 def main(bp: BasePage):
+    gameInit.guide_skip(bp)
     bp.is_time_scale = True
     bp.set_time_scale(time_scale=time_scale)
     bp.set_is_quick_qte(is_quick_qte=True)
     bp.set_hook_progress(hook_progress=0.8)
     bp.custom_cmd("setQTECD 0.5")
+
     increase_gear(bp)
+
     bp.connect_close()
+
 
 if __name__ == '__main__':
     bp1 = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
@@ -581,7 +600,7 @@ if __name__ == '__main__':
     # bp2 = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
 
     # 装备等级
-    lv = 30
+    lv = 90
 
     # 1力 2敏 3智
     fish_kind = "力"
@@ -594,8 +613,8 @@ if __name__ == '__main__':
     gear_kind_end = 6
 
     # 渔场难度
-    star_start = 3
-    star_end = 11
+    star_start = 19
+    star_end = 27
 
     # is_restrain = False
 
