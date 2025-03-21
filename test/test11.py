@@ -279,6 +279,7 @@ def qte(bp, personality: Personality = None):
         if object_id_list[btn_claim_pve_index]:
             ResultPanel.automatic_settlement(bp, element_btn=ElementsData.ResultPanel.btn_claim_pve)
             print("成功")
+            bp.res = "成功"
             break
         if object_id_list[btn_claim_pvp_index]:
             ResultPanel.automatic_settlement(bp, element_btn=ElementsData.ResultPanel.btn_claim_pvp)
@@ -288,11 +289,13 @@ def qte(bp, personality: Personality = None):
             break
         if object_id_list[btn_again_index]:
             ResultPanel.automatic_settlement(bp, element_btn=ElementsData.BattleFailedPanel.btn_again)
+            bp.res = "失败"
             print("失败")
             break
         if object_id_list[btn_again_2_index]:
             ResultPanel.automatic_settlement(bp, element_btn=ElementsData.MainStageBattleFailedPanel.btn_again)
             print("失败")
+            bp.res = "失败"
             break
         if object_id_list[FlashCardReceivePanel_index]:
             bp.clear_popup()
@@ -333,6 +336,9 @@ def fish_once(bp: BasePage, fish_id="", personality=None):
     bp.custom_cmd("autofish")
 
     data_list, m_max, base_hp, battle_time, line_data, battle_damage, reel_velocity_z, time_remain = qte(bp, personality)
+    plt_name = f"{lv}级装备_{fish_kind}鱼_{bp.star}星渔场_{bp.kezhi}_{bp.name_line}{bp.name_lure}_{bp.res}"
+    print(plt_name)
+    save_plt(data_list, m_max, base_hp, name=plt_name)
     print(f"伤害：{battle_damage} 线长：{m_max} 跑线：{reel_velocity_z}")
     # print(f"剩余时间：{time_remain}s, 战斗时间：{battle_time}")
     print(f"战斗时间：{battle_time}")
@@ -384,12 +390,12 @@ def change_gear(bp: BasePage, kind):
         part_id_line = 1700001
         part_id_lure = 1700002
 
-    if kind % 3 == 1:
-        part_id_rod = 1801001
-    elif kind % 3 == 2:
-        part_id_rod = 1801002
+    if fish_kind=="力":
+        part_id_rod = 1901001
+    elif fish_kind=="敏":
+        part_id_rod = 1901002
     else:
-        part_id_rod = 1801003
+        part_id_rod = 1901003
 
     lua_code_line = csMsgAll.get_CSEquipPrepareReplaceMsg(prepareIndex=1, dlc=1, partId=part_id_line)
     lua_code_lure = csMsgAll.get_CSEquipPrepareReplaceMsg(prepareIndex=1, dlc=1, partId=part_id_lure)
@@ -551,12 +557,12 @@ def increase_star(bp: BasePage):
     print(f"{lv}级装备_{fish_kind}鱼_{star_start}至{star_end}星渔场_{bp.kezhi}_{bp.name_line}{bp.name_lure}")
     star = star_start
     while star <= star_end:
-        plt_name = f"{lv}级装备_{fish_kind}鱼_{star}星渔场_{bp.kezhi}_{bp.name_line}{bp.name_lure}"
-        print(plt_name)
+        bp.star = star
         bp.cmd(f"fishscenestarset 500301 {star}")
         bp.star = star
         data_list, m_max, base_hp = fish_once(bp, fish_id=fish_id, personality=personality)
-        save_plt(data_list, m_max, base_hp, name=plt_name)
+
+
         bp.set_text(element_data={"locator": "UICanvas>star(Clone)"}, text=f"")
         star += 2
 
@@ -567,6 +573,9 @@ def increase_gear(bp: BasePage):
     print(file_name)
     gear_kind = gear_kind_start
     while gear_kind <= gear_kind_end:
+        if gear_kind == 9:
+            gear_kind += 1
+            continue
         change_gear(bp, kind=gear_kind)
         bp.kezhi = "非克制"
         if (gear_kind % 3 == 1 and fish_kind == "力") or (gear_kind % 3 == 2 and fish_kind == "敏" or (gear_kind % 3 == 1 and fish_kind == "智")):
@@ -581,12 +590,12 @@ def increase_gear(bp: BasePage):
 
 
 def main(bp: BasePage):
-    gameInit.guide_skip(bp)
+    # gameInit.guide_skip(bp)
     bp.is_time_scale = True
     bp.set_time_scale(time_scale=time_scale)
     bp.set_is_quick_qte(is_quick_qte=True)
     bp.set_hook_progress(hook_progress=0.8)
-    bp.custom_cmd("setQTECD 0.5")
+    bp.custom_cmd("setQTECD 0.47")
 
     increase_gear(bp)
 
@@ -600,10 +609,10 @@ if __name__ == '__main__':
     # bp2 = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
 
     # 装备等级
-    lv = 90
+    lv = 30
 
     # 1力 2敏 3智
-    fish_kind = "力"
+    fish_kind = "敏"
 
     # 套装0-9
     # 0.初始 1.强力收线/强力爆气 2.强力回拉/强力刺鱼 3.技巧拔竿/技巧压制 4.远交近攻/鱼跃反制 5.绝佳时机/暴力挥杆 6.越挫越勇/贴身肉搏 7.超负荷气 8.长线绝杀 9.不动如山 10.乘胜追击 11.背水一战 12.一刺入魂
@@ -613,8 +622,8 @@ if __name__ == '__main__':
     gear_kind_end = 6
 
     # 渔场难度
-    star_start = 19
-    star_end = 27
+    star_start = 3
+    star_end = 9
 
     # is_restrain = False
 
