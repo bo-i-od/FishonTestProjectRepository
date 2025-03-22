@@ -44,6 +44,7 @@ class JumpData:
         "PVPRoomInvitePanel",
         "QuestBossTipsPanel",
         "RankFishSettleResultPanel",
+        "RewardsPanel",
         "Recharge1And1Panel",
         "RechargeBlack5Panel",
         "RechargeEndlessThanksPanel",

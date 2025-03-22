@@ -3,8 +3,8 @@ import time
 
 from matplotlib.lines import Line2D
 
-from common import gameInit
 from common.basePage import BasePage
+from common.gameInit import guide_skip
 from configs.elementsData import ElementsData
 from netMsg import csMsgAll
 from panelObjs import BattlePreparePanel, BattlePanel, ResultPanel
@@ -12,6 +12,10 @@ from panelObjs.BattleDebugPanel import BattleDebugPanel
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 
+from panelObjs.HomePanelNew import HomePanelNew
+from panelObjs.MainStageFishSpotPanel import MainStageFishSpotPanel
+from scripts.createUsers import logout, login
+from tools.videoCompression import record_start, record_end
 
 
 class Personality:
@@ -278,7 +282,7 @@ def qte(bp, personality: Personality = None):
 
         if object_id_list[btn_claim_pve_index]:
             ResultPanel.automatic_settlement(bp, element_btn=ElementsData.ResultPanel.btn_claim_pve)
-            print("成功")
+            write_log("成功")
             bp.res = "成功"
             break
         if object_id_list[btn_claim_pvp_index]:
@@ -290,11 +294,11 @@ def qte(bp, personality: Personality = None):
         if object_id_list[btn_again_index]:
             ResultPanel.automatic_settlement(bp, element_btn=ElementsData.BattleFailedPanel.btn_again)
             bp.res = "失败"
-            print("失败")
+            write_log("成功")
             break
         if object_id_list[btn_again_2_index]:
             ResultPanel.automatic_settlement(bp, element_btn=ElementsData.MainStageBattleFailedPanel.btn_again)
-            print("失败")
+            write_log("成功")
             bp.res = "失败"
             break
         if object_id_list[FlashCardReceivePanel_index]:
@@ -318,7 +322,7 @@ def show_data(bp: BasePage):
     battle_damage_temp = get_value(content_dict, "STAMINA_DECREASE")
     reel_velocity_z_temp = get_value(content_dict, "REEL_VELOCITY_Z")
     bp.set_text(element_data={"locator": "UICanvas>star(Clone)"},
-                text=f"{lv}级装备 {bp.star}星渔场 鱼{fish_id} {bp.name_line} {bp.name_lure}  伤害：{battle_damage_temp}, 线长：{m_max_temp}, 收线：{reel_velocity_z_temp}, 鱼血量上限：{base_hp_temp}")
+                text=f"{bp.lv}级装备 {bp.star}星渔场 鱼{fish_id} {bp.name_line} {bp.name_lure}  伤害：{battle_damage_temp}, 线长：{m_max_temp}, 收线：{reel_velocity_z_temp}, 鱼血量上限：{base_hp_temp}")
 
 
 
@@ -336,17 +340,16 @@ def fish_once(bp: BasePage, fish_id="", personality=None):
     bp.custom_cmd("autofish")
 
     data_list, m_max, base_hp, battle_time, line_data, battle_damage, reel_velocity_z, time_remain = qte(bp, personality)
-    plt_name = f"{lv}级装备_{fish_kind}鱼_{bp.star}星渔场_{bp.kezhi}_{bp.name_line}{bp.name_lure}_{bp.res}"
-    print(plt_name)
+    plt_name = f"{bp.lv}级装备_{fish_kind}鱼_{bp.star}星渔场_{bp.kezhi}_{bp.name_line}{bp.name_lure}_{bp.res}"
+    write_log(plt_name)
     save_plt(data_list, m_max, base_hp, name=plt_name)
-    print(f"伤害：{battle_damage} 线长：{m_max} 跑线：{reel_velocity_z}")
+    write_log(f"伤害：{battle_damage} 线长：{m_max} 跑线：{reel_velocity_z}")
     # print(f"剩余时间：{time_remain}s, 战斗时间：{battle_time}")
-    print(f"战斗时间：{battle_time}")
-    print(f"鱼血量上限：{base_hp}")
-    print(line_data)
+    write_log(f"战斗时间：{battle_time}")
+    write_log(f"鱼血量上限：{base_hp}")
+    write_log(line_data)
     if fish_id != "":
         bp.cmd("mode 0 0")
-    return data_list, m_max, base_hp
 
 def change_gear(bp: BasePage, kind):
     # part_id_line = 0
@@ -507,7 +510,7 @@ def savefig_autoname(base_name):
             continue
         plt.savefig(new_name)
         plt.close()
-        print(f"检测到重名文件，已保存为: {new_name}")
+        write_log(f"检测到重名文件，已保存为: {new_name}")
         return
 
 
@@ -552,25 +555,21 @@ def save_text(content, filename, mode='w', encoding='utf-8'):
     return target_file
 
 
-def increase_star(bp: BasePage):
+def increase_star(bp: BasePage, star_start, star_end):
 
-    print(f"{lv}级装备_{fish_kind}鱼_{star_start}至{star_end}星渔场_{bp.kezhi}_{bp.name_line}{bp.name_lure}")
+    write_log(f"{bp.lv}级装备_{fish_kind}鱼_{star_start}至{star_end}星渔场_{bp.kezhi}_{bp.name_line}{bp.name_lure}")
     star = star_start
     while star <= star_end:
         bp.star = star
         bp.cmd(f"fishscenestarset 500301 {star}")
         bp.star = star
-        data_list, m_max, base_hp = fish_once(bp, fish_id=fish_id, personality=personality)
-
+        fish_once(bp, fish_id=fish_id, personality=personality)
 
         bp.set_text(element_data={"locator": "UICanvas>star(Clone)"}, text=f"")
         star += 2
 
 
-def increase_gear(bp: BasePage):
-    file_name = f"{lv}级装备_{fish_kind}鱼_{star_start}至{star_end}星渔场"
-    # bp.video = record_start(file_name=f"{file_name}.mp4")
-    print(file_name)
+def increase_gear(bp: BasePage, star_start, star_end, gear_kind_start, gear_kind_end):
     gear_kind = gear_kind_start
     while gear_kind <= gear_kind_end:
         if gear_kind == 9:
@@ -584,32 +583,89 @@ def increase_gear(bp: BasePage):
         bp.lua_console('PanelMgr:OpenPanel("GearMainPanel")')
         bp.sleep(0.5)
         bp.lua_console('PanelMgr:ClosePanel("GearMainPanel")')
-        increase_star(bp)
+        increase_star(bp, star_start, star_end)
         gear_kind += 1
 
+def increase_rod(bp: BasePage):
+    cur = 9
+    while cur < len(test_list):
+        try:
+            test = test_list[cur]
+            bp.lv = test["lv"]
+            file_name = f'{bp.lv}级装备_{fish_kind}鱼_{test["star_start"]}至{test["star_end"]}星渔场'
+            bp.video = record_start(file_name=f"{file_name}.mp4")
+            bp.sleep(1)
+            write_log(file_name)
+            login(bp, name=test["name"])
+            guide_skip(bp)
+            bp.lua_console('PanelMgr:OpenPanel("HomePanelNew")')
+            bp.sleep(1)
+            HomePanelNew.click_btn_spot(bp, index=0)
+            bp.sleep(1)
+            MainStageFishSpotPanel.click_btn_go(bp)
+            bp.sleep(3)
+            increase_gear(bp, star_start=test["star_start"], star_end=test["star_end"], gear_kind_start=test["gear_kind_start"], gear_kind_end=test["gear_kind_end"])
+        except:
+            record_end(bp.video)
+            write_log("------------------------------")
+            write_log("上方一个区间作废")
+            write_log("------------------------------")
+            logout(bp)
+            bp.sleep(5)
+            continue
+        record_end(bp.video)
+        write_log("------------------------------")
+        write_log("")
+        logout(bp)
+        bp.sleep(5)
+        cur += 1
 
+
+
+def write_log(*msg):
+    f = open("../test/log.txt", "a", encoding="utf-8")
+    print(*msg)
+    f.write(str(*msg) + '\n')
+    f.close()
 
 def main(bp: BasePage):
     # gameInit.guide_skip(bp)
     bp.is_time_scale = True
     bp.set_time_scale(time_scale=time_scale)
     bp.set_is_quick_qte(is_quick_qte=True)
-    bp.set_hook_progress(hook_progress=0.8)
+    bp.set_hook_progress(hook_progress=0.85)
     bp.custom_cmd("setQTECD 0.47")
-
-    increase_gear(bp)
+    increase_rod(bp)
 
     bp.connect_close()
 
 
 if __name__ == '__main__':
     bp1 = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
+    test_list = [{"name": "f_30", "lv": 30, "star_start": 3, "star_end": 9, "gear_kind_start": 1, "gear_kind_end": 6},
+                 {"name": "f_45", "lv": 45, "star_start": 5, "star_end": 15, "gear_kind_start": 1, "gear_kind_end": 6},
+                 {"name": "f_60", "lv": 60, "star_start": 11, "star_end": 21, "gear_kind_start": 1, "gear_kind_end": 6},
+                 {"name": "f_69", "lv": 69, "star_start": 13, "star_end": 23, "gear_kind_start": 1, "gear_kind_end": 6},
+                 {"name": "f_78", "lv": 78, "star_start": 15, "star_end": 25, "gear_kind_start": 1, "gear_kind_end": 6},
+                 {"name": "f_84", "lv": 84, "star_start": 17, "star_end": 27, "gear_kind_start": 1, "gear_kind_end": 6},
+                 {"name": "f_90", "lv": 90, "star_start": 21, "star_end": 31, "gear_kind_start": 1, "gear_kind_end": 6},
+                 {"name": "f_105", "lv": 105, "star_start": 25, "star_end": 35, "gear_kind_start": 7, "gear_kind_end": 12},
+                 {"name": "f_120", "lv": 120, "star_start": 29, "star_end": 39, "gear_kind_start": 7, "gear_kind_end": 12},
+                 {"name": "f_150", "lv": 150, "star_start": 35, "star_end": 45, "gear_kind_start": 7, "gear_kind_end": 12},
+                 {"name": "f_170", "lv": 170, "star_start": 39, "star_end": 49, "gear_kind_start": 7, "gear_kind_end": 12},
+                 {"name": "f_185", "lv": 185, "star_start": 41, "star_end": 51, "gear_kind_start": 7, "gear_kind_end": 12},
+                 {"name": "f_195", "lv": 195, "star_start": 43, "star_end": 53, "gear_kind_start": 7, "gear_kind_end": 12},
+                 {"name": "f_205", "lv": 205, "star_start": 45, "star_end": 55, "gear_kind_start": 7, "gear_kind_end": 12},
+                 {"name": "f_225", "lv": 225, "star_start": 47, "star_end": 57, "gear_kind_start": 7, "gear_kind_end": 12},
+                 {"name": "f_235", "lv": 235, "star_start": 49, "star_end": 59, "gear_kind_start": 7, "gear_kind_end": 12},
+                 {"name": "f_255", "lv": 255, "star_start": 53, "star_end": 63, "gear_kind_start": 7, "gear_kind_end": 12},
+                 ]
 
     time_scale = 4
     # bp2 = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
 
     # 装备等级
-    lv = 30
+
 
     # 1力 2敏 3智
     fish_kind = "敏"
@@ -618,12 +674,7 @@ if __name__ == '__main__':
     # 0.初始 1.强力收线/强力爆气 2.强力回拉/强力刺鱼 3.技巧拔竿/技巧压制 4.远交近攻/鱼跃反制 5.绝佳时机/暴力挥杆 6.越挫越勇/贴身肉搏 7.超负荷气 8.长线绝杀 9.不动如山 10.乘胜追击 11.背水一战 12.一刺入魂
 
 
-    gear_kind_start = 1
-    gear_kind_end = 6
 
-    # 渔场难度
-    star_start = 3
-    star_end = 9
 
     # is_restrain = False
 

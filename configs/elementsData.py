@@ -1188,6 +1188,7 @@ class ElementsData:
 
     class HomePanelNew:
         HomePanelNew = {"locator": "UICanvas>Default>HomePanelNew"}
+        btn_spot = {"locator": "UICanvas>Default>HomePanelNew>panel>info_model_area>btn_spot(Clone)", "focus": (0.5, 1)}
 
     class HomePanel:
         #panel_left
@@ -1364,6 +1365,10 @@ class ElementsData:
     class MainStageBattleFailedPanel:
         MainStageBattleFailedPanel = {"locator": "UICanvas>Default>MainStageBattleFailedPanel"}
         btn_again = {"locator": "UICanvas>Default>MainStageBattleFailedPanel>panel_fail>btns>btn_again"}
+
+    class MainStageFishSpotPanel:
+        MainStageFishSpotPanel = {"locator": "UICanvas>Default>MainStageFishSpotPanel"}
+        btn_go = {"locator": "UICanvas>Default>MainStageFishSpotPanel>panel>panel_info>panel>panel_right>btn_go", "focus": (0.5, 1)}
 
     class MainStageSettlePanel:
         MainStageSettlePanel = {"locator": "UICanvas>Default>MainStageSettlePanel"}
