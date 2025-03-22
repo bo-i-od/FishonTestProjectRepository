@@ -1782,6 +1782,7 @@ if not skillCounter:IsHaveEnoughEnergy(caBeCounter:GetType()) then
 end
 fishingMatch:TriggerActiveSkill(skillCounter:GetSlotIndex())"""
         cmd_list.append(f"addElement joystickUp UICanvas>Default>BattlePanel>FishHUD>qte_up>qte 0 {lua_code}")
+        cmd_list.append(f"addElement joystickUp UICanvas>Default>BattlePanel>FishHUD>qte_juesha>qte 0 {lua_code}")
 #         lua_code = """local BattlePanel = PanelMgr:Find("BattlePanel")
 # if not BattlePanel then
 #     return
