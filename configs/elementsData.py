@@ -76,6 +76,9 @@ class ElementsData:
         AnniversaryEventMainPanel = {"locator":"UICanvas>Default>AnniversaryEventMainPanel"}
         btn_close = {"locator": "UICanvas>Default>AnniversaryEventMainPanel>panel>btn_close>img"}
 
+    class AnniversaryEventMemoirPanel:
+        AnniversaryEventMemoirPanel = {"locator":"UICanvas>Default>AnniversaryEventMemoirPanel"}
+        btn_close = {"locator": "UICanvas>Default>AnniversaryEventMemoirPanel>panel>btn_close>img"}
 
     class AquariumPanel:
         AquariumPanel = {"locator": "UICanvas>Default>AquariumPanel"}
