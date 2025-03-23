@@ -107,7 +107,7 @@ class BattlePanel(BasePage):
                 ResultPanel.automatic_settlement(self, element_btn=ElementsData.BattleFailedPanel.btn_again)
                 break
             if object_id_list[btn_again_2_index]:
-                ResultPanel.automatic_settlement(bp, element_btn=ElementsData.MainStageBattleFailedPanel.btn_again)
+                ResultPanel.automatic_settlement(self, element_btn=ElementsData.MainStageBattleFailedPanel.btn_again)
                 break
             if object_id_list[FlashCardReceivePanel_index]:
                 self.clear_popup()
