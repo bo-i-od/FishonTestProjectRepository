@@ -4,7 +4,7 @@ import time
 from matplotlib.lines import Line2D
 
 from common.basePage import BasePage
-from common.gameInit import guide_skip
+from common import gameInit
 from configs.elementsData import ElementsData
 from netMsg import csMsgAll
 from panelObjs import BattlePreparePanel, BattlePanel, ResultPanel
@@ -129,15 +129,7 @@ def qte(bp, personality: Personality = None):
                          ElementsData.BattlePanel.crt2,
                          ElementsData.BattlePanel.progress
                          ]
-    qte_left_index = element_data_list.index(ElementsData.BattlePanel.qte_left)
-    qte_right_index = element_data_list.index(ElementsData.BattlePanel.qte_right)
-    qte_up_index = element_data_list.index(ElementsData.BattlePanel.qte_up)
-    qte_dance_right_index = element_data_list.index(ElementsData.BattlePanel.qte_dance_right)
-    qte_dance_left_index = element_data_list.index(ElementsData.BattlePanel.qte_dance_left)
-    qte_jump_left_index = element_data_list.index(ElementsData.BattlePanel.qte_jump_left)
-    qte_jump_right_index = element_data_list.index(ElementsData.BattlePanel.qte_jump_right)
-    hud_power_list_index = element_data_list.index(ElementsData.BattlePanel.hud_power_list)
-    hud_power_list_old_index = element_data_list.index(ElementsData.BattlePanel.hud_power_list_old)
+
     btn_claim_pve_index = element_data_list.index(ElementsData.ResultPanel.btn_claim_pve)
     btn_claim_pvp_index = element_data_list.index(ElementsData.ResultPanel.btn_claim_pvp)
     btn_claim_token_fish_index = element_data_list.index(ElementsData.ResultPanel.btn_claim_token_fish)
@@ -146,7 +138,6 @@ def qte(bp, personality: Personality = None):
     FlashCardReceivePanel_index = element_data_list.index(ElementsData.FlashCardReceivePanel.FlashCardReceivePanel)
     warning_index = element_data_list.index(ElementsData.BattlePanel.warning)
     MainlineFlashCardReceivePanel_index = element_data_list.index(ElementsData.MainlineFlashCardReceivePanel.MainlineFlashCardReceivePanel)
-    BattlePanel_index = element_data_list.index(ElementsData.BattlePanel.BattlePanel)
     crt_index = element_data_list.index(ElementsData.BattlePanel.crt)
     crt2_index = element_data_list.index(ElementsData.BattlePanel.crt2)
     progress_index = element_data_list.index(ElementsData.BattlePanel.progress)
@@ -226,47 +217,6 @@ def qte(bp, personality: Personality = None):
             bp.sleep(0.1)
             hold_status = BattleDebugPanel.get_hold_status(bp)
             hold_status_start = deal_with_hold_status(hold_status)
-        # if len(object_id_list[hud_power_list_index]) > 2:
-        #     BattlePanel.unleash_power(bp)
-        #     continue
-        # if len(object_id_list[hud_power_list_old_index]) > 2:
-        #     BattlePanel.unleash_power(bp)
-        #     continue
-        # if object_id_list[qte_up_index]:
-        #     if t_one > personality.qte_rate * 10:
-        #         continue
-        #     BattlePanel.slide(bp, "up")
-        #     continue
-        # if object_id_list[qte_jump_left_index]:
-        #     if t_one > personality.qte_rate * 10:
-        #         continue
-        #     BattlePanel.slide(bp, "left")
-        #     continue
-        # if object_id_list[qte_jump_right_index]:
-        #     if t_one > personality.qte_rate * 10:
-        #         continue
-        #     BattlePanel.slide(bp, "right")
-        #     continue
-        # if object_id_list[qte_dance_left_index]:
-        #     if t_one > personality.qte_rate * 10:
-        #         continue
-        #     BattlePanel.slide(bp, "left")
-        #     continue
-        # if object_id_list[qte_dance_right_index]:
-        #     if t_one > personality.qte_rate * 10:
-        #         continue
-        #     BattlePanel.slide(bp, "right")
-        #     continue
-        # if object_id_list[qte_left_index]:
-        #     if t_one > personality.qte_rate * 10:
-        #         continue
-        #     BattlePanel.slide(bp, "left")
-        #     continue
-        # if object_id_list[qte_right_index]:
-        #     if t_one > personality.qte_rate * 10:
-        #         continue
-        #     BattlePanel.slide(bp, "right")
-        #     continue
         if (not object_id_list[warning_index]) and (start_time is not None):
             if end_time is None:
                 end_time = time.time()
@@ -277,12 +227,9 @@ def qte(bp, personality: Personality = None):
                 time_release = (hold_status_end[1] - hold_status_start[1])
                 line_data = f"收线占比{100 * time_hold // (time_release + time_hold)}%"
             bp.set_time_scale(time_scale=time_scale)
-            # print(line_data)
-            # print(time_hold, time_release)
 
         if object_id_list[btn_claim_pve_index]:
             ResultPanel.automatic_settlement(bp, element_btn=ElementsData.ResultPanel.btn_claim_pve)
-            write_log("成功")
             bp.res = "成功"
             break
         if object_id_list[btn_claim_pvp_index]:
@@ -294,11 +241,9 @@ def qte(bp, personality: Personality = None):
         if object_id_list[btn_again_index]:
             ResultPanel.automatic_settlement(bp, element_btn=ElementsData.BattleFailedPanel.btn_again)
             bp.res = "失败"
-            write_log("成功")
             break
         if object_id_list[btn_again_2_index]:
             ResultPanel.automatic_settlement(bp, element_btn=ElementsData.MainStageBattleFailedPanel.btn_again)
-            write_log("成功")
             bp.res = "失败"
             break
         if object_id_list[FlashCardReceivePanel_index]:
@@ -322,11 +267,9 @@ def show_data(bp: BasePage):
     battle_damage_temp = get_value(content_dict, "STAMINA_DECREASE")
     reel_velocity_z_temp = get_value(content_dict, "REEL_VELOCITY_Z")
     bp.set_text(element_data={"locator": "UICanvas>star(Clone)"},
-                text=f"{bp.lv}级装备 {bp.star}星渔场 鱼{fish_id} {bp.name_line} {bp.name_lure}  伤害：{battle_damage_temp}, 线长：{m_max_temp}, 收线：{reel_velocity_z_temp}, 鱼血量上限：{base_hp_temp}")
+                text=f"{bp.rod_lv}级{bp.rod_star}星装备 {bp.fish_kind}鱼 {bp.star}星渔场 {bp.name_line} {bp.name_lure} 第{bp.index}场  伤害:{battle_damage_temp} 线长:{m_max_temp} 收线:{reel_velocity_z_temp} 鱼血量上限:{base_hp_temp}")
 
 
-
-    
 
 def fish_once(bp: BasePage, fish_id="", personality=None):
     if fish_id != "":
@@ -340,66 +283,79 @@ def fish_once(bp: BasePage, fish_id="", personality=None):
     bp.custom_cmd("autofish")
 
     data_list, m_max, base_hp, battle_time, line_data, battle_damage, reel_velocity_z, time_remain = qte(bp, personality)
-    plt_name = f"{bp.lv}级装备_{fish_kind}鱼_{bp.star}星渔场_{bp.kezhi}_{bp.name_line}{bp.name_lure}_{bp.res}"
+    plt_name = f"{bp.rod_lv}级{bp.rod_star}星装备_{bp.fish_kind}鱼_{bp.star}星渔场_{bp.name_line}{bp.name_lure}_{bp.index}_{bp.res}"
     write_log(plt_name)
     save_plt(data_list, m_max, base_hp, name=plt_name)
-    write_log(f"伤害：{battle_damage} 线长：{m_max} 跑线：{reel_velocity_z}")
+    write_log(f"鱼血量上限：{base_hp} 伤害：{battle_damage} 线长：{m_max} 跑线：{reel_velocity_z}")
     # print(f"剩余时间：{time_remain}s, 战斗时间：{battle_time}")
     write_log(f"战斗时间：{battle_time}")
-    write_log(f"鱼血量上限：{base_hp}")
+    write_log("")
     write_log(line_data)
     if fish_id != "":
         bp.cmd("mode 0 0")
 
-def change_gear(bp: BasePage, kind):
-    # part_id_line = 0
+def get_gear(kind, rod_quality):
     if kind == 1:
-        part_id_line = 1700003
-        part_id_lure = 1700006
-    elif kind == 2:
-        part_id_line = 1700004
-        part_id_lure = 1700007
-    elif kind == 3:
-        part_id_line = 1700005
-        part_id_lure = 1700008
-    elif kind == 4:
-        part_id_line = 1700031
-        part_id_lure = 1700032
-    elif kind == 5:
-        part_id_line = 1700033
-        part_id_lure = 1700034
-    elif kind == 6:
-        part_id_line = 1700035
-        part_id_lure = 1700036
-    elif kind == 7:
-        part_id_line = 1700009
-        part_id_lure = 1700010
-    elif kind == 8:
-        part_id_line = 1700011
-        part_id_lure = 1700012
-    elif kind == 9:
-        part_id_line = 1700013
-        part_id_lure = 1700014
-    elif kind == 10:
-        part_id_line = 1700015
-        part_id_lure = 1700016
-    elif kind == 11:
-        part_id_line = 1700017
-        part_id_lure = 1700018
-    elif kind == 12:
-        part_id_line = 1700019
-        part_id_lure = 1700020
-    else:
         part_id_line = 1700001
         part_id_lure = 1700002
+    elif kind == 2:
+        part_id_line = 1700027
+        part_id_lure = 1700028
+    elif kind == 3:
+        part_id_line = 1700029
+        part_id_lure = 1700030
+    elif kind == 4:
+        part_id_line = 1700003
+        part_id_lure = 1700006
+    elif kind == 5:
+        part_id_line = 1700004
+        part_id_lure = 1700007
+    elif kind == 6:
+        part_id_line = 1700005
+        part_id_lure = 1700008
+    elif kind == 7:
+        part_id_line = 1700031
+        part_id_lure = 1700032
+    elif kind == 8:
+        part_id_line = 1700033
+        part_id_lure = 1700034
+    elif kind == 9:
+        part_id_line = 1700035
+        part_id_lure = 1700036
+    elif kind == 10:
+        part_id_line = 1700009
+        part_id_lure = 1700010
+    elif kind == 11:
+        part_id_line = 1700011
+        part_id_lure = 1700012
+    elif kind == 12:
+        part_id_line = 1700013
+        part_id_lure = 1700014
+    elif kind == 13:
+        part_id_line = 1700015
+        part_id_lure = 1700016
+    elif kind == 14:
+        part_id_line = 1700017
+        part_id_lure = 1700018
+    else:
+        part_id_line = 1700019
+        part_id_lure = 1700020
 
-    if fish_kind=="力":
+    if rod_quality == "紫":
+        part_id_rod = 1901004
+        return part_id_line, part_id_lure, part_id_rod
+    if kind % 3 == 1:
         part_id_rod = 1901001
-    elif fish_kind=="敏":
+    elif kind % 3 == 2:
         part_id_rod = 1901002
     else:
         part_id_rod = 1901003
 
+    return part_id_line, part_id_lure, part_id_rod
+
+def change_gear(bp: BasePage, kind, rod_quality):
+    # part_id_line = 0
+    part_id_line, part_id_lure, part_id_rod = get_gear(kind, rod_quality)
     lua_code_line = csMsgAll.get_CSEquipPrepareReplaceMsg(prepareIndex=1, dlc=1, partId=part_id_line)
     lua_code_lure = csMsgAll.get_CSEquipPrepareReplaceMsg(prepareIndex=1, dlc=1, partId=part_id_lure)
     lua_code_rod = csMsgAll.get_CSEquipPrepareReplaceMsg(prepareIndex=1, dlc=1, partId=part_id_rod)
@@ -555,57 +511,81 @@ def save_text(content, filename, mode='w', encoding='utf-8'):
     return target_file
 
 
-def increase_star(bp: BasePage, star_start, star_end):
+def increase_star(bp: BasePage, fishery_star_range):
 
-    write_log(f"{bp.lv}级装备_{fish_kind}鱼_{star_start}至{star_end}星渔场_{bp.kezhi}_{bp.name_line}{bp.name_lure}")
-    star = star_start
-    while star <= star_end:
+    write_log(f"{bp.rod_lv}级{bp.rod_star}星装备_{bp.fish_kind}鱼_{fishery_star_range[0]}至{fishery_star_range[1]}星渔场_{bp.name_line}{bp.name_lure}")
+    star = fishery_star_range[0]
+    while star <= fishery_star_range[1]:
         bp.star = star
         bp.cmd(f"fishscenestarset 500301 {star}")
         bp.star = star
-        fish_once(bp, fish_id=fish_id, personality=personality)
-
+        bp.index = 1
+        fish_once(bp, fish_id=bp.fish_id, personality=personality)
+        bp.index = 2
+        bp.cmd(f"fishscenestarset 500301 {star}")
+        fish_once(bp, fish_id=bp.fish_id, personality=personality)
         bp.set_text(element_data={"locator": "UICanvas>star(Clone)"}, text=f"")
         star += 2
 
 
-def increase_gear(bp: BasePage, star_start, star_end, gear_kind_start, gear_kind_end):
-    gear_kind = gear_kind_start
-    while gear_kind <= gear_kind_end:
-        if gear_kind == 9:
-            gear_kind += 1
-            continue
-        change_gear(bp, kind=gear_kind)
-        bp.kezhi = "非克制"
-        if (gear_kind % 3 == 1 and fish_kind == "力") or (gear_kind % 3 == 2 and fish_kind == "敏" or (gear_kind % 3 == 1 and fish_kind == "智")):
-            bp.kezhi = "克制"
-
+def increase_gear(bp: BasePage, fishery_star_range, gear_kind_list):
+    cur = 0
+    while cur < len(gear_kind_list):
+        change_gear(bp, kind=gear_kind_list[cur])
         bp.lua_console('PanelMgr:OpenPanel("GearMainPanel")')
         bp.sleep(0.5)
         bp.lua_console('PanelMgr:ClosePanel("GearMainPanel")')
-        increase_star(bp, star_start, star_end)
-        gear_kind += 1
+        increase_star(bp, fishery_star_range)
+        cur += 1
 
 def increase_rod(bp: BasePage):
-    cur = 9
+    cur = 0
     while cur < len(test_list):
         try:
             test = test_list[cur]
-            bp.lv = test["lv"]
-            file_name = f'{bp.lv}级装备_{fish_kind}鱼_{test["star_start"]}至{test["star_end"]}星渔场'
+            bp.rod_lv = test["rod_lv"]
+            bp.rod_star = test["rod_star"]
+            bp.rod_quality = test["rod_quality"]
+            bp.gear_quality = test["gear_quality"]
+            file_name = f'{bp.rod_lv}级{bp.rod_star}星装备_{bp.fish_kind}鱼_{test["fishery_star_range"][0]}至{test["fishery_star_range"][1]}星渔场'
             bp.video = record_start(file_name=f"{file_name}.mp4")
             bp.sleep(1)
             write_log(file_name)
             login(bp, name=test["name"])
-            guide_skip(bp)
-            bp.lua_console('PanelMgr:OpenPanel("HomePanelNew")')
-            bp.sleep(1)
-            HomePanelNew.click_btn_spot(bp, index=0)
-            bp.sleep(1)
-            MainStageFishSpotPanel.click_btn_go(bp)
-            bp.sleep(3)
-            increase_gear(bp, star_start=test["star_start"], star_end=test["star_end"], gear_kind_start=test["gear_kind_start"], gear_kind_end=test["gear_kind_end"])
-        except:
+            # gameInit.guide_skip(bp)
+            # bp.clear_popup()
+            # bp.lua_console('PanelMgr:OpenPanel("HomePanelNew")')
+
+            lua_code = """local battleController = ControllerMgr:Get("BattleController")
+    battleController:GoToDaily(10101, true)
+    """
+            bp.lua_console(lua_code)
+
+            if bp.fish_kind == "力":
+                if bp.gear_quality == "紫":
+                    gear_kind_list = [1]
+                elif bp.gear_quality == "金":
+                    gear_kind_list = [4, 7]
+                else:
+                    gear_kind_list = [10, 13]
+            elif bp.fish_kind == "敏":
+                if bp.gear_quality == "紫":
+                    gear_kind_list = [2]
+                elif bp.gear_quality == "金":
+                    gear_kind_list = [5, 8]
+                else:
+                    gear_kind_list = [11, 14]
+            else:
+                if bp.gear_quality == "紫":
+                    gear_kind_list = [3]
+                elif bp.gear_quality == "金":
+                    gear_kind_list = [6, 9]
+                else:
+                    gear_kind_list = [12, 15]
+
+            increase_gear(bp, fishery_star_range=test["fishery_star_range"], gear_kind_list=gear_kind_list)
+        except Exception as e:
+            print(e)
             record_end(bp.video)
             write_log("------------------------------")
             write_log("上方一个区间作废")
@@ -618,6 +598,21 @@ def increase_rod(bp: BasePage):
         write_log("")
         logout(bp)
         bp.sleep(5)
+        cur += 1
+
+def increase_fish_kind(bp: BasePage):
+    fish_kind_list = ["力", "敏", "智"]
+    cur = 0
+    while cur < len(fish_kind_list):
+        bp.fish_kind = fish_kind_list[cur]
+        if bp.fish_kind == "力":
+            bp.fish_id = "360113"
+        elif bp.fish_kind == "敏":
+            bp.fish_id = "360115"
+
+        elif bp.fish_kind == "智":
+            bp.fish_id = "360107"
+        increase_rod(bp)
         cur += 1
 
 
@@ -634,41 +629,70 @@ def main(bp: BasePage):
     bp.set_time_scale(time_scale=time_scale)
     bp.set_is_quick_qte(is_quick_qte=True)
     bp.set_hook_progress(hook_progress=0.85)
-    bp.custom_cmd("setQTECD 0.47")
-    increase_rod(bp)
-
+    bp.custom_cmd("setQTECD 0.45")
+    increase_fish_kind(bp)
     bp.connect_close()
 
 
 if __name__ == '__main__':
     bp1 = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
-    test_list = [{"name": "f_30", "lv": 30, "star_start": 3, "star_end": 9, "gear_kind_start": 1, "gear_kind_end": 6},
-                 {"name": "f_45", "lv": 45, "star_start": 5, "star_end": 15, "gear_kind_start": 1, "gear_kind_end": 6},
-                 {"name": "f_60", "lv": 60, "star_start": 11, "star_end": 21, "gear_kind_start": 1, "gear_kind_end": 6},
-                 {"name": "f_69", "lv": 69, "star_start": 13, "star_end": 23, "gear_kind_start": 1, "gear_kind_end": 6},
-                 {"name": "f_78", "lv": 78, "star_start": 15, "star_end": 25, "gear_kind_start": 1, "gear_kind_end": 6},
-                 {"name": "f_84", "lv": 84, "star_start": 17, "star_end": 27, "gear_kind_start": 1, "gear_kind_end": 6},
-                 {"name": "f_90", "lv": 90, "star_start": 21, "star_end": 31, "gear_kind_start": 1, "gear_kind_end": 6},
-                 {"name": "f_105", "lv": 105, "star_start": 25, "star_end": 35, "gear_kind_start": 7, "gear_kind_end": 12},
-                 {"name": "f_120", "lv": 120, "star_start": 29, "star_end": 39, "gear_kind_start": 7, "gear_kind_end": 12},
-                 {"name": "f_150", "lv": 150, "star_start": 35, "star_end": 45, "gear_kind_start": 7, "gear_kind_end": 12},
-                 {"name": "f_170", "lv": 170, "star_start": 39, "star_end": 49, "gear_kind_start": 7, "gear_kind_end": 12},
-                 {"name": "f_185", "lv": 185, "star_start": 41, "star_end": 51, "gear_kind_start": 7, "gear_kind_end": 12},
-                 {"name": "f_195", "lv": 195, "star_start": 43, "star_end": 53, "gear_kind_start": 7, "gear_kind_end": 12},
-                 {"name": "f_205", "lv": 205, "star_start": 45, "star_end": 55, "gear_kind_start": 7, "gear_kind_end": 12},
-                 {"name": "f_225", "lv": 225, "star_start": 47, "star_end": 57, "gear_kind_start": 7, "gear_kind_end": 12},
-                 {"name": "f_235", "lv": 235, "star_start": 49, "star_end": 59, "gear_kind_start": 7, "gear_kind_end": 12},
-                 {"name": "f_255", "lv": 255, "star_start": 53, "star_end": 63, "gear_kind_start": 7, "gear_kind_end": 12},
-                 ]
 
+    test_list = [
+    #              {"name": "z_30_0_0", "rod_lv": 30, "rod_star": 0,"gear_star": 0,"rod_quality":"紫", "gear_quality":"紫", "fishery_star_range": [3, 7]},
+    #              {"name": "z_60_0_0", "rod_lv": 60, "rod_star": 0, "gear_star": 0,"rod_quality":"紫", "gear_quality":"紫", "fishery_star_range": [7, 15]},
+    #              {"name": "z_90_0_0", "rod_lv": 90, "rod_star": 0, "gear_star": 0,"rod_quality":"紫", "gear_quality":"紫",  "fishery_star_range": [11, 19]},
+    #              {"name": "z_120_0_0", "rod_lv": 120, "rod_star": 0, "gear_star": 0,"rod_quality":"紫", "gear_quality":"紫",  "fishery_star_range": [17,25]},
+    #              {"name": "z_150_0_0", "rod_lv": 150, "rod_star": 0, "gear_star": 0,"rod_quality":"紫", "gear_quality":"紫",  "fishery_star_range": [21, 31]},
+    #              {"name": "z_215_0_0", "rod_lv": 215, "rod_star": 0, "gear_star": 0,"rod_quality":"紫", "gear_quality":"紫",  "fishery_star_range": [29, 39]},
+    #              {"name": "z_30_0_3", "rod_lv": 30, "rod_star": 0, "gear_star": 3,"rod_quality":"金", "gear_quality":"紫",  "fishery_star_range": [5, 13]},
+    #              {"name": "z_60_0_3", "rod_lv": 60, "rod_star": 0, "gear_star": 3,"rod_quality":"金", "gear_quality":"紫",  "fishery_star_range": [11, 19]},
+    #              {"name": "z_90_0_3", "rod_lv": 90, "rod_star": 0, "gear_star": 3,"rod_quality":"金", "gear_quality":"紫",  "fishery_star_range": [17, 25]},
+    #              {"name": "z_120_0_3", "rod_lv": 120, "rod_star": 0, "gear_star": 3,"rod_quality":"金", "gear_quality":"紫",  "fishery_star_range": [21, 31]},
+    #              {"name": "z_150_0_3", "rod_lv": 150, "rod_star": 0, "gear_star": 3,"rod_quality":"金", "gear_quality":"紫",  "fishery_star_range": [27, 35]},
+    #              {"name": "z_215_0_3", "rod_lv": 215, "rod_star": 0, "gear_star": 3, "rod_quality":"金", "gear_quality":"紫", "fishery_star_range": [37, 47]},
+    #              {"name": "z_30_0_0", "rod_lv": 30, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [3, 11]},
+    #              {"name": "z_60_0_0", "rod_lv": 60, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [9, 19]},
+    #              {"name": "z_90_0_0", "rod_lv": 90, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [15, 23]},
+    #              {"name": "z_120_0_0", "rod_lv": 120, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [21, 29]},
+    #              {"name": "z_150_0_0", "rod_lv": 150, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [25, 33]},
+    #              {"name": "z_215_0_0", "rod_lv": 215, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [35, 43]},
+    #              {"name": "z_30_2_2", "rod_lv": 30, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [5, 15]},
+    #              {"name": "z_60_2_2", "rod_lv": 60, "rod_star": 2, "gear_star": 2, "rod_quality":"金", "gear_quality":"金", "fishery_star_range": [12, 21]},
+    #              {"name": "z_90_2_2", "rod_lv": 90, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [19, 29]},
+    #              {"name": "z_120_2_2", "rod_lv": 120, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [25, 35]},
+    #              {"name": "z_150_2_2", "rod_lv": 150, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [31, 39]},
+    #              {"name": "z_215_2_2", "rod_lv": 215, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [41, 49]},
+                 {"name": "z_30_4_4", "rod_lv": 30, "rod_star": 4, "gear_star": 4,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [9, 19]},
+                 {"name": "z_60_4_4", "rod_lv": 60, "rod_star": 4, "gear_star": 4,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [17, 25]},
+                 {"name": "z_90_4_4", "rod_lv": 90, "rod_star": 4, "gear_star": 4,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [25, 33]},
+                 {"name": "z_120_4_4", "rod_lv": 120, "rod_star": 4, "gear_star": 4, "rod_quality":"金", "gear_quality":"金", "fishery_star_range": [31, 39]},
+                 {"name": "z_150_4_4", "rod_lv": 150, "rod_star": 4, "gear_star": 4,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [37, 45]},
+                 {"name": "z_215_4_4", "rod_lv": 215, "rod_star": 4, "gear_star": 4, "rod_quality":"金", "gear_quality":"金", "fishery_star_range": [45, 55]},
+                 {"name": "z_30_2_0", "rod_lv": 30, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [7, 17]},
+                 {"name": "z_60_2_0", "rod_lv": 60, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [15, 23]},
+                 {"name": "z_90_2_0", "rod_lv": 90, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [21, 29]},
+                 {"name": "z_120_2_0", "rod_lv": 120, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [29, 37]},
+                 {"name": "z_150_2_0", "rod_lv": 150, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [33, 41]},
+                 {"name": "z_215_2_0", "rod_lv": 215, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [43, 51]},
+                 {"name": "z_30_2_2", "rod_lv": 30, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [9, 19]},
+                 {"name": "z_60_2_2", "rod_lv": 60, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [17, 25]},
+                 {"name": "z_90_2_2", "rod_lv": 90, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [25, 33]},
+                 {"name": "z_120_2_2", "rod_lv": 120, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [31, 39]},
+                 {"name": "z_150_2_2", "rod_lv": 150, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [37, 45]},
+                 {"name": "z_215_2_2", "rod_lv": 215, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [45, 53]},
+                 {"name": "z_30_2_5", "rod_lv": 30, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [13, 23]},
+                 {"name": "z_60_2_5", "rod_lv": 60, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [23, 31]},
+                 {"name": "z_90_2_5", "rod_lv": 90, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [31, 39]},
+                 {"name": "z_120_2_5", "rod_lv": 120, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [37, 45]},
+                 {"name": "z_150_2_5", "rod_lv": 150, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [43, 51]},
+                 {"name": "z_215_2_5", "rod_lv": 215, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [51, 59]},
+
+                 ]
     time_scale = 4
     # bp2 = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
 
     # 装备等级
 
-
-    # 1力 2敏 3智
-    fish_kind = "敏"
 
     # 套装0-9
     # 0.初始 1.强力收线/强力爆气 2.强力回拉/强力刺鱼 3.技巧拔竿/技巧压制 4.远交近攻/鱼跃反制 5.绝佳时机/暴力挥杆 6.越挫越勇/贴身肉搏 7.超负荷气 8.长线绝杀 9.不动如山 10.乘胜追击 11.背水一战 12.一刺入魂
@@ -682,16 +706,9 @@ if __name__ == '__main__':
     # PersonalityLJ是挂机菜鸡
     personality = PersonalityNB()
 
-    # res = f"{lv}级_{star}星"
+    # res = f"{rod_lv}级_{star}星"
 
-    if fish_kind == "力":
-        fish_id = "360113"
 
-    elif fish_kind == "敏":
-        fish_id = "360115"
-
-    elif fish_kind == "智":
-        fish_id = "360107"
 
 
     # if is_restrain:
