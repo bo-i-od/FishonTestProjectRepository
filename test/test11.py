@@ -545,8 +545,10 @@ def increase_rod(bp: BasePage):
             test = test_list[cur]
             bp.rod_lv = test["rod_lv"]
             bp.rod_star = test["rod_star"]
+            bp.gear_star = test["gear_star"]
             bp.rod_quality = test["rod_quality"]
             bp.gear_quality = test["gear_quality"]
+
             file_name = f'{bp.rod_lv}级{bp.rod_star}星{bp.rod_quality}装_{bp.gear_star}星{bp.gear_quality}线饵_{bp.fish_kind}鱼_{test["fishery_star_range"][0]}至{test["fishery_star_range"][1]}星渔场'
             bp.video = record_start(file_name=f"{file_name}.mp4")
             bp.sleep(1)
