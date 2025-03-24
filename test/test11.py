@@ -528,10 +528,10 @@ def increase_star(bp: BasePage, fishery_star_range):
         star += 2
 
 
-def increase_gear(bp: BasePage, fishery_star_range, gear_kind_list):
+def increase_gear(bp: BasePage, fishery_star_range, gear_kind_list, rod_quality):
     cur = 0
     while cur < len(gear_kind_list):
-        change_gear(bp, kind=gear_kind_list[cur])
+        change_gear(bp, kind=gear_kind_list[cur], rod_quality=rod_quality)
         bp.lua_console('PanelMgr:OpenPanel("GearMainPanel")')
         bp.sleep(0.5)
         bp.lua_console('PanelMgr:ClosePanel("GearMainPanel")')
@@ -583,7 +583,7 @@ def increase_rod(bp: BasePage):
                 else:
                     gear_kind_list = [12, 15]
 
-            increase_gear(bp, fishery_star_range=test["fishery_star_range"], gear_kind_list=gear_kind_list)
+            increase_gear(bp, fishery_star_range=test["fishery_star_range"], gear_kind_list=gear_kind_list, rod_quality=bp.rod_quality)
         except Exception as e:
             print(e)
             record_end(bp.video)
@@ -638,54 +638,54 @@ if __name__ == '__main__':
     bp1 = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
 
     test_list = [
-    #              {"name": "z_30_0_0", "rod_lv": 30, "rod_star": 0,"gear_star": 0,"rod_quality":"紫", "gear_quality":"紫", "fishery_star_range": [3, 7]},
-    #              {"name": "z_60_0_0", "rod_lv": 60, "rod_star": 0, "gear_star": 0,"rod_quality":"紫", "gear_quality":"紫", "fishery_star_range": [7, 15]},
-    #              {"name": "z_90_0_0", "rod_lv": 90, "rod_star": 0, "gear_star": 0,"rod_quality":"紫", "gear_quality":"紫",  "fishery_star_range": [11, 19]},
-    #              {"name": "z_120_0_0", "rod_lv": 120, "rod_star": 0, "gear_star": 0,"rod_quality":"紫", "gear_quality":"紫",  "fishery_star_range": [17,25]},
-    #              {"name": "z_150_0_0", "rod_lv": 150, "rod_star": 0, "gear_star": 0,"rod_quality":"紫", "gear_quality":"紫",  "fishery_star_range": [21, 31]},
-    #              {"name": "z_215_0_0", "rod_lv": 215, "rod_star": 0, "gear_star": 0,"rod_quality":"紫", "gear_quality":"紫",  "fishery_star_range": [29, 39]},
-    #              {"name": "z_30_0_3", "rod_lv": 30, "rod_star": 0, "gear_star": 3,"rod_quality":"金", "gear_quality":"紫",  "fishery_star_range": [5, 13]},
-    #              {"name": "z_60_0_3", "rod_lv": 60, "rod_star": 0, "gear_star": 3,"rod_quality":"金", "gear_quality":"紫",  "fishery_star_range": [11, 19]},
-    #              {"name": "z_90_0_3", "rod_lv": 90, "rod_star": 0, "gear_star": 3,"rod_quality":"金", "gear_quality":"紫",  "fishery_star_range": [17, 25]},
-    #              {"name": "z_120_0_3", "rod_lv": 120, "rod_star": 0, "gear_star": 3,"rod_quality":"金", "gear_quality":"紫",  "fishery_star_range": [21, 31]},
-    #              {"name": "z_150_0_3", "rod_lv": 150, "rod_star": 0, "gear_star": 3,"rod_quality":"金", "gear_quality":"紫",  "fishery_star_range": [27, 35]},
-    #              {"name": "z_215_0_3", "rod_lv": 215, "rod_star": 0, "gear_star": 3, "rod_quality":"金", "gear_quality":"紫", "fishery_star_range": [37, 47]},
-    #              {"name": "z_30_0_0", "rod_lv": 30, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [3, 11]},
-    #              {"name": "z_60_0_0", "rod_lv": 60, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [9, 19]},
-    #              {"name": "z_90_0_0", "rod_lv": 90, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [15, 23]},
-    #              {"name": "z_120_0_0", "rod_lv": 120, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [21, 29]},
-    #              {"name": "z_150_0_0", "rod_lv": 150, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [25, 33]},
-    #              {"name": "z_215_0_0", "rod_lv": 215, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [35, 43]},
-    #              {"name": "z_30_2_2", "rod_lv": 30, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [5, 15]},
-    #              {"name": "z_60_2_2", "rod_lv": 60, "rod_star": 2, "gear_star": 2, "rod_quality":"金", "gear_quality":"金", "fishery_star_range": [12, 21]},
-    #              {"name": "z_90_2_2", "rod_lv": 90, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [19, 29]},
-    #              {"name": "z_120_2_2", "rod_lv": 120, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [25, 35]},
-    #              {"name": "z_150_2_2", "rod_lv": 150, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [31, 39]},
-    #              {"name": "z_215_2_2", "rod_lv": 215, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [41, 49]},
-                 {"name": "z_30_4_4", "rod_lv": 30, "rod_star": 4, "gear_star": 4,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [9, 19]},
-                 {"name": "z_60_4_4", "rod_lv": 60, "rod_star": 4, "gear_star": 4,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [17, 25]},
-                 {"name": "z_90_4_4", "rod_lv": 90, "rod_star": 4, "gear_star": 4,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [25, 33]},
-                 {"name": "z_120_4_4", "rod_lv": 120, "rod_star": 4, "gear_star": 4, "rod_quality":"金", "gear_quality":"金", "fishery_star_range": [31, 39]},
-                 {"name": "z_150_4_4", "rod_lv": 150, "rod_star": 4, "gear_star": 4,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [37, 45]},
-                 {"name": "z_215_4_4", "rod_lv": 215, "rod_star": 4, "gear_star": 4, "rod_quality":"金", "gear_quality":"金", "fishery_star_range": [45, 55]},
-                 {"name": "z_30_2_0", "rod_lv": 30, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [7, 17]},
-                 {"name": "z_60_2_0", "rod_lv": 60, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [15, 23]},
-                 {"name": "z_90_2_0", "rod_lv": 90, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [21, 29]},
-                 {"name": "z_120_2_0", "rod_lv": 120, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [29, 37]},
-                 {"name": "z_150_2_0", "rod_lv": 150, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [33, 41]},
-                 {"name": "z_215_2_0", "rod_lv": 215, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [43, 51]},
-                 {"name": "z_30_2_2", "rod_lv": 30, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [9, 19]},
-                 {"name": "z_60_2_2", "rod_lv": 60, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [17, 25]},
-                 {"name": "z_90_2_2", "rod_lv": 90, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [25, 33]},
-                 {"name": "z_120_2_2", "rod_lv": 120, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [31, 39]},
-                 {"name": "z_150_2_2", "rod_lv": 150, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [37, 45]},
-                 {"name": "z_215_2_2", "rod_lv": 215, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [45, 53]},
-                 {"name": "z_30_2_5", "rod_lv": 30, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [13, 23]},
-                 {"name": "z_60_2_5", "rod_lv": 60, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [23, 31]},
-                 {"name": "z_90_2_5", "rod_lv": 90, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [31, 39]},
-                 {"name": "z_120_2_5", "rod_lv": 120, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [37, 45]},
-                 {"name": "z_150_2_5", "rod_lv": 150, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [43, 51]},
-                 {"name": "z_215_2_5", "rod_lv": 215, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [51, 59]},
+                 {"name": "y_30_0_0", "rod_lv": 30, "rod_star": 0,"gear_star": 0,"rod_quality":"紫", "gear_quality":"紫", "fishery_star_range": [3, 7]},
+                 {"name": "y_60_0_0", "rod_lv": 60, "rod_star": 0, "gear_star": 0,"rod_quality":"紫", "gear_quality":"紫", "fishery_star_range": [7, 15]},
+                 {"name": "y_90_0_0", "rod_lv": 90, "rod_star": 0, "gear_star": 0,"rod_quality":"紫", "gear_quality":"紫",  "fishery_star_range": [11, 19]},
+                 {"name": "y_120_0_0", "rod_lv": 120, "rod_star": 0, "gear_star": 0,"rod_quality":"紫", "gear_quality":"紫",  "fishery_star_range": [17,25]},
+                 {"name": "y_150_0_0", "rod_lv": 150, "rod_star": 0, "gear_star": 0,"rod_quality":"紫", "gear_quality":"紫",  "fishery_star_range": [21, 31]},
+                 {"name": "y_215_0_0", "rod_lv": 215, "rod_star": 0, "gear_star": 0,"rod_quality":"紫", "gear_quality":"紫",  "fishery_star_range": [29, 39]},
+                 {"name": "y_30_0_3", "rod_lv": 30, "rod_star": 0, "gear_star": 3,"rod_quality":"金", "gear_quality":"紫",  "fishery_star_range": [5, 13]},
+                 {"name": "y_60_0_3", "rod_lv": 60, "rod_star": 0, "gear_star": 3,"rod_quality":"金", "gear_quality":"紫",  "fishery_star_range": [11, 19]},
+                 {"name": "y_90_0_3", "rod_lv": 90, "rod_star": 0, "gear_star": 3,"rod_quality":"金", "gear_quality":"紫",  "fishery_star_range": [17, 25]},
+                 {"name": "y_120_0_3", "rod_lv": 120, "rod_star": 0, "gear_star": 3,"rod_quality":"金", "gear_quality":"紫",  "fishery_star_range": [21, 31]},
+                 {"name": "y_150_0_3", "rod_lv": 150, "rod_star": 0, "gear_star": 3,"rod_quality":"金", "gear_quality":"紫",  "fishery_star_range": [27, 35]},
+                 {"name": "y_215_0_3", "rod_lv": 215, "rod_star": 0, "gear_star": 3, "rod_quality":"金", "gear_quality":"紫", "fishery_star_range": [37, 47]},
+                 {"name": "y_30_0_0", "rod_lv": 30, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [3, 11]},
+                 {"name": "y_60_0_0", "rod_lv": 60, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [9, 19]},
+                 {"name": "y_90_0_0", "rod_lv": 90, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [15, 23]},
+                 {"name": "y_120_0_0", "rod_lv": 120, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [21, 29]},
+                 {"name": "y_150_0_0", "rod_lv": 150, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [25, 33]},
+                 {"name": "y_215_0_0", "rod_lv": 215, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [35, 43]},
+                 {"name": "y_30_2_2", "rod_lv": 30, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [5, 15]},
+                 {"name": "y_60_2_2", "rod_lv": 60, "rod_star": 2, "gear_star": 2, "rod_quality":"金", "gear_quality":"金", "fishery_star_range": [12, 21]},
+                 {"name": "y_90_2_2", "rod_lv": 90, "rod_star": 2, "gear_star": 2, "rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [19, 29]},
+                 {"name": "y_120_2_2", "rod_lv": 120, "rod_star": 2, "gear_star": 2, "rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [25, 35]},
+                 {"name": "y_150_2_2", "rod_lv": 150, "rod_star": 2, "gear_star": 2, "rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [31, 39]},
+                 {"name": "y_215_2_2", "rod_lv": 215, "rod_star": 2, "gear_star": 2, "rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [41, 49]},
+    #              {"name": "y_30_4_4", "rod_lv": 30, "rod_star": 4, "gear_star": 4,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [9, 19]},
+    #              {"name": "y_60_4_4", "rod_lv": 60, "rod_star": 4, "gear_star": 4,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [17, 25]},
+    #              {"name": "y_90_4_4", "rod_lv": 90, "rod_star": 4, "gear_star": 4,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [25, 33]},
+    #              {"name": "y_120_4_4", "rod_lv": 120, "rod_star": 4, "gear_star": 4, "rod_quality":"金", "gear_quality":"金", "fishery_star_range": [31, 39]},
+    #              {"name": "y_150_4_4", "rod_lv": 150, "rod_star": 4, "gear_star": 4,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [37, 45]},
+    #              {"name": "y_215_4_4", "rod_lv": 215, "rod_star": 4, "gear_star": 4, "rod_quality":"金", "gear_quality":"金", "fishery_star_range": [45, 55]},
+    #              {"name": "y_30_2_0", "rod_lv": 30, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [7, 17]},
+    #              {"name": "y_60_2_0", "rod_lv": 60, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [15, 23]},
+    #              {"name": "y_90_2_0", "rod_lv": 90, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [21, 29]},
+    #              {"name": "y_120_2_0", "rod_lv": 120, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [29, 37]},
+    #              {"name": "y_150_2_0", "rod_lv": 150, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [33, 41]},
+    #              {"name": "y_215_2_0", "rod_lv": 215, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [43, 51]},
+    #              {"name": "y_30_2_2", "rod_lv": 30, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [9, 19]},
+    #              {"name": "y_60_2_2", "rod_lv": 60, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [17, 25]},
+    #              {"name": "y_90_2_2", "rod_lv": 90, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [25, 33]},
+    #              {"name": "y_120_2_2", "rod_lv": 120, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [31, 39]},
+    #              {"name": "y_150_2_2", "rod_lv": 150, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [37, 45]},
+    #              {"name": "y_215_2_2", "rod_lv": 215, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [45, 53]},
+    #              {"name": "y_30_2_5", "rod_lv": 30, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [13, 23]},
+    #              {"name": "y_60_2_5", "rod_lv": 60, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [23, 31]},
+    #              {"name": "y_90_2_5", "rod_lv": 90, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [31, 39]},
+    #              {"name": "y_120_2_5", "rod_lv": 120, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [37, 45]},
+    #              {"name": "y_150_2_5", "rod_lv": 150, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [43, 51]},
+    #              {"name": "y_215_2_5", "rod_lv": 215, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [51, 59]},
 
                  ]
     time_scale = 4
