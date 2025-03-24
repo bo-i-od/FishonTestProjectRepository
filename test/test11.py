@@ -289,8 +289,8 @@ def fish_once(bp: BasePage, fish_id="", personality=None):
     write_log(f"鱼血量上限：{base_hp} 伤害：{battle_damage} 线长：{m_max} 跑线：{reel_velocity_z}")
     # print(f"剩余时间：{time_remain}s, 战斗时间：{battle_time}")
     write_log(f"战斗时间：{battle_time}")
-    write_log("")
     write_log(line_data)
+    write_log("")
     if fish_id != "":
         bp.cmd("mode 0 0")
 
