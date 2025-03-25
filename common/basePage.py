@@ -1865,7 +1865,9 @@ fishingMatch:TriggerActiveSkill(skillCounter:GetSlotIndex())"""
         table_data_object = self.excelTools.get_table_data_object_by_key_value(key="tpId", value=fishery_id,
                                                                                book_name="FISHERIES.xlsm")
         fish_list = table_data_object["fish"]
-        activity_fish_list = table_data_object["activityFishNotShow"]
+        activity_fish_list = []
+        if "activityFishNotShow" in table_data_object:
+            activity_fish_list = table_data_object["activityFishNotShow"]
         res_list = []
         for fish in fish_list:
             if not fish:
