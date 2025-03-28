@@ -147,11 +147,11 @@ def fishery_to_spot(fishery_id, is_gold, is_double_week):
 
 
 def go_to_treasure_map(bp, fishery_id):
-    if BattlePreparePanel.get_value_cost(bp) > 10:
+    if BattlePreparePanel.panel_pve_prepare.get_value_cost(bp) > 10:
         return
     spot_id_list, is_in_double_week, is_new_plot = bp.get_spot_id_list(fishery_id=fishery_id)
     spot_id = spot_id_list[3]
-    if BattlePreparePanel.is_panel_tip_location_active(bp):
+    if BattlePreparePanel.panel_pve_prepare.is_panel_tip_location_active(bp):
 
         lua_code = csMsgAll.get_CSFishingSaveFishSpotMsg(fishSpotId=int(spot_id), fishSceneTpId=int(fishery_id),
                                                          source=0, isInDoubleWeek=is_in_double_week)
@@ -165,7 +165,7 @@ def go_to_treasure_map(bp, fishery_id):
 
 
 def leave_treasure_map(bp, fishery_id):
-    if BattlePreparePanel.get_value_cost(bp) < 20:
+    if BattlePreparePanel.panel_pve_prepare.get_value_cost(bp) < 20:
         return
     spot_id_list, is_in_double_week, is_new_plot = bp.get_spot_id_list(fishery_id=fishery_id)
     spot_id = spot_id_list[2]
@@ -377,28 +377,29 @@ def vibration_cast(bp: BasePage):
 # is_in_double_week 当前的双周渔场
 def main(bp: BasePage, fishery_id):
     # # # 渔场全部闪卡
-    flashcard_all(bp, fishery_id)
-    fishbone_all(bp, fishery_id, is_gold=False)
-    fail_all(bp, fishery_id=fishery_id, is_gold=False)
-    fishbone_all(bp, fishery_id, is_gold=True)
-    fail_all(bp, fishery_id=fishery_id, is_gold=True)
+    circulate_fish(bp, fishery_id=fishery_id, is_quick=False)
+    # flashcard_all(bp, fishery_id)
+    # fishbone_all(bp, fishery_id, is_gold=False)
+    # fail_all(bp, fishery_id=fishery_id, is_gold=False)
+    # fishbone_all(bp, fishery_id, is_gold=True)
+    # fail_all(bp, fishery_id=fishery_id, is_gold=True)
 
 
 
 if __name__ == '__main__':
     # 连接设备号为127.0.0.1:21533的设备
     bp = BasePage("192.168.111.37:20051", is_mobile_device=False)
-    bp.is_time_scale = True
+    bp.is_time_scale = False
     gameInit.set_joystick(bp)
     bp.lua_console("DebugLog=true")
     bp.custom_cmd("setTension 0.9")
     bp.set_is_quick_qte(True)
-    main(bp, fishery_id=400319)
+    # main(bp, fishery_id=400302)
     # select_rod(bp, 500011)
     # fish_all(bp=bp, is_quick=False)
     # fishbone_all(bp, fishery_id=400320, is_gold=False, is_double_week=True, is_in_double_week=False)
-    # circulate_fish(bp, fishery_id="400320",is_quick=False)
-    # fish_once(bp, fish_id="390012", is_quick=True)
+    # circulate_fish(bp, fishery_id="400302",is_quick=False)
+    fish_once(bp,  is_quick=False)
     # 断开连接
     bp.connect_close()
 

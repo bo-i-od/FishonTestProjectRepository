@@ -18,7 +18,7 @@ class JumpData:
         "BattleTreasureMapDescriptionPanel",
         "CatPackPopupPanel",
         "ChallengeMainStageAFKPanel",
-        "ChampointshipResultPopup"
+        "ChampointshipResultPopup",
         "ClubRedEnvelopePanel",
         "DailyTipsPanel",
         "DivisionChangePanel",

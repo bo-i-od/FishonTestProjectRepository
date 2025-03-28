@@ -1218,6 +1218,7 @@ class BasePageMain:
         if ignore_set is None:
             ignore_set = set()
         panel_name_list = self.get_name_list(element_data_list=JumpData.panel_list)
+
         panel_name_list = tools.commonTools.merge_list(panel_name_list)
         # 弹窗=检测到的弹窗-忽略的弹窗
         pop_window_set = set(panel_name_list) & JumpData.pop_window_set - ignore_set
@@ -1739,7 +1740,7 @@ class BasePage(BasePageMain):
 
         # 设置是否使用快速qte
         self.is_quick_qte = None
-        self.set_is_quick_qte(False)
+        self.set_is_quick_qte(True)
 
         self.auto_fish_init()
 
@@ -2612,6 +2613,15 @@ end
         table_data_object = self.excelTools.get_table_data_object_by_key_value(key="collectionId", value=flash_card_id, table_data_detail=table_data_detail)
         flash_card_type = table_data_object['collectionLevel']
         return flash_card_type
+
+    def energy_cost_to_id(self, energy_cost):
+        table_data_object_list = self.excelTools.get_table_data_object_list(book_name="FISH_ACTIVITY_SPOT_ENERGY.xlsm")
+        for table_data_object in table_data_object_list:
+            if "energyCost" not in table_data_object:
+                continue
+            if table_data_object["energyCost"] == energy_cost:
+                return table_data_object["tpId"]
+        return table_data_object_list[0]["tpId"]
 
 
     def set_is_quick_qte(self, is_quick_qte):

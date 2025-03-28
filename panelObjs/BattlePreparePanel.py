@@ -2,6 +2,7 @@ import common.resource
 from common.basePage import BasePage
 from configs.elementsData import ElementsData
 from common import resource
+from netMsg import csMsgAll
 
 from panelObjs.MessageBoxPanel import MessageBoxPanel
 from panelObjs.RewardsPanel import RewardsPanel
@@ -176,6 +177,20 @@ class BattlePreparePanel(BasePage):
                 cur += 1
             return select_list, selectable_list
 
+        def try_go_to_treasure_map(self, fishery_id):
+            # 没有藏宝图直接返回
+            if not BattlePreparePanel.panel_pve_prepare.is_panel_tip_location_active(self):
+                return
+
+            # 在藏宝图直接返回
+            if BattlePreparePanel.panel_pve_prepare.get_value_cost(self) > 10:
+                return
+            spot_id_list, is_in_double_week, is_new_plot = self.get_spot_id_list(fishery_id=fishery_id)
+            spot_id = spot_id_list[3]
+            lua_code = csMsgAll.get_CSFishingSaveFishSpotMsg(fishSpotId=int(spot_id), fishSceneTpId=int(fishery_id),
+                                                             source=0, isInDoubleWeek=is_in_double_week)
+            self.lua_console(lua_code)
+
 
 
         class panel_tournaments_mini(BasePage):
@@ -337,8 +352,8 @@ class BattlePreparePanel(BasePage):
     # print(res)
 
 if __name__ == "__main__":
-    bp = BasePage()
-    BattlePreparePanel.panel_MainStage_daily_prepare.click_btn_tournaments(bp)
+    bp = BasePage(is_mobile_device=True, serial_number="127.0.0.1:21503")
+    BattlePreparePanel.panel_MainStage_daily_prepare.click_btn_btn_receive(bp)
     bp.connect_close()
 
 
