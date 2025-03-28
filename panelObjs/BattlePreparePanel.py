@@ -44,7 +44,7 @@ class BattlePreparePanel(BasePage):
 
     # 点击抛竿
     def click_btn_cast(self):
-        element_data_list = [ElementsData.BattlePreparePanel.btn_cast, ElementsData.BattlePreparePanel.btn_start]
+        element_data_list = [ElementsData.BattlePreparePanel.panel_MainStage_challenge_prepare.btn_cast, ElementsData.BattlePreparePanel.btn_cast, ElementsData.BattlePreparePanel.btn_start]
         position_list = self.wait_for_appear(element_data_list=element_data_list, is_click=False)
         element_data = element_data_list[0]
         cur = 0
@@ -54,15 +54,15 @@ class BattlePreparePanel(BasePage):
                 cur += 1
                 continue
             element_data = element_data_list[cur]
-            break
-        if self.is_ray_input:
-            self.ray_input(kind="click", element_data=element_data)
+            if self.is_ray_input:
+                self.ray_input(kind="click", element_data=element_data)
 
-        else:
-            self.click_element_safe(element_data=element_data)
-        self.sleep(1)
-        if self.exist(element_data=ElementsData.BattlePanel.BattlePanel):
-            return
+            else:
+                self.click_element_safe(element_data=element_data)
+            self.sleep(1)
+            if self.exist(element_data=ElementsData.BattlePanel.BattlePanel):
+                return
+            cur += 1
         BattlePreparePanel.click_btn_cast(self)
 
     # 点击快速换装
@@ -323,6 +323,33 @@ class BattlePreparePanel(BasePage):
         def click_btn_btn_receive(self):
             self.click_element_safe(element_data=ElementsData.BattlePreparePanel.panel_MainStage_daily_prepare.btn_receive)
 
+    class panel_MainStage_challenge_prepare(BasePage):
+        def click_btn_cast(self):
+            self.click_element(element_data=ElementsData.BattlePreparePanel.panel_MainStage_challenge_prepare.btn_cast)
+
+        def try_go_to_treasure_map(self, spot_id):
+            # 没有藏宝图直接返回
+            if not BattlePreparePanel.panel_MainStage_challenge_prepare.is_panel_tip_location_active(self):
+                return
+
+            # 在藏宝图直接返回
+            if BattlePreparePanel.panel_MainStage_challenge_prepare.get_value_cost(self) > 10:
+                return
+            fishery_id = self.spot_id_to_fishery_id(spot_id=spot_id)
+            spot_id_list, is_in_double_week, is_new_plot = self.get_spot_id_list(fishery_id=fishery_id)
+            spot_id = spot_id_list[3]
+            lua_code = csMsgAll.get_CSFishingSaveFishSpotMsg(fishSpotId=int(spot_id), fishSceneTpId=fishery_id,
+                                                             source=0, isInDoubleWeek=is_in_double_week)
+            self.lua_console(lua_code)
+
+        def is_panel_tip_location_active(self):
+            return self.exist(element_data=ElementsData.BattlePreparePanel.panel_MainStage_daily_prepare.panel_tip_location_newtreasure)
+
+        def get_value_cost(self):
+            self.wait_for_appear(element_data=ElementsData.BattlePreparePanel.btn_cast, is_click=False)
+            value_cost = self.get_text(element_data=ElementsData.BattlePreparePanel.panel_MainStage_daily_prepare.value_cost)
+            return int(value_cost)
+
 
     class panel_gears_new(BasePage):
         def is_panel_active(self):
@@ -353,7 +380,12 @@ class BattlePreparePanel(BasePage):
 
 if __name__ == "__main__":
     bp = BasePage(is_mobile_device=True, serial_number="127.0.0.1:21503")
-    BattlePreparePanel.panel_MainStage_daily_prepare.click_btn_btn_receive(bp)
+    element_data_list = [ElementsData.BattlePreparePanel.btn_cast, ElementsData.BattlePreparePanel.btn_start,
+                         ElementsData.BattlePreparePanel.panel_MainStage_challenge_prepare.btn_cast]
+    position_list = BattlePreparePanel.wait_for_appear(bp, element_data_list=element_data_list, is_click=False)
+    print(position_list)
+    BattlePreparePanel.click_btn_cast(bp)
+    # BattlePreparePanel.panel_MainStage_challenge_prepare.click_btn_cast(bp)
     bp.connect_close()
 
 

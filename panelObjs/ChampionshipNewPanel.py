@@ -8,3 +8,6 @@ class ChampionshipNewPanel(BasePage):
 
     def click_btn_close(self):
         self.click_element(element_data=ElementsData.ChampionshipNewPanel.btn_close)
+
+    def is_completed(self):
+        return self.exist(element_data=ElementsData.ChampionshipNewPanel.text_completed)

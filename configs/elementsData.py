@@ -522,9 +522,14 @@ class ElementsData:
         class panel_MainStage_daily_prepare:
             btn_tournaments = {"locator": "UICanvas>Default>BattlePreparePanel>panel_MainStage_daily_prepare>panel_activity>btn_activity>btn_evt>btn_tournaments", "focus": (0, 0)}
             btn_receive = {"locator": "UICanvas>Default>BattlePreparePanel>panel_MainStage_daily_prepare>Panel_MainStage_MiniTask_new>Panel_MainStage_MiniTask>model_order>btn_receive"}
+            panel_tip_location_newtreasure = {"locator": "UICanvas>Default>BattlePreparePanel>panel_MainStage_daily_prepare>panel_pve>panel_tip_location_newtreasure", "focus": (1, 0.8)}
+            value_cost = {"locator": "UICanvas>Default>BattlePreparePanel>panel_MainStage_daily_prepare>panel_pve>btn_cast>value_cost"}
 
         class PanelPrepareWarning:
             btn_icon = {"locator": "UICanvas>Default>BattlePreparePanel>Panel_Prepare_Warning>panel>panel_icon>>btn_icon>bg_icon"}
+
+        class panel_MainStage_challenge_prepare:
+            btn_cast = {"locator": "UICanvas>Default>BattlePreparePanel>panel_MainStage_challenge_prepare>panel_pve>btn_cast"}
 
 
 
@@ -645,6 +650,7 @@ class ElementsData:
     class ChampionshipNewPanel:
         ChampionshipNewPanel = {"locator": "UICanvas>Default>ChampionshipNewPanel"}
         btn_close = {"locator": "UICanvas>Default>ChampionshipNewPanel>Panel>btn_close>img"}
+        text_completed = {"locator": "UICanvas>Default>ChampionshipNewPanel>Panel>left>Content>tournaments>text"}
 
 
     class ChampointshipResultPopup:

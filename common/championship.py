@@ -44,8 +44,14 @@ def check_reward_new(bp, overflow_factor: float = 1):
     BattlePreparePanel.panel_MainStage_daily_prepare.click_btn_tournaments(bp)
     bp.sleep(1)
 
+    # 已经完赛
+    if ChampionshipNewPanel.is_completed(bp):
+        ChampionshipNewPanel.click_btn_close(bp)
+        return True
+
     # 打开ChampionshipNewPanel说明暂未参赛
     if ChampionshipNewPanel.is_panel_active(bp):
+        ChampionshipNewPanel.click_btn_close(bp)
         return False
 
     ChampionshipInfoNewPanel.switch_tab(bp, index=2)
@@ -71,6 +77,7 @@ def handle_game_exception(func):
         try:
             return func(*args, **kwargs)
         except Exception as e:
+            traceback.print_exc()
             print(e)
             bp = args[0]  # 假设第一个参数是 bp
             is_monitor = kwargs.get('is_monitor', False)  # 从 kwargs 获取 is_monitor 参数
@@ -140,7 +147,7 @@ def championship(bp,  times, index=None, fishery_id=None, energy_cost=50, is_mon
     return bp
 
 @handle_game_exception
-def championship_new(bp: BasePage, spot_id, times, is_monitor=True, overflow_factor: float = 1):
+def championship_new(bp: BasePage, spot_id, times, is_monitor=True, overflow_factor: float = 1, is_treasure_map=False, energy_cost=50):
     gameInit.set_joystick(bp)
     bp.clear_popup()
     bp.go_to_panel("HomePanelNew")
@@ -151,6 +158,12 @@ def championship_new(bp: BasePage, spot_id, times, is_monitor=True, overflow_fac
     if check_reward_new(bp, overflow_factor=overflow_factor):
         bp.go_home()
         return bp
+
+    if is_treasure_map:
+        BattlePreparePanel.panel_MainStage_challenge_prepare.try_go_to_treasure_map(bp, spot_id=spot_id)
+        lua_code = csMsgAll.get_CSFishingSaveLimitedSpotEnergyCostIdMsg(chooseEnergyCostId=bp.energy_cost_to_id(energy_cost=energy_cost), newPlot=1)
+        bp.lua_console(lua_code)
+        bp.sleep(1)
 
     BattlePreparePanel.panel_MainStage_daily_prepare.click_btn_btn_receive(bp)
     bp.sleep(1)
@@ -225,14 +238,14 @@ if __name__ == '__main__':
     #     print(f"第{cur}次钓鱼")
 
     # 备战界面钓指定次数
-    # circulate_fish(bp=base_page, is_quick=False, times=60)
+    # circulate_fish(bp=base_page, is_quick=False, times=100)
     # base_page.sleep(3600)
     # aquarium(bp=base_page)
     # base_page.clear_popup()
     # 循环进行水族箱/新主线/旧主线 直到打满
     while True:
         base_page = aquarium(base_page, is_monitor=True)
-        base_page = championship_new(base_page, spot_id=10102, times=10)
+        base_page = championship_new(base_page, spot_id=10102, times=10, is_treasure_map=False)
         # base_page = championship(base_page, index=0, times=20, cost=2, overflow_factor=1, is_monitor=True)
         # # base_page.sleep(60)
 
