@@ -505,7 +505,7 @@ def pve(bp: BasePage):
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
 
     # 点锦标赛
-    BattlePreparePanel.click_btn_tournaments(bp)
+    BattlePreparePanel.panel_pve_prepare.click_btn_tournaments(bp)
     bp.sleep(1)
     TournamentsInfoPanel.switch_tab(bp, 1)
     bp.sleep(1)
@@ -515,13 +515,13 @@ def pve(bp: BasePage):
     bp.sleep(1)
 
     # 点全局进度条
-    BattlePreparePanel.click_progress_info(bp)
+    BattlePreparePanel.panel_pve_prepare.panel_tournaments_mini.click_progress_info(bp)
     bp.sleep(1)
     # 如果可领奖先领
     if RewardsPanel.is_panel_active(bp):
         RewardsPanel.click_tap_to_claim(bp)
         bp.sleep(1)
-        BattlePreparePanel.click_progress_info(bp)
+        BattlePreparePanel.panel_pve_prepare.panel_tournaments_mini.click_progress_info(bp)
         bp.sleep(1)
     ProgressRewardsPanel.click_btn_close(bp)
     bp.sleep(1)

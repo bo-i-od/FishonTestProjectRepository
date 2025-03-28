@@ -38,99 +38,99 @@ def main(bp: BasePage):
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
 
     # 点击打开备战收纳界面
-    BattlePreparePanel.SideBar.click_btn_menu(bp)
+    BattlePreparePanel.panel_pve_prepare.click_btn_menu(bp)
     bp.sleep(1)
 
 
     #  点击查看玩家名片
-    BattlePreparePanel.SideBar.click_btn_player(bp)
+    BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.click_btn_player(bp)
     bp.sleep(1)
     PlayerInteractPanel.is_panel_active(bp)
     PlayerInteractPanel.click_btn_close(bp)
 
-    BattlePreparePanel.SideBar.click_btn_menu(bp)
+    BattlePreparePanel.panel_pve_prepare.click_btn_menu(bp)
     bp.sleep(1)
 
     # 点击查看鱼册
-    BattlePreparePanel.SideBar.click_btn_fishalbum(bp)
+    BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.click_btn_fishalbum(bp)
     bp.sleep(1)
     FishAlbum3DPanel.is_panel_active(bp)
     FishAlbum3DPanel.click_btn_close(bp)
 
-    BattlePreparePanel.SideBar.click_btn_menu(bp)
+    BattlePreparePanel.panel_pve_prepare.click_btn_menu(bp)
     bp.sleep(1)
 
     # 点击查看闪卡
-    BattlePreparePanel.SideBar.click_btn_flashcard(bp)
+    BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.click_btn_flashcard(bp)
     bp.sleep(1)
     FlashCardBoxesPanel.is_panel_active(bp)
     FlashCardBoxesPanel.click_btn_close(bp)
 
-    BattlePreparePanel.SideBar.click_btn_menu(bp)
+    BattlePreparePanel.panel_pve_prepare.click_btn_menu(bp)
     bp.sleep(1)
 
     # 点击查看鱼卡
-    BattlePreparePanel.SideBar.click_btn_fishcard(bp)
+    BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.click_btn_fishcard(bp)
     bp.sleep(1)
     FishCardPanel.is_panel_active(bp)
     FishCardPanel.click_btn_close(bp)
 
-    BattlePreparePanel.SideBar.click_btn_menu(bp)
+    BattlePreparePanel.panel_pve_prepare.click_btn_menu(bp)
     bp.sleep(1)
 
     # 点击查看照片墙
-    BattlePreparePanel.SideBar.click_btn_achievement(bp)
+    BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.click_btn_achievement(bp)
     bp.sleep(1)
     AchievementWantedPanel.is_panel_active(bp)
     AchievementWantedPanel.click_btn_close(bp)
 
-    BattlePreparePanel.SideBar.click_btn_menu(bp)
+    BattlePreparePanel.panel_pve_prepare.click_btn_menu(bp)
     bp.sleep(1)
 
     # 点击查看商城
-    BattlePreparePanel.SideBar.click_btn_store(bp)
+    BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.click_btn_store(bp)
     bp.sleep(1)
     StorePanel.is_panel_active(bp)
     StorePanel.click_btn_close(bp)
-    BattlePreparePanel.SideBar.click_btn_menu(bp)
+    BattlePreparePanel.panel_pve_prepare.click_btn_menu(bp)
     bp.sleep(1)
 
     # 点击查看钓者生涯
-    BattlePreparePanel.SideBar.click_btn_career(bp)
+    BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.click_btn_career(bp)
     bp.sleep(1)
     CareerPanel.is_panel_active(bp)
     CareerPanel.click_btn_close(bp)
-    BattlePreparePanel.SideBar.click_btn_menu(bp)
+    BattlePreparePanel.panel_pve_prepare.click_btn_menu(bp)
     bp.sleep(1)
 
     # 点击查看好友
-    BattlePreparePanel.SideBar.click_btn_friend(bp)
+    BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.click_btn_friend(bp)
     bp.sleep(1)
     FriendPanel.is_panel_active(bp)
     FriendPanel.click_btn_close(bp)
-    BattlePreparePanel.SideBar.click_btn_menu(bp)
+    BattlePreparePanel.panel_pve_prepare.click_btn_menu(bp)
     bp.sleep(1)
 
     # 点击查看俱乐部
-    BattlePreparePanel.SideBar.click_btn_club(bp)
+    BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.click_btn_club(bp)
     bp.sleep(1)
     ClubApplyPanel.is_panel_active(bp)
     ClubApplyPanel.click_btn_close(bp)
-    BattlePreparePanel.SideBar.click_btn_menu(bp)
+    BattlePreparePanel.panel_pve_prepare.click_btn_menu(bp)
     bp.sleep(1)
 
     # 点击查看鱼竿
-    BattlePreparePanel.SideBar.click_btn_gears(bp)
+    BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.click_btn_gears(bp)
     bp.sleep(1)
 
     BattlePreparePanel.panel_gears_new.click_btn_cancel(bp)
-    BattlePreparePanel.SideBar.click_btn_menu(bp)
+    BattlePreparePanel.panel_pve_prepare.click_btn_menu(bp)
     bp.sleep(1)
 
     # 点击查看鱼护
-    BattlePreparePanel.SideBar.click_btn_aquarium(bp)
+    BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.click_btn_aquarium(bp)
     bp.sleep(1)
-    BattlePreparePanel.SideBar.click_btn_close(bp)
+    BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.click_btn_close(bp)
 
 
 
@@ -139,14 +139,14 @@ def main(bp: BasePage):
 
 
     # 点击查看邮件
-    BattlePreparePanel.SideBar.click_btn_fishcard(bp)
+    BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.click_btn_fishcard(bp)
 
     # 点击查看公告
-    BattlePreparePanel.SideBar.click_btn_fishcard(bp)
+    BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.click_btn_fishcard(bp)
 
 
     # 点击查看avatar
-    BattlePreparePanel.SideBar.click_btn_fishcard(bp)
+    BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.click_btn_fishcard(bp)
 
 
 if __name__ == '__main__':

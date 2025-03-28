@@ -434,7 +434,7 @@ class ElementsData:
 
     class BattlePreparePanel:
         BattlePreparePanel = {"locator": "UICanvas>Default>BattlePreparePanel"}
-        btn_close = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_gohome>btn_gohome>img"}
+        btn_close = {"locator": "UICanvas>Default>BattlePreparePanel>>panel_gohome>btn_gohome>img"}
         quick_switch = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears>panel_gears_preview>gears>quick_switch>btn_quick_switch>btn_normal"}
         btn_i = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears>panel_gears_preview>gears>quick_switch>btn_i>img"}
         rod_model_list = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears_new>panel_gears_switch>panel_rod>List>Viewport>Content>>gear_model_new(Clone)>bg"}
@@ -449,92 +449,91 @@ class ElementsData:
         btn_cast = {"locator": "UICanvas>Default>BattlePreparePanel>>>btn_cast", "focus": (1, 1)}
         btn_start = {"locator": "UICanvas>Default>BattlePreparePanel>>>btn_start", "focus": (1, 1)}
         location = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears>panel_gears_switch>location_info>bg>location>value"}
-
-        btn_tournaments = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_activity>btn_activity>btn_tournaments>img"}
-        btn_location = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>btn_location>btn_normal"}
-        panel_tip_location = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>panel_tip_location"}
-        location_list = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>panel_tip_location>panel>list_location>", "focus": (0, 0)}
-        treasure_list = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>panel_tip_location>panel>list_treasure>", "focus": (0, 0)}
-        location_energy_list = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>panel_tip_location>panel>list_location>>energy>value"}
-        treasure_energy_list = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>panel_tip_location>panel>list_treasure>>energy>value"}
-        btn_add_100500 = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>top_res>ResourceBar>100500>btn_add"}
-        btn_collection = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_gohome>btn_collection>icon"}
-        panel_tip_location_newtreasure = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>panel_tip_location_newtreasure", "focus": (1, 0.8)}
-
-        btn_icon = {"locator":"UICanvas>Default>BattlePreparePanel>Panel_Prepare_Warning>panel>panel_icon>btn_icon_b>btn_icon>bg_icon"}
-        value_cost = {"locator":"UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>btn_cast>value_cost"}
-
-        wait_for_join = {"locator":"UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_activity>btn_activity>btn_tournaments>rank>value_3"}
-
-        wait_for_join_new = {"locator":"UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_activity>btn_activity>btn_tournaments>tips>text"}
         gears = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears_new>panel_gears_preview>gears>bg"}
         btn_apply = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears_new>panel_gears_switch>btns>btn_apply>btn_normal"}
 
+        class panel_pve_prepare:
+            btn_location = { "locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>btn_location>btn_normal"}
+            location_list = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>panel_tip_location>panel>list_location>", "focus": (0, 0)}
+            treasure_list = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>panel_tip_location>panel>list_treasure>", "focus": (0, 0)}
+            location_energy_list = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>panel_tip_location>panel>list_location>>energy>value"}
+            treasure_energy_list = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>panel_tip_location>panel>list_treasure>>energy>value"}
+            btn_add_100500 = { "locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>top_res>ResourceBar>100500>btn_add"}
+            btn_collection = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_gohome>btn_collection>icon"}
+            panel_tip_location_newtreasure = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>panel_tip_location_newtreasure", "focus": (1, 0.8)}
+            value_cost = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_pve>btn_cast>value_cost"}
+            btn_tournaments = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_activity>btn_activity>btn_tournaments>img"}
+            wait_for_join = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_activity>btn_activity>btn_tournaments>rank>value_3"}
+            wait_for_join_new = { "locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_activity>btn_activity>btn_tournaments>tips>text"}
+            btn_menu = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_gohome>btn_menu>icon"}
 
-        class GlobalProgress:
-            progress_info = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_tournaments_mini>panel_global_progress>panel_rewards>rewards>progress_info", "focus": (0.5, 0.5)}
-            progress_cur = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_tournaments_mini>panel_global_progress>panel_rewards>rewards>progress_info>progressValueLayout>cur"}
-            progress_max = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_tournaments_mini>panel_global_progress>panel_rewards>rewards>progress_info>progressValueLayout>max"}
-            next_reward_icon = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_tournaments_mini>panel_global_progress>panel_rewards>rewards>progress_info>reward>item_model_mini>icon"}
-            next_reward_quantity = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_tournaments_mini>panel_global_progress>panel_rewards>rewards>progress_info>reward>item_model_mini>quantity>value"}
-            current_rewards_icon_list = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_tournaments_mini>panel_global_progress>panel_rewards>rewards>rewards_list>Viewport>Content>>icon"}
-            current_rewards_quantity_list = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_tournaments_mini>panel_global_progress>panel_rewards>rewards>rewards_list>Viewport>Content>>quantity>value"}
-            progress_finish = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_tournaments_mini>panel_global_progress>panel_rewards>rewards>progress_finish"}
+            class panel_tournaments_mini:
+                progress_info = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_tournaments_mini>panel_global_progress>panel_rewards>rewards>progress_info", "focus": (0.5, 0.5)}
+                progress_cur = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_tournaments_mini>panel_global_progress>panel_rewards>rewards>progress_info>progressValueLayout>cur"}
+                progress_max = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_tournaments_mini>panel_global_progress>panel_rewards>rewards>progress_info>progressValueLayout>max"}
+                next_reward_icon = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_tournaments_mini>panel_global_progress>panel_rewards>rewards>progress_info>reward>item_model_mini>icon"}
+                next_reward_quantity = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_tournaments_mini>panel_global_progress>panel_rewards>rewards>progress_info>reward>item_model_mini>quantity>value"}
+                current_rewards_icon_list = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_tournaments_mini>panel_global_progress>panel_rewards>rewards>rewards_list>Viewport>Content>>icon"}
+                current_rewards_quantity_list = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_tournaments_mini>panel_global_progress>panel_rewards>rewards>rewards_list>Viewport>Content>>quantity>value"}
+                progress_finish = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_tournaments_mini>panel_global_progress>panel_rewards>rewards>progress_finish"}
 
-        class Panel_MiniTask:
-            # minitask
-            Panel_MiniTask = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>Panel_MiniTask"}
-            btn_recommend = {
-                "locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>Panel_MiniTask>Panel>btn_recommend"}
-            btn_go = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>Panel_MiniTask>Panel>btn_go"}
-            btn_gift = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>Panel_MiniTask>Panel>btn_gift"}
-            btn_claim = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>Panel_MiniTask>Panel>btn_claim"}
-            text_task = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>Panel_MiniTask>Panel>text"}
-            progress = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>Panel_MiniTask>Panel>progress>value"}
+            class Panel_MiniTask:
+                btn_recommend = {
+                    "locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>Panel_MiniTask>Panel>btn_recommend"}
+                btn_go = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>Panel_MiniTask>Panel>btn_go"}
+                btn_gift = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>Panel_MiniTask>Panel>btn_gift"}
+                btn_claim = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>Panel_MiniTask>Panel>btn_claim"}
+                text_task = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>Panel_MiniTask>Panel>text"}
+                progress = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>Panel_MiniTask>Panel>progress>value"}
+
+            class panel_main_sidebar:
+                panel_main_sidebar = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar"}
+                btn_close = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>btn_close"}
+                panel_sidebar = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar"}
+                panel_bg = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_bg"}
+                head_img = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>head>head_mask>head_img"}
+                head_frame = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>head>head_frame>panel>head_frame"}
+                head_frame_com = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>head>head_frame>panel>head_frame_com"}
+                division = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>player_top>division>icon"}
+                player_name = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>player_top>player_name"}
+                player_lv_lv = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>player_down>player_lv>lv"}
+                player_lv_value = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>player_down>player_lv>value"}
+                player_rating_img = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>player_down>player_rating>rating>img"}
+                player_rating_num = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>player_down>player_rating>rating>num"}
+                player_id_text = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_id>text"}
+                player_id_value = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_id>value"}
+                btn_leaderboard = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_down>btns>btn_leaderboard>img"}
+                btn_changeroom = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_down>btns>btn_changeroom>img"}
+                btn_mail = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_down>btns>btn_mail>img"}
+                btn_announcement = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_down>btns>btn_announcement>img"}
+                btn_setting = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_down>btns>btn_setting>img"}
+                gears = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>gears>rod"}
+                btn_club = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_club>btn"}
+                btn_friend = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_friend>btn"}
+                btn_aquarium = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_aquarium>btn"}
+                btn_career = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_career>btn"}
+                btn_fishcard = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_fishcard>btn"}
+                btn_store = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_store>btn"}
+                btn_avatar = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_avatar>btn"}
+                btn_flashcard = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_flashcard>btn"}
+                btn_achievement = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_achievement>btn"}
+                btn_fishalbum = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_fishalbum>btn"}
+
+        class panel_MainStage_daily_prepare:
+            btn_tournaments = {"locator": "UICanvas>Default>BattlePreparePanel>panel_MainStage_daily_prepare>panel_activity>btn_activity>btn_evt>btn_tournaments", "focus": (0, 0)}
+            btn_receive = {"locator": "UICanvas>Default>BattlePreparePanel>panel_MainStage_daily_prepare>Panel_MainStage_MiniTask_new>Panel_MainStage_MiniTask>model_order>btn_receive"}
 
         class PanelPrepareWarning:
             btn_icon = {"locator": "UICanvas>Default>BattlePreparePanel>Panel_Prepare_Warning>panel>panel_icon>>btn_icon>bg_icon"}
 
-        class Sidebar:
-            btn_menu = {"locator":"UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_gohome>btn_menu>icon"}
-            panel_main_sidebar= {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar"}
-            btn_close = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>btn_close"}
-            panel_sidebar = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar"}
-            panel_bg = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_bg"}
-            head_img = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>head>head_mask>head_img"}
-            head_frame = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>head>head_frame>panel>head_frame"}
-            head_frame_com = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>head>head_frame>panel>head_frame_com"}
-            division = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>player_top>division>icon"}
-            player_name = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>player_top>player_name"}
-            player_lv_lv= {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>player_down>player_lv>lv"}
-            player_lv_value = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>player_down>player_lv>value"}
-            player_rating_img = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>player_down>player_rating>rating>img"}
-            player_rating_num = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_info>player_down>player_rating>rating>num"}
-            player_id_text = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_id>text"}
-            player_id_value = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_top>player_id>value"}
-            btn_leaderboard = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_down>btns>btn_leaderboard>img"}
-            btn_changeroom = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_down>btns>btn_changeroom>img"}
-            btn_mail = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_down>btns>btn_mail>img"}
-            btn_announcement = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_down>btns>btn_announcement>img"}
-            btn_setting = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_down>btns>btn_setting>img"}
-            gears = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>gears>rod"}
-            btn_club = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_club>btn"}
-            btn_friend = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_friend>btn"}
-            btn_aquarium = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_aquarium>btn"}
-            btn_career = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_career>btn"}
-            btn_fishcard = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_fishcard>btn"}
-            btn_store = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_store>btn"}
-            btn_avatar = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_avatar>btn"}
-            btn_flashcard = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_flashcard>btn"}
-            btn_achievement = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_achievement>btn"}
-            btn_fishalbum = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_fishalbum>btn"}
+
 
         class panel_gears_new:
             panel_gears_switch = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears_new>panel_gears_switch"}
             btn_cancel = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears_new>panel_gears_switch>btns>btn_cancel>text"}
             btn_go = {"locator": "UICanvas>Default>BattlePreparePanel>panel_gears_new>panel_gears_switch>panel_gears_preview>btns>btn_go"}
 
-        class rogue_prepare:
+        class panel_MainStage_rogue_prepare:
             task03 = {"locator":"UICanvas>Default>BattlePreparePanel>panel_MainStage_rogue_prepare>panel_right>task_group>task03>text"}
             btn_gohome = {"locator":"UICanvas>Default>BattlePreparePanel>panel_MainStage_rogue_prepare>panel_gohome>btn_gohome>img"}
 
@@ -634,6 +633,18 @@ class ElementsData:
         btn_close = {"locator": "UICanvas>Default>ChallengeMainStagePanel>panel>btn_close>img"}
         btn_orange = {"locator":"UICanvas>Default>ChallengeMainStagePanel>panel>right>btn_orange"}
 
+    class ChampionshipInfoNewPanel:
+        ChampionshipInfoNewPanel = {"locator": "UICanvas>Default>ChampionshipInfoNewPanel"}
+        btn_close = {"locator":"UICanvas>Default>ChampionshipInfoNewPanel>panel>btn_close>img"}
+        tab_list = {"locator":"UICanvas>Default>ChampionshipInfoNewPanel>panel>panel_tab_list>panel_tab>TabList>Viewport>Content>"}
+        check = {"locator":"UICanvas>Default>ChampionshipInfoNewPanel>panel>panel_rules>rules_2>rules>Viewport>Content>progress_info>reward>item_model_mini>collected>check"}
+        progress_cur = {"locator": "UICanvas>Default>ChampionshipInfoNewPanel>panel>panel_rules>rules_2>rules>Viewport>Content>progress_info>progressValueLayout>cur"}
+        progress_max = {"locator": "UICanvas>Default>ChampionshipInfoNewPanel>panel>panel_rules>rules_2>rules>Viewport>Content>progress_info>progressValueLayout>max"}
+
+
+    class ChampionshipNewPanel:
+        ChampionshipNewPanel = {"locator": "UICanvas>Default>ChampionshipNewPanel"}
+        btn_close = {"locator": "UICanvas>Default>ChampionshipNewPanel>Panel>btn_close>img"}
 
 
     class ChampointshipResultPopup:
@@ -1191,6 +1202,7 @@ class ElementsData:
 
     class HomePanelNew:
         HomePanelNew = {"locator": "UICanvas>Default>HomePanelNew"}
+        btn_close = {"locator": "UICanvas>Default>HomePanelNew>panel>btn_close>img"}
         btn_spot = {"locator": "UICanvas>Default>HomePanelNew>panel>info_model_area>btn_spot(Clone)", "focus": (0.5, 1)}
 
     class HomePanel:

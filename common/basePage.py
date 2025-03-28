@@ -1804,6 +1804,14 @@ fishingMatch:TriggerActiveSkill(skillCounter:GetSlotIndex())"""
         lua_code = f'ControllerMgr:Get("BattleController"):GoToPVE({fishery_id})'
         self.lua_console(lua_code)
 
+    def go_to_spot(self, spot_id):
+            lua_code = f"""local battleController = ControllerMgr:Get("BattleController")
+            battleController:GoToDaily({spot_id}, true)
+            """
+            self.lua_console(lua_code)
+            return
+
+
     def get_rod_list(self, rarity=None, fisheries_living=None, fisheries_rank=None, fishery_id=None):
         rod_list = []
         if fishery_id:
@@ -2605,6 +2613,7 @@ end
         flash_card_type = table_data_object['collectionLevel']
         return flash_card_type
 
+
     def set_is_quick_qte(self, is_quick_qte):
         self.is_quick_qte = is_quick_qte
         if is_quick_qte:
@@ -2623,8 +2632,8 @@ end
 
 if __name__ == '__main__':
     bp = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21593")
-    bp.set_time_scale(time_scale=4)
 
+    # bp.lua_console('PanelMgr:OpenPanel("NewRankingPanel"')
     # "127.0.0.1:21613"
     # "b6h65hd64p5pxcyh"
     # "TimeMgr:GetServerTime()"

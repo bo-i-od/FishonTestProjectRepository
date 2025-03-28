@@ -13,7 +13,7 @@ from tools.commonTools import *
 
 def collect_test(bp: BasePage):
     # 得到期望奖励图标
-    next_reward_icon = BattlePreparePanel.get_next_reward_icon(bp)
+    next_reward_icon = BattlePreparePanel.panel_pve_prepare.panel_tournaments_mini.get_next_reward_icon(bp)
 
     # 钓一条鱼
     battleTest.fish_once(bp, fish_id="390001", is_quick=True)
@@ -21,7 +21,7 @@ def collect_test(bp: BasePage):
     bp.sleep(10)
 
     # 下一奖励应在奖励列表里
-    current_rewards_icon_list = BattlePreparePanel.get_current_rewards_icon_list(bp)
+    current_rewards_icon_list = BattlePreparePanel.panel_pve_prepare.panel_tournaments_mini.get_current_rewards_icon_list(bp)
 
     if next_reward_icon not in current_rewards_icon_list:
         raise FindNoElementError
@@ -49,7 +49,7 @@ def collect_test(bp: BasePage):
     #     cur += 1
 
     # 领取奖励
-    BattlePreparePanel.click_progress_info(bp)
+    BattlePreparePanel.panel_pve_prepare.panel_tournaments_mini.click_progress_info(bp)
     bp.sleep(1)
     # reward_dict = RewardsPanel.get_reward_dict(bp)
     # compare_dict(current_rewards_dict, reward_dict)
@@ -67,24 +67,24 @@ def collect_test(bp: BasePage):
 
 def mini_panel_test(bp: BasePage):
     # 保证没有可领取的奖励
-    current_rewards_icon_list = BattlePreparePanel.get_current_rewards_icon_list(bp)
+    current_rewards_icon_list = BattlePreparePanel.panel_pve_prepare.panel_tournaments_mini.get_current_rewards_icon_list(bp)
     if current_rewards_icon_list:
-        BattlePreparePanel.click_progress_info(bp)
+        BattlePreparePanel.panel_pve_prepare.panel_tournaments_mini.click_progress_info(bp)
         RewardsPanel.wait_for_panel_appear(bp)
         bp.sleep(1)
         RewardsPanel.click_tap_to_claim(bp)
         bp.sleep(1)
-    current_rewards_icon_list = BattlePreparePanel.get_current_rewards_icon_list(bp)
+    current_rewards_icon_list = BattlePreparePanel.panel_pve_prepare.panel_tournaments_mini.get_current_rewards_icon_list(bp)
     if current_rewards_icon_list:
         raise FindElementError
 
     # 记录mini板信息
-    progress_mini = BattlePreparePanel.get_progress(bp)
-    icon_mini = BattlePreparePanel.get_next_reward_icon(bp)
-    quantity_mini = BattlePreparePanel.get_next_reward_quantity(bp)
+    progress_mini = BattlePreparePanel.panel_pve_prepare.panel_tournaments_mini.get_progress(bp)
+    icon_mini = BattlePreparePanel.panel_pve_prepare.panel_tournaments_mini.get_next_reward_icon(bp)
+    quantity_mini = BattlePreparePanel.panel_pve_prepare.panel_tournaments_mini.get_next_reward_quantity(bp)
 
     # 打开面板
-    BattlePreparePanel.click_progress_info(bp)
+    BattlePreparePanel.panel_pve_prepare.panel_tournaments_mini.click_progress_info(bp)
 
     # # 应该没有可领取奖励
     # current_rewards_icon_list = ProgressRewardsPanel.get_current_rewards_icon_list(bp)

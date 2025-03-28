@@ -33,10 +33,6 @@ class BattlePreparePanel(BasePage):
         self.click_element(element_data=ElementsData.BattlePreparePanel.btn_close)
 
 
-    def get_rod_position_list(self):
-        return self.get_position_list(element_data=ElementsData.BattlePreparePanel.rod_model_list)
-
-
     # 点击抛竿
     def cast(self):
         self.wait_for_appear(element_data=ElementsData.BattlePreparePanel.btn_cast, is_click=False)
@@ -79,211 +75,240 @@ class BattlePreparePanel(BasePage):
     def click_btn_apply(self):
         self.click_element(element_data=ElementsData.BattlePreparePanel.btn_apply)
 
-    # 得到下一档奖励的图标
-    def get_next_reward_icon(self):
-        icon = self.get_icon(element_data=ElementsData.BattlePreparePanel.GlobalProgress.next_reward_icon)
-        return icon
-
-
-    # 得到下一档奖励的数量
-    def get_next_reward_quantity(self):
-        quantity = resource.str_to_int(self.get_text(element_data=ElementsData.BattlePreparePanel.GlobalProgress.next_reward_quantity))
-        return quantity
-
-    # 得到进度条的值
-    def get_progress(self):
-        progress_cur = int(self.get_text(element_data=ElementsData.BattlePreparePanel.GlobalProgress.progress_cur))
-        progress_max = int(self.get_text(element_data=ElementsData.BattlePreparePanel.GlobalProgress.progress_max))
-        return progress_cur, progress_max
-
-    # 得到当前累计奖励的图标列表
-    def get_current_rewards_icon_list(self):
-        icon_list = self.get_icon_list(element_data=ElementsData.BattlePreparePanel.GlobalProgress.current_rewards_icon_list)
-        return icon_list
-
-    # 得到当前累计奖励的数量列表
-    def get_current_rewards_quantity_list(self):
-        quantity_list = self.get_text_list(element_data=ElementsData.BattlePreparePanel.GlobalProgress.current_rewards_quantity_list)
-        resource.str_to_int_list(quantity_list)
-        return quantity_list
-
-    # 点击mini板 打开全局进度条面板
-    def click_progress_info(self):
-        self.click_element(element_data=ElementsData.BattlePreparePanel.GlobalProgress.progress_info)
-
-    def is_progress_finish(self):
-        return self.exist(element_data=ElementsData.BattlePreparePanel.GlobalProgress.progress_finish)
-
-    def click_progress_finish(self):
-        self.click_element(element_data=ElementsData.BattlePreparePanel.GlobalProgress.progress_finish)
-
-    def click_btn_tournaments(self):
-        while not TournamentsInfoPanel.is_panel_active(self):
-            position_list = self.get_position_list(element_data=ElementsData.BattlePreparePanel.btn_tournaments)
-            if not position_list:
-                return False
-            self.click_position(position_list[0])
-            self.sleep(1)
-        return True
-
-    # 得到钓点状态
-    def get_location_status(self):
-        location_id_list = self.get_object_id_list(element_data=ElementsData.BattlePreparePanel.location_list)
-        treasure_id_list = self.get_object_id_list(element_data=ElementsData.BattlePreparePanel.treasure_list)
-        select_list = []
-        selectable_list = []
-        cur = 0
-        while cur < len(location_id_list):
-            select_id_list = self.get_offspring_id_list(object_id=location_id_list[cur], offspring_path="select")
-            if select_id_list:
-                select_list.append(cur)
-                cur += 1
-                continue
-            selectable_list.append(cur)
-            cur += 1
-        bias = cur
-        cur = 0
-        while cur < len(treasure_id_list):
-            select_id_list = self.get_offspring_id_list(object_id=treasure_id_list[cur], offspring_path="select")
-            if select_id_list:
-                select_list.append(cur + bias)
-                cur += 1
-                continue
-            selectable_list.append(cur + bias)
-            cur += 1
-        return select_list, selectable_list
-
-    def get_location_position_list(self):
-        location_position_list = self.get_position_list(element_data=ElementsData.BattlePreparePanel.location_list)
-
-        location_position_list += self.get_position_list(element_data=ElementsData.BattlePreparePanel.treasure_list)
-        return location_position_list
-
-
-    def get_energy_list(self):
-        location_energy_list = self.get_text_list(element_data=ElementsData.BattlePreparePanel.location_energy_list)
-        str_to_int_list(location_energy_list)
-        treasure_energy_list = self.get_text_list(element_data=ElementsData.BattlePreparePanel.treasure_energy_list)
-        str_to_int_list(treasure_energy_list)
-        return location_energy_list + treasure_energy_list
-
-    def click_btn_add_100500(self):
-        self.click_element(element_data=ElementsData.BattlePreparePanel.btn_add_100500)
-
-    def click_btn_location(self):
-        self.click_element(element_data=ElementsData.BattlePreparePanel.btn_location)
-
-    def click_btn_collection(self):
-        self.click_element(element_data=ElementsData.BattlePreparePanel.btn_collection)
-
     def click_gears(self):
         self.click_element(element_data=ElementsData.BattlePreparePanel.gears)
 
-    def click_panel_tip_location_newtreasure(self):
-        self.click_element(element_data=ElementsData.BattlePreparePanel.panel_tip_location_newtreasure)
-
-    def is_panel_tip_location_active(self):
-        return self.exist(element_data=ElementsData.BattlePreparePanel.panel_tip_location_newtreasure)
 
     def get_btn_icon_warning_position(self):
         return self.get_position_list(element_data=ElementsData.BattlePreparePanel.PanelPrepareWarning.btn_icon)
 
-    def get_value_cost(self):
-        self.wait_for_appear(element_data=ElementsData.BattlePreparePanel.btn_cast, is_click=False)
-        value_cost = self.get_text(element_data=ElementsData.BattlePreparePanel.value_cost)
-        return int(value_cost)
 
-    def is_wait_for_join(self):
-        position_list = self.get_position_list(element_data_list=[ElementsData.BattlePreparePanel.wait_for_join, ElementsData.BattlePreparePanel.wait_for_join_new])
-        position_list = merge_list(position_list)
-        if position_list:
+    class panel_pve_prepare(BasePage):
+        def click_btn_tournaments(self):
+            while not TournamentsInfoPanel.is_panel_active(self):
+                position_list = self.get_position_list(
+                    element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.btn_tournaments)
+                print(position_list)
+                if not position_list:
+                    return False
+                self.click_position(position_list[0])
+                self.sleep(1)
             return True
-        return False
+        # 得到钓点状态
 
 
+        def get_location_position_list(self):
+            location_position_list = self.get_position_list(
+                element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.location_list)
 
+            location_position_list += self.get_position_list(
+                element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.treasure_list)
+            return location_position_list
 
+        def get_energy_list(self):
+            location_energy_list = self.get_text_list(
+                element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.location_energy_list)
+            str_to_int_list(location_energy_list)
+            treasure_energy_list = self.get_text_list(
+                element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.treasure_energy_list)
+            str_to_int_list(treasure_energy_list)
+            return location_energy_list + treasure_energy_list
 
-    class Minitask(BasePage):
-        def click_btn_recommend(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Panel_MiniTask.btn_recommend)
-
-        def click_btn_go(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Panel_MiniTask.btn_go)
-
-        def click_btn_gift(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Panel_MiniTask.btn_gift)
-
-        def get_progress(self):
-            progress = self.get_text(element_data=ElementsData.BattlePreparePanel.Panel_MiniTask.progress)
-            res = progress.split("/")
-            numerator = int(res[0])
-            denominator = int(res[1])
-            return numerator, denominator
-
-        def click_btn_claim(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Panel_MiniTask.btn_claim)
-
-        def get_text_task(self):
-            return self.get_text(element_data=ElementsData.BattlePreparePanel.Panel_MiniTask.text_task)
+        def click_btn_add_100500(self):
+            self.click_element(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.btn_add_100500)
+        def click_btn_location(self):
+            self.click_element(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.btn_location)
 
         def click_btn_collection(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.btn_collection)
+            self.click_element(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.btn_collection)
 
-    class SideBar(BasePage):
+        def click_panel_tip_location_newtreasure(self):
+            self.click_element(
+                element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_tip_location_newtreasure)
+
+        def is_panel_tip_location_active(self):
+            return self.exist(
+                element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_tip_location_newtreasure)
+
+        def get_value_cost(self):
+            self.wait_for_appear(element_data=ElementsData.BattlePreparePanel.btn_cast, is_click=False)
+            value_cost = self.get_text(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.value_cost)
+            return int(value_cost)
+
+        def is_wait_for_join(self):
+            position_list = self.get_position_list(
+                element_data_list=[ElementsData.BattlePreparePanel.panel_pve_prepare.wait_for_join,
+                                   ElementsData.BattlePreparePanel.panel_pve_prepare.wait_for_join_new])
+            position_list = merge_list(position_list)
+            # position_list = self.get_position_list(element_data=ElementsData.BattlePreparePanel.wait_for_join)
+            if position_list:
+                return True
+            return False
         def click_btn_menu(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_menu)
+            self.click_element(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.btn_menu)
 
-        def click_btn_close(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_close)
+        def get_location_status(self):
+            location_id_list = self.get_object_id_list(
+                element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.location_list)
+            treasure_id_list = self.get_object_id_list(
+                element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.treasure_list)
+            select_list = []
+            selectable_list = []
+            cur = 0
+            while cur < len(location_id_list):
+                select_id_list = self.get_offspring_id_list(object_id=location_id_list[cur],
+                                                            offspring_path="select")
+                if select_id_list:
+                    select_list.append(cur)
+                    cur += 1
+                    continue
+                selectable_list.append(cur)
+                cur += 1
+            bias = cur
+            cur = 0
+            while cur < len(treasure_id_list):
+                select_id_list = self.get_offspring_id_list(object_id=treasure_id_list[cur],
+                                                            offspring_path="select")
+                if select_id_list:
+                    select_list.append(cur + bias)
+                    cur += 1
+                    continue
+                selectable_list.append(cur + bias)
+                cur += 1
+            return select_list, selectable_list
 
-        def click_btn_player(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.head_img)
 
-        def click_btn_gears(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.gears)
 
-        def click_btn_club(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_club)
+        class panel_tournaments_mini(BasePage):
+            # 点击mini板 打开全局进度条面板
+            def click_progress_info(self):
+                self.click_element(
+                    element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_tournaments_mini.progress_info)
 
-        def click_btn_friend(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_friend)
+            def is_progress_finish(self):
+                return self.exist(
+                    element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_tournaments_mini.progress_finish)
 
-        def click_btn_aquarium(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_aquarium)
+            def click_progress_finish(self):
+                self.click_element(
+                    element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_tournaments_mini.progress_finish)
 
-        def click_btn_career(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_career)
+            # 得到当前累计奖励的图标列表
+            def get_current_rewards_icon_list(self):
+                icon_list = self.get_icon_list(
+                    element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_tournaments_mini.current_rewards_icon_list)
+                return icon_list
 
-        def click_btn_fishcard(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_fishcard)
+            # 得到当前累计奖励的数量列表
+            def get_current_rewards_quantity_list(self):
+                quantity_list = self.get_text_list(
+                    element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_tournaments_mini.current_rewards_quantity_list)
+                resource.str_to_int_list(quantity_list)
+                return quantity_list
 
-        def click_btn_store(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_store)
+            def get_progress(self):
+                progress_cur = int(self.get_text(
+                    element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_tournaments_mini.progress_cur))
+                progress_max = int(self.get_text(
+                    element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_tournaments_mini.progress_max))
+                return progress_cur, progress_max
 
-        def click_btn_achievement(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_achievement)
+            # 得到下一档奖励的数量
+            def get_next_reward_quantity(self):
+                quantity = resource.str_to_int(self.get_text(
+                    element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_tournaments_mini.next_reward_quantity))
+                return quantity
 
-        def click_btn_fishalbum(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_fishalbum)
+            # 得到下一档奖励的图标
+            def get_next_reward_icon(self):
+                icon = self.get_icon(
+                    element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_tournaments_mini.next_reward_icon)
+                return icon
 
-        def click_btn_flashcard(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_flashcard)
 
-        def click_btn_mail(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_mail)
 
-        def click_btn_announcement(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_announcement)
+        class Panel_MiniTask(BasePage):
+            def click_btn_recommend(self):
+                self.click_element(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.Panel_MiniTask.btn_recommend)
 
-        def click_btn_changeroom(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_changeroom)
+            def click_btn_go(self):
+                self.click_element(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.Panel_MiniTask.btn_go)
 
-        def click_btn_leaderboard(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_leaderboard)
+            def click_btn_gift(self):
+                self.click_element(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.Panel_MiniTask.btn_gift)
 
-        def click_btn_avatar(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.Sidebar.btn_avatar)
+            def get_progress(self):
+                progress = self.get_text(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.Panel_MiniTask.progress)
+                res = progress.split("/")
+                numerator = int(res[0])
+                denominator = int(res[1])
+                return numerator, denominator
+
+            def click_btn_claim(self):
+                self.click_element(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.Panel_MiniTask.btn_claim)
+
+            def get_text_task(self):
+                return self.get_text(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.Panel_MiniTask.text_task)
+
+        class panel_main_sidebar(BasePage):
+            def click_btn_close(self):
+                self.click_element(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.btn_close)
+
+            def click_btn_player(self):
+                self.click_element(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.head_img)
+
+            def click_btn_gears(self):
+                self.click_element(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.gears)
+
+            def click_btn_club(self):
+                self.click_element(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.btn_club)
+
+            def click_btn_friend(self):
+                self.click_element(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.btn_friend)
+
+            def click_btn_aquarium(self):
+                self.click_element(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.btn_aquarium)
+
+            def click_btn_career(self):
+                self.click_element(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.btn_career)
+
+            def click_btn_fishcard(self):
+                self.click_element(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.btn_fishcard)
+
+            def click_btn_store(self):
+                self.click_element(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.btn_store)
+
+            def click_btn_achievement(self):
+                self.click_element(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.btn_achievement)
+
+            def click_btn_fishalbum(self):
+                self.click_element(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.btn_fishalbum)
+
+            def click_btn_flashcard(self):
+                self.click_element(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.btn_flashcard)
+
+            def click_btn_mail(self):
+                self.click_element(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.btn_mail)
+
+            def click_btn_announcement(self):
+                self.click_element(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.btn_announcement)
+
+            def click_btn_changeroom(self):
+                self.click_element(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.btn_changeroom)
+
+            def click_btn_leaderboard(self):
+                self.click_element(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.btn_leaderboard)
+
+            def click_btn_avatar(self):
+                self.click_element(element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.panel_main_sidebar.btn_avatar)
+
+    class panel_MainStage_daily_prepare(BasePage):
+        def click_btn_tournaments(self):
+            self.click_element(element_data=ElementsData.BattlePreparePanel.panel_MainStage_daily_prepare.btn_tournaments)
+
+        def click_btn_btn_receive(self):
+            self.click_element_safe(element_data=ElementsData.BattlePreparePanel.panel_MainStage_daily_prepare.btn_receive)
+
 
     class panel_gears_new(BasePage):
         def is_panel_active(self):
@@ -311,6 +336,11 @@ class BattlePreparePanel(BasePage):
     #     print(res)
     #     cur += 1
     # print(res)
+
+if __name__ == "__main__":
+    bp = BasePage()
+    BattlePreparePanel.panel_MainStage_daily_prepare.click_btn_tournaments(bp)
+    bp.connect_close()
 
 
 

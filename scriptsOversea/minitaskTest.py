@@ -21,10 +21,10 @@ def recommend_test(bp: BasePage):
         return text_task_1
 
     # 备战界面刷新任务
-    text_task_0 = BattlePreparePanel.Minitask.get_text_task(bp)
-    BattlePreparePanel.Minitask.click_btn_recommend(bp)
+    text_task_0 = BattlePreparePanel.panel_pve_prepare.Panel_MiniTask.get_text_task(bp)
+    BattlePreparePanel.panel_pve_prepare.Panel_MiniTask.click_btn_recommend(bp)
     bp.sleep(1)
-    text_task_1 = BattlePreparePanel.Minitask.get_text_task(bp)
+    text_task_1 = BattlePreparePanel.panel_pve_prepare.Panel_MiniTask.get_text_task(bp)
     if text_task_0 == text_task_1:
         raise SameError
     return text_task_1
@@ -48,7 +48,7 @@ def main(bp: BasePage):
     # 推荐切换
     recommend_test(bp)
 
-    BattlePreparePanel.Minitask.click_btn_gift(bp)
+    BattlePreparePanel.panel_pve_prepare.Panel_MiniTask.click_btn_gift(bp)
 
     # 钓一次鱼
     battleTest.fish_once(bp, fish_id="301013", is_quick=True)
@@ -57,7 +57,7 @@ def main(bp: BasePage):
     text_task_1 = recommend_test(bp)
 
     # 领取奖励
-    BattlePreparePanel.Minitask.click_btn_claim(bp)
+    BattlePreparePanel.panel_pve_prepare.Panel_MiniTask.click_btn_claim(bp)
     RewardsPanel.wait_for_panel_appear(bp)
     bp.sleep(1)
     RewardsPanel.click_tap_to_claim(bp)
@@ -100,7 +100,7 @@ def main(bp: BasePage):
     LoadingFisheryPanel.wait_until_panel_disappear(bp)
 
     # 领取跳转应该不在备战界面了
-    BattlePreparePanel.Minitask.click_btn_claim(bp)
+    BattlePreparePanel.panel_pve_prepare.Panel_MiniTask.click_btn_claim(bp)
     bp.sleep(1)
     if BattlePreparePanel.is_panel_active(bp):
         raise FindElementError
