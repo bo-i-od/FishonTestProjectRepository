@@ -88,7 +88,6 @@ class BattlePreparePanel(BasePage):
             while not TournamentsInfoPanel.is_panel_active(self):
                 position_list = self.get_position_list(
                     element_data=ElementsData.BattlePreparePanel.panel_pve_prepare.btn_tournaments)
-                print(position_list)
                 if not position_list:
                     return False
                 self.click_position(position_list[0])
