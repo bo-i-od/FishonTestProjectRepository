@@ -1,5 +1,6 @@
 import os
 import time
+import traceback
 
 from matplotlib.lines import Line2D
 
@@ -294,7 +295,7 @@ def fish_once(bp: BasePage, fish_id="", personality=None):
     if fish_id != "":
         bp.cmd("mode 0 0")
 
-def get_gear(kind, rod_quality):
+def get_gear(bp: BasePage, kind, rod_quality):
     if kind == 1:
         part_id_line = 1700001
         part_id_lure = 1700002
@@ -337,16 +338,22 @@ def get_gear(kind, rod_quality):
     elif kind == 14:
         part_id_line = 1700017
         part_id_lure = 1700018
-    else:
+    elif kind == 15:
         part_id_line = 1700019
+        part_id_lure = 1700020
+    elif kind == 16:
+        part_id_line = 1700015
+        part_id_lure = 1700010
+    else:
+        part_id_line = 1700015
         part_id_lure = 1700020
 
     if rod_quality == "紫":
         part_id_rod = 1901004
         return part_id_line, part_id_lure, part_id_rod
-    if kind % 3 == 1:
+    if bp.fish_kind == "力":
         part_id_rod = 1901001
-    elif kind % 3 == 2:
+    elif bp.fish_kind == "敏":
         part_id_rod = 1901002
     else:
         part_id_rod = 1901003
@@ -355,16 +362,11 @@ def get_gear(kind, rod_quality):
 
 def change_gear(bp: BasePage, kind, rod_quality):
     # part_id_line = 0
-    part_id_line, part_id_lure, part_id_rod = get_gear(kind, rod_quality)
+    part_id_line, part_id_lure, part_id_rod = get_gear(bp, kind, rod_quality)
     lua_code_line = csMsgAll.get_CSEquipPrepareReplaceMsg(prepareIndex=1, dlc=1, partId=part_id_line)
     lua_code_lure = csMsgAll.get_CSEquipPrepareReplaceMsg(prepareIndex=1, dlc=1, partId=part_id_lure)
     lua_code_rod = csMsgAll.get_CSEquipPrepareReplaceMsg(prepareIndex=1, dlc=1, partId=part_id_rod)
     bp.lua_console_list([lua_code_line, lua_code_lure, lua_code_rod])
-    table_data_detail = bp.excelTools.get_table_data_detail(book_name="ADV_GEAR_LANGUAGE.xlsm")
-    name_line = bp.excelTools.get_table_data_object_by_key_value(key="tpId", value=part_id_line, table_data_detail=table_data_detail)["name"]
-    name_lure = bp.excelTools.get_table_data_object_by_key_value(key="tpId", value=part_id_lure, table_data_detail=table_data_detail)["name"]
-    bp.name_line = name_line
-    bp.name_lure = name_lure
 
 
 def save_plt(data_list, m_max, base_hp, name):
@@ -513,7 +515,7 @@ def save_text(content, filename, mode='w', encoding='utf-8'):
 
 def increase_star(bp: BasePage, fishery_star_range):
 
-    write_log(f"{bp.rod_lv}级{bp.rod_quality}{bp.rod_star}星竿_{bp.gear_quality}{bp.gear_star}星线饵_{bp.fish_kind}鱼_{fishery_star_range[0]}至{fishery_star_range[1]}星渔场_{bp.name_line}{bp.name_lure}")
+    write_log(f"{bp.rod_lv}级{bp.rod_quality}{bp.rod_star}星竿_{bp.gear_quality}{bp.gear_star}星线饵_{bp.fish_kind}鱼_{fishery_star_range[0]}星渔场_{bp.name_line}{bp.name_lure}")
     star = fishery_star_range[0]
     while star <= 67:
         bp.star = star
@@ -539,62 +541,34 @@ def increase_star(bp: BasePage, fishery_star_range):
 def increase_gear(bp: BasePage, fishery_star_range, gear_kind_list, rod_quality):
     cur = 0
     while cur < len(gear_kind_list):
-        change_gear(bp, kind=gear_kind_list[cur], rod_quality=rod_quality)
-        bp.lua_console('PanelMgr:OpenPanel("GearMainPanel")')
-        bp.sleep(0.5)
-        bp.lua_console('PanelMgr:ClosePanel("GearMainPanel")')
-        increase_star(bp, fishery_star_range)
-        cur += 1
-
-def increase_rod(bp: BasePage):
-    cur = 0
-    while cur < len(test_list):
         try:
-            test = test_list[cur]
-            bp.rod_lv = test["rod_lv"]
-            bp.rod_star = test["rod_star"]
-            bp.gear_star = test["gear_star"]
-            bp.rod_quality = test["rod_quality"]
-            bp.gear_quality = test["gear_quality"]
+            part_id_line, part_id_lure, part_id_rod = get_gear(bp, gear_kind_list[cur], rod_quality)
+            table_data_detail = bp.excelTools.get_table_data_detail(book_name="ADV_GEAR_LANGUAGE.xlsm")
+            bp.name_line = bp.excelTools.get_table_data_object_by_key_value(key="tpId", value=part_id_line, table_data_detail=table_data_detail)["name"]
+            bp.name_lure = bp.excelTools.get_table_data_object_by_key_value(key="tpId", value=part_id_lure, table_data_detail=table_data_detail)["name"]
 
-            file_name = f'{bp.rod_lv}级{bp.rod_quality}{bp.rod_star}星竿_{bp.gear_quality}{bp.gear_star}星线饵_{bp.fish_kind}鱼_{test["fishery_star_range"][0]}至{test["fishery_star_range"][1]}星渔场'
+            file_name = f'{bp.rod_lv}级{bp.rod_quality}{bp.rod_star}星竿_{bp.gear_quality}{bp.gear_star}星线饵_{bp.fish_kind}鱼_{fishery_star_range[0]}星渔场_{bp.name_line}{bp.name_lure}'
             bp.video = record_start(file_name=f"{file_name}.mp4")
             bp.sleep(1)
             write_log(file_name)
-            login(bp, name=test["name"])
+            login(bp, name=bp.name)
             # gameInit.guide_skip(bp)
             # bp.clear_popup()
             # bp.lua_console('PanelMgr:OpenPanel("HomePanelNew")')
 
             lua_code = """local battleController = ControllerMgr:Get("BattleController")
-    battleController:GoToDaily(10101, true)
-    """
+            battleController:GoToDaily(10101, true)
+            """
             bp.lua_console(lua_code)
 
-            if bp.fish_kind == "力":
-                if bp.gear_quality == "紫":
-                    gear_kind_list = [1]
-                elif bp.gear_quality == "金":
-                    gear_kind_list = [4, 7]
-                else:
-                    gear_kind_list = [10, 13]
-            elif bp.fish_kind == "敏":
-                if bp.gear_quality == "紫":
-                    gear_kind_list = [2]
-                elif bp.gear_quality == "金":
-                    gear_kind_list = [5, 8]
-                else:
-                    gear_kind_list = [11, 14]
-            else:
-                if bp.gear_quality == "紫":
-                    gear_kind_list = [3]
-                elif bp.gear_quality == "金":
-                    gear_kind_list = [6, 9]
-                else:
-                    gear_kind_list = [12, 15]
-
-            increase_gear(bp, fishery_star_range=test["fishery_star_range"], gear_kind_list=gear_kind_list, rod_quality=bp.rod_quality)
+            change_gear(bp, kind=gear_kind_list[cur], rod_quality=rod_quality)
+            bp.lua_console('PanelMgr:OpenPanel("GearMainPanel")')
+            bp.sleep(0.5)
+            bp.lua_console('PanelMgr:ClosePanel("GearMainPanel")')
+            increase_star(bp, fishery_star_range)
+            cur += 1
         except Exception as e:
+            traceback.print_exc()
             print(e)
             record_end(bp.video)
             write_log("------------------------------")
@@ -608,12 +582,47 @@ def increase_rod(bp: BasePage):
         write_log("")
         logout(bp)
         bp.sleep(5)
+
+def increase_rod(bp: BasePage):
+    cur = 0
+    while cur < len(test_list):
+
+        test = test_list[cur]
+        bp.rod_lv = test["rod_lv"]
+        bp.rod_star = test["rod_star"]
+        bp.gear_star = test["gear_star"]
+        bp.rod_quality = test["rod_quality"]
+        bp.gear_quality = test["gear_quality"]
+        bp.name = test["name"]
+
+        if bp.fish_kind == "力":
+            if bp.gear_quality == "紫":
+                gear_kind_list = []
+            elif bp.gear_quality == "金":
+                gear_kind_list = [4, 7]
+            else:
+                gear_kind_list = [10, 13]
+        elif bp.fish_kind == "敏":
+            if bp.gear_quality == "紫":
+                gear_kind_list = []
+            elif bp.gear_quality == "金":
+                gear_kind_list = [5, 8]
+            else:
+                gear_kind_list = [11, 14]
+        else:
+            if bp.gear_quality == "紫":
+                gear_kind_list = []
+            elif bp.gear_quality == "金":
+                gear_kind_list = [6, 9]
+            else:
+                gear_kind_list = [12, 15]
+        increase_gear(bp, fishery_star_range=test["fishery_star_range"], gear_kind_list=gear_kind_list, rod_quality=bp.rod_quality)
         cur += 1
 
 def increase_fish_kind(bp: BasePage):
     fish_kind_list = ["力", "敏", "智"]
-    cur = 1
-    while cur < len(fish_kind_list):
+    cur = 0
+    while cur < 3:
         bp.fish_kind = fish_kind_list[cur]
         if bp.fish_kind == "力":
             bp.fish_id = "360113"
@@ -649,53 +658,53 @@ if __name__ == '__main__':
 
     test_list = [
                  # {"name": "z_30_0_0", "rod_lv": 30, "rod_star": 0,"gear_star": 0,"rod_quality":"紫", "gear_quality":"紫", "fishery_star_range": [3, 7]},
-                 # {"name": "z_60_0_0", "rod_lv": 60, "rod_star": 0, "gear_star": 0,"rod_quality":"紫", "gear_quality":"紫", "fishery_star_range": [7, 15]},
-                 # {"name": "z_90_0_0", "rod_lv": 90, "rod_star": 0, "gear_star": 0,"rod_quality":"紫", "gear_quality":"紫",  "fishery_star_range": [11, 19]},
-                 # {"name": "z_120_0_0", "rod_lv": 120, "rod_star": 0, "gear_star": 0,"rod_quality":"紫", "gear_quality":"紫",  "fishery_star_range": [17,25]},
-                 # {"name": "z_150_0_0", "rod_lv": 150, "rod_star": 0, "gear_star": 0,"rod_quality":"紫", "gear_quality":"紫",  "fishery_star_range": [21, 31]},
-                 # {"name": "z_215_0_0", "rod_lv": 215, "rod_star": 0, "gear_star": 0,"rod_quality":"紫", "gear_quality":"紫",  "fishery_star_range": [29, 39]},
-                 # {"name": "z_30_0_3", "rod_lv": 30, "rod_star": 0, "gear_star": 3,"rod_quality":"金", "gear_quality":"紫",  "fishery_star_range": [5, 13]},
-                 # {"name": "z_60_0_3", "rod_lv": 60, "rod_star": 0, "gear_star": 3,"rod_quality":"金", "gear_quality":"紫",  "fishery_star_range": [11, 19]},
-                 # {"name": "z_90_0_3", "rod_lv": 90, "rod_star": 0, "gear_star": 3,"rod_quality":"金", "gear_quality":"紫",  "fishery_star_range": [17, 25]},
-                 # {"name": "z_120_0_3", "rod_lv": 120, "rod_star": 0, "gear_star": 3,"rod_quality":"金", "gear_quality":"紫",  "fishery_star_range": [21, 31]},
-                 # {"name": "z_150_0_3", "rod_lv": 150, "rod_star": 0, "gear_star": 3,"rod_quality":"金", "gear_quality":"紫",  "fishery_star_range": [27, 35]},
-                 # {"name": "z_215_0_3", "rod_lv": 215, "rod_star": 0, "gear_star": 3, "rod_quality":"金", "gear_quality":"紫", "fishery_star_range": [37, 47]},
-                 # {"name": "z_30_0_0", "rod_lv": 30, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [3, 11]},
-                 # {"name": "z_60_0_0", "rod_lv": 60, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [9, 19]},
-                 # {"name": "z_90_0_0", "rod_lv": 90, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [15, 23]},
-                 # {"name": "z_120_0_0", "rod_lv": 120, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [21, 29]},
-                 # {"name": "z_150_0_0", "rod_lv": 150, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [25, 33]},
-                 # {"name": "z_215_0_0", "rod_lv": 215, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [35, 43]},
-                 # {"name": "z_30_2_2", "rod_lv": 30, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [5, 15]},
-                 # {"name": "z_60_2_2", "rod_lv": 60, "rod_star": 2, "gear_star": 2, "rod_quality":"金", "gear_quality":"金", "fishery_star_range": [12, 21]},
-                 # {"name": "z_90_2_2", "rod_lv": 90, "rod_star": 2, "gear_star": 2, "rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [19, 29]},
-                 # {"name": "z_120_2_2", "rod_lv": 120, "rod_star": 2, "gear_star": 2, "rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [25, 35]},
-                 # {"name": "z_150_2_2", "rod_lv": 150, "rod_star": 2, "gear_star": 2, "rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [31, 39]},
-                 # {"name": "z_215_2_2", "rod_lv": 215, "rod_star": 2, "gear_star": 2, "rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [41, 49]},
-                 {"name": "x_30_4_4", "rod_lv": 30, "rod_star": 4, "gear_star": 4,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [11, 17]},
-                 {"name": "x_60_4_4", "rod_lv": 60, "rod_star": 4, "gear_star": 4,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [19, 23]},
-                 {"name": "x_90_4_4", "rod_lv": 90, "rod_star": 4, "gear_star": 4,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [27, 31]},
-                 {"name": "x_120_4_4", "rod_lv": 120, "rod_star": 4, "gear_star": 4, "rod_quality":"金", "gear_quality":"金", "fishery_star_range": [33, 37]},
-                 {"name": "x_150_4_4", "rod_lv": 150, "rod_star": 4, "gear_star": 4,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [39, 43]},
-                 {"name": "x_215_4_4", "rod_lv": 215, "rod_star": 4, "gear_star": 4, "rod_quality":"金", "gear_quality":"金", "fishery_star_range": [47, 53]},
-                 {"name": "x_30_2_0", "rod_lv": 30, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [9, 15]},
-                 {"name": "x_60_2_0", "rod_lv": 60, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [17, 21]},
-                 {"name": "x_90_2_0", "rod_lv": 90, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [23, 27]},
-                 {"name": "x_120_2_0", "rod_lv": 120, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [31, 35]},
-                 {"name": "x_150_2_0", "rod_lv": 150, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [35, 39]},
-                 {"name": "x_215_2_0", "rod_lv": 215, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [45, 49]},
-                 {"name": "x_30_2_2", "rod_lv": 30, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [11, 17]},
-                 {"name": "x_60_2_2", "rod_lv": 60, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [19, 23]},
-                 {"name": "x_90_2_2", "rod_lv": 90, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [27, 31]},
-                 {"name": "x_120_2_2", "rod_lv": 120, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [33, 37]},
-                 {"name": "x_150_2_2", "rod_lv": 150, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [39, 43]},
-                 {"name": "x_215_2_2", "rod_lv": 215, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [47, 51]},
-                 {"name": "x_30_2_5", "rod_lv": 30, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [15, 21]},
-                 {"name": "x_60_2_5", "rod_lv": 60, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [25, 29]},
-                 {"name": "x_90_2_5", "rod_lv": 90, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [33, 37]},
-                 {"name": "x_120_2_5", "rod_lv": 120, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [39, 43]},
-                 {"name": "x_150_2_5", "rod_lv": 150, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [45, 49]},
-                 {"name": "x_215_2_5", "rod_lv": 215, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [53, 57]},
+                 # {"name": "z_60_0_0", "rod_lv": 60, "rod_star": 0, "gear_star": 0,"rod_quality":"紫", "gear_quality":"紫", "fishery_star_range": [9, 15]},
+                 # {"name": "z_90_0_0", "rod_lv": 90, "rod_star": 0, "gear_star": 0,"rod_quality":"紫", "gear_quality":"紫",  "fishery_star_range": [13, 19]},
+                 # {"name": "z_120_0_0", "rod_lv": 120, "rod_star": 0, "gear_star": 0,"rod_quality":"紫", "gear_quality":"紫",  "fishery_star_range": [19,25]},
+                 # {"name": "z_150_0_0", "rod_lv": 150, "rod_star": 0, "gear_star": 0,"rod_quality":"紫", "gear_quality":"紫",  "fishery_star_range": [23, 31]},
+                 # {"name": "z_215_0_0", "rod_lv": 215, "rod_star": 0, "gear_star": 0,"rod_quality":"紫", "gear_quality":"紫",  "fishery_star_range": [31, 39]},
+                 # {"name": "z_30_0_3", "rod_lv": 30, "rod_star": 0, "gear_star": 3,"rod_quality":"金", "gear_quality":"紫",  "fishery_star_range": [7, 13]},
+                 # {"name": "z_60_0_3", "rod_lv": 60, "rod_star": 0, "gear_star": 3,"rod_quality":"金", "gear_quality":"紫",  "fishery_star_range": [13, 19]},
+                 # {"name": "z_90_0_3", "rod_lv": 90, "rod_star": 0, "gear_star": 3,"rod_quality":"金", "gear_quality":"紫",  "fishery_star_range": [19, 25]},
+                 # {"name": "z_120_0_3", "rod_lv": 120, "rod_star": 0, "gear_star": 3,"rod_quality":"金", "gear_quality":"紫",  "fishery_star_range": [23, 31]},
+                 # {"name": "z_150_0_3", "rod_lv": 150, "rod_star": 0, "gear_star": 3,"rod_quality":"金", "gear_quality":"紫",  "fishery_star_range": [29, 35]},
+                 # {"name": "z_215_0_3", "rod_lv": 215, "rod_star": 0, "gear_star": 3, "rod_quality":"金", "gear_quality":"紫", "fishery_star_range": [39, 47]},
+                 # {"name": "x_30_0_0", "rod_lv": 30, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [7, 11]},
+                 # {"name": "x_60_0_0", "rod_lv": 60, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [13, 19]},
+                 # {"name": "x_90_0_0", "rod_lv": 90, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [17, 23]},
+                 # {"name": "x_120_0_0", "rod_lv": 120, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [23, 29]},
+                 # {"name": "x_150_0_0", "rod_lv": 150, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [27, 33]},
+                 # {"name": "x_215_0_0", "rod_lv": 215, "rod_star": 0, "gear_star": 0,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [37, 43]},
+                 # {"name": "x_30_2_2", "rod_lv": 30, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [9, 15]},
+                 # {"name": "x_60_2_2", "rod_lv": 60, "rod_star": 2, "gear_star": 2, "rod_quality":"金", "gear_quality":"金", "fishery_star_range": [17, 21]},
+                 # {"name": "x_90_2_2", "rod_lv": 90, "rod_star": 2, "gear_star": 2, "rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [21, 29]},
+                 # {"name": "x_120_2_2", "rod_lv": 120, "rod_star": 2, "gear_star": 2, "rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [27, 35]},
+                 # {"name": "x_150_2_2", "rod_lv": 150, "rod_star": 2, "gear_star": 2, "rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [33, 39]},
+                 # {"name": "x_215_2_2", "rod_lv": 215, "rod_star": 2, "gear_star": 2, "rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [43, 49]},
+                 # {"name": "x_30_4_4", "rod_lv": 30, "rod_star": 4, "gear_star": 4,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [13, 17]},
+                 # {"name": "x_60_4_4", "rod_lv": 60, "rod_star": 4, "gear_star": 4,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [21, 23]},
+                 # {"name": "x_90_4_4", "rod_lv": 90, "rod_star": 4, "gear_star": 4,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [27, 31]},
+                 # {"name": "x_120_4_4", "rod_lv": 120, "rod_star": 4, "gear_star": 4, "rod_quality":"金", "gear_quality":"金", "fishery_star_range": [33, 37]},
+                 # {"name": "x_150_4_4", "rod_lv": 150, "rod_star": 4, "gear_star": 4,"rod_quality":"金", "gear_quality":"金",  "fishery_star_range": [39, 43]},
+                 # {"name": "x_215_4_4", "rod_lv": 215, "rod_star": 4, "gear_star": 4, "rod_quality":"金", "gear_quality":"金", "fishery_star_range": [47, 53]},
+                 {"name": "x_30_2_0", "rod_lv": 30, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [11, 15]},
+                 {"name": "x_60_2_0", "rod_lv": 60, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [19, 21]},
+                 {"name": "x_90_2_0", "rod_lv": 90, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [25, 27]},
+                 {"name": "x_120_2_0", "rod_lv": 120, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [33, 35]},
+                 {"name": "x_150_2_0", "rod_lv": 150, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [37, 39]},
+                 {"name": "x_215_2_0", "rod_lv": 215, "rod_star": 2, "gear_star": 0,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [47, 49]},
+                 {"name": "x_30_2_2", "rod_lv": 30, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [13, 17]},
+                 {"name": "x_60_2_2", "rod_lv": 60, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [21, 23]},
+                 {"name": "x_90_2_2", "rod_lv": 90, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [29, 31]},
+                 {"name": "x_120_2_2", "rod_lv": 120, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [35, 37]},
+                 {"name": "x_150_2_2", "rod_lv": 150, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [41, 43]},
+                 {"name": "x_215_2_2", "rod_lv": 215, "rod_star": 2, "gear_star": 2,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [49, 51]},
+                 {"name": "x_30_2_5", "rod_lv": 30, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [17, 21]},
+                 {"name": "x_60_2_5", "rod_lv": 60, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [27, 29]},
+                 {"name": "x_90_2_5", "rod_lv": 90, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [35, 37]},
+                 {"name": "x_120_2_5", "rod_lv": 120, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [41, 43]},
+                 {"name": "x_150_2_5", "rod_lv": 150, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [47, 49]},
+                 {"name": "x_215_2_5", "rod_lv": 215, "rod_star": 2, "gear_star": 5,"rod_quality":"金", "gear_quality":"红",  "fishery_star_range": [55, 57]},
 
                  ]
     time_scale = 4

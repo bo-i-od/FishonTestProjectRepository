@@ -650,7 +650,7 @@ class ElementsData:
     class ChampionshipNewPanel:
         ChampionshipNewPanel = {"locator": "UICanvas>Default>ChampionshipNewPanel"}
         btn_close = {"locator": "UICanvas>Default>ChampionshipNewPanel>Panel>btn_close>img"}
-        text_completed = {"locator": "UICanvas>Default>ChampionshipNewPanel>Panel>left>Content>tournaments>text"}
+        progress = {"locator": "UICanvas>Default>ChampionshipNewPanel>Panel>left>Content>tournaments>progress"}
 
 
     class ChampointshipResultPopup:

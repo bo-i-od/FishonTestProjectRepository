@@ -44,15 +44,15 @@ def check_reward_new(bp, overflow_factor: float = 1):
     BattlePreparePanel.panel_MainStage_daily_prepare.click_btn_tournaments(bp)
     bp.sleep(1)
 
-    # 已经完赛
-    if ChampionshipNewPanel.is_completed(bp):
-        ChampionshipNewPanel.click_btn_close(bp)
-        return True
-
-    # 打开ChampionshipNewPanel说明暂未参赛
-    if ChampionshipNewPanel.is_panel_active(bp):
+    # 还没打
+    if ChampionshipNewPanel.is_progress_active(bp):
         ChampionshipNewPanel.click_btn_close(bp)
         return False
+
+    # 已经打了
+    if ChampionshipNewPanel.is_panel_active(bp):
+        ChampionshipNewPanel.click_btn_close(bp)
+        return True
 
     ChampionshipInfoNewPanel.switch_tab(bp, index=2)
     bp.sleep(1)
@@ -80,7 +80,7 @@ def handle_game_exception(func):
             traceback.print_exc()
             print(e)
             bp = args[0]  # 假设第一个参数是 bp
-            is_monitor = kwargs.get('is_monitor', False)  # 从 kwargs 获取 is_monitor 参数
+            is_monitor = kwargs.get('is_monitor', True)  # 从 kwargs 获取 is_monitor 参数
             bp = gameInit.reset_bp(bp.dev, is_monitor=is_monitor)
             return bp
     return wrapper
@@ -112,7 +112,7 @@ def championship(bp,  times, index=None, fishery_id=None, energy_cost=50, is_mon
 
         fishery_id_list = TournamentsPanel.get_fishery_tpid_list(bp)
         fishery_id = fishery_id_list[entrance_index]
-        TournamentsPanel.go_to_fishery_by_index(bp, index=entrance_index)
+        TournamentsPanel.go_to_fishery_by_id(bp, fishery_id=fishery_id)
 
     spot_id_list, is_in_double_week, is_new_plot = bp.get_spot_id_list(fishery_id=fishery_id)
     if energy_cost < 3:
@@ -238,17 +238,21 @@ if __name__ == '__main__':
     #     print(f"第{cur}次钓鱼")
 
     # 备战界面钓指定次数
-    # circulate_fish(bp=base_page, is_quick=False, times=100)
+    circulate_fish(bp=base_page, is_quick=False, times=20)
     # base_page.sleep(3600)
     # aquarium(bp=base_page)
     # base_page.clear_popup()
     # 循环进行水族箱/新主线/旧主线 直到打满
+    cur = 0
     while True:
-        base_page = aquarium(base_page, is_monitor=True)
+        if cur > 10:
+            base_page = aquarium(base_page, is_monitor=True)
+            cur = 0
         base_page = championship_new(base_page, spot_id=10102, times=10, is_treasure_map=False)
         # base_page = championship(base_page, index=0, times=20, cost=2, overflow_factor=1, is_monitor=True)
         # # base_page.sleep(60)
 
         base_page = championship(base_page, times=20, index=0, energy_cost=1, is_treasure_map=False)
         base_page = championship(base_page, times=20, index=1, energy_cost=1, is_treasure_map=False)
+        cur += 1
 
