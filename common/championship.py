@@ -238,7 +238,13 @@ if __name__ == '__main__':
     #     print(f"第{cur}次钓鱼")
 
     # 备战界面钓指定次数
-    circulate_fish(bp=base_page, is_quick=False, times=20)
+    # circulate_fish(bp=base_page, is_quick=False, times=250)
+    # while True:
+    #     fish_once(bp=base_page, is_quick=False)
+    #     base_page.go_to_panel("TournamentsPanel")
+    #     base_page.sleep(1)
+    #     base_page.go_to_fishery(fishery_id=400314)
+
     # base_page.sleep(3600)
     # aquarium(bp=base_page)
     # base_page.clear_popup()
@@ -248,7 +254,7 @@ if __name__ == '__main__':
         if cur > 10:
             base_page = aquarium(base_page, is_monitor=True)
             cur = 0
-        base_page = championship_new(base_page, spot_id=10102, times=10, is_treasure_map=False)
+        base_page = championship_new(base_page, spot_id=10103, times=10, is_treasure_map=False)
         # base_page = championship(base_page, index=0, times=20, cost=2, overflow_factor=1, is_monitor=True)
         # # base_page.sleep(60)
 

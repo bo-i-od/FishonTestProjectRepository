@@ -641,7 +641,7 @@ class ElementsData:
     class ChampionshipInfoNewPanel:
         ChampionshipInfoNewPanel = {"locator": "UICanvas>Default>ChampionshipInfoNewPanel"}
         btn_close = {"locator":"UICanvas>Default>ChampionshipInfoNewPanel>panel>btn_close>img"}
-        tab_list = {"locator":"UICanvas>Default>ChampionshipInfoNewPanel>panel>panel_tab_list>panel_tab>TabList>Viewport>Content>"}
+        tab_list = {"locator":"UICanvas>Default>ChampionshipInfoNewPanel>panel>panel_tab_list>panel_tab>TabList>Viewport>Content>", "focus": (0, 0.5)}
         check = {"locator":"UICanvas>Default>ChampionshipInfoNewPanel>panel>panel_rules>rules_2>rules>Viewport>Content>progress_info>reward>item_model_mini>collected>check"}
         progress_cur = {"locator": "UICanvas>Default>ChampionshipInfoNewPanel>panel>panel_rules>rules_2>rules>Viewport>Content>progress_info>progressValueLayout>cur"}
         progress_max = {"locator": "UICanvas>Default>ChampionshipInfoNewPanel>panel>panel_rules>rules_2>rules>Viewport>Content>progress_info>progressValueLayout>max"}
