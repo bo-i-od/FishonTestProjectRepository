@@ -6,7 +6,7 @@ from tools.commonTools import *
 from tools.decl2py import *
 from tools.excelRead import ExcelToolsForActivities
 
-def cooperation_sys_final_reward_with_time(excel_tool: ExcelToolsForActivities, time_start):
+def cooperation_sys_final_reward_with_time(excel_tool: ExcelToolsForActivities, time_start, fishery_id):
     table_data_detail = excel_tool.get_table_data_detail(book_name="COOPERATION_SYS_FINAL_REWARD_WITH_TIME.xlsm")
     table_data_object_list, structs, prefix = table_data_detail
     json_object = table_data_object_list[-1]
@@ -16,6 +16,7 @@ def cooperation_sys_final_reward_with_time(excel_tool: ExcelToolsForActivities, 
     instance_object.tpId = instance_object.tpId + 1
     instance_object.id = instance_object.tpId
     instance_object.openTime = time_start
+    instance_object.fisheriesId = fishery_id
     print(f"----------------{prefix} 正在新增----------------")
     print(json_to_block(json_object=instance_to_json(instance_object=instance_object), name=prefix.lower()))
     print("- - - - - - - - - - - - - - - -")
@@ -34,9 +35,10 @@ def timer_main(excel_tool: ExcelToolsForActivities, time_start, timer_id=102037)
 def main():
     time_start = "2025-04-18 00:00:00"
     group_id = 6006666
+    fishery_id = 500302
     excel_tool = ExcelToolsForActivities(EXCEL_PATH)
     timer_id = excel_tool.group_id_to_timer_id(group_id=group_id)
-    cooperation_sys_final_reward_with_time(excel_tool, time_start)
+    cooperation_sys_final_reward_with_time(excel_tool=excel_tool, time_start=time_start, fishery_id=fishery_id)
     timer_main(excel_tool=excel_tool, time_start=time_start, timer_id=timer_id)
 
 

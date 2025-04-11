@@ -1,5 +1,6 @@
 from activities.decl.EVENT_N_DAY_TASKS_MILESTONE import EVENT_N_DAY_TASKS_MILESTONE
 from activities.decl.MISSION_CONDITION import MISSION_CONDITION
+from activities.decl.MISSION_GROUP import MISSION_GROUP
 from activities.decl.MISSION_LANGUAGE import MISSION_LANGUAGE
 from activities.decl.MISSION_MAIN import MISSION_MAIN
 from common.error import FindNoElementError
@@ -120,6 +121,23 @@ def mission_main(excel_tool: ExcelToolsForActivities, group_id: int, fishery_id:
         print(f"----------------{mission_main_detail[2]} {mission_language_detail[2]} {mission_condition_detail[2]}修改完成----------------")
 
 
+def mission_group(excel_tool: ExcelToolsForActivities, group_id:int, fishery_id: int):
+    mission_group_detail = excel_tool.get_table_data_detail(book_name="MISSION_GROUP.xlsm")
+    prefix = mission_group_detail[2]
+    print(f"----------------{prefix} 正在修改----------------")
+
+    json_object, instance_object = excel_tool.get_object(key="groupId", value=group_id, table_data_detail=mission_group_detail, cls=MISSION_GROUP)
+
+    print(json_to_block(json_object=json_object, name=prefix.lower()))
+    print("\n        ⬇⬇⬇⬇⬇⬇        \n")
+
+    instance_object.fisheriesId = fishery_id
+
+    print(json_to_block(json_object=instance_to_json(instance_object=instance_object), name=prefix.lower()))
+    print("- - - - - - - - - - - - - - - -")
+
+    excel_tool.change_object(key="groupId", value=group_id, table_data_detail=mission_group_detail, instance_object=instance_object)
+    print(f"----------------{prefix} 修改完成----------------\n")
 
 
 def timer_main(excel_tool: ExcelToolsForActivities, time_start, timer_id):
@@ -131,7 +149,7 @@ def timer_main(excel_tool: ExcelToolsForActivities, time_start, timer_id):
 def main():
     time_start = "2025-04-25 00:00:00"
     group_id = 2010801
-    fishery_id = 400301
+    fishery_id = 400318
     excel_tool = ExcelToolsForActivities(EXCEL_PATH)
     timer_id = excel_tool.group_id_to_timer_id(group_id=group_id)
     timer_main(excel_tool=excel_tool, time_start=time_start, timer_id=timer_id)

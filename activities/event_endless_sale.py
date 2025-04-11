@@ -1,3 +1,4 @@
+from activities.decl.EVENT_ENDLESS_SALE_CONTAINER import EVENT_ENDLESS_SALE_CONTAINER
 from configs.pathConfig import EXCEL_PATH
 from tools.commonTools import get_time
 from tools.decl2py import *
@@ -76,12 +77,13 @@ def event_endless_sale(excel_tool: ExcelToolsForActivities, fishery_id, group_id
     # 读取ITEM_MAIN表
     item_main_detail = excel_tool.get_table_data_detail(book_name="ITEM_MAIN.xlsm")
     event_endless_sale_detail = excel_tool.get_table_data_detail(book_name="EVENT_ENDLESS_SALE.xlsm")
-    print(f"----------------{event_endless_sale_detail[2]} 正在修改----------------")
+    prefix = event_endless_sale_detail[2]
+    print(f"----------------{prefix} 正在修改----------------")
     for cfg in event_endless_sale_cfg:
         if group_id != cfg["groupId"]:
             continue
         json_object, instance_object = excel_tool.get_object(key="autoId", value=cfg["autoId"], table_data_detail=event_endless_sale_detail, cls=EVENT_ENDLESS_SALE)
-        print(json_to_block(json_object=json_object, name=event_endless_sale_detail[2].lower()))
+        print(json_to_block(json_object=json_object, name=prefix.lower()))
         print("\n        ⬇⬇⬇⬇⬇⬇        \n")
         fish_bag_type = cfg["fishBagType"]
         fish_card_count = cfg["fishCardCount"]
@@ -91,10 +93,31 @@ def event_endless_sale(excel_tool: ExcelToolsForActivities, fishery_id, group_id
         table_data_object = excel_tool.get_table_data_object_by_key_value(key="itemTpId", value=instance_object.specialItem.tpId, table_data_detail=item_main_detail)
         icon_name = table_data_object["iconName"]
         instance_object.specialItemIcon = 'icon_fishbag/' + icon_name
-        print(json_to_block(json_object=instance_to_json(instance_object=instance_object), name=event_endless_sale_detail[2].lower()))
+        print(json_to_block(json_object=instance_to_json(instance_object=instance_object), name=prefix.lower()))
         print("- - - - - - - - - - - - - - - -")
         excel_tool.change_object(key="id", value=instance_object.id, table_data_detail=event_endless_sale_detail, instance_object=instance_object)
-    print(f"----------------{event_endless_sale_detail[2]} 修改完成----------------\n")
+    print(f"----------------{prefix} 修改完成----------------\n")
+
+def event_endless_sale_container(excel_tool: ExcelToolsForActivities, fishery_id, group_id):
+    event_endless_sale_container_detail = excel_tool.get_table_data_detail(book_name="EVENT_ENDLESS_SALE_CONTAINER.xlsm")
+    prefix = event_endless_sale_container_detail[2]
+    print(f"----------------{prefix} 正在修改----------------")
+
+    json_object, instance_object = excel_tool.get_object(key="groupId", value=group_id, table_data_detail=event_endless_sale_container_detail, cls=EVENT_ENDLESS_SALE_CONTAINER)
+
+    print(json_to_block(json_object=json_object, name=prefix.lower()))
+    print("\n        ⬇⬇⬇⬇⬇⬇        \n")
+
+    instance_object.fisheriesId = fishery_id
+
+    print(json_to_block(json_object=instance_to_json(instance_object=instance_object), name=prefix.lower()))
+    print("- - - - - - - - - - - - - - - -")
+
+    excel_tool.change_object(key="groupId", value=group_id, table_data_detail=event_endless_sale_container_detail, instance_object=instance_object)
+    print(f"----------------{prefix} 修改完成----------------\n")
+
+
+
 
 def timer_main(excel_tool: ExcelToolsForActivities, time_start, timer_id):
     time_end = get_time(time=time_start, days=6, seconds=-1)
@@ -112,6 +135,7 @@ def main():
     excel_tool = ExcelToolsForActivities(EXCEL_PATH)
     timer_id = excel_tool.group_id_to_timer_id(group_id=group_id)
     event_endless_sale(excel_tool, fishery_id=fishery_id, group_id=group_id)
+    event_endless_sale_container(excel_tool, fishery_id=fishery_id, group_id=group_id)
     timer_main(excel_tool=excel_tool, time_start=time_start, timer_id=timer_id)
 
 
