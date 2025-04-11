@@ -1,5 +1,6 @@
 from activities.decl.COOPERATION_SYS_FINAL_REWARD_WITH_TIME import COOPERATION_SYS_FINAL_REWARD_WITH_TIME
 from activities.decl.TIMER_MAIN import TIMER_MAIN
+from configs.pathConfig import EXCEL_PATH
 from tools import baseDataRead
 from tools.commonTools import *
 from tools.decl2py import *
@@ -33,7 +34,7 @@ def timer_main(excel_tool: ExcelToolsForActivities, time_start, timer_id=102037)
 def main():
     time_start = "2025-04-18 00:00:00"
     group_id = 6006666
-    excel_tool = ExcelToolsForActivities("C:/Dev/datapool/策划模板导出工具/")
+    excel_tool = ExcelToolsForActivities(EXCEL_PATH)
     timer_id = excel_tool.group_id_to_timer_id(group_id=group_id)
     cooperation_sys_final_reward_with_time(excel_tool, time_start)
     timer_main(excel_tool=excel_tool, time_start=time_start, timer_id=timer_id)

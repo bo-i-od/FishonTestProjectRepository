@@ -1,3 +1,4 @@
+from configs.pathConfig import EXCEL_PATH
 from tools.commonTools import get_time
 from tools.decl2py import *
 from tools.excelRead import ExcelToolsForActivities
@@ -108,7 +109,7 @@ def main():
     fishery_id = 400318
     group_id = 3010102
     time_start = "2025-04-25 00:00:00"
-    excel_tool = ExcelToolsForActivities("C:/Dev/datapool/策划模板导出工具/")
+    excel_tool = ExcelToolsForActivities(EXCEL_PATH)
     timer_id = excel_tool.group_id_to_timer_id(group_id=group_id)
     event_endless_sale(excel_tool, fishery_id=fishery_id, group_id=group_id)
     timer_main(excel_tool=excel_tool, time_start=time_start, timer_id=timer_id)

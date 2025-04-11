@@ -3,6 +3,7 @@ from activities.decl.MISSION_CONDITION import MISSION_CONDITION
 from activities.decl.MISSION_LANGUAGE import MISSION_LANGUAGE
 from activities.decl.MISSION_MAIN import MISSION_MAIN
 from common.error import FindNoElementError
+from configs.pathConfig import EXCEL_PATH
 from tools.commonTools import get_time
 from tools.decl2py import *
 from tools.excelRead import ExcelToolsForActivities
@@ -131,7 +132,7 @@ def main():
     time_start = "2025-04-25 00:00:00"
     group_id = 2010801
     fishery_id = 400301
-    excel_tool = ExcelToolsForActivities("C:/Dev/datapool/策划模板导出工具/")
+    excel_tool = ExcelToolsForActivities(EXCEL_PATH)
     timer_id = excel_tool.group_id_to_timer_id(group_id=group_id)
     timer_main(excel_tool=excel_tool, time_start=time_start, timer_id=timer_id)
     event_n_day_tasks_milestone(excel_tool=excel_tool, group_id=group_id, fishery_id=fishery_id)

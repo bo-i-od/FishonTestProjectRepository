@@ -1,10 +1,10 @@
-from activities.decl.TIMER_MAIN import TIMER_MAIN
+from configs.pathConfig import EXCEL_PATH
 from tools import baseDataRead
 from tools.excelRead import ExcelToolsForActivities
 from tools.decl2py import *
 
 def main():
-    excel_tool = ExcelToolsForActivities("C:/Dev/datapool/策划模板导出工具/")
+    excel_tool = ExcelToolsForActivities(EXCEL_PATH)
     json_object_list, _, _ = baseDataRead.convert_to_json(path=excel_tool.root_dir + "/activities/prepare/", prefix="TIMER_MAIN")
     timer_main_detail = excel_tool.get_table_data_detail(book_name="TIMER_MAIN.xlsm")
     print(f"----------------{timer_main_detail[2]} 正在修改----------------")

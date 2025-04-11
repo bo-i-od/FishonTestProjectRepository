@@ -1,5 +1,6 @@
 from activities.decl.GLOBAL_VALUE import GLOBAL_VALUE
 from activities.decl.TIMER_MAIN import TIMER_MAIN
+from configs.pathConfig import EXCEL_PATH
 from tools import baseDataRead
 from tools.commonTools import *
 from tools.decl2py import *
@@ -39,7 +40,7 @@ def timer_main(excel_tool:ExcelToolsForActivities, time_start, timer_id=102030):
 
 
 def main():
-    excel_tool = ExcelToolsForActivities("C:/Dev/datapool/策划模板导出工具/")
+    excel_tool = ExcelToolsForActivities(EXCEL_PATH)
     time_start = "2025-04-21 02:00:00"
     group_id = 2010111
     timer_id = excel_tool.group_id_to_timer_id(group_id=group_id)
