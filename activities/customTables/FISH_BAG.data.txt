@@ -1,0 +1,2252 @@
+fish_bag{
+	name="渔场1鱼卡包10";
+	itemTpId="211001";
+	fishCardCount="10";
+	fishBagFishery="400301";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场2鱼卡包10";
+	itemTpId="211002";
+	fishCardCount="10";
+	fishBagFishery="400302";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场3鱼卡包10";
+	itemTpId="211003";
+	fishCardCount="10";
+	fishBagFishery="400303";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场4鱼卡包10";
+	itemTpId="211004";
+	fishCardCount="10";
+	fishBagFishery="400304";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场5鱼卡包10";
+	itemTpId="211005";
+	fishCardCount="10";
+	fishBagFishery="400305";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场6鱼卡包10";
+	itemTpId="211006";
+	fishCardCount="10";
+	fishBagFishery="400306";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场7鱼卡包10";
+	itemTpId="211007";
+	fishCardCount="10";
+	fishBagFishery="400307";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场8鱼卡包10";
+	itemTpId="211008";
+	fishCardCount="10";
+	fishBagFishery="400308";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场9鱼卡包10";
+	itemTpId="211009";
+	fishCardCount="10";
+	fishBagFishery="400309";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场10鱼卡包10";
+	itemTpId="211010";
+	fishCardCount="10";
+	fishBagFishery="400310";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场11鱼卡包10";
+	itemTpId="211011";
+	fishCardCount="10";
+	fishBagFishery="400311";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场12鱼卡包10";
+	itemTpId="211012";
+	fishCardCount="10";
+	fishBagFishery="400312";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场1鱼卡包20";
+	itemTpId="211013";
+	fishCardCount="20";
+	fishBagFishery="400301";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场2鱼卡包20";
+	itemTpId="211014";
+	fishCardCount="20";
+	fishBagFishery="400302";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场3鱼卡包20";
+	itemTpId="211015";
+	fishCardCount="20";
+	fishBagFishery="400303";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场4鱼卡包20";
+	itemTpId="211016";
+	fishCardCount="20";
+	fishBagFishery="400304";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场5鱼卡包20";
+	itemTpId="211017";
+	fishCardCount="20";
+	fishBagFishery="400305";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场6鱼卡包20";
+	itemTpId="211018";
+	fishCardCount="20";
+	fishBagFishery="400306";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场7鱼卡包20";
+	itemTpId="211019";
+	fishCardCount="20";
+	fishBagFishery="400307";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场8鱼卡包20";
+	itemTpId="211020";
+	fishCardCount="20";
+	fishBagFishery="400308";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场9鱼卡包20";
+	itemTpId="211021";
+	fishCardCount="20";
+	fishBagFishery="400309";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场10鱼卡包20";
+	itemTpId="211022";
+	fishCardCount="20";
+	fishBagFishery="400310";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场11鱼卡包20";
+	itemTpId="211023";
+	fishCardCount="20";
+	fishBagFishery="400311";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场12鱼卡包20";
+	itemTpId="211024";
+	fishCardCount="20";
+	fishBagFishery="400312";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场1鱼卡包50";
+	itemTpId="211025";
+	fishCardCount="50";
+	fishBagFishery="400301";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场2鱼卡包50";
+	itemTpId="211026";
+	fishCardCount="50";
+	fishBagFishery="400302";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场3鱼卡包50";
+	itemTpId="211027";
+	fishCardCount="50";
+	fishBagFishery="400303";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场4鱼卡包50";
+	itemTpId="211028";
+	fishCardCount="50";
+	fishBagFishery="400304";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场5鱼卡包50";
+	itemTpId="211029";
+	fishCardCount="50";
+	fishBagFishery="400305";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场6鱼卡包50";
+	itemTpId="211030";
+	fishCardCount="50";
+	fishBagFishery="400306";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场7鱼卡包50";
+	itemTpId="211031";
+	fishCardCount="50";
+	fishBagFishery="400307";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场8鱼卡包50";
+	itemTpId="211032";
+	fishCardCount="50";
+	fishBagFishery="400308";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场9鱼卡包50";
+	itemTpId="211033";
+	fishCardCount="50";
+	fishBagFishery="400309";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场10鱼卡包50";
+	itemTpId="211034";
+	fishCardCount="50";
+	fishBagFishery="400310";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场11鱼卡包50";
+	itemTpId="211035";
+	fishCardCount="50";
+	fishBagFishery="400311";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场12鱼卡包50";
+	itemTpId="211036";
+	fishCardCount="50";
+	fishBagFishery="400312";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场1鱼卡包100";
+	itemTpId="211037";
+	fishCardCount="100";
+	fishBagFishery="400301";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场2鱼卡包100";
+	itemTpId="211038";
+	fishCardCount="100";
+	fishBagFishery="400302";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场3鱼卡包100";
+	itemTpId="211039";
+	fishCardCount="100";
+	fishBagFishery="400303";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场4鱼卡包100";
+	itemTpId="211040";
+	fishCardCount="100";
+	fishBagFishery="400304";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场5鱼卡包100";
+	itemTpId="211041";
+	fishCardCount="100";
+	fishBagFishery="400305";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场6鱼卡包100";
+	itemTpId="211042";
+	fishCardCount="100";
+	fishBagFishery="400306";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场7鱼卡包100";
+	itemTpId="211043";
+	fishCardCount="100";
+	fishBagFishery="400307";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场8鱼卡包100";
+	itemTpId="211044";
+	fishCardCount="100";
+	fishBagFishery="400308";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场9鱼卡包100";
+	itemTpId="211045";
+	fishCardCount="100";
+	fishBagFishery="400309";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场10鱼卡包100";
+	itemTpId="211046";
+	fishCardCount="100";
+	fishBagFishery="400310";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场11鱼卡包100";
+	itemTpId="211047";
+	fishCardCount="100";
+	fishBagFishery="400311";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场12鱼卡包100";
+	itemTpId="211048";
+	fishCardCount="100";
+	fishBagFishery="400312";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场1鱼卡包200";
+	itemTpId="211049";
+	fishCardCount="200";
+	fishBagFishery="400301";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场2鱼卡包200";
+	itemTpId="211050";
+	fishCardCount="200";
+	fishBagFishery="400302";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场3鱼卡包200";
+	itemTpId="211051";
+	fishCardCount="200";
+	fishBagFishery="400303";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场4鱼卡包200";
+	itemTpId="211052";
+	fishCardCount="200";
+	fishBagFishery="400304";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场5鱼卡包200";
+	itemTpId="211053";
+	fishCardCount="200";
+	fishBagFishery="400305";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场6鱼卡包200";
+	itemTpId="211054";
+	fishCardCount="200";
+	fishBagFishery="400306";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场7鱼卡包200";
+	itemTpId="211055";
+	fishCardCount="200";
+	fishBagFishery="400307";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场8鱼卡包200";
+	itemTpId="211056";
+	fishCardCount="200";
+	fishBagFishery="400308";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场9鱼卡包200";
+	itemTpId="211057";
+	fishCardCount="200";
+	fishBagFishery="400309";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场10鱼卡包200";
+	itemTpId="211058";
+	fishCardCount="200";
+	fishBagFishery="400310";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场11鱼卡包200";
+	itemTpId="211059";
+	fishCardCount="200";
+	fishBagFishery="400311";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场12鱼卡包200";
+	itemTpId="211060";
+	fishCardCount="200";
+	fishBagFishery="400312";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场1鱼卡包boss";
+	itemTpId="211061";
+	fishCardCount="20";
+	fishBagFishery="400301";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="渔场2鱼卡包boss";
+	itemTpId="211062";
+	fishCardCount="20";
+	fishBagFishery="400302";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="渔场3鱼卡包boss";
+	itemTpId="211063";
+	fishCardCount="20";
+	fishBagFishery="400303";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="渔场4鱼卡包boss";
+	itemTpId="211064";
+	fishCardCount="20";
+	fishBagFishery="400304";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="渔场5鱼卡包boss";
+	itemTpId="211065";
+	fishCardCount="20";
+	fishBagFishery="400305";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="渔场6鱼卡包boss";
+	itemTpId="211066";
+	fishCardCount="20";
+	fishBagFishery="400306";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="渔场7鱼卡包boss";
+	itemTpId="211067";
+	fishCardCount="20";
+	fishBagFishery="400307";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="渔场8鱼卡包boss";
+	itemTpId="211068";
+	fishCardCount="20";
+	fishBagFishery="400308";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="渔场9鱼卡包boss";
+	itemTpId="211069";
+	fishCardCount="20";
+	fishBagFishery="400309";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="渔场10鱼卡包boss";
+	itemTpId="211070";
+	fishCardCount="20";
+	fishBagFishery="400310";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="渔场11鱼卡包boss";
+	itemTpId="211071";
+	fishCardCount="20";
+	fishBagFishery="400311";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="渔场12鱼卡包boss";
+	itemTpId="211072";
+	fishCardCount="20";
+	fishBagFishery="400312";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="渔场1鱼卡包隐藏";
+	itemTpId="211073";
+	fishCardCount="20";
+	fishBagFishery="400301";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="渔场2鱼卡包隐藏";
+	itemTpId="211074";
+	fishCardCount="20";
+	fishBagFishery="400302";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="渔场3鱼卡包隐藏";
+	itemTpId="211075";
+	fishCardCount="20";
+	fishBagFishery="400303";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="渔场4鱼卡包隐藏";
+	itemTpId="211076";
+	fishCardCount="20";
+	fishBagFishery="400304";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="渔场5鱼卡包隐藏";
+	itemTpId="211077";
+	fishCardCount="20";
+	fishBagFishery="400305";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="渔场6鱼卡包隐藏";
+	itemTpId="211078";
+	fishCardCount="20";
+	fishBagFishery="400306";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="渔场7鱼卡包隐藏";
+	itemTpId="211079";
+	fishCardCount="20";
+	fishBagFishery="400307";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="渔场8鱼卡包隐藏";
+	itemTpId="211080";
+	fishCardCount="20";
+	fishBagFishery="400308";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="渔场9鱼卡包隐藏";
+	itemTpId="211081";
+	fishCardCount="20";
+	fishBagFishery="400309";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="渔场10鱼卡包隐藏";
+	itemTpId="211082";
+	fishCardCount="20";
+	fishBagFishery="400310";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="渔场11鱼卡包隐藏";
+	itemTpId="211083";
+	fishCardCount="20";
+	fishBagFishery="400311";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="渔场12鱼卡包隐藏";
+	itemTpId="211084";
+	fishCardCount="20";
+	fishBagFishery="400312";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="tier1鱼卡包10";
+	itemTpId="211085";
+	fishCardCount="10";
+	fishBagFishery="1";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier1鱼卡包20";
+	itemTpId="211086";
+	fishCardCount="20";
+	fishBagFishery="1";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier1鱼卡包50";
+	itemTpId="211087";
+	fishCardCount="50";
+	fishBagFishery="1";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier1鱼卡包100";
+	itemTpId="211088";
+	fishCardCount="100";
+	fishBagFishery="1";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier1鱼卡包200";
+	itemTpId="211089";
+	fishCardCount="200";
+	fishBagFishery="1";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier1鱼卡包boss";
+	itemTpId="211090";
+	fishCardCount="20";
+	fishBagFishery="1";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="tier1鱼卡包隐藏";
+	itemTpId="211091";
+	fishCardCount="20";
+	fishBagFishery="1";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="tier2鱼卡包10";
+	itemTpId="211092";
+	fishCardCount="10";
+	fishBagFishery="2";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier2鱼卡包20";
+	itemTpId="211093";
+	fishCardCount="20";
+	fishBagFishery="2";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier2鱼卡包50";
+	itemTpId="211094";
+	fishCardCount="50";
+	fishBagFishery="2";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier2鱼卡包100";
+	itemTpId="211095";
+	fishCardCount="100";
+	fishBagFishery="2";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier2鱼卡包200";
+	itemTpId="211096";
+	fishCardCount="200";
+	fishBagFishery="2";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier2鱼卡包boss";
+	itemTpId="211097";
+	fishCardCount="20";
+	fishBagFishery="2";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="tier2鱼卡包隐藏";
+	itemTpId="211098";
+	fishCardCount="20";
+	fishBagFishery="2";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="tier3鱼卡包10";
+	itemTpId="211099";
+	fishCardCount="10";
+	fishBagFishery="3";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier3鱼卡包20";
+	itemTpId="211100";
+	fishCardCount="20";
+	fishBagFishery="3";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier3鱼卡包50";
+	itemTpId="211101";
+	fishCardCount="50";
+	fishBagFishery="3";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier3鱼卡包100";
+	itemTpId="211102";
+	fishCardCount="100";
+	fishBagFishery="3";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier3鱼卡包200";
+	itemTpId="211103";
+	fishCardCount="200";
+	fishBagFishery="3";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier3鱼卡包boss";
+	itemTpId="211104";
+	fishCardCount="20";
+	fishBagFishery="3";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="tier3鱼卡包隐藏";
+	itemTpId="211105";
+	fishCardCount="20";
+	fishBagFishery="3";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="tier4鱼卡包10";
+	itemTpId="211106";
+	fishCardCount="10";
+	fishBagFishery="4";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier4鱼卡包20";
+	itemTpId="211107";
+	fishCardCount="20";
+	fishBagFishery="4";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier4鱼卡包50";
+	itemTpId="211108";
+	fishCardCount="50";
+	fishBagFishery="4";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier4鱼卡包100";
+	itemTpId="211109";
+	fishCardCount="100";
+	fishBagFishery="4";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier4鱼卡包200";
+	itemTpId="211110";
+	fishCardCount="200";
+	fishBagFishery="4";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier4鱼卡包boss";
+	itemTpId="211111";
+	fishCardCount="20";
+	fishBagFishery="4";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="tier4鱼卡包隐藏";
+	itemTpId="211112";
+	fishCardCount="20";
+	fishBagFishery="4";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="渔场1鱼卡包1000";
+	itemTpId="211113";
+	fishCardCount="1000";
+	fishBagFishery="400301";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场2鱼卡包1000";
+	itemTpId="211114";
+	fishCardCount="1000";
+	fishBagFishery="400302";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场3鱼卡包1000";
+	itemTpId="211115";
+	fishCardCount="1000";
+	fishBagFishery="400303";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场4鱼卡包1000";
+	itemTpId="211116";
+	fishCardCount="1000";
+	fishBagFishery="400304";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场5鱼卡包1000";
+	itemTpId="211117";
+	fishCardCount="1000";
+	fishBagFishery="400305";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场6鱼卡包1000";
+	itemTpId="211118";
+	fishCardCount="1000";
+	fishBagFishery="400306";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场7鱼卡包1000";
+	itemTpId="211119";
+	fishCardCount="1000";
+	fishBagFishery="400307";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场8鱼卡包1000";
+	itemTpId="211120";
+	fishCardCount="1000";
+	fishBagFishery="400308";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场9鱼卡包1000";
+	itemTpId="211121";
+	fishCardCount="1000";
+	fishBagFishery="400309";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场10鱼卡包1000";
+	itemTpId="211122";
+	fishCardCount="1000";
+	fishBagFishery="400310";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场11鱼卡包1000";
+	itemTpId="211123";
+	fishCardCount="1000";
+	fishBagFishery="400311";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场12鱼卡包1000";
+	itemTpId="211124";
+	fishCardCount="1000";
+	fishBagFishery="400312";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="渔场1鱼卡包隐藏100";
+	itemTpId="211125";
+	fishCardCount="100";
+	fishBagFishery="400301";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="渔场2鱼卡包隐藏100";
+	itemTpId="211126";
+	fishCardCount="100";
+	fishBagFishery="400302";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="渔场3鱼卡包隐藏100";
+	itemTpId="211127";
+	fishCardCount="100";
+	fishBagFishery="400303";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="渔场4鱼卡包隐藏100";
+	itemTpId="211128";
+	fishCardCount="100";
+	fishBagFishery="400304";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="渔场5鱼卡包隐藏100";
+	itemTpId="211129";
+	fishCardCount="100";
+	fishBagFishery="400305";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="渔场6鱼卡包隐藏100";
+	itemTpId="211130";
+	fishCardCount="100";
+	fishBagFishery="400306";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="渔场7鱼卡包隐藏100";
+	itemTpId="211131";
+	fishCardCount="100";
+	fishBagFishery="400307";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="渔场8鱼卡包隐藏100";
+	itemTpId="211132";
+	fishCardCount="100";
+	fishBagFishery="400308";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="渔场9鱼卡包隐藏100";
+	itemTpId="211133";
+	fishCardCount="100";
+	fishBagFishery="400309";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="渔场10鱼卡包隐藏100";
+	itemTpId="211134";
+	fishCardCount="100";
+	fishBagFishery="400310";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="渔场11鱼卡包隐藏100";
+	itemTpId="211135";
+	fishCardCount="100";
+	fishBagFishery="400311";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="渔场12鱼卡包隐藏100";
+	itemTpId="211136";
+	fishCardCount="100";
+	fishBagFishery="400312";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="渔场1鱼卡包boss100";
+	itemTpId="211137";
+	fishCardCount="100";
+	fishBagFishery="400301";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="渔场2鱼卡包boss100";
+	itemTpId="211138";
+	fishCardCount="100";
+	fishBagFishery="400302";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="渔场3鱼卡包boss100";
+	itemTpId="211139";
+	fishCardCount="100";
+	fishBagFishery="400303";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="渔场4鱼卡包boss100";
+	itemTpId="211140";
+	fishCardCount="100";
+	fishBagFishery="400304";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="渔场5鱼卡包boss100";
+	itemTpId="211141";
+	fishCardCount="100";
+	fishBagFishery="400305";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="渔场6鱼卡包boss100";
+	itemTpId="211142";
+	fishCardCount="100";
+	fishBagFishery="400306";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="渔场7鱼卡包boss100";
+	itemTpId="211143";
+	fishCardCount="100";
+	fishBagFishery="400307";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="渔场8鱼卡包boss100";
+	itemTpId="211144";
+	fishCardCount="100";
+	fishBagFishery="400308";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="渔场9鱼卡包boss100";
+	itemTpId="211145";
+	fishCardCount="100";
+	fishBagFishery="400309";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="渔场10鱼卡包boss100";
+	itemTpId="211146";
+	fishCardCount="100";
+	fishBagFishery="400310";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="渔场11鱼卡包boss100";
+	itemTpId="211147";
+	fishCardCount="100";
+	fishBagFishery="400311";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="渔场12鱼卡包boss100";
+	itemTpId="211148";
+	fishCardCount="100";
+	fishBagFishery="400312";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="tier1鱼卡包1000";
+	itemTpId="211149";
+	fishCardCount="1000";
+	fishBagFishery="1";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier2鱼卡包1000";
+	itemTpId="211150";
+	fishCardCount="1000";
+	fishBagFishery="2";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier3鱼卡包1000";
+	itemTpId="211151";
+	fishCardCount="1000";
+	fishBagFishery="3";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier4鱼卡包1000";
+	itemTpId="211152";
+	fishCardCount="1000";
+	fishBagFishery="4";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="问号鱼卡包10";
+	itemTpId="219001";
+	fishCardCount="10";
+	fishBagType="4";
+};
+
+fish_bag{
+	name="问号鱼卡包20";
+	itemTpId="219002";
+	fishCardCount="20";
+	fishBagType="4";
+};
+
+fish_bag{
+	name="问号鱼卡包50";
+	itemTpId="219003";
+	fishCardCount="50";
+	fishBagType="4";
+};
+
+fish_bag{
+	name="问号鱼卡包100";
+	itemTpId="219004";
+	fishCardCount="100";
+	fishBagType="4";
+};
+
+fish_bag{
+	name="问号鱼卡包200";
+	itemTpId="219005";
+	fishCardCount="200";
+	fishBagType="4";
+};
+
+fish_bag{
+	name="问号鱼卡包1000";
+	itemTpId="219006";
+	fishCardCount="1000";
+	fishBagType="4";
+};
+
+fish_bag{
+	name="tier1鱼卡包boss100";
+	itemTpId="211153";
+	fishCardCount="100";
+	fishBagFishery="1";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="tier2鱼卡包boss100";
+	itemTpId="211154";
+	fishCardCount="100";
+	fishBagFishery="2";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="tier3鱼卡包boss100";
+	itemTpId="211155";
+	fishCardCount="100";
+	fishBagFishery="3";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="tier4鱼卡包boss100";
+	itemTpId="211156";
+	fishCardCount="100";
+	fishBagFishery="4";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="tier1鱼卡包隐藏100";
+	itemTpId="211157";
+	fishCardCount="100";
+	fishBagFishery="1";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="tier2鱼卡包隐藏100";
+	itemTpId="211158";
+	fishCardCount="100";
+	fishBagFishery="2";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="tier3鱼卡包隐藏100";
+	itemTpId="211159";
+	fishCardCount="100";
+	fishBagFishery="3";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="tier4鱼卡包隐藏100";
+	itemTpId="211160";
+	fishCardCount="100";
+	fishBagFishery="4";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="卡包10-鱼场17";
+	itemTpId="211161";
+	fishCardCount="10";
+	fishBagFishery="400317";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包20-鱼场17";
+	itemTpId="211162";
+	fishCardCount="20";
+	fishBagFishery="400317";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包50-鱼场17";
+	itemTpId="211163";
+	fishCardCount="50";
+	fishBagFishery="400317";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包100-鱼场17";
+	itemTpId="211164";
+	fishCardCount="100";
+	fishBagFishery="400317";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包200-鱼场17";
+	itemTpId="211165";
+	fishCardCount="200";
+	fishBagFishery="400317";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包1000-鱼场17";
+	itemTpId="211166";
+	fishCardCount="1000";
+	fishBagFishery="400317";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="huge卡包-鱼场17";
+	itemTpId="211167";
+	fishCardCount="20";
+	fishBagFishery="400317";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="huge卡包100-鱼场17";
+	itemTpId="211168";
+	fishCardCount="100";
+	fishBagFishery="400317";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="giant卡包-鱼场17";
+	itemTpId="211169";
+	fishCardCount="20";
+	fishBagFishery="400317";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="giant卡包100-鱼场17";
+	itemTpId="211170";
+	fishCardCount="100";
+	fishBagFishery="400317";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="tier1鱼卡包20000";
+	itemTpId="211171";
+	fishCardCount="20000";
+	fishBagFishery="1";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier2鱼卡包20000";
+	itemTpId="211172";
+	fishCardCount="20000";
+	fishBagFishery="2";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier3鱼卡包20000";
+	itemTpId="211173";
+	fishCardCount="20000";
+	fishBagFishery="3";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier4鱼卡包20000";
+	itemTpId="211174";
+	fishCardCount="20000";
+	fishBagFishery="4";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="tier1鱼卡包boss2000";
+	itemTpId="211175";
+	fishCardCount="2000";
+	fishBagFishery="1";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="tier2鱼卡包boss2000";
+	itemTpId="211176";
+	fishCardCount="2000";
+	fishBagFishery="2";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="tier3鱼卡包boss2000";
+	itemTpId="211177";
+	fishCardCount="2000";
+	fishBagFishery="3";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="tier4鱼卡包boss2000";
+	itemTpId="211178";
+	fishCardCount="2000";
+	fishBagFishery="4";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="tier1鱼卡包隐藏2000";
+	itemTpId="211179";
+	fishCardCount="2000";
+	fishBagFishery="1";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="tier2鱼卡包隐藏2000";
+	itemTpId="211180";
+	fishCardCount="2000";
+	fishBagFishery="2";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="tier3鱼卡包隐藏2000";
+	itemTpId="211181";
+	fishCardCount="2000";
+	fishBagFishery="3";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="tier4鱼卡包隐藏2000";
+	itemTpId="211182";
+	fishCardCount="2000";
+	fishBagFishery="4";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="0712补偿鱼卡包";
+	itemTpId="211183";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包10-鱼场13";
+	itemTpId="211184";
+	fishCardCount="10";
+	fishBagFishery="400313";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包20-鱼场13";
+	itemTpId="211185";
+	fishCardCount="20";
+	fishBagFishery="400313";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包50-鱼场13";
+	itemTpId="211186";
+	fishCardCount="50";
+	fishBagFishery="400313";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包100-鱼场13";
+	itemTpId="211187";
+	fishCardCount="100";
+	fishBagFishery="400313";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包200-鱼场13";
+	itemTpId="211188";
+	fishCardCount="200";
+	fishBagFishery="400313";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包1000-鱼场13";
+	itemTpId="211189";
+	fishCardCount="1000";
+	fishBagFishery="400313";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="huge卡包-鱼场13";
+	itemTpId="211190";
+	fishCardCount="20";
+	fishBagFishery="400313";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="huge卡包100-鱼场13";
+	itemTpId="211191";
+	fishCardCount="100";
+	fishBagFishery="400313";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="giant卡包-鱼场13";
+	itemTpId="211192";
+	fishCardCount="20";
+	fishBagFishery="400313";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="giant卡包100-鱼场13";
+	itemTpId="211193";
+	fishCardCount="100";
+	fishBagFishery="400313";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="卡包10-鱼场14";
+	itemTpId="211194";
+	fishCardCount="10";
+	fishBagFishery="400314";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包20-鱼场14";
+	itemTpId="211195";
+	fishCardCount="20";
+	fishBagFishery="400314";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包50-鱼场14";
+	itemTpId="211196";
+	fishCardCount="50";
+	fishBagFishery="400314";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包100-鱼场14";
+	itemTpId="211197";
+	fishCardCount="100";
+	fishBagFishery="400314";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包200-鱼场14";
+	itemTpId="211198";
+	fishCardCount="200";
+	fishBagFishery="400314";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包1000-鱼场14";
+	itemTpId="211199";
+	fishCardCount="1000";
+	fishBagFishery="400314";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="huge卡包-鱼场14";
+	itemTpId="211200";
+	fishCardCount="20";
+	fishBagFishery="400314";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="huge卡包100-鱼场14";
+	itemTpId="211201";
+	fishCardCount="100";
+	fishBagFishery="400314";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="giant卡包-鱼场14";
+	itemTpId="211202";
+	fishCardCount="20";
+	fishBagFishery="400314";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="giant卡包100-鱼场14";
+	itemTpId="211203";
+	fishCardCount="100";
+	fishBagFishery="400314";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="卡包10-鱼场15";
+	itemTpId="211204";
+	fishCardCount="10";
+	fishBagFishery="400315";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包20-鱼场15";
+	itemTpId="211205";
+	fishCardCount="20";
+	fishBagFishery="400315";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包50-鱼场15";
+	itemTpId="211206";
+	fishCardCount="50";
+	fishBagFishery="400315";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包100-鱼场15";
+	itemTpId="211207";
+	fishCardCount="100";
+	fishBagFishery="400315";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包200-鱼场15";
+	itemTpId="211208";
+	fishCardCount="200";
+	fishBagFishery="400315";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包1000-鱼场15";
+	itemTpId="211209";
+	fishCardCount="1000";
+	fishBagFishery="400315";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="huge卡包-鱼场15";
+	itemTpId="211210";
+	fishCardCount="20";
+	fishBagFishery="400315";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="huge卡包100-鱼场15";
+	itemTpId="211211";
+	fishCardCount="100";
+	fishBagFishery="400315";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="giant卡包-鱼场15";
+	itemTpId="211212";
+	fishCardCount="20";
+	fishBagFishery="400315";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="giant卡包100-鱼场15";
+	itemTpId="211213";
+	fishCardCount="100";
+	fishBagFishery="400315";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="卡包10-鱼场18";
+	itemTpId="211214";
+	fishCardCount="10";
+	fishBagFishery="400318";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包20-鱼场18";
+	itemTpId="211215";
+	fishCardCount="20";
+	fishBagFishery="400318";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包50-鱼场18";
+	itemTpId="211216";
+	fishCardCount="50";
+	fishBagFishery="400318";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包100-鱼场18";
+	itemTpId="211217";
+	fishCardCount="100";
+	fishBagFishery="400318";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包200-鱼场18";
+	itemTpId="211218";
+	fishCardCount="200";
+	fishBagFishery="400318";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包1000-鱼场18";
+	itemTpId="211219";
+	fishCardCount="1000";
+	fishBagFishery="400318";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="huge卡包-鱼场18";
+	itemTpId="211220";
+	fishCardCount="20";
+	fishBagFishery="400318";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="huge卡包100-鱼场18";
+	itemTpId="211221";
+	fishCardCount="100";
+	fishBagFishery="400318";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="giant卡包-鱼场18";
+	itemTpId="211222";
+	fishCardCount="20";
+	fishBagFishery="400318";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="giant卡包100-鱼场18";
+	itemTpId="211223";
+	fishCardCount="100";
+	fishBagFishery="400318";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="问号huge卡包20";
+	itemTpId="219007";
+	fishCardCount="20";
+	fishBagType="4";
+};
+
+fish_bag{
+	name="问号huge卡包100";
+	itemTpId="219008";
+	fishCardCount="100";
+	fishBagType="4";
+};
+
+fish_bag{
+	name="问号giant卡包20";
+	itemTpId="219009";
+	fishCardCount="20";
+	fishBagType="4";
+};
+
+fish_bag{
+	name="问号giant卡包100";
+	itemTpId="219010";
+	fishCardCount="100";
+	fishBagType="4";
+};
+
+fish_bag{
+	name="卡包10-鱼场19";
+	itemTpId="211224";
+	fishCardCount="10";
+	fishBagFishery="400319";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包20-鱼场19";
+	itemTpId="211225";
+	fishCardCount="20";
+	fishBagFishery="400319";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包50-鱼场19";
+	itemTpId="211226";
+	fishCardCount="50";
+	fishBagFishery="400319";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包100-鱼场19";
+	itemTpId="211227";
+	fishCardCount="100";
+	fishBagFishery="400319";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包200-鱼场19";
+	itemTpId="211228";
+	fishCardCount="200";
+	fishBagFishery="400319";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包1000-鱼场19";
+	itemTpId="211229";
+	fishCardCount="1000";
+	fishBagFishery="400319";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="huge卡包-鱼场19";
+	itemTpId="211230";
+	fishCardCount="20";
+	fishBagFishery="400319";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="huge卡包100-鱼场19";
+	itemTpId="211231";
+	fishCardCount="100";
+	fishBagFishery="400319";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="giant卡包-鱼场19";
+	itemTpId="211232";
+	fishCardCount="20";
+	fishBagFishery="400319";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="giant卡包100-鱼场19";
+	itemTpId="211233";
+	fishCardCount="100";
+	fishBagFishery="400319";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="卡包10-鱼场20";
+	itemTpId="211234";
+	fishCardCount="10";
+	fishBagFishery="400320";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包20-鱼场20";
+	itemTpId="211235";
+	fishCardCount="20";
+	fishBagFishery="400320";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包50-鱼场20";
+	itemTpId="211236";
+	fishCardCount="50";
+	fishBagFishery="400320";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包100-鱼场20";
+	itemTpId="211237";
+	fishCardCount="100";
+	fishBagFishery="400320";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包200-鱼场20";
+	itemTpId="211238";
+	fishCardCount="200";
+	fishBagFishery="400320";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包1000-鱼场20";
+	itemTpId="211239";
+	fishCardCount="1000";
+	fishBagFishery="400320";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="huge卡包-鱼场20";
+	itemTpId="211240";
+	fishCardCount="20";
+	fishBagFishery="400320";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="huge卡包100-鱼场20";
+	itemTpId="211241";
+	fishCardCount="100";
+	fishBagFishery="400320";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="giant卡包-鱼场20";
+	itemTpId="211242";
+	fishCardCount="20";
+	fishBagFishery="400320";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="giant卡包100-鱼场20";
+	itemTpId="211243";
+	fishCardCount="100";
+	fishBagFishery="400320";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="卡包10-鱼场21";
+	itemTpId="211244";
+	fishCardCount="10";
+	fishBagFishery="400321";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包20-鱼场21";
+	itemTpId="211245";
+	fishCardCount="20";
+	fishBagFishery="400321";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包50-鱼场21";
+	itemTpId="211246";
+	fishCardCount="50";
+	fishBagFishery="400321";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包100-鱼场21";
+	itemTpId="211247";
+	fishCardCount="100";
+	fishBagFishery="400321";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包200-鱼场21";
+	itemTpId="211248";
+	fishCardCount="200";
+	fishBagFishery="400321";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包1000-鱼场21";
+	itemTpId="211249";
+	fishCardCount="1000";
+	fishBagFishery="400321";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="huge卡包-鱼场21";
+	itemTpId="211250";
+	fishCardCount="20";
+	fishBagFishery="400321";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="huge卡包100-鱼场21";
+	itemTpId="211251";
+	fishCardCount="100";
+	fishBagFishery="400321";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="giant卡包-鱼场21";
+	itemTpId="211252";
+	fishCardCount="20";
+	fishBagFishery="400321";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="giant卡包100-鱼场21";
+	itemTpId="211253";
+	fishCardCount="100";
+	fishBagFishery="400321";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="卡包10-鱼场22";
+	itemTpId="211254";
+	fishCardCount="10";
+	fishBagFishery="400322";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包20-鱼场22";
+	itemTpId="211255";
+	fishCardCount="20";
+	fishBagFishery="400322";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包50-鱼场22";
+	itemTpId="211256";
+	fishCardCount="50";
+	fishBagFishery="400322";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包100-鱼场22";
+	itemTpId="211257";
+	fishCardCount="100";
+	fishBagFishery="400322";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包200-鱼场22";
+	itemTpId="211258";
+	fishCardCount="200";
+	fishBagFishery="400322";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包1000-鱼场22";
+	itemTpId="211259";
+	fishCardCount="1000";
+	fishBagFishery="400322";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="huge卡包-鱼场22";
+	itemTpId="211260";
+	fishCardCount="20";
+	fishBagFishery="400322";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="huge卡包100-鱼场22";
+	itemTpId="211261";
+	fishCardCount="100";
+	fishBagFishery="400322";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="giant卡包-鱼场22";
+	itemTpId="211262";
+	fishCardCount="20";
+	fishBagFishery="400322";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="giant卡包100-鱼场22";
+	itemTpId="211263";
+	fishCardCount="100";
+	fishBagFishery="400322";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="卡包10-鱼场新主线1";
+	itemTpId="211264";
+	fishCardCount="10";
+	fishBagFishery="500301";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包20-鱼场新主线1";
+	itemTpId="211265";
+	fishCardCount="20";
+	fishBagFishery="500301";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包50-鱼场新主线1";
+	itemTpId="211266";
+	fishCardCount="50";
+	fishBagFishery="500301";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包100-鱼场新主线1";
+	itemTpId="211267";
+	fishCardCount="100";
+	fishBagFishery="500301";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包200-鱼场新主线1";
+	itemTpId="211268";
+	fishCardCount="200";
+	fishBagFishery="500301";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="卡包1000-鱼场新主线1";
+	itemTpId="211269";
+	fishCardCount="1000";
+	fishBagFishery="500301";
+	fishBagType="1";
+};
+
+fish_bag{
+	name="huge卡包-鱼场新主线1";
+	itemTpId="211270";
+	fishCardCount="20";
+	fishBagFishery="500301";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="huge卡包100-鱼场新主线1";
+	itemTpId="211271";
+	fishCardCount="100";
+	fishBagFishery="500301";
+	fishBagType="2";
+};
+
+fish_bag{
+	name="giant卡包-鱼场新主线1";
+	itemTpId="211272";
+	fishCardCount="20";
+	fishBagFishery="500301";
+	fishBagType="3";
+};
+
+fish_bag{
+	name="giant卡包100-鱼场新主线1";
+	itemTpId="211273";
+	fishCardCount="100";
+	fishBagFishery="500301";
+	fishBagType="3";
+};
+

@@ -1,6 +1,5 @@
 import os
 import re
-import json
 
 
 def parse_decl_file(decl_file):
@@ -49,7 +48,7 @@ def parse_value(value, field_type):
 
 
 def parse_data_file(data_file):
-    encodings = ['utf-16', 'utf-8', 'gbk', 'gb18030', 'gb2312']
+    encodings = ['utf-8', 'utf-16', 'gbk', 'gb18030', 'gb2312']
     content = None
 
     for encoding in encodings:
@@ -85,7 +84,7 @@ def deal_with_blocks(structs, blocks, prefix):
 
 def deal_with_lines(structs, lines, prefix):
     current_struct = (prefix, True)
-    data, delta = deal_with_struct(structs, lines, current_struct, 0)
+    data, delta = deal_with_struct(structs, lines, current_struct, -1)
     return data
 
 

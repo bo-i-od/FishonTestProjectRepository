@@ -7,7 +7,7 @@ import ctypes
 import inspect
 import re
 from collections import Counter
-
+from datetime import datetime, timezone, timedelta
 
 # 对比值或对象，不一致报错
 def compare(a, b):
@@ -217,10 +217,39 @@ def sort_dict_recursively(d):
     else:
         return d
 
+
 def generate_random_string(length):
     characters = string.ascii_letters + string.digits
     random_string = ''.join(random.choices(characters, k=length))
     return random_string
+
+
+def time_to_timestamp_ms(time: str):
+    dt = datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
+    dt_utc = dt.replace(tzinfo=timezone.utc)
+    timestamp_ms = int(dt_utc.timestamp() * 1000)
+    return timestamp_ms
+
+def timestamp_ms_to_time(timestamp_ms: int):
+    dt_utc = datetime.fromtimestamp(timestamp_ms/1000, tz=timezone.utc)
+    new_date_string = dt_utc.strftime("%Y-%m-%d %H:%M:%S")
+    return new_date_string
+
+
+def get_time(time: str, days: float = 0, hours: float = 0, minutes: float = 0, seconds: float = 0):
+    # 解析原始日期字符串
+    original_date = datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
+    # 计算n天后的日期
+    new_date = original_date + timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
+
+    # 将新日期转换为字符串
+    new_date_string = new_date.strftime("%Y-%m-%d %H:%M:%S")
+    return new_date_string
+
+
+
+
+
 
 
 if __name__ == '__main__':
