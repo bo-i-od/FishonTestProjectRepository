@@ -270,7 +270,7 @@ class ExcelToolsForActivities(ExcelTools):
             instance_list_to_json_list(instance_object_list=instance_object_list)
         if json_object_list:
             blocks = json_list_to_blocks(json_object_list=json_object_list, name=name.lower())
-        Path(self.base_data_path + name + ".data.txt").write_text(blocks, encoding="utf-8")
+        Path(self.base_data_path + name + ".data.txt").write_text(blocks, encoding="utf-16")
 
     def add_object(self, key: str=None, value=None, book_name: str = None, table_data_detail=None, json_object: dict = None, instance_object=None):
         """
