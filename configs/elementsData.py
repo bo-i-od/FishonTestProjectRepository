@@ -524,6 +524,7 @@ class ElementsData:
             btn_receive = {"locator": "UICanvas>Default>BattlePreparePanel>panel_MainStage_daily_prepare>Panel_MainStage_MiniTask_new>Panel_MainStage_MiniTask>model_order>btn_receive"}
             panel_tip_location_newtreasure = {"locator": "UICanvas>Default>BattlePreparePanel>panel_MainStage_daily_prepare>panel_pve>panel_tip_location_newtreasure", "focus": (1, 0.8)}
             value_cost = {"locator": "UICanvas>Default>BattlePreparePanel>panel_MainStage_daily_prepare>panel_pve>btn_cast>value_cost"}
+            btn_gohome = {"locator":"UICanvas>Default>BattlePreparePanel>panel_MainStage_daily_prepare>panel_gohome>btn_gohome>img"}
 
         class PanelPrepareWarning:
             btn_icon = {"locator": "UICanvas>Default>BattlePreparePanel>Panel_Prepare_Warning>panel>panel_icon>>btn_icon>bg_icon"}
@@ -1210,6 +1211,9 @@ class ElementsData:
         HomePanelNew = {"locator": "UICanvas>Default>HomePanelNew"}
         btn_close = {"locator": "UICanvas>Default>HomePanelNew>panel>btn_close>img"}
         btn_spot = {"locator": "UICanvas>Default>HomePanelNew>panel>info_model_area>btn_spot(Clone)", "focus": (0.5, 1)}
+        btn_menu = {"locator":"UICanvas>Default>HomePanelNew>panel>navbar>btns>btn_menu>title>icon"}
+        btn_entrance1 = {"locator":"UICanvas>Default>HomePanelNew>panel_popups_menu>panel_list>List>Viewport>Content>entrance1"}
+        btn_entrance2 = {"locator": "UICanvas>Default>HomePanelNew>panel_popups_menu>panel_list>List>Viewport>Content>entrance2"}
 
     class HomePanel:
         #panel_left
