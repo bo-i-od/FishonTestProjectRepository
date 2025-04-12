@@ -350,6 +350,8 @@ class BattlePreparePanel(BasePage):
             value_cost = self.get_text(element_data=ElementsData.BattlePreparePanel.panel_MainStage_daily_prepare.value_cost)
             return int(value_cost)
 
+        def click_btn_gohome(self):
+            self.click_element(element_data=ElementsData.BattlePreparePanel.panel_MainStage_daily_prepare.btn_gohome)
 
     class panel_gears_new(BasePage):
         def is_panel_active(self):

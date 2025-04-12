@@ -10,6 +10,18 @@ class HomePanelNew(BasePage):
     def click_btn_spot(self, index=-1):
         self.click_object_of_plural_objects(element_data=ElementsData.HomePanelNew.btn_spot, index=index)
 
+    def click_btn_menu(self):
+        self.click_element(element_data=ElementsData.HomePanelNew.btn_menu)
+
+    def click_btn_entrance1(self):
+        self.click_element(element_data=ElementsData.HomePanelNew.btn_entrance1)
+
+    def click_btn_entrance2(self):
+        self.click_element(element_data=ElementsData.HomePanelNew.btn_entrance2)
+
+    def click_btn_close(self):
+        self.click_element(element_data=ElementsData.HomePanelNew.btn_close)
+
 if __name__ == '__main__':
     bp = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21583")
     HomePanelNew.click_btn_spot(bp, index=1)
