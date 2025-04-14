@@ -21,7 +21,7 @@ def get_table_data(data_key):
     collect_list = []
     collect_map = {}
     collect_dup_map = None
-    doWorkOnDataTxtFile(file_path + data_key + ".data.txt", 'en', collect_list, collect_dup_map, collect_map)
+    doWorkOnDataTxtFile(file_path + data_key.upper() + ".data.txt", 'en', collect_list, collect_dup_map, collect_map)
     return collect_map[data_key.lower()]
 
 def get_table_list_data(data_keys):
