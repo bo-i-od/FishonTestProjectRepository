@@ -390,7 +390,7 @@ class ExcelToolsForActivities(ExcelTools):
             cur += 1
         self.write_data_txt(name=prefix, json_object_list=table_data_object_list)
 
-    def change_objects(self, key: str, value_list, book_name: str = None, table_data_detail=None, json_object_list: list = None, instance_object_list: list=None, is_plural=False):
+    def change_objects(self, key: str, value_list, book_name: str = None, table_data_detail=None, json_object_list: list = None, instance_object_list: list=None):
         """
             改变所有指定键值的object
             key: 特征键
@@ -426,7 +426,7 @@ class ExcelToolsForActivities(ExcelTools):
         instance_object_list = None
         instance_object = None
         if cls:
-            instance_object_list = json_list_to_instance_list(json_object_list=json_object, cls=cls)
+            instance_object_list = json_list_to_instance_list(json_object_list=json_object_list, cls=cls)
             instance_object = instance_object_list[0]
         if is_plural:
             return json_object_list, instance_object_list
