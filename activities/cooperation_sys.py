@@ -12,13 +12,14 @@ def cooperation_sys_final_reward_with_time(excel_tool: ExcelToolsForActivities, 
     json_object = table_data_object_list[-1]
 
     # 复制最后一条
+    instance_object: COOPERATION_SYS_FINAL_REWARD_WITH_TIME
     instance_object = json_to_instance(json_object=json_object, cls=COOPERATION_SYS_FINAL_REWARD_WITH_TIME)
     instance_object.tpId = instance_object.tpId + 1
     instance_object.id = instance_object.tpId
     instance_object.openTime = time_start
     instance_object.fisheriesId = fishery_id
     print(f"----------------{prefix} 正在新增----------------")
-    print(json_to_block(json_object=instance_to_json(instance_object=instance_object), name=prefix.lower()))
+    print(instance_to_block(instance_object=instance_object, name=prefix.lower()))
     print("- - - - - - - - - - - - - - - -")
     res = excel_tool.add_object(key="openTime", value=instance_object.openTime, table_data_detail=table_data_detail, instance_object=instance_object)
 

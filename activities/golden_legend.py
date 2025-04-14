@@ -1,3 +1,4 @@
+from activities.decl.EVENT_N_DAY_TASKS_MILESTONE import EVENT_N_DAY_TASKS_MILESTONE
 from tools.excelRead import ExcelToolsForActivities
 
 golden_legend_cfg = [
@@ -16,6 +17,7 @@ def event_n_day_tasks_milestone(excel_tool: ExcelToolsForActivities, group_id:in
     for cfg in golden_legend_cfg:
         if group_id != cfg["groupId"]:
             continue
+        instance_object: EVENT_N_DAY_TASKS_MILESTONE
         json_object, instance_object = excel_tool.get_object(key="autoId", value=cfg["autoId"], table_data_detail=event_n_day_tasks_milestone_detail, cls=EVENT_N_DAY_TASKS_MILESTONE)
         fish_bag_type = cfg["fishBagType"]
         fish_card_count = cfg["fishCardCount"]

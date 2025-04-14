@@ -216,6 +216,10 @@ def json_to_block(json_object, name='', indent=0):
 
     return '\n'.join(lines)
 
+def instance_to_block(instance_object, name='', indent=0):
+    json_object = instance_to_json(instance_object=instance_object)
+    return json_to_block(json_object=json_object, name=name, indent=indent)
+
 
 def _strict_format(value):
     """精确数值格式化"""
