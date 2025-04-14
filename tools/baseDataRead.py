@@ -97,10 +97,10 @@ def deal_with_struct(structs, lines, struct, start):
         if not line:
             i += 1
             continue
-        if '=' in line:
-            key, value = line.split('=', 1)
+        if '="' in line:
+            key, value = line.split('="', 1)
             key = key.strip()
-            value = value.strip().strip('";')
+            value = value.strip('";')
             field_info = structs[struct[0]].get(key, ('string', False))
 
             if field_info[1]:  # 是数组
