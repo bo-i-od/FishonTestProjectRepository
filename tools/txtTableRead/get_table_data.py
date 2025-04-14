@@ -45,6 +45,7 @@ def write_table_data(table_name,table_data):
     table_name: 表名，不带后缀
     table_data: 和上文 get_table_data 一致的数据结构
     """
+    table_name=table_name.lower()
     doWriteConfigTable(file_path, table_name, table_data.values())
 
 if __name__ == '__main__':
