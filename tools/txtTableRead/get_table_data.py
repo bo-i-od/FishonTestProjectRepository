@@ -48,4 +48,6 @@ def write_table_data(table_name,table_data):
     doWriteConfigTable(file_path, table_name, table_data.values())
 
 if __name__ == '__main__':
-    print(get_table_list_data(["BATTLE_SKILL", "BATTLE_BUFF"]))
+    battle_skill_data=get_table_data("BATTLE_SKILL")
+    from icecream import ic
+    ic(battle_skill_data)
