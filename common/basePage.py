@@ -129,6 +129,9 @@ class BasePageMain:
             # 是否让Unity发log
             self.set_send_log_flag(True)
 
+        # 开启倍速后的默认加速倍率
+        self.time_scale_default = 5
+
         # BasePageExt(self)
 
     def get_device(self, serial_number=None):
@@ -1542,7 +1545,7 @@ class BasePageMain:
         self.set_object_active_list(active=active, element_data=element_data, offspring_path=offspring_path)
 
     # 设置时间缩放
-    def set_time_scale(self, time_scale: float = 5):
+    def set_time_scale(self, time_scale: float = None):
         """函数功能简述
             设定Unity时间倍率
 
@@ -1550,6 +1553,9 @@ class BasePageMain:
             time_scale: float
             正常速率为1
         """
+        if not time_scale:
+            time_scale = self.time_scale_default
+
         if not self.is_time_scale:
             rpcMethodRequest.set_time_scale(self.poco, 1)
             return
@@ -1712,6 +1718,7 @@ class BasePageMain:
         function = getattr(module, function_name)
         # 调用函数并返回结果
         return function(*args, **kwargs)
+
 
 
 class BasePage(BasePageMain):
@@ -2645,7 +2652,7 @@ end
 
 if __name__ == '__main__':
     bp = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21593")
-
+    print(bp.get_fish_type(fish_tpid=360105))
     # bp.lua_console('PanelMgr:OpenPanel("NewRankingPanel"')
     # "127.0.0.1:21613"
     # "b6h65hd64p5pxcyh"

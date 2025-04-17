@@ -1,6 +1,8 @@
 import re
 from pathlib import Path
 from typing import Dict, List
+
+from configs.pathConfig import EXCEL_PATH
 from tools.baseDataRead import parse_decl_file
 
 import dataclasses
@@ -82,7 +84,7 @@ def json_list_to_instance_list(json_object_list, cls: type):
 def json_to_instance(json_object: dict, cls: type) -> Any:
     """将字典转换为数据类实例"""
     if not dataclasses.is_dataclass(cls):
-        return json_object
+        return None
 
     kwargs = {}
     for field in dataclasses.fields(cls):
@@ -243,7 +245,7 @@ def json_list_to_blocks(json_object_list, name):
 
 
 if __name__ == "__main__":
-    base_data_path = Path("C:/Dev/datapool/ElementData/BaseData/")
+    base_data_path = Path(EXCEL_PATH.split("策划模板导出工具/")[0] + r"ElementData/BaseData/")
     direct_files = list(base_data_path.glob("*"))  # 包含文件和目录
     direct_files = [p for p in direct_files if p.is_file()]
     batch_process(

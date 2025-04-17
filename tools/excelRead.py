@@ -390,7 +390,7 @@ class ExcelToolsForActivities(ExcelTools):
             cur += 1
         self.write_data_txt(name=prefix, json_object_list=table_data_object_list)
 
-    def change_objects(self, key: str, value_list, book_name: str = None, table_data_detail=None, json_object_list: list = None, instance_object_list: list=None):
+    def change_objects(self, key: str, value_list, book_name: str = None, table_data_detail=None, json_object_list: list = None, instance_object_list: list=None, is_plural=False):
         """
             改变所有指定键值的object
             key: 特征键
@@ -461,21 +461,35 @@ class ExcelToolsForActivities(ExcelTools):
                                  table_data_detail=timer_main_detail)
         print(f"----------------{timer_main_detail[2]} 修改完成----------------\n")
 
-    def get_fish_bag(self, fishery_id, fish_bag_type, fish_card_count):
-        json_object_list, _, _ = baseDataRead.convert_to_json(path=self.root_dir + "/activities/customTables/",
-                                                              prefix="FISH_BAG")
+    def fish_bag_id_to_detail(self, fish_bag_id):
+        json_object_list, _, _ = baseDataRead.convert_to_json(path=self.root_dir + "/activities/customTables/", prefix="FISH_BAG")
         for json_object in json_object_list:
-            if "fishBagFishery" not in json_object:
+            if json_object["itemTpId"] != fish_bag_id:
                 continue
-            if "fishBagType" not in json_object:
+            return json_object
+        return None
+
+    def change_fish_bag_fishery(self, fish_bag_id, fishery_id):
+        detail = self.fish_bag_id_to_detail(fish_bag_id=fish_bag_id)
+        if detail is None:
+            return None
+        return self.get_fish_bag(fishery_id=fishery_id, fish_bag_type=detail["fishBagType"],  fish_card_count=detail["fishCardCount"])
+
+
+    def get_fish_bag(self, fishery_id=None, fish_bag_type=None, fish_card_count=None):
+        json_object_list, _, _ = baseDataRead.convert_to_json(path=self.root_dir + "/activities/customTables/", prefix="FISH_BAG")
+        for json_object in json_object_list:
+            if fishery_id and "fishBagFishery" not in json_object:
                 continue
-            if "fishCardCount" not in json_object:
+            if fish_bag_type and "fishBagType" not in json_object:
                 continue
-            if json_object["fishBagFishery"] != fishery_id:
+            if fish_card_count and "fishCardCount" not in json_object:
                 continue
-            if json_object["fishBagType"] != fish_bag_type:
+            if fishery_id and json_object["fishBagFishery"] != fishery_id:
                 continue
-            if json_object["fishCardCount"] != fish_card_count:
+            if fish_bag_type and json_object["fishBagType"] != fish_bag_type:
+                continue
+            if fish_card_count and json_object["fishCardCount"] != fish_card_count:
                 continue
             return json_object["itemTpId"]
         raise FindNoElementError
@@ -485,14 +499,14 @@ class ExcelToolsForActivities(ExcelTools):
         timer_id = table_data_object["openArg"]
         return timer_id
 
-    def get_max_id(self, table_object_detail):
+    def get_max_value(self, key, table_object_detail):
         json_object_list, _ , _ = table_object_detail
-        max_id = 0
+        max_value = 0
         for json_object in json_object_list:
-            if max_id >= json_object["id"]:
+            if max_value >= json_object[key]:
                 continue
-            max_id = json_object["id"]
-        return max_id
+            max_value = json_object[key]
+        return max_value
 
     def get_fish_id_list(self, fishery_id):
         """函数功能简述
@@ -512,22 +526,38 @@ class ExcelToolsForActivities(ExcelTools):
                 continue
             if activity_fish_list and fish in activity_fish_list:
                 continue
-            res_list.append(str(fish))
+            res_list.append(fish)
         return res_list
 
-    def get_fish_type(self, fish_tpid, table_data_detail=None):
+    def get_fish_type(self, fish_id, table_data_detail=None):
         if table_data_detail is None:
             table_data_detail = self.get_table_data_detail(book_name="FISH.xlsm")
-        table_data_object = self.get_table_data_object_by_key_value(key="tpId", value=fish_tpid, table_data_detail=table_data_detail)
+        table_data_object = self.get_table_data_object_by_key_value(key="tpId", value=fish_id, table_data_detail=table_data_detail)
         return table_data_object["fishType"]
 
-    def get_fish_class(self, fish_tpid, table_data_detail=None):
+    def get_fish_class(self, fish_id, table_data_detail=None):
         if table_data_detail is None:
             table_data_detail = self.get_table_data_detail(book_name="FISH.xlsm")
-        table_data_object = self.get_table_data_object_by_key_value(key="tpId", value=fish_tpid, table_data_detail=table_data_detail)
+        table_data_object = self.get_table_data_object_by_key_value(key="tpId", value=fish_id, table_data_detail=table_data_detail)
         return table_data_object["fishClass"]
 
+    def get_rod(self, fishery_id, rarity):
+        fishery_rank, fishery_living = self.get_fishery_detail(fishery_id=fishery_id)
+        table_data_object_list = self.get_table_data_object_list_by_key_value(key="rarity", value=rarity, book_name="FISHING_ROD.xlsm")
+        rod_list = []
+        for table_data_object in table_data_object_list:
+            if table_data_object["fisheriesRank"] != fishery_rank:
+                continue
+            if table_data_object["isFreshWater"] != fishery_living:
+                continue
+            rod_list.append(table_data_object["tpId"])
+        return rod_list
 
+    def get_fishery_detail(self, fishery_id):
+        table_data_object = self.get_table_data_object_by_key_value(key="tpId", value=fishery_id, book_name="FISHERIES.xlsm")
+        fishery_rank = table_data_object["fisheriesRank"]
+        fishery_living = table_data_object["fisheriesLiving"]
+        return fishery_rank, fishery_living
 
 
 
