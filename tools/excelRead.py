@@ -251,11 +251,7 @@ class ExcelTools:
             cur += 1
         return column_data
 
-    def is_new_fishery(self, fishery_id):
-        table_data_object = self.get_table_data_object_by_key_value(key="tpId", value=fishery_id)
-        if "fisheriesType" in table_data_object:
-            return True
-        return False
+
 
 
 class ExcelToolsForActivities(ExcelTools):
@@ -422,6 +418,8 @@ class ExcelToolsForActivities(ExcelTools):
         if not table_data_detail:
             table_data_detail = self.get_table_data_detail(book_name=book_name)
         json_object_list = self.get_table_data_object_list_by_key_value(key=key, value=value, book_name=book_name, table_data_detail=table_data_detail)
+        if not json_object_list:
+            return None, None
         json_object = json_object_list[0]
         instance_object_list = None
         instance_object = None
@@ -450,34 +448,37 @@ class ExcelToolsForActivities(ExcelTools):
         timer_main_detail = self.get_table_data_detail(book_name="TIMER_MAIN.xlsm")
         instance_object: TIMER_MAIN
         json_object, instance_object = self.get_object(key="timerID", value=timer_id, table_data_detail=timer_main_detail, cls=TIMER_MAIN)
-        print(f"----------------{timer_main_detail[2]} 正在修改----------------")
-        print(json_to_block(json_object=json_object, name=timer_main_detail[2].lower()))
         instance_object.openTime = time_start
         instance_object.endTime = time_end
-        print("\n        ⬇⬇⬇⬇⬇⬇        \n")
-        print(json_to_block(json_object=instance_to_json(instance_object=instance_object), name=timer_main_detail[2].lower()))
-        print("- - - - - - - - - - - - - - - -")
-        self.change_object(key="timerID", value=timer_id, instance_object=instance_object,
-                                 table_data_detail=timer_main_detail)
-        print(f"----------------{timer_main_detail[2]} 修改完成----------------\n")
+        print(instance_object)
+        self.change_object(key="timerID", value=timer_id, instance_object=instance_object, table_data_detail=timer_main_detail)
 
-    def fish_bag_id_to_detail(self, fish_bag_id):
-        json_object_list, _, _ = baseDataRead.convert_to_json(path=self.root_dir + "/activities/customTables/", prefix="FISH_BAG")
+
+    def fish_bag_id_to_detail(self, fish_bag_id, table_object_detail=None):
+        if table_object_detail is None:
+             table_object_detail = baseDataRead.convert_to_json(path=self.root_dir + "/activities/customTables/", prefix="FISH_BAG")
+        json_object_list, _, _ = table_object_detail
         for json_object in json_object_list:
             if json_object["itemTpId"] != fish_bag_id:
                 continue
             return json_object
         return None
 
-    def change_fish_bag_fishery(self, fish_bag_id, fishery_id):
-        detail = self.fish_bag_id_to_detail(fish_bag_id=fish_bag_id)
+    def change_fish_bag_fishery(self, fish_bag_id, fishery_id, table_object_detail=None):
+        if table_object_detail is None:
+            table_object_detail = baseDataRead.convert_to_json(path=self.root_dir + "/activities/customTables/", prefix="FISH_BAG")
+        detail = self.fish_bag_id_to_detail(fish_bag_id=fish_bag_id, table_object_detail=table_object_detail)
         if detail is None:
             return None
-        return self.get_fish_bag(fishery_id=fishery_id, fish_bag_type=detail["fishBagType"],  fish_card_count=detail["fishCardCount"])
+        if detail["fishBagFishery"] == 5:
+            return fish_bag_id
+        return self.get_fish_bag(fishery_id=fishery_id, fish_bag_type=detail["fishBagType"],  fish_card_count=detail["fishCardCount"], table_object_detail=table_object_detail)
 
 
-    def get_fish_bag(self, fishery_id=None, fish_bag_type=None, fish_card_count=None):
-        json_object_list, _, _ = baseDataRead.convert_to_json(path=self.root_dir + "/activities/customTables/", prefix="FISH_BAG")
+    def get_fish_bag(self, fishery_id=None, fish_bag_type=None, fish_card_count=None, table_object_detail=None):
+        if table_object_detail is None:
+            table_object_detail = baseDataRead.convert_to_json(path=self.root_dir + "/activities/customTables/", prefix="FISH_BAG")
+        json_object_list, _, _ = table_object_detail
         for json_object in json_object_list:
             if fishery_id and "fishBagFishery" not in json_object:
                 continue
@@ -492,7 +493,7 @@ class ExcelToolsForActivities(ExcelTools):
             if fish_card_count and json_object["fishCardCount"] != fish_card_count:
                 continue
             return json_object["itemTpId"]
-        raise FindNoElementError
+        raise FindNoElementError("没有找到对应的鱼卡包")
 
     def group_id_to_timer_id(self, group_id):
         table_data_object = self.get_table_data_object_by_key_value(book_name="MISSION_GROUP.xlsm", key="groupId", value=group_id)
@@ -503,19 +504,23 @@ class ExcelToolsForActivities(ExcelTools):
         json_object_list, _ , _ = table_object_detail
         max_value = 0
         for json_object in json_object_list:
+            if key not in json_object:
+                continue
             if max_value >= json_object[key]:
                 continue
             max_value = json_object[key]
         return max_value
 
-    def get_fish_id_list(self, fishery_id):
+    def get_fish_id_list(self, fishery_id, fisheries_detail=None):
         """函数功能简述
             根据fishery_id获取该渔场的鱼id列表
 
         参数:
             fishery_id: 渔场id
         """
-        table_data_object = self.get_table_data_object_by_key_value(key="tpId", value=fishery_id, book_name="FISHERIES.xlsm")
+        if fisheries_detail is None:
+            fisheries_detail = self.get_table_data_detail(book_name="FISHERIES.xlsm")
+        table_data_object = self.get_table_data_object_by_key_value(key="tpId", value=fishery_id, table_data_detail=fisheries_detail)
         fish_list = table_data_object["fish"]
         activity_fish_list = []
         if "activityFishNotShow" in table_data_object:
@@ -529,21 +534,25 @@ class ExcelToolsForActivities(ExcelTools):
             res_list.append(fish)
         return res_list
 
-    def get_fish_type(self, fish_id, table_data_detail=None):
-        if table_data_detail is None:
-            table_data_detail = self.get_table_data_detail(book_name="FISH.xlsm")
-        table_data_object = self.get_table_data_object_by_key_value(key="tpId", value=fish_id, table_data_detail=table_data_detail)
+    def get_fish_type(self, fish_id, fish_detail=None):
+        if fish_detail is None:
+            fish_detail = self.get_table_data_detail(book_name="FISH.xlsm")
+        table_data_object = self.get_table_data_object_by_key_value(key="tpId", value=fish_id, table_data_detail=fish_detail)
         return table_data_object["fishType"]
 
-    def get_fish_class(self, fish_id, table_data_detail=None):
-        if table_data_detail is None:
-            table_data_detail = self.get_table_data_detail(book_name="FISH.xlsm")
-        table_data_object = self.get_table_data_object_by_key_value(key="tpId", value=fish_id, table_data_detail=table_data_detail)
+    def get_fish_class(self, fish_id, fish_detail=None):
+        if fish_detail is None:
+            fish_detail = self.get_table_data_detail(book_name="FISH.xlsm")
+        table_data_object = self.get_table_data_object_by_key_value(key="tpId", value=fish_id, table_data_detail=fish_detail)
         return table_data_object["fishClass"]
 
-    def get_rod(self, fishery_id, rarity):
-        fishery_rank, fishery_living = self.get_fishery_detail(fishery_id=fishery_id)
-        table_data_object_list = self.get_table_data_object_list_by_key_value(key="rarity", value=rarity, book_name="FISHING_ROD.xlsm")
+    def get_rod(self, fishery_id, rarity, fisheries_detail=None, fishing_rod_detail=None):
+        if fisheries_detail is None:
+            fisheries_detail = self.get_table_data_detail(book_name="FISHERIES.xlsm")
+        if fishing_rod_detail is None:
+            fishing_rod_detail = self.get_table_data_detail(book_name="FISHING_ROD.xlsm")
+        fishery_rank, fishery_living, _ = self.get_fishery_detail(fishery_id=fishery_id, fisheries_detail=fisheries_detail)
+        table_data_object_list = self.get_table_data_object_list_by_key_value(key="rarity", value=rarity, table_data_detail=fishing_rod_detail)
         rod_list = []
         for table_data_object in table_data_object_list:
             if table_data_object["fisheriesRank"] != fishery_rank:
@@ -553,11 +562,81 @@ class ExcelToolsForActivities(ExcelTools):
             rod_list.append(table_data_object["tpId"])
         return rod_list
 
-    def get_fishery_detail(self, fishery_id):
-        table_data_object = self.get_table_data_object_by_key_value(key="tpId", value=fishery_id, book_name="FISHERIES.xlsm")
+    def get_rod_icon(self, rod_id, fishing_rod_detail=None):
+        if fishing_rod_detail is None:
+            fishing_rod_detail = self.get_table_data_detail(book_name="FISHING_ROD.xlsm")
+        rod_icon = self.get_table_data_object_by_key_value(key="tpId", value=rod_id, table_data_detail=fishing_rod_detail)["displayicon"]
+        return rod_icon
+
+    def get_fishery_detail(self, fishery_id, fisheries_detail=None):
+        if fisheries_detail is None:
+            fisheries_detail = self.get_table_data_detail(book_name="FISHERIES.xlsm")
+        table_data_object_list = self.get_table_data_object_list_by_key_value(key="tpId", value=fishery_id, table_data_detail=fisheries_detail)
+        if not table_data_object_list:
+            return None
+        table_data_object = table_data_object_list[0]
         fishery_rank = table_data_object["fisheriesRank"]
         fishery_living = table_data_object["fisheriesLiving"]
-        return fishery_rank, fishery_living
+        is_new_fishery = 0
+        if "fisheriesType" in table_data_object:
+            is_new_fishery = 1
+        return fishery_rank, fishery_living, is_new_fishery
+
+    def get_fishery_fish_type_detail(self, fishery_id, fish_detail=None):
+        if fish_detail is None:
+            fish_detail = self.get_table_data_detail(book_name="FISH.xlsm")
+        fish_id_list = self.get_fish_id_list(fishery_id=fishery_id)
+        fish_type_detail = {"small":0, "medium": 0, "large": 0, "hidden": 0, "boss": 0, "rare": 0, "elite": 0, "monster": 0, "total": len(fish_id_list), "total_common": 0}
+        cur = 0
+        while cur < len(fish_id_list):
+            fish_id = fish_id_list[cur]
+            fish_class = self.get_fish_class(fish_id=fish_id, fish_detail=fish_detail)
+            if fish_class == 2:
+                fish_type_detail["rare"] += 1
+                cur += 1
+                continue
+            if fish_class == 3:
+                fish_type_detail["elite"] += 1
+                cur += 1
+                continue
+            if fish_class == 4:
+                fish_type_detail["monster"] += 1
+                cur += 1
+                continue
+            fish_type_detail["total_common"] += 1
+            fish_type = self.get_fish_type(fish_id=fish_id, fish_detail=fish_detail)
+            if fish_type == 1:
+                fish_type_detail["small"] += 1
+                cur += 1
+                continue
+            if fish_type == 2:
+                fish_type_detail["medium"] += 1
+                cur += 1
+                continue
+            if fish_type == 3:
+                fish_type_detail["large"] += 1
+                cur += 1
+                continue
+            if fish_type == 4:
+                fish_type_detail["hidden"] += 1
+                cur += 1
+                continue
+            if fish_type == 5:
+                fish_type_detail["boss"] += 1
+                cur += 1
+                continue
+            cur += 1
+        return fish_type_detail
+
+    def get_fishery_name(self, fishery_id):
+        fisheries_language_detail = self.get_table_data_detail(book_name="FISHERIES_LANGUAGE.xlsm")
+        table_data_object = self.get_table_data_object_by_key_value(key="tpId", value=fishery_id, table_data_detail=fisheries_language_detail)
+        return table_data_object["t_name"]
+
+    def get_fish_name(self, fish_id):
+        fish_language_detail = self.get_table_data_detail(book_name="FISH_LANGUAGE.xlsm")
+        table_data_object = self.get_table_data_object_by_key_value(key="tpId", value=fish_id, table_data_detail=fish_language_detail)
+        return table_data_object["t_fishName"]
 
 
 

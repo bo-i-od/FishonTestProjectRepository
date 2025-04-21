@@ -5,6 +5,7 @@ from activities.decl.FISHCARD import FISHCARD
 from activities.decl.FISHCARD_PACK_INFO import FISHCARD_PACK_INFO
 from activities.decl.ITEM_MAIN import ITEM_MAIN
 from activities.decl.ITEM_MAIN_LANGUAGE import ITEM_MAIN_LANGUAGE
+from common.error import DifferError
 from configs.pathConfig import EXCEL_PATH
 from tools.excelRead import ExcelToolsForActivities
 
@@ -49,7 +50,7 @@ def replace_number_between_keywords(content, replacement, pre, next):
 
 def item_main(excel_tool: ExcelToolsForActivities, tpid_start, fishery_index, icon_name,  drop_id_start):
     item_main_detail = excel_tool.get_table_data_detail(book_name="ITEM_MAIN.xlsm")
-    id_start = excel_tool.get_max_id(table_object_detail=item_main_detail) + 1
+    id_start = excel_tool.get_max_value(key="id", table_object_detail=item_main_detail) + 1
 
     prefix = item_main_detail[2]
     template_tpid_list = [211264, 211265, 211266, 211267, 211268, 211269, 211270, 211271, 211272, 211273]
@@ -76,7 +77,7 @@ def item_main(excel_tool: ExcelToolsForActivities, tpid_start, fishery_index, ic
 def item_main_language(excel_tool: ExcelToolsForActivities, tpid_start, fishery_index, pack_info_cfg_list):
     item_main_language_detail = excel_tool.get_table_data_detail(book_name="ITEM_MAIN_LANGUAGE.xlsm")
     fisheries_language_detail = excel_tool.get_table_data_detail(book_name="FISHERIES_LANGUAGE.xlsm")
-    id_start = excel_tool.get_max_id(table_object_detail=item_main_language_detail) + 1
+    id_start = excel_tool.get_max_value(key="id", table_object_detail=item_main_language_detail) + 1
     id_start=133255
     prefix = item_main_language_detail[2]
     template_tpid_list = [211264, 211265, 211266, 211267, 211268, 211269, 211270, 211271, 211272, 211273]
@@ -94,17 +95,20 @@ def item_main_language(excel_tool: ExcelToolsForActivities, tpid_start, fishery_
         pattern = r'^.*?(鱼卡)'
         match = re.search(pattern, instance_object.t_description, re.DOTALL)
         pack_info_cfg = pack_info_cfg_list[cur]
+        item_count_list = pack_info_cfg["itemCount_list"]
         description = fishery_name + "鱼卡"
-        if pack_info_cfg[0] > 0:
-            description += fr"\n小体型鱼 X {pack_info_cfg[0]}"
-        if pack_info_cfg[1] > 0:
-            description += fr"\n中体型鱼 X {pack_info_cfg[1]}"
-        if pack_info_cfg[2] > 0:
-            description += fr"\n大体型鱼 X {pack_info_cfg[2]}"
-        if pack_info_cfg[3] > 0:
-            description += fr"\n特大型鱼 X {pack_info_cfg[3]}"
-        if pack_info_cfg[4] > 0:
-            description += fr"\n超巨型鱼 X {pack_info_cfg[4]}"
+        if item_count_list[0] > 0:
+            description += fr"\n小体型鱼 X {item_count_list[0]}"
+        if item_count_list[1] > 0:
+            description += fr"\n中体型鱼 X {item_count_list[1]}"
+        if item_count_list[2] > 0:
+            description += fr"\n大体型鱼 X {item_count_list[2]}"
+        if item_count_list[3] > 0:
+            description += fr"\n特大型鱼 X {item_count_list[3]}"
+        if item_count_list[4] > 0:
+            description += fr"\n超巨型鱼 X {item_count_list[4]}"
+        if item_count_list[0] + item_count_list[1] +item_count_list[2] + item_count_list[3] +item_count_list[4] != item_count_list[5]:
+            raise DifferError("鱼卡总数和各体型鱼卡和不一致")
         instance_object.t_description = description
         print(instance_object)
         excel_tool.change_object(key=key, value=instance_object.tpId, instance_object=instance_object, table_data_detail=item_main_language_detail)
@@ -113,7 +117,7 @@ def item_main_language(excel_tool: ExcelToolsForActivities, tpid_start, fishery_
 def drop_main(excel_tool: ExcelToolsForActivities, drop_id_start, fishery_index):
     drop_main_detail = excel_tool.get_table_data_detail(book_name="DROP_MAIN.xlsm")
     prefix = drop_main_detail[2]
-    id_start = excel_tool.get_max_id(table_object_detail=drop_main_detail) + 1
+    id_start = excel_tool.get_max_value(key="id", table_object_detail=drop_main_detail) + 1
     template_drop_id_start = 1010123
     key = "dropId"
     cur = 0
@@ -130,7 +134,7 @@ def drop_main(excel_tool: ExcelToolsForActivities, drop_id_start, fishery_index)
         cur += 1
 
 
-def drop_pack(excel_tool: ExcelToolsForActivities, drop_id_start, drop_pack_id_start, fishery_index):
+def drop_pack(excel_tool: ExcelToolsForActivities, drop_id_start, drop_pack_id_start, fishery_index, pack_info_cfg_list):
     drop_pack_detail = excel_tool.get_table_data_detail(book_name="DROP_PACK.xlsm")
     prefix = drop_pack_detail[2]
     # 从最大+1开始新增
@@ -141,7 +145,7 @@ def drop_pack(excel_tool: ExcelToolsForActivities, drop_id_start, drop_pack_id_s
         if form_id_max >= json_object["formId"]:
             continue
         form_id_max = json_object["formId"]
-    id_start = excel_tool.get_max_id(table_object_detail=drop_pack_detail) + 1
+    id_start = excel_tool.get_max_value(key="id", table_object_detail=drop_pack_detail) + 1
     formId_start = form_id_max + 1
     id_start = 133711
     formId_start = 10460
@@ -151,6 +155,7 @@ def drop_pack(excel_tool: ExcelToolsForActivities, drop_id_start, drop_pack_id_s
     while j < 10:
         drop_id = drop_id_start + j * 100
         i = 0
+        drop_turn_list = pack_info_cfg_list[j]["dropTurn_list"]
         while i < 5:
             delta_drop_pack_id = j * 10000 + i
             drop_pack_id = template_drop_pack_id_start + delta_drop_pack_id
@@ -164,27 +169,23 @@ def drop_pack(excel_tool: ExcelToolsForActivities, drop_id_start, drop_pack_id_s
             instance_object.formId = formId_start + delta
             instance_object.dropPackId = drop_pack_id_start + delta_drop_pack_id
             instance_object.dropId = drop_id
+            drop_turn = drop_turn_list[i]
+            instance_object.dropTurnMin = drop_turn
+            instance_object.dropTurnMax = instance_object.dropTurnMin
+            if drop_turn == 0:
+                instance_object.dropTurnMin = None
+                instance_object.dropTurnMax = None
             print(instance_object)
             excel_tool.change_object(key=key, value=instance_object.dropPackId, instance_object=instance_object, table_data_detail=drop_pack_detail)
             i += 1
         j += 1
 
-def drop_entity(excel_tool: ExcelToolsForActivities, drop_pack_id_start, entity_id_start, fishery_index, fish_card_tpid_start):
-    cfg_list = [
-        {"name": "10", "count_list": [2, 2, 1, 1, 1]},
-        {"name": "20", "count_list": [6, 3, 4, 3, 1]},
-        {"name": "50", "count_list": [15, 8, 9, 7, 3]},
-        {"name": "100", "count_list": [30, 17, 16, 14, 6]},
-        {"name": "200", "count_list": [60, 34, 32, 28, 12]},
-        {"name": "1000", "count_list": [300, 170, 160, 140, 60]},
-        {"name": "隐藏", "count_list": [1, 1, 1, 20, 1]},
-        {"name": "隐藏100", "count_list": [1, 1, 1, 100, 1]},
-        {"name": "boss", "count_list": [1, 1, 1, 1, 20]},
-        {"name": "boss100", "count_list": [1, 1, 1, 1, 100]}
-    ]
+def drop_entity(excel_tool: ExcelToolsForActivities, drop_pack_id_start, entity_id_start, fishery_index, fish_card_tpid_start, pack_info_cfg_list):
+
     drop_entity_detail = excel_tool.get_table_data_detail(book_name="DROP_ENTITY.xlsm")
     prefix = drop_entity_detail[2]
-    id_start = excel_tool.get_max_id(table_object_detail=drop_entity_detail) + 1
+    id_start = excel_tool.get_max_value(key="id", table_object_detail=drop_entity_detail) + 1
+    id_start = 133906
     template_entity_id_start = 200901
 
     fish_card_fishery = 500300 + fishery_index
@@ -193,28 +194,34 @@ def drop_entity(excel_tool: ExcelToolsForActivities, drop_pack_id_start, entity_
     key = "entityId"
     json_object_origin, _ = excel_tool.get_object(key=key, value=template_entity_id_start, table_data_detail=drop_entity_detail)
     i = 0
-    for cfg in cfg_list:
+    for pack_info_cfg in pack_info_cfg_list:
         cur = 0
         while cur < 15:
             instance_object = DROP_ENTITY()
             instance_object.id = id_start + 15 * i + cur
             fish_id = int(fish_id_list[cur])
-            fish_type = excel_tool.get_fish_type(fish_tpid=fish_id)
-            instance_object.name = f"新主线鱼场{fishery_index}鱼卡包{cfg['name']}类型{fish_type}"
+            fish_type = excel_tool.get_fish_type(fish_id=fish_id)
+            instance_object.name = f"新主线鱼场{fishery_index}鱼卡包{pack_info_cfg['name']}类型{fish_type}"
             delta = 15 * i + cur
             instance_object.entityId = entity_id_start + delta
             instance_object.enabled = 1
             instance_object.dropPackId = drop_pack_id_start + i * 10000 + fish_type - 1
             instance_object.itemType = 10
             instance_object.itemID = fish_card_tpid_start + cur
-            instance_object.itemCount = cfg['count_list'][fish_type - 1]
+            drop_turn = pack_info_cfg["dropTurn_list"][fish_type - 1]
+            item_count = pack_info_cfg['itemCount_list'][fish_type - 1]
+            if drop_turn == 0:
+                instance_object.itemCount = 1
+            else:
+                instance_object.itemCount = item_count // drop_turn
+
             instance_object.itemCountMax = instance_object.itemCount
             instance_object.params = ["0", "0", "0"]
             instance_object.dropType = 1
             instance_object.dropValue = 1
             print(instance_object)
-            excel_tool.add_object(key=key, value=instance_object.entityId, instance_object=instance_object, table_data_detail=drop_entity_detail)
-            # excel_tool.change_object(key=key, value=instance_object.entityId, instance_object=instance_object, table_data_detail=drop_entity_detail)
+            # excel_tool.add_object(key=key, value=instance_object.entityId, instance_object=instance_object, table_data_detail=drop_entity_detail)
+            excel_tool.change_object(key=key, value=instance_object.entityId, instance_object=instance_object, table_data_detail=drop_entity_detail)
             cur += 1
         i += 1
 
@@ -222,7 +229,7 @@ def drop_entity(excel_tool: ExcelToolsForActivities, drop_pack_id_start, entity_
 def fishcard(excel_tool: ExcelToolsForActivities, fish_card_tpid_start, fishery_index, item_main_tpid_start):
     fishcard_detail = excel_tool.get_table_data_detail(book_name="FISHCARD.xlsm")
     prefix = fishcard_detail[2]
-    id_start = excel_tool.get_max_id(table_object_detail=fishcard_detail) + 1
+    id_start = excel_tool.get_max_value(key="id", table_object_detail=fishcard_detail) + 1
     template_fish_card_tpid_start = 1010001
     key = "tpId"
     fish_card_fishery = 500300 + fishery_index
@@ -235,13 +242,13 @@ def fishcard(excel_tool: ExcelToolsForActivities, fish_card_tpid_start, fishery_
         instance_object.name = replace_number_between_keywords(content=instance_object.name, replacement=str(fishery_index), pre="新主线", next="-")
         instance_object.tpId = fish_card_tpid_start + cur
         fish_id = int(fish_id_list[cur])
-        instance_object.rank = excel_tool.get_fish_type(fish_tpid=fish_id)
+        instance_object.rank = excel_tool.get_fish_type(fish_id=fish_id)
         instance_object.fishCardFishery = 500300 + fishery_index
         instance_object.fishCardFish = fish_id
         instance_object.fishCardupId = 40 + instance_object.rank
         subspecies_id = int(fish_id_list[15 + cur])
         instance_object.subspeciesId = subspecies_id
-        instance_object.fishClassType = excel_tool.get_fish_type(fish_tpid=fish_id) + 4
+        instance_object.fishClassType = excel_tool.get_fish_type(fish_id=fish_id) + 4
         instance_object.revealPackId = item_main_tpid_start + 2
         print(instance_object)
         excel_tool.add_object(key=key, value=instance_object.tpId, instance_object=instance_object, table_data_detail=fishcard_detail)
@@ -251,7 +258,7 @@ def fishcard(excel_tool: ExcelToolsForActivities, fish_card_tpid_start, fishery_
 def fishcard_pack_info(excel_tool: ExcelToolsForActivities, fishery_index, fishcard_pack_info_tpid_start, item_main_tpid_start, pack_info_cfg_list):
     fishcard_pack_info_detail = excel_tool.get_table_data_detail(book_name="FISHCARD_PACK_INFO.xlsm")
     prefix = fishcard_pack_info_detail[2]
-    id_start = excel_tool.get_max_id(table_object_detail=fishcard_pack_info_detail) + 1
+    id_start = excel_tool.get_max_value(key="id", table_object_detail=fishcard_pack_info_detail) + 1
     id_start =131391
     template_fishcard_pack_info_tpid_start = 362
     key = "tpId"
@@ -274,6 +281,8 @@ def fishcard_pack_info(excel_tool: ExcelToolsForActivities, fishery_index, fishc
         instance_object.hiddenNum = pack_info_cfg[3]
         instance_object.bossNum = pack_info_cfg[4]
         instance_object.fisheryId = 500300 + fishery_index
+        if pack_info_cfg["fish_type"] > 3:
+            instance_object.fisheryId = None
         print(instance_object)
         excel_tool.change_object(key=key, value=instance_object.tpId, instance_object=instance_object,  table_data_detail=fishcard_pack_info_detail)
         cur += 1
@@ -296,25 +305,25 @@ def main():
     fishery_index = 2
 
     pack_info_cfg_list = [
-        [3, 3 , 3, 1, 0],
-        [6, 5, 6, 2, 1],
-        [15, 13, 14, 5, 3],
-        [30, 26, 28, 10, 6],
-        [60, 52, 56, 20, 12],
-        [300, 260, 280, 100, 60],
-        [0, 0, 0, 20, 0],
-        [0, 0, 0, 100, 0],
-        [0, 0, 0, 0, 20],
-        [0, 0, 0, 0, 100],
+        {"name": "10","itemCount_list": [4, 2, 3, 1, 0, 10], "dropTurn_list": [2, 2 ,1 ,1, 0], "fish_type": 0},
+        {"name": "20","itemCount_list":[6, 5, 6, 2, 1, 20], "dropTurn_list": [2, 1 ,1 ,1, 1], "fish_type": 0},
+        {"name": "50","itemCount_list":[15, 13, 14, 5, 3, 50], "dropTurn_list": [1, 1 ,2 ,1, 1], "fish_type": 0},
+        {"name": "100","itemCount_list":[30, 26, 28, 10, 6, 100], "dropTurn_list": [2, 1 ,1 ,1, 1], "fish_type": 0},
+        {"name": "200","itemCount_list":[60, 52, 56, 20, 12, 200], "dropTurn_list": [2, 1 ,1 ,1, 1], "fish_type": 0},
+        {"name": "1000", "itemCount_list":[300, 260, 280, 100, 60, 1000], "dropTurn_list": [2, 1 ,1 ,1, 1], "fish_type": 0},
+        {"name": "隐藏","itemCount_list":[0, 0, 0, 20, 0, 20], "dropTurn_list": [0, 0 ,0 ,1, 0], "fish_type": 4},
+        {"name": "隐藏100","itemCount_list":[0, 0, 0, 100, 0, 100], "dropTurn_list": [0, 0 ,0 ,1, 0], "fish_type": 4},
+        {"name": "boss","itemCount_list":[0, 0, 0, 0, 20, 20], "dropTurn_list": [0, 0 ,0 ,0, 1], "fish_type": 5},
+        {"name": "boss100","itemCount_list":[0, 0, 0, 0, 100, 100],"dropTurn_list": [0, 0 ,0 ,0, 1], "fish_type": 5},
     ]
 
     # item_main(excel_tool=excel_tool, tpid_start=item_main_tpid_start, fishery_index=fishery_index,icon_name=icon_name,  drop_id_start= drop_id_start)
     item_main_language(excel_tool=excel_tool, tpid_start=item_main_tpid_start, fishery_index=fishery_index, pack_info_cfg_list=pack_info_cfg_list)
     # drop_main(excel_tool=excel_tool, drop_id_start=drop_id_start, fishery_index=fishery_index)
     # drop_pack(excel_tool=excel_tool, drop_id_start=drop_id_start,drop_pack_id_start=drop_pack_id_start, fishery_index=fishery_index, pack_info_cfg_list=pack_info_cfg_list)
-    # drop_entity(excel_tool=excel_tool,drop_pack_id_start=drop_pack_id_start, entity_id_start=entity_id_start, fishery_index=fishery_index, fish_card_tpid_start=fish_card_tpid_start)
+    # drop_entity(excel_tool=excel_tool,drop_pack_id_start=drop_pack_id_start, entity_id_start=entity_id_start, fishery_index=fishery_index, fish_card_tpid_start=fish_card_tpid_start, pack_info_cfg_list=pack_info_cfg_list)
     # fishcard(excel_tool=excel_tool, fish_card_tpid_start=fish_card_tpid_start, fishery_index=fishery_index, item_main_tpid_start=item_main_tpid_start)
-    fishcard_pack_info(excel_tool=excel_tool,fishery_index=fishery_index, fishcard_pack_info_tpid_start=fishcard_pack_info_tpid_start, item_main_tpid_start=item_main_tpid_start,  pack_info_cfg_list=pack_info_cfg_list)
+    # fishcard_pack_info(excel_tool=excel_tool,fishery_index=fishery_index, fishcard_pack_info_tpid_start=fishcard_pack_info_tpid_start, item_main_tpid_start=item_main_tpid_start,  pack_info_cfg_list=pack_info_cfg_list)
 
 
 
