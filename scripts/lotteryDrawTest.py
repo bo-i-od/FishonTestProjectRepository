@@ -46,7 +46,8 @@ def get_small_reward_dict(bp: BasePage, price_list, wave):
 
 
 
-def lottery_draw(bp: BasePage, target_index=None):
+def lottery_draw(bp: BasePage, target_index_list=None):
+
     count_init = 10000
     bp.set_item_count(item_tpid="102200", target_count=count_init)
     lua_code = csMsgAll.get_CSLotteryDrawOnceMsg(groupId=group_id)
@@ -88,9 +89,11 @@ def lottery_draw(bp: BasePage, target_index=None):
                 reward_all_dict[reward] = reward_dict[reward]
             p = get_price(bp)
             # print(p[-1], target_index)
-            if p[-1] == target_index:
-                res["总大奖"] = p
-                break
+            if p[-1] in target_index_list:
+                target_index_list.remove(p[-1])
+                if not target_index_list:
+                    res["总大奖"] = p
+                    break
         else:
             # 根据期望键拿到值
             key1 = "prize"
@@ -147,7 +150,7 @@ def main(bp: BasePage):
         bp.sleep(0.5)
 
         # target_index代表目标是1-5哪个大奖
-        res = lottery_draw(bp, target_index=1)
+        res = lottery_draw(bp, target_index_list=[5, 4])
         print(res)
         if res["总消耗"] > cost_max:
             cost_max = res["总消耗"]
@@ -166,7 +169,7 @@ def main(bp: BasePage):
                 continue
             big_reward_all[reward] = 1
         # 不填的话就不设目标
-        # lottery_draw(bp)
+        # lottery_draw(bp, t)
         cur += 1
         if cur % 10 == 0:
             print("---------------------------")
@@ -176,7 +179,7 @@ def main(bp: BasePage):
 
 
 if __name__ == '__main__':
-    group_id = 4000106
+    group_id = 4000118
     bp = BasePage("192.168.111.77:20052")
     main(bp)
     bp.connect_close()
