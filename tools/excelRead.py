@@ -4,7 +4,7 @@ from pathlib import Path
 
 from openpyxl import *
 
-from activities.decl.TIMER_MAIN import TIMER_MAIN
+
 from common.error import PluralElementError, FindNoElementError
 from tools import baseDataRead
 from tools.decl2py import *
@@ -253,7 +253,7 @@ class ExcelTools:
 
 
 
-
+from activities.decl.TIMER_MAIN import TIMER_MAIN
 class ExcelToolsForActivities(ExcelTools):
     def __init__(self, root_path):
         super().__init__(root_path)
@@ -505,8 +505,15 @@ class ExcelToolsForActivities(ExcelTools):
         max_value = 0
         for json_object in json_object_list:
             if key not in json_object:
+                # print(json_object)
                 continue
-            if max_value >= json_object[key]:
+            if max_value > json_object[key]:
+                continue
+            if json_object[key] == 9999999:
+                continue
+            if json_object[key] == 99999999:
+                continue
+            if json_object[key] == 9999999:
                 continue
             max_value = json_object[key]
         return max_value
