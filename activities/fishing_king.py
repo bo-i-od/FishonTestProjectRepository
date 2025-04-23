@@ -107,7 +107,6 @@ def mission_group(excel_tool: ExcelToolsForActivities, group_id:int, fishery_id:
         return res
 
     mission_group_detail = excel_tool.get_table_data_detail(book_name="MISSION_GROUP.xlsm")
-    fishing_rod_detail = excel_tool.get_table_data_detail(book_name="FISHING_ROD.xlsm")
     fisheries_detail = excel_tool.get_table_data_detail(book_name="FISHERIES.xlsm")
     instance_object: MISSION_GROUP
     json_object, instance_object = excel_tool.get_object(key="groupId", value=group_id, table_data_detail=mission_group_detail, cls=MISSION_GROUP)
@@ -116,16 +115,15 @@ def mission_group(excel_tool: ExcelToolsForActivities, group_id:int, fishery_id:
     instance_object.openArg = timer_id
     instance_object.closeArg = timer_id
 
-    instance_object.extArgs[6] = get_fisheries()
+    # instance_object.extArgs[6] = get_fisheries()
     print(instance_object)
     excel_tool.change_object(key="groupId", value=group_id, table_data_detail=mission_group_detail, instance_object=instance_object)
 
-    json_object, instance_object = excel_tool.get_object(key="groupId", value=group_id+1, table_data_detail=mission_group_detail, cls=MISSION_GROUP)
+    group_id = group_id + 1
+    json_object, instance_object = excel_tool.get_object(key="groupId", value=group_id, table_data_detail=mission_group_detail, cls=MISSION_GROUP)
     instance_object.openArg = timer_id
     instance_object.closeArg = timer_id
-    rod_id = excel_tool.get_rod(fishery_id=fishery_id, rarity=4, fishing_rod_detail=fishing_rod_detail, fisheries_detail=fisheries_detail)[0]
-    rod_icon = excel_tool.get_rod_icon(rod_id=rod_id, fishing_rod_detail=fishing_rod_detail)
-    instance_object.imgRodGiftpack = rod_icon
+
     print(instance_object)
     excel_tool.change_object(key="groupId", value=group_id, table_data_detail=mission_group_detail, instance_object=instance_object)
 
@@ -138,15 +136,15 @@ def timer_main(excel_tool: ExcelToolsForActivities, group_id, time_start):
 
 def main():
     time_start = "2025-04-25 00:00:00"
-    group_id = 2010801
-    fishery_id = 400301
+    group_id = 2010803
+    fishery_id = 400318
     new_fishery_id = 500302
     excel_tool = ExcelToolsForActivities(EXCEL_PATH)
 
     timer_main(excel_tool=excel_tool, group_id=group_id,  time_start=time_start)
-    mission_group(excel_tool=excel_tool, group_id=group_id, fishery_id=fishery_id)
-    # event_n_day_tasks_milestone(excel_tool=excel_tool, group_id=group_id, fishery_id=fishery_id)
-    # mission_main(excel_tool=excel_tool, group_id=group_id, fishery_id=fishery_id, new_fishery_id=new_fishery_id)
+    mission_group(excel_tool=excel_tool, group_id=group_id, fishery_id=new_fishery_id)
+    event_n_day_tasks_milestone(excel_tool=excel_tool, group_id=group_id, fishery_id=fishery_id)
+    mission_main(excel_tool=excel_tool, group_id=group_id, fishery_id=fishery_id, new_fishery_id=new_fishery_id)
 
 
 

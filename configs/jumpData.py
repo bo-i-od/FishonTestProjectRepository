@@ -59,6 +59,8 @@ class JumpData:
         "MessageBoxPanel",
         "MidAutumnPackPopupPanel",
         "MonthCardPopPanel",
+        "NewbieGuidePanel",
+        "NewRankingActivityCompetitionPanel",
         "ValentinePackPopupPanel"
     }
 
@@ -185,6 +187,8 @@ class JumpData:
         "TreasureChestPanel": {"element_data": ElementsData.TreasureChestPanel.TreasureChestPanel, "open_path": [ElementsData.Home3DPanel.btn_pve, ElementsData.TournamentsPanel.btn_box], "close_path": [ElementsData.TreasureChestPanel.btn_close]},
         "TreasureChestRewardsPanel": {"element_data": ElementsData.TreasureChestRewardsPanel.TreasureChestRewardsPanel, "close_path": [ElementsData.TreasureChestRewardsPanel.btn_close]},
         "ValentinePackPopupPanel": {"element_data": ElementsData.ValentinePackPopupPanel.ValentinePackPopupPanel, "close_path": [ElementsData.ValentinePackPopupPanel.btn_close]},
+        "NewbieGuidePanel": {"element_data": ElementsData.NewbieGuidePanel.NewbieGuidePanel, "close_path": [ElementsData.NewbieGuidePanel.NewbieGuidePanel]},
+        "NewRankingActivityCompetitionPanel":{"element_data": ElementsData.NewRankingActivityCompetitionPanel.NewRankingActivityCompetitionPanel, "close_path": [ElementsData.NewRankingActivityCompetitionPanel.btn_receive]},
     }
 
 

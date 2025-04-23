@@ -1,21 +1,18 @@
 from activities.decl.COOPERATION_SYS_FINAL_REWARD_WITH_TIME import COOPERATION_SYS_FINAL_REWARD_WITH_TIME
-from activities.decl.TIMER_MAIN import TIMER_MAIN
-from configs.pathConfig import EXCEL_PATH
-from tools import baseDataRead
 from tools.commonTools import *
 from tools.decl2py import *
 from tools.excelRead import ExcelToolsForActivities
 
 def cooperation_sys_final_reward_with_time(excel_tool: ExcelToolsForActivities, time_start, fishery_id):
     table_data_detail = excel_tool.get_table_data_detail(book_name="COOPERATION_SYS_FINAL_REWARD_WITH_TIME.xlsm")
-    table_data_object_list, structs, prefix = table_data_detail
-    json_object = table_data_object_list[-1]
+    json_object_list, structs, prefix = table_data_detail
+    json_object = json_object_list[-1]
 
     # 复制最后一条
     instance_object: COOPERATION_SYS_FINAL_REWARD_WITH_TIME
     instance_object = json_to_instance(json_object=json_object, cls=COOPERATION_SYS_FINAL_REWARD_WITH_TIME)
-    instance_object.tpId = instance_object.tpId + 1
-    instance_object.id = instance_object.tpId
+    instance_object.tpId = excel_tool.get_max_value(key="tpId", table_object_detail=table_data_detail) + 1
+    instance_object.id = excel_tool.get_max_value(key="id", table_object_detail=table_data_detail) + 1
     instance_object.openTime = time_start
     instance_object.fisheriesId = fishery_id
     print(f"----------------{prefix} 正在新增----------------")

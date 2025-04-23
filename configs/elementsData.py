@@ -1416,6 +1416,9 @@ class ElementsData:
         btn_close = {"locator": "UICanvas>Default>MonthCardPopPanel>panel>btn_close>img"}
         btn_go = {"locator": "UICanvas>Default>MonthCardPopPanel>panel>btn_go", "focus": (1, 1)}
 
+    class NewRankingActivityCompetitionPanel:
+        NewRankingActivityCompetitionPanel =  {"locator": "UICanvas>Default>NewRankingActivityCompetitionPanel"}
+        btn_receive = {"locator": "UICanvas>Default>NewRankingActivityCompetitionPanel>panel>myself>btn_receive"}
 
     class NewbieGuidePanel:
         NewbieGuidePanel = {"locator": "UICanvas>Default>NewbieGuidePanel"}
