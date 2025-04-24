@@ -1,8 +1,12 @@
 import re
+import time
 
 from common import gameInit
 from common.basePage import BasePage
 from netMsg import csMsgAll, fishingMsg
+from panelObjs import BattlePanel
+from panelObjs.ChallengeMainStagePanel import ChallengeMainStagePanel
+from panelObjs.MainStageSettlePanel import MainStageSettlePanel
 from panelObjs.RogueMainStagePanel import RogueMainStagePanel
 from panelObjs.RogueResultPanel import RogueResultPanel
 from scripts import battleTest, duelTest, gearTest, fishCardTest, flashCardTest, createUsers
@@ -27,6 +31,8 @@ def quest_done(bp: BasePage):
 
         if "nextQuestId" not in table_data_object:
             break
+        # if table_data_object["nextQuestId"] == 80000047:
+        #     break
         bp.cmd(f"questFinish {quest_id}")
         bp.sleep(0.1)
 
@@ -180,36 +186,55 @@ def tower_level_up(bp: BasePage, tag, lv):
         bp.sleep(1)
         cur += 1
 
+def challenge(bp: BasePage, times=100):
+    cur = 0
+    while cur < times:
+        ChallengeMainStagePanel.click_btn_orange(bp)
+        battleTest.fish_once(bp, is_quick=False)
+        MainStageSettlePanel.click_btn_blue(bp)
+        bp.sleep(1)
+        cur += 1
+
 
 if __name__ == '__main__':
     base_page = BasePage(serial_number="127.0.0.1:21593", is_mobile_device=False)
-    # base_page.sleep(3)
-    # base_page.go_to_panel("AchievementPanel")
-    base_page.is_time_scale = True
-    base_page.custom_cmd("setQuickQTE 1")
-    base_page.tension_default = 0.65
-    base_page.custom_cmd("setTension 0.65")
-    base_page.is_quick_qte = True
+    # base_page.cmd_list(["mode 500301 360107"])
     #
-    # # # 跳过引导
+    base_page.is_time_scale = False
+    base_page.time_scale_default = 5
+    base_page.set_time_scale(base_page.time_scale_default)
+    # base_page.set_is_quick_qte(True)
+    # base_page.set_object_active(active=False, element_data={"locator": "UICanvas>Default>EventPanel_N_DAYS_10>Panel>panel_right>tab>Scroll View>Viewport>content>day_1(Clone)>lock"})
+    # base_page.cmd("mode 500301 360101")
+    # gameInit.set_joystick(base_page)
+    # BattlePanel.hold_btn_reel(base_page)
+    # base_page.cmd("clone 1000002002")
+    #
+    #
+    #
+    # base_page.cmd_list(["levelupto 101","add 1 100500 10000000", "guideskip"])
+    # base_page.sleep(1)
+    # # # # # 跳过引导
     # gameInit.guide_skip(base_page)
+    # base_page.set_item_count(target_count=10000, item_tpid="100500")
+    # base_page.set_item_count(target_count=0, item_tpid="101500")
+    # # # # # # #
+    # # # # # # # #
     #
-    # #
-    # base_page.cmd_list(["levelupto 21"])
-    # # #
-    # # # # # # 新主线升到指定等级
-    # level_up_to_new_plot(base_page, 60)
-    # # #
-    # # # 完成新主线剧情任务
+    # # # # # #
+    # # # # # # # 新主线升到指定等级
+    # level_up_to_new_plot(base_page, 99)
+    # # # # # # # # # #
+    # # # # # # # # # # 完成新主线剧情任务
     # quest_done(base_page)
-
-    # 天赋满级
-    # talent_all(base_page)
-
-    # 装备满级满星
-    # full_gear(base_page)
-
-    # 鱼卡满级
+    # # # # #
+    # # # # 天赋满级
+    # # talent_all(base_page)
+    # # # #
+    # # # # # 装备满级满星
+    # # full_gear(base_page)
+    # # # # #
+    # # # # # # 鱼卡满级
     # fishCardTest.fish_card_one_key_level_up(base_page)
 
     # 指定渔场渔册满
@@ -225,11 +250,18 @@ if __name__ == '__main__':
     # category_done(base_page, category_id=10004)
 
     # # 钓一次鱼 运行界面：备战界面
-    battleTest.fish_once(base_page, is_quick=False, fish_id="360113")
+    # base_page.cmd("mode 500301 360113")
+    # battleTest.fish_once(base_page, is_quick=True, fish_id=360115)
 
     # 循环钓鱼 运行界面：备战界面
     # 填渔场id会将该渔场鱼钓一遍
-    # battleTest.circulate_fish(base_page, is_quick=False, fishery_id="400304", start=13)
+    # base_page.cmd("mode 500301 360115")
+
+    # battleTest.circulate_fish(base_page, is_quick=False, fishery_id="500301")
+
+
+    # 钓者挑战打times关
+    challenge(base_page, times=10)
 
     # 体感抛竿
     # battleTest.vibration_cast(base_page)
@@ -239,13 +271,13 @@ if __name__ == '__main__':
 
     # 对决一次 运行界面：对决大厅界面
     # rank0-7代表黑铁到传奇
-    # duelTest.duel_once(base_page, rank=0)
+    # duelTest.duel_once(base_page, rank=1)
 
     # 该渔场闪卡获得一张
-    # flashCardTest.get_flash_card(base_page, fishery_id="500301")
+    # flashCardTest.get_flash_card(base_page, fishery_id="400319")
 
     # 任意界面接口钓鱼 1021
-    # fish_quick(base_page, fish_id=360101, is_map=False, times=1)
+    # fish_quick(base_page, fish_id=350114, is_map=False, times=1)
 
     # 设定道具数量
     # base_page.set_item_count(item_tpid="102100", target_count=10)
