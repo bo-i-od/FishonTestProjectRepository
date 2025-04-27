@@ -260,7 +260,7 @@ class ExcelToolsForActivities(ExcelTools):
 
     def write_data_txt(self, name: str, blocks: str = None, json_object_list=None, instance_object_list=None):
         """
-            blocks, json_object_list, instance_object_list三选一
+            blocks, json_object_list, instance_object_list三选一保存到{name}.data.txt中
         """
         if instance_object_list:
             instance_list_to_json_list(instance_object_list=instance_object_list)
@@ -413,7 +413,7 @@ class ExcelToolsForActivities(ExcelTools):
             value：特征值
             book_name，table_data_detail二选一
             json_object，instance_object二选一
-            cls：类型 当不写时instance_object的值为None
+            cls：instance_object的类型 当不写时instance_object的值为None
         """
         if not table_data_detail:
             table_data_detail = self.get_table_data_detail(book_name=book_name)
@@ -431,6 +431,10 @@ class ExcelToolsForActivities(ExcelTools):
         return json_object, instance_object
 
     def get_objects(self, key, value_list, book_name: str = None, table_data_detail=None, cls: type = None):
+        """
+            获取json_object_list, instance_object_list
+            需要cls=instance_object的类型，否则instance_object_list=[]
+        """
         if not table_data_detail:
             table_data_detail = self.get_table_data_detail(book_name=book_name)
         json_object_list = []
@@ -444,8 +448,12 @@ class ExcelToolsForActivities(ExcelTools):
         return json_object_list, instance_object_list
 
 
-    def timer_main(self, timer_id:int, time_start: str, time_end: str):
-        timer_main_detail = self.get_table_data_detail(book_name="TIMER_MAIN.xlsm")
+    def timer_main(self, timer_id:int, time_start: str, time_end: str, timer_main_detail=None):
+        """
+            更改指定timer_id的openTime和endTime
+        """
+        if timer_main_detail is None:
+            timer_main_detail = self.get_table_data_detail(book_name="TIMER_MAIN.xlsm")
         instance_object: TIMER_MAIN
         json_object, instance_object = self.get_object(key="timerID", value=timer_id, table_data_detail=timer_main_detail, cls=TIMER_MAIN)
         instance_object.openTime = time_start
@@ -455,6 +463,13 @@ class ExcelToolsForActivities(ExcelTools):
 
 
     def fish_bag_id_to_detail(self, fish_bag_id, table_object_detail=None):
+        """
+            name              鱼卡包名称
+            itemTpId          fish_bag_id
+            fishCardCount     一包里鱼卡总数
+            fishBagFishery    1-4是tier1-4卡包  x003xx是x003xx卡包
+            fishBagType       1是普通卡包 2是hidden卡包 3是boss卡包
+        """
         if table_object_detail is None:
              table_object_detail = baseDataRead.convert_to_json(path=self.root_dir + "/activities/customTables/", prefix="FISH_BAG")
         json_object_list, _, _ = table_object_detail
@@ -465,6 +480,9 @@ class ExcelToolsForActivities(ExcelTools):
         return None
 
     def change_fish_bag_fishery(self, fish_bag_id, fishery_id, table_object_detail=None):
+        """
+            将fish_bag_id转换成fishery_id对应的卡包id，如果不存在返回None
+        """
         if table_object_detail is None:
             table_object_detail = baseDataRead.convert_to_json(path=self.root_dir + "/activities/customTables/", prefix="FISH_BAG")
         detail = self.fish_bag_id_to_detail(fish_bag_id=fish_bag_id, table_object_detail=table_object_detail)
@@ -476,6 +494,12 @@ class ExcelToolsForActivities(ExcelTools):
 
 
     def get_fish_bag(self, fishery_id=None, fish_bag_type=None, fish_card_count=None, table_object_detail=None):
+        """
+            fishBagType 1是普通卡包 2是hidden卡包 3是boss卡包
+            fishery_id  1-4是tier1-4卡包  x003xx是x003xx卡包
+            fish_card_count  一包里鱼卡总数
+            table_object_detail是FISH_BAG.data.txt的数据
+        """
         if table_object_detail is None:
             table_object_detail = baseDataRead.convert_to_json(path=self.root_dir + "/activities/customTables/", prefix="FISH_BAG")
         json_object_list, _, _ = table_object_detail
@@ -496,11 +520,17 @@ class ExcelToolsForActivities(ExcelTools):
         raise FindNoElementError("没有找到对应的鱼卡包")
 
     def group_id_to_timer_id(self, group_id):
+        """
+            MISSION_GROUP中根据group_id查timer_id
+        """
         table_data_object = self.get_table_data_object_by_key_value(book_name="MISSION_GROUP.xlsm", key="groupId", value=group_id)
         timer_id = table_data_object["openArg"]
         return timer_id
 
     def get_max_value(self, key, table_object_detail):
+        """
+            获取表中该键最大的值
+        """
         json_object_list, _ , _ = table_object_detail
         max_value = 0
         for json_object in json_object_list:
@@ -517,6 +547,21 @@ class ExcelToolsForActivities(ExcelTools):
                 continue
             max_value = json_object[key]
         return max_value
+
+    def get_min_value_more_than_start(self, key, table_object_detail, start, long=1):
+        """
+            获得大于一个指定数能容纳连续long个数的最小数
+        """
+        json_object_list, _, _ = table_object_detail
+        existing_values = {obj[key] for obj in json_object_list if key in obj}
+
+        n = start
+        while True:
+            # 检查从n开始的long个连续数是否均未被使用
+            if all((n + i) not in existing_values for i in range(long)):
+                return n
+            n += 1
+
 
     def get_fish_id_list(self, fishery_id, fisheries_detail=None):
         """函数功能简述
@@ -542,23 +587,35 @@ class ExcelToolsForActivities(ExcelTools):
         return res_list
 
     def get_fish_type(self, fish_id, fish_detail=None):
+        """
+            查FISH表里的fishType
+        """
         if fish_detail is None:
             fish_detail = self.get_table_data_detail(book_name="FISH.xlsm")
         table_data_object = self.get_table_data_object_by_key_value(key="tpId", value=fish_id, table_data_detail=fish_detail)
         return table_data_object["fishType"]
 
     def get_fish_class(self, fish_id, fish_detail=None):
+        """
+            查FISH表里的fishClass
+        """
         if fish_detail is None:
             fish_detail = self.get_table_data_detail(book_name="FISH.xlsm")
         table_data_object = self.get_table_data_object_by_key_value(key="tpId", value=fish_id, table_data_detail=fish_detail)
         return table_data_object["fishClass"]
 
     def get_rod(self, fishery_id, rarity, fisheries_detail=None, fishing_rod_detail=None):
+        """
+            根据渔场id和稀有度查对应的鱼竿
+            rarity 2蓝 3紫 4黄
+        """
         if fisheries_detail is None:
             fisheries_detail = self.get_table_data_detail(book_name="FISHERIES.xlsm")
         if fishing_rod_detail is None:
             fishing_rod_detail = self.get_table_data_detail(book_name="FISHING_ROD.xlsm")
-        fishery_rank, fishery_living, _ = self.get_fishery_detail(fishery_id=fishery_id, fisheries_detail=fisheries_detail)
+        fishery_detail = self.get_fishery_detail(fishery_id=fishery_id, fisheries_detail=fisheries_detail)
+        fishery_rank = fishery_detail["fisheriesRank"]
+        fishery_living = fishery_detail["fisheriesLiving"]
         table_data_object_list = self.get_table_data_object_list_by_key_value(key="rarity", value=rarity, table_data_detail=fishing_rod_detail)
         rod_list = []
         for table_data_object in table_data_object_list:
@@ -570,26 +627,31 @@ class ExcelToolsForActivities(ExcelTools):
         return rod_list
 
     def get_rod_icon(self, rod_id, fishing_rod_detail=None):
+        """
+            根据rod_id查FISHING_ROD中displayicon
+        """
         if fishing_rod_detail is None:
             fishing_rod_detail = self.get_table_data_detail(book_name="FISHING_ROD.xlsm")
         rod_icon = self.get_table_data_object_by_key_value(key="tpId", value=rod_id, table_data_detail=fishing_rod_detail)["displayicon"]
         return rod_icon
 
     def get_fishery_detail(self, fishery_id, fisheries_detail=None):
+        """
+            获取指定渔场json格式数据
+        """
         if fisheries_detail is None:
             fisheries_detail = self.get_table_data_detail(book_name="FISHERIES.xlsm")
         table_data_object_list = self.get_table_data_object_list_by_key_value(key="tpId", value=fishery_id, table_data_detail=fisheries_detail)
         if not table_data_object_list:
             return None
         table_data_object = table_data_object_list[0]
-        fishery_rank = table_data_object["fisheriesRank"]
-        fishery_living = table_data_object["fisheriesLiving"]
-        is_new_fishery = 0
-        if "fisheriesType" in table_data_object:
-            is_new_fishery = 1
-        return fishery_rank, fishery_living, is_new_fishery
+        return table_data_object
 
     def get_fishery_fish_type_detail(self, fishery_id, fish_detail=None):
+        """
+            获取指定渔场各体型鱼的分布数据
+            例如{"small":4, "medium": 4, "large": 4, "hidden": 2, "boss": 4, "rare": 3, "elite": 3, "monster": 6, "total": 25, "total_common": 15}
+        """
         if fish_detail is None:
             fish_detail = self.get_table_data_detail(book_name="FISH.xlsm")
         fish_id_list = self.get_fish_id_list(fishery_id=fishery_id)
@@ -635,15 +697,32 @@ class ExcelToolsForActivities(ExcelTools):
             cur += 1
         return fish_type_detail
 
-    def get_fishery_name(self, fishery_id):
-        fisheries_language_detail = self.get_table_data_detail(book_name="FISHERIES_LANGUAGE.xlsm")
+    def get_fishery_name(self, fishery_id, fisheries_language_detail=None):
+        """
+            根据fishery_id查FISHERIES_LANGUAGE中t_name
+        """
+        if fisheries_language_detail is None:
+            fisheries_language_detail = self.get_table_data_detail(book_name="FISHERIES_LANGUAGE.xlsm")
         table_data_object = self.get_table_data_object_by_key_value(key="tpId", value=fishery_id, table_data_detail=fisheries_language_detail)
         return table_data_object["t_name"]
 
-    def get_fish_name(self, fish_id):
-        fish_language_detail = self.get_table_data_detail(book_name="FISH_LANGUAGE.xlsm")
+    def get_fish_name(self, fish_id, fish_language_detail=None):
+        """
+            根据fish_id查FISH_LANGUAGE中t_fishName
+        """
+        if fish_language_detail is None:
+            fish_language_detail = self.get_table_data_detail(book_name="FISH_LANGUAGE.xlsm")
         table_data_object = self.get_table_data_object_by_key_value(key="tpId", value=fish_id, table_data_detail=fish_language_detail)
         return table_data_object["t_fishName"]
+
+    def get_flash_card_id(self, fish_id, collection_base_detail=None):
+        """
+            根据fish_id查COLLECTION_BASE中闪卡id
+        """
+        if collection_base_detail is None:
+            collection_base_detail = self.get_table_data_detail(book_name="COLLECTION_BASE.xlsm")
+        return self.get_table_data_object_by_key_value(key="fishId", value=fish_id, table_data_detail=collection_base_detail)["collectionId"]
+
 
 
 

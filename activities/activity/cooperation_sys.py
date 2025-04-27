@@ -3,6 +3,10 @@ from tools.commonTools import *
 from tools.decl2py import *
 from tools.excelRead import ExcelToolsForActivities
 
+"""
+    共建配置模板
+"""
+
 def cooperation_sys_final_reward_with_time(excel_tool: ExcelToolsForActivities, time_start, fishery_id):
     table_data_detail = excel_tool.get_table_data_detail(book_name="COOPERATION_SYS_FINAL_REWARD_WITH_TIME.xlsm")
     json_object_list, structs, prefix = table_data_detail
@@ -15,15 +19,9 @@ def cooperation_sys_final_reward_with_time(excel_tool: ExcelToolsForActivities, 
     instance_object.id = excel_tool.get_max_value(key="id", table_object_detail=table_data_detail) + 1
     instance_object.openTime = time_start
     instance_object.fisheriesId = fishery_id
-    print(f"----------------{prefix} 正在新增----------------")
-    print(instance_to_block(instance_object=instance_object, name=prefix.lower()))
-    print("- - - - - - - - - - - - - - - -")
-    res = excel_tool.add_object(key="openTime", value=instance_object.openTime, table_data_detail=table_data_detail, instance_object=instance_object)
+    print(instance_object)
+    excel_tool.add_object(key="openTime", value=instance_object.openTime, table_data_detail=table_data_detail, instance_object=instance_object)
 
-    if res:
-        print(f"----------------{prefix} 新增完成----------------\n")
-    else:
-        print(f"----------------{prefix} 新增终止----------------\n")
 
 def timer_main(excel_tool: ExcelToolsForActivities, time_start, timer_id=102037):
     time_end = get_time(time=time_start, days=7, seconds=-1)

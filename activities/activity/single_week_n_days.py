@@ -19,13 +19,12 @@ from activities.decl.REPEATABLE_CHALLENGE_LANGUAGE import REPEATABLE_CHALLENGE_L
 from activities.decl.THREE_FISH_MAIN import THREE_FISH_MAIN, ThreeFishOffset
 from activities.decl.THREE_FISH_RANK_REWARD import THREE_FISH_RANK_REWARD
 from activities.decl.TIMER_MAIN import TIMER_MAIN
-from configs.pathConfig import EXCEL_PATH
 from tools import commonTools, baseDataRead
 from tools.excelRead import ExcelToolsForActivities
 from tools.decl2py import *
 
 """
-这个是没有开过双周活动的单周配置模板
+    这个是没有开过双周活动的单周配置模板
 """
 
 def activity_double_week(excel_tool: ExcelToolsForActivities,fishery_id, chapterID, TimerId, icon_name, paymentGiftId_start, activityFisheryNameId, chapterTimerId, returnTimerId, notShowBeforeReturn, wildCardId=None):
@@ -104,7 +103,7 @@ def activity_double_week(excel_tool: ExcelToolsForActivities,fishery_id, chapter
     else:
         excel_tool.add_object(key=key, value=instance_object.tpId, table_data_detail=activity_double_week_detail, instance_object=instance_object)
 
-def battle_pass_main_2024(excel_tool: ExcelToolsForActivities, fishery_id, groupId_battle_pass, returnTimerId, newNDaysImgName, activityFisheryNameId):
+def battle_pass_main_2024(excel_tool: ExcelToolsForActivities, fishery_id, groupId_battle_pass, returnTimerId, newNDaysImgName, activityFisheryNameId, bounsRate=None):
     battle_pass_main_2024_detail = excel_tool.get_table_data_detail(book_name="BATTLE_PASS_MAIN_2024.xlsm")
     template_groupId = 21
 
@@ -124,6 +123,10 @@ def battle_pass_main_2024(excel_tool: ExcelToolsForActivities, fishery_id, group
     instance_object.activityBPName = f"Assets/InBundle/UI/Texture/activity_ndays/{newNDaysImgName}.png"
     instance_object.activityBPId = activityFisheryNameId
     instance_object.fisheriesId = fishery_id
+    if bounsRate:
+        instance_object.bounsRate = bounsRate
+        instance_object.bounsRateAdvance = bounsRate
+        instance_object.bounsRatePromote = bounsRate
     print(instance_object)
     if mode == 0:
         excel_tool.change_object(key=key, value=instance_object.tpId, table_data_detail=battle_pass_main_2024_detail, instance_object=instance_object)
@@ -786,7 +789,8 @@ def mission_main(excel_tool: ExcelToolsForActivities,fishery_id, groupId, missio
                 missionConditionID_set.add(instance_object.missionConditionIDs[1])
         # missionConditionID_set有该值就加一直到无重复
         if "mission_language" in mission_cfg:
-            fishery_rank, fishery_living, _ = excel_tool.get_fishery_detail(fishery_id=fishery_id, fisheries_detail=fisheries_detail)
+            fishery_detail = excel_tool.get_fishery_detail(fishery_id=fishery_id, fisheries_detail=fisheries_detail)
+            fishery_living = fishery_detail["fisheriesLiving"]
             mission_language_id = get_mission_language_id(fishery_living, mission_cfg["mission_language"])
             instance_object.mission_language = mission_language_id
 
@@ -846,7 +850,12 @@ def mission_condition(excel_tool: ExcelToolsForActivities,fishery_id, mission_cf
             instance_object.id = id_start + cur
         instance_object.missionConditionID = missionConditionID
         if "rod_detail" in mission_condition_cfg:
-            fishery_rank, fishery_living, _ = excel_tool.get_fishery_detail(fishery_id=fishery_id, fisheries_detail=fisheries_detail)
+            fishery_detail = excel_tool.get_fishery_detail(fishery_id=fishery_id, fisheries_detail=fisheries_detail)
+            fishery_rank = fishery_detail["fisheriesRank"]
+            fishery_living = fishery_detail["fisheriesLiving"]
+            is_new_fishery = 0
+            if "fisheriesType" in fishery_detail:
+                is_new_fishery = 1
             instance_object.triggerKeyM = fishery_rank
             instance_object.triggerKeyS = fishery_living
             instance_object.numDisplay[0] = f"{fishery_rank}"
@@ -1108,13 +1117,13 @@ def main():
         "fishery_id": 400319,                # 渔场id
         "open_time": "2025-05-02 00:00:00",  # 活动开始时间 (timer_main)
         "missionType": 72,                   # 任务类型 (mission_group, mission_main)
-        "collectionChapterId": 9,           # 闪卡章节 (activity_double_week)
-        "TimerId": None,                   # 双周时间id (activity_double_week, timer_main)
+        "collectionChapterId": 9,            # 闪卡章节 (activity_double_week)
+        "TimerId": None,                     # 双周时间id (activity_double_week, timer_main)
         "chapterTimerId": 102051,            # 闪卡开启时间 (activity_double_week, timer_main)
         "returnTimerId": 151209,             # 返场时间id (activity_double_week, battle_pass_main_2024, mission_group, timer_main) ×
         "groupId": 5100048,                  # 返场活动的groupId (event_endless_sale, event_n_day_tasks_leaderboard, event_n_day_tasks_milestone, mission_group, repeatable_challenge)
         "groupId_battle_pass": 31,           # battle_pass表里的groupId (battle_pass_main_2024, battle_pass)
-        "groupId_three_fish": None,       # 三鱼榜的groupId (mission_group, three_fish_main, three_fish_rank_reward)
+        "groupId_three_fish": None,          # 三鱼榜的groupId (mission_group, three_fish_main, three_fish_rank_reward)
         "icon_name": "B09",                  # 图标的特殊后缀 (activity_double_week, item_main)
         "paymentGiftId_start": 2510085,      # paymentGiftId开始 (activity_double_week)
         "activityFisheryNameId": 19960006,   # 活动名的id (activity_double_week, battle_pass_main_2024, panel_static_language, mission_group, three_fish_main, mission_main)
@@ -1126,6 +1135,7 @@ def main():
         "imgNameInner": "ActivityTasks_banner_bg_40",                 # 活动内的背景 (mission_group)
         "newNDaysImgName": "ActivityTasks_ndays_logo_wslj",          # (battle_pass_main_2024, mission_group)
         "big_reward": {"tpId": 1104011, "itemType": 11, "count": 1},  # 闪卡集齐大奖 (collection_reward)
+        "bounsRate": 3000,
         "displayBanner": "activitycarnival_njld/ActivityCarnival_njld_leaderboard_tittle",        # 三鱼排行榜banner (three_fish_main)
         "fishOffset_list": [
             {"offsetX": 122, "offsetY": 3, "scale": 1, "cardOffsetX": 8, "cardOffsetY": 47, "cardScale": 0.55},
@@ -1137,7 +1147,7 @@ def main():
     excel_tool = ExcelToolsForActivities(EXCEL_PATH)
 
     activity_double_week(excel_tool=excel_tool, fishery_id=cfg["fishery_id"], chapterID=cfg["collectionChapterId"], TimerId=cfg["TimerId"], icon_name=cfg["icon_name"], paymentGiftId_start=cfg["paymentGiftId_start"], activityFisheryNameId=cfg["activityFisheryNameId"], wildCardId=cfg["wildCardId"], chapterTimerId=cfg["chapterTimerId"], returnTimerId=cfg["returnTimerId"], notShowBeforeReturn=cfg["notShowBeforeReturn"])
-    battle_pass_main_2024(excel_tool=excel_tool, fishery_id=cfg["fishery_id"], groupId_battle_pass=cfg["groupId_battle_pass"], returnTimerId=cfg["returnTimerId"], newNDaysImgName=cfg["newNDaysImgName"], activityFisheryNameId=cfg["activityFisheryNameId_return"])
+    battle_pass_main_2024(excel_tool=excel_tool, fishery_id=cfg["fishery_id"], groupId_battle_pass=cfg["groupId_battle_pass"], returnTimerId=cfg["returnTimerId"], newNDaysImgName=cfg["newNDaysImgName"], activityFisheryNameId=cfg["activityFisheryNameId_return"], bounsRate=cfg["bounsRate"])
     battle_pass(excel_tool=excel_tool, groupId_battle_pass=cfg["groupId_battle_pass"])
     collection_base(excel_tool=excel_tool, fishery_id=cfg["fishery_id"], collectionChapterId=cfg["collectionChapterId"])
     collection_energy_cost_debuff(excel_tool=excel_tool, fishery_id=cfg["fishery_id"])

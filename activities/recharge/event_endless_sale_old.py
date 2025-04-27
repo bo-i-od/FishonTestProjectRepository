@@ -4,6 +4,10 @@ from tools.decl2py import *
 from tools.excelRead import ExcelToolsForActivities
 from activities.decl.EVENT_ENDLESS_SALE import EVENT_ENDLESS_SALE
 
+"""
+    海外蛇形礼包配置模板
+"""
+
 def event_endless_sale(excel_tool: ExcelToolsForActivities, group_id, fishery_id):
     event_endless_sale_detail = excel_tool.get_table_data_detail(book_name="EVENT_ENDLESS_SALE.xlsm")
     item_main_detail = excel_tool.get_table_data_detail(book_name="ITEM_MAIN.xlsm")
