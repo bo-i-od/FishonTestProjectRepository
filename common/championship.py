@@ -4,6 +4,7 @@ from common.basePage import BasePage
 from netMsg import csMsgAll
 from panelObjs.AquariumFishNewPanel import AquariumFishNewPanel
 from panelObjs.BattlePreparePanel import BattlePreparePanel
+from panelObjs.ChallengeMainStagePanel import ChallengeMainStagePanel
 from panelObjs.ChampionshipInfoNewPanel import ChampionshipInfoNewPanel
 from panelObjs.ChampionshipNewPanel import ChampionshipNewPanel
 from panelObjs.LoadingPanel import LoadingPanel
@@ -154,7 +155,14 @@ def championship_new(bp: BasePage, spot_id, times, is_monitor=True, overflow_fac
     bp.sleep(1)
     bp.go_to_spot(spot_id=spot_id)
     BattlePreparePanel.wait_for_panel_appear(bp)
-
+    bp.sleep(1)
+    BattlePreparePanel.panel_MainStage_daily_prepare.click_btn_btn_receive(bp)
+    bp.sleep(1)
+    BattlePreparePanel.panel_MainStage_daily_prepare.click_outboard_tip(bp)
+    bp.sleep(1)
+    if ChallengeMainStagePanel.is_panel_active(bp):
+        ChallengeMainStagePanel.click_btn_close(bp)
+        bp.sleep(1)
     if check_reward_new(bp, overflow_factor=overflow_factor):
         bp.go_home()
         return bp
@@ -165,8 +173,7 @@ def championship_new(bp: BasePage, spot_id, times, is_monitor=True, overflow_fac
         bp.lua_console(lua_code)
         bp.sleep(1)
 
-    BattlePreparePanel.panel_MainStage_daily_prepare.click_btn_btn_receive(bp)
-    bp.sleep(1)
+
     circulate_fish(bp, times=times, is_quick=False)
 
     while BattlePreparePanel.get_btn_icon_warning_position(bp):
@@ -238,13 +245,15 @@ if __name__ == '__main__':
     #     print(f"第{cur}次钓鱼")
 
     # 备战界面钓指定次数
-    # circulate_fish(bp=base_page, is_quick=False, times=250)
-    # while True:
+    # circulate_fish(bp=base_page, is_quick=False, times=100)
+    # i = 0
+    # while i < 10:
     #     fish_once(bp=base_page, is_quick=False)
     #     base_page.go_to_panel("TournamentsPanel")
     #     base_page.sleep(1)
     #     base_page.go_to_fishery(fishery_id=400314)
-
+    #     i += 1
+    # fish_once(bp=base_page, is_quick=False)
     # base_page.sleep(3600)
     # aquarium(bp=base_page)
     # base_page.clear_popup()
@@ -254,11 +263,12 @@ if __name__ == '__main__':
         if cur > 10:
             base_page = aquarium(base_page, is_monitor=True)
             cur = 0
-        base_page = championship_new(base_page, spot_id=10103, times=10, is_treasure_map=False)
+        base_page = championship_new(base_page, spot_id=10201, times=10, is_treasure_map=False)
         # base_page = championship(base_page, index=0, times=20, cost=2, overflow_factor=1, is_monitor=True)
         # # base_page.sleep(60)
 
-        base_page = championship(base_page, times=20, index=0, energy_cost=1, is_treasure_map=False)
-        base_page = championship(base_page, times=20, index=1, energy_cost=1, is_treasure_map=False)
+        base_page = championship(base_page, times=20, index=0, energy_cost=3, is_treasure_map=False)
+        base_page = championship(base_page, times=20, index=1, energy_cost=3, is_treasure_map=False)
         cur += 1
+
 

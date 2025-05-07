@@ -106,7 +106,7 @@ class JumpData:
         "CatPackPopupPanel": {"element_data": ElementsData.CatPackPopupPanel.CatPackPopupPanel, "close_path": [ElementsData.CatPackPopupPanel.btn_close]},
         "CareerPanel": {"element_data": ElementsData.CareerPanel.CareerPanel, "open_path": [ElementsData.Home3DPanel.btn_pve, ElementsData.TournamentsPanel.btn_career], "close_path": [ElementsData.CareerPanel.btn_close]},
         "ChatPanel": {"element_data": ElementsData.ChatPanel.ChatPanel, "close_path": [ElementsData.ChatPanel.btn_close]},
-        "ChallengeMainStageAFKPanel": {"element_data": ElementsData.ChallengeMainStageAFKPanel.ChallengeMainStageAFKPanel,"close_path": [ElementsData.ChallengeMainStageAFKPanel.btn_close]},
+        "ChallengeMainStageAFKPanel": {"element_data": ElementsData.ChallengeMainStageAFKPanel.ChallengeMainStageAFKPanel,"close_path": [ElementsData.ChallengeMainStageAFKPanel.btn_go]},
         "ChampointshipResultPopup": {"element_data": ElementsData.ChampointshipResultPopup.ChampointshipResultPopup, "close_path": [ElementsData.ChampointshipResultPopup.btn_close]},
         "CommonWebViewPanel": {"element_data": ElementsData.CommonWebViewPanel.CommonWebViewPanel, "close_path": [ElementsData.CommonWebViewPanel.btn_close]},
         "ClubApplyPanel": {"element_data": ElementsData.ClubApplyPanel.ClubApplyPanel, "close_path": [ElementsData.ClubApplyPanel.btn_close]},

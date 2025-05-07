@@ -46,7 +46,6 @@ class BattlePreparePanel(BasePage):
     def click_btn_cast(self):
         element_data_list = [ElementsData.BattlePreparePanel.panel_MainStage_challenge_prepare.btn_cast, ElementsData.BattlePreparePanel.btn_cast, ElementsData.BattlePreparePanel.btn_start]
         position_list = self.wait_for_appear(element_data_list=element_data_list, is_click=False)
-        element_data = element_data_list[0]
         cur = 0
         while cur < len(position_list):
             position = position_list[cur]
@@ -323,6 +322,9 @@ class BattlePreparePanel(BasePage):
         def click_btn_btn_receive(self):
             self.click_element_safe(element_data=ElementsData.BattlePreparePanel.panel_MainStage_daily_prepare.btn_receive)
 
+        def click_outboard_tip(self):
+            self.click_element_safe(element_data=ElementsData.BattlePreparePanel.panel_MainStage_daily_prepare.outboard_tip)
+
     class panel_MainStage_challenge_prepare(BasePage):
         def click_btn_cast(self):
             self.click_element(element_data=ElementsData.BattlePreparePanel.panel_MainStage_challenge_prepare.btn_cast)
@@ -381,12 +383,8 @@ class BattlePreparePanel(BasePage):
     # print(res)
 
 if __name__ == "__main__":
-    bp = BasePage(is_mobile_device=True, serial_number="127.0.0.1:21503")
-    element_data_list = [ElementsData.BattlePreparePanel.btn_cast, ElementsData.BattlePreparePanel.btn_start,
-                         ElementsData.BattlePreparePanel.panel_MainStage_challenge_prepare.btn_cast]
-    position_list = BattlePreparePanel.wait_for_appear(bp, element_data_list=element_data_list, is_click=False)
-    print(position_list)
-    BattlePreparePanel.click_btn_cast(bp)
+    bp = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21503")
+    BattlePreparePanel.panel_MainStage_daily_prepare.click_outboard_tip(bp)
     # BattlePreparePanel.panel_MainStage_challenge_prepare.click_btn_cast(bp)
     bp.connect_close()
 
