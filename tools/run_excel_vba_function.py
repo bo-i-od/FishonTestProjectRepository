@@ -61,8 +61,6 @@ def runVBAExcel(path):
         runVBAExcel(path)
 
 if __name__ == "__main__":
-    # 直接运行目标excel
-    excel_path = EXCEL_PATH
     excel_list = ["TIMER_MAIN.xlsm", "MISSION_GROUP.xlsm", "MISSION_MAIN.xlsm", "MISSION_CONDITION.xlsm", "MISSION_LANGUAGE.xlsm", "EVENT_N_DAY_TASKS_MILESTONE.xlsm"]
     cur = 0
     while cur < len(excel_list):
