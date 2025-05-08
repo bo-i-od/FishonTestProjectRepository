@@ -57,7 +57,7 @@ def main():
     timer_id = timer_main(excel_tool=excel_tool, time_open=time_open, duration=duration)
     mission_group(excel_tool=excel_tool, timer_id=timer_id, icon_name=icon_name)
 
-
+    print("涉及到的表：", list(excel_tool.data_txt_changed))
 
 
 

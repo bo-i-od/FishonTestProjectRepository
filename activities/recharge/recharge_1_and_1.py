@@ -189,6 +189,7 @@ def main():
     giftId = payment_gift(excel_tool=excel_tool, priceCount=priceCount, pay_item_list=pay_item_list, free_item_list=free_item_list, goodsOff=goodsOff,title=title, giftId=giftId)
     event_special_sale(excel_tool=excel_tool, groupId=groupId, giftId=giftId, title=title)
 
+    print("涉及到的表：", list(excel_tool.data_txt_changed))
 
 if __name__ == '__main__':
     main()

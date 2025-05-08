@@ -61,6 +61,7 @@ def main():
     timer_main(excel_tool=excel_tool, time_open=time_open, group_id_drop=group_id_drop)
     item_main(excel_tool=excel_tool, icon_prefix=icon_prefix)
 
+    print("涉及到的表：", list(excel_tool.data_txt_changed))
 
 if __name__ == '__main__':
     main()

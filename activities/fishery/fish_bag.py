@@ -589,5 +589,6 @@ def main():
     fish_bag(excel_tool=excel_tool)
     payment_gift_group(excel_tool=excel_tool, fishery_id=fishery_id, giftId_start=giftId_start, payment_gift_group_tp_id_start=payment_gift_group_tp_id_start)
 
+    print("涉及到的表：", list(excel_tool.data_txt_changed))
 if __name__ == '__main__':
     main()

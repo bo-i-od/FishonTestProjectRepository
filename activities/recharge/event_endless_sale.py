@@ -231,7 +231,7 @@ def main():
     event_endless_sale(excel_tool=excel_tool, group_id=group_id)
     event_endless_sale_container(excel_tool=excel_tool, event_endless_sale_cfg_list=event_endless_sale_cfg_list, group_id=group_id, timer_id_list=timer_id_list)
 
-
+    print("涉及到的表：", list(excel_tool.data_txt_changed))
 
 
 

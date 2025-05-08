@@ -46,6 +46,7 @@ def main():
     event_endless_sale(excel_tool=excel_tool, group_id=group_id, fishery_id=fishery_id)
     timer_main(excel_tool=excel_tool, group_id=group_id, time_start=time_start, time_last=time_last)
 
+    print("涉及到的表：", list(excel_tool.data_txt_changed))
 
 if __name__ == '__main__':
     main()

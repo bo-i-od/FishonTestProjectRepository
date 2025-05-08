@@ -23,6 +23,7 @@ def event_n_day_tasks_milestone(excel_tool: ExcelToolsForActivities, group_id: i
         fish_bag_id = excel_tool.change_fish_bag_fishery(fish_bag_id=instance_object.milestoneRewards[0].itemId, fishery_id=fishery_id, table_object_detail=fish_bag_detail)
         if fish_bag_id:
             instance_object.milestoneRewards[0].itemId = fish_bag_id
+        print(instance_object)
         excel_tool.change_object(key="autoId", value=instance_object.autoId, table_data_detail=event_n_day_tasks_milestone_detail, instance_object=instance_object)
 
 
@@ -125,10 +126,10 @@ def main():
 
     """
     # 配置修改区起始
-    time_start = "2025-05-23 00:00:00"
+    time_start = "2025-05-02 00:00:00"
     group_id = 2010807
-    fishery_id = 400321      # 旧主线活动渔场
-    new_fishery_id = 500303  # 新主线渔场
+    fishery_id = 400319      # 旧主线活动渔场
+    new_fishery_id = 500302  # 新主线渔场
 
     # 配置修改区结束
     excel_tool = ExcelToolsForActivities(EXCEL_PATH)
@@ -137,6 +138,7 @@ def main():
     event_n_day_tasks_milestone(excel_tool=excel_tool, group_id=group_id, fishery_id=fishery_id)
     mission_main(excel_tool=excel_tool, group_id=group_id, fishery_id=fishery_id, new_fishery_id=new_fishery_id)
 
+    print("涉及到的表：", list(excel_tool.data_txt_changed))
 
 if __name__ == '__main__':
     main()

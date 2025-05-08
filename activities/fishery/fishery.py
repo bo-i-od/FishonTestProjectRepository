@@ -968,7 +968,7 @@ def main():
     # 需要new_plot_quest主线任务配好
     new_plot_fish_spot(excel_tool=excel_tool, fishery_id=fishery_id, tpId_start=new_plot_fish_spot_tpId_start, fishery_cfg_list=fishery_cfg_list, fishery_info=fishery_info, exclude_info=exclude_info, bgm_name=bgm_name, fishery_name=fishery_name, scene_name_list=scene_name_list, mapPointId_list=mapPointId_list)
 
-
+    print("涉及到的表：", list(excel_tool.data_txt_changed))
 
 if __name__ == '__main__':
     main()

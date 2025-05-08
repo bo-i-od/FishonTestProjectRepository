@@ -425,5 +425,6 @@ def main():
     mission_main(excel_tool=excel_tool,  fishery_id=fishery_id, groupId=groupId, missionType=missionType, tokenID=tokenID, missionConditionID_start=missionConditionID_start)
     event_n_day_tasks_milestone(excel_tool=excel_tool, fishery_id=fishery_id, groupId=groupId, tokenID=tokenID, big_reward=big_reward)
 
+    print("涉及到的表：", list(excel_tool.data_txt_changed))
 if __name__ == '__main__':
     main()

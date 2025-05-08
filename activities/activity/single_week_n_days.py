@@ -1203,5 +1203,8 @@ def main():
         three_fish_main(excel_tool=excel_tool, fishery_id=fishery_id, groupId_three_fish=groupId_three_fish, fishOffset_list=fishOffset_list, activityRankTitle=activityFisheryNameId_return, displayBanner=displayBanner)
         three_fish_rank_reward(excel_tool=excel_tool, fishery_id=fishery_id,groupId_three_fish=groupId_three_fish)
 
+    print("涉及到的表：", list(excel_tool.data_txt_changed))
+
+
 if __name__ == '__main__':
     main()

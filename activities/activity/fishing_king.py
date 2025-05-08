@@ -141,7 +141,7 @@ def main():
     event_n_day_tasks_milestone(excel_tool=excel_tool, group_id=group_id, fishery_id=fishery_id)
     mission_main(excel_tool=excel_tool, group_id=group_id, fishery_id=fishery_id, new_fishery_id=new_fishery_id)
 
-
+    print("涉及到的表：", list(excel_tool.data_txt_changed))
 
 
 if __name__ == '__main__':

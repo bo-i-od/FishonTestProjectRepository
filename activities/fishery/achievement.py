@@ -286,18 +286,7 @@ def main():
     achievement_wanted(excel_tool=excel_tool, fishery_id=fishery_id, itemTpId_start=itemTpId_start, achievement_icon_list=achievement_icon_list, order=order)
     achievement_group_rewards_language(excel_tool=excel_tool,  fishery_id=fishery_id, name=name)
 
-
-
-
-
-
-
-
-
-
-
-
-
+    print("涉及到的表：", list(excel_tool.data_txt_changed))
 
 
 if __name__ == '__main__':

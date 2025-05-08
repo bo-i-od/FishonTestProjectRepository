@@ -60,6 +60,9 @@ def main():
     activity_sign_may_day(excel_tool=excel_tool, group_id=group_id, big_reward=big_reward)
     global_value(excel_tool=excel_tool, prefab=prefab)
 
+    print("涉及到的表：", list(excel_tool.data_txt_changed))
+
+
 
 
 if __name__ == '__main__':

@@ -257,6 +257,7 @@ from activities.decl.TIMER_MAIN import TIMER_MAIN
 class ExcelToolsForActivities(ExcelTools):
     def __init__(self, root_path):
         super().__init__(root_path)
+        self.data_txt_changed = set()
 
     def write_data_txt(self, name: str, blocks: str = None, json_object_list=None, instance_object_list=None):
         """
@@ -267,6 +268,7 @@ class ExcelToolsForActivities(ExcelTools):
         if json_object_list:
             blocks = json_list_to_blocks(json_object_list=json_object_list, name=name.lower())
         Path(self.base_data_path + name + ".data.txt").write_text("\n" + blocks, encoding="utf-16")
+        self.data_txt_changed.add(name + ".xlsm")
 
     def add_object(self, key: str=None, value=None, book_name: str = None, table_data_detail=None, json_object: dict = None, instance_object=None):
         """

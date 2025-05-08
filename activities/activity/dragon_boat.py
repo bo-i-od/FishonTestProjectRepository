@@ -93,7 +93,7 @@ def main():
     global_value(excel_tool, time_start=time_start)
     timer_main(excel_tool, time_start=time_start, timer_id=timer_id)
 
-
+    print("涉及到的表：", list(excel_tool.data_txt_changed))
 
 
 if __name__ == '__main__':

@@ -62,6 +62,8 @@ def main():
     cooperation_sys_final_reward_with_time(excel_tool=excel_tool, time_start=time_start, fishery_id=fishery_id)
     timer_main(excel_tool=excel_tool, time_start=time_start, timer_id=timer_id)
 
+    print("涉及到的表：", list(excel_tool.data_txt_changed))
+
 
 
 if __name__ == '__main__':

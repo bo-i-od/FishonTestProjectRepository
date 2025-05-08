@@ -364,7 +364,8 @@ def panel_static_language(excel_tool: ExcelToolsForActivities, fishery_id, chapt
     if notOpenText is None:
         mode = 1
         instance_object = PANEL_STATIC_LANGUAGE()
-        instance_object.templateID = max(excel_tool.get_min_value_more_than_start(key=key, table_object_detail=panel_static_language_detail, start=19960945), excel_tool.get_min_value_more_than_start(key="id", table_object_detail=panel_static_language_detail, start=19960945))
+        notOpenText = max(excel_tool.get_min_value_more_than_start(key=key, table_object_detail=panel_static_language_detail, start=19960945), excel_tool.get_min_value_more_than_start(key="id", table_object_detail=panel_static_language_detail, start=19960945))
+        instance_object.templateID = notOpenText
         instance_object.id = instance_object.templateID
     else:
         mode = 0
@@ -377,6 +378,7 @@ def panel_static_language(excel_tool: ExcelToolsForActivities, fishery_id, chapt
     else:
         excel_tool.add_object(key=key, value=instance_object.templateID, table_data_detail=panel_static_language_detail, instance_object=instance_object)
 
+    return notOpenText
 
 
 
@@ -387,8 +389,8 @@ def main():
         读写方式：新增/修改
     """
     # 配置修改区起始
-    fishery_id = 500304
-    icon_name = "S01C04"
+    fishery_id = 500303
+    icon_name = "S01C03"
     time_start = "2025-05-30 00:00:00"
 
     # 该区域参数为None则新增
@@ -404,7 +406,7 @@ def main():
     # 配置修改区结束
     excel_tool = ExcelToolsForActivities(EXCEL_PATH)
     item_main(excel_tool=excel_tool, fishery_index=fishery_index, wildCardId=wildCardId, icon_name=icon_name)
-    panel_static_language(excel_tool=excel_tool, fishery_id=fishery_id, chapterNamePanelId=chapterNamePanelId, notOpenText=notOpenText)
+    notOpenText = panel_static_language(excel_tool=excel_tool, fishery_id=fishery_id, chapterNamePanelId=chapterNamePanelId, notOpenText=notOpenText)
     item_main_language(excel_tool=excel_tool, fishery_id=fishery_id,fishery_index=fishery_index, wildCardId=wildCardId)
     collection_energy_cost_debuff(excel_tool=excel_tool, fishery_id=fishery_id)
     collection_exchange_store(excel_tool=excel_tool, fishery_id=fishery_id, collectionChapterId=collectionChapterId, wildCardId=wildCardId)
@@ -414,6 +416,7 @@ def main():
     collection_chapter(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index, chapterTimerId=chapterTimerId, chapterNamePanelId=chapterNamePanelId, icon_name=icon_name, wildCardId=wildCardId, notOpenText=notOpenText)
     collection_protect(excel_tool=excel_tool,  fishery_id=fishery_id)
 
+    print("涉及到的表：", list(excel_tool.data_txt_changed))
 
 
 if __name__ == '__main__':
