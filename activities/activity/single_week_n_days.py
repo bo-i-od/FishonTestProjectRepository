@@ -28,14 +28,14 @@ from tools.decl2py import *
 """
 
 def activity_double_week(excel_tool: ExcelToolsForActivities,fishery_id, chapterID, TimerId, icon_name, paymentGiftId_start, activityFisheryNameId, chapterTimerId, returnTimerId, notShowBeforeReturn, wildCardId=None):
-    paymentGiftId_cfg = {
-        500021: {"paymentGiftId_start": 2510096, "paymentGiftId_count": 9},
-        500023: {"paymentGiftId_start": 2510085, "paymentGiftId_count": 10},
-        500024: {"paymentGiftId_start": 2510117, "paymentGiftId_count": 10},
-        500026: {"paymentGiftId_start": 2510075, "paymentGiftId_count": 10},
-        500028: {"paymentGiftId_start": 2510039, "paymentGiftId_count": 10},
-        500029: {"paymentGiftId_start": 2510064, "paymentGiftId_count": 10},
-           }
+    # paymentGiftId_cfg = {
+    #     500021: {"paymentGiftId_start": 2510096, "paymentGiftId_count": 10},
+    #     500023: {"paymentGiftId_start": 2510085, "paymentGiftId_count": 10},
+    #     500024: {"paymentGiftId_start": 2510117, "paymentGiftId_count": 10},
+    #     500026: {"paymentGiftId_start": 2510075, "paymentGiftId_count": 10},
+    #     500028: {"paymentGiftId_start": 2510039, "paymentGiftId_count": 10},
+    #     500029: {"paymentGiftId_start": 2510064, "paymentGiftId_count": 10},
+    #        }
     key = "tpId"
     tpId = 10000000 + fishery_id
     activity_double_week_detail = excel_tool.get_table_data_detail(book_name="ACTIVITY_DOUBLE_WEEK.xlsm")
@@ -70,20 +70,26 @@ def activity_double_week(excel_tool: ExcelToolsForActivities,fishery_id, chapter
     instance_object.chapterPrizeResultIcon = f"flashcard_result_bannerbg_{icon_name}"
     instance_object.chapterPrizeResultTopIcon = f"flashcard_result_alltop_{icon_name}"
     instance_object.flashCardBooksMaterial = f"FlashCardBooks_out_mat_{icon_name}"
-    rod_id = excel_tool.get_rod(fishery_id=fishery_id, rarity=4)[0]
-    if rod_id not in paymentGiftId_cfg:
-        raise FileNotFoundError("没有适合该渔场的礼包配置")
-    paymentGiftId_start = paymentGiftId_cfg[rod_id]["paymentGiftId_start"]
-    paymentGiftId_count = paymentGiftId_cfg[rod_id]["paymentGiftId_count"]
-    print(f"paymentGiftId_start:{paymentGiftId_start}")
+
     payment_gift_id_list = []
     cur = 0
-    while cur < paymentGiftId_count:
+    while cur < 10:
         payment_gift_id_list.append(paymentGiftId_start + cur)
         cur += 1
-    while cur < 10:
-        payment_gift_id_list.append(0)
-        cur += 1
+    # rod_id = excel_tool.get_rod(fishery_id=fishery_id, rarity=4)[0]
+    # if rod_id not in paymentGiftId_cfg:
+    #     raise FileNotFoundError("没有适合该渔场的礼包配置")
+    # paymentGiftId_start = paymentGiftId_cfg[rod_id]["paymentGiftId_start"]
+    # paymentGiftId_count = paymentGiftId_cfg[rod_id]["paymentGiftId_count"]
+    # print(f"paymentGiftId_start:{paymentGiftId_start}")
+    # payment_gift_id_list = []
+    # cur = 0
+    # while cur < paymentGiftId_count:
+    #     payment_gift_id_list.append(paymentGiftId_start + cur)
+    #     cur += 1
+    # while cur < 10:
+    #     payment_gift_id_list.append(0)
+    #     cur += 1
     instance_object.paymentGiftId = payment_gift_id_list
     instance_object.activityFisheryNameId = activityFisheryNameId
     if wildCardId:
@@ -103,20 +109,21 @@ def activity_double_week(excel_tool: ExcelToolsForActivities,fishery_id, chapter
     else:
         excel_tool.add_object(key=key, value=instance_object.tpId, table_data_detail=activity_double_week_detail, instance_object=instance_object)
 
-def battle_pass_main_2024(excel_tool: ExcelToolsForActivities, fishery_id, groupId_battle_pass, returnTimerId, newNDaysImgName, activityFisheryNameId, bounsRate=None):
+def battle_pass_main_2024(excel_tool: ExcelToolsForActivities, fishery_id, returnTimerId, newNDaysImgName, activityFisheryNameId, groupId_battle_pass=None, bounsRate=None):
     battle_pass_main_2024_detail = excel_tool.get_table_data_detail(book_name="BATTLE_PASS_MAIN_2024.xlsm")
     template_groupId = 21
-
-    table_data_object_list = excel_tool.get_table_data_object_list_by_key_value(key="groupId", value=groupId_battle_pass, table_data_detail=battle_pass_main_2024_detail)
-    key = "tpId"
     instance_object: BATTLE_PASS_MAIN_2024
-    if table_data_object_list:
-        mode = 0
-        instance_object = json_to_instance(json_object=table_data_object_list[0], cls=BATTLE_PASS_MAIN_2024)
-    else:
+    key = "tpId"
+    if groupId_battle_pass is None:
         mode = 1
         _, instance_object = excel_tool.get_object(key="groupId", value=template_groupId, table_data_detail=battle_pass_main_2024_detail, cls=BATTLE_PASS_MAIN_2024)
         instance_object.tpId = excel_tool.get_max_value(key=key, table_object_detail=battle_pass_main_2024_detail) + 1
+        groupId_battle_pass = excel_tool.get_max_value(key="groupId", table_object_detail=battle_pass_main_2024_detail) + 1
+        instance_object.id = excel_tool.get_max_value(key="id", table_object_detail=battle_pass_main_2024_detail) + 1
+    else:
+        mode = 0
+        _, instance_object = excel_tool.get_object(key="groupId", value=groupId_battle_pass, table_data_detail=battle_pass_main_2024_detail, cls=BATTLE_PASS_MAIN_2024)
+
     instance_object.name = f"{fishery_id}双周BP"
     instance_object.groupId = groupId_battle_pass
     instance_object.firstOpenTimerId = returnTimerId
@@ -132,6 +139,8 @@ def battle_pass_main_2024(excel_tool: ExcelToolsForActivities, fishery_id, group
         excel_tool.change_object(key=key, value=instance_object.tpId, table_data_detail=battle_pass_main_2024_detail, instance_object=instance_object)
     else:
         excel_tool.add_object(key=key, value=instance_object.tpId, table_data_detail=battle_pass_main_2024_detail, instance_object=instance_object)
+
+    return  instance_object.groupId
 
 def battle_pass(excel_tool: ExcelToolsForActivities, groupId_battle_pass):
     battle_pass_detail = excel_tool.get_table_data_detail(book_name="BATTLE_PASS.xlsm")
@@ -377,7 +386,7 @@ def event_endless_sale(excel_tool: ExcelToolsForActivities, fishery_id, groupId)
     groupId_sale = groupId + 1
     event_endless_sale_detail = excel_tool.get_table_data_detail(book_name="EVENT_ENDLESS_SALE.xlsm")
     fishing_rod_detail = excel_tool.get_table_data_detail(book_name="FISHING_ROD.xlsm")
-    fish_bag_detail = baseDataRead.convert_to_json(path=excel_tool.root_dir + "/activities/customTables/", prefix="FISH_BAG")
+    fish_bag_detail = excel_tool.get_table_data_detail(book_name="FISH_BAG.xlsm")
     fisheries_detail = excel_tool.get_table_data_detail(book_name="FISHERIES.xlsm")
     table_data_object_list = excel_tool.get_table_data_object_list_by_key_value(key="groupId", value=groupId_sale, table_data_detail=event_endless_sale_detail)
     template_autoId_start = 20020651
@@ -483,7 +492,7 @@ def event_n_day_tasks_milestone(excel_tool: ExcelToolsForActivities, fishery_id,
             excel_tool.add_object(key=key, value=instance_object.autoId, table_data_detail=event_n_day_tasks_milestone_detail, instance_object=instance_object)
         cur += 1
 
-def item_main(excel_tool: ExcelToolsForActivities, fishery_id, wildCardId, icon_name,tokenID):
+def item_main(excel_tool: ExcelToolsForActivities, fishery_id, wildCardId, icon_name,tokenID=None):
     # 万能卡
     template_itemTpId = 240153
     item_main_detail = excel_tool.get_table_data_detail(book_name="ITEM_MAIN.xlsm")
@@ -512,23 +521,25 @@ def item_main(excel_tool: ExcelToolsForActivities, fishery_id, wildCardId, icon_
     template_itemTpId = 291008
     item_main_detail = excel_tool.get_table_data_detail(book_name="ITEM_MAIN.xlsm")
     key = "itemTpId"
-    table_data_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=tokenID, table_data_detail=item_main_detail)
-    if table_data_object_list:
-        mode = 0
-        template_itemTpId = table_data_object_list[0]["itemTpId"]
-    else:
+    if tokenID is None:
         mode = 1
+        tokenID = excel_tool.get_min_value_more_than_start(key=key, table_object_detail=item_main_detail, start=template_itemTpId)
+    else:
+        mode = 0
+        template_itemTpId = tokenID
+
     instance_object: ITEM_MAIN
     json_object, instance_object = excel_tool.get_object(key=key, value=template_itemTpId, table_data_detail=item_main_detail, cls=ITEM_MAIN)
-    if mode == 1:
-        instance_object.id = excel_tool.get_max_value(key="id", table_object_detail=item_main_detail) + 1
     instance_object.name = f"{fishery_id}双周返场活动代币"
     instance_object.itemTpId = tokenID
+    instance_object.id = tokenID
     print(instance_object)
     if mode == 0:
         excel_tool.change_object(key=key, value=instance_object.itemTpId, table_data_detail=item_main_detail, instance_object=instance_object)
     else:
         excel_tool.add_object(key=key, value=instance_object.itemTpId, table_data_detail=item_main_detail, instance_object=instance_object)
+
+    return tokenID
 
 def item_main_language(excel_tool: ExcelToolsForActivities,fishery_id, wildCardId, tokenID, activityFisheryName, internal_or_global):
     item_main_language_detail = excel_tool.get_table_data_detail(book_name="ITEM_MAIN_LANGUAGE.xlsm")
@@ -544,9 +555,8 @@ def item_main_language(excel_tool: ExcelToolsForActivities,fishery_id, wildCardI
         mode = 1
     instance_object: ITEM_MAIN_LANGUAGE
     json_object, instance_object = excel_tool.get_object(key=key, value=template_tpId, table_data_detail=item_main_language_detail, cls=ITEM_MAIN_LANGUAGE)
-    if mode == 1:
-        instance_object.id = excel_tool.get_max_value(key="id", table_object_detail=item_main_language_detail) + 1
     instance_object.tpId = wildCardId
+    instance_object.id = instance_object.tpId
     instance_object.name = f"{fishery_id}万能卡"
     t_name = excel_tool.get_table_data_object_by_key_value(key="tpId",value=fishery_id,  book_name="FISHERIES_LANGUAGE.xlsm")["t_name"]
 
@@ -572,10 +582,11 @@ def item_main_language(excel_tool: ExcelToolsForActivities,fishery_id, wildCardI
         mode = 1
     instance_object: ITEM_MAIN_LANGUAGE
     json_object, instance_object = excel_tool.get_object(key=key, value=template_tpId, table_data_detail=item_main_language_detail, cls=ITEM_MAIN_LANGUAGE)
-    if mode == 1:
-        instance_object.id = excel_tool.get_max_value(key="id", table_object_detail=item_main_language_detail) + 1
+    # if mode == 1:
+    #     instance_object.id = excel_tool.get_max_value(key="id", table_object_detail=item_main_language_detail) + 1
     instance_object.name = f"{fishery_id}双周返场活动代币"
     instance_object.tpId = tokenID
+    instance_object.id = instance_object.tpId
     if internal_or_global == "internal":
         instance_object.t_description = f"在{activityFisheryName}中收集活动积分，赢取额外奖励。"
     else:
@@ -586,25 +597,24 @@ def item_main_language(excel_tool: ExcelToolsForActivities,fishery_id, wildCardI
     else:
         excel_tool.add_object(key=key, value=instance_object.tpId, table_data_detail=item_main_language_detail, instance_object=instance_object)
 
-def mission_group(excel_tool: ExcelToolsForActivities, groupId, TimerId, fishery_id, activityName, imgNameInner,  newNDaysImgName, missionType, groupId_three_fish=None):
+def mission_group(excel_tool: ExcelToolsForActivities, TimerId, is_open_three_fish, fishery_id, activityName, imgNameInner,  newNDaysImgName, missionType=None, groupId=None, groupId_three_fish=None):
     mission_group_detail = excel_tool.get_table_data_detail(book_name="MISSION_GROUP.xlsm")
     key = "groupId"
 
     # ndays
     template_groupId = 5100011
-    table_data_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=groupId, table_data_detail=mission_group_detail)
-    if table_data_object_list:
-        mode = 0
-        template_groupId = table_data_object_list[0][key]
-    else:
+    if groupId is None:
         mode = 1
-    id_start = excel_tool.get_max_value(key="id", table_object_detail=mission_group_detail) + 1
+        groupId = max(excel_tool.get_min_value_more_than_start(key=key, table_object_detail=mission_group_detail, start=template_groupId, long=2), excel_tool.get_min_value_more_than_start(key="id", table_object_detail=mission_group_detail, start=template_groupId, long=2))
+    else:
+        mode = 0
+        template_groupId = groupId
+
     instance_object: MISSION_GROUP
     json_object, instance_object = excel_tool.get_object(key=key, value=template_groupId, table_data_detail=mission_group_detail, cls=MISSION_GROUP)
-    if mode == 1:
-        instance_object.id = id_start
     instance_object.name = f"{fishery_id}的返场活动"
     instance_object.groupId = groupId
+    instance_object.id = instance_object.groupId
     instance_object.openArg = TimerId
     instance_object.closeArg = TimerId
     instance_object.extArgs[2] = f"{groupId + 1}"
@@ -619,7 +629,15 @@ def mission_group(excel_tool: ExcelToolsForActivities, groupId, TimerId, fishery
     instance_object.imgNameInner = imgNameInner
     instance_object.iconName = "prepare_activity_RookieTasks_2"
     if missionType is None:
-        missionType = excel_tool.get_max_value(key="missionType", table_object_detail=mission_group_detail)
+        json_object_list = mission_group_detail[0]
+        max_value = 0
+        for json_object in json_object_list:
+            if "missionType" not in json_object:
+                continue
+            if max_value > json_object["missionType"][0]:
+                continue
+            max_value = json_object[key]
+        missionType = max_value + 1
     instance_object.missionType = missionType
     instance_object.newNDaysImgName = newNDaysImgName
     instance_object.activityName2 = None
@@ -634,6 +652,7 @@ def mission_group(excel_tool: ExcelToolsForActivities, groupId, TimerId, fishery
         excel_tool.add_object(key=key, value=instance_object.groupId, table_data_detail=mission_group_detail, instance_object=instance_object)
 
     # ndays促销
+    mission_group_detail = excel_tool.get_table_data_detail(book_name="MISSION_GROUP.xlsm")
     template_groupId += 1
     table_data_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=groupId + 1, table_data_detail=mission_group_detail)
     if table_data_object_list:
@@ -642,12 +661,12 @@ def mission_group(excel_tool: ExcelToolsForActivities, groupId, TimerId, fishery
     else:
         mode = 1
     json_object, instance_object = excel_tool.get_object(key=key, value=template_groupId, table_data_detail=mission_group_detail, cls=MISSION_GROUP)
-    if mode == 1:
-        instance_object.id = id_start + 1
+
+    instance_object.groupId = groupId + 1
+    instance_object.id = instance_object.groupId
     instance_object.name = f"{fishery_id}的促销"
     instance_object.openArg = TimerId
     instance_object.closeArg = TimerId
-    instance_object.groupId = groupId + 1
     rod_id = excel_tool.get_rod(fishery_id=fishery_id, rarity=4)[0]
     rod_icon = excel_tool.get_table_data_object_by_key_value(key="tpId", value=rod_id, book_name="FISHING_ROD.xlsm")["displayicon"]
     instance_object.imgRodGiftpack = rod_icon
@@ -658,18 +677,20 @@ def mission_group(excel_tool: ExcelToolsForActivities, groupId, TimerId, fishery
         excel_tool.add_object(key=key, value=instance_object.groupId, table_data_detail=mission_group_detail, instance_object=instance_object)
 
     # # 三鱼排行榜
+    if not is_open_three_fish:
+        return missionType, groupId, groupId_three_fish
+    mission_group_detail = excel_tool.get_table_data_detail(book_name="MISSION_GROUP.xlsm")
     if groupId_three_fish is None:
-        return
-    table_data_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=groupId_three_fish, table_data_detail=mission_group_detail)
-    if table_data_object_list:
-        mode = 0
-        instance_object = json_to_instance(json_object=table_data_object_list[0], cls=MISSION_GROUP)
-    else:
         mode = 1
         instance_object = MISSION_GROUP()
-        instance_object.id = id_start + 2
+        groupId_three_fish = max(excel_tool.get_min_value_more_than_start(key=key, table_object_detail=mission_group_detail, start=template_groupId), excel_tool.get_min_value_more_than_start(key="id", table_object_detail=mission_group_detail, start=template_groupId))
+        instance_object.groupId = groupId_three_fish
+        instance_object.id = instance_object.groupId
+    else:
+        mode = 0
+        json_object, instance_object = excel_tool.get_object(key=key, value=groupId_three_fish, table_data_detail=mission_group_detail, cls=MISSION_GROUP)
+
     instance_object.name = "三鱼排行榜活动"
-    instance_object.groupId = groupId_three_fish
     instance_object.enabled = 1
     instance_object.key = "THREE_FISH"
     instance_object.keyDesc = "三鱼排行榜活动"
@@ -690,6 +711,8 @@ def mission_group(excel_tool: ExcelToolsForActivities, groupId, TimerId, fishery
         excel_tool.change_object(key=key, value=instance_object.groupId, table_data_detail=mission_group_detail, instance_object=instance_object)
     else:
         excel_tool.add_object(key=key, value=instance_object.groupId, table_data_detail=mission_group_detail, instance_object=instance_object)
+
+    return missionType, groupId, groupId_three_fish
 
 def mission_main(excel_tool: ExcelToolsForActivities,fishery_id, groupId, missionType, tokenID):
     mission_cfg_list = [
@@ -754,7 +777,7 @@ def mission_main(excel_tool: ExcelToolsForActivities,fishery_id, groupId, missio
     mission_main_detail = excel_tool.get_table_data_detail(book_name="MISSION_MAIN.xlsm")
     mission_condition_detail = excel_tool.get_table_data_detail(book_name="MISSION_CONDITION.xlsm")
     fisheries_detail = excel_tool.get_table_data_detail(book_name="FISHERIES.xlsm")
-    fish_bag_detail = baseDataRead.convert_to_json(path=excel_tool.root_dir + "/activities/customTables/", prefix="FISH_BAG")
+    fish_bag_detail = excel_tool.get_table_data_detail(book_name="FISH_BAG.xlsm")
     id_start = excel_tool.get_max_value(key="id", table_object_detail=mission_main_detail) + 1
     missionConditionID_start = excel_tool.get_max_value(key="missionConditionID", table_object_detail=mission_condition_detail) + 1
     table_data_object_list = excel_tool.get_table_data_object_list_by_key_value(key="groupId", value=groupId, table_data_detail=mission_main_detail)
@@ -878,17 +901,27 @@ def mission_condition(excel_tool: ExcelToolsForActivities,fishery_id, mission_cf
             excel_tool.add_object(key=key, value=instance_object.missionConditionID, table_data_detail=mission_condition_detail, instance_object=instance_object)
         cur += 1
 
-def panel_static_language(excel_tool: ExcelToolsForActivities, t_panellanguage):
-    # 标题语言
+def panel_static_language(excel_tool: ExcelToolsForActivities, t_panellanguage, activityFisheryNameId_return=None):
     panel_static_language_detail = excel_tool.get_table_data_detail(book_name="PANEL_STATIC_LANGUAGE.xlsm")
     key = "templateID"
-    instance_object = PANEL_STATIC_LANGUAGE()
-    instance_object.id = excel_tool.get_max_value(key="id", table_object_detail=panel_static_language_detail) + 1
+    if activityFisheryNameId_return is None:
+        mode = 1
+        instance_object = PANEL_STATIC_LANGUAGE()
+        instance_object.templateID = max(excel_tool.get_min_value_more_than_start(key=key, table_object_detail=panel_static_language_detail, start=1998237),excel_tool.get_min_value_more_than_start(key="id", table_object_detail=panel_static_language_detail, start=1998237))
+        instance_object.id = instance_object.templateID
+    else:
+        mode = 0
+        json_object, instance_object = excel_tool.get_object(key=key, value=activityFisheryNameId_return, table_data_detail=panel_static_language_detail, cls=PANEL_STATIC_LANGUAGE)
+    # 标题语言
+
     instance_object.name = t_panellanguage
-    instance_object.templateID = excel_tool.get_max_value(key=key, table_object_detail=panel_static_language_detail) + 1
     instance_object.t_panellanguage = t_panellanguage
     print(instance_object)
-    excel_tool.add_object(key=key, value=instance_object.templateID, table_data_detail=panel_static_language_detail, instance_object=instance_object)
+    if mode == 0:
+        excel_tool.change_object(key=key, value=instance_object.templateID, table_data_detail=panel_static_language_detail, instance_object=instance_object)
+    else:
+        excel_tool.add_object(key=key, value=instance_object.templateID, table_data_detail=panel_static_language_detail, instance_object=instance_object)
+    return activityFisheryNameId_return
 
 
 def repeatable_challenge(excel_tool: ExcelToolsForActivities, fishery_id, groupId, tokenID):
@@ -992,7 +1025,7 @@ def three_fish_main(excel_tool: ExcelToolsForActivities, fishery_id, groupId_thr
         if "cardOffsetY" in fishOffset_list[cur]:
             fish_offset.cardOffsetY = fishOffset_list[cur]["cardOffsetY"]
         instance_object.fishOffset.append(fish_offset)
-        instance_object.fishIdNew.append(fish_id_list[-(4 - cur)])
+        instance_object.fishIdNew.append(fish_id_list[-(3 - cur)])
         cur += 1
     print(instance_object)
     if mode == 0:
@@ -1029,32 +1062,30 @@ def three_fish_rank_reward(excel_tool: ExcelToolsForActivities, fishery_id, grou
             excel_tool.add_object(key=key, value=instance_object.tpId, table_data_detail=three_fish_rank_reward_detail , instance_object=instance_object)
         cur += 1
 
-def timer_main(excel_tool: ExcelToolsForActivities, fishery_id, open_time,  returnTimerId, TimerId, chapterTimerId):
+def timer_main(excel_tool: ExcelToolsForActivities, fishery_id, open_time, TimerId, chapterTimerId, returnTimerId=None):
     key = "timerID"
-    def doubleweek_back():
-        # 双周返场
-        timer_main_detail = excel_tool.get_table_data_detail(book_name="TIMER_MAIN.xlsm")
-        id_start = excel_tool.get_max_value(key="id", table_object_detail=timer_main_detail) + 1
+    # 双周返场
+    timer_main_detail = excel_tool.get_table_data_detail(book_name="TIMER_MAIN.xlsm")
+    if returnTimerId is None:
+        mode = 1
+        instance_object = TIMER_MAIN()
+        returnTimerId = max(excel_tool.get_min_value_more_than_start(key=key, table_object_detail=timer_main_detail, start=150001), excel_tool.get_min_value_more_than_start(key="id", table_object_detail=timer_main_detail, start=150001))
+    else:
+        mode = 0
+        json_object, instance_object = excel_tool.get_object(key=key, value=returnTimerId, table_data_detail=timer_main_detail, cls=TIMER_MAIN)
 
-        json_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=returnTimerId, table_data_detail=timer_main_detail)
-        if json_object_list:
-            mode = 0
-            instance_object = json_to_instance(json_object=json_object_list[0], cls=TIMER_MAIN)
-        else:
-            mode = 1
-            instance_object = TIMER_MAIN()
-            instance_object.id = id_start
-        instance_object.name = f"{fishery_id}双周返场活动"
-        instance_object.timerID = returnTimerId
-        instance_object.timerName = instance_object.name
-        instance_object.cycleType = 1
-        instance_object.openTime = open_time
-        instance_object.endTime = commonTools.get_time(time=open_time, days=7, seconds=-1)
-        print(instance_object)
-        if mode == 0:
-            excel_tool.change_object(key=key, value=instance_object.timerID, table_data_detail=timer_main_detail, instance_object=instance_object)
-        else:
-            excel_tool.add_object(key=key, value=instance_object.timerID, table_data_detail=timer_main_detail, instance_object=instance_object)
+    instance_object.name = f"{fishery_id}双周返场活动"
+    instance_object.timerID = returnTimerId
+    instance_object.id = instance_object.timerID
+    instance_object.timerName = instance_object.name
+    instance_object.cycleType = 1
+    instance_object.openTime = open_time
+    instance_object.endTime = commonTools.get_time(time=open_time, days=7, seconds=-1)
+    print(instance_object)
+    if mode == 0:
+        excel_tool.change_object(key=key, value=instance_object.timerID, table_data_detail=timer_main_detail, instance_object=instance_object)
+    else:
+        excel_tool.add_object(key=key, value=instance_object.timerID, table_data_detail=timer_main_detail, instance_object=instance_object)
 
     # 假双周
     def doubleweek():
@@ -1079,93 +1110,98 @@ def timer_main(excel_tool: ExcelToolsForActivities, fishery_id, open_time,  retu
             excel_tool.change_object(key=key, value=instance_object.timerID, table_data_detail=timer_main_detail, instance_object=instance_object)
         else:
             excel_tool.add_object(key=key, value=instance_object.timerID, table_data_detail=timer_main_detail, instance_object=instance_object)
-
-    # 假闪卡
-    def flash_card():
-        timer_main_detail = excel_tool.get_table_data_detail(book_name="TIMER_MAIN.xlsm")
-        id_start = excel_tool.get_max_value(key="id", table_object_detail=timer_main_detail) + 1
-        json_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=chapterTimerId, table_data_detail=timer_main_detail)
-        if json_object_list:
-            mode = 0
-            instance_object = json_to_instance(json_object=json_object_list[0], cls=TIMER_MAIN)
-        else:
-            mode = 1
-            instance_object = TIMER_MAIN()
-            instance_object.id = id_start
-        instance_object.name = f"{fishery_id}双周闪卡"
-        instance_object.timerID = chapterTimerId
-        instance_object.timerName = instance_object.name
-        instance_object.cycleType = 1
-        instance_object.openTime = open_time
-        instance_object.endTime = "2034-12-26 23:59:59"
-        print(instance_object)
-        if mode == 0:
-            excel_tool.change_object(key=key, value=instance_object.timerID, table_data_detail=timer_main_detail, instance_object=instance_object)
-        else:
-            excel_tool.add_object(key=key, value=instance_object.timerID, table_data_detail=timer_main_detail, instance_object=instance_object)
-
-    doubleweek_back()
     if TimerId:
         doubleweek()
-    flash_card()
+
+    # 假闪卡
+    timer_main_detail = excel_tool.get_table_data_detail(book_name="TIMER_MAIN.xlsm")
+    id_start = excel_tool.get_max_value(key="id", table_object_detail=timer_main_detail) + 1
+    json_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=chapterTimerId, table_data_detail=timer_main_detail)
+    if json_object_list:
+        mode = 0
+        instance_object = json_to_instance(json_object=json_object_list[0], cls=TIMER_MAIN)
+    else:
+        mode = 1
+        instance_object = TIMER_MAIN()
+        instance_object.id = id_start
+    instance_object.name = f"{fishery_id}双周闪卡"
+    instance_object.timerID = chapterTimerId
+    instance_object.timerName = instance_object.name
+    instance_object.cycleType = 1
+    instance_object.openTime = open_time
+    instance_object.endTime = "2034-12-26 23:59:59"
+    print(instance_object)
+    if mode == 0:
+        excel_tool.change_object(key=key, value=instance_object.timerID, table_data_detail=timer_main_detail, instance_object=instance_object)
+    else:
+        excel_tool.add_object(key=key, value=instance_object.timerID, table_data_detail=timer_main_detail, instance_object=instance_object)
+    return returnTimerId
 
 
 
 def main():
-    cfg = {
-        "internal_or_global": "internal",    # 国内还是海外 (item_main_language)
-        "fishery_id": 400319,                # 渔场id
-        "open_time": "2025-05-02 00:00:00",  # 活动开始时间 (timer_main)
-        "missionType": 72,                   # 任务类型 (mission_group, mission_main)
-        "collectionChapterId": 9,            # 闪卡章节 (activity_double_week)
-        "TimerId": None,                     # 双周时间id (activity_double_week, timer_main)
-        "chapterTimerId": 102051,            # 闪卡开启时间 (activity_double_week, timer_main)
-        "returnTimerId": 151209,             # 返场时间id (activity_double_week, battle_pass_main_2024, mission_group, timer_main) ×
-        "groupId": 5100048,                  # 返场活动的groupId (event_endless_sale, event_n_day_tasks_leaderboard, event_n_day_tasks_milestone, mission_group, repeatable_challenge)
-        "groupId_battle_pass": 31,           # battle_pass表里的groupId (battle_pass_main_2024, battle_pass)
-        "groupId_three_fish": None,          # 三鱼榜的groupId (mission_group, three_fish_main, three_fish_rank_reward)
-        "icon_name": "B09",                  # 图标的特殊后缀 (activity_double_week, item_main)
-        "paymentGiftId_start": 2510085,      # paymentGiftId开始 (activity_double_week)
-        "activityFisheryNameId": 19960006,   # 活动名的id (activity_double_week, battle_pass_main_2024, panel_static_language, mission_group, three_fish_main, mission_main)
-        "activityFisheryNameId_return": 1998226,
-        "wildCardId": 240130,                # 万能卡id (activity_double_week, collection_exchange_store, item_main, item_main_language)
-        "tokenID": 260074,                   # ndays积分币 可填None(event_n_day_tasks_milestone, item_main, item_main_language, mission_main, repeatable_challenge) ×
-        "notShowBeforeReturn": 0,            # 返场前隐藏 (activity_double_week)
-        "activityFisheryName_return": "漫溯乌苏里",   # 活动名 (item_main_language, panel_static_language)
-        "imgNameInner": "ActivityTasks_banner_bg_40",                 # 活动内的背景 (mission_group)
-        "newNDaysImgName": "ActivityTasks_ndays_logo_wslj",          # (battle_pass_main_2024, mission_group)
-        "big_reward": {"tpId": 1104011, "itemType": 11, "count": 1},  # 闪卡集齐大奖 (collection_reward)
-        "bounsRate": 3000,
-        "displayBanner": "activitycarnival_njld/ActivityCarnival_njld_leaderboard_tittle",        # 三鱼排行榜banner (three_fish_main)
-        "fishOffset_list": [
-            {"offsetX": 122, "offsetY": 3, "scale": 1, "cardOffsetX": 8, "cardOffsetY": 47, "cardScale": 0.55},
-            {"offsetX": 116, "offsetY": -2, "scale": 1, "cardOffsetX": -2, "cardOffsetY": 50, "cardScale": 0.54},
-            {"offsetX": 122, "offsetY": None, "scale": 1, "cardOffsetX": None, "cardOffsetY": 43, "cardScale": 0.55},
-        ],                                                            # 排行榜上鱼的位置偏移和缩放 (three_fish_main)
-    }
+    """
+        读写方式：新增/修改
 
+    """
+
+    # 配置修改区起始
+    internal_or_global = "internal"    # 国内还是海外 (item_main_language)
+    fishery_id = 400321                # 渔场id
+    open_time = "2025-05-23 00:00:00"  # 活动开始时间 (timer_main)
+    collectionChapterId= 11            # 闪卡章节 (activity_double_week)
+    TimerId = None                     # 双周时间id (activity_double_week, timer_main)
+    chapterTimerId = 102079            # 闪卡开启时间 (activity_double_week, timer_main)
+    icon_name = "B11"                  # 图标的特殊后缀 (activity_double_week, item_main)
+    paymentGiftId_start= 2510107      # paymentGiftId开始 (activity_double_week)
+    activityFisheryNameId= 19960054   # 活动名的id (activity_double_week, battle_pass_main_2024, panel_static_language, mission_group, three_fish_main, mission_main)
+    wildCardId= 240132                # 万能卡id (activity_double_week, collection_exchange_store, item_main, item_main_language)
+    notShowBeforeReturn= 0            # 返场前隐藏 (activity_double_week)
+    is_open_three_fish = True        # 是否开三鱼榜
+    activityFisheryName_return= "邂逅琵琶湖"  # 活动名 (item_main_language, panel_static_language)
+    imgNameInner= "ActivityTasks_banner_bg_48"                 # 活动内的背景 (mission_group)
+    newNDaysImgName= "ActivityTasks_ndays_logo_pph"          # (battle_pass_main_2024, mission_group)
+    big_reward= {"tpId": 1500025, "itemType": 15, "count": 1}  # 闪卡全卡集齐大奖 (collection_reward)
+    bounsRate= 3000
+    displayBanner= "activitycarnival_njld/ActivityCarnival_njld_leaderboard_tittle"        # 三鱼排行榜banner (three_fish_main)
+    # 排行榜上鱼的位置偏移和缩放 (three_fish_main)
+    fishOffset_list= [
+        {"offsetX": 122, "offsetY": 3, "scale": 1, "cardOffsetX": 8, "cardOffsetY": 47, "cardScale": 0.55},
+        {"offsetX": 116, "offsetY": -2, "scale": 1, "cardOffsetX": -2, "cardOffsetY": 50, "cardScale": 0.54},
+        {"offsetX": 122, "offsetY": None, "scale": 1, "cardOffsetX": None, "cardOffsetY": 43, "cardScale": 0.55},
+    ]
+
+    # 该区域参数为None则新增
+    groupId= None                  # 返场活动的groupId (event_endless_sale, event_n_day_tasks_leaderboard, event_n_day_tasks_milestone, mission_group, repeatable_challenge)
+    missionType = None                  # 任务类型 (mission_group, mission_main)
+    returnTimerId= None             # 返场时间id (activity_double_week, battle_pass_main_2024, mission_group, timer_main)
+    groupId_three_fish= None          # 三鱼榜的groupId (mission_group, three_fish_main, three_fish_rank_reward)
+    groupId_battle_pass= None          # battle_pass表里的groupId (battle_pass_main_2024, battle_pass)
+    activityFisheryNameId_return= None  # panel_static_language里的templateID 返场活动名templateID
+    tokenID= None                   # ndays积分币(event_n_day_tasks_milestone, item_main, item_main_language, mission_main, repeatable_challenge)
+
+    # 配置修改区结束
     excel_tool = ExcelToolsForActivities(EXCEL_PATH)
-
-    activity_double_week(excel_tool=excel_tool, fishery_id=cfg["fishery_id"], chapterID=cfg["collectionChapterId"], TimerId=cfg["TimerId"], icon_name=cfg["icon_name"], paymentGiftId_start=cfg["paymentGiftId_start"], activityFisheryNameId=cfg["activityFisheryNameId"], wildCardId=cfg["wildCardId"], chapterTimerId=cfg["chapterTimerId"], returnTimerId=cfg["returnTimerId"], notShowBeforeReturn=cfg["notShowBeforeReturn"])
-    battle_pass_main_2024(excel_tool=excel_tool, fishery_id=cfg["fishery_id"], groupId_battle_pass=cfg["groupId_battle_pass"], returnTimerId=cfg["returnTimerId"], newNDaysImgName=cfg["newNDaysImgName"], activityFisheryNameId=cfg["activityFisheryNameId_return"], bounsRate=cfg["bounsRate"])
-    battle_pass(excel_tool=excel_tool, groupId_battle_pass=cfg["groupId_battle_pass"])
-    collection_base(excel_tool=excel_tool, fishery_id=cfg["fishery_id"], collectionChapterId=cfg["collectionChapterId"])
-    collection_energy_cost_debuff(excel_tool=excel_tool, fishery_id=cfg["fishery_id"])
-    collection_exchange_store(excel_tool=excel_tool,  fishery_id=cfg["fishery_id"], collectionChapterId=cfg["collectionChapterId"], wildCardId=cfg["wildCardId"])
-    collection_reward(excel_tool=excel_tool, fishery_id=cfg["fishery_id"], collectionChapterId=cfg["collectionChapterId"], big_reward=cfg["big_reward"])
-    event_endless_sale(excel_tool=excel_tool, fishery_id=cfg["fishery_id"], groupId=cfg["groupId"])
-    event_n_day_tasks_leaderboard(excel_tool=excel_tool, fishery_id=cfg["fishery_id"], groupId=cfg["groupId"])
-    event_n_day_tasks_milestone(excel_tool=excel_tool, fishery_id=cfg["fishery_id"], groupId=cfg["groupId"], tokenID=cfg["tokenID"])
-    item_main(excel_tool=excel_tool, fishery_id=cfg["fishery_id"], wildCardId=cfg["wildCardId"], icon_name=cfg["icon_name"], tokenID=cfg["tokenID"])
-    item_main_language(excel_tool=excel_tool, fishery_id=cfg["fishery_id"], wildCardId=cfg["wildCardId"], tokenID=cfg["tokenID"], activityFisheryName=cfg["activityFisheryName_return"], internal_or_global=cfg["internal_or_global"])
-    mission_group(excel_tool=excel_tool, groupId=cfg["groupId"], TimerId=cfg["returnTimerId"], groupId_three_fish=cfg["groupId_three_fish"], fishery_id=cfg["fishery_id"], activityName=cfg["activityFisheryNameId_return"], imgNameInner=cfg["imgNameInner"], missionType=cfg["missionType"], newNDaysImgName=cfg["newNDaysImgName"])
-    mission_main(excel_tool=excel_tool, fishery_id=cfg["fishery_id"], groupId=cfg["groupId"], missionType=cfg["missionType"], tokenID=cfg["tokenID"])
-    panel_static_language(excel_tool=excel_tool, t_panellanguage=cfg["activityFisheryName_return"])
-    repeatable_challenge(excel_tool=excel_tool, fishery_id=cfg["fishery_id"], groupId=cfg["groupId"], tokenID=cfg["tokenID"])
-    timer_main(excel_tool=excel_tool, open_time=cfg["open_time"], fishery_id=cfg["fishery_id"], returnTimerId=cfg["returnTimerId"], TimerId=cfg["TimerId"], chapterTimerId=cfg["chapterTimerId"])
-    if cfg["groupId_three_fish"]:
-        three_fish_main(excel_tool=excel_tool, fishery_id=cfg["fishery_id"], groupId_three_fish=cfg["groupId_three_fish"], fishOffset_list=cfg["fishOffset_list"], activityRankTitle=cfg["activityFisheryNameId_return"], displayBanner=cfg["displayBanner"])
-        three_fish_rank_reward(excel_tool=excel_tool, fishery_id=cfg["fishery_id"],groupId_three_fish=cfg["groupId_three_fish"])
+    returnTimerId = timer_main(excel_tool=excel_tool, open_time=open_time, fishery_id=fishery_id, TimerId=TimerId, chapterTimerId=chapterTimerId, returnTimerId=returnTimerId)
+    activityFisheryNameId_return = panel_static_language(excel_tool=excel_tool, t_panellanguage=activityFisheryName_return, activityFisheryNameId_return=activityFisheryNameId_return)
+    missionType, groupId, groupId_three_fish = mission_group(excel_tool=excel_tool, TimerId=returnTimerId, is_open_three_fish=is_open_three_fish, fishery_id=fishery_id, activityName=activityFisheryNameId_return, imgNameInner=imgNameInner, newNDaysImgName=newNDaysImgName, missionType=missionType, groupId=groupId, groupId_three_fish=groupId_three_fish)
+    tokenID = item_main(excel_tool=excel_tool, fishery_id=fishery_id, wildCardId=wildCardId, icon_name=icon_name, tokenID=tokenID)
+    item_main_language(excel_tool=excel_tool, fishery_id=fishery_id, wildCardId=wildCardId, tokenID=tokenID, activityFisheryName=activityFisheryName_return, internal_or_global=internal_or_global)
+    activity_double_week(excel_tool=excel_tool, fishery_id=fishery_id, chapterID=collectionChapterId, TimerId=TimerId, icon_name=icon_name, paymentGiftId_start=paymentGiftId_start, activityFisheryNameId=activityFisheryNameId, wildCardId=wildCardId, chapterTimerId=chapterTimerId, returnTimerId=returnTimerId, notShowBeforeReturn=notShowBeforeReturn)
+    groupId_battle_pass = battle_pass_main_2024(excel_tool=excel_tool, fishery_id=fishery_id, groupId_battle_pass=groupId_battle_pass, returnTimerId=returnTimerId, newNDaysImgName=newNDaysImgName, activityFisheryNameId=activityFisheryNameId_return, bounsRate=bounsRate)
+    battle_pass(excel_tool=excel_tool, groupId_battle_pass=groupId_battle_pass)
+    collection_base(excel_tool=excel_tool, fishery_id=fishery_id, collectionChapterId=collectionChapterId)
+    collection_energy_cost_debuff(excel_tool=excel_tool, fishery_id=fishery_id)
+    collection_exchange_store(excel_tool=excel_tool,  fishery_id=fishery_id, collectionChapterId=collectionChapterId, wildCardId=wildCardId)
+    collection_reward(excel_tool=excel_tool, fishery_id=fishery_id, collectionChapterId=collectionChapterId, big_reward=big_reward)
+    event_endless_sale(excel_tool=excel_tool, fishery_id=fishery_id, groupId=groupId)
+    event_n_day_tasks_leaderboard(excel_tool=excel_tool, fishery_id=fishery_id, groupId=groupId)
+    event_n_day_tasks_milestone(excel_tool=excel_tool, fishery_id=fishery_id, groupId=groupId, tokenID=tokenID)
+    repeatable_challenge(excel_tool=excel_tool, fishery_id=fishery_id, groupId=groupId, tokenID=tokenID)
+    mission_main(excel_tool=excel_tool, fishery_id=fishery_id, groupId=groupId, missionType=missionType, tokenID=tokenID)
+    if is_open_three_fish:
+        three_fish_main(excel_tool=excel_tool, fishery_id=fishery_id, groupId_three_fish=groupId_three_fish, fishOffset_list=fishOffset_list, activityRankTitle=activityFisheryNameId_return, displayBanner=displayBanner)
+        three_fish_rank_reward(excel_tool=excel_tool, fishery_id=fishery_id,groupId_three_fish=groupId_three_fish)
 
 if __name__ == '__main__':
     main()

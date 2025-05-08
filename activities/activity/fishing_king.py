@@ -15,7 +15,7 @@ from tools.excelRead import ExcelToolsForActivities
 
 def event_n_day_tasks_milestone(excel_tool: ExcelToolsForActivities, group_id: int, fishery_id: int):
     event_n_day_tasks_milestone_detail = excel_tool.get_table_data_detail(book_name="EVENT_N_DAY_TASKS_MILESTONE.xlsm")
-    fish_bag_detail = baseDataRead.convert_to_json(path=excel_tool.root_dir + "/activities/customTables/", prefix="FISH_BAG")
+    fish_bag_detail = excel_tool.get_table_data_detail(book_name="FISH_BAG.xlsm")
     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="groupId", value=group_id, table_data_detail=event_n_day_tasks_milestone_detail)
     for json_object in json_object_list:
         instance_object: EVENT_N_DAY_TASKS_MILESTONE
@@ -97,27 +97,13 @@ def mission_main(excel_tool: ExcelToolsForActivities, group_id: int, fishery_id:
 
 
 def mission_group(excel_tool: ExcelToolsForActivities, group_id:int, fishery_id: int):
-    def get_fisheries():
-        res = ""
-        for fishery in fisheries_detail[0]:
-            if "enabled" not in fishery:
-                continue
-            res += f"{fishery['tpId']};"
-        if res[-1] == ";":
-            res = res[:-1]
-        print(res)
-        return res
-
     mission_group_detail = excel_tool.get_table_data_detail(book_name="MISSION_GROUP.xlsm")
-    fisheries_detail = excel_tool.get_table_data_detail(book_name="FISHERIES.xlsm")
     instance_object: MISSION_GROUP
     json_object, instance_object = excel_tool.get_object(key="groupId", value=group_id, table_data_detail=mission_group_detail, cls=MISSION_GROUP)
     timer_id = excel_tool.group_id_to_timer_id(group_id=group_id)
     instance_object.fisheriesId = fishery_id
     instance_object.openArg = timer_id
     instance_object.closeArg = timer_id
-
-    # instance_object.extArgs[6] = get_fisheries()
     print(instance_object)
     excel_tool.change_object(key="groupId", value=group_id, table_data_detail=mission_group_detail, instance_object=instance_object)
 
@@ -137,12 +123,19 @@ def timer_main(excel_tool: ExcelToolsForActivities, group_id, time_start):
 
 
 def main():
-    time_start = "2025-04-25 00:00:00"
-    group_id = 2010803
-    fishery_id = 400318
-    new_fishery_id = 500302
-    excel_tool = ExcelToolsForActivities(EXCEL_PATH)
+    """
+        读写方式：修改
 
+    """
+
+    # 配置修改区起始
+    time_start = "2025-05-16 00:00:00"
+    group_id = 2010803
+    fishery_id = 400322
+    new_fishery_id = 500303
+
+    # 配置修改区结束
+    excel_tool = ExcelToolsForActivities(EXCEL_PATH)
     timer_main(excel_tool=excel_tool, group_id=group_id,  time_start=time_start)
     mission_group(excel_tool=excel_tool, group_id=group_id, fishery_id=new_fishery_id)
     event_n_day_tasks_milestone(excel_tool=excel_tool, group_id=group_id, fishery_id=fishery_id)

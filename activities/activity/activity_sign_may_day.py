@@ -36,10 +36,25 @@ def global_value(excel_tool: ExcelToolsForActivities, prefab):
     excel_tool.change_object(key=key, value=value, table_data_detail=global_value_detail, json_object=json_object)
 
 def main():
-    group_id = 2020003
+
+    """
+        读写方式：修改
+        小奖换的话在ACTIVITY_SIGN_MAY_DAY.xlsm中修改
+        常规皮     Panel_Events_singin_7day
+        端午皮     Panel_Events_singin_7day_e01
+        奥运健将皮  Panel_Events_singin_7day_e02
+        圣诞皮     Panel_Events_singin_7day_e03
+        周年皮     Panel_Events_singin_7day_e04
+
+    """
+
+    # 配置修改区起始
     open_time = "2025-05-01 00:00:00"
     big_reward = {"tpId": 100500, "itemType": 1, "count": 800}
     prefab = "Panel_Events_singin_7day"
+    group_id = 2020003
+
+    # 配置修改区结束
     excel_tool = ExcelToolsForActivities(EXCEL_PATH)
     timer_main(excel_tool=excel_tool, group_id=group_id, open_time=open_time)
     activity_sign_may_day(excel_tool=excel_tool, group_id=group_id, big_reward=big_reward)

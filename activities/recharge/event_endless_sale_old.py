@@ -12,7 +12,7 @@ def event_endless_sale(excel_tool: ExcelToolsForActivities, group_id, fishery_id
     event_endless_sale_detail = excel_tool.get_table_data_detail(book_name="EVENT_ENDLESS_SALE.xlsm")
     item_main_detail = excel_tool.get_table_data_detail(book_name="ITEM_MAIN.xlsm")
     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="groupId", value=group_id, table_data_detail=event_endless_sale_detail)
-    fish_bag_detail = baseDataRead.convert_to_json(path=excel_tool.root_dir + "/activities/customTables/", prefix="FISH_BAG")
+    fish_bag_detail = excel_tool.get_table_data_detail(book_name="FISH_BAG.xlsm")
     for json_object in json_object_list:
         instance_object: EVENT_ENDLESS_SALE
         instance_object = json_to_instance(json_object=json_object, cls=EVENT_ENDLESS_SALE)
@@ -31,11 +31,17 @@ def timer_main(excel_tool: ExcelToolsForActivities, group_id, time_start, time_l
     excel_tool.timer_main(timer_id=timer_id, time_start=time_start, time_end=time_end)
 
 def main():
+    """
+        读写方式：修改
+        海外的无尽促销
+    """
+    # 配置修改区起始
     group_id = 3010102                     # 无尽促销的groupId
     fishery_id = 400302                    # 无尽促销的渔场
     time_start = "2025-04-25 00:00:00"     # 无尽促销的起始时间
     time_last = 6                          # 无尽促销的持续天数
 
+    # 配置修改区结束
     excel_tool = ExcelToolsForActivities(EXCEL_PATH)
     event_endless_sale(excel_tool=excel_tool, group_id=group_id, fishery_id=fishery_id)
     timer_main(excel_tool=excel_tool, group_id=group_id, time_start=time_start, time_last=time_last)

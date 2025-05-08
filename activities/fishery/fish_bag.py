@@ -4,6 +4,7 @@ from activities.decl.DROP_PACK import DROP_PACK
 from activities.decl.FISHCARD import FISHCARD
 from activities.decl.FISHCARD_PACK_INFO import FISHCARD_PACK_INFO
 from activities.decl.FISHCARD_REWARD_GROUP import FISHCARD_REWARD_GROUP
+from activities.decl.FISH_BAG import FISH_BAG
 from activities.decl.ITEM_MAIN import ITEM_MAIN
 from activities.decl.ITEM_MAIN_LANGUAGE import ITEM_MAIN_LANGUAGE
 from activities.decl.PAYMENT_GIFT import PAYMENT_GIFT
@@ -381,10 +382,95 @@ def fishcard_reward_group(excel_tool: ExcelToolsForActivities, fishery_index, fi
             excel_tool.add_object(key=key, value=instance_object.TPID, instance_object=instance_object,  table_data_detail=fishcard_reward_group_detail)
         cur += 1
 
+def fish_bag(excel_tool: ExcelToolsForActivities):
+    with open(f"{excel_tool.base_data_path}FISH_BAG.data.txt", "w") as file:
+        pass  # 不做任何操作,关闭文件即可清空内容
+    fish_bag_detail = excel_tool.get_table_data_detail(book_name="FISH_BAG.xlsm")
+    table_data_object_list = excel_tool.get_table_data_object_list_by_key_value(key="stype", value=110, book_name="ITEM_MAIN.xlsm")
+    cur = 1
+    for table_data_object in table_data_object_list:
+        fish_bag = FISH_BAG()
+        fish_bag.id = cur
+        fish_bag.name = table_data_object["name"]
+        pattern = r"场(\d+)"
+
+        fish_bag.fishBagType = 1
+
+        match = re.search(pattern, fish_bag.name)
+        if match:
+            fish_bag.fishBagFishery = 400300 + int(match.group(1))
+
+
+        pattern = r"场新主线(\d+)"
+
+        match = re.search(pattern, fish_bag.name)
+        if match:
+            fish_bag.fishBagFishery = 500300 + int(match.group(1))
+
+        pattern = r"卡包(\d+)"
+        match = re.search(pattern, fish_bag.name)
+        if match:
+            fish_bag.fishCardCount = int(match.group(1))
+        pattern = r"卡包隐藏"
+        pattern2 = r"卡包隐藏(\d+)"
+        match = re.search(pattern, fish_bag.name)
+        match2 = re.search(pattern2, fish_bag.name)
+        if match:
+            fish_bag.fishCardCount = 20
+            fish_bag.fishBagType = 2
+        if match2:
+            fish_bag.fishCardCount = int(match2.group(1))
+
+        pattern = r"卡包boss"
+        pattern2 = r"卡包boss(\d+)"
+        match = re.search(pattern, fish_bag.name)
+        match2 = re.search(pattern2, fish_bag.name)
+        if match:
+            fish_bag.fishCardCount = 20
+            fish_bag.fishBagType = 3
+        if match2:
+            fish_bag.fishCardCount = int(match2.group(1))
+
+        pattern = r"huge卡包"
+        pattern2 = r"huge卡包(\d+)"
+        match = re.search(pattern, fish_bag.name)
+        match2 = re.search(pattern2, fish_bag.name)
+        if match:
+            fish_bag.fishCardCount = 20
+            fish_bag.fishBagType = 2
+        if match2:
+            fish_bag.fishCardCount = int(match2.group(1))
+
+        pattern = r"giant卡包"
+        pattern2 = r"giant卡包(\d+)"
+        match = re.search(pattern, fish_bag.name)
+        match2 = re.search(pattern2, fish_bag.name)
+        if match:
+            fish_bag.fishCardCount = 20
+            fish_bag.fishBagType = 3
+        if match2:
+            fish_bag.fishCardCount = int(match2.group(1))
+
+        pattern = r"tier(\d+)"
+        match = re.search(pattern, fish_bag.name)
+        if match:
+            fish_bag.fishBagFishery = int(match.group(1))
+
+        pattern = r"问号"
+        match = re.search(pattern, fish_bag.name)
+        if match:
+            fish_bag.fishBagFishery = 5
+
+        fish_bag.itemTpId = table_data_object["itemTpId"]
+        print(fish_bag)
+        excel_tool.add_object(instance_object=fish_bag, key="itemTpId", value=fish_bag.itemTpId, table_data_detail=fish_bag_detail)
+        cur += 1
+
+
 def payment_gift_group(excel_tool: ExcelToolsForActivities, fishery_id, giftId_start, payment_gift_group_tp_id_start):
     # payment_gift
     payment_gift_detail = excel_tool.get_table_data_detail(book_name="PAYMENT_GIFT.xlsm")
-    fish_bag_detail = baseDataRead.convert_to_json(path=excel_tool.root_dir + "/activities/customTables/", prefix="FISH_BAG")
+    fish_bag_detail = excel_tool.get_table_data_detail(book_name="FISH_BAG.xlsm")
     template_giftId_start = 2310023
     key = "giftId"
     table_data_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=giftId_start, table_data_detail=payment_gift_detail)
@@ -454,16 +540,14 @@ def payment_gift_group(excel_tool: ExcelToolsForActivities, fishery_id, giftId_s
 
 
 def main():
-    excel_tool = ExcelToolsForActivities(EXCEL_PATH)
-    drop_id_start = None            # 为None则新增
-    drop_pack_id_start = None             # 为None则新增
-    entity_id_start = None                # 为None则新增
-    fishcard_pack_info_tpid_start = None  # 为None则新增
-    fishcard_reward_group_tpid_start = 231         # 为None则新增
-
-    icon_name = "S01C03"
-    fishery_id = 500303
-
+    """
+        读写方式：新增/修改
+    """
+    # 配置修改区起始
+    icon_name = "S01C04"
+    fishery_id = 500304
+    # 鱼卡数量配置 找曦哥要200卡包的剩下自己按照倍数填
+    # dropTurn_list需要和为6所以会有一两个需要itemCount是偶数的填2
     pack_info_cfg_list = [
         {"name": "10","itemCount_list": [3, 3, 2, 2, 0, 10], "dropTurn_list": [1, 1 ,2 ,2, 0], "fish_type": 0},
         {"name": "20","itemCount_list":[6, 5, 5, 3, 1, 20], "dropTurn_list": [2, 1 ,1 ,1, 1], "fish_type": 0},
@@ -476,19 +560,33 @@ def main():
         {"name": "boss","itemCount_list":[0, 0, 0, 0, 20, 20], "dropTurn_list": [0, 0 ,0 ,0, 1], "fish_type": 5},
         {"name": "boss100","itemCount_list":[0, 0, 0, 0, 100, 100],"dropTurn_list": [0, 0 ,0 ,0, 1], "fish_type": 5},
     ]
+
+    # 该区域参数为None则新增
+    drop_id_start = None  # 对应drop_main的起始dropId
+    drop_pack_id_start = None  # 对应drop_pack的起始dropPackId
+    entity_id_start = None   # 对应drop_entity的起始entityId
+    fishcard_pack_info_tpid_start = None  # 对应fishcard_pack_info的起始tpId
+    fishcard_reward_group_tpid_start = None  # 对应fishcard_reward_group的起始TPID
+
+    # 根据偏移算中间值，当渔场id不按顺序新增时可能有问题
     fishery_index = fishery_id - 500300
     giftId_start = 2310022 + fishery_index
     payment_gift_group_tp_id_start = 100022 + fishery_index
-    # item_main_tpid_start = 211264 + (fishery_index-1) * 10
-    # fish_card_tpid_start = 1010001 + (fishery_index-1) * 15
-    # drop_id_start = drop_main(excel_tool=excel_tool, drop_id_start=drop_id_start, fishery_index=fishery_index)
-    # item_main_tpid_start = item_main(excel_tool=excel_tool, tpid_start=item_main_tpid_start, fishery_index=fishery_index, icon_name=icon_name,  drop_id_start=drop_id_start)
-    # item_main_language(excel_tool=excel_tool, tpid_start=item_main_tpid_start,fishery_index=fishery_index, fishery_id=fishery_id, pack_info_cfg_list=pack_info_cfg_list)
-    # drop_pack_id_start = drop_pack(excel_tool=excel_tool, drop_id_start=drop_id_start,drop_pack_id_start=drop_pack_id_start, fishery_index=fishery_index, pack_info_cfg_list=pack_info_cfg_list)
-    # drop_entity(excel_tool=excel_tool,drop_pack_id_start=drop_pack_id_start, entity_id_start=entity_id_start, fishery_index=fishery_index, fishery_id=fishery_id, fish_card_tpid_start=fish_card_tpid_start, pack_info_cfg_list=pack_info_cfg_list)
-    # fishcard(excel_tool=excel_tool, fish_card_tpid_start=fish_card_tpid_start, fishery_index=fishery_index,fishery_id=fishery_id, item_main_tpid_start=item_main_tpid_start)
-    # fishcard_pack_info(excel_tool=excel_tool, fishery_index=fishery_index, fishery_id=fishery_id, fishcard_pack_info_tpid_start=fishcard_pack_info_tpid_start, item_main_tpid_start=item_main_tpid_start,  pack_info_cfg_list=pack_info_cfg_list)
-    # fishcard_reward_group(excel_tool=excel_tool, fishery_index=fishery_index, fishery_id=fishery_id, fishcard_reward_group_tpid_start=fishcard_reward_group_tpid_start, item_main_tpid_start=item_main_tpid_start)
+    item_main_tpid_start = 211264 + (fishery_index-1) * 10
+    fish_card_tpid_start = 1010001 + (fishery_index-1) * 15
+
+    # 配置修改区结束
+
+    excel_tool = ExcelToolsForActivities(EXCEL_PATH)
+    drop_id_start = drop_main(excel_tool=excel_tool, drop_id_start=drop_id_start, fishery_index=fishery_index)
+    item_main_tpid_start = item_main(excel_tool=excel_tool, tpid_start=item_main_tpid_start, fishery_index=fishery_index, icon_name=icon_name,  drop_id_start=drop_id_start)
+    item_main_language(excel_tool=excel_tool, tpid_start=item_main_tpid_start,fishery_index=fishery_index, fishery_id=fishery_id, pack_info_cfg_list=pack_info_cfg_list)
+    drop_pack_id_start = drop_pack(excel_tool=excel_tool, drop_id_start=drop_id_start,drop_pack_id_start=drop_pack_id_start, fishery_index=fishery_index, pack_info_cfg_list=pack_info_cfg_list)
+    drop_entity(excel_tool=excel_tool,drop_pack_id_start=drop_pack_id_start, entity_id_start=entity_id_start, fishery_index=fishery_index, fishery_id=fishery_id, fish_card_tpid_start=fish_card_tpid_start, pack_info_cfg_list=pack_info_cfg_list)
+    fishcard(excel_tool=excel_tool, fish_card_tpid_start=fish_card_tpid_start, fishery_index=fishery_index,fishery_id=fishery_id, item_main_tpid_start=item_main_tpid_start)
+    fishcard_pack_info(excel_tool=excel_tool, fishery_index=fishery_index, fishery_id=fishery_id, fishcard_pack_info_tpid_start=fishcard_pack_info_tpid_start, item_main_tpid_start=item_main_tpid_start,  pack_info_cfg_list=pack_info_cfg_list)
+    fishcard_reward_group(excel_tool=excel_tool, fishery_index=fishery_index, fishery_id=fishery_id, fishcard_reward_group_tpid_start=fishcard_reward_group_tpid_start, item_main_tpid_start=item_main_tpid_start)
+    fish_bag(excel_tool=excel_tool)
     payment_gift_group(excel_tool=excel_tool, fishery_id=fishery_id, giftId_start=giftId_start, payment_gift_group_tp_id_start=payment_gift_group_tp_id_start)
 
 if __name__ == '__main__':

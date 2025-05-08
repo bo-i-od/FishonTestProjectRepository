@@ -420,14 +420,15 @@ class ExcelToolsForActivities(ExcelTools):
         json_object_list = self.get_table_data_object_list_by_key_value(key=key, value=value, book_name=book_name, table_data_detail=table_data_detail)
         if not json_object_list:
             return None, None
-        json_object = json_object_list[0]
         instance_object_list = None
         instance_object = None
         if cls:
             instance_object_list = json_list_to_instance_list(json_object_list=json_object_list, cls=cls)
-            instance_object = instance_object_list[0]
         if is_plural:
             return json_object_list, instance_object_list
+        if cls:
+            instance_object = instance_object_list[0]
+        json_object = json_object_list[0]
         return json_object, instance_object
 
     def get_objects(self, key, value_list, book_name: str = None, table_data_detail=None, cls: type = None):
@@ -471,7 +472,7 @@ class ExcelToolsForActivities(ExcelTools):
             fishBagType       1是普通卡包 2是hidden卡包 3是boss卡包
         """
         if table_object_detail is None:
-             table_object_detail = baseDataRead.convert_to_json(path=self.root_dir + "/activities/customTables/", prefix="FISH_BAG")
+             table_object_detail = self.get_table_data_detail(book_name="FISH_BAG.xlsm")
         json_object_list, _, _ = table_object_detail
         for json_object in json_object_list:
             if json_object["itemTpId"] != fish_bag_id:
@@ -484,7 +485,7 @@ class ExcelToolsForActivities(ExcelTools):
             将fish_bag_id转换成fishery_id对应的卡包id，如果不存在返回None
         """
         if table_object_detail is None:
-            table_object_detail = baseDataRead.convert_to_json(path=self.root_dir + "/activities/customTables/", prefix="FISH_BAG")
+            table_object_detail = self.get_table_data_detail(book_name="FISH_BAG.xlsm")
         detail = self.fish_bag_id_to_detail(fish_bag_id=fish_bag_id, table_object_detail=table_object_detail)
         if detail is None:
             return None
@@ -501,7 +502,7 @@ class ExcelToolsForActivities(ExcelTools):
             table_object_detail是FISH_BAG.data.txt的数据
         """
         if table_object_detail is None:
-            table_object_detail = baseDataRead.convert_to_json(path=self.root_dir + "/activities/customTables/", prefix="FISH_BAG")
+            table_object_detail = self.get_table_data_detail(book_name="FISH_BAG.xlsm")
         json_object_list, _, _ = table_object_detail
         for json_object in json_object_list:
             if fishery_id and "fishBagFishery" not in json_object:
@@ -548,7 +549,7 @@ class ExcelToolsForActivities(ExcelTools):
             max_value = json_object[key]
         return max_value
 
-    def get_min_value_more_than_start(self, key, table_object_detail, start, long=1):
+    def get_min_value_more_than_start(self, key, table_object_detail, start=1, long=1):
         """
             获得大于一个指定数能容纳连续long个数的最小数
         """
@@ -722,6 +723,23 @@ class ExcelToolsForActivities(ExcelTools):
         if collection_base_detail is None:
             collection_base_detail = self.get_table_data_detail(book_name="COLLECTION_BASE.xlsm")
         return self.get_table_data_object_by_key_value(key="fishId", value=fish_id, table_data_detail=collection_base_detail)["collectionId"]
+
+    def get_last_quest_id(self, fishery_id):
+        new_plot_quest_detail = self.get_table_data_detail(book_name="NEW_PLOT_QUEST.xlsm")
+        nextQuestId_dict = {}
+        json_object_list = self.get_table_data_object_list_by_key_value(key="fisheriesID", value=fishery_id, table_data_detail=new_plot_quest_detail)
+        for json_object in json_object_list:
+            if "nextQuestId" not in json_object:
+                continue
+            nextQuestId_dict[json_object["nextQuestId"]] =json_object["tpId"]
+        for nextQuestId in nextQuestId_dict:
+            json_object = self.get_table_data_object_by_key_value(key="tpId", value=nextQuestId, table_data_detail=new_plot_quest_detail)
+            if json_object["fisheriesID"] == fishery_id:
+                continue
+            return nextQuestId_dict[nextQuestId]
+        return None
+
+
 
 
 

@@ -6,6 +6,8 @@ from activities.decl.COLLECTION_PROTECT import COLLECTION_PROTECT
 from activities.decl.COLLECTION_REWARD import COLLECTION_REWARD
 from activities.decl.ITEM_MAIN import ITEM_MAIN
 from activities.decl.ITEM_MAIN_LANGUAGE import ITEM_MAIN_LANGUAGE
+from activities.decl.PANEL_STATIC_LANGUAGE import PANEL_STATIC_LANGUAGE
+from activities.decl.TIMER_MAIN import TIMER_MAIN
 from tools.excelRead import ExcelToolsForActivities
 from tools.decl2py import *
 
@@ -81,7 +83,33 @@ def collection_base(excel_tool: ExcelToolsForActivities, fishery_id, fishery_ind
             excel_tool.add_object(key=key, value=instance_object.collectionId, table_data_detail=collection_base_detail, instance_object=instance_object)
         cur += 1
 
-def collection_chapter(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index, chapterTimerId, chapterNamePanelId, icon_name, wildCardId):
+def timer_main(excel_tool: ExcelToolsForActivities,fishery_index, time_start, timerID=None):
+    timer_main_detail = excel_tool.get_table_data_detail(book_name="TIMER_MAIN.xlsm")
+    instance_object: TIMER_MAIN
+    key = "timerID"
+    if timerID is None:
+        mode = 1
+        instance_object = TIMER_MAIN()
+        instance_object.timerID = excel_tool.get_min_value_more_than_start(key=key, table_object_detail=timer_main_detail, start=151100)
+        instance_object.id = instance_object.timerID
+    else:
+        mode = 0
+        json_object, instance_object = excel_tool.get_object(key=key, value=timerID, table_data_detail=timer_main_detail, cls=TIMER_MAIN)
+    instance_object.name = f"闪卡新主线-渔场{fishery_index}"
+    instance_object.timerName = instance_object.name
+    instance_object.cycleType = 1
+    instance_object.openTime = time_start
+    instance_object.endTime = "2035-12-28 23:59:59"
+    print(instance_object)
+    if mode == 0:
+        excel_tool.change_object(key=key, value=instance_object.timerID, table_data_detail=timer_main_detail, instance_object=instance_object)
+    else:
+        excel_tool.add_object(key=key, value=instance_object.timerID, table_data_detail=timer_main_detail, instance_object=instance_object)
+    return instance_object.timerID
+
+
+
+def collection_chapter(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index, chapterTimerId, chapterNamePanelId, icon_name, wildCardId, notOpenText=None):
     collection_chapter_detail = excel_tool.get_table_data_detail(book_name="COLLECTION_CHAPTER.xlsm")
     key = "tpId"
     template_tpId = 1
@@ -101,7 +129,8 @@ def collection_chapter(excel_tool: ExcelToolsForActivities, fishery_id, fishery_
     instance_object.fishSceneTpId = fishery_id
     instance_object.chapterTimerId = chapterTimerId
     instance_object.chapterNamePanelId = chapterNamePanelId
-    instance_object.chapterPrizeIconName=f"division_flashcard_{icon_name}"
+    # instance_object.chapterPrizeIconName=f"division_flashcard_{icon_name}"
+    instance_object.chapterPrizeIconName="division_flashcard_B13"
     instance_object.chapterPrizeResultIcon= f"flashcard_result_bannerbg_M_{icon_name}"
     instance_object.chapterPrizeResultTopIcon = f"flashcard_result_alltop_{icon_name}"
     instance_object.flashCardBooksMaterial = f"FlashCardBooks_M_{icon_name}"
@@ -308,25 +337,81 @@ def collection_reward(excel_tool: ExcelToolsForActivities, fishery_id, collectio
             excel_tool.add_object(key=key, value=instance_object.tpId, table_data_detail=collection_reward_detail, instance_object=instance_object)
         cur += 1
 
+def panel_static_language(excel_tool: ExcelToolsForActivities, fishery_id, chapterNamePanelId, notOpenText=None):
+    panel_static_language_detail = excel_tool.get_table_data_detail(book_name="PANEL_STATIC_LANGUAGE.xlsm")
+    key = "templateID"
+    instance_object: PANEL_STATIC_LANGUAGE
+
+    # chapterNamePanelId
+    json_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=chapterNamePanelId, table_data_detail=panel_static_language_detail)
+    if json_object_list:
+        mode = 0
+        instance_object = json_to_instance(json_object=json_object_list[0], cls=PANEL_STATIC_LANGUAGE)
+    else:
+        mode = 1
+        instance_object = PANEL_STATIC_LANGUAGE()
+    instance_object.id = chapterNamePanelId
+    instance_object.name = "新主线闪卡"
+    instance_object.templateID = chapterNamePanelId
+    instance_object.t_panellanguage = f"{excel_tool.get_fishery_name(fishery_id=fishery_id)}"
+    print(instance_object)
+    if mode == 0:
+        excel_tool.change_object(key=key, value=instance_object.templateID, table_data_detail=panel_static_language_detail, instance_object=instance_object)
+    else:
+        excel_tool.add_object(key=key, value=instance_object.templateID, table_data_detail=panel_static_language_detail, instance_object=instance_object)
+
+    # notOpenText
+    if notOpenText is None:
+        mode = 1
+        instance_object = PANEL_STATIC_LANGUAGE()
+        instance_object.templateID = max(excel_tool.get_min_value_more_than_start(key=key, table_object_detail=panel_static_language_detail, start=19960945), excel_tool.get_min_value_more_than_start(key="id", table_object_detail=panel_static_language_detail, start=19960945))
+        instance_object.id = instance_object.templateID
+    else:
+        mode = 0
+        json_object, instance_object = excel_tool.get_object(key=key, value=notOpenText, table_data_detail=panel_static_language_detail, cls=PANEL_STATIC_LANGUAGE)
+    instance_object.name = "闪卡相关-渔场开启条件"
+    instance_object.t_panellanguage = f"完成{excel_tool.get_fishery_name(fishery_id=fishery_id-1)}游钓任务后解锁{excel_tool.get_fishery_name(fishery_id=fishery_id)}渔场"
+    print(instance_object)
+    if mode == 0:
+        excel_tool.change_object(key=key, value=instance_object.templateID, table_data_detail=panel_static_language_detail, instance_object=instance_object)
+    else:
+        excel_tool.add_object(key=key, value=instance_object.templateID, table_data_detail=panel_static_language_detail, instance_object=instance_object)
+
+
+
+
+
 
 def main():
-    fishery_id = 500303
+    """
+        读写方式：新增/修改
+    """
+    # 配置修改区起始
+    fishery_id = 500304
+    icon_name = "S01C04"
+    time_start = "2025-05-30 00:00:00"
+
+    # 该区域参数为None则新增
+    notOpenText = None  # panel_static_language中templateID 完成xxx游钓任务后解锁yyy渔场
+    chapterTimerId = None  # timer_main中timerID 闪卡开启和结束时间
+
+    # 根据偏移算中间值，当渔场id不按顺序新增时可能有问题
     fishery_index = fishery_id - 500300
-    chapterTimerId = 150025
-    chapterNamePanelId = 19960301
-    icon_name = "S01C01"
-    wildCardId = 240152
-
-
+    wildCardId = 240149 + fishery_index
     collectionChapterId = 100 + fishery_index
+    chapterNamePanelId = 19960300 + fishery_index
+
+    # 配置修改区结束
     excel_tool = ExcelToolsForActivities(EXCEL_PATH)
     item_main(excel_tool=excel_tool, fishery_index=fishery_index, wildCardId=wildCardId, icon_name=icon_name)
+    panel_static_language(excel_tool=excel_tool, fishery_id=fishery_id, chapterNamePanelId=chapterNamePanelId, notOpenText=notOpenText)
     item_main_language(excel_tool=excel_tool, fishery_id=fishery_id,fishery_index=fishery_index, wildCardId=wildCardId)
     collection_energy_cost_debuff(excel_tool=excel_tool, fishery_id=fishery_id)
     collection_exchange_store(excel_tool=excel_tool, fishery_id=fishery_id, collectionChapterId=collectionChapterId, wildCardId=wildCardId)
     collection_reward(excel_tool=excel_tool, fishery_id=fishery_id, collectionChapterId=collectionChapterId)
     collection_base(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index, collectionChapterId=collectionChapterId)
-    collection_chapter(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index, chapterTimerId=chapterTimerId, chapterNamePanelId=chapterNamePanelId, icon_name=icon_name, wildCardId=wildCardId)
+    chapterTimerId = timer_main(excel_tool=excel_tool,fishery_index=fishery_index, time_start=time_start, timerID=chapterTimerId)
+    collection_chapter(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index, chapterTimerId=chapterTimerId, chapterNamePanelId=chapterNamePanelId, icon_name=icon_name, wildCardId=wildCardId, notOpenText=notOpenText)
     collection_protect(excel_tool=excel_tool,  fishery_id=fishery_id)
 
 

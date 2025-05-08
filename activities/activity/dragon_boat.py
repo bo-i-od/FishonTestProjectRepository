@@ -79,9 +79,16 @@ def timer_main(excel_tool:ExcelToolsForActivities, time_start, timer_id=102030):
 
 
 def main():
-    excel_tool = ExcelToolsForActivities(EXCEL_PATH)
-    time_start = "2025-04-21 02:00:00"
+    """
+        读写方式：修改
+    """
+    # 配置修改区起始
+    time_start = "2025-05-26 02:00:00"
     group_id = 2010111
+
+    # 配置修改区结束
+
+    excel_tool = ExcelToolsForActivities(EXCEL_PATH)
     timer_id = excel_tool.group_id_to_timer_id(group_id=group_id)
     global_value(excel_tool, time_start=time_start)
     timer_main(excel_tool, time_start=time_start, timer_id=timer_id)

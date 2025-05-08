@@ -26,6 +26,7 @@ def get_rod_id(scene_id):
                     "400322": "500004",
                     "500301": "500001",
                     "500302": "500001",
+                    "500303": "500001",
                     }
     rod_id = scene_to_rod[scene_id]
     return rod_id
@@ -52,9 +53,12 @@ def fish(bp: BasePage, arg_list):
             execute_dict["isLimitedSpot"] = arg_list[cur]["is_limited_spot"]
         if "energy_cost" in arg_list[cur]:
             energy_cost = arg_list[cur]["energy_cost"]
-            table_data_object = bp.excelTools.get_table_data_object_by_key_value(key="energyCost", value=energy_cost, book_name="FISH_ACTIVITY_SPOT_ENERGY.xlsm")
-            tpId = table_data_object["tpId"]
-            execute_dict["energyCostId"] = tpId
+            table_data_object_list = bp.excelTools.get_table_data_object_list_by_key_value(key="energyCost", value=energy_cost, book_name="FISH_ACTIVITY_SPOT_ENERGY.xlsm")
+            if table_data_object_list:
+                tpId = table_data_object_list[0]["tpId"]
+                execute_dict["energyCostId"] = tpId
+            else:
+                print("没有找到该体力，使用默认体力消耗")
 
             # table_data = bp.excelTools.get_table_data("FISH_ACTIVITY_SPOT_ENERGY.xlsm")
             # energyCost_list = table_data['energyCost']
