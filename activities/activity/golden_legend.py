@@ -69,7 +69,7 @@ def mission_language(excel_tool: ExcelToolsForActivities,  mission_language_id, 
     excel_tool.change_object(key="mission_language", value=mission_language_id, instance_object=instance_object, table_data_detail=mission_language_detail)
 
 
-def mission_main(excel_tool: ExcelToolsForActivities, group_id: int, fishery_id: int, new_fishery_id: int):
+def mission_main(excel_tool: ExcelToolsForActivities, group_id: int, fishery_id: int):
     mission_main_detail = excel_tool.get_table_data_detail(book_name="MISSION_MAIN.xlsm")
     mission_language_detail = excel_tool.get_table_data_detail(book_name="MISSION_LANGUAGE.xlsm")
     mission_condition_detail = excel_tool.get_table_data_detail(book_name="MISSION_CONDITION.xlsm")
@@ -128,7 +128,7 @@ def main():
     # 配置修改区起始
     time_start = "2025-05-02 00:00:00"
     group_id = 2010807
-    fishery_id = 400319      # 旧主线活动渔场
+    fishery_id = 400318      # 旧主线活动渔场
     new_fishery_id = 500302  # 新主线渔场
 
     # 配置修改区结束
@@ -136,7 +136,7 @@ def main():
     timer_main(excel_tool=excel_tool, group_id=group_id,  time_start=time_start)
     mission_group(excel_tool=excel_tool, group_id=group_id, fishery_id=new_fishery_id)
     event_n_day_tasks_milestone(excel_tool=excel_tool, group_id=group_id, fishery_id=fishery_id)
-    mission_main(excel_tool=excel_tool, group_id=group_id, fishery_id=fishery_id, new_fishery_id=new_fishery_id)
+    mission_main(excel_tool=excel_tool, group_id=group_id, fishery_id=fishery_id)
 
     print("涉及到的表：", list(excel_tool.data_txt_changed))
 

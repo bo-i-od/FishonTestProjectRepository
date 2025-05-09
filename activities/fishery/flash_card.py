@@ -364,7 +364,7 @@ def panel_static_language(excel_tool: ExcelToolsForActivities, fishery_id, chapt
     if notOpenText is None:
         mode = 1
         instance_object = PANEL_STATIC_LANGUAGE()
-        notOpenText = max(excel_tool.get_min_value_more_than_start(key=key, table_object_detail=panel_static_language_detail, start=19960945), excel_tool.get_min_value_more_than_start(key="id", table_object_detail=panel_static_language_detail, start=19960945))
+        notOpenText = excel_tool.get_min_value_more_than_start(key_list=[key, "id"], table_object_detail=panel_static_language_detail, start=19960945)
         instance_object.templateID = notOpenText
         instance_object.id = instance_object.templateID
     else:

@@ -551,17 +551,26 @@ class ExcelToolsForActivities(ExcelTools):
             max_value = json_object[key]
         return max_value
 
-    def get_min_value_more_than_start(self, key, table_object_detail, start=1, long=1):
+    def get_min_value_more_than_start(self,  table_object_detail, start=1, long=1, key=None, key_list=None):
+        if key is not None:
+            return self.get_min_value_more_than_start(table_object_detail=table_object_detail, start=start, long=long, key_list=[key])
+
         """
-            获得大于一个指定数能容纳连续long个数的最小数
+        获得大于指定数start，能容纳连续long个数的多个键对应的值都满足的最小数。
         """
         json_object_list, _, _ = table_object_detail
-        existing_values = {obj[key] for obj in json_object_list if key in obj}
+        # 为每个键生成现有值的集合
+        existing_values_dict = {}
+        for key in key_list:
+            existing_values_dict[key] = {obj[key] for obj in json_object_list if key in obj}
 
         n = start
         while True:
-            # 检查从n开始的long个连续数是否均未被使用
-            if all((n + i) not in existing_values for i in range(long)):
+            # 检查所有键是否都满足从n开始的连续long个数未被占用
+            if all(
+                    all((n + i) not in existing_values_dict[key] for i in range(long))
+                    for key in key_list
+            ):
                 return n
             n += 1
 

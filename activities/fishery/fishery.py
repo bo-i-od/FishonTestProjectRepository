@@ -819,7 +819,7 @@ def panel_static_language(excel_tool: ExcelToolsForActivities, activityBP, activ
     if activityBPId is None:
         mode = 1
         instance_object = PANEL_STATIC_LANGUAGE()
-        instance_object.templateID = max(excel_tool.get_min_value_more_than_start(key=key, table_object_detail=panel_static_language_detail, start=19960945), excel_tool.get_min_value_more_than_start(key="id", table_object_detail=panel_static_language_detail, start=19960945))
+        instance_object.templateID = excel_tool.get_min_value_more_than_start(key_list=[key, "id"], table_object_detail=panel_static_language_detail, start=19960945)
         instance_object.id = instance_object.templateID
     else:
         mode = 0

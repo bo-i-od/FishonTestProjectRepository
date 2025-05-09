@@ -19,7 +19,7 @@ def panel_static_language(excel_tool: ExcelToolsForActivities, title, title_id=N
     if title_id is None:
         mode = 1
         instance_object = PANEL_STATIC_LANGUAGE()
-        title_id = max(excel_tool.get_min_value_more_than_start(key=key, table_object_detail=panel_static_language_detail, start=1998237),excel_tool.get_min_value_more_than_start(key="id", table_object_detail=panel_static_language_detail, start=1998237))
+        title_id = excel_tool.get_min_value_more_than_start(key_list=[key, "id"], table_object_detail=panel_static_language_detail, start=1998237)
         instance_object.templateID = title_id
         instance_object.id = instance_object.templateID
 
@@ -64,7 +64,7 @@ def mission_group(excel_tool: ExcelToolsForActivities, fishery_id, title_id, img
     template_groupId = 5100039
     if groupId is None:
         mode = 1
-        groupId = max(excel_tool.get_min_value_more_than_start(key=key, table_object_detail=mission_group_detail, start=template_groupId), excel_tool.get_min_value_more_than_start(key="id", table_object_detail=mission_group_detail, start=template_groupId))
+        groupId = excel_tool.get_min_value_more_than_start(key_list=[key, "id"], table_object_detail=mission_group_detail, start=template_groupId)
     else:
         mode = 0
         template_groupId = groupId
@@ -107,7 +107,7 @@ def item_main(excel_tool: ExcelToolsForActivities, fishery_id, tokenID=None):
     key = "itemTpId"
     if tokenID is None:
         mode = 1
-        tokenID = max(excel_tool.get_min_value_more_than_start(key="itemTpId", table_object_detail=item_main_detail, start=template_itemTpId), excel_tool.get_min_value_more_than_start(key="id", table_object_detail=item_main_detail, start=template_itemTpId))
+        tokenID = excel_tool.get_min_value_more_than_start(key_list=[key, "id"], table_object_detail=item_main_detail, start=template_itemTpId)
     else:
         mode = 0
         template_itemTpId = tokenID

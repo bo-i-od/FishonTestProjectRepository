@@ -15,7 +15,7 @@ def mission_group(excel_tool: ExcelToolsForActivities, group_id, event_endless_s
     template_groupId = 3010103
     if group_id is None:
         mode = 1
-        group_id = max(excel_tool.get_min_value_more_than_start(key=key, table_object_detail=mission_group_detail, start=template_groupId), excel_tool.get_min_value_more_than_start(key="id", table_object_detail=mission_group_detail, start=template_groupId))
+        group_id = excel_tool.get_min_value_more_than_start(key_list=[key, "id"], table_object_detail=mission_group_detail, start=template_groupId)
         timer_id, timer_id_list = timer_main(excel_tool=excel_tool, event_endless_sale_cfg_list=event_endless_sale_cfg_list)
     else:
         mode = 0
@@ -74,7 +74,7 @@ def event_endless_sale(excel_tool: ExcelToolsForActivities, group_id):
 
 def event_endless_sale_container(excel_tool: ExcelToolsForActivities, event_endless_sale_cfg_list, group_id, timer_id_list):
     def event_endless_sale_container_add():
-        tpId_start = max(excel_tool.get_min_value_more_than_start(key="tpId", table_object_detail=event_endless_sale_container_detail, start=1, long=len(timer_id_list)), excel_tool.get_min_value_more_than_start(key="id", table_object_detail=event_endless_sale_container_detail, start=1, long=len(timer_id_list)))
+        tpId_start = excel_tool.get_min_value_more_than_start(key_list=[key, "id"], table_object_detail=event_endless_sale_container_detail, start=1, long=len(timer_id_list))
         cur = 0
         while cur < len(timer_id_list):
             instance_object = EVENT_ENDLESS_SALE_CONTAINER()
@@ -131,7 +131,7 @@ def timer_main(excel_tool: ExcelToolsForActivities, event_endless_sale_cfg_list,
     template_timerID = 150253
     if timer_id is None:
         mode = 1
-        timer_id = max(excel_tool.get_min_value_more_than_start(key=key, table_object_detail=timer_main_detail, start=template_timerID), excel_tool.get_min_value_more_than_start(key="id", table_object_detail=timer_main_detail, start=template_timerID))
+        timer_id = excel_tool.get_min_value_more_than_start(key_list=[key, "id"], table_object_detail=timer_main_detail, start=template_timerID)
     else:
         mode = 0
         template_timerID = timer_id

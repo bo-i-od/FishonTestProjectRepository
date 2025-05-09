@@ -27,7 +27,7 @@ def mission_group(excel_tool: ExcelToolsForActivities, timer_id,title, groupId=N
     instance_object: MISSION_GROUP
     instance_object = json_to_instance(json_object=json_object, cls=MISSION_GROUP)
     if mode == 1:
-        instance_object.groupId = max(excel_tool.get_min_value_more_than_start(key=key, table_object_detail=mission_group_detail, start=5200102), excel_tool.get_min_value_more_than_start(key="id", table_object_detail=mission_group_detail, start=5200102))
+        instance_object.groupId = excel_tool.get_min_value_more_than_start(key_list=[key, "id"], table_object_detail=mission_group_detail, start=5200102)
         instance_object.id = instance_object.groupId
     instance_object.name= title
     instance_object.openArg= timer_id
@@ -54,7 +54,7 @@ def timer_main(excel_tool: ExcelToolsForActivities, time_open,  duration, title,
     instance_object: TIMER_MAIN
     instance_object = json_to_instance(json_object=json_object, cls=TIMER_MAIN)
     if mode == 1:
-        instance_object.timerID = max(excel_tool.get_min_value_more_than_start(key=key, table_object_detail=timer_main_detail, start=160047), excel_tool.get_min_value_more_than_start(key="id", table_object_detail=timer_main_detail, start=160047))
+        instance_object.timerID = excel_tool.get_min_value_more_than_start(key_list=[key, "id"], table_object_detail=timer_main_detail, start=160047)
         instance_object.id = instance_object.timerID
     instance_object.openTime = time_open
     instance_object.name = title
@@ -80,7 +80,7 @@ def payment_gift(excel_tool: ExcelToolsForActivities, priceCount, pay_item_list,
     instance_object: PAYMENT_GIFT
     instance_object = json_to_instance(json_object=json_object, cls=PAYMENT_GIFT)
     if mode == 1:
-        instance_object.giftId = max(excel_tool.get_min_value_more_than_start(key=key, table_object_detail=payment_gift_detail, start=20040228),excel_tool.get_min_value_more_than_start(key="id", table_object_detail=payment_gift_detail, start=20040228))
+        instance_object.giftId = excel_tool.get_min_value_more_than_start(key_list=[key, "id"], table_object_detail=payment_gift_detail, start=20040228)
         instance_object.id = instance_object.giftId
     instance_object.name = title
     instance_object.priceCount = priceCount
