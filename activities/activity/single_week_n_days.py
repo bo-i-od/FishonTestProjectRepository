@@ -1156,7 +1156,7 @@ def main():
 
     # 配置修改区起始
     internal_or_global = "internal"    # 国内还是海外 (item_main_language)
-    fishery_id = 400322                # 渔场id
+    fishery_id = 400308                # 渔场id
     open_time = "2025-05-16 00:00:00"  # 活动开始时间 (timer_main)
     icon_name = "B12"                  # 图标的特殊后缀 (activity_double_week, item_main)
     paymentGiftId_start= 2510117      # paymentGiftId开始 (activity_double_week)
@@ -1207,7 +1207,7 @@ def main():
     if is_open_three_fish:
         groupId_three_fish = three_fish_main(excel_tool=excel_tool, fishery_id=fishery_id, groupId_three_fish=groupId_three_fish, fishOffset_list=fishOffset_list, activityRankTitle=activityFisheryNameId_return, displayBanner=displayBanner)
         three_fish_rank_reward(excel_tool=excel_tool, fishery_id=fishery_id,groupId_three_fish=groupId_three_fish)
-    # mission_main(excel_tool=excel_tool, fishery_id=fishery_id, groupId=groupId, missionType=missionType, tokenID=tokenID)
+    mission_main(excel_tool=excel_tool, fishery_id=fishery_id, groupId=groupId, missionType=missionType, tokenID=tokenID)
 
     print("涉及到的表：", list(excel_tool.data_txt_changed))
 
