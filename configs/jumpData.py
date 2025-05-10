@@ -7,6 +7,7 @@ class JumpData:
     pop_window_set = {
         "AnniversaryEventMainPanel",
         "AnniversaryEventMemoirPanel",
+        "AgentPackPopupPanel",
         "AquariumCommonFishChangePanel",
         "AquariumNewActivityInnerPopupPanel",
         "AquariumNewActivityPopupPanel",
@@ -70,6 +71,7 @@ class JumpData:
         "AchievementPanel": {"element_data": ElementsData.AchievementPanel.AchievementPanel, "open_path": [ElementsData.Home3DPanel.btn_pve, ElementsData.TournamentsPanel.btn_achievement], "close_path": [ElementsData.AchievementPanel.btn_close]},
         "AchievementPopupPanel": {"element_data": ElementsData.AchievementPopupPanel.AchievementPopupPanel},
         "AchievementWantedPanel": {"element_data": ElementsData.AchievementWantedPanel.AchievementWantedPanel, "close_path": [ElementsData.AchievementWantedPanel.btn_close]},
+        "AgentPackPopupPanel":{"element_data": ElementsData.AgentPackPopupPanel.AgentPackPopupPanel, "close_path": [ElementsData.AgentPackPopupPanel.btn_close]},
         "AlbumFishDetailPanel": {"element_data": ElementsData.AlbumFishDetailPanel.AlbumFishDetailPanel, "close_path": [ElementsData.AlbumFishDetailPanel.btn_close_share_chat, ElementsData.AlbumFishDetailPanel.btn_close]},
         "AnniversaryEventMainPanel": {"element_data": ElementsData.AnniversaryEventMainPanel.AnniversaryEventMainPanel, "close_path": [ElementsData.AnniversaryEventMainPanel.btn_close]},
         "AnniversaryEventMemoirPanel":{"element_data": ElementsData.AnniversaryEventMemoirPanel.AnniversaryEventMemoirPanel, "close_path": [ElementsData.AnniversaryEventMemoirPanel.btn_close]},

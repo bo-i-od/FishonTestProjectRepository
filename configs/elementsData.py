@@ -64,6 +64,10 @@ class ElementsData:
         ActivityCenterPanel = {"locator": "UICanvas>Important>ActivityCenterPanel"}
         btn_close = {"locator": "UICanvas>Important>ActivityCenterPanel>panel>btn_close>img"}
 
+    class AgentPackPopupPanel:
+        AgentPackPopupPanel = {"locator": "UICanvas>Important>UICanvas>Default>AgentPackPopupPanel"}
+        btn_close = {"locator": "UICanvas>Default>AgentPackPopupPanel>btn_close>img"}
+
     class AlbumFishDetailPanel:
         AlbumFishDetailPanel = {"locator": "UICanvas>Default>AlbumFishDetailPanel"}
         btn_close = {"locator": "UICanvas>Default>AlbumFishDetailPanel>btn_close>img"}
