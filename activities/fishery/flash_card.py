@@ -152,10 +152,11 @@ def item_main(excel_tool: ExcelToolsForActivities, fishery_index, wildCardId, ic
         template_itemTpId = table_data_object_list[0]["itemTpId"]
     else:
         mode = 1
+        wildCardId = excel_tool.get_min_value_more_than_start(key=key, table_object_detail=item_main_detail, start=240150)
     instance_object: ITEM_MAIN
     json_object, instance_object = excel_tool.get_object(key=key, value=template_itemTpId, table_data_detail=item_main_detail, cls=ITEM_MAIN)
     if mode == 1:
-        instance_object.id = excel_tool.get_max_value(key="id", table_object_detail=item_main_detail) + 1
+        instance_object.id = wildCardId
     instance_object.name = f"新主线万能卡{fishery_index}"
     instance_object.itemTpId = wildCardId
     instance_object.iconName = f"flashcard_com_{icon_name}"
@@ -396,10 +397,10 @@ def main():
     # 该区域参数为None则新增
     notOpenText = None  # panel_static_language中templateID 完成xxx游钓任务后解锁yyy渔场
     chapterTimerId = None  # timer_main中timerID 闪卡开启和结束时间
+    wildCardId = None  # item_main中itemTpId 万能卡id
 
     # 根据偏移算中间值，当渔场id不按顺序新增时可能有问题
     fishery_index = fishery_id - 500300
-    wildCardId = 240149 + fishery_index
     collectionChapterId = 100 + fishery_index
     chapterNamePanelId = 19960300 + fishery_index
 

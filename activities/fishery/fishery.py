@@ -51,8 +51,8 @@ def get_exclude_info(excel_tool: ExcelToolsForActivities, fishery_id):
     fish_list = excel_tool.get_fish_id_list(fishery_id=fishery_id)
     worksheet = get_worksheet()
     color_list = []
-    cur = 14
-    while cur < 22:
+    cur = 13
+    while cur < 21:
         color_list.append(get_row_color(worksheet, row_index=cur, table_data_len=15))
         cur += 1
     exclude_info = []
@@ -80,13 +80,13 @@ def get_fishery_info(excel_tool: ExcelToolsForActivities, fishery_id):
     cur = 3
     while cur < 11:
         fish_spot_info_common.append(get_row_data(worksheet, row_index=cur, table_data_len=15))
-        fish_spot_info_rare.append(get_row_data(worksheet, row_index=cur + 11, table_data_len=15))
+        fish_spot_info_rare.append(get_row_data(worksheet, row_index=cur + 10, table_data_len=15))
         cur += 1
 
     fish_ai_info_common = get_row_data(worksheet, row_index=11, table_data_len=15)
     fish_ai_info_rare = get_row_data(worksheet, row_index=12, table_data_len=15)
-    fish_battle_type_info = get_row_data(worksheet, row_index=13, table_data_len=15)
-    fish_class_info = get_row_data(worksheet, row_index=22, table_data_len=15)
+    fish_class_info = get_row_data(worksheet, row_index=21, table_data_len=15)
+    fish_battle_type_info = get_row_data(worksheet, row_index=22, table_data_len=15)
 
     cur = 0
     while cur < 15:
@@ -632,6 +632,8 @@ def new_plot_clue_reward(excel_tool: ExcelToolsForActivities, fishery_id, fisher
 
 
 def fish_state(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index,  fishery_info):
+    dropMultiple2_dict = {4: 1500000, 3: 400000, 2: 75000}
+    dropMultiple2_dict_gold = {4: 3000000, 3: 820000, 2: 100000}
     fish_state_detail = excel_tool.get_table_data_detail(book_name="FISH_STATE.xlsm")
     fish_detail = excel_tool.get_table_data_detail(book_name="FISH.xlsm")
     key = "tpId"
@@ -668,6 +670,7 @@ def fish_state(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index,  
         instance_object.endTime = 30
         instance_object.fisheriesId = fishery_id
         instance_object.fishChange[0].fish = fish_info["tpId"]
+        instance_object.fishChange[0].dropMultiple2 = dropMultiple2_dict[fish_info["fishClass"]]
         instance_object.iconShow = excel_tool.get_table_data_object_by_key_value(key="tpId", value=fish_info["tpId"], table_data_detail=fish_detail)["displayicon"]
         instance_object.bgShow = "btn_warning_icon_bg_"
         if fish_info["fishClass"] == 2:
@@ -709,6 +712,7 @@ def fish_state(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index,  
         instance_object.endTime = 30
         instance_object.fisheriesId = fishery_id
         instance_object.fishChange[0].fish = fish_info["tpId"]
+        instance_object.fishChange[0].dropMultiple2 = dropMultiple2_dict_gold[fish_info["fishClass"]]
         instance_object.iconShow = excel_tool.get_table_data_object_by_key_value(key="tpId", value=fish_info["tpId"], table_data_detail=fish_detail)["displayicon"]
         instance_object.iconShow += "_gold"
         instance_object.bgShow = "btn_warning_icon_bg_"
@@ -752,6 +756,7 @@ def fish_state(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index,  
         instance_object.endTime = 10
         instance_object.fisheriesId = fishery_id
         instance_object.fishChange[0].fish = fish_info["tpId"]
+        instance_object.fishChange[0].dropMultiple2 = dropMultiple2_dict[fish_info["fishClass"]]
         instance_object.iconShow = excel_tool.get_table_data_object_by_key_value(key="tpId", value=fish_info["tpId"], table_data_detail=fish_detail)["displayicon"]
         instance_object.bgShow = "btn_warning_icon_bg_"
         if fish_info["fishClass"] == 2:
@@ -792,6 +797,7 @@ def fish_state(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index,  
         instance_object.endTime = 10
         instance_object.fisheriesId = fishery_id
         instance_object.fishChange[0].fish = fish_info["tpId"]
+        instance_object.fishChange[0].dropMultiple2 = dropMultiple2_dict_gold[fish_info["fishClass"]]
         instance_object.iconShow = excel_tool.get_table_data_object_by_key_value(key="tpId", value=fish_info["tpId"], table_data_detail=fish_detail)["displayicon"]
         instance_object.iconShow += "_gold"
         instance_object.bgShow = "btn_warning_icon_bg_"
@@ -913,7 +919,7 @@ def main():
         需要先生成鱼卡包的配置
     """
     # 配置修改区起始
-    fishery_id = 500304
+    fishery_id = 500303
     ChapterId = 1  # 赛季id
     bgm_name = "Med"  # new_plot_map_main和new_plot_fish_spot中区分渔场的字段
     fishery_name = "MediterraneanSea"  # new_plot_fish_spot的battleScene字段用到

@@ -5,14 +5,14 @@ from activities.decl.FISHCARD import FISHCARD
 from activities.decl.FISHCARD_PACK_INFO import FISHCARD_PACK_INFO
 from activities.decl.FISHCARD_REWARD_GROUP import FISHCARD_REWARD_GROUP
 from activities.decl.FISH_BAG import FISH_BAG
+from activities.decl.ITEM_CONVERT_RULE import ITEM_CONVERT_RULE
 from activities.decl.ITEM_MAIN import ITEM_MAIN
 from activities.decl.ITEM_MAIN_LANGUAGE import ITEM_MAIN_LANGUAGE
 from activities.decl.PAYMENT_GIFT import PAYMENT_GIFT
 from activities.decl.PAYMENT_GIFT_GROUP import PAYMENT_GIFT_GROUP
 from common.error import DifferError
-from configs.pathConfig import EXCEL_PATH
-from tools import baseDataRead
 from tools.excelRead import ExcelToolsForActivities
+from tools.decl2py import *
 
 import re
 
@@ -534,8 +534,41 @@ def payment_gift_group(excel_tool: ExcelToolsForActivities, fishery_id, giftId_s
             excel_tool.add_object(key=key, value=instance_object.tp_id, instance_object=instance_object,  table_data_detail=payment_gift_group_detail)
         cur += 1
 
+def item_convert_rule(excel_tool: ExcelToolsForActivities, fishery_id, item_main_tpid_start):
+    def get_item_convert_rule_of_fishery_id(f_id):
+        res_list = []
+        table_data_object_list = item_convert_rule_detail[0]
+        for table_data_object in table_data_object_list:
+            if table_data_object["changeArg"][0] != f_id:
+                continue
+            res_list.append(table_data_object)
+        return res_list
+    item_convert_rule_detail = excel_tool.get_table_data_detail(book_name="ITEM_CONVERT_RULE.xlsm")
+    key = "autoId"
+    autoId_start = excel_tool.get_max_value(key="autoId", table_object_detail=item_convert_rule_detail) + 1
+    json_object_list = get_item_convert_rule_of_fishery_id(fishery_id)
+    if json_object_list:
+        mode = 0
+    else:
+        mode = 1
+        json_object_list = get_item_convert_rule_of_fishery_id(500301)
+    cur = 0
+    while cur < len(json_object_list):
+        instance_object: ITEM_CONVERT_RULE
+        instance_object = json_to_instance(json_object=json_object_list[cur], cls=ITEM_CONVERT_RULE)
+        if mode == 1:
+            instance_object.autoId = autoId_start + cur
+            instance_object.id = instance_object.autoId
+            instance_object.changeArg[0] = fishery_id
+            instance_object.name = str(fishery_id) + instance_object.name[6:]
+        instance_object.toConvertItemTpId = item_main_tpid_start + cur
 
-
+        print(instance_object)
+        if mode == 0:
+            excel_tool.change_object(key=key, value=instance_object.autoId, instance_object=instance_object,  table_data_detail=item_convert_rule_detail)
+        else:
+            excel_tool.add_object(key=key, value=instance_object.autoId, instance_object=instance_object,  table_data_detail=item_convert_rule_detail)
+        cur += 1
 
 
 
@@ -588,6 +621,7 @@ def main():
     fishcard_reward_group(excel_tool=excel_tool, fishery_index=fishery_index, fishery_id=fishery_id, fishcard_reward_group_tpid_start=fishcard_reward_group_tpid_start, item_main_tpid_start=item_main_tpid_start)
     fish_bag(excel_tool=excel_tool)
     payment_gift_group(excel_tool=excel_tool, fishery_id=fishery_id, giftId_start=giftId_start, payment_gift_group_tp_id_start=payment_gift_group_tp_id_start)
+    item_convert_rule(excel_tool=excel_tool, fishery_id=fishery_id, item_main_tpid_start=item_main_tpid_start)
 
     print("涉及到的表：", list(excel_tool.data_txt_changed))
 if __name__ == '__main__':
