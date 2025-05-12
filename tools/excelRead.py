@@ -157,6 +157,8 @@ class ExcelTools:
 
     def get_table_data_object_list_by_key_value(self, key, value, book_name=None, table_data_detail=None):
         res = []
+        if value is None:
+            return res
         if table_data_detail is None:
             table_data_detail = self.get_table_data_detail(book_name=book_name)
         table_data_object_list, structs, prefix = table_data_detail
