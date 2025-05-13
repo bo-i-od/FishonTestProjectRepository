@@ -339,9 +339,8 @@ class BattlePreparePanel(BasePage):
                 return
             fishery_id = self.spot_id_to_fishery_id(spot_id=spot_id)
             spot_id_list, is_in_double_week, is_new_plot = self.get_spot_id_list(fishery_id=fishery_id)
-            spot_id = spot_id_list[3]
-            lua_code = csMsgAll.get_CSFishingSaveFishSpotMsg(fishSpotId=int(spot_id), fishSceneTpId=fishery_id,
-                                                             source=0, isInDoubleWeek=is_in_double_week)
+            lua_code = csMsgAll.get_CSFishingSaveFishSpotMsg(fishSpotId=int(spot_id), fishSceneTpId=int(fishery_id),
+                                                             isLimitedFishSpot=True, isInDoubleWeek=is_in_double_week)
             self.lua_console(lua_code)
 
         def is_panel_tip_location_active(self):
