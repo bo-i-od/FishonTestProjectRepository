@@ -26,19 +26,19 @@ def get_worksheet():
     worksheet = workbook["Sheet1"]
     return worksheet
 
-def get_row_color_bg(worksheet: Worksheet, row_index, table_data_len):
+def get_row_color_bg(worksheet: Worksheet, column_start, row_index, table_data_len):
     row_color_bg = []
-    cur = 1
-    while cur <= table_data_len:
+    cur = column_start
+    while cur <= table_data_len + column_start:
         row_color_bg.append(worksheet.cell(row_index, cur).fill.fgColor.rgb)
         cur += 1
     return row_color_bg
 
 
-def get_row_color_font(worksheet: Worksheet, row_index, table_data_len):
+def get_row_color_font(worksheet: Worksheet, column_start, row_index, table_data_len):
     row_color_font = []
-    cur = 1
-    while cur <= table_data_len:
+    cur = column_start
+    while cur <= table_data_len + column_start:
         cell = worksheet.cell(row_index, cur)
         if cell.value is None:
             row_color_font.append("")
@@ -52,11 +52,11 @@ def get_row_color_font(worksheet: Worksheet, row_index, table_data_len):
         cur += 1
     return row_color_font
 
-def get_row_data(worksheet, row_index, table_data_len):
+def get_row_data(worksheet, row_index, column_start, table_data_len):
     row_data = []
     # 第六行开始
-    cur = 1
-    while cur <= table_data_len:
+    cur = column_start
+    while cur <= table_data_len + column_start:
         row_data.append(worksheet.cell(row_index, cur).value)
         cur += 1
     return row_data
@@ -66,10 +66,10 @@ def get_exclude_info(excel_tool: ExcelToolsForActivities, fishery_id):
     worksheet = get_worksheet()
     color_bg_list = []
     color_font_list = []
-    cur = 13
-    while cur < 21:
-        color_bg_list.append(get_row_color_bg(worksheet, row_index=cur, table_data_len=15))
-        color_font_list.append(get_row_color_font(worksheet, row_index=cur, table_data_len=15))
+    cur = 3
+    while cur < 11:
+        color_bg_list.append(get_row_color_bg(worksheet, row_index=cur, column_start=8, table_data_len=15))
+        color_font_list.append(get_row_color_font(worksheet, row_index=cur, column_start=8, table_data_len=15))
         cur += 1
     exclude_info = []
     cur = 0
@@ -96,20 +96,24 @@ def get_fishery_info(excel_tool: ExcelToolsForActivities, fishery_id):
     fishery_info = []
     fish_id_list = excel_tool.get_fish_id_list(fishery_id=fishery_id)
 
-    fish_type_info = get_row_data(worksheet, row_index=1, table_data_len=15)
+    fish_type_info = get_row_data(worksheet, row_index=1, column_start=8, table_data_len=15)
     fish_spot_info_common = []
     fish_spot_info_rare = []
 
     cur = 3
     while cur < 11:
-        fish_spot_info_common.append(get_row_data(worksheet, row_index=cur, table_data_len=15))
-        fish_spot_info_rare.append(get_row_data(worksheet, row_index=cur + 10, table_data_len=15))
+        fish_spot_info_rare.append(get_row_data(worksheet, row_index=cur, column_start=8, table_data_len=15))
         cur += 1
 
-    fish_ai_info_common = get_row_data(worksheet, row_index=11, table_data_len=15)
-    fish_ai_info_rare = get_row_data(worksheet, row_index=12, table_data_len=15)
-    fish_class_info = get_row_data(worksheet, row_index=21, table_data_len=15)
-    fish_battle_type_info = get_row_data(worksheet, row_index=22, table_data_len=15)
+    cur = 16
+    while cur < 24:
+        fish_spot_info_common.append(get_row_data(worksheet, row_index=cur, column_start=8, table_data_len=15))
+        cur += 1
+
+    fish_class_info = get_row_data(worksheet, row_index=11, column_start=8, table_data_len=15)
+    fish_battle_type_info = get_row_data(worksheet, row_index=12,column_start=8, table_data_len=15)
+    fish_ai_info_common = get_row_data(worksheet, row_index=24, column_start=8, table_data_len=15)
+    fish_ai_info_rare = get_row_data(worksheet, row_index=25, column_start=8, table_data_len=15)
 
     cur = 0
     while cur < 15:
@@ -177,21 +181,22 @@ def get_fishery_info(excel_tool: ExcelToolsForActivities, fishery_id):
 def get_spot_fish_type_detail():
     worksheet = get_worksheet()
     spot_fish_type_detail = []
-    cur = 23
-    while cur < 31:
+    cur = 3
+    while cur < 11:
         fish_type_detail = {"small": 0, "medium": 0, "large": 0, "hidden": 0, "boss": 0, "rare": 0, "elite": 0,
                             "monster": 0, "total_rare": 0, "total_common": 0}
-        spot_fish_type_info = get_row_data(worksheet, row_index=cur, table_data_len=10)
+        spot_fish_type_info = get_row_data(worksheet, row_index=cur, column_start=3, table_data_len=4)
+        fish_type_detail["total_rare"] = spot_fish_type_info[0]
+        fish_type_detail["rare"] = spot_fish_type_info[1]
+        fish_type_detail["elite"] = spot_fish_type_info[2]
+        fish_type_detail["monster"] = spot_fish_type_info[3]
+        spot_fish_type_info = get_row_data(worksheet, row_index=cur + 13, column_start=1, table_data_len=6)
         fish_type_detail["total_common"] = spot_fish_type_info[0]
         fish_type_detail["small"] = spot_fish_type_info[1]
         fish_type_detail["medium"] = spot_fish_type_info[2]
         fish_type_detail["large"] = spot_fish_type_info[3]
         fish_type_detail["hidden"] = spot_fish_type_info[4]
         fish_type_detail["boss"] = spot_fish_type_info[5]
-        fish_type_detail["total_rare"] = spot_fish_type_info[6]
-        fish_type_detail["rare"] = spot_fish_type_info[7]
-        fish_type_detail["elite"] = spot_fish_type_info[8]
-        fish_type_detail["monster"] = spot_fish_type_info[9]
         spot_fish_type_detail.append(fish_type_detail)
         cur += 1
     return spot_fish_type_detail
