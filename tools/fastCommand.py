@@ -196,6 +196,72 @@ def challenge(bp: BasePage, times=100):
         cur += 1
 
 
+def dialog_show(bp: BasePage, start_quest_id:int):
+    table_data_detail = bp.excelTools.get_table_data_detail(book_name="NEW_PLOT_QUEST.xlsm")
+    table_data_object_list, _, _ = table_data_detail
+    table_data_object = bp.excelTools.get_table_data_object_by_key_value(key="tpId", value=start_quest_id, table_data_detail=table_data_detail)
+    quest_id = start_quest_id
+    title = "Complete"
+    count = 0
+
+    while True:
+
+        if count != 0 and "endStoryId" in table_data_object:
+            target_log = bp.receive_until_get_msg(msg_name="", key_sc=title, timeout=50)
+            # print(bp.log_list)
+        count+=1
+        # print(bp.log_list)
+        # if interact_mode:
+        #     if not continue_dialog(): break
+
+        if "showStoryId" in table_data_object:
+            story_id = table_data_object["showStoryId"]
+            bp.cmd(f"dialog {story_id}")
+            bp.log_list.clear()
+            print(story_id)
+
+            bp.sleep(0.1)
+            target_log = bp.receive_until_get_msg(msg_name="", key_sc=title, timeout=50)
+            # print(bp.log_list)
+
+        # if interact_mode:
+        #     if not continue_dialog(): break
+
+        if "endStoryId" in table_data_object:
+            story_id = table_data_object["endStoryId"]
+            bp.cmd(f"dialog {story_id}")
+            bp.log_list.clear()
+            print(story_id)
+            bp.sleep(0.2)
+
+        if "nextQuestId" not in table_data_object:
+            break
+
+        quest_id = table_data_object["nextQuestId"]
+        table_data_object = bp.excelTools.get_table_data_object_by_key_value(key="tpId", value=quest_id,
+                                                                             table_data_detail=table_data_detail)
+def quest_start_to_end(bp: BasePage, start_quest_id: int, end_quest_id: int):
+    table_data_detail = bp.excelTools.get_table_data_detail(book_name="NEW_PLOT_QUEST.xlsm")
+    table_data_object_list, _, _ = table_data_detail
+    table_data_object = bp.excelTools.get_table_data_object_by_key_value(key="tpId", value=start_quest_id, table_data_detail=table_data_detail)
+
+    quest_id = start_quest_id
+
+    while True:
+        if "nextQuestId" not in table_data_object:
+            break
+        if table_data_object["nextQuestId"] == end_quest_id:
+            break
+        bp.cmd(f"questFinish {quest_id}")
+        bp.sleep(1)
+
+        # 发送消息
+        lua_code = csMsgAll.get_CSGetQuestRewardsMsg(questTpId=quest_id)
+        bp.lua_console(lua_code)
+        bp.sleep(0.1)
+        quest_id = table_data_object["nextQuestId"]
+        table_data_object = bp.excelTools.get_table_data_object_by_key_value(key="tpId", value=quest_id, table_data_detail=table_data_detail)
+
 if __name__ == '__main__':
     base_page = BasePage(serial_number="127.0.0.1:21593", is_mobile_device=False)
     # base_page.cmd_list(["mode 500301 360107"])
