@@ -466,9 +466,7 @@ def fish_bag(excel_tool: ExcelToolsForActivities):
         excel_tool.add_object(instance_object=fish_bag, key="itemTpId", value=fish_bag.itemTpId, table_data_detail=fish_bag_detail)
         cur += 1
 
-
-def payment_gift_group(excel_tool: ExcelToolsForActivities, fishery_id, giftId_start, payment_gift_group_tp_id_start):
-    # payment_gift
+def payment_gift(excel_tool: ExcelToolsForActivities, fishery_id, giftId_start):
     payment_gift_detail = excel_tool.get_table_data_detail(book_name="PAYMENT_GIFT.xlsm")
     fish_bag_detail = excel_tool.get_table_data_detail(book_name="FISH_BAG.xlsm")
     template_giftId_start = 2310023
@@ -504,7 +502,7 @@ def payment_gift_group(excel_tool: ExcelToolsForActivities, fishery_id, giftId_s
             excel_tool.add_object(key=key, value=instance_object.giftId, instance_object=instance_object,  table_data_detail=payment_gift_detail)
         cur += 1
 
-    # payment_gift_group
+def payment_gift_group(excel_tool: ExcelToolsForActivities, fishery_id, giftId_start, payment_gift_group_tp_id_start):
     payment_gift_group_detail = excel_tool.get_table_data_detail(book_name="PAYMENT_GIFT_GROUP.xlsm")
     template_tp_id_start = 100023
     key = "tp_id"
@@ -516,6 +514,7 @@ def payment_gift_group(excel_tool: ExcelToolsForActivities, fishery_id, giftId_s
         mode = 1
 
     id_start = excel_tool.get_max_value(key="id", table_object_detail=payment_gift_group_detail) + 1
+    instance_object: PAYMENT_GIFT_GROUP
     cur = 0
     while cur < 4:
         instance_object: PAYMENT_GIFT_GROUP
@@ -571,7 +570,6 @@ def item_convert_rule(excel_tool: ExcelToolsForActivities, fishery_id, item_main
         cur += 1
 
 
-
 def main():
     """
         读写方式：新增/修改
@@ -582,11 +580,11 @@ def main():
     # 鱼卡数量配置 找曦哥要200卡包的剩下自己按照倍数填
     # dropTurn_list需要和为6所以会有一两个需要itemCount是偶数的填2
     pack_info_cfg_list = [
-        {"name": "10","itemCount_list": [3, 3, 2, 2, 0, 10], "dropTurn_list": [1, 1 ,2 ,2, 0], "fish_type": 0},
-        {"name": "20","itemCount_list":[6, 5, 5, 3, 1, 20], "dropTurn_list": [2, 1 ,1 ,1, 1], "fish_type": 0},
-        {"name": "50","itemCount_list":[15, 13, 12, 7, 3, 50], "dropTurn_list": [1, 1 ,2 ,1, 1], "fish_type": 0},
-        {"name": "100","itemCount_list":[30, 26, 24, 14, 6, 100], "dropTurn_list": [2, 1 ,1 ,1, 1], "fish_type": 0},
-        {"name": "200","itemCount_list":[60, 52, 48, 28, 12, 200], "dropTurn_list": [2, 1 ,1 ,1, 1], "fish_type": 0},
+        {"name": "10","itemCount_list": [3, 4, 2, 1, 0, 10], "dropTurn_list": [1, 2 ,2 ,1, 0], "fish_type": 0},
+        {"name": "20","itemCount_list":[6, 7, 3, 3, 1, 20], "dropTurn_list": [2, 1 ,1 ,1, 1], "fish_type": 0},
+        {"name": "50","itemCount_list":[15, 17, 8, 7, 3, 50], "dropTurn_list": [1, 1 ,2 ,1, 1], "fish_type": 0},
+        {"name": "100","itemCount_list":[30, 34, 16, 14, 6, 100], "dropTurn_list": [2, 1 ,1 ,1, 1], "fish_type": 0},
+        {"name": "200","itemCount_list":[60, 68, 32, 28, 12, 200], "dropTurn_list": [2, 1 ,1 ,1, 1], "fish_type": 0},
         {"name": "1000", "itemCount_list":[300, 260, 240, 140, 60, 1000], "dropTurn_list": [2, 1 ,1 ,1, 1], "fish_type": 0},
         {"name": "隐藏","itemCount_list":[0, 0, 0, 20, 0, 20], "dropTurn_list": [0, 0 ,0 ,1, 0], "fish_type": 4},
         {"name": "隐藏100","itemCount_list":[0, 0, 0, 100, 0, 100], "dropTurn_list": [0, 0 ,0 ,1, 0], "fish_type": 4},
@@ -621,6 +619,7 @@ def main():
     fishcard_reward_group(excel_tool=excel_tool, fishery_index=fishery_index, fishery_id=fishery_id, fishcard_reward_group_tpid_start=fishcard_reward_group_tpid_start, item_main_tpid_start=item_main_tpid_start)
     fish_bag(excel_tool=excel_tool)
     payment_gift_group(excel_tool=excel_tool, fishery_id=fishery_id, giftId_start=giftId_start, payment_gift_group_tp_id_start=payment_gift_group_tp_id_start)
+    payment_gift(excel_tool=excel_tool, fishery_id=fishery_id, giftId_start=giftId_start)
     item_convert_rule(excel_tool=excel_tool, fishery_id=fishery_id, item_main_tpid_start=item_main_tpid_start)
 
     print("涉及到的表：", list(excel_tool.data_txt_changed))

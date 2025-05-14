@@ -1,7 +1,5 @@
-import openpyxl
 from openpyxl.reader.excel import load_workbook
 from openpyxl.worksheet.worksheet import Worksheet
-
 from activities.decl.BATTLE_PASS import BATTLE_PASS
 from activities.decl.BATTLE_PASS_MAIN_2024 import BATTLE_PASS_MAIN_2024
 from activities.decl.FISH import FISH
@@ -14,7 +12,6 @@ from activities.decl.NEW_PLOT_FISH_SPOT import *
 from activities.decl.NEW_PLOT_FISH_TYPE_DROP import NEW_PLOT_FISH_TYPE_DROP
 from activities.decl.NEW_PLOT_MAP_MAIN import NEW_PLOT_MAP_MAIN
 from activities.decl.PANEL_STATIC_LANGUAGE import PANEL_STATIC_LANGUAGE
-from tools import baseDataRead
 from tools.excelRead import ExcelToolsForActivities
 from tools.decl2py import *
 
@@ -29,14 +26,31 @@ def get_worksheet():
     worksheet = workbook["Sheet1"]
     return worksheet
 
-def get_row_color(worksheet: Worksheet, row_index, table_data_len):
-    row_color = []
-    # 第六行开始
+def get_row_color_bg(worksheet: Worksheet, row_index, table_data_len):
+    row_color_bg = []
     cur = 1
     while cur <= table_data_len:
-        row_color.append(worksheet.cell(row_index, cur).fill)
+        row_color_bg.append(worksheet.cell(row_index, cur).fill.fgColor.rgb)
         cur += 1
-    return row_color
+    return row_color_bg
+
+
+def get_row_color_font(worksheet: Worksheet, row_index, table_data_len):
+    row_color_font = []
+    cur = 1
+    while cur <= table_data_len:
+        cell = worksheet.cell(row_index, cur)
+        if cell.value is None:
+            row_color_font.append("")
+            cur += 1
+            continue
+        font_color = cell.font.color.rgb
+        if type(font_color) is str:
+            row_color_font.append(font_color)
+        else:
+            row_color_font.append("")
+        cur += 1
+    return row_color_font
 
 def get_row_data(worksheet, row_index, table_data_len):
     row_data = []
@@ -50,24 +64,33 @@ def get_row_data(worksheet, row_index, table_data_len):
 def get_exclude_info(excel_tool: ExcelToolsForActivities, fishery_id):
     fish_list = excel_tool.get_fish_id_list(fishery_id=fishery_id)
     worksheet = get_worksheet()
-    color_list = []
+    color_bg_list = []
+    color_font_list = []
     cur = 13
     while cur < 21:
-        color_list.append(get_row_color(worksheet, row_index=cur, table_data_len=15))
+        color_bg_list.append(get_row_color_bg(worksheet, row_index=cur, table_data_len=15))
+        color_font_list.append(get_row_color_font(worksheet, row_index=cur, table_data_len=15))
         cur += 1
     exclude_info = []
     cur = 0
     while cur < 8:
         info = []
         i = 0
-        while i < len(color_list[cur]):
-            color = color_list[cur][i]
-            if color.fgColor.rgb == "FFA9D08D":
+        while i < len(color_bg_list[cur]):
+            color = color_bg_list[cur][i]
+            if color == "FFA9D08D":
                 info.append(fish_list[i + 15])
+                i += 1
+                continue
+            if color_font_list[cur][i] == "FFFE0300":
+                info.append(fish_list[i + 15])
+                i += 1
+                continue
             i += 1
         exclude_info.append(info)
         cur += 1
     return exclude_info
+
 def get_fishery_info(excel_tool: ExcelToolsForActivities, fishery_id):
     worksheet = get_worksheet()
     fishery_info = []
@@ -432,7 +455,6 @@ def fish_weight_new(excel_tool: ExcelToolsForActivities, fishery_info, fishery_i
         8: {"minweight": 39000, "firstRate": 3900, "secondRate": 2769},
     }
     fish_weight_new_detail = excel_tool.get_table_data_detail(book_name="FISH_WEIGHT_NEW.xlsm")
-    fish_language_detail = excel_tool.get_table_data_detail(book_name="FISH_LANGUAGE.xlsm")
     id_start = excel_tool.get_max_value(key="id", table_object_detail=fish_weight_new_detail) + 1
 
     key = "fishId"
@@ -468,7 +490,6 @@ def fish_weight_new(excel_tool: ExcelToolsForActivities, fishery_info, fishery_i
 
 def fish(excel_tool: ExcelToolsForActivities, fishery_info, fishery_index, living):
     fish_detail = excel_tool.get_table_data_detail(book_name="FISH.xlsm")
-    fish_language_detail = excel_tool.get_table_data_detail(book_name="FISH_LANGUAGE.xlsm")
     key = "tpId"
     template_tpId_start = 350101
     cur = 0
@@ -681,6 +702,7 @@ def fish_state(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index,  
             instance_object.bgShow += "r"
         instance_object.warningPrefeb = 5 - fish_info["fishClass"]
         instance_object.descBgPicture = f"item_info_title_bg_0{fish_info['fishClass'] + 2}"
+        instance_object.isGolden = None
         instance_object.textId = 6010001
         print(instance_object)
         if mode == 0:
