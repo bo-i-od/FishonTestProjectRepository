@@ -56,16 +56,17 @@ def replace_number_between_keywords(content, replacement, pre, next):
     return re.sub(pattern, replacer, content)
 
 
-def item_main(excel_tool: ExcelToolsForActivities, fishery_index, icon_name,  drop_id_start, tpid_start):
+def item_main(excel_tool: ExcelToolsForActivities, fishery_index, icon_name, drop_id_start, item_main_tpid_start: int=None):
     item_main_detail = excel_tool.get_table_data_detail(book_name="ITEM_MAIN.xlsm")
     key = "itemTpId"
-    table_data_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=tpid_start, table_data_detail=item_main_detail)
+    table_data_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=item_main_tpid_start, table_data_detail=item_main_detail)
     template_tpid_start = 211264
     if table_data_object_list:
         mode = 0
-        template_tpid_start = tpid_start
+        template_tpid_start = item_main_tpid_start
     else:
         mode = 1
+        item_main_tpid_start = excel_tool.get_min_value_more_than_start(key=key, table_object_detail=item_main_detail, start=211264, long=10)
     id_start = excel_tool.get_max_value(key="id", table_object_detail=item_main_detail) + 1
     cur = 0
     while cur < 10:
@@ -74,7 +75,8 @@ def item_main(excel_tool: ExcelToolsForActivities, fishery_index, icon_name,  dr
         json_object_origin, instance_object = excel_tool.get_object(key=key, value=template_tpid, table_data_detail=item_main_detail, cls=ITEM_MAIN)
         if mode == 1:
             instance_object.id = id_start + cur
-        instance_object.itemTpId = tpid_start + cur
+        instance_object.itemTpId = item_main_tpid_start + cur
+        print(instance_object.name)
         pattern = r'(.*新主线)\d+.*'
         match = re.match(pattern, instance_object.name)
         instance_object.name = f"{match.group(1)}{fishery_index}"
@@ -89,7 +91,7 @@ def item_main(excel_tool: ExcelToolsForActivities, fishery_index, icon_name,  dr
             excel_tool.add_object(key=key, value=instance_object.itemTpId, instance_object=instance_object, table_data_detail=item_main_detail)
 
         cur += 1
-    return tpid_start
+    return item_main_tpid_start
 
 def item_main_language(excel_tool: ExcelToolsForActivities,fishery_index, fishery_id, pack_info_cfg_list, tpid_start):
     item_main_language_detail = excel_tool.get_table_data_detail(book_name="ITEM_MAIN_LANGUAGE.xlsm")
@@ -598,19 +600,19 @@ def main():
     entity_id_start = None   # 对应drop_entity的起始entityId
     fishcard_pack_info_tpid_start = None  # 对应fishcard_pack_info的起始tpId
     fishcard_reward_group_tpid_start = None  # 对应fishcard_reward_group的起始TPID
+    item_main_tpid_start = None
 
     # 根据偏移算中间值，当渔场id不按顺序新增时可能有问题
     fishery_index = fishery_id - 500300
     giftId_start = 2310022 + fishery_index
     payment_gift_group_tp_id_start = 100022 + fishery_index
-    item_main_tpid_start = 211264 + (fishery_index-1) * 10
     fish_card_tpid_start = 1010001 + (fishery_index-1) * 15
 
     # 配置修改区结束
 
     excel_tool = ExcelToolsForActivities(EXCEL_PATH)
     drop_id_start = drop_main(excel_tool=excel_tool, drop_id_start=drop_id_start, fishery_index=fishery_index)
-    item_main_tpid_start = item_main(excel_tool=excel_tool, tpid_start=item_main_tpid_start, fishery_index=fishery_index, icon_name=icon_name,  drop_id_start=drop_id_start)
+    item_main_tpid_start = item_main(excel_tool=excel_tool, fishery_index=fishery_index, icon_name=icon_name,  drop_id_start=drop_id_start, item_main_tpid_start=item_main_tpid_start)
     item_main_language(excel_tool=excel_tool, tpid_start=item_main_tpid_start,fishery_index=fishery_index, fishery_id=fishery_id, pack_info_cfg_list=pack_info_cfg_list)
     drop_pack_id_start = drop_pack(excel_tool=excel_tool, drop_id_start=drop_id_start,drop_pack_id_start=drop_pack_id_start, fishery_index=fishery_index, pack_info_cfg_list=pack_info_cfg_list)
     drop_entity(excel_tool=excel_tool,drop_pack_id_start=drop_pack_id_start, entity_id_start=entity_id_start, fishery_index=fishery_index, fishery_id=fishery_id, fish_card_tpid_start=fish_card_tpid_start, pack_info_cfg_list=pack_info_cfg_list)
