@@ -1,3 +1,6 @@
+import os
+import sys
+
 from activities.decl.COLLECTION_BASE import COLLECTION_BASE
 from activities.decl.COLLECTION_CHAPTER import COLLECTION_CHAPTER
 from activities.decl.COLLECTION_ENERGY_COST_DEBUFF import COLLECTION_ENERGY_COST_DEBUFF
@@ -8,6 +11,8 @@ from activities.decl.ITEM_MAIN import ITEM_MAIN
 from activities.decl.ITEM_MAIN_LANGUAGE import ITEM_MAIN_LANGUAGE
 from activities.decl.PANEL_STATIC_LANGUAGE import PANEL_STATIC_LANGUAGE
 from activities.decl.TIMER_MAIN import TIMER_MAIN
+from activities.fishery.load_tools import get_cfg_flash_card
+from activities.fishery.temp.main_id import load_main_id, save_main_id
 from tools.excelRead import ExcelToolsForActivities
 from tools.decl2py import *
 
@@ -34,7 +39,7 @@ def collection_base(excel_tool: ExcelToolsForActivities, fishery_id, fishery_ind
     key = "collectionId"
     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=collectionId_start, table_data_detail=collection_base_detail)
     if json_object_list:
-        mode = 0
+        mode = 2
         template_collectionId_start = collectionId_start
     else:
         mode = 1
@@ -77,7 +82,7 @@ def collection_base(excel_tool: ExcelToolsForActivities, fishery_id, fishery_ind
         instance_object.collectionSeasonId = 2
         instance_object.collectionChapterId = collectionChapterId
         print(instance_object)
-        if mode == 0:
+        if mode == 2:
             excel_tool.change_object(key=key, value=instance_object.collectionId, table_data_detail=collection_base_detail, instance_object=instance_object)
         else:
             excel_tool.add_object(key=key, value=instance_object.collectionId, table_data_detail=collection_base_detail, instance_object=instance_object)
@@ -90,10 +95,11 @@ def timer_main(excel_tool: ExcelToolsForActivities,fishery_index, time_start, ti
     if timerID is None:
         mode = 1
         instance_object = TIMER_MAIN()
-        instance_object.timerID = excel_tool.get_min_value_more_than_start(key=key, table_object_detail=timer_main_detail, start=151100)
+        timerID = excel_tool.get_min_value_more_than_start(key=key, table_object_detail=timer_main_detail, start=151100)
+        instance_object.timerID = timerID
         instance_object.id = instance_object.timerID
     else:
-        mode = 0
+        mode = 2
         json_object, instance_object = excel_tool.get_object(key=key, value=timerID, table_data_detail=timer_main_detail, cls=TIMER_MAIN)
     instance_object.name = f"闪卡新主线-渔场{fishery_index}"
     instance_object.timerName = instance_object.name
@@ -101,22 +107,22 @@ def timer_main(excel_tool: ExcelToolsForActivities,fishery_index, time_start, ti
     instance_object.openTime = time_start
     instance_object.endTime = "2035-12-28 23:59:59"
     print(instance_object)
-    if mode == 0:
+    if mode == 2:
         excel_tool.change_object(key=key, value=instance_object.timerID, table_data_detail=timer_main_detail, instance_object=instance_object)
     else:
         excel_tool.add_object(key=key, value=instance_object.timerID, table_data_detail=timer_main_detail, instance_object=instance_object)
-    return instance_object.timerID
+    return timerID
 
 
 
-def collection_chapter(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index, chapterTimerId, chapterNamePanelId, icon_name, wildCardId, notOpenText=None):
+def collection_chapter(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index, chapterTimerId, chapterNamePanelId, icon_name, wildCardId, notOpenText):
     collection_chapter_detail = excel_tool.get_table_data_detail(book_name="COLLECTION_CHAPTER.xlsm")
     key = "tpId"
     template_tpId = 1
     tpId = fishery_index
     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=tpId, table_data_detail=collection_chapter_detail)
     if json_object_list:
-        mode = 0
+        mode = 2
     else:
         mode = 1
         json_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=template_tpId, table_data_detail=collection_chapter_detail)
@@ -135,20 +141,21 @@ def collection_chapter(excel_tool: ExcelToolsForActivities, fishery_id, fishery_
     instance_object.chapterPrizeResultTopIcon = f"flashcard_result_alltop_{icon_name}"
     instance_object.flashCardBooksMaterial = f"FlashCardBooks_M_{icon_name}"
     instance_object.wildCardId = wildCardId
+    instance_object.notOpenText = notOpenText
     print(instance_object)
-    if mode == 0:
+    if mode == 2:
         excel_tool.change_object(key=key, value=instance_object.tpId, table_data_detail=collection_chapter_detail,  instance_object=instance_object)
     else:
         excel_tool.add_object(key=key, value=instance_object.tpId, table_data_detail=collection_chapter_detail,  instance_object=instance_object)
 
-def item_main(excel_tool: ExcelToolsForActivities, fishery_index, wildCardId, icon_name):
+def item_main(excel_tool: ExcelToolsForActivities, fishery_index, icon_name, wildCardId=None):
     # 万能卡
     template_itemTpId = 240150
     item_main_detail = excel_tool.get_table_data_detail(book_name="ITEM_MAIN.xlsm")
     key = "itemTpId"
     table_data_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=wildCardId, table_data_detail=item_main_detail)
     if table_data_object_list:
-        mode = 0
+        mode = 2
         template_itemTpId = table_data_object_list[0]["itemTpId"]
     else:
         mode = 1
@@ -161,10 +168,11 @@ def item_main(excel_tool: ExcelToolsForActivities, fishery_index, wildCardId, ic
     instance_object.itemTpId = wildCardId
     instance_object.iconName = f"flashcard_com_{icon_name}"
     print(instance_object)
-    if mode == 0:
+    if mode == 2:
         excel_tool.change_object(key=key, value=instance_object.itemTpId, table_data_detail=item_main_detail, instance_object=instance_object)
     else:
         excel_tool.add_object(key=key, value=instance_object.itemTpId, table_data_detail=item_main_detail, instance_object=instance_object)
+    return wildCardId
 
 
 def item_main_language(excel_tool: ExcelToolsForActivities,fishery_id, fishery_index, wildCardId):
@@ -175,15 +183,16 @@ def item_main_language(excel_tool: ExcelToolsForActivities,fishery_id, fishery_i
     template_tpId = 240150
     table_data_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=wildCardId, table_data_detail=item_main_language_detail)
     if table_data_object_list:
-        mode = 0
+        mode = 2
         template_tpId = table_data_object_list[0][key]
     else:
         mode = 1
     instance_object: ITEM_MAIN_LANGUAGE
     json_object, instance_object = excel_tool.get_object(key=key, value=template_tpId, table_data_detail=item_main_language_detail, cls=ITEM_MAIN_LANGUAGE)
-    if mode == 1:
-        instance_object.id = excel_tool.get_max_value(key="id", table_object_detail=item_main_language_detail) + 1
+
     instance_object.tpId = wildCardId
+    if mode == 1:
+        instance_object.id = instance_object.tpId
     instance_object.name = f"新主线万能卡{fishery_index}"
     t_name = excel_tool.get_table_data_object_by_key_value(key="tpId",value=fishery_id,  book_name="FISHERIES_LANGUAGE.xlsm")["t_name"]
 
@@ -191,7 +200,7 @@ def item_main_language(excel_tool: ExcelToolsForActivities,fishery_id, fishery_i
     instance_object.t_description = f"可兑换<{t_name}>闪卡册的任意一张闪卡"
 
     print(instance_object)
-    if mode == 0:
+    if mode == 2:
         excel_tool.change_object(key=key, value=instance_object.tpId, table_data_detail=item_main_language_detail, instance_object=instance_object)
     else:
         excel_tool.add_object(key=key, value=instance_object.tpId, table_data_detail=item_main_language_detail, instance_object=instance_object)
@@ -204,7 +213,7 @@ def collection_energy_cost_debuff(excel_tool: ExcelToolsForActivities, fishery_i
     table_data_object_list = excel_tool.get_table_data_object_list_by_key_value(key="fishSceneTpId", value=fishery_id, table_data_detail=collection_energy_cost_debuff_detail)
     key = "tpId"
     if table_data_object_list:
-        mode = 0
+        mode = 2
         template_tpId_start = table_data_object_list[0]["tpId"]
         tpId_start = template_tpId_start
     else:
@@ -223,7 +232,7 @@ def collection_energy_cost_debuff(excel_tool: ExcelToolsForActivities, fishery_i
         instance_object.name = instance_object.tpId
         instance_object.fishSceneTpId = fishery_id
         print(instance_object)
-        if mode == 0:
+        if mode == 2:
             excel_tool.change_object(key=key, value=instance_object.tpId, table_data_detail=collection_energy_cost_debuff_detail, instance_object=instance_object)
         else:
             excel_tool.add_object(key=key, value=instance_object.tpId, table_data_detail=collection_energy_cost_debuff_detail, instance_object=instance_object)
@@ -235,14 +244,13 @@ def collection_protect(excel_tool: ExcelToolsForActivities, fishery_id):
     template_fishSceneTpId = 500301
     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="fishSceneTpId", value=fishery_id, table_data_detail=collection_protect_detail)
     if json_object_list:
-        mode = 0
+        mode = 2
     else:
         mode = 1
         json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="fishSceneTpId", value=template_fishSceneTpId, table_data_detail=collection_protect_detail)
     key = "tpId"
     tpId_start = excel_tool.get_max_value(key=key, table_object_detail=collection_protect_detail) + 1
     id_start = excel_tool.get_min_value_more_than_start(key="id", table_object_detail=collection_protect_detail, start=json_object_list[0]["id"], long=18)
-    id_start = 137
     fish_id_list = excel_tool.get_fish_id_list(fishery_id=fishery_id)
     monster_id_list = []
     for fish_id in fish_id_list:
@@ -262,7 +270,7 @@ def collection_protect(excel_tool: ExcelToolsForActivities, fishery_id):
         instance_object.protectFishIdGroup[0] = monster_id_list[cur // 3]
         instance_object.protectFlashCardIdGroup[0] = excel_tool.get_flash_card_id(fish_id=instance_object.protectFishIdGroup[0])
         print(instance_object)
-        if mode == 0:
+        if mode == 2:
             excel_tool.change_object(key=key, value=instance_object.tpId, table_data_detail=collection_protect_detail, instance_object=instance_object)
         else:
             excel_tool.add_object(key=key, value=instance_object.tpId, table_data_detail=collection_protect_detail, instance_object=instance_object)
@@ -278,7 +286,7 @@ def collection_exchange_store(excel_tool: ExcelToolsForActivities, fishery_id, c
     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="collectionChapterId", value=collectionChapterId, table_data_detail=collection_exchange_store_detail)
     key = "tpId"
     if json_object_list:
-        mode = 0
+        mode = 2
     else:
         mode = 1
         json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="collectionChapterId", value=template_collectionChapterId, table_data_detail=collection_exchange_store_detail)
@@ -298,7 +306,7 @@ def collection_exchange_store(excel_tool: ExcelToolsForActivities, fishery_id, c
         else:
             instance_object.itemId = wildCardId
         print(instance_object)
-        if mode == 0:
+        if mode == 2:
             excel_tool.change_object(key=key, value=instance_object.tpId, table_data_detail=collection_exchange_store_detail, instance_object=instance_object)
         else:
             excel_tool.add_object(key=key, value=instance_object.tpId, table_data_detail=collection_exchange_store_detail, instance_object=instance_object)
@@ -312,7 +320,7 @@ def collection_reward(excel_tool: ExcelToolsForActivities, fishery_id, collectio
     template_collectionChapterId = 102
     key = "tpId"
     if json_object_list:
-        mode = 0
+        mode = 2
     else:
         mode = 1
         json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="collectionChapterId", value=template_collectionChapterId, table_data_detail=collection_reward_detail)
@@ -332,7 +340,7 @@ def collection_reward(excel_tool: ExcelToolsForActivities, fishery_id, collectio
                 continue
             normalRewards.itemId = fish_bag
         print(instance_object)
-        if mode == 0:
+        if mode == 2:
             excel_tool.change_object(key=key, value=instance_object.tpId, table_data_detail=collection_reward_detail, instance_object=instance_object)
         else:
             excel_tool.add_object(key=key, value=instance_object.tpId, table_data_detail=collection_reward_detail, instance_object=instance_object)
@@ -346,7 +354,7 @@ def panel_static_language(excel_tool: ExcelToolsForActivities, fishery_id, chapt
     # chapterNamePanelId
     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=chapterNamePanelId, table_data_detail=panel_static_language_detail)
     if json_object_list:
-        mode = 0
+        mode = 2
         instance_object = json_to_instance(json_object=json_object_list[0], cls=PANEL_STATIC_LANGUAGE)
     else:
         mode = 1
@@ -356,7 +364,7 @@ def panel_static_language(excel_tool: ExcelToolsForActivities, fishery_id, chapt
     instance_object.templateID = chapterNamePanelId
     instance_object.t_panellanguage = f"{excel_tool.get_fishery_name(fishery_id=fishery_id)}"
     print(instance_object)
-    if mode == 0:
+    if mode == 2:
         excel_tool.change_object(key=key, value=instance_object.templateID, table_data_detail=panel_static_language_detail, instance_object=instance_object)
     else:
         excel_tool.add_object(key=key, value=instance_object.templateID, table_data_detail=panel_static_language_detail, instance_object=instance_object)
@@ -369,12 +377,12 @@ def panel_static_language(excel_tool: ExcelToolsForActivities, fishery_id, chapt
         instance_object.templateID = notOpenText
         instance_object.id = instance_object.templateID
     else:
-        mode = 0
+        mode = 2
         json_object, instance_object = excel_tool.get_object(key=key, value=notOpenText, table_data_detail=panel_static_language_detail, cls=PANEL_STATIC_LANGUAGE)
     instance_object.name = "闪卡相关-渔场开启条件"
     instance_object.t_panellanguage = f"完成{excel_tool.get_fishery_name(fishery_id=fishery_id-1)}游钓任务后解锁{excel_tool.get_fishery_name(fishery_id=fishery_id)}渔场"
     print(instance_object)
-    if mode == 0:
+    if mode == 2:
         excel_tool.change_object(key=key, value=instance_object.templateID, table_data_detail=panel_static_language_detail, instance_object=instance_object)
     else:
         excel_tool.add_object(key=key, value=instance_object.templateID, table_data_detail=panel_static_language_detail, instance_object=instance_object)
@@ -389,15 +397,27 @@ def main():
     """
         读写方式：新增/修改
     """
+    # mode=1 新增   mode=2 修改
+    mode = 2
+
+    file_name = os.path.basename(sys.argv[0]).split('.')[0]
+
     # 配置修改区起始
-    fishery_id = 500303
-    icon_name = "S01C03"
-    time_start = "2025-05-30 00:00:00"
+    cfg = get_cfg_flash_card()
+    fishery_id = cfg["fishery_id"]
+    icon_name = cfg["icon_name"]
+    time_start = cfg["time_start"]
 
     # 该区域参数为None则新增
-    notOpenText = None  # panel_static_language中templateID 完成xxx游钓任务后解锁yyy渔场
-    chapterTimerId = None  # timer_main中timerID 闪卡开启和结束时间
-    wildCardId = None  # item_main中itemTpId 万能卡id
+    if mode == 1:
+        notOpenText = None  # panel_static_language中templateID 完成xxx游钓任务后解锁yyy渔场
+        chapterTimerId = None  # timer_main中timerID 闪卡开启和结束时间
+        wildCardId = None  # item_main中itemTpId 万能卡id
+    else:
+        id_dict = load_main_id(file_name=file_name)
+        notOpenText = id_dict["notOpenText"]
+        chapterTimerId = id_dict["chapterTimerId"]
+        wildCardId = id_dict["wildCardId"]
 
     # 根据偏移算中间值，当渔场id不按顺序新增时可能有问题
     fishery_index = fishery_id - 500300
@@ -406,7 +426,7 @@ def main():
 
     # 配置修改区结束
     excel_tool = ExcelToolsForActivities(EXCEL_PATH)
-    item_main(excel_tool=excel_tool, fishery_index=fishery_index, wildCardId=wildCardId, icon_name=icon_name)
+    wildCardId = item_main(excel_tool=excel_tool, fishery_index=fishery_index, wildCardId=wildCardId, icon_name=icon_name)
     notOpenText = panel_static_language(excel_tool=excel_tool, fishery_id=fishery_id, chapterNamePanelId=chapterNamePanelId, notOpenText=notOpenText)
     item_main_language(excel_tool=excel_tool, fishery_id=fishery_id,fishery_index=fishery_index, wildCardId=wildCardId)
     collection_energy_cost_debuff(excel_tool=excel_tool, fishery_id=fishery_id)
@@ -417,6 +437,7 @@ def main():
     collection_chapter(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index, chapterTimerId=chapterTimerId, chapterNamePanelId=chapterNamePanelId, icon_name=icon_name, wildCardId=wildCardId, notOpenText=notOpenText)
     collection_protect(excel_tool=excel_tool,  fishery_id=fishery_id)
 
+    save_main_id(file_name=file_name, id_dict={"notOpenText": notOpenText, "chapterTimerId": chapterTimerId, "wildCardId": wildCardId})
     print("涉及到的表：", list(excel_tool.data_txt_changed))
 
 

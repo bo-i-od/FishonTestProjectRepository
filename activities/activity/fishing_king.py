@@ -118,8 +118,9 @@ def mission_group(excel_tool: ExcelToolsForActivities, group_id:int, fishery_id:
 
 def timer_main(excel_tool: ExcelToolsForActivities, group_id, time_start):
     timer_id = excel_tool.group_id_to_timer_id(group_id=group_id)
-    time_end = get_time(time=time_start, days=7, seconds=-1)
-    excel_tool.timer_main(timer_id=timer_id, time_start=time_start, time_end=time_end)
+    # time_end = get_time(time=time_start, days=7, seconds=-1)
+    # excel_tool.timer_main(timer_id=timer_id, time_start=time_start, time_end=time_end)
+    excel_tool.timer_main(timer_id=timer_id, time_start=time_start, time_duration=7)
 
 
 def main():

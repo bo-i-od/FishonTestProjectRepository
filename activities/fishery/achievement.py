@@ -2,6 +2,7 @@ from activities.decl.ACHIEVEMENT_GROUP_REWARDS_LANGUAGE import ACHIEVEMENT_GROUP
 from activities.decl.ACHIEVEMENT_WANTED import ACHIEVEMENT_WANTED
 from activities.decl.ITEM_MAIN import ITEM_MAIN
 from activities.decl.ITEM_MAIN_LANGUAGE import ITEM_MAIN_LANGUAGE
+from activities.fishery.load_tools import get_cfg_achievement
 from tools.excelRead import ExcelToolsForActivities
 from tools.decl2py import *
 
@@ -16,7 +17,7 @@ def item_main(excel_tool: ExcelToolsForActivities, fishery_id,  itemTpId_start, 
     key = "itemTpId"
     table_data_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=itemTpId_start, table_data_detail=item_main_detail)
     if table_data_object_list:
-        mode = 0
+        mode = 2
         template_itemTpId_start = itemTpId_start
     else:
         mode = 1
@@ -36,7 +37,7 @@ def item_main(excel_tool: ExcelToolsForActivities, fishery_id,  itemTpId_start, 
 
         instance_object.iconName = achievement_icon_list[cur]
         print(instance_object)
-        if mode == 0:
+        if mode == 2:
             excel_tool.change_object(key=key, value=instance_object.itemTpId, instance_object=instance_object,  table_data_detail=item_main_detail)
         else:
             excel_tool.add_object(key=key, value=instance_object.itemTpId, instance_object=instance_object,  table_data_detail=item_main_detail)
@@ -48,7 +49,7 @@ def item_main_language(excel_tool: ExcelToolsForActivities, fishery_id,  itemTpI
     key = "tpId"
     table_data_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=itemTpId_start, table_data_detail=item_main_language_detail)
     if table_data_object_list:
-        mode = 0
+        mode = 2
         template_tpId_start = itemTpId_start
     else:
         mode = 1
@@ -71,7 +72,7 @@ def item_main_language(excel_tool: ExcelToolsForActivities, fishery_id,  itemTpI
             instance_object.t_description = description_gold
 
         print(instance_object)
-        if mode == 0:
+        if mode == 2:
             excel_tool.change_object(key=key, value=instance_object.tpId, instance_object=instance_object,  table_data_detail=item_main_language_detail)
         else:
             excel_tool.add_object(key=key, value=instance_object.tpId, instance_object=instance_object,  table_data_detail=item_main_language_detail)
@@ -88,7 +89,7 @@ def achievement_wanted(excel_tool: ExcelToolsForActivities, fishery_id, itemTpId
     key = "TPID"
     table_data_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=TPID_start, table_data_detail=achievement_wanted_detail)
     if table_data_object_list:
-        mode = 0
+        mode = 2
         template_TPID_start = TPID_start
     else:
         mode = 1
@@ -134,7 +135,7 @@ def achievement_wanted(excel_tool: ExcelToolsForActivities, fishery_id, itemTpId
         else:
             instance_object.unlock = 6
         print(instance_object)
-        if mode == 0:
+        if mode == 2:
             excel_tool.change_object(key=key, value=instance_object.TPID, instance_object=instance_object,  table_data_detail=achievement_wanted_detail)
         else:
             excel_tool.add_object(key=key, value=instance_object.TPID, instance_object=instance_object,  table_data_detail=achievement_wanted_detail)
@@ -156,7 +157,7 @@ def achievement_group_rewards_language(excel_tool: ExcelToolsForActivities, fish
     key = "achievementGroupId"
     table_data_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=achievementGroupId, table_data_detail=achievement_group_rewards_language_detail)
     if table_data_object_list:
-        mode = 0
+        mode = 2
         instance_object = json_to_instance(json_object=table_data_object_list[0], cls=ACHIEVEMENT_GROUP_REWARDS_LANGUAGE)
     else:
         mode = 1
@@ -167,7 +168,7 @@ def achievement_group_rewards_language(excel_tool: ExcelToolsForActivities, fish
     instance_object.achievementGroupId = achievementGroupId
     instance_object.title = name
     print(instance_object)
-    if mode == 0:
+    if mode == 2:
         excel_tool.change_object(key=key, value=instance_object.achievementGroupId, instance_object=instance_object, table_data_detail=achievement_group_rewards_language_detail)
     else:
         excel_tool.add_object(key=key, value=instance_object.achievementGroupId, instance_object=instance_object, table_data_detail=achievement_group_rewards_language_detail)
@@ -176,7 +177,7 @@ def achievement_group_rewards_language(excel_tool: ExcelToolsForActivities, fish
     achievementGroupId_gold = achievementGroupId + 1
     table_data_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=achievementGroupId_gold, table_data_detail=achievement_group_rewards_language_detail)
     if table_data_object_list:
-        mode = 0
+        mode = 2
         instance_object = json_to_instance(json_object=table_data_object_list[0], cls=ACHIEVEMENT_GROUP_REWARDS_LANGUAGE)
     else:
         mode = 1
@@ -187,7 +188,7 @@ def achievement_group_rewards_language(excel_tool: ExcelToolsForActivities, fish
     instance_object.achievementGroupId = achievementGroupId_gold
     instance_object.title = name + "[黄金]"
     print(instance_object)
-    if mode == 0:
+    if mode == 2:
         excel_tool.change_object(key=key, value=instance_object.achievementGroupId, instance_object=instance_object, table_data_detail=achievement_group_rewards_language_detail)
     else:
         excel_tool.add_object(key=key, value=instance_object.achievementGroupId, instance_object=instance_object, table_data_detail=achievement_group_rewards_language_detail)
@@ -268,12 +269,13 @@ def main():
         出现过就是修改
     """
     # 配置修改区起始
-    fishery_id = 500304
-    achievement_icon_list = ["achv_fishphoto_group_icon_24", "achv_fishphoto_group_icon_g24"]
-    name = "地中海诗境"
-    description = "蔚蓝褶皱里沉睡着千年的盐粒，古船龙骨在珊瑚间拼写楔形文字。"
-    description_gold = "神话的碎片在波纹里流转，每朵浪花都盛着奥林匹斯的星屑。"
-    order = 23  # 一般填奇数 控制显示顺序，该序号后的会依次+2
+    cfg = get_cfg_achievement()
+    fishery_id = cfg["fishery_id"]
+    achievement_icon_list = cfg["achievement_icon_list"]
+    name = cfg["name"]
+    description = cfg["description"]
+    description_gold = cfg["description_gold"]
+    order = cfg["order"]  # 一般填奇数 控制显示顺序，该序号后的会依次+2
 
     # 根据偏移算中间值，当渔场id不按顺序新增时可能有问题
     fishery_index = fishery_id - 500300

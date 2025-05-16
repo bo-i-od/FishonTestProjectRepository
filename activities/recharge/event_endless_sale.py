@@ -18,7 +18,7 @@ def mission_group(excel_tool: ExcelToolsForActivities, group_id, event_endless_s
         group_id = excel_tool.get_min_value_more_than_start(key_list=[key, "id"], table_object_detail=mission_group_detail, start=template_groupId)
         timer_id, timer_id_list = timer_main(excel_tool=excel_tool, event_endless_sale_cfg_list=event_endless_sale_cfg_list)
     else:
-        mode = 0
+        mode = 2
         template_groupId = group_id
         timer_id = excel_tool.group_id_to_timer_id(group_id=group_id)
         timer_id_list = []
@@ -33,7 +33,7 @@ def mission_group(excel_tool: ExcelToolsForActivities, group_id, event_endless_s
     instance_object.openArg = timer_id
     instance_object.closeArg = timer_id
     print(instance_object)
-    if mode == 0:
+    if mode == 2:
         excel_tool.change_object(key=key, value=instance_object.groupId, table_data_detail=mission_group_detail, instance_object=instance_object)
     else:
         excel_tool.add_object(key=key, value=instance_object.groupId, table_data_detail=mission_group_detail, instance_object=instance_object)
@@ -48,7 +48,7 @@ def event_endless_sale(excel_tool: ExcelToolsForActivities, group_id):
 
     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="groupId", value=group_id, table_data_detail=event_endless_sale_detail)
     if json_object_list:
-        mode = 0
+        mode = 2
     else:
         mode = 1
         json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="groupId", value=template_groupId, table_data_detail=event_endless_sale_detail)
@@ -63,7 +63,7 @@ def event_endless_sale(excel_tool: ExcelToolsForActivities, group_id):
             instance_object.autoId = autoId_start + cur
         instance_object.groupId = group_id
         print(instance_object)
-        if mode == 0:
+        if mode == 2:
             excel_tool.change_object(key=key, value=instance_object.autoId, table_data_detail=event_endless_sale_detail, instance_object=instance_object)
         else:
             excel_tool.add_object(key=key, value=instance_object.autoId, table_data_detail=event_endless_sale_detail, instance_object=instance_object)
@@ -133,7 +133,7 @@ def timer_main(excel_tool: ExcelToolsForActivities, event_endless_sale_cfg_list,
         mode = 1
         timer_id = excel_tool.get_min_value_more_than_start(key_list=[key, "id"], table_object_detail=timer_main_detail, start=template_timerID)
     else:
-        mode = 0
+        mode = 2
         template_timerID = timer_id
     instance_object: TIMER_MAIN
     json_object, instance_object = excel_tool.get_object(key=key, value=template_timerID, table_data_detail=timer_main_detail, cls=TIMER_MAIN)
@@ -145,7 +145,7 @@ def timer_main(excel_tool: ExcelToolsForActivities, event_endless_sale_cfg_list,
     instance_object.openTime = time_start
     instance_object.endTime = time_end
     print(instance_object)
-    if mode == 0:
+    if mode == 2:
         excel_tool.change_object(key=key, value=instance_object.timerID, table_data_detail=timer_main_detail, instance_object=instance_object)
     else:
         excel_tool.add_object(key=key, value=instance_object.timerID, table_data_detail=timer_main_detail, instance_object=instance_object)
@@ -155,7 +155,7 @@ def timer_main(excel_tool: ExcelToolsForActivities, event_endless_sale_cfg_list,
         mode = 1
         timer_id_list = []
     else:
-        mode = 0
+        mode = 2
 
     def timer_main_add():
         instance_obj = TIMER_MAIN()

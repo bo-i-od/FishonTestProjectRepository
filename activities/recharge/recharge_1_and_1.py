@@ -21,7 +21,7 @@ def mission_group(excel_tool: ExcelToolsForActivities, timer_id,title, groupId=N
     if groupId is None:
         mode = 1
     else:
-        mode = 0
+        mode = 2
         template_groupId = groupId
     json_object = excel_tool.get_table_data_object_by_key_value(key=key, value=template_groupId, table_data_detail=mission_group_detail)
     instance_object: MISSION_GROUP
@@ -34,7 +34,7 @@ def mission_group(excel_tool: ExcelToolsForActivities, timer_id,title, groupId=N
     instance_object.closeArg= timer_id
     instance_object.extArgs[0] =eventId
     print(instance_object)
-    if mode == 0:
+    if mode == 2:
         excel_tool.change_object(key=key, value=instance_object.groupId, table_data_detail=mission_group_detail, instance_object=instance_object)
     else:
         excel_tool.add_object(key=key, value=instance_object.groupId, table_data_detail=mission_group_detail, instance_object=instance_object)
@@ -48,7 +48,7 @@ def timer_main(excel_tool: ExcelToolsForActivities, time_open,  duration, title,
     if timerID is None:
         mode = 1
     else:
-        mode = 0
+        mode = 2
         template_timerID = timerID
     json_object = excel_tool.get_table_data_object_by_key_value(key=key, value=template_timerID, table_data_detail=timer_main_detail)
     instance_object: TIMER_MAIN
@@ -61,7 +61,7 @@ def timer_main(excel_tool: ExcelToolsForActivities, time_open,  duration, title,
     time_end = commonTools.get_time(time=time_open, days=duration, seconds=-1)
     instance_object.endTime = time_end
     print(instance_object)
-    if mode == 0:
+    if mode == 2:
         excel_tool.change_object(key=key, value=instance_object.timerID, table_data_detail=timer_main_detail, instance_object=instance_object)
     else:
         excel_tool.add_object(key=key, value=instance_object.timerID, table_data_detail=timer_main_detail, instance_object=instance_object)
@@ -74,7 +74,7 @@ def payment_gift(excel_tool: ExcelToolsForActivities, priceCount, pay_item_list,
     if giftId is None:
         mode = 1
     else:
-        mode = 0
+        mode = 2
         template_giftId = giftId
     json_object = excel_tool.get_table_data_object_by_key_value(key=key, value=template_giftId, table_data_detail=payment_gift_detail)
     instance_object: PAYMENT_GIFT
@@ -102,7 +102,7 @@ def payment_gift(excel_tool: ExcelToolsForActivities, priceCount, pay_item_list,
             item.count = free_item_list[cur]["count"]
         cur += 1
     print(instance_object)
-    if mode == 0:
+    if mode == 2:
         excel_tool.change_object(key=key, value=instance_object.giftId, table_data_detail=payment_gift_detail, instance_object=instance_object)
     else:
         excel_tool.add_object(key=key, value=instance_object.giftId, table_data_detail=payment_gift_detail, instance_object=instance_object)
@@ -115,7 +115,7 @@ def event_special_sale(excel_tool: ExcelToolsForActivities, groupId, giftId, tit
     template_eventId = 1
     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="giftId", value=giftId, table_data_detail=event_special_sale_detail)
     if json_object_list:
-        mode = 0
+        mode = 2
         template_eventId = json_object_list[0][key]
     else:
         mode = 1
@@ -130,7 +130,7 @@ def event_special_sale(excel_tool: ExcelToolsForActivities, groupId, giftId, tit
     instance_object.groupId= groupId
     instance_object.giftId= giftId
     print(instance_object)
-    if mode == 0:
+    if mode == 2:
         excel_tool.change_object(key=key, value=instance_object.eventId, table_data_detail=event_special_sale_detail, instance_object=instance_object)
     else:
         excel_tool.add_object(key=key, value=instance_object.eventId, table_data_detail=event_special_sale_detail, instance_object=instance_object)

@@ -13,7 +13,7 @@ def cooperation_sys_final_reward_with_time(excel_tool: ExcelToolsForActivities, 
     json_object_list, structs, prefix = cooperation_sys_final_reward_with_time_detail
     json_object = json_object_list[-1]
     if excel_tool.get_table_data_object_list_by_key_value(key="openTime", value=time_start, table_data_detail=cooperation_sys_final_reward_with_time_detail):
-        mode = 0
+        mode = 2
     else:
         mode = 1
 
@@ -33,15 +33,16 @@ def cooperation_sys_final_reward_with_time(excel_tool: ExcelToolsForActivities, 
         itemReward.itemId = fish_bag
 
     print(instance_object)
-    if mode == 0:
+    if mode == 2:
         excel_tool.change_object(key="openTime", value=instance_object.openTime, table_data_detail=cooperation_sys_final_reward_with_time_detail, instance_object=instance_object)
     else:
         excel_tool.add_object(key="openTime", value=instance_object.openTime, table_data_detail=cooperation_sys_final_reward_with_time_detail, instance_object=instance_object)
 
 
-def timer_main(excel_tool: ExcelToolsForActivities, time_start, timer_id=102037):
-    time_end = get_time(time=time_start, days=7, seconds=-1)
-    excel_tool.timer_main(timer_id=timer_id, time_start=time_start, time_end=time_end)
+def timer_main(excel_tool: ExcelToolsForActivities, time_start, timer_id):
+    # time_end = get_time(time=time_start, days=7, seconds=-1)
+    # excel_tool.timer_main(timer_id=timer_id, time_start=time_start, time_end=time_end)
+    excel_tool.timer_main(timer_id=timer_id, time_start=time_start, time_duration=7)
 
 
 def main():
