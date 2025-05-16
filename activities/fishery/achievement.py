@@ -217,12 +217,10 @@ def change_order(excel_tool: ExcelToolsForActivities, order_old, order_new):
                 continue
             if instance_object.order == order_old:
                 instance_object_target = instance_object
-            print(f"{instance_object.order}->{instance_object.order+1}")
             instance_object.order += 1
             print(instance_object)
             excel_tool.change_object(key="TPID", value=instance_object.TPID, table_data_detail=achievement_wanted_detail, instance_object=instance_object)
             cur += 1
-        print(f"{instance_object_target.order}->{order_new}")
         instance_object_target.order = order_new
         print(instance_object_target)
         excel_tool.change_object(key="TPID", value=instance_object_target.TPID, table_data_detail=achievement_wanted_detail, instance_object=instance_object_target)
@@ -244,12 +242,10 @@ def change_order(excel_tool: ExcelToolsForActivities, order_old, order_new):
                 continue
             if instance_object.order == order_old:
                 instance_object_target = instance_object
-            print(f"{instance_object.order}->{instance_object.order-1}")
             instance_object.order -= 1
             print(instance_object)
             excel_tool.change_object(key="TPID", value=instance_object.TPID, table_data_detail=achievement_wanted_detail, instance_object=instance_object)
             cur += 1
-        print(f"{instance_object_target.order}->{order_new}")
         instance_object_target.order = order_new
         print(instance_object_target)
         excel_tool.change_object(key="TPID", value=instance_object_target.TPID, table_data_detail=achievement_wanted_detail, instance_object=instance_object_target)
@@ -262,7 +258,7 @@ def change_order(excel_tool: ExcelToolsForActivities, order_old, order_new):
         change_order_descending()
 
 
-def main():
+def main(excel_tool: ExcelToolsForActivities):
     """
         读写方式：新增/修改
         该渔场没出现过就是新增
@@ -270,6 +266,7 @@ def main():
     """
     # 配置修改区起始
     cfg = get_cfg_achievement()
+    print("cfg:", cfg)
     fishery_id = cfg["fishery_id"]
     achievement_icon_list = cfg["achievement_icon_list"]
     name = cfg["name"]
@@ -282,7 +279,6 @@ def main():
     itemTpId_start = 260056 + fishery_index * 2
 
     # 配置修改区结束
-    excel_tool = ExcelToolsForActivities(EXCEL_PATH)
     item_main(excel_tool=excel_tool,  fishery_id=fishery_id, itemTpId_start=itemTpId_start, achievement_icon_list=achievement_icon_list)
     item_main_language(excel_tool=excel_tool,  fishery_id=fishery_id, itemTpId_start=itemTpId_start, name=name, description=description, description_gold=description_gold)
     achievement_wanted(excel_tool=excel_tool, fishery_id=fishery_id, itemTpId_start=itemTpId_start, achievement_icon_list=achievement_icon_list, order=order)
@@ -292,4 +288,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    excel_tool = ExcelToolsForActivities(EXCEL_PATH)
+    main(excel_tool)

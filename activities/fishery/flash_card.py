@@ -393,17 +393,17 @@ def panel_static_language(excel_tool: ExcelToolsForActivities, fishery_id, chapt
 
 
 
-def main():
+def main(excel_tool: ExcelToolsForActivities, mode=1):
     """
         读写方式：新增/修改
+        mode=1 新增   mode=2 修改
     """
-    # mode=1 新增   mode=2 修改
-    mode = 2
 
-    file_name = os.path.basename(sys.argv[0]).split('.')[0]
+    file_name = os.path.basename(__file__).split('.')[0]
 
     # 配置修改区起始
     cfg = get_cfg_flash_card()
+    print("cfg:", cfg)
     fishery_id = cfg["fishery_id"]
     icon_name = cfg["icon_name"]
     time_start = cfg["time_start"]
@@ -415,6 +415,7 @@ def main():
         wildCardId = None  # item_main中itemTpId 万能卡id
     else:
         id_dict = load_main_id(file_name=file_name)
+        print("id_dict:", id_dict)
         notOpenText = id_dict["notOpenText"]
         chapterTimerId = id_dict["chapterTimerId"]
         wildCardId = id_dict["wildCardId"]
@@ -425,7 +426,6 @@ def main():
     chapterNamePanelId = 19960300 + fishery_index
 
     # 配置修改区结束
-    excel_tool = ExcelToolsForActivities(EXCEL_PATH)
     wildCardId = item_main(excel_tool=excel_tool, fishery_index=fishery_index, wildCardId=wildCardId, icon_name=icon_name)
     notOpenText = panel_static_language(excel_tool=excel_tool, fishery_id=fishery_id, chapterNamePanelId=chapterNamePanelId, notOpenText=notOpenText)
     item_main_language(excel_tool=excel_tool, fishery_id=fishery_id,fishery_index=fishery_index, wildCardId=wildCardId)
@@ -442,4 +442,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    excel_tool = ExcelToolsForActivities(EXCEL_PATH)
+    main(excel_tool, mode=1)

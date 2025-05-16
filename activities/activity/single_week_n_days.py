@@ -1,3 +1,6 @@
+import os
+import sys
+
 from activities.decl.ACTIVITY_DOUBLE_WEEK import ACTIVITY_DOUBLE_WEEK
 from activities.decl.BATTLE_PASS import BATTLE_PASS
 from activities.decl.BATTLE_PASS_MAIN_2024 import BATTLE_PASS_MAIN_2024
@@ -19,6 +22,7 @@ from activities.decl.REPEATABLE_CHALLENGE_LANGUAGE import REPEATABLE_CHALLENGE_L
 from activities.decl.THREE_FISH_MAIN import THREE_FISH_MAIN, ThreeFishOffset
 from activities.decl.THREE_FISH_RANK_REWARD import THREE_FISH_RANK_REWARD
 from activities.decl.TIMER_MAIN import TIMER_MAIN
+from activities.fishery.temp.main_id import load_main_id, save_main_id
 from tools import commonTools, baseDataRead
 from tools.excelRead import ExcelToolsForActivities
 from tools.decl2py import *
@@ -1148,25 +1152,29 @@ def timer_main(excel_tool: ExcelToolsForActivities, fishery_id, open_time, chapt
     return TimerId, chapterTimerId
 
 
-def main():
+def main(excel_tool: ExcelToolsForActivities):
     """
         读写方式：新增/修改
 
     """
+    # mode=1 新增   mode=2 修改
+    mode = 2
+
+    file_name = os.path.basename(__file__).split('.')[0]
 
     # 配置修改区起始
     internal_or_global = "internal"    # 国内还是海外 (item_main_language)
-    fishery_id = 400308                # 渔场id
+    fishery_id = 400309                # 渔场id
     open_time = "2025-05-16 00:00:00"  # 活动开始时间 (timer_main)
     icon_name = "B12"                  # 图标的特殊后缀 (activity_double_week, item_main)
-    paymentGiftId_start= 2510117      # paymentGiftId开始 (activity_double_week)
-    notShowBeforeReturn = 0
-    is_open_three_fish = False        # 是否开三鱼榜
+    paymentGiftId_start= 2510117       # paymentGiftId开始 (activity_double_week)
+    notShowBeforeReturn = 0            # 0 返场活动前显示闪卡  1 返场活动前隐藏闪卡
+    is_open_three_fish = False         # 是否开三鱼榜
     activityFisheryName_return= "探礁南澳岛"  # 活动名 (item_main_language, panel_static_language)
     imgNameInner= "ActivityTasks_banner_bg_50"                 # 活动内的背景 (mission_group)
     newNDaysImgName= "ActivityTasks_ndays_logo_nad"          # (battle_pass_main_2024, mission_group)
     big_reward= {"tpId": 1500025, "itemType": 15, "count": 1}  # 闪卡全卡集齐大奖 (collection_reward)
-    bounsRate= 3000
+    bounsRate= 3000      # 返比(battle_pass_main_2024)
     displayBanner= "activitycarnival_njld/ActivityCarnival_njld_leaderboard_tittle"        # 三鱼排行榜banner (three_fish_main)
     # 排行榜上鱼的位置偏移和缩放 (three_fish_main)
     fishOffset_list= [
@@ -1176,18 +1184,29 @@ def main():
     ]
 
     # 该区域参数为None则新增
-    groupId= None                  # 返场活动的groupId (event_endless_sale, event_n_day_tasks_leaderboard, event_n_day_tasks_milestone, mission_group, repeatable_challenge)
-    missionType = None                  # 任务类型 (mission_group, mission_main)
-    returnTimerId= None             # 返场时间id (activity_double_week, battle_pass_main_2024, mission_group, timer_main)
-    groupId_three_fish= None          # 三鱼榜的groupId (mission_group, three_fish_main, three_fish_rank_reward)
-    groupId_battle_pass= None          # battle_pass表里的groupId (battle_pass_main_2024, battle_pass)
-    activityFisheryNameId_return= None  # panel_static_language里的templateID 返场活动名templateID
-    tokenID= None                   # ndays积分币(event_n_day_tasks_milestone, item_main, item_main_language, mission_main, repeatable_challenge)
-    collectionChapterId= None            # 闪卡章节 (activity_double_week)
-    wildCardId = None                    # 闪卡万能卡
+    if mode == 1:
+        groupId= None                  # 返场活动的groupId (event_endless_sale, event_n_day_tasks_leaderboard, event_n_day_tasks_milestone, mission_group, repeatable_challenge)
+        missionType = None                  # 任务类型 (mission_group, mission_main)
+        returnTimerId= None             # 返场时间id (activity_double_week, battle_pass_main_2024, mission_group, timer_main)
+        groupId_three_fish= None          # 三鱼榜的groupId (mission_group, three_fish_main, three_fish_rank_reward)
+        groupId_battle_pass= None          # battle_pass表里的groupId (battle_pass_main_2024, battle_pass)
+        activityFisheryNameId_return= None  # panel_static_language里的templateID 返场活动名templateID
+        tokenID= None                   # ndays积分币(event_n_day_tasks_milestone, item_main, item_main_language, mission_main, repeatable_challenge)
+        collectionChapterId= None            # 闪卡章节 (activity_double_week)
+        wildCardId = None                    # 闪卡万能卡
+    else:
+        id_dict = load_main_id(file_name=file_name)
+        groupId = id_dict["groupId"]
+        missionType = id_dict["missionType"]
+        returnTimerId = id_dict["returnTimerId"]
+        groupId_three_fish = id_dict["groupId_three_fish"]
+        groupId_battle_pass = id_dict["groupId_battle_pass"]
+        activityFisheryNameId_return = id_dict["activityFisheryNameId_return"]
+        tokenID = id_dict["tokenID"]
+        collectionChapterId = id_dict["collectionChapterId"]
+        wildCardId = id_dict["wildCardId"]
 
     # 配置修改区结束
-    excel_tool = ExcelToolsForActivities(EXCEL_PATH)
     returnTimerId = timer_main_return(excel_tool=excel_tool, open_time=open_time, fishery_id=fishery_id, returnTimerId=returnTimerId)
     activityFisheryNameId_return = panel_static_language(excel_tool=excel_tool, t_panellanguage=activityFisheryName_return, activityFisheryNameId_return=activityFisheryNameId_return)
     missionType, groupId, groupId_three_fish = mission_group(excel_tool=excel_tool, TimerId=returnTimerId, is_open_three_fish=is_open_three_fish, fishery_id=fishery_id, activityName=activityFisheryNameId_return, imgNameInner=imgNameInner, newNDaysImgName=newNDaysImgName, missionType=missionType, groupId=groupId, groupId_three_fish=groupId_three_fish)
@@ -1209,8 +1228,10 @@ def main():
         three_fish_rank_reward(excel_tool=excel_tool, fishery_id=fishery_id,groupId_three_fish=groupId_three_fish)
     mission_main(excel_tool=excel_tool, fishery_id=fishery_id, groupId=groupId, missionType=missionType, tokenID=tokenID)
 
+    save_main_id(file_name=file_name, id_dict={"groupId": groupId, "missionType": missionType, "returnTimerId":returnTimerId, "groupId_three_fish":groupId_three_fish, "groupId_battle_pass":groupId_battle_pass, "activityFisheryNameId_return": activityFisheryNameId_return, "tokenID": tokenID, "collectionChapterId": collectionChapterId, "wildCardId": wildCardId})
     print("涉及到的表：", list(excel_tool.data_txt_changed))
 
 
 if __name__ == '__main__':
-    main()
+    excel_tool = ExcelToolsForActivities(EXCEL_PATH)
+    main(excel_tool)

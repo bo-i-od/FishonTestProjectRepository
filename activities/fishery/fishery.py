@@ -764,19 +764,18 @@ def battle_pass(excel_tool: ExcelToolsForActivities, fishery_id, battle_pass_gro
 
 
 
-def main():
+def main(excel_tool: ExcelToolsForActivities, mode = 1):
     """
         读写方式：新增/修改
         需要先生成鱼卡包的配置
+        mode=1 新增   mode=2 修改
     """
-    # mode=1 新增   mode=2 修改
-    mode = 2
 
-    file_name = os.path.basename(sys.argv[0]).split('.')[0]
+    file_name = os.path.basename(__file__).split('.')[0]
 
     # 配置修改区起始
     cfg = get_cfg_fishery()
-    print(cfg)
+    print("cfg:", cfg)
     fishery_id = cfg["fishery_id"]
     ChapterId = cfg["ChapterId"]  # 赛季id
     bgm_name = cfg["bgm_name"]  # new_plot_map_main和new_plot_fish_spot中区分渔场的字段
@@ -796,6 +795,7 @@ def main():
         battle_pass_main_2024_tpId = None  # battle_pass_main_2024中tpId
     else:
         id_dict = load_main_id(file_name=file_name)
+        print("id_dict:", id_dict)
         activityBPId = id_dict["activityBPId"]
         battle_pass_main_2024_tpId = id_dict["battle_pass_main_2024_tpId"]
 
@@ -806,7 +806,6 @@ def main():
     sectionNameID = 1998083 + fishery_index
     # 配置修改区结束
 
-    excel_tool = ExcelToolsForActivities(EXCEL_PATH)
     fishery_info = get_fishery_info(excel_tool=excel_tool, fishery_id=fishery_id)
     exclude_info = get_exclude_info(excel_tool=excel_tool, fishery_id=fishery_id)
     fish(excel_tool=excel_tool, fishery_info=fishery_info, fishery_index=fishery_index, living=living)
@@ -826,5 +825,7 @@ def main():
     save_main_id(file_name=file_name, id_dict={"activityBPId": activityBPId, "battle_pass_main_2024_tpId": battle_pass_main_2024_tpId})
     print("涉及到的表：", list(excel_tool.data_txt_changed))
 
+
 if __name__ == '__main__':
-    main()
+    excel_tool = ExcelToolsForActivities(EXCEL_PATH)
+    main(excel_tool, mode=1)

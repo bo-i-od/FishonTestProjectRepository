@@ -108,7 +108,6 @@ def item_main_language(excel_tool: ExcelToolsForActivities,fishery_index, fisher
         template_tpid_start = tpid_start
     else:
         mode = 1
-    print(mode)
     # id_start=133255
 
     cur = 0
@@ -579,17 +578,18 @@ def item_convert_rule(excel_tool: ExcelToolsForActivities, fishery_id, item_main
         cur += 1
 
 
-def main():
+def main(excel_tool: ExcelToolsForActivities, mode=1):
     """
         读写方式：新增/修改
+        mode=1 新增   mode=2 修改
     """
-    # mode=1 新增   mode=2 修改
-    mode = 2
 
-    file_name = os.path.basename(sys.argv[0]).split('.')[0]
+
+    file_name = os.path.basename(__file__).split('.')[0]
 
     # 配置修改区起始
     cfg = get_cfg_fish_bag()
+    print("cfg", cfg)
     icon_name = cfg["icon_name"]
     fishery_id = cfg["fishery_id"]
     # 鱼卡数量配置 找曦哥要200卡包的剩下自己按照倍数填
@@ -605,6 +605,7 @@ def main():
         fishcard_pack_info_tpid_start = None  # 对应fishcard_pack_info的起始tpId
     else:
         id_dict = load_main_id(file_name=file_name)
+        print("id_dict:", id_dict)
         drop_id_start = id_dict["drop_id_start"]
         item_main_tpid_start = id_dict["item_main_tpid_start"]
         drop_pack_id_start = id_dict["drop_pack_id_start"]
@@ -620,7 +621,7 @@ def main():
 
     # 配置修改区结束
 
-    excel_tool = ExcelToolsForActivities(EXCEL_PATH)
+
     drop_id_start = drop_main(excel_tool=excel_tool, drop_id_start=drop_id_start, fishery_index=fishery_index)
     item_main_tpid_start = item_main(excel_tool=excel_tool, fishery_index=fishery_index, icon_name=icon_name,  drop_id_start=drop_id_start, item_main_tpid_start=item_main_tpid_start)
     item_main_language(excel_tool=excel_tool, tpid_start=item_main_tpid_start,fishery_index=fishery_index, fishery_id=fishery_id, pack_info_cfg_list=pack_info_cfg_list)
@@ -637,4 +638,5 @@ def main():
     save_main_id(file_name=file_name, id_dict={"drop_id_start": drop_id_start, "item_main_tpid_start": item_main_tpid_start, "drop_pack_id_start": drop_pack_id_start, "entity_id_start": entity_id_start, "fishcard_pack_info_tpid_start": fishcard_pack_info_tpid_start})
     print("涉及到的表：", list(excel_tool.data_txt_changed))
 if __name__ == '__main__':
-    main()
+    excel_tool = ExcelToolsForActivities(EXCEL_PATH)
+    main(excel_tool, mode=1)

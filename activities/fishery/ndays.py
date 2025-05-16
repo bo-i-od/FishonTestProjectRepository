@@ -393,16 +393,16 @@ def event_n_day_tasks_milestone(excel_tool: ExcelToolsForActivities, fishery_id,
         cur += 1
 
 
-def main():
+def main(excel_tool: ExcelToolsForActivities, mode=1):
     """
         读写方式：新增/修改
+        mode=1 新增   mode=2 修改
     """
-    # mode=1 新增   mode=2 修改
-    mode = 2
 
-    file_name = os.path.basename(sys.argv[0]).split('.')[0]
+    file_name = os.path.basename(__file__).split('.')[0]
 
     cfg = get_cfg_ndays()
+    print("cfg:", cfg)
     fishery_id = cfg["fishery_id"]
     title = cfg["title"]
     imgNameInner = cfg["imgNameInner"]  # 活动左侧背景
@@ -420,6 +420,7 @@ def main():
         missionType = None  # mission_group的missionType 任务类型
     else:
         id_dict = load_main_id(file_name=file_name)
+        print("id_dict:", id_dict)
         groupId = id_dict["groupId"]
         title_id = id_dict["title_id"]
         missionConditionID_start = id_dict["missionConditionID_start"]
@@ -434,7 +435,6 @@ def main():
 
     # 配置修改区结束
 
-    excel_tool = ExcelToolsForActivities(EXCEL_PATH)
     title_id = panel_static_language(excel_tool=excel_tool, title=title, title_id=title_id)
     groupId, missionType, openArg = mission_group(excel_tool=excel_tool, groupId=groupId, fishery_id=fishery_id, title_id=title_id, imgNameInner=imgNameInner, missionType=missionType, openArg=openArg)
     tokenID = item_main(excel_tool=excel_tool, fishery_id=fishery_id, tokenID=tokenID)
@@ -445,5 +445,7 @@ def main():
 
     save_main_id(file_name=file_name, id_dict={"groupId": groupId, "title_id": title_id, "missionConditionID_start": missionConditionID_start, "openArg": openArg, "tokenID": tokenID, "missionType": missionType})
     print("涉及到的表：", list(excel_tool.data_txt_changed))
+
 if __name__ == '__main__':
-    main()
+    excel_tool = ExcelToolsForActivities(EXCEL_PATH)
+    main(excel_tool, mode=1)
