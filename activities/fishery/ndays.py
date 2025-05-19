@@ -82,7 +82,7 @@ def mission_group(excel_tool: ExcelToolsForActivities, fishery_id, title_id, img
                 continue
             if max_value > json_object["missionType"][0]:
                 continue
-            max_value = json_object[key]
+            max_value = json_object["missionType"]
         missionType = max_value + 1
 
     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=template_groupId, table_data_detail=mission_group_detail)
