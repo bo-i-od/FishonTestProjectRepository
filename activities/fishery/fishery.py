@@ -15,7 +15,8 @@ from activities.decl.NEW_PLOT_FISH_SPOT import *
 from activities.decl.NEW_PLOT_FISH_TYPE_DROP import NEW_PLOT_FISH_TYPE_DROP
 from activities.decl.NEW_PLOT_MAP_MAIN import NEW_PLOT_MAP_MAIN
 from activities.decl.PANEL_STATIC_LANGUAGE import PANEL_STATIC_LANGUAGE
-from activities.fishery.load_tools import get_spot_fish_type_detail, get_fishery_info, get_exclude_info, get_cfg_fishery
+from activities.fishery.load_tools import get_spot_fish_type_detail, get_fishery_info, get_exclude_info, \
+    get_cfg_fishery, get_cfg_ndays, get_quest_info
 from activities.fishery.temp.main_id import load_main_id, save_main_id
 from tools.excelRead import ExcelToolsForActivities
 from tools.decl2py import *
@@ -26,12 +27,17 @@ from tools.decl2py import *
 """
 
 
-def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_start, fishery_cfg_list, fishery_info,exclude_info, bgm_name,fishery_name, scene_name_list, mapPointId_list):
+def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_start, fishery_cfg_list, fishery_info,exclude_info, bgm_name,fishery_name, scene_name_list, mapPointId_list, cfg_ndays):
     def get_quest_id(fish_id):
-        return excel_tool.get_table_data_object_by_key_value(key="triggerKeyS", value=fish_id, table_data_detail=new_plot_quest_detail)["tpId"]
+        # return excel_tool.get_table_data_object_by_key_value(key="triggerKeyS", value=fish_id, table_data_detail=new_plot_quest_detail)["tpId"]
+        index = quest_info.index(fish_id)
+        new_plot_quest_list = cfg_ndays["mission_cfg"]["new_plot_quest_list"]
+        quest_id = new_plot_quest_list[index]
+        return quest_id
 
     new_plot_fish_spot_detail = excel_tool.get_table_data_detail(book_name="NEW_PLOT_FISH_SPOT.xlsm")
     new_plot_quest_detail = excel_tool.get_table_data_detail(book_name="NEW_PLOT_QUEST.xlsm")
+    quest_info = get_quest_info(excel_tool=excel_tool, fishery_id=fishery_id)
     template_tpId_start = 10101
     key = "tpId"
     table_data_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=tpId_start, table_data_detail=new_plot_fish_spot_detail)
@@ -788,7 +794,7 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
     fishery_cfg_list = cfg["fishery_cfg_list"]
     # 线索奖励需要的数量和奖励
     clue_reward = cfg["clue_reward"]
-
+    cfg_ndays = get_cfg_ndays()
     # 该区域参数为None则新增
     if mode == 1:
         activityBPId = None       # bp标题对应的panel_static_language中templateID
@@ -820,7 +826,7 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
     battle_pass_groupId, battle_pass_main_2024_tpId = battle_pass_main_2024(excel_tool=excel_tool, fishery_id=fishery_id, icon_name=icon_name, activityBPId=activityBPId, battle_pass_main_2024_tpId=battle_pass_main_2024_tpId)
     battle_pass(excel_tool=excel_tool, fishery_id=fishery_id, battle_pass_groupId=battle_pass_groupId)
     # 需要new_plot_quest主线任务配好
-    # new_plot_fish_spot(excel_tool=excel_tool, fishery_id=fishery_id, tpId_start=new_plot_fish_spot_tpId_start, fishery_cfg_list=fishery_cfg_list, fishery_info=fishery_info, exclude_info=exclude_info, bgm_name=bgm_name, fishery_name=fishery_name, scene_name_list=scene_name_list, mapPointId_list=mapPointId_list)
+    new_plot_fish_spot(excel_tool=excel_tool, fishery_id=fishery_id, tpId_start=new_plot_fish_spot_tpId_start, fishery_cfg_list=fishery_cfg_list, fishery_info=fishery_info, exclude_info=exclude_info, bgm_name=bgm_name, fishery_name=fishery_name, scene_name_list=scene_name_list, mapPointId_list=mapPointId_list, cfg_ndays=cfg_ndays)
 
     save_main_id(file_name=file_name, id_dict={"activityBPId": activityBPId, "battle_pass_main_2024_tpId": battle_pass_main_2024_tpId})
     print("涉及到的表：", list(excel_tool.data_txt_changed))

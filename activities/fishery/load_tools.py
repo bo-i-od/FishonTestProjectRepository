@@ -176,8 +176,8 @@ def get_fishery_info(excel_tool: ExcelToolsForActivities, fishery_id):
 def get_spot_fish_type_detail():
     worksheet = get_worksheet()
     spot_fish_type_detail = []
-    cur = 3
-    while cur < 11:
+    cur = 8
+    while cur < 16:
         fish_type_detail = {"small": 0, "medium": 0, "large": 0, "hidden": 0, "boss": 0, "rare": 0, "elite": 0,
                             "monster": 0, "total_rare": 0, "total_common": 0}
         spot_fish_type_info = get_row_data(worksheet, row_index=cur, column_start=3, table_data_len=4)
