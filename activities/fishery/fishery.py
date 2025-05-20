@@ -427,7 +427,6 @@ def new_plot_map_main(excel_tool: ExcelToolsForActivities, fishery_id,fishery_in
     instance_object.backGroundPic = f"MainStageBG_00{fishery_index}"
     instance_object.backGroundEffect = f"ep_Panel_MainStage_Home_0{fishery_index}"
     instance_object.openTimer = 102100 + fishery_index - 1
-    point_start = 10001 + 5 * (fishery_index - 1)
     instance_object.point = point_list
     instance_object.completeImg = f"icon_mainstage_clue_{icon_name}_{clue_reward[-1]['CollectCount']}"
     instance_object.loadingImg = f"loading_fisheries_{scene_name}_1"
@@ -841,6 +840,7 @@ def new_plot_map_point(excel_tool: ExcelToolsForActivities, fishery_id,fishery_i
         instance_object.enabled = 1
         instance_object.fisheriesId = fishery_id
         instance_object.showIcon = cfg["showIcon"]
+        instance_object.type = cfg["type"]
         instance_object.xPosition = map_point_position_list[cur]["xPosition"]
         instance_object.yPosition = map_point_position_list[cur]["yPosition"]
         if "spotConditionType" in cfg:
@@ -922,16 +922,16 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
     fishery_cfg_list = cfg["fishery_cfg_list"]
     # 线索奖励需要的数量和奖励
     clue_reward = cfg["clue_reward"]
-    # map_point_position_list = [
-    #     {"name": "钓点1", "xPosition": 20, "yPosition": 30},
-    #     {"name": "钓点2", "xPosition": 40, "yPosition": 50},
-    #     {"name": "村庄1", "xPosition": 60, "yPosition": 70},
-    #     {"name": "村庄2", "xPosition": 80, "yPosition": 90},
-    #     {"name": "村庄3", "xPosition": 100, "yPosition": 110},
-    #     {"name": "订单", "xPosition": 120, "yPosition": 130},
-    #     {"name": "锦标赛", "xPosition": 140, "yPosition": 150},
-    # ]
-    map_point_position_list = cfg["map_point_position_list"]
+    map_point_position_list = [
+        {"name": "钓点1", "xPosition": -338, "yPosition": 59},
+        {"name": "钓点2", "xPosition": 479, "yPosition": 371},
+        {"name": "村庄1", "xPosition": -507, "yPosition": 252},
+        {"name": "村庄2", "xPosition": 118, "yPosition": 556},
+        {"name": "村庄3", "xPosition": 487, "yPosition": 111},
+        {"name": "订单", "xPosition": -73, "yPosition": 369},
+        {"name": "锦标赛", "xPosition": 22, "yPosition": 412},
+    ]
+    # map_point_position_list = cfg["map_point_position_list"]
 
 
     cfg_ndays = get_cfg_ndays()
