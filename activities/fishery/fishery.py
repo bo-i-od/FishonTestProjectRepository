@@ -10,10 +10,13 @@ from activities.decl.FISHERIES import FISHERIES
 from activities.decl.FISH_GOLDEN_SHOW import FISH_GOLDEN_SHOW
 from activities.decl.FISH_STATE import FISH_STATE
 from activities.decl.FISH_WEIGHT_NEW import FISH_WEIGHT_NEW
+from activities.decl.MULTIPLAYER_ROOM_ENUM import MULTIPLAYER_ROOM_ENUM
 from activities.decl.NEW_PLOT_CLUE_REWARD import NEW_PLOT_CLUE_REWARD
 from activities.decl.NEW_PLOT_FISH_SPOT import *
 from activities.decl.NEW_PLOT_FISH_TYPE_DROP import NEW_PLOT_FISH_TYPE_DROP
 from activities.decl.NEW_PLOT_MAP_MAIN import NEW_PLOT_MAP_MAIN
+from activities.decl.NEW_PLOT_MAP_POINT import NEW_PLOT_MAP_POINT
+from activities.decl.NEW_PLOT_MAP_POINT_LANGUAGE import NEW_PLOT_MAP_POINT_LANGUAGE
 from activities.decl.PANEL_STATIC_LANGUAGE import PANEL_STATIC_LANGUAGE
 from activities.fishery.load_tools import get_spot_fish_type_detail, get_fishery_info, get_exclude_info, \
     get_cfg_fishery, get_cfg_ndays, get_quest_info
@@ -36,7 +39,7 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
         return quest_id
 
     new_plot_fish_spot_detail = excel_tool.get_table_data_detail(book_name="NEW_PLOT_FISH_SPOT.xlsm")
-    new_plot_quest_detail = excel_tool.get_table_data_detail(book_name="NEW_PLOT_QUEST.xlsm")
+    # new_plot_quest_detail = excel_tool.get_table_data_detail(book_name="NEW_PLOT_QUEST.xlsm")
     quest_info = get_quest_info(excel_tool=excel_tool, fishery_id=fishery_id)
     template_tpId_start = 10101
     key = "tpId"
@@ -405,7 +408,7 @@ def fisheries(excel_tool: ExcelToolsForActivities, fishery_id, icon_name, scene_
     else:
         excel_tool.add_object(key=key, value=instance_object.tpId, table_data_detail=fisheries_detail, instance_object=instance_object)
 
-def new_plot_map_main(excel_tool: ExcelToolsForActivities, fishery_id,fishery_index, sectionNameID, icon_name, clue_reward, scene_name, bgm_name):
+def new_plot_map_main(excel_tool: ExcelToolsForActivities, fishery_id,fishery_index, sectionNameID, icon_name, clue_reward, scene_name, bgm_name, point_list):
     new_plot_map_main_detail = excel_tool.get_table_data_detail(book_name="NEW_PLOT_MAP_MAIN.xlsm")
     template_tpId = 500301
     key = "tpId"
@@ -425,7 +428,7 @@ def new_plot_map_main(excel_tool: ExcelToolsForActivities, fishery_id,fishery_in
     instance_object.backGroundEffect = f"ep_Panel_MainStage_Home_0{fishery_index}"
     instance_object.openTimer = 102100 + fishery_index - 1
     point_start = 10001 + 5 * (fishery_index - 1)
-    instance_object.point = [point_start, point_start + 1, point_start + 2, point_start + 3, point_start + 4]
+    instance_object.point = point_list
     instance_object.completeImg = f"icon_mainstage_clue_{icon_name}_{clue_reward[-1]['CollectCount']}"
     instance_object.loadingImg = f"loading_fisheries_{scene_name}_1"
     instance_object.cluePanelName = f"Panel_MS_clue_info_{icon_name}"
@@ -451,6 +454,41 @@ def new_plot_map_main(excel_tool: ExcelToolsForActivities, fishery_id,fishery_in
         excel_tool.change_object(key=key, value=instance_object.tpId, table_data_detail=new_plot_map_main_detail, instance_object=instance_object)
     else:
         excel_tool.add_object(key=key, value=instance_object.tpId, table_data_detail=new_plot_map_main_detail, instance_object=instance_object)
+
+def multiplayer_room_enum(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index):
+    multiplayer_room_enum_detail = excel_tool.get_table_data_detail(book_name="MULTIPLAYER_ROOM_ENUM.xlsm")
+    fishery_name = excel_tool.get_fishery_name(fishery_id=fishery_id)
+    fishSpotId_start = fishery_index * 100 + 10001
+    template_fisheriesId = 500301
+    key = "tpId"
+    json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="fisheriesId", value=fishery_id, table_data_detail=multiplayer_room_enum_detail)
+    if json_object_list:
+        mode = 2
+    else:
+        mode = 1
+        json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="fisheriesId", value=template_fisheriesId, table_data_detail=multiplayer_room_enum_detail)
+    cur = 0
+    while cur < len(json_object_list):
+        instance_object: MULTIPLAYER_ROOM_ENUM
+        instance_object = json_to_instance(json_object=json_object_list[cur], cls=MULTIPLAYER_ROOM_ENUM)
+        instance_object.id = fishery_id * 100 + cur + 1
+        instance_object.name = f"{fishery_name}-钓点{cur//2 + 1}"
+        if cur % 2 == 0:
+            instance_object.name += "白天"
+        else:
+            instance_object.name += "晚上"
+        instance_object.tpId = instance_object.id
+        instance_object.multiType = 2
+        instance_object.fisheriesId = fishery_id
+        instance_object.fishSpotIds = [fishSpotId_start + cur, fishSpotId_start + cur + 4, 0, 0]
+        print(instance_object)
+        if mode == 2:
+            excel_tool.change_object(key=key, value=instance_object.tpId, table_data_detail=multiplayer_room_enum_detail, instance_object=instance_object)
+        else:
+            excel_tool.add_object(key=key, value=instance_object.tpId, table_data_detail=multiplayer_room_enum_detail, instance_object=instance_object)
+        cur += 1
+
+
 
 def new_plot_clue_reward(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index, clue_reward):
     new_plot_clue_reward_detail = excel_tool.get_table_data_detail(book_name="NEW_PLOT_CLUE_REWARD.xlsm")
@@ -767,8 +805,98 @@ def battle_pass(excel_tool: ExcelToolsForActivities, fishery_id, battle_pass_gro
             excel_tool.add_object(key=key, value=instance_object.tpId, table_data_detail=battle_pass_detail, instance_object=instance_object)
         cur += 1
 
+def new_plot_map_point(excel_tool: ExcelToolsForActivities, fishery_id,fishery_index, fishery_cfg_list, map_point_position_list):
+    cfg_dict = {
+        "钓点1": {"type": 2, "showIcon": "diaodian", "spotConditionType": 2, "spotConditionArg": 1, "needChapterLv": fishery_cfg_list[0]["needChapterLv"], "needPlotQuestId": fishery_cfg_list[0]["needPlotQuestId"], "needDay": fishery_cfg_list[0]["needDay"], "minDeep": 10, "maxDeep": 30, "defaultDeep": 10, "defaultSpotId": 10001 + fishery_index * 100, "pointname": 1},
+        "钓点2": {"type": 2, "showIcon": "diaodian", "spotConditionType": 2, "spotConditionArg": 2, "needChapterLv": fishery_cfg_list[2]["needChapterLv"], "needPlotQuestId": fishery_cfg_list[2]["needPlotQuestId"], "needDay": fishery_cfg_list[2]["needDay"], "minDeep": 15, "maxDeep": 35, "defaultDeep": 15, "defaultSpotId": 10003 + fishery_index * 100, "pointname": 2},
+        "村庄1": {"type": 1, "showIcon": "cunzhuang"},
+        "村庄2": {"type": 1, "showIcon": "cunzhuang"},
+        "村庄3": {"type": 1, "showIcon": "cunzhuang"},
+        "订单": {"type": 3, "showIcon": "dingdan"},
+        "锦标赛": {"type": 5, "showIcon": "dingdan"}
+    }
+    fishery_name = excel_tool.get_fishery_name(fishery_id=fishery_id)
+    point_list = []
+    new_plot_map_point_detail = excel_tool.get_table_data_detail(book_name="NEW_PLOT_MAP_POINT.xlsm")
+    key = "tpId"
+    id_start = excel_tool.get_min_value_more_than_start(key_list=["id", key], table_object_detail=new_plot_map_point_detail, start=10000, long=len(map_point_position_list))
+    json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="fisheriesId", value=fishery_id, table_data_detail=new_plot_map_point_detail)
+    if json_object_list:
+        mode = 2
+    else:
+        mode = 1
+    cur = 0
+    while cur < len(map_point_position_list):
+        cfg = cfg_dict[map_point_position_list[cur]["name"]]
+        instance_object: NEW_PLOT_MAP_POINT
+        if mode == 1:
+            instance_object = NEW_PLOT_MAP_POINT()
+            instance_object.id = id_start + cur
+            instance_object.tpId = instance_object.id
+        else:
+            instance_object = json_to_instance(json_object=json_object_list[cur], cls=NEW_PLOT_MAP_POINT)
+        if cur < 5:
+            point_list.append(instance_object.tpId)
+        instance_object.name = fishery_name + "-" + map_point_position_list[cur]["name"]
+        instance_object.enabled = 1
+        instance_object.fisheriesId = fishery_id
+        instance_object.showIcon = cfg["showIcon"]
+        instance_object.xPosition = map_point_position_list[cur]["xPosition"]
+        instance_object.yPosition = map_point_position_list[cur]["yPosition"]
+        if "spotConditionType" in cfg:
+            instance_object.spotConditionType = cfg["spotConditionType"]
+        if "spotConditionArg" in cfg:
+            instance_object.spotConditionArg = cfg["spotConditionArg"]
+        if "needChapterLv" in cfg:
+            instance_object.needChapterLv = cfg["needChapterLv"]
+        if "needPlotQuestId" in cfg:
+            instance_object.needPlotQuestId = cfg["needPlotQuestId"]
+        if "needDay" in cfg:
+            instance_object.needDay = cfg["needDay"]
+        if "minDeep" in cfg:
+            instance_object.minDeep = cfg["minDeep"]
+        if "maxDeep" in cfg:
+            instance_object.maxDeep = cfg["maxDeep"]
+        if "defaultDeep" in cfg:
+            instance_object.defaultDeep = cfg["defaultDeep"]
+        if "defaultSpotId" in cfg:
+            instance_object.defaultSpotId = cfg["defaultSpotId"]
+        if "pointname" in cfg:
+            instance_object.pointname = cfg["pointname"]
+        print(instance_object)
+        if mode == 2:
+            excel_tool.change_object(key=key, value=instance_object.tpId, table_data_detail=new_plot_map_point_detail, instance_object=instance_object)
+        else:
+            excel_tool.add_object(key=key, value=instance_object.tpId, table_data_detail=new_plot_map_point_detail, instance_object=instance_object)
+        cur += 1
+    return point_list
 
-
+def new_plot_map_point_language(excel_tool: ExcelToolsForActivities,fishery_id, point_list, map_point_position_list):
+    new_plot_map_point_language_detail = excel_tool.get_table_data_detail(book_name="NEW_PLOT_MAP_POINT_LANGUAGE.xlsm")
+    fishery_name = excel_tool.get_fishery_name(fishery_id=fishery_id)
+    key = "tpId"
+    cur = 0
+    while cur < len(point_list):
+        json_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=point_list[cur], table_data_detail=new_plot_map_point_language_detail)
+        if json_object_list:
+            mode = 2
+            instance_object = json_to_instance(json_object=json_object_list[0], cls=NEW_PLOT_MAP_POINT_LANGUAGE)
+        else:
+            mode = 1
+            instance_object = NEW_PLOT_MAP_POINT_LANGUAGE()
+        instance_object.id = point_list[cur]
+        instance_object.tpId = instance_object.id
+        instance_object.name = fishery_name + "-" + map_point_position_list[cur]["name"]
+        if instance_object.t_name is None:
+            instance_object.t_name = fishery_name + "-" + map_point_position_list[cur]["name"]
+        if cur < 2 and instance_object.t_desc is None:
+            instance_object.t_desc = fishery_name + "-" + map_point_position_list[cur]["name"] + "描述"
+        print(instance_object)
+        if mode == 2:
+            excel_tool.change_object(key=key, value=instance_object.tpId, table_data_detail=new_plot_map_point_language_detail, instance_object=instance_object)
+        else:
+            excel_tool.add_object(key=key, value=instance_object.tpId, table_data_detail=new_plot_map_point_language_detail, instance_object=instance_object)
+        cur += 1
 
 def main(excel_tool: ExcelToolsForActivities, mode = 1):
     """
@@ -794,6 +922,18 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
     fishery_cfg_list = cfg["fishery_cfg_list"]
     # 线索奖励需要的数量和奖励
     clue_reward = cfg["clue_reward"]
+    # map_point_position_list = [
+    #     {"name": "钓点1", "xPosition": 20, "yPosition": 30},
+    #     {"name": "钓点2", "xPosition": 40, "yPosition": 50},
+    #     {"name": "村庄1", "xPosition": 60, "yPosition": 70},
+    #     {"name": "村庄2", "xPosition": 80, "yPosition": 90},
+    #     {"name": "村庄3", "xPosition": 100, "yPosition": 110},
+    #     {"name": "订单", "xPosition": 120, "yPosition": 130},
+    #     {"name": "锦标赛", "xPosition": 140, "yPosition": 150},
+    # ]
+    map_point_position_list = cfg["map_point_position"]
+
+
     cfg_ndays = get_cfg_ndays()
     # 该区域参数为None则新增
     if mode == 1:
@@ -816,7 +956,10 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
     exclude_info = get_exclude_info(excel_tool=excel_tool, fishery_id=fishery_id)
     fish(excel_tool=excel_tool, fishery_info=fishery_info, fishery_index=fishery_index, living=living)
     fisheries(excel_tool=excel_tool, fishery_id=fishery_id, icon_name=icon_name, scene_name=scene_name_list[0], fishery_info=fishery_info)
-    new_plot_map_main(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index, sectionNameID=sectionNameID, icon_name=icon_name, clue_reward=clue_reward, scene_name=scene_name_list[1], bgm_name=bgm_name)
+    point_list = new_plot_map_point(excel_tool=excel_tool, fishery_id=fishery_id,  fishery_index=fishery_index, fishery_cfg_list=fishery_cfg_list, map_point_position_list=map_point_position_list)
+    new_plot_map_point_language(excel_tool=excel_tool, fishery_id=fishery_id, point_list=point_list, map_point_position_list=map_point_position_list)
+    new_plot_map_main(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index, sectionNameID=sectionNameID, icon_name=icon_name, clue_reward=clue_reward, scene_name=scene_name_list[1], bgm_name=bgm_name, point_list=point_list)
+    multiplayer_room_enum(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index)
     new_plot_fish_type_drop(excel_tool=excel_tool, fishery_id=fishery_id, ChapterId=ChapterId)
     new_plot_clue_reward(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index, clue_reward=clue_reward)
     fish_golden_show(excel_tool=excel_tool, fishery_id=fishery_id)

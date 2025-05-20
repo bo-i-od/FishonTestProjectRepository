@@ -4,10 +4,11 @@ from tools.excelRead import ExcelToolsForActivities
 
 
 def main(excel_tool: ExcelToolsForActivities):
-    fish_bag.main(excel_tool, mode=1)
-    fishery.main(excel_tool, mode=1)
-    flash_card.main(excel_tool, mode=1)
-    ndays.main(excel_tool, mode=1)
+    mode = 2
+    fish_bag.main(excel_tool, mode=mode)
+    fishery.main(excel_tool, mode=mode)
+    flash_card.main(excel_tool, mode=mode)
+    ndays.main(excel_tool, mode=mode)
     achievement.main(excel_tool)
 
 

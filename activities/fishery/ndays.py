@@ -1,6 +1,7 @@
 import os
 import sys
 
+from activities.decl.ENUM_MAPPING import ENUM_MAPPING
 from activities.decl.EVENT_N_DAY_TASKS_MILESTONE import EVENT_N_DAY_TASKS_MILESTONE
 from activities.decl.ITEM_MAIN import ITEM_MAIN
 from activities.decl.ITEM_MAIN_LANGUAGE import ITEM_MAIN_LANGUAGE
@@ -42,7 +43,7 @@ def panel_static_language(excel_tool: ExcelToolsForActivities, title, title_id=N
     return title_id
 
 
-def mission_group(excel_tool: ExcelToolsForActivities, fishery_id, title_id, imgNameInner,  missionType=None, groupId=None, openArg=None):
+def mission_group(excel_tool: ExcelToolsForActivities, fishery_id, title_id, imgNameInner, groupId=None, openArg=None):
     # 在mission_condition中新增章节开启
     def get_openArg():
         mission_condition_detail = excel_tool.get_table_data_detail(book_name="MISSION_CONDITION.xlsm")
@@ -74,17 +75,6 @@ def mission_group(excel_tool: ExcelToolsForActivities, fishery_id, title_id, img
         mode = 2
         template_groupId = groupId
 
-    if missionType is None:
-        json_object_list = mission_group_detail[0]
-        max_value = 0
-        for json_object in json_object_list:
-            if "missionType" not in json_object:
-                continue
-            if max_value > json_object["missionType"][0]:
-                continue
-            max_value = json_object["missionType"]
-        missionType = max_value + 1
-
     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=template_groupId, table_data_detail=mission_group_detail)
     instance_object: MISSION_GROUP
     instance_object = json_to_instance(json_object=json_object_list[0], cls=MISSION_GROUP)
@@ -97,13 +87,13 @@ def mission_group(excel_tool: ExcelToolsForActivities, fishery_id, title_id, img
     instance_object.extArgs[6] = fishery_id
     instance_object.activityName = title_id
     instance_object.imgNameInner = imgNameInner
-    instance_object.missionType = missionType
+    instance_object.missionType = 82
     print(instance_object)
     if mode == 2:
         excel_tool.change_object(key=key, value=instance_object.groupId, instance_object=instance_object, table_data_detail=mission_group_detail)
     else:
         excel_tool.add_object(key=key, value=instance_object.groupId, instance_object=instance_object, table_data_detail=mission_group_detail)
-    return groupId, missionType, openArg
+    return groupId, openArg
 
 def item_main(excel_tool: ExcelToolsForActivities, fishery_id, tokenID=None):
     # 活动代币
@@ -279,7 +269,7 @@ def mission_condition(excel_tool: ExcelToolsForActivities, fishery_id,fishery_in
     return missionConditionID_start
 
 
-def mission_main(excel_tool: ExcelToolsForActivities, fishery_id, groupId, tokenID, missionConditionID_start, missionType):
+def mission_main(excel_tool: ExcelToolsForActivities, fishery_id, groupId, tokenID, missionConditionID_start):
     cfg = {
         2: {"order": 2},
         14: {"point": 200},
@@ -313,7 +303,7 @@ def mission_main(excel_tool: ExcelToolsForActivities, fishery_id, groupId, token
         if mode == 1:
             instance_object.id = id_start + cur
         instance_object.missionID = missionID_start + cur
-        instance_object.missionType = missionType
+        instance_object.missionType = 82
         instance_object.groupId = groupId
         if cur in cfg:
             if "order" in cfg[cur]:
@@ -392,6 +382,33 @@ def event_n_day_tasks_milestone(excel_tool: ExcelToolsForActivities, fishery_id,
             excel_tool.add_object(key=key, value=instance_object.autoId, table_data_detail=event_n_day_tasks_milestone_detail, instance_object=instance_object)
         cur += 1
 
+# def enum_mapping(excel_tool: ExcelToolsForActivities, missionType, fishery_id):
+#     enum_mapping_detail = excel_tool.get_table_data_detail(book_name="ENUM_MAPPING.xlsm")
+#     template_value = 84
+#     key = "value"
+#     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="value", value=missionType, table_data_detail=enum_mapping_detail)
+#     if json_object_list:
+#         mode = 2
+#     else:
+#         mode = 1
+#         json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="value", value=template_value, table_data_detail=enum_mapping_detail)
+#     instance_object: ENUM_MAPPING
+#     instance_object = json_to_instance(json_object=json_object_list[0], cls=ENUM_MAPPING)
+#     if mode == 1:
+#         instance_object.id = excel_tool.get_min_value_more_than_start(table_object_detail=enum_mapping_detail, start=493, key_list=["id", "enumAutoID"])
+#         instance_object.enumAutoID = instance_object.id
+#         instance_object.name = instance_object.id
+#     instance_object.enumName = "MissionTypeEnum"
+#     instance_object.key = f"FISH_SCENE_N_DAYS_NEW_{instance_object.enumAutoID}"
+#     instance_object.value = missionType
+#     instance_object.desc = f"任务类型-{excel_tool.get_fishery_name(fishery_id=fishery_id)}十天乐"
+#     print(instance_object)
+#     if mode == 2:
+#         excel_tool.change_object(key=key, value=instance_object.value, table_data_detail=enum_mapping_detail, instance_object=instance_object)
+#     else:
+#         excel_tool.add_object(key=key, value=instance_object.value, table_data_detail=enum_mapping_detail, instance_object=instance_object)
+
+
 
 def main(excel_tool: ExcelToolsForActivities, mode=1):
     """
@@ -417,7 +434,6 @@ def main(excel_tool: ExcelToolsForActivities, mode=1):
         missionConditionID_start = None  # mission_condition的missionConditionID 系列任务的起始
         openArg = None  # mission_condition的missionConditionID 解锁该渔场
         tokenID = None  # item_main的itemTpId 活动代币
-        missionType = None  # mission_group的missionType 任务类型
     else:
         id_dict = load_main_id(file_name=file_name)
         print("id_dict:", id_dict)
@@ -426,7 +442,6 @@ def main(excel_tool: ExcelToolsForActivities, mode=1):
         missionConditionID_start = id_dict["missionConditionID_start"]
         openArg = id_dict["openArg"]
         tokenID = id_dict["tokenID"]
-        missionType = id_dict["missionType"]
 
 
     # 根据偏移算中间值，当渔场id不按顺序新增时可能有问题
@@ -434,18 +449,17 @@ def main(excel_tool: ExcelToolsForActivities, mode=1):
     spot_id_start = 10001 + 100 * fishery_index
 
     # 配置修改区结束
-
     title_id = panel_static_language(excel_tool=excel_tool, title=title, title_id=title_id)
-    groupId, missionType, openArg = mission_group(excel_tool=excel_tool, groupId=groupId, fishery_id=fishery_id, title_id=title_id, imgNameInner=imgNameInner, missionType=missionType, openArg=openArg)
+    groupId, openArg = mission_group(excel_tool=excel_tool, groupId=groupId, fishery_id=fishery_id, title_id=title_id, imgNameInner=imgNameInner, openArg=openArg)
     tokenID = item_main(excel_tool=excel_tool, fishery_id=fishery_id, tokenID=tokenID)
     item_main_language(excel_tool=excel_tool, fishery_id=fishery_id, tokenID=tokenID)
     missionConditionID_start = mission_condition(excel_tool=excel_tool,  fishery_id=fishery_id, fishery_index=fishery_index, mission_cfg=mission_cfg, spot_id_start=spot_id_start, missionConditionID_start=missionConditionID_start)
-    mission_main(excel_tool=excel_tool,  fishery_id=fishery_id, groupId=groupId, missionType=missionType, tokenID=tokenID, missionConditionID_start=missionConditionID_start)
+    mission_main(excel_tool=excel_tool, fishery_id=fishery_id, groupId=groupId, tokenID=tokenID, missionConditionID_start=missionConditionID_start)
     event_n_day_tasks_milestone(excel_tool=excel_tool, fishery_id=fishery_id, groupId=groupId, tokenID=tokenID, big_reward=big_reward)
 
-    save_main_id(file_name=file_name, id_dict={"groupId": groupId, "title_id": title_id, "missionConditionID_start": missionConditionID_start, "openArg": openArg, "tokenID": tokenID, "missionType": missionType})
+    save_main_id(file_name=file_name, id_dict={"groupId": groupId, "title_id": title_id, "missionConditionID_start": missionConditionID_start, "openArg": openArg, "tokenID": tokenID})
     print("涉及到的表：", list(excel_tool.data_txt_changed))
 
 if __name__ == '__main__':
     excel_tool = ExcelToolsForActivities(EXCEL_PATH)
-    main(excel_tool, mode=1)
+    main(excel_tool, mode=2)

@@ -263,9 +263,8 @@ def collection_protect(excel_tool: ExcelToolsForActivities, fishery_id):
         instance_object: COLLECTION_PROTECT
         instance_object = json_to_instance(json_object=json_object_list[cur], cls=COLLECTION_PROTECT)
         if mode == 1:
-
             instance_object.tpId = tpId_start + cur
-        instance_object.id = id_start + cur
+            instance_object.id = id_start + cur
         instance_object.fishSceneTpId = fishery_id
         instance_object.protectFishIdGroup[0] = monster_id_list[cur // 3]
         instance_object.protectFlashCardIdGroup[0] = excel_tool.get_flash_card_id(fish_id=instance_object.protectFishIdGroup[0])
