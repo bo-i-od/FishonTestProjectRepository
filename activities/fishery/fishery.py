@@ -931,7 +931,7 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
     #     {"name": "订单", "xPosition": 120, "yPosition": 130},
     #     {"name": "锦标赛", "xPosition": 140, "yPosition": 150},
     # ]
-    map_point_position_list = cfg["map_point_position"]
+    map_point_position_list = cfg["map_point_position_list"]
 
 
     cfg_ndays = get_cfg_ndays()
@@ -977,4 +977,4 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
 
 if __name__ == '__main__':
     excel_tool = ExcelToolsForActivities(EXCEL_PATH)
-    main(excel_tool, mode=1)
+    main(excel_tool, mode=2)
