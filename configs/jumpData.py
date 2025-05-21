@@ -60,7 +60,7 @@ class JumpData:
         "MessageBoxPanel",
         "MidAutumnPackPopupPanel",
         "MonthCardPopPanel",
-        "NewbieGuidePanel",
+        # "NewbieGuidePanel",
         "NewRankingActivityCompetitionPanel",
         "ValentinePackPopupPanel"
     }
@@ -68,7 +68,7 @@ class JumpData:
     panel_dict = {
         "AchievementCategoryPanel": {"element_data": ElementsData.AchievementCategoryPanel.AchievementCategoryPanel, "close_path": [ElementsData.AchievementCategoryPanel.btn_close]},
         "AchievementGroupPanel": {"element_data": ElementsData.AchievementGroupPanel.AchievementGroupPanel, "close_path": [ElementsData.AchievementGroupPanel.btn_close]},
-        "AchievementPanel": {"element_data": ElementsData.AchievementPanel.AchievementPanel, "open_path": [ElementsData.Home3DPanel.btn_pve, ElementsData.TournamentsPanel.btn_achievement], "close_path": [ElementsData.AchievementPanel.btn_close]},
+        "AchievementPanel": {"element_data": ElementsData.AchievementPanel.AchievementPanel, "open_path": [ElementsData.HomePanel.btn_achievement], "close_path": [ElementsData.AchievementPanel.btn_close]},
         "AchievementPopupPanel": {"element_data": ElementsData.AchievementPopupPanel.AchievementPopupPanel},
         "AchievementWantedPanel": {"element_data": ElementsData.AchievementWantedPanel.AchievementWantedPanel, "close_path": [ElementsData.AchievementWantedPanel.btn_close]},
         "AgentPackPopupPanel":{"element_data": ElementsData.AgentPackPopupPanel.AgentPackPopupPanel, "close_path": [ElementsData.AgentPackPopupPanel.btn_close]},
