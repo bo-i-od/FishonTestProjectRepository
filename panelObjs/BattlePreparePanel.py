@@ -325,6 +325,9 @@ class BattlePreparePanel(BasePage):
         def click_outboard_tip(self):
             self.click_element_safe(element_data=ElementsData.BattlePreparePanel.panel_MainStage_daily_prepare.outboard_tip)
 
+        def click_btn_gohome(self):
+            self.click_element(element_data=ElementsData.BattlePreparePanel.panel_MainStage_daily_prepare.btn_gohome)
+
     class panel_MainStage_challenge_prepare(BasePage):
         def click_btn_cast(self):
             self.click_element(element_data=ElementsData.BattlePreparePanel.panel_MainStage_challenge_prepare.btn_cast)

@@ -66,11 +66,11 @@ def FishCardUpgradePanel_test(bp: BasePage):
 def level_up_test(bp: BasePage):
     # check_information_test(bp)
     # FishCardPanel.click_btn_upgrade(bp)
-    # 跳转商店
-    FishCardUpgradePanel.click_btn_add_100000(bp)
-    bp.sleep(1)
-    StorePanel.click_btn_close(bp)
-    bp.sleep(1)
+    # # 跳转商店
+    # FishCardUpgradePanel.click_btn_add_100000(bp)
+    # bp.sleep(1)
+    # StorePanel.click_btn_close(bp)
+    # bp.sleep(1)
     # 升5级
     cur = 0
     # while FishCardUpgradePanel.is_btn_level_up_abled(bp):

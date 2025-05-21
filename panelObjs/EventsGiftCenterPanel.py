@@ -4,7 +4,7 @@ from configs.elementsData import ElementsData
 
 class EventsGiftCenterPanel(BasePage):
     def click_btn_close(self):
-        self.click_until_disappear(element_data=ElementsData.EventsGiftCenterPanel.btn_close, ignore_set={"EventsGiftCenterPanel"})
+        self.click_element(element_data=ElementsData.EventsGiftCenterPanel.btn_close, ignore_set={"EventsGiftCenterPanel"})
 
     def is_panel_active(self):
         return self.exist(element_data=ElementsData.EventsGiftCenterPanel.EventsGiftCenterPanel)
