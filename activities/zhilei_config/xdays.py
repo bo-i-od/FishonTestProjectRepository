@@ -46,34 +46,34 @@ def add_time_to_datetime(datetime_obj, days=0, hours=0, seconds=0):
         print(f"错误：{str(e)}")
         return None
 
-def get_single_fisheries(line):
-    """
-    将渔场列表转化为单个渔场
-    """
-    # # 去除空白字符
-    # line = line.strip()
-    # if not line:
-    #     return ""
-
-    # 分割字符串
-    parts = line.split(',')
-    if len(parts) > 1:
-        # 获取最后一个逗号后的数据
-        return parts[-1].strip()
-    else:
-        # 如果没有逗号，直接使用原值
-        return line
+def trans_fisheries_list(fisheries_list):
+    result=str(fisheries_list).split(',')
+    return result
 
 xdays_main_data=get_table_data("xdays_main")
 xdays_rank_data=get_table_data("xdays_rank")
 mission_group_data=get_table_data("mission_group")
 timer_main_data = get_table_data("timer_main")
 xdays_rank_reward_data = get_table_data("xdays_rank_reward")
+fisheries_data = get_table_data("fisheries")
+
+def get_fisheries_level(fisheries_list):
+    min_lv=999
+    for key,value in fisheries_data.items():
+        if value['tpId'] in fisheries_list:
+            need_lv=int(value.get('needPlayerLv',0))
+            if need_lv and need_lv<min_lv:
+                min_lv=need_lv
+    if min_lv!=999:
+        return min_lv
+    else:
+        return 0
 
 for index, row in df.iterrows():
-    row['start_time'].month
     full_name = f"{'' if row['fisheries_list']==0 else row['fisheries_list']}{row['xdays_type']},{row['start_time'].month}.{row['start_time'].day}"
     print(full_name)
+    fisheries_list=trans_fisheries_list(row['fisheries_list'])
+    single_fisheries=fisheries_list[-1]
     # =============处理xdays main==============
     xdays_id=row['xdays_id']
     # 先拷贝一下数据
@@ -92,7 +92,7 @@ for index, row in df.iterrows():
         'name':full_name,
         'tpId':xdays_id,
         'rankGroupId':row['groupId'],
-        'fisheries':get_single_fisheries(str(row['fisheries_list'])),
+        'fisheries':single_fisheries,
     })
     # =============处理xdays rank==============
     xdays_rank_id=row['groupId']
@@ -109,10 +109,10 @@ for index, row in df.iterrows():
         'id':xdays_rank_id,
         'name': full_name,
         'groupId':xdays_rank_id,
-        'fisheries':get_single_fisheries(str(row['fisheries_list'])),
-        'rankTimer':row['rank_timer'],
+        'fisheries':single_fisheries,
+        'rankEarlyEndTime':39600,
     })
-    if row['xdays_type'] in ['最高单鱼得分','所有鱼基础分','典藏奇珍超奇珍']:
+    if row['xdays_type'] in ['最高单鱼得分','钓鱼王冠军赛','典藏奇珍超奇珍']:
         xdays_rank_append_data['rankTypeArgs'][0]=row['fisheries_list']
 
     # =============处理 mission group==============
@@ -128,10 +128,15 @@ for index, row in df.iterrows():
         'id':xdays_rank_id,
         'name':full_name,
         'groupId':xdays_rank_id,
-        'fisheries':get_single_fisheries(str(row['fisheries_list'])),
+        'fisheriesId':single_fisheries,
         'openArg':row['group_timer'],
         'closeArg':row['group_timer'],
     })
+    if single_fisheries!='0':
+        mission_group_append_data.update({
+            'serverCharaLevel':get_fisheries_level(fisheries_list)
+        })
+
     # =============处理 timer表=============
     timer_append_data1={
         'tb': 'timer_main',
@@ -142,16 +147,6 @@ for index, row in df.iterrows():
         'cycleType': '1',
         'openTime': row['start_time'],
         'endTime': add_time_to_datetime(row['start_time'],days=row['days'],seconds=-1),
-    }
-    timer_append_data2={
-        'tb': 'timer_main',
-        'id': row['rank_timer'],
-        'name': full_name,
-        'timerID': row['rank_timer'],
-        'timerName': row['xdays_type'],
-        'cycleType': '1',
-        'openTime': row['start_time'],
-        'endTime': add_time_to_datetime(row['start_time'],days=row['days']-1,hours=13,seconds=-1),
     }
     # ========处理 xdays reward表================
     # 先拷贝一下数据
@@ -174,7 +169,6 @@ for index, row in df.iterrows():
     mission_group_data[str(xdays_rank_id)] = mission_group_append_data
     timer_main_data.update({
         str(row['group_timer']):timer_append_data1,
-        str(row['rank_timer']):timer_append_data2,
     })
     xdays_rank_reward_data.update(reward_append_data)
 

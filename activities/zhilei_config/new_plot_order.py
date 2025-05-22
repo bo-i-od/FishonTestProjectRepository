@@ -13,9 +13,9 @@ def get_code_type(code):
 data_keys = "ALLOT_CONFIG"
 allot_config_data=get_table_data(data_keys)
 # 清理原有allot
-for i in copy.deepcopy(list(allot_config_data.keys())):
-    if i[0]=='3' and len(i)==7:
-        allot_config_data.pop(i)
+# for i in copy.deepcopy(list(allot_config_data.keys())):
+#     if i[0]=='3' and len(i)==7:
+#         allot_config_data.pop(i)
 
 def add_allot_base(code_list,allot_id,allot_name,allot_type,weight_list=[]):
     """ 标准的allot添加形式，支持 权重、不放回抽取、按次数 等类型 """
@@ -49,6 +49,8 @@ def add_allot_base(code_list,allot_id,allot_name,allot_type,weight_list=[]):
         allotType = 4
     elif allot_type == 'times':
         allotType = 3
+    else:
+        print("errror!!!",code_list)
     allot_config_data[str(allot_id)] = {
         'id': allot_id,
         'name': allot_name,
@@ -76,18 +78,27 @@ weight_list1=[
 [1,1,1,0,0,0,0,0],
 [1,1,1,1,1,0,0,0],
 [1,1,1,1,1,0,0,0],
+[0,1,1,1,1,0,0,0],
 [0,0,1,1,1,0,0,0],
-[0,0,0,1,1,1,0,0],
-[0,0,0,0,1,1,1,0],
+[0,0,0,1,1,0,0,0],
 ]
 weight_list2=[
+[1,1,1,0,0,0,0,0],
+[1,1,1,0,0,0,0,0],
+[1,1,1,1,1,0,0,0],
+[1,1,1,1,1,0,0,0],
+[0,0,1,1,1,0,0,0],
+[0,0,0,1,1,1,0,0],
+[0,0,0,0,1,1,0,0],
+]
+weight_list3=[
 [1,1,1,0,0,0,0,0],
 [1,1,1,1,1,0,0,0],
 [1,1,1,1,1,0,0,0],
 [1,1,1,1,1,1,0,0],
 [0,0,1,1,1,1,0,0],
 [0,0,0,1,1,1,0,0],
-[0,0,0,0,1,1,1,0],
+[0,0,0,0,1,1,0,0],
 ]
 
 fish_type_name=['S','M','L','H','G','R','E','M']
@@ -98,11 +109,11 @@ for i in range(len(order_level_name)):
 for i in range(len(order_level_name)):
     code_list2=[7112001+(j+1)*10+i for j in range(8)]  # 分体型累计得分
     add_allot_base(code_list2, allot_id_fish_type_total+i, '订单-分体型累计得分-稀有度' + order_level_name[i],
-                   'no_repeat', weight_list1[i])
+                   'no_repeat', weight_list2[i])
 for i in range(len(order_level_name)):
     code_list3=[7113001+(j+1)*10+i for j in range(8)]  # 次数型任务
     add_allot_base(code_list3, allot_id_fish_type_num+i, '订单-次数型任务-稀有度' + order_level_name[i],
-                   'no_repeat', weight_list2[i])
+                   'no_repeat', weight_list3[i])
 
 # ------------------------------战斗类型任务聚合  D-SSS  3000401-7 ---------------------------------
 allot_id_start=3000401
@@ -169,16 +180,16 @@ add_allot_card_level(allot_id_normal_final,allot_id_normal_card_start,'普通订
 # -------------高难订单各级鱼卡----分发到具体任务-------------------
 # 高难订单，不同鱼卡等级下， A\S\SS\SSS的任务出现的分布
 now_times_total=[
-    [2,1,0,0],
-    [1,1,0,0],
-    [2,2,1,0],
-    [0,2,1,0],
-    [0,1,1,0],
-    [0,2,2,1],
-    [0,0,2,1],
-    [0,0,1,1],
-    [0,0,0,1],
-    [0,0,0,1],
+    [1, 0, 0, 0],
+    [2, 1, 0, 0],
+    [2, 3, 0, 0],
+    [1, 2, 0, 0],
+    [1, 3, 0, 0],
+    [0, 1, 1, 0],
+    [0, 1, 3, 0],
+    [0, 0, 2, 1],
+    [0, 0, 1, 2],
+    [0, 0, 0, 1],
 ]
 # mission_id或者allot_id,  由于从A开始  D=0,C=1,B=2,A=3
 code_id_start = allot_id_hard_start + 3
@@ -234,12 +245,19 @@ now_code_list= [
 first_allot_id]
 add_allot_base(now_code_list,final_allot_id,"订单究极总入口",'times')
 
+
+# ic(allot_config_data)
 # fix
 for key,value in allot_config_data.items():
     if 'tb' not in value:
         value['tb']='allot_config'
+    dis_len=20-len(value['allotData'])
+    if dis_len>0:
+        for i in range(dis_len):
+            value['allotData'].append({})
 
-ic(allot_config_data)
+
+
 # 写回txt
 write_table_data("allot_config",allot_config_data)
 
