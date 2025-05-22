@@ -33,6 +33,7 @@ def get_rod_id(scene_id):
 
 
 def fish(bp: BasePage, arg_list):
+    fisheries_detail = bp.excelTools.get_table_data_detail(book_name="FISHERIES.xlsm")
     execute_list = []
     cur = 0
     while cur < len(arg_list):
@@ -59,6 +60,11 @@ def fish(bp: BasePage, arg_list):
                 execute_dict["energyCostId"] = tpId
             else:
                 print("没有找到该体力，使用默认体力消耗")
+        json_object = bp.excelTools.get_table_data_object_by_key_value(key="tpId", value=scene_id, table_data_detail=fisheries_detail)
+        if "fisheriesStarid" in json_object:
+            execute_dict["enableDifficult"] = True
+        else:
+            execute_dict["enableDifficult"] = False
 
             # table_data = bp.excelTools.get_table_data("FISH_ACTIVITY_SPOT_ENERGY.xlsm")
             # energyCost_list = table_data['energyCost']
