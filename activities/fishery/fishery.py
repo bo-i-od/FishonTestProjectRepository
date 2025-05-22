@@ -871,7 +871,7 @@ def new_plot_map_point(excel_tool: ExcelToolsForActivities, fishery_id,fishery_i
         cur += 1
     return point_list
 
-def new_plot_map_point_language(excel_tool: ExcelToolsForActivities,fishery_id, point_list, map_point_position_list):
+def new_plot_map_point_language(excel_tool: ExcelToolsForActivities,fishery_id, point_list, map_point_position_list, spot_language_list):
     new_plot_map_point_language_detail = excel_tool.get_table_data_detail(book_name="NEW_PLOT_MAP_POINT_LANGUAGE.xlsm")
     fishery_name = excel_tool.get_fishery_name(fishery_id=fishery_id)
     key = "tpId"
@@ -891,6 +891,7 @@ def new_plot_map_point_language(excel_tool: ExcelToolsForActivities,fishery_id, 
             instance_object.t_name = fishery_name + "-" + map_point_position_list[cur]["name"]
         if cur < 2 and instance_object.t_desc is None:
             instance_object.t_desc = fishery_name + "-" + map_point_position_list[cur]["name"] + "描述"
+            instance_object.name = spot_language_list[cur]
         print(instance_object)
         if mode == 2:
             excel_tool.change_object(key=key, value=instance_object.tpId, table_data_detail=new_plot_map_point_language_detail, instance_object=instance_object)
@@ -910,6 +911,7 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
     # 配置修改区起始
     cfg = get_cfg_fishery()
     print("cfg:", cfg)
+    cfg_ndays = get_cfg_ndays()
     fishery_id = cfg["fishery_id"]
     ChapterId = cfg["ChapterId"]  # 赛季id
     bgm_name = cfg["bgm_name"]  # new_plot_map_main和new_plot_fish_spot中区分渔场的字段
@@ -922,6 +924,7 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
     fishery_cfg_list = cfg["fishery_cfg_list"]
     # 线索奖励需要的数量和奖励
     clue_reward = cfg["clue_reward"]
+    spot_language_list = cfg_ndays["mission_cfg"]["spot_language_list"]
     map_point_position_list = [
         {"name": "钓点1", "xPosition": -338, "yPosition": 59},
         {"name": "钓点2", "xPosition": 479, "yPosition": 371},
@@ -954,22 +957,22 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
 
     fishery_info = get_fishery_info(excel_tool=excel_tool, fishery_id=fishery_id)
     exclude_info = get_exclude_info(excel_tool=excel_tool, fishery_id=fishery_id)
-    fish(excel_tool=excel_tool, fishery_info=fishery_info, fishery_index=fishery_index, living=living)
-    fisheries(excel_tool=excel_tool, fishery_id=fishery_id, icon_name=icon_name, scene_name=scene_name_list[0], fishery_info=fishery_info)
+    # fish(excel_tool=excel_tool, fishery_info=fishery_info, fishery_index=fishery_index, living=living)
+    # fisheries(excel_tool=excel_tool, fishery_id=fishery_id, icon_name=icon_name, scene_name=scene_name_list[0], fishery_info=fishery_info)
     point_list = new_plot_map_point(excel_tool=excel_tool, fishery_id=fishery_id,  fishery_index=fishery_index, fishery_cfg_list=fishery_cfg_list, map_point_position_list=map_point_position_list)
-    new_plot_map_point_language(excel_tool=excel_tool, fishery_id=fishery_id, point_list=point_list, map_point_position_list=map_point_position_list)
-    new_plot_map_main(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index, sectionNameID=sectionNameID, icon_name=icon_name, clue_reward=clue_reward, scene_name=scene_name_list[1], bgm_name=bgm_name, point_list=point_list)
-    multiplayer_room_enum(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index)
-    new_plot_fish_type_drop(excel_tool=excel_tool, fishery_id=fishery_id, ChapterId=ChapterId)
-    new_plot_clue_reward(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index, clue_reward=clue_reward)
-    fish_golden_show(excel_tool=excel_tool, fishery_id=fishery_id)
-    fish_weight_new(excel_tool=excel_tool, fishery_info=fishery_info, fishery_index=fishery_index)
-    fish_state(excel_tool=excel_tool,fishery_id=fishery_id, fishery_index=fishery_index, fishery_info=fishery_info)
-    activityBPId = panel_static_language(excel_tool=excel_tool, activityBP=activityBP, activityBPId=activityBPId)
-    battle_pass_groupId, battle_pass_main_2024_tpId = battle_pass_main_2024(excel_tool=excel_tool, fishery_id=fishery_id, icon_name=icon_name, activityBPId=activityBPId, battle_pass_main_2024_tpId=battle_pass_main_2024_tpId)
-    battle_pass(excel_tool=excel_tool, fishery_id=fishery_id, battle_pass_groupId=battle_pass_groupId)
-    # 需要new_plot_quest主线任务配好
-    new_plot_fish_spot(excel_tool=excel_tool, fishery_id=fishery_id, tpId_start=new_plot_fish_spot_tpId_start, fishery_cfg_list=fishery_cfg_list, fishery_info=fishery_info, exclude_info=exclude_info, bgm_name=bgm_name, fishery_name=fishery_name, scene_name_list=scene_name_list, mapPointId_list=mapPointId_list, cfg_ndays=cfg_ndays)
+    new_plot_map_point_language(excel_tool=excel_tool, fishery_id=fishery_id, point_list=point_list, map_point_position_list=map_point_position_list, spot_language_list=spot_language_list)
+    # new_plot_map_main(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index, sectionNameID=sectionNameID, icon_name=icon_name, clue_reward=clue_reward, scene_name=scene_name_list[1], bgm_name=bgm_name, point_list=point_list)
+    # multiplayer_room_enum(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index)
+    # new_plot_fish_type_drop(excel_tool=excel_tool, fishery_id=fishery_id, ChapterId=ChapterId)
+    # new_plot_clue_reward(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index, clue_reward=clue_reward)
+    # fish_golden_show(excel_tool=excel_tool, fishery_id=fishery_id)
+    # fish_weight_new(excel_tool=excel_tool, fishery_info=fishery_info, fishery_index=fishery_index)
+    # fish_state(excel_tool=excel_tool,fishery_id=fishery_id, fishery_index=fishery_index, fishery_info=fishery_info)
+    # activityBPId = panel_static_language(excel_tool=excel_tool, activityBP=activityBP, activityBPId=activityBPId)
+    # battle_pass_groupId, battle_pass_main_2024_tpId = battle_pass_main_2024(excel_tool=excel_tool, fishery_id=fishery_id, icon_name=icon_name, activityBPId=activityBPId, battle_pass_main_2024_tpId=battle_pass_main_2024_tpId)
+    # battle_pass(excel_tool=excel_tool, fishery_id=fishery_id, battle_pass_groupId=battle_pass_groupId)
+    # # 需要new_plot_quest主线任务配好
+    # new_plot_fish_spot(excel_tool=excel_tool, fishery_id=fishery_id, tpId_start=new_plot_fish_spot_tpId_start, fishery_cfg_list=fishery_cfg_list, fishery_info=fishery_info, exclude_info=exclude_info, bgm_name=bgm_name, fishery_name=fishery_name, scene_name_list=scene_name_list, mapPointId_list=mapPointId_list, cfg_ndays=cfg_ndays)
 
     save_main_id(file_name=file_name, id_dict={"activityBPId": activityBPId, "battle_pass_main_2024_tpId": battle_pass_main_2024_tpId})
     print("涉及到的表：", list(excel_tool.data_txt_changed))
