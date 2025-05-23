@@ -271,6 +271,8 @@ def fish_golden_show(excel_tool: ExcelToolsForActivities, fishery_id, fishery_in
             instance_object.id = id_start + cur
         instance_object.tpId = fish_id
         instance_object.name = f"渔场{fishery_index}-{cur + 1}"
+        if cur > 14:
+            instance_object.name += "-改"
         asset_name = excel_tool.get_table_data_object_by_key_value(key="tpId", value=fish_id, table_data_detail=fish_detail)["assetName"]
         instance_object.goldenShowImage = asset_name.split("/")[-1]
         print(instance_object)
