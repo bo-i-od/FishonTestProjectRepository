@@ -251,7 +251,7 @@ def new_plot_fish_type_drop(excel_tool: ExcelToolsForActivities, fishery_id, Cha
             excel_tool.add_object(key=key, value=instance_object.tpId, table_data_detail=new_plot_fish_type_drop_detail, instance_object=instance_object)
         cur += 1
 
-def fish_golden_show(excel_tool: ExcelToolsForActivities, fishery_id):
+def fish_golden_show(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index):
     fish_golden_show_detail = excel_tool.get_table_data_detail(book_name="FISH_GOLDEN_SHOW.xlsm")
     fisheries_detail = excel_tool.get_table_data_detail(book_name="FISHERIES.xlsm")
     fish_detail = excel_tool.get_table_data_detail(book_name="FISH.xlsm")
@@ -270,7 +270,7 @@ def fish_golden_show(excel_tool: ExcelToolsForActivities, fishery_id):
             instance_object = FISH_GOLDEN_SHOW()
             instance_object.id = id_start + cur
         instance_object.tpId = fish_id
-        instance_object.name = excel_tool.get_fish_name(fish_id=fish_id, fish_language_detail=fish_language_detail)
+        instance_object.name = f"渔场{fishery_index}-{cur + 1}"
         asset_name = excel_tool.get_table_data_object_by_key_value(key="tpId", value=fish_id, table_data_detail=fish_detail)["assetName"]
         instance_object.goldenShowImage = asset_name.split("/")[-1]
         print(instance_object)
@@ -965,7 +965,7 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
     multiplayer_room_enum(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index)
     new_plot_fish_type_drop(excel_tool=excel_tool, fishery_id=fishery_id, ChapterId=ChapterId)
     new_plot_clue_reward(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index, clue_reward=clue_reward)
-    fish_golden_show(excel_tool=excel_tool, fishery_id=fishery_id)
+    fish_golden_show(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index)
     fish_weight_new(excel_tool=excel_tool, fishery_info=fishery_info, fishery_index=fishery_index)
     fish_state(excel_tool=excel_tool,fishery_id=fishery_id, fishery_index=fishery_index, fishery_info=fishery_info)
     activityBPId = panel_static_language(excel_tool=excel_tool, activityBP=activityBP, activityBPId=activityBPId)
