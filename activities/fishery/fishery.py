@@ -256,12 +256,14 @@ def fish_golden_show(excel_tool: ExcelToolsForActivities, fishery_id, fishery_in
     fish_golden_show_detail = excel_tool.get_table_data_detail(book_name="FISH_GOLDEN_SHOW.xlsm")
     fisheries_detail = excel_tool.get_table_data_detail(book_name="FISHERIES.xlsm")
     fish_detail = excel_tool.get_table_data_detail(book_name="FISH.xlsm")
-    fish_language_detail = excel_tool.get_table_data_detail(book_name="FISH_LANGUAGE.xlsm")
     id_start = excel_tool.get_max_value(key="id", table_object_detail=fish_golden_show_detail) + 1
     key = "tpId"
     fish_id_list = excel_tool.get_fish_id_list(fishery_id=fishery_id, fisheries_detail=fisheries_detail)
     cur = 0
     for fish_id in fish_id_list:
+        if cur < 15:
+            cur += 1
+            continue
         instance_object: FISH_GOLDEN_SHOW
         json_object, instance_object = excel_tool.get_object(key=key, value=fish_id, table_data_detail=fish_golden_show_detail, cls=FISH_GOLDEN_SHOW)
         if instance_object:
@@ -271,9 +273,7 @@ def fish_golden_show(excel_tool: ExcelToolsForActivities, fishery_id, fishery_in
             instance_object = FISH_GOLDEN_SHOW()
             instance_object.id = id_start + cur
         instance_object.tpId = fish_id
-        instance_object.name = f"渔场{fishery_index}-{cur + 1}"
-        if cur > 14:
-            instance_object.name += "-改"
+        instance_object.name = f"渔场{fishery_index}-{cur + 1}-改"
         asset_name = excel_tool.get_table_data_object_by_key_value(key="tpId", value=fish_id, table_data_detail=fish_detail)["assetName"]
         instance_object.goldenShowImage = asset_name.split("/")[-1]
         print(instance_object)
