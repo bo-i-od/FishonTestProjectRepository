@@ -10,6 +10,7 @@ from activities.decl.FISHERIES import FISHERIES
 from activities.decl.FISH_GOLDEN_SHOW import FISH_GOLDEN_SHOW
 from activities.decl.FISH_STATE import FISH_STATE
 from activities.decl.FISH_WEIGHT_NEW import FISH_WEIGHT_NEW
+from activities.decl.MISSION_CONDITION import MISSION_CONDITION
 from activities.decl.MULTIPLAYER_ROOM_ENUM import MULTIPLAYER_ROOM_ENUM
 from activities.decl.NEW_PLOT_CLUE_REWARD import NEW_PLOT_CLUE_REWARD
 from activities.decl.NEW_PLOT_FISH_SPOT import *
@@ -715,6 +716,115 @@ def fish_state(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index,  
             excel_tool.add_object(key=key, value=instance_object.tpId, table_data_detail=fish_state_detail, instance_object=instance_object)
         cur += 1
 
+def mission_condition(excel_tool:ExcelToolsForActivities,fishery_id, fishery_index):
+    tpId_bone_start = 6010001 + (fishery_index-1) * 15
+    bone_start_condition = tpId_bone_start + 900000
+    bone_glod_start_condition = tpId_bone_start + 905000
+    end_condition = tpId_bone_start + 910000
+    key = "missionConditionID"
+
+    # 鱼情开启条件
+    mission_condition_detail = excel_tool.get_table_data_detail(book_name="MISSION_CONDITION.xlsm")
+    id_start = excel_tool.get_min_value_more_than_start(key="id", table_object_detail=mission_condition_detail, start=134189, long=15)
+    json_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=bone_start_condition, table_data_detail=mission_condition_detail)
+    if json_object_list:
+        mode = 2
+    else:
+        mode = 1
+    cur = 0
+    while cur < 15:
+        instance_object: MISSION_CONDITION
+        if mode == 1:
+            instance_object = MISSION_CONDITION()
+            instance_object.id = id_start + cur
+            instance_object.missionConditionID = bone_start_condition + cur
+        else:
+            json_object, instance_object = excel_tool.get_object(key=key, value=bone_start_condition + cur, table_data_detail=mission_condition_detail, cls=MISSION_CONDITION)
+        instance_object.name = f"新主线渔场{fishery_index}-称号鱼{cur + 1}-鱼情开启条件"
+        instance_object.enabled = 1
+        instance_object.triggerTypeId = 9800145
+        instance_object.triggerDataMode = 2
+        instance_object.triggerKeyM = fishery_id
+        instance_object.triggerKeyS = 380000 + (fishery_index - 1) * 15 + cur + 1
+        instance_object.triggerValue = 1
+        instance_object.numDisplay = ["0", "0", "0"]
+        instance_object.numDisplay_Title = ["0", "0", "0"]
+        print(instance_object)
+        if mode == 2:
+            excel_tool.change_object(key=key, value=instance_object.missionConditionID, table_data_detail=mission_condition_detail, instance_object=instance_object)
+        else:
+            excel_tool.add_object(key=key, value=instance_object.missionConditionID, table_data_detail=mission_condition_detail, instance_object=instance_object)
+        cur += 1
+
+    # 黄金鱼情开启条件
+    mission_condition_detail = excel_tool.get_table_data_detail(book_name="MISSION_CONDITION.xlsm")
+    id_start = excel_tool.get_min_value_more_than_start(key="id", table_object_detail=mission_condition_detail, start=134189, long=15)
+    json_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=bone_glod_start_condition, table_data_detail=mission_condition_detail)
+    if json_object_list:
+        mode = 2
+    else:
+        mode = 1
+    cur = 0
+    while cur < 15:
+        instance_object: MISSION_CONDITION
+        if mode == 1:
+            instance_object = MISSION_CONDITION()
+            instance_object.id = id_start + cur
+            instance_object.missionConditionID = bone_glod_start_condition + cur
+        else:
+            json_object, instance_object = excel_tool.get_object(key=key, value=bone_glod_start_condition + cur, table_data_detail=mission_condition_detail, cls=MISSION_CONDITION)
+        instance_object.name = f"新主线渔场{fishery_index}-称号鱼{cur + 1}-黄金鱼情开启条件"
+        instance_object.enabled = 1
+        instance_object.triggerTypeId = 9800145
+        instance_object.triggerDataMode = 2
+        instance_object.triggerKeyM = fishery_id
+        instance_object.triggerKeyS = 385000 + (fishery_index - 1) * 15 + cur + 1
+        instance_object.triggerValue = 1
+        instance_object.numDisplay = ["0", "0", "0"]
+        instance_object.numDisplay_Title = ["0", "0", "0"]
+        print(instance_object)
+        if mode == 2:
+            excel_tool.change_object(key=key, value=instance_object.missionConditionID,
+                                     table_data_detail=mission_condition_detail, instance_object=instance_object)
+        else:
+            excel_tool.add_object(key=key, value=instance_object.missionConditionID,
+                                  table_data_detail=mission_condition_detail, instance_object=instance_object)
+        cur += 1
+
+    # 鱼情结束条件
+    mission_condition_detail = excel_tool.get_table_data_detail(book_name="MISSION_CONDITION.xlsm")
+    id_start = excel_tool.get_min_value_more_than_start(key="id", table_object_detail=mission_condition_detail, start=134189, long=15)
+    json_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=end_condition, table_data_detail=mission_condition_detail)
+    if json_object_list:
+        mode = 2
+    else:
+        mode = 1
+    cur = 0
+    while cur < 15:
+        instance_object: MISSION_CONDITION
+        if mode == 1:
+            instance_object = MISSION_CONDITION()
+            instance_object.id = id_start + cur
+            instance_object.missionConditionID = end_condition + cur
+        else:
+            json_object, instance_object = excel_tool.get_object(key=key, value=end_condition + cur, table_data_detail=mission_condition_detail, cls=MISSION_CONDITION)
+        instance_object.name = f"新主线渔场{fishery_index}-称号鱼{cur + 1}-鱼情结束条件"
+        instance_object.enabled = 1
+        instance_object.triggerTypeId = 9800061
+        instance_object.triggerDataMode = 2
+        instance_object.triggerKeyM = fishery_id
+        instance_object.triggerKeyS = 360000 + fishery_index * 100 + cur + 1
+        instance_object.triggerValue = 1
+        instance_object.numDisplay = ["0", "0", "0"]
+        instance_object.numDisplay_Title = ["0", "0", "0"]
+        print(instance_object)
+        if mode == 2:
+            excel_tool.change_object(key=key, value=instance_object.missionConditionID, table_data_detail=mission_condition_detail, instance_object=instance_object)
+        else:
+            excel_tool.add_object(key=key, value=instance_object.missionConditionID, table_data_detail=mission_condition_detail, instance_object=instance_object)
+        cur += 1
+
+
 def panel_static_language(excel_tool: ExcelToolsForActivities, activityBP, activityBPId=None):
     panel_static_language_detail = excel_tool.get_table_data_detail(book_name="PANEL_STATIC_LANGUAGE.xlsm")
     key = "templateID"
@@ -970,11 +1080,11 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
     new_plot_clue_reward(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index, clue_reward=clue_reward)
     fish_golden_show(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index)
     fish_weight_new(excel_tool=excel_tool, fishery_info=fishery_info, fishery_index=fishery_index)
-    fish_state(excel_tool=excel_tool,fishery_id=fishery_id, fishery_index=fishery_index, fishery_info=fishery_info)
+    fish_state(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index, fishery_info=fishery_info)
+    mission_condition(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index)
     activityBPId = panel_static_language(excel_tool=excel_tool, activityBP=activityBP, activityBPId=activityBPId)
     battle_pass_groupId, battle_pass_main_2024_tpId = battle_pass_main_2024(excel_tool=excel_tool, fishery_id=fishery_id, icon_name=icon_name, activityBPId=activityBPId, battle_pass_main_2024_tpId=battle_pass_main_2024_tpId)
     battle_pass(excel_tool=excel_tool, fishery_id=fishery_id, battle_pass_groupId=battle_pass_groupId)
-    # 需要new_plot_quest主线任务配好
     new_plot_fish_spot(excel_tool=excel_tool, fishery_id=fishery_id, tpId_start=new_plot_fish_spot_tpId_start, fishery_cfg_list=fishery_cfg_list, fishery_info=fishery_info, exclude_info=exclude_info, bgm_name=bgm_name, fishery_name=fishery_name, scene_name_list=scene_name_list, mapPointId_list=mapPointId_list, cfg_ndays=cfg_ndays)
 
     save_main_id(file_name=file_name, id_dict={"activityBPId": activityBPId, "battle_pass_main_2024_tpId": battle_pass_main_2024_tpId})
@@ -983,4 +1093,4 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
 
 if __name__ == '__main__':
     excel_tool = ExcelToolsForActivities(EXCEL_PATH)
-    main(excel_tool, mode=1)
+    main(excel_tool, mode=2)
