@@ -285,14 +285,14 @@ def fish_golden_show(excel_tool: ExcelToolsForActivities, fishery_id, fishery_in
 def fish_weight_new(excel_tool: ExcelToolsForActivities, fishery_info, fishery_index):
     #
     cfg = {
-        1: {"minweight": 227, "firstRate": 597, "secondRate": 426},
-        2: {"minweight": 681, "firstRate": 1790, "secondRate": 1276},
-        3: {"minweight": 1134, "firstRate": 2983, "secondRate": 2127},
-        4: {"minweight": 4536, "firstRate": 11929, "secondRate": 8505},
-        5: {"minweight": 22680, "firstRate": 59645, "secondRate": 42525},
-        6: {"minweight": 23400, "firstRate": 2340, "secondRate": 1661},
-        7: {"minweight": 31200, "firstRate": 3120, "secondRate": 2215},
-        8: {"minweight": 39000, "firstRate": 3900, "secondRate": 2769},
+        1: {"minweight": 227, "firstRate": 597, "secondStar":78000, "secondRate": 426},
+        2: {"minweight": 681, "firstRate": 1790, "secondStar":78000, "secondRate": 1276},
+        3: {"minweight": 1134, "firstRate": 2983, "secondStar":78000, "secondRate": 2127},
+        4: {"minweight": 4536, "firstRate": 11929, "secondStar":78000, "secondRate": 8505},
+        5: {"minweight": 22680, "firstRate": 59645, "secondStar":78000, "secondRate": 42525},
+        6: {"minweight": 23400, "firstRate": 2340, "secondStar":78000, "secondRate": 1661},
+        7: {"minweight": 31200, "firstRate": 3120, "secondStar":78000, "secondRate": 2215},
+        8: {"minweight": 39000, "firstRate": 3900, "secondStar":78000,"secondRate": 2769},
     }
     fish_weight_new_detail = excel_tool.get_table_data_detail(book_name="FISH_WEIGHT_NEW.xlsm")
     id_start = excel_tool.get_max_value(key="id", table_object_detail=fish_weight_new_detail) + 1
@@ -321,6 +321,7 @@ def fish_weight_new(excel_tool: ExcelToolsForActivities, fishery_info, fishery_i
         instance_object.minweight = cfg[fish_kind]["minweight"]
         instance_object.firstRate = cfg[fish_kind]["firstRate"]
         instance_object.secondRate = cfg[fish_kind]["secondRate"]
+        instance_object.secondStar = cfg[fish_kind]["secondStar"]
         print(instance_object)
         if mode == 2:
             excel_tool.change_object(key=key, value=instance_object.fishId, table_data_detail=fish_weight_new_detail, instance_object=instance_object)
