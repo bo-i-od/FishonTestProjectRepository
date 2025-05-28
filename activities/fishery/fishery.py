@@ -601,7 +601,7 @@ def fish_state(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index,  
         if mode == 1:
             instance_object.id = id_start + cur
         instance_object.name = f"新主线渔场{fishery_index}-称号鱼{cur + 1}-黄金鱼骨"
-        instance_object.tpId = template_tpId_bone_glod_start + cur
+        instance_object.tpId = tpId_bone_glod_start + cur
         instance_object.stateType = 1
         instance_object.startConditionId = instance_object.tpId + 900000
         instance_object.endConditionId = instance_object.tpId + 905000
@@ -646,7 +646,7 @@ def fish_state(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index,  
         if mode == 1:
             instance_object.id = id_start + cur
         instance_object.name = f"新主线渔场{fishery_index}-称号鱼{cur+1}-失败"
-        instance_object.tpId = template_tpId_fail_start + cur
+        instance_object.tpId = tpId_fail_start + cur
         instance_object.stateType = 2
         instance_object.endConditionId = instance_object.tpId + 900000
         instance_object.endTime = 10
@@ -687,7 +687,7 @@ def fish_state(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index,  
         if mode == 1:
             instance_object.id = id_start + cur
         instance_object.name = f"新主线渔场{fishery_index}-称号鱼{cur + 1}-黄金失败"
-        instance_object.tpId = template_tpId_fail_glod_start + cur
+        instance_object.tpId = tpId_fail_glod_start + cur
         instance_object.stateType = 2
         instance_object.endConditionId = instance_object.tpId + 895000
         instance_object.endTime = 10
@@ -982,4 +982,4 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
 
 if __name__ == '__main__':
     excel_tool = ExcelToolsForActivities(EXCEL_PATH)
-    main(excel_tool, mode=2)
+    main(excel_tool, mode=1)
