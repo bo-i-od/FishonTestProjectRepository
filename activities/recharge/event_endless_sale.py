@@ -37,7 +37,7 @@ def mission_group(excel_tool: ExcelToolsForActivities, group_id, event_endless_s
         excel_tool.change_object(key=key, value=instance_object.groupId, table_data_detail=mission_group_detail, instance_object=instance_object)
     else:
         excel_tool.add_object(key=key, value=instance_object.groupId, table_data_detail=mission_group_detail, instance_object=instance_object)
-    return instance_object.groupId, timer_id_list
+    return group_id, timer_id_list
 
 
 
@@ -80,6 +80,7 @@ def event_endless_sale_container(excel_tool: ExcelToolsForActivities, event_endl
             instance_object = EVENT_ENDLESS_SALE_CONTAINER()
             instance_object.tpId = tpId_start + cur
             instance_object.id = instance_object.tpId
+            instance_object.groupId = group_id
             instance_object.name = f"无尽礼包{group_id}-{cur + 1}期"
             instance_object.timerId = timer_id_list[cur]
             instance_object.fisheriesId = event_endless_sale_cfg_list[cur]["fishery_id"]
@@ -216,13 +217,13 @@ def main():
 
     # 配置修改区起始
     event_endless_sale_cfg_list = [
-        {"time_start": "2025-04-18 00:00:00", "fishery_id": 500302, "iconName": "home_btn_icon_events_endless_com", "panelName":"RechargeEndlessAddOnPanel"},
-        {"time_start": "2025-04-25 00:00:00",  "fishery_id": 400318, "iconName": "home_btn_icon_events_endless_com", "panelName":"RechargeEndlessAddOnPanel"},
-        {"time_start": "2025-05-02 00:00:00", "fishery_id": 400319, "iconName": "home_btn_icon_events_endless_com", "panelName":"RechargeEndlessAddOnPanel"},
+        {"time_start": "2025-05-30 00:00:00", "fishery_id": 500304, "iconName": "home_btn_icon_events_endless_com", "panelName":"RechargeEndlessAddOnPanel"},
+        {"time_start": "2025-06-06 00:00:00",  "fishery_id": 400309, "iconName": "home_btn_icon_events_endless_com", "panelName":"RechargeEndlessAddOnPanel"},
+        {"time_start": "2025-06-13 00:00:00", "fishery_id": 400320, "iconName": "home_btn_icon_events_endless_com", "panelName":"RechargeEndlessAddOnPanel"},
     ]
 
     # 该区域参数为None则新增
-    group_id = 3010103
+    group_id = None
 
     # 配置修改区结束
 
