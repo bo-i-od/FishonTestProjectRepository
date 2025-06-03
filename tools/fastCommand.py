@@ -262,6 +262,22 @@ def quest_start_to_end(bp: BasePage, start_quest_id: int, end_quest_id: int):
         quest_id = table_data_object["nextQuestId"]
         table_data_object = bp.excelTools.get_table_data_object_by_key_value(key="tpId", value=quest_id, table_data_detail=table_data_detail)
 
+#使用该函数前，需要使用 setQuest {quest_id} 命令, 设置当前任务为最后一个任务
+def clue_start_to_end(bp: BasePage, start_clue_id: int, end_clue_id: int):
+    table_data_detail = bp.excelTools.get_table_data_detail(book_name="NEW_PLOT_CLUE_STATE")
+    table_data_object_list, _, _ = table_data_detail
+
+    # 按clueStateId排序，防止无序
+    table_data_object_list = sorted(table_data_object_list, key=lambda x: x['clueStateId'])
+
+    # 遍历所有clueStateId介于start和end之间（含端点）的项
+    for clue_obj in table_data_object_list:
+        clue_id = clue_obj['clueStateId']
+        if start_clue_id <= clue_id <= end_clue_id:
+            bp.cmd(f"cubeGet 500304 {clue_id}")
+            bp.sleep(1)
+            print(f"当前clue_id: {clue_id}")
+
 if __name__ == '__main__':
     base_page = BasePage(serial_number="127.0.0.1:21593", is_mobile_device=False)
     # base_page.cmd_list(["mode 500301 360107"])
