@@ -510,7 +510,7 @@ def payment_gift(excel_tool: ExcelToolsForActivities, fishery_id, giftId_start):
             excel_tool.add_object(key=key, value=instance_object.giftId, instance_object=instance_object,  table_data_detail=payment_gift_detail)
         cur += 1
 
-def payment_gift_group(excel_tool: ExcelToolsForActivities, fishery_id, giftId_start, payment_gift_group_tp_id_start):
+def payment_gift_group(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index, giftId_start, payment_gift_group_tp_id_start):
     payment_gift_group_detail = excel_tool.get_table_data_detail(book_name="PAYMENT_GIFT_GROUP.xlsm")
     template_tp_id_start = 100023
     key = "tp_id"
@@ -534,6 +534,7 @@ def payment_gift_group(excel_tool: ExcelToolsForActivities, fishery_id, giftId_s
         instance_object.tp_id = payment_gift_group_tp_id_start + 100000 * cur
         instance_object.giftId = giftId_start + 100 * cur
         instance_object.extra_arg = fishery_id
+        instance_object.sortId = fishery_index
         print(instance_object)
         if mode == 2:
             excel_tool.change_object(key=key, value=instance_object.tp_id, instance_object=instance_object,  table_data_detail=payment_gift_group_detail)
@@ -631,7 +632,7 @@ def main(excel_tool: ExcelToolsForActivities, mode=1):
     fishcard_pack_info_tpid_start = fishcard_pack_info(excel_tool=excel_tool, fishery_index=fishery_index, fishery_id=fishery_id, fishcard_pack_info_tpid_start=fishcard_pack_info_tpid_start, item_main_tpid_start=item_main_tpid_start,  pack_info_cfg_list=pack_info_cfg_list)
     fishcard_reward_group(excel_tool=excel_tool, fishery_index=fishery_index, fishery_id=fishery_id, item_main_tpid_start=item_main_tpid_start)
     fish_bag(excel_tool=excel_tool)
-    payment_gift_group(excel_tool=excel_tool, fishery_id=fishery_id, giftId_start=giftId_start, payment_gift_group_tp_id_start=payment_gift_group_tp_id_start)
+    payment_gift_group(excel_tool=excel_tool, fishery_id=fishery_id,fishery_index=fishery_index, giftId_start=giftId_start, payment_gift_group_tp_id_start=payment_gift_group_tp_id_start)
     payment_gift(excel_tool=excel_tool, fishery_id=fishery_id, giftId_start=giftId_start)
     item_convert_rule(excel_tool=excel_tool, fishery_id=fishery_id, item_main_tpid_start=item_main_tpid_start)
 
