@@ -12,6 +12,7 @@ class JumpData:
         "AquariumNewActivityInnerPopupPanel",
         "AquariumNewActivityPopupPanel",
         "AquariumNewAnniversaryPopupPanel",
+        "AvatarMainPanel",
         "AvatarSkinPopPanel",
         "AvatarSkinPopPanel_subType_2",
         "BaitAndRodShowPanel",
@@ -62,7 +63,8 @@ class JumpData:
         "MonthCardPopPanel",
         # "NewbieGuidePanel",
         "NewRankingActivityCompetitionPanel",
-        "ValentinePackPopupPanel"
+        "ValentinePackPopupPanel",
+        "FishSeasonPopPanel"
     }
 
     panel_dict = {
@@ -119,6 +121,7 @@ class JumpData:
         "DivisionListPanel": {"element_data": ElementsData.DivisionListPanel.DivisionListPanel, "close_path": [ElementsData.DivisionListPanel.btn_close]},
         "DLCDownloadPanel": {"element_data": ElementsData.DLCDownloadPanel.DLCDownloadPanel, "open_path": [ElementsData.HomePanel.btn_download], "close_path": [ElementsData.DLCDownloadPanel.btn_close, ElementsData.DLCDownloadPanel_oversea.btn_close]},
         "EnergyGiftPackPanel": {"element_data": ElementsData.EnergyGiftPackPanel.EnergyGiftPackPanel, "close_path": [ElementsData.EnergyGiftPackPanel.btn_close]},
+        "EventCenterGoldenLegendPanel":{"element_data":ElementsData.EventCenterGoldenLegendPanel.EventCenterGoldenLegendPanel, "open_path":[ElementsData.HomePanel.btn_center_new], "close_path":[ElementsData.EventCenterGoldenLegendPanel.btn_close]},
         "EventSignSevenDayPanel": {"element_data": ElementsData.EventSignSevenDayPanel.EventSignSevenDayPanel, "close_path": [ElementsData.EventSignSevenDayPanel.btn_receive]},
         "EventsGiftCenterPanel": {"element_data": ElementsData.EventsGiftCenterPanel.EventsGiftCenterPanel, "close_path": [ElementsData.EventsGiftCenterPanel.btn_close]},
         "FacePopNewYear1Panel": {"element_data": ElementsData.FacePopNewYear1Panel.FacePopNewYear1Panel, "close_path": [ElementsData.FacePopNewYear1Panel.btn_close]},
@@ -132,6 +135,7 @@ class JumpData:
         "FisheryUnlockPanel": {"element_data": ElementsData.FisheryUnlockPanel.FisheryUnlockPanel, "close_path": [ElementsData.FisheryUnlockPanel.btn_close]},
         "FishCardUpgradePanel": {"element_data": ElementsData.FishCardUpgradePanel.FishCardUpgradePanel, "close_path": [ElementsData.FishCardUpgradePanel.btn_close]},
         "FisheryGiftPackPanel": {"element_data": ElementsData.FisheryGiftPackPanel.FisheryGiftPackPanel, "open_path": [ElementsData.HomePanel.btn_event_location], "close_path": [ElementsData.FishCardUpgradePanel.btn_close]},
+        "FishSeasonPopPanel":{"element_data": ElementsData.FishSeasonPopPanel.FishSeasonPopPanel, "close_path": [ElementsData.FishSeasonPopPanel.btn_close]},
         "FriendPanel": {"element_data": ElementsData.FriendPanel.FriendPanel, "open_path": [ElementsData.HomePanel.btn_friend], "close_path": [ElementsData.FriendPanel.btn_close]},
         "GachaPackPopupPanel": {"element_data": ElementsData.GachaPackPopupPanel.GachaPackPopupPanel,  "close_path": [ElementsData.GachaPackPopupPanel.btn_close]},
         "GearPanel": {"element_data": ElementsData.GearPanel.GearPanel, "open_path": [ElementsData.Home3DPanel.btn_pve, ElementsData.TournamentsPanel.btn_gears], "close_path": [ElementsData.GearPanel.btn_close]},

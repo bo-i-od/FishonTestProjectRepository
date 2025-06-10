@@ -62,7 +62,9 @@ class ElementsData:
 
     class ActivityCenterPanel:
         ActivityCenterPanel = {"locator": "UICanvas>Important>ActivityCenterPanel"}
+        eventsname = {"locator": "UICanvas>Important>ActivityCenterPanel>panel>panel_tab>content>TabList>Viewport>Content>EventsHall_tab_list_4>items>EventsHall_tab_1(Clone)>eventsname", "focus": (0, 0.5)}
         btn_close = {"locator": "UICanvas>Important>ActivityCenterPanel>panel>btn_close>img"}
+        viewport = {"locator": "UICanvas>Important>ActivityCenterPanel>panel>panel_tab>content>TabList>Viewport", "focus":(0, 0.05)}
 
     class AgentPackPopupPanel:
         AgentPackPopupPanel = {"locator": "UICanvas>Important>UICanvas>Default>AgentPackPopupPanel"}
@@ -880,6 +882,13 @@ class ElementsData:
         panel_loading = {"locator": "GameUpdater>Canvas>EntryUpdateLoading>panel_loading"}
         tap_to_start = {"locator": "GameUpdater>Canvas>EntryUpdateLoading>panel_go>Button_Login>Text"}
 
+    class EventCenterGoldenLegendPanel:
+        EventCenterGoldenLegendPanel = {"locator": "UICanvas>Default>EventCenterGoldenLegendPanel"}
+        panel_right = {"locator": "UICanvas>Default>EventCenterGoldenLegendPanel>Panel>panel_right>"}
+        tab_4 = {"locator": "UICanvas>Default>EventCenterGoldenLegendPanel>Panel>panel_right>tab>tab_4>text"}
+        btn_close = {"locator":"UICanvas>Important>ActivityCenterPanel>panel>btn_close>img"}
+        name = {"locator":"UICanvas>Default>EventCenterGoldenLegendPanel>Panel>panel_right>photo>img_3>name"}
+
     class EnergyGiftPackPanel:
         EnergyGiftPackPanel = {"locator": "UICanvas>Default>EnergyGiftPackPanel"}
         btn_close = {"locator": "UICanvas>Default>EnergyGiftPackPanel>panel>btn_close>img"}
@@ -1081,7 +1090,9 @@ class ElementsData:
         btn_close = {"locator": "UICanvas>Default>FisheryUnlockPanel>panel>btn_close>img"}
         btn_go = {"locator": "UICanvas>Default>FisheryUnlockPanel>panel>btn_go"}
 
-
+    class FishSeasonPopPanel:
+        FishSeasonPopPanel = {"locator": "UICanvas>Default>FishSeasonPopPanel"}
+        btn_close = {"locator": "UICanvas>Default>FishSeasonPopPanel>btn_close", "focus": (0.85, 0.25)}
 
     class FlashTipsPanel:
         FlashTipsPanel = {"locator": "UICanvas>Important>FlashTipsPanel"}
@@ -1228,7 +1239,7 @@ class ElementsData:
         btn_bp = {"locator": "UICanvas>Default>HomePanel>panel>panel_giftpack>list>Viewport>Content>btn_bp>img"}
         # panel_events
         btn_globa_progress = {"locator": "UICanvas>Default>HomePanel>panel>panel_left>list>Viewport>Content>btn_globa_progress"}
-        btn_center_new = {"locator": "UICanvas>Default>HomePanel>panel>panel_left>list>Viewport>Content>btn_center_new"}
+        btn_center_new = {"locator": "UICanvas>Default>HomePanel>panel>panel_left>list>Viewport>Content>btn_center_new", "focus": (1, 0.5)}
         btn_iaa = {"locator": "UICanvas>Default>HomePanel>panel>panel_events>events_list>Viewport>Content>btn_iaa>img"}
         btn_endless = {"locator": "UICanvas>Default>HomePanel>panel>panel_events>events_list>Viewport>Content>btn_endless>img"}
         btn_events_endless_thanksgiving = {"locator": "UICanvas>Default>HomePanel>panel>panel_giftpack>list>Viewport>Content>btn_events_endless_thanksgiving>img"}
