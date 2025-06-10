@@ -2,7 +2,7 @@ import copy
 
 from activities.zhilei_config.common_functions import match_keys,get_format_data
 from tools.txtTableRead.get_table_data import get_table_data,write_table_data
-from icecream import ic
+# from icecream import ic
 
 adv_level_data=get_table_data("ADV_LEVEL_UP")
 adv_quality_data=get_table_data("ADV_GEAR_QUALITY")
@@ -129,7 +129,7 @@ def cal_power(suit_data):
     # print(attr_data)
     skill_rate=sum(get_skill_rate(suit_data))
     power=(attr_data['damage']+attr_data['hookDamage']*0.005)/100*attr_data['lineLength']/10*((attr_data['reelVelocityZ']/1000)**2)*(1+skill_rate/100)
-    print(convert_power(power,power_convert_data))
+    return convert_power(power,power_convert_data)
 
 
 def get_level_cost(level):
@@ -149,8 +149,34 @@ def get_level_cost(level):
     return cost_list
 
 def get_level_up_num(start_level,cost):
-    cost
+    """ 按消耗获取升级次数 """
+    now_level=start_level
+    num=0
+    for i in range(999):
+        now_cost=sum(get_level_cost(now_level))
+        cost-=now_cost
+        now_level+=1
+        num+=1
+        if cost<0:
+            return num
 
+def get_suit_data(level,star):
+    """ 构造套装数据，默认红装 """
+    ret={
+        1:{'level':level,'quality':6,'star':star},
+        2:{'level':level,'quality':6,'star':star},
+        3:{'level':level,'quality':6,'star':star},
+    }
+    return ret
+
+def get_up_num_power(star,start_level,up_num):
+    """ 升级提升多少战力 """
+    suit_data1 = get_suit_data(start_level,star)
+    suit_data2 = get_suit_data(start_level+up_num, star)
+    power1=cal_power(suit_data1)
+    power2=cal_power(suit_data2)
+    print(power2,power1)
+    return power2-power1
 
 suit_data={
     1:{'level':194,'quality':6,'star':2},
@@ -159,13 +185,7 @@ suit_data={
 }
 cal_power(suit_data)
 
-def get_suit_data(level,star):
-    ret={
-        1:{'level':level,'quality':6,'star':star},
-        2:{'level':level,'quality':6,'star':star},
-        3:{'level':level,'quality':6,'star':star},
-    }
-    return ret
+
 
 target=[
 [180,1],
@@ -173,7 +193,8 @@ target=[
 [180,3],
 [190,3],
 [200,3],
-[200,4],]
+[200,4],
+]
 for i in target:
     cal_power(get_suit_data(i[0],i[1]))
 
@@ -182,3 +203,15 @@ for level in level_list:
     cost_list=get_level_cost(level)
     total_cost=sum(cost_list)
     print(total_cost)
+
+data1=[
+[50,1000000],
+[100,1700000],
+[150,2400000],
+[190,3000000],]
+
+for value in data1:
+    up_num=get_level_up_num(value[0],value[1])
+    print(up_num)
+    power_num=get_up_num_power(3,value[0],up_num)
+    print(power_num)
