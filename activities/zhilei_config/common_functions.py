@@ -9,8 +9,11 @@ def match_keys(data,match_data):
     for key,value in data.items():
         is_match=True
         for match_key,match_value in match_data.items():
-            if (match_key not in value) or value[match_key]!=match_value:
-                is_match=False
+            if match_value=='0' and (match_key not in value):
+                continue
+            else:
+                if (match_key not in value) or value[match_key]!=match_value:
+                    is_match=False
         if is_match:
             return key
     return False

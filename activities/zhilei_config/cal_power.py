@@ -3,6 +3,8 @@ import copy
 from activities.zhilei_config.common_functions import match_keys,get_format_data
 from tools.txtTableRead.get_table_data import get_table_data,write_table_data
 # from icecream import ic
+import pandas as pd
+import numpy as np
 
 adv_level_data=get_table_data("ADV_LEVEL_UP")
 adv_quality_data=get_table_data("ADV_GEAR_QUALITY")
@@ -123,14 +125,13 @@ def convert_power(pre_num,data):
 
         if pre_num<next_preValue:
             ret=afterValue+(pre_num-preValue)*(next_afterValue-afterValue)/(next_preValue-preValue)
-            return ret
+            return int(ret)
 def cal_power(suit_data):
     attr_data=get_attr(suit_data)
     # print(attr_data)
     skill_rate=sum(get_skill_rate(suit_data))
     power=(attr_data['damage']+attr_data['hookDamage']*0.005)/100*attr_data['lineLength']/10*((attr_data['reelVelocityZ']/1000)**2)*(1+skill_rate/100)
     return convert_power(power,power_convert_data)
-
 
 def get_level_cost(level):
     cost_list=[]
@@ -162,20 +163,28 @@ def get_level_up_num(start_level,cost):
 
 def get_suit_data(level,star):
     """ 构造套装数据，默认红装 """
-    ret={
-        1:{'level':level,'quality':6,'star':star},
-        2:{'level':level,'quality':6,'star':star},
-        3:{'level':level,'quality':6,'star':star},
-    }
-    return ret
+    if isinstance(star,int):
+        ret={
+            1:{'level':level,'quality':6,'star':star},
+            2:{'level':level,'quality':6,'star':star},
+            3:{'level':level,'quality':6,'star':star},
+        }
+        return ret
+    elif isinstance(star,list):
+        ret={
+            1:{'level':level,'quality':6,'star':star[0]},
+            2:{'level':level,'quality':6,'star':star[1]},
+            3:{'level':level,'quality':6,'star':star[2]},
+        }
+        return ret
+
+def cal_power_simple(level,star_list):
+    return cal_power(get_suit_data(level,star_list))
 
 def get_up_num_power(star,start_level,up_num):
     """ 升级提升多少战力 """
-    suit_data1 = get_suit_data(start_level,star)
-    suit_data2 = get_suit_data(start_level+up_num, star)
-    power1=cal_power(suit_data1)
-    power2=cal_power(suit_data2)
-    print(power2,power1)
+    power1 = cal_power_simple(start_level,star)
+    power2 = cal_power_simple(start_level+up_num, star)
     return power2-power1
 
 suit_data={
@@ -215,3 +224,25 @@ for value in data1:
     print(up_num)
     power_num=get_up_num_power(3,value[0],up_num)
     print(power_num)
+
+for value in data1:
+    power1=cal_power_simple(value[0],[4,3,3])
+    power2=cal_power_simple(value[0],[3,3,3])
+    print(power1,power2,power1-power2)
+
+for level in data1:
+    for star in [1,2,3,4]:
+        power1=cal_power_simple(value[0],star)
+        print(star,power1)
+
+data=np.zeros((300,6))
+
+for level in range(1,301):
+    for star in [0, 1,2,3,4,5]:
+        power = cal_power_simple(level, star)
+        data[level-1][star]=power
+column_labels = [0, 1, 2, 3, 4, 5]
+index_labels = list(range(1, 301))
+df=pd.DataFrame(data,columns=column_labels,index=index_labels)
+
+df.to_excel('output.xlsx', index=True)

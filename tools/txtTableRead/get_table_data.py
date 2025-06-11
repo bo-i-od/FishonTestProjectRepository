@@ -24,6 +24,26 @@ def get_table_data(data_key):
     doWorkOnDataTxtFile(file_path + data_key.upper() + ".data.txt", 'en', collect_list, collect_dup_map, collect_map)
     return collect_map[data_key.lower()]
 
+
+def get_table_data_by_file(data_key,file_name):
+    """
+    data_key: 表名，不带后缀
+    返回值: {
+        key1:value1,
+        key2:value1,
+        ...
+    }
+    key: 第一列的id（非tpid)
+    value: 每一行的数据，同样以key-value的形式保存，key为表头字段
+    """
+    collect_list = []
+    collect_map = {}
+    collect_dup_map = None
+    doWorkOnDataTxtFile(file_name, 'en', collect_list, collect_dup_map, collect_map)
+    return collect_map[data_key.lower()]
+
+
+
 def get_table_list_data(data_keys):
     """
     data_keys = ["BATTLE_SKILL", "BATTLE_BUFF", "FISH_TYPECLASS_VISUAL", "FISH_STAR_GRADING", "FISHERIES", "FISH"]
