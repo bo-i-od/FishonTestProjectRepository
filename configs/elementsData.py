@@ -936,6 +936,11 @@ class ElementsData:
         btn_close = {"locator": "UICanvas>Default>FishAlbumPreviewPanel>panel>panel_5>btn_close>img"}
         rewards_icon_list = {"locator": "UICanvas>Default>FishAlbumPreviewPanel>btn_rewards>item_list>>icon"}
         rewards_quantity_list = {"locator": "UICanvas>Default>FishAlbumPreviewPanel>btn_rewards>item_list>>quantity>value"}
+    class FishCardSelectPanel:
+        FishCardSelectPanel={"locator": "UICanvas>Default>FishCardSelectPanel"}
+        fishery_select_list={"locator": "UICanvas>Default>FishCardSelectPanel>panel>panel_tab>content>TabList>Viewport>Content>tab_model(Clone)"}
+        btn_select_confirm={"locator":"UICanvas>Default>FishCardSelectPanel>panel>btns"}
+
 
     class FishBagPanel:
         FishBagPanel = {"locator": "UICanvas>Default>FishBagPanel"}
@@ -1243,7 +1248,7 @@ class ElementsData:
         btn_iaa = {"locator": "UICanvas>Default>HomePanel>panel>panel_events>events_list>Viewport>Content>btn_iaa>img"}
         btn_endless = {"locator": "UICanvas>Default>HomePanel>panel>panel_events>events_list>Viewport>Content>btn_endless>img"}
         btn_events_endless_thanksgiving = {"locator": "UICanvas>Default>HomePanel>panel>panel_giftpack>list>Viewport>Content>btn_events_endless_thanksgiving>img"}
-        btn_events_endless_newyear = {"locator": "UICanvas>Default>HomePanel>panel>panel_giftpack>list>Viewport>Content>btn_events_endless_newyear>img"}
+        #btn_events_endless_newyear = {"locator": "UICanvas>Default>HomePanel>panel>panel_giftpack>list>Viewport>Content>btn_events_endless_newyear>img"}
         btn_1add1 = {"locator": "UICanvas>Default>HomePanel>panel>panel_giftpack>list>Viewport>Content>btn_1add1", "focus": (1, 0.5)}
         btn_black5 = {"locator": "UICanvas>Default>HomePanel>panel>panel_events>events_list>Viewport>Content>btn_black5>img"}
         # panel_entrance
@@ -1963,6 +1968,16 @@ class ElementsData:
         icon_sub_list = {"locator": "UICanvas>Default>RechargeEndlessThanksPanel>panel>panel_info>panel_list>Viewport>content>itemModel(Clone)>>group>item_list>item_model_mini(Clone)>icon"}
         quantity_sub_list = {"locator": "UICanvas>Default>RechargeEndlessThanksPanel>panel>panel_info>panel_list>Viewport>content>itemModel(Clone)>>group>item_list>item_model_mini(Clone)>quantity>value"}
         btn_buy_list = {"locator": "UICanvas>Default>RechargeEndlessThanksPanel>panel>panel_info>panel_list>Viewport>content>itemModel(Clone)>>btn"}
+
+    class RechargeEndlessAddOnPanel:
+        RechargeEndlessAddOnPanel={"locator": "UICanvas>Default>RechargeEndlessAddOnPanel"}
+        btn_close = {"locator": "UICanvas>Default>RechargeEndlessAddOnPanel>panel>btn_close>img"}
+        item_model_list = {"locator": "UICanvas>Default>RechargeEndlessAddOnPanel>panel>panel_info>panel_list>Viewport>content>itemModel(Clone)"}
+        icon_main_list = {"locator": "UICanvas>Default>RechargeEndlessAddOnPanel>panel>panel_info>panel_list>Viewport>content>itemModel(Clone)>item_free>group>icon"}
+        quantity_main_list = {"locator": "UICanvas>Default>RechargeEndlessAddOnPanel>panel>panel_info>panel_list>Viewport>content>itemModel(Clone)>item_free>group>icon>quantity>value"}
+        icon_sub_list = {"locator": "UICanvas>Default>RechargeEndlessAddOnPanel>panel>panel_info>panel_list>Viewport>content>itemModel(Clone)>>group>item_list>item_model_mini(Clone)(Clone)>icon"}
+        quantity_sub_list = {"locator": "UICanvas>Default>RechargeEndlessAddOnPanel>panel>panel_info>panel_list>Viewport>content>itemModel(Clone)>>group>item_list>item_model_mini(Clone)(Clone)>quantity>value"}
+        btn_buy_list = {"locator": "UICanvas>Default>RechargeEndlessAddOnPanel>panel>panel_info>panel_list>Viewport>content>itemModel(Clone)>>btn","focus": (0.5, 0.5)}
 
     class ResultPanel:
         ResultPanel = {"locator": "UICanvas>Default>ResultPanel"}

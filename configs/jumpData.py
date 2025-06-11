@@ -52,6 +52,7 @@ class JumpData:
         "RechargeBlack5Panel",
         "RechargeEndlessThanksPanel",
         "RechargeEndlessNewYearPanel",
+        "RechargeEndlessAddOnPanel",
         "RodSkinGiftPack027Panel",
         "RodSkinGiftPack030Panel",
         "RogueSelectSkillPanel",
@@ -180,7 +181,9 @@ class JumpData:
         "Recharge1And1Panel": {"element_data": ElementsData.Recharge1And1Panel.Recharge1And1Panel, "open_path": [ElementsData.HomePanel.btn_1add1]},
         "RechargeBlack5Panel": {"element_data": ElementsData.RechargeBlack5Panel.RechargeBlack5Panel, "open_path": [ElementsData.HomePanel.btn_black5], "close_path": [ElementsData.EventsGiftCenterPanel.btn_close]},
         "RechargeEndlessThanksPanel": {"element_data": ElementsData.RechargeEndlessThanksPanel.RechargeEndlessThanksPanel, "open_path": [ElementsData.HomePanel.btn_events_endless_thanksgiving], "close_path": [ElementsData.RechargeEndlessThanksPanel.btn_close, ElementsData.EventsGiftCenterPanel.btn_close]},
-        "RechargeEndlessNewYearPanel": {"element_data": ElementsData.RechargeEndlessNewYearPanel.RechargeEndlessNewYearPanel, "open_path": [ElementsData.HomePanel.btn_events_endless_newyear], "close_path": [ElementsData.RechargeEndlessNewYearPanel.btn_close, ElementsData.EventsGiftCenterPanel.btn_close]},
+        #"RechargeEndlessNewYearPanel": {"element_data": ElementsData.RechargeEndlessNewYearPanel.RechargeEndlessNewYearPanel, "open_path": [ElementsData.HomePanel.btn_events_endless_newyear], "close_path": [ElementsData.RechargeEndlessNewYearPanel.btn_close, ElementsData.EventsGiftCenterPanel.btn_close]},
+        #yaerlan
+        "RechargeEndlessAddOnPanel":{"element_data": ElementsData.RechargeEndlessAddOnPanel.RechargeEndlessAddOnPanel, "open_path": [ElementsData.HomePanel.btn_events_endless_thanksgiving],"close_path": [ElementsData.EventsGiftCenterPanel.btn_close]},
         "RoulettePanel": {"element_data": ElementsData.RoulettePanel.RoulettePanel, "open_path": [ElementsData.Home3DPanel.btn_pvp, ElementsData.PVPHallPanel.btn_turntable], "close_path": [ElementsData.RoulettePanel.btn_close]},
         "StoreSuitPopupPanel": {"element_data": ElementsData.StoreSuitPopupPanel.StoreSuitPopupPanel, "close_path": [ElementsData.StoreSuitPopupPanel.btn_close]},
         "StoreChristmasPopupPanel": {"element_data": ElementsData.StoreChristmasPopupPanel.StoreChristmasPopupPanel, "close_path": [ElementsData.StoreChristmasPopupPanel.btn_close]},

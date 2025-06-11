@@ -101,6 +101,7 @@ from .Recharge1And1Panel import Recharge1And1Panel
 from .RechargeBlack5Panel import RechargeBlack5Panel
 from .RechargeEndlessNewYearPanel import RechargeEndlessNewYearPanel
 from .RechargeEndlessThanksPanel import RechargeEndlessThanksPanel
+from .RechargeEndlessAddOnPanel import RechargeEndlessAddOnPanel
 from .ResultPanel import ResultPanel
 from .RewardsPanel import RewardsPanel
 from .RewardsPreviewPanel import RewardsPreviewPanel
@@ -115,3 +116,4 @@ from .TreasureChestGearsShardsPanel import TreasureChestGearsShardsPanel
 from .TreasureChestPanel import TreasureChestPanel
 from .TreasureChestRewardsPanel import TreasureChestRewardsPanel
 from .WaitHintPanel import WaitHintPanel
+
