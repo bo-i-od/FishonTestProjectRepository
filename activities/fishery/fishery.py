@@ -273,7 +273,7 @@ def fish_golden_show(excel_tool: ExcelToolsForActivities, fishery_id, fishery_in
             instance_object = FISH_GOLDEN_SHOW()
             instance_object.id = id_start + cur
         instance_object.tpId = fish_id
-        instance_object.name = f"渔场{fishery_index}-{cur + 1}-改"
+        instance_object.name = f"渔场{fishery_index}-{cur - 15 + 1}-改"
         asset_name = excel_tool.get_table_data_object_by_key_value(key="tpId", value=fish_id, table_data_detail=fish_detail)["assetName"]
         instance_object.goldenShowImage = asset_name.split("/")[-1]
         print(instance_object)
@@ -399,6 +399,8 @@ def fisheries(excel_tool: ExcelToolsForActivities, fishery_id, icon_name, scene_
     instance_object.displayLoadingPic = f"loading_fisheries_{scene_name}_1"
     instance_object.cardPackIcon = f"FishCard_fisheries_{icon_name}"
     instance_object.battleScene = f"{icon_name}_NanaoIsland"
+    instance_object.unlockKeyCost = 10000
+    instance_object.unlockByFishing = 20
     fish_id_list = []
     for fish_info in fishery_info:
         fish_id_list.append(fish_info["tpId"])
