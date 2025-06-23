@@ -15,7 +15,7 @@ from activities.decl.PAYMENT_GIFT import PAYMENT_GIFT
 from activities.decl.PAYMENT_GIFT_GROUP import PAYMENT_GIFT_GROUP
 from activities.fishery.load_tools import get_cfg_fish_bag
 from activities.fishery.temp.main_id import save_main_id, load_main_id
-from common.error import DifferError
+from common.error import DifferError, PluralElementError
 from tools.excelRead import ExcelToolsForActivities
 from tools.decl2py import *
 
@@ -119,8 +119,11 @@ def item_main_language(excel_tool: ExcelToolsForActivities,fishery_index, fisher
         if mode == 1:
             instance_object.id = instance_object.tpId
         instance_object.name = f"{instance_object.name.split('-')[0] }-渔场新主线{fishery_index}"
-        table_data_object = excel_tool.get_table_data_object_by_key_value(key="tpId", value=fishery_id, table_data_detail=fisheries_language_detail)
-        fishery_name = table_data_object['t_name']
+        try:
+            table_data_object = excel_tool.get_table_data_object_by_key_value(key="tpId", value=fishery_id, table_data_detail=fisheries_language_detail)
+            fishery_name = table_data_object['t_name']
+        except PluralElementError:
+            fishery_name = f"新主线渔场{fishery_index}"
         instance_object.t_name = f"{fishery_name}卡包"
         pattern = r'^.*?(鱼卡)'
         match = re.search(pattern, instance_object.t_description, re.DOTALL)
@@ -239,7 +242,7 @@ def drop_entity(excel_tool: ExcelToolsForActivities, drop_pack_id_start, fishery
         mode = 2
         template_entity_id_start = entity_id_start
     fish_card_fishery = 500300 + fishery_index
-    fish_id_list = excel_tool.get_fish_id_list(fishery_id=fish_card_fishery)
+    # fish_id_list = excel_tool.get_fish_id_list(fishery_id=fish_card_fishery)
     json_object_origin, _ = excel_tool.get_object(key=key, value=template_entity_id_start, table_data_detail=drop_entity_detail)
     i = 0
     for pack_info_cfg in pack_info_cfg_list:
@@ -250,7 +253,8 @@ def drop_entity(excel_tool: ExcelToolsForActivities, drop_pack_id_start, fishery
                 instance_object.id = id_start + 15 * i + cur
             else:
                 instance_object.id = json_object_origin["id"] + 15 * i + cur
-            fish_id = int(fish_id_list[cur])
+            # fish_id = int(fish_id_list[cur])
+            fish_id = 350000 + fishery_index * 100 + cur + 1
             fish_type = excel_tool.get_fish_type(fish_id=fish_id)
             instance_object.name = f"新主线鱼场{fishery_index}鱼卡包{pack_info_cfg['name']}类型{fish_type}"
             delta = 15 * i + cur
@@ -292,8 +296,8 @@ def fishcard(excel_tool: ExcelToolsForActivities, fish_card_tpid_start, fishery_
         mode = 1
     id_start = excel_tool.get_max_value(key="id", table_object_detail=fishcard_detail) + 1
 
-    fish_card_fishery = fishery_id
-    fish_id_list = excel_tool.get_fish_id_list(fishery_id=fish_card_fishery)
+    # fish_card_fishery = fishery_id
+    # fish_id_list = excel_tool.get_fish_id_list(fishery_id=fish_card_fishery)
     cur = 0
     while cur < 15:
         instance_object: FISHCARD
@@ -302,12 +306,14 @@ def fishcard(excel_tool: ExcelToolsForActivities, fish_card_tpid_start, fishery_
             instance_object.id = id_start + cur
         instance_object.name = replace_number_between_keywords(content=instance_object.name, replacement=str(fishery_index), pre="新主线", next="-")
         instance_object.tpId = fish_card_tpid_start + cur
-        fish_id = int(fish_id_list[cur])
+        fish_id = 350000 + fishery_index * 100 + cur + 1
+        # fish_id = int(fish_id_list[cur])
         instance_object.rank = excel_tool.get_fish_type(fish_id=fish_id)
         instance_object.fishCardFishery = fishery_id
         instance_object.fishCardFish = fish_id
         instance_object.fishCardupId = 40 + instance_object.rank
-        subspecies_id = int(fish_id_list[15 + cur])
+        # subspecies_id = int(fish_id_list[15 + cur])
+        subspecies_id = 360000 + fishery_index * 100 + cur + 1
         instance_object.subspeciesId[0] = subspecies_id
         instance_object.fishClassType = excel_tool.get_fish_class(fish_id=subspecies_id) + 4
         instance_object.revealPackId = item_main_tpid_start + 2
@@ -372,13 +378,17 @@ def fishcard_reward_group(excel_tool: ExcelToolsForActivities, fishery_index, fi
         mode = 1
         TPID_start = excel_tool.get_min_value_more_than_start(key=key, table_object_detail=fishcard_reward_group_detail, start=template_TPID_start, long=10)
     id_start = excel_tool.get_max_value(key="id", table_object_detail=fishcard_reward_group_detail) + 1
+    try:
+        fishery_name = excel_tool.get_fishery_name(fishery_id=fishery_id)
+    except PluralElementError:
+        fishery_name = ""
     cur = 0
     while cur < 10:
         instance_object: FISHCARD_REWARD_GROUP
         json_object_origin, instance_object = excel_tool.get_object(key=key, value=template_TPID_start + cur, table_data_detail=fishcard_reward_group_detail, cls=FISHCARD_REWARD_GROUP)
         if mode == 1:
             instance_object.id = id_start + cur
-        instance_object.name = f"{instance_object.name.split('-')[0]}-新主线-{excel_tool.get_fishery_name(fishery_id=fishery_id)}-渔场{fishery_index}"
+        instance_object.name = f"{instance_object.name.split('-')[0]}-新主线-{fishery_name}-渔场{fishery_index}"
         instance_object.TPID = TPID_start + cur
         instance_object.rewardGroupId = 10001 + cur
         instance_object.fisheriesId = fishery_id
@@ -474,7 +484,7 @@ def fish_bag(excel_tool: ExcelToolsForActivities):
         excel_tool.add_object(instance_object=fish_bag, key="itemTpId", value=fish_bag.itemTpId, table_data_detail=fish_bag_detail)
         cur += 1
 
-def payment_gift(excel_tool: ExcelToolsForActivities, fishery_id, giftId_start):
+def payment_gift(excel_tool: ExcelToolsForActivities, fishery_id,fishery_index, giftId_start):
     payment_gift_detail = excel_tool.get_table_data_detail(book_name="PAYMENT_GIFT.xlsm")
     fish_bag_detail = excel_tool.get_table_data_detail(book_name="FISH_BAG.xlsm")
     template_giftId_start = 2310023
@@ -485,7 +495,10 @@ def payment_gift(excel_tool: ExcelToolsForActivities, fishery_id, giftId_start):
         template_giftId_start = giftId_start
     else:
         mode = 1
-
+    try:
+        fishery_name = excel_tool.get_fishery_name(fishery_id=fishery_id)
+    except PluralElementError:
+        fishery_name = f"新主线渔场{fishery_index}"
     id_start = excel_tool.get_max_value(key="id", table_object_detail=payment_gift_detail) + 1
     cur = 0
     while cur < 4:
@@ -494,7 +507,7 @@ def payment_gift(excel_tool: ExcelToolsForActivities, fishery_id, giftId_start):
         if mode == 1:
             instance_object.id = id_start + cur
         name_split = instance_object.name.split("-")
-        instance_object.name = f"{name_split[0]}-{excel_tool.get_fishery_name(fishery_id=fishery_id)}-{name_split[2]}"
+        instance_object.name = f"{name_split[0]}-{fishery_name}-{name_split[2]}"
         instance_object.giftId = giftId_start + 100 * cur
         items_list = instance_object.itemGroups[0].items
         # 鱼卡包转换渔场
@@ -523,6 +536,10 @@ def payment_gift_group(excel_tool: ExcelToolsForActivities, fishery_id, fishery_
 
     id_start = excel_tool.get_max_value(key="id", table_object_detail=payment_gift_group_detail) + 1
     instance_object: PAYMENT_GIFT_GROUP
+    try:
+        fishery_name = excel_tool.get_fishery_name(fishery_id=fishery_id)
+    except PluralElementError:
+        fishery_name = f"新主线渔场{fishery_index}"
     cur = 0
     while cur < 4:
         instance_object: PAYMENT_GIFT_GROUP
@@ -530,7 +547,7 @@ def payment_gift_group(excel_tool: ExcelToolsForActivities, fishery_id, fishery_
         if mode == 1:
             instance_object.id = id_start + cur
         name_split = instance_object.name.split("-")
-        instance_object.name = f"{name_split[0]}-{excel_tool.get_fishery_name(fishery_id=fishery_id)}-{name_split[2]}"
+        instance_object.name = f"{name_split[0]}-{fishery_name}-{name_split[2]}"
         instance_object.tp_id = payment_gift_group_tp_id_start + 100000 * cur
         instance_object.giftId = giftId_start + 100 * cur
         instance_object.extra_arg = fishery_id
@@ -633,11 +650,12 @@ def main(excel_tool: ExcelToolsForActivities, mode=1):
     fishcard_reward_group(excel_tool=excel_tool, fishery_index=fishery_index, fishery_id=fishery_id, item_main_tpid_start=item_main_tpid_start)
     fish_bag(excel_tool=excel_tool)
     payment_gift_group(excel_tool=excel_tool, fishery_id=fishery_id,fishery_index=fishery_index, giftId_start=giftId_start, payment_gift_group_tp_id_start=payment_gift_group_tp_id_start)
-    payment_gift(excel_tool=excel_tool, fishery_id=fishery_id, giftId_start=giftId_start)
+    payment_gift(excel_tool=excel_tool, fishery_id=fishery_id,fishery_index=fishery_index, giftId_start=giftId_start)
     item_convert_rule(excel_tool=excel_tool, fishery_id=fishery_id, item_main_tpid_start=item_main_tpid_start)
 
     save_main_id(file_name=file_name, id_dict={"drop_id_start": drop_id_start, "item_main_tpid_start": item_main_tpid_start, "drop_pack_id_start": drop_pack_id_start, "entity_id_start": entity_id_start, "fishcard_pack_info_tpid_start": fishcard_pack_info_tpid_start})
     print("涉及到的表：", list(excel_tool.data_txt_changed))
+
 if __name__ == '__main__':
     excel_tool = ExcelToolsForActivities(EXCEL_PATH)
     main(excel_tool, mode=1)
