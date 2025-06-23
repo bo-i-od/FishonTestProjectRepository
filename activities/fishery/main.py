@@ -1,10 +1,11 @@
-from activities.fishery import fish_bag, fishery, achievement, flash_card, ndays
+from activities.fishery import fish_bag, fishery, achievement, flash_card, ndays, fish_template
 from configs.pathConfig import EXCEL_PATH
 from tools.excelRead import ExcelToolsForActivities
 
 
 def main(excel_tool: ExcelToolsForActivities):
-    mode = 2
+    fish_template.main(excel_tool=excel_tool, fishery_id=500307)
+    mode = 1
     fish_bag.main(excel_tool, mode=mode)
     fishery.main(excel_tool, mode=mode)
     flash_card.main(excel_tool, mode=mode)
