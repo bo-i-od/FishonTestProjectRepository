@@ -109,6 +109,8 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
                 if info.fishId in exclude_list:
                     info.excludeType = 1
                     info.excludeArgs = get_quest_id(fish_id=info.fishId)
+                    if not info.excludeArgs:
+                        info.excludeType = None
                 if counter["rare"] == 0:
                     info.weight = last_weight[fish_type_detail["rare"]]
                 counter["rare"] += 1
@@ -125,6 +127,8 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
                 if info.fishId in exclude_list:
                     info.excludeType = 1
                     info.excludeArgs = get_quest_id(fish_id=info.fishId)
+                    if not info.excludeArgs:
+                        info.excludeType = None
                 if counter["elite"] == 0:
                     info.weight = last_weight[fish_type_detail["elite"]]
                 counter["elite"] += 1
@@ -141,6 +145,8 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
                 if info.fishId in exclude_list:
                     info.excludeType = 1
                     info.excludeArgs = get_quest_id(fish_id=info.fishId)
+                    if not info.excludeArgs:
+                        info.excludeType = None
                 if counter["monster"] == 0:
                     info.weight = last_weight[fish_type_detail["monster"]]
                 counter["monster"] += 1
