@@ -53,6 +53,7 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
 
     spot_fish_type_detail = get_spot_fish_type_detail()
     last_weight = {
+        0: 0,
         1: 1000,
         2: 500,
         3: 334,
