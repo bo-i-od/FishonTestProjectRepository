@@ -9,7 +9,7 @@ from activities.decl.FISHCARD_PACK_INFO import FISHCARD_PACK_INFO
 from activities.decl.FISHCARD_REWARD_GROUP import FISHCARD_REWARD_GROUP
 from activities.decl.FISH_BAG import FISH_BAG
 from activities.decl.ITEM_CONVERT_RULE import ITEM_CONVERT_RULE
-from activities.decl.ITEM_MAIN import ITEM_MAIN
+from activities.decl.ITEM_MAIN import ITEM_MAIN, complimentary_item_main
 from activities.decl.ITEM_MAIN_LANGUAGE import ITEM_MAIN_LANGUAGE
 from activities.decl.PAYMENT_GIFT import PAYMENT_GIFT
 from activities.decl.PAYMENT_GIFT_GROUP import PAYMENT_GIFT_GROUP
@@ -88,6 +88,7 @@ def item_main(excel_tool: ExcelToolsForActivities, fishery_index, icon_name, dro
         # 定义定位标记
         instance_object.iconName = replace_excluding_keywords(text=original_str, replacement=icon_name, exclude_words=["boss", "hiddn"])
         instance_object.useArgs[1] = drop_id_start + cur * 100
+        instance_object.awards = [complimentary_item_main()]
         print(instance_object)
         if mode == 2:
             excel_tool.change_object(key=key, value=instance_object.itemTpId, instance_object=instance_object, table_data_detail=item_main_detail)

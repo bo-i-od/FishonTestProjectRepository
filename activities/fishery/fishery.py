@@ -410,7 +410,7 @@ def fish(excel_tool: ExcelToolsForActivities, fishery_info, fishery_index, livin
             excel_tool.add_object(key=key, value=instance_object.tpId, table_data_detail=fish_detail, instance_object=instance_object)
         cur += 1
 
-def fisheries(excel_tool: ExcelToolsForActivities, fishery_id, icon_name, scene_name, fishery_info):
+def fisheries(excel_tool: ExcelToolsForActivities, fishery_id, icon_name, scene_name, fishery_info, fishery_name):
     fisheries_detail = excel_tool.get_table_data_detail(book_name="FISHERIES.xlsm")
     fish_bag_detail = excel_tool.get_table_data_detail(book_name="FISH_BAG.xlsm")
     key = "tpId"
@@ -435,6 +435,7 @@ def fisheries(excel_tool: ExcelToolsForActivities, fishery_id, icon_name, scene_
     instance_object.battleScene = f"{icon_name}_NanaoIsland"
     instance_object.unlockKeyCost = 10000
     instance_object.unlockByFishing = 20
+    instance_object.dlcName = f"DLC_FISHERY_{fishery_name}"
     fish_id_list = []
     for fish_info in fishery_info:
         fish_id_list.append(fish_info["tpId"])
@@ -1148,7 +1149,7 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
     fishery_info = get_fishery_info(excel_tool=excel_tool, fishery_id=fishery_id)
     exclude_info = get_exclude_info(excel_tool=excel_tool, fishery_id=fishery_id)
     fish(excel_tool=excel_tool, fishery_info=fishery_info, fishery_index=fishery_index, living=living)
-    fisheries(excel_tool=excel_tool, fishery_id=fishery_id, icon_name=icon_name, scene_name=scene_name_list[0], fishery_info=fishery_info)
+    fisheries(excel_tool=excel_tool, fishery_id=fishery_id, icon_name=icon_name, scene_name=scene_name_list[0], fishery_info=fishery_info, fishery_name=fishery_name)
     point_list = new_plot_map_point(excel_tool=excel_tool, fishery_id=fishery_id,  fishery_index=fishery_index, fishery_cfg_list=fishery_cfg_list, map_point_position_list=map_point_position_list)
     new_plot_map_point_language(excel_tool=excel_tool, fishery_id=fishery_id, point_list=point_list, map_point_position_list=map_point_position_list, spot_language_list=spot_language_list)
     new_plot_map_main(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index, sectionNameID=sectionNameID, icon_name=icon_name, clue_reward=clue_reward, scene_name=scene_name_list[1], bgm_name=bgm_name, point_list=point_list)
