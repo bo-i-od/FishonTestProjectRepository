@@ -95,7 +95,10 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
             if fish_class == 2:
                 info = RAREINFO()
                 info.fishId = fish_info["tpId"]
-                info.weight = 1000 // fish_type_detail["rare"]
+                if fish_type_detail["rare"] == 0:
+                    info.weight = 0
+                else:
+                    info.weight = 1000 // fish_type_detail["rare"]
                 if info.fishId in exclude_list:
                     info.excludeType = 1
                     info.excludeArgs = get_quest_id(fish_id=info.fishId)
@@ -108,7 +111,10 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
             if fish_class == 3:
                 info = ELITEINFO()
                 info.fishId = fish_info["tpId"]
-                info.weight = 1000 // fish_type_detail["elite"]
+                if fish_type_detail["elite"] == 0:
+                    info.weight = 0
+                else:
+                    info.weight = 1000 // fish_type_detail["elite"]
                 if info.fishId in exclude_list:
                     info.excludeType = 1
                     info.excludeArgs = get_quest_id(fish_id=info.fishId)
@@ -121,7 +127,10 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
             if fish_class == 4:
                 info = MONSTERINFO()
                 info.fishId = fish_info["tpId"]
-                info.weight = 1000 // fish_type_detail["monster"]
+                if fish_type_detail["monster"] == 0:
+                    info.weight = 0
+                else:
+                    info.weight = 1000 // fish_type_detail["monster"]
                 if info.fishId in exclude_list:
                     info.excludeType = 1
                     info.excludeArgs = get_quest_id(fish_id=info.fishId)
@@ -136,7 +145,10 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
             if fish_type == 1:
                 info = SMALLINFO()
                 info.fishId = fish_info["tpId"]
-                info.weight = 1000 // fish_type_detail["small"]
+                if fish_type_detail["small"] == 0:
+                    info.weight = 0
+                else:
+                    info.weight = 1000 // fish_type_detail["small"]
                 if counter["small"] == 0:
                     info.weight = last_weight[fish_type_detail["small"]]
                 counter["small"] += 1
@@ -146,7 +158,10 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
             if fish_type == 2:
                 info = MEDIUMINFO()
                 info.fishId = fish_info["tpId"]
-                info.weight = 1000 // fish_type_detail["medium"]
+                if fish_type_detail["medium"] == 0:
+                    info.weight = 0
+                else:
+                    info.weight = 1000 // fish_type_detail["medium"]
                 if counter["medium"] == 0:
                     info.weight = last_weight[fish_type_detail["medium"]]
                 counter["medium"] += 1
@@ -156,7 +171,10 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
             if fish_type == 3:
                 info = LARGEINFO()
                 info.fishId = fish_info["tpId"]
-                info.weight = 1000 // fish_type_detail["large"]
+                if fish_type_detail["large"] == 0:
+                    info.weight = 0
+                else:
+                    info.weight = 1000 // fish_type_detail["large"]
                 if counter["large"] == 0:
                     info.weight = last_weight[fish_type_detail["large"]]
                 counter["large"] += 1
@@ -166,7 +184,10 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
             if fish_type == 4:
                 info = HUGEINFO()
                 info.fishId = fish_info["tpId"]
-                info.weight = 1000 // fish_type_detail["hidden"]
+                if fish_type_detail["hidden"] == 0:
+                    info.weight = 0
+                else:
+                    info.weight = 1000 // fish_type_detail["hidden"]
                 if counter["hidden"] == 0:
                     info.weight = last_weight[fish_type_detail["hidden"]]
                 counter["hidden"] += 1
@@ -176,7 +197,10 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
             if fish_type == 5:
                 info = GIANTINFO()
                 info.fishId = fish_info["tpId"]
-                info.weight = 1000 // fish_type_detail["boss"]
+                if fish_type_detail["boss"] == 0:
+                    info.weight = 0
+                else:
+                    info.weight = 1000 // fish_type_detail["boss"]
                 if counter["boss"] == 0:
                     info.weight = last_weight[fish_type_detail["boss"]]
                 counter["boss"] += 1
@@ -1095,4 +1119,4 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
 
 if __name__ == '__main__':
     excel_tool = ExcelToolsForActivities(EXCEL_PATH)
-    main(excel_tool, mode=2)
+    main(excel_tool, mode=1)
