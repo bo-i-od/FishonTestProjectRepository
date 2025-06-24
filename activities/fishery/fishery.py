@@ -36,8 +36,13 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
         # return excel_tool.get_table_data_object_by_key_value(key="triggerKeyS", value=fish_id, table_data_detail=new_plot_quest_detail)["tpId"]
         index = quest_info.index(fish_id)
         new_plot_quest_list = cfg_ndays["mission_cfg"]["new_plot_quest_list"]
-        quest_id = new_plot_quest_list[index]
-        return quest_id
+        try:
+            quest_id = new_plot_quest_list[index]
+            return quest_id
+        except IndexError:
+            return None
+
+
 
     new_plot_fish_spot_detail = excel_tool.get_table_data_detail(book_name="NEW_PLOT_FISH_SPOT.xlsm")
     # new_plot_quest_detail = excel_tool.get_table_data_detail(book_name="NEW_PLOT_QUEST.xlsm")
