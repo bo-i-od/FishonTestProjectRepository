@@ -19,6 +19,7 @@ from activities.decl.NEW_PLOT_MAP_MAIN import NEW_PLOT_MAP_MAIN
 from activities.decl.NEW_PLOT_MAP_POINT import NEW_PLOT_MAP_POINT
 from activities.decl.NEW_PLOT_MAP_POINT_LANGUAGE import NEW_PLOT_MAP_POINT_LANGUAGE
 from activities.decl.PANEL_STATIC_LANGUAGE import PANEL_STATIC_LANGUAGE
+from activities.decl.SHOP_GOODS_SEASON_INFO import SHOP_GOODS_SEASON_INFO
 from activities.fishery.load_tools import get_spot_fish_type_detail, get_fishery_info, get_exclude_info, \
     get_cfg_fishery, get_cfg_ndays, get_quest_info
 from activities.fishery.temp.main_id import load_main_id, save_main_id
@@ -1049,7 +1050,44 @@ def new_plot_map_point_language(excel_tool: ExcelToolsForActivities,fishery_id, 
 
 def shop_goods_season_info(excel_tool: ExcelToolsForActivities, fishery_index, ChapterId):
     shop_goods_season_info_detail = excel_tool.get_table_data_detail(book_name="SHOP_GOODS_SEASON_INFO.xlsm")
-    # openTimeTimer =
+    openTimeTimer = 102100 + fishery_index - 1
+    key = "tpId"
+    id_start = excel_tool.get_min_value_more_than_start(key_list=["id", key], table_object_detail=shop_goods_season_info_detail, start=190001, long=2)
+    json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="openTimeTimer", value=openTimeTimer, table_data_detail=shop_goods_season_info_detail)
+    if json_object_list:
+        instance_object_low: SHOP_GOODS_SEASON_INFO
+        instance_object_high: SHOP_GOODS_SEASON_INFO
+        mode = 2
+        instance_object_low = json_to_instance(json_object=json_object_list[0], cls=SHOP_GOODS_SEASON_INFO)
+        instance_object_high = json_to_instance(json_object=json_object_list[1], cls=SHOP_GOODS_SEASON_INFO)
+    else:
+        mode = 1
+        instance_object_low = SHOP_GOODS_SEASON_INFO()
+        instance_object_high = SHOP_GOODS_SEASON_INFO()
+        instance_object_low.id = id_start
+        instance_object_high.id = id_start + 1
+        instance_object_low.tpId = instance_object_low.id
+        instance_object_high.tpId = instance_object_high.id
+    instance_object_low.enabled = 1
+    instance_object_low.name = f"赛季溢出资源兑换商店-渔场{fishery_index}-鱼卡200-低价"
+    instance_object_low.plotId = ChapterId
+    instance_object_low.openTimeTimer = openTimeTimer
+    instance_object_low.unlockPic = "fishbag_kind_T_04"
+    instance_object_low.languageId = 2020067
+    instance_object_high.enabled = 1
+    instance_object_high.name = f"赛季溢出资源兑换商店-渔场{fishery_index}-鱼卡200-高价"
+    instance_object_high.plotId = ChapterId
+    instance_object_high.openTimeTimer = openTimeTimer
+    instance_object_high.unlockPic = "fishbag_kind_T_04"
+    instance_object_high.languageId = 2020067
+    print(instance_object_low)
+    print(instance_object_high)
+    if mode == 2:
+        excel_tool.change_object(key=key, value=instance_object_low.tpId, table_data_detail=shop_goods_season_info_detail, instance_object=instance_object_low)
+        excel_tool.change_object(key=key, value=instance_object_high.tpId, table_data_detail=shop_goods_season_info_detail, instance_object=instance_object_high)
+    else:
+        excel_tool.add_object(key=key, value=instance_object_low.tpId, table_data_detail=shop_goods_season_info_detail, instance_object=instance_object_low)
+        excel_tool.add_object(key=key, value=instance_object_high.tpId, table_data_detail=shop_goods_season_info_detail, instance_object=instance_object_high)
 
 def main(excel_tool: ExcelToolsForActivities, mode = 1):
     """
@@ -1109,23 +1147,23 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
 
     fishery_info = get_fishery_info(excel_tool=excel_tool, fishery_id=fishery_id)
     exclude_info = get_exclude_info(excel_tool=excel_tool, fishery_id=fishery_id)
-    fish(excel_tool=excel_tool, fishery_info=fishery_info, fishery_index=fishery_index, living=living)
-    fisheries(excel_tool=excel_tool, fishery_id=fishery_id, icon_name=icon_name, scene_name=scene_name_list[0], fishery_info=fishery_info)
-    point_list = new_plot_map_point(excel_tool=excel_tool, fishery_id=fishery_id,  fishery_index=fishery_index, fishery_cfg_list=fishery_cfg_list, map_point_position_list=map_point_position_list)
-    new_plot_map_point_language(excel_tool=excel_tool, fishery_id=fishery_id, point_list=point_list, map_point_position_list=map_point_position_list, spot_language_list=spot_language_list)
-    new_plot_map_main(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index, sectionNameID=sectionNameID, icon_name=icon_name, clue_reward=clue_reward, scene_name=scene_name_list[1], bgm_name=bgm_name, point_list=point_list)
-    multiplayer_room_enum(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index)
-    new_plot_fish_type_drop(excel_tool=excel_tool, fishery_id=fishery_id, ChapterId=ChapterId)
-    new_plot_clue_reward(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index, clue_reward=clue_reward)
-    fish_golden_show(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index)
-    fish_weight_new(excel_tool=excel_tool, fishery_info=fishery_info, fishery_index=fishery_index)
-    fish_state(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index, fishery_info=fishery_info)
-    mission_condition(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index)
-    activityBPId = panel_static_language(excel_tool=excel_tool, activityBP=activityBP, activityBPId=activityBPId)
-    battle_pass_groupId, battle_pass_main_2024_tpId = battle_pass_main_2024(excel_tool=excel_tool, fishery_id=fishery_id, icon_name=icon_name, activityBPId=activityBPId, battle_pass_main_2024_tpId=battle_pass_main_2024_tpId)
-    battle_pass(excel_tool=excel_tool, fishery_id=fishery_id, battle_pass_groupId=battle_pass_groupId)
-    # shop_goods_season_info(excel_tool=excel_tool, fishery_index=fishery_index, ChapterId=ChapterId)
-    new_plot_fish_spot(excel_tool=excel_tool, fishery_id=fishery_id, tpId_start=new_plot_fish_spot_tpId_start, fishery_cfg_list=fishery_cfg_list, fishery_info=fishery_info, exclude_info=exclude_info, bgm_name=bgm_name, fishery_name=fishery_name, scene_name_list=scene_name_list, mapPointId_list=mapPointId_list, cfg_ndays=cfg_ndays)
+    # fish(excel_tool=excel_tool, fishery_info=fishery_info, fishery_index=fishery_index, living=living)
+    # fisheries(excel_tool=excel_tool, fishery_id=fishery_id, icon_name=icon_name, scene_name=scene_name_list[0], fishery_info=fishery_info)
+    # point_list = new_plot_map_point(excel_tool=excel_tool, fishery_id=fishery_id,  fishery_index=fishery_index, fishery_cfg_list=fishery_cfg_list, map_point_position_list=map_point_position_list)
+    # new_plot_map_point_language(excel_tool=excel_tool, fishery_id=fishery_id, point_list=point_list, map_point_position_list=map_point_position_list, spot_language_list=spot_language_list)
+    # new_plot_map_main(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index, sectionNameID=sectionNameID, icon_name=icon_name, clue_reward=clue_reward, scene_name=scene_name_list[1], bgm_name=bgm_name, point_list=point_list)
+    # multiplayer_room_enum(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index)
+    # new_plot_fish_type_drop(excel_tool=excel_tool, fishery_id=fishery_id, ChapterId=ChapterId)
+    # new_plot_clue_reward(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index, clue_reward=clue_reward)
+    # fish_golden_show(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index)
+    # fish_weight_new(excel_tool=excel_tool, fishery_info=fishery_info, fishery_index=fishery_index)
+    # fish_state(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index, fishery_info=fishery_info)
+    # mission_condition(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index)
+    # activityBPId = panel_static_language(excel_tool=excel_tool, activityBP=activityBP, activityBPId=activityBPId)
+    # battle_pass_groupId, battle_pass_main_2024_tpId = battle_pass_main_2024(excel_tool=excel_tool, fishery_id=fishery_id, icon_name=icon_name, activityBPId=activityBPId, battle_pass_main_2024_tpId=battle_pass_main_2024_tpId)
+    # battle_pass(excel_tool=excel_tool, fishery_id=fishery_id, battle_pass_groupId=battle_pass_groupId)
+    shop_goods_season_info(excel_tool=excel_tool, fishery_index=fishery_index, ChapterId=ChapterId)
+    # new_plot_fish_spot(excel_tool=excel_tool, fishery_id=fishery_id, tpId_start=new_plot_fish_spot_tpId_start, fishery_cfg_list=fishery_cfg_list, fishery_info=fishery_info, exclude_info=exclude_info, bgm_name=bgm_name, fishery_name=fishery_name, scene_name_list=scene_name_list, mapPointId_list=mapPointId_list, cfg_ndays=cfg_ndays)
 
     save_main_id(file_name=file_name, id_dict={"activityBPId": activityBPId, "battle_pass_main_2024_tpId": battle_pass_main_2024_tpId})
     print("涉及到的表：", list(excel_tool.data_txt_changed))
