@@ -383,6 +383,9 @@ def fish(excel_tool: ExcelToolsForActivities, fishery_info, fishery_index, livin
             instance_object.name += "-改"
             instance_object.boneId = 380001 + (fishery_index - 1) * 15 + cur % 15
             instance_object.glodBoneId = 385001 + (fishery_index - 1) * 15 + cur % 15
+            instance_object.failFishStateId = 6020001 + (fishery_index-1) * 15
+            instance_object.mapNormalFailFishStateId = instance_object.failFishStateId
+            instance_object.mapGoldenFailFishStateId = 6025001 + (fishery_index-1) * 15
         else:
             instance_object.subspecies = [fish_id + 10000, 0]
         instance_object.fishType = fish_info["fishType"]
@@ -1044,6 +1047,10 @@ def new_plot_map_point_language(excel_tool: ExcelToolsForActivities,fishery_id, 
             excel_tool.add_object(key=key, value=instance_object.tpId, table_data_detail=new_plot_map_point_language_detail, instance_object=instance_object)
         cur += 1
 
+def shop_goods_season_info(excel_tool: ExcelToolsForActivities, fishery_index, ChapterId):
+    shop_goods_season_info_detail = excel_tool.get_table_data_detail(book_name="SHOP_GOODS_SEASON_INFO.xlsm")
+    # openTimeTimer =
+
 def main(excel_tool: ExcelToolsForActivities, mode = 1):
     """
         读写方式：新增/修改
@@ -1117,6 +1124,7 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
     activityBPId = panel_static_language(excel_tool=excel_tool, activityBP=activityBP, activityBPId=activityBPId)
     battle_pass_groupId, battle_pass_main_2024_tpId = battle_pass_main_2024(excel_tool=excel_tool, fishery_id=fishery_id, icon_name=icon_name, activityBPId=activityBPId, battle_pass_main_2024_tpId=battle_pass_main_2024_tpId)
     battle_pass(excel_tool=excel_tool, fishery_id=fishery_id, battle_pass_groupId=battle_pass_groupId)
+    # shop_goods_season_info(excel_tool=excel_tool, fishery_index=fishery_index, ChapterId=ChapterId)
     new_plot_fish_spot(excel_tool=excel_tool, fishery_id=fishery_id, tpId_start=new_plot_fish_spot_tpId_start, fishery_cfg_list=fishery_cfg_list, fishery_info=fishery_info, exclude_info=exclude_info, bgm_name=bgm_name, fishery_name=fishery_name, scene_name_list=scene_name_list, mapPointId_list=mapPointId_list, cfg_ndays=cfg_ndays)
 
     save_main_id(file_name=file_name, id_dict={"activityBPId": activityBPId, "battle_pass_main_2024_tpId": battle_pass_main_2024_tpId})
