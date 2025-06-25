@@ -185,6 +185,8 @@ def click_golden_tab(bp: BasePage):
     bp.click_element_safe(element_data=ElementsData.EventCenterGoldenLegendPanel.name)
     bp.sleep(0.1)
     bp.click_element_safe(element_data=ElementsData.RewardsPanel.tap_to_claim)
+    bp.sleep(0.1)
+    bp.clear_popup_until_appear(element_data=ElementsData.EventCenterGoldenLegendPanel.name)
 
 # def fish_golden(bp: BasePage, fishery_id: int):
 #     fish_detail = bp.excelTools.get_table_data_detail(book_name="FISH.xlsm")
@@ -235,6 +237,7 @@ def relogin(bp:BasePage,name,uid=None):
         bp.cmd(f"clone {uid}")
         logout(bp)
         login(bp,name)
+        bp.cmd(f"open_chapter_all")
 
 def logout(bp: BasePage):
     bp.sleep(1)
@@ -272,7 +275,7 @@ def main(bp:BasePage, fish_type_map, fished_dict, uid=None):
         fished_dict: {2:set,3:set,4:set} 已钓鱼id集合
         uid (optional): clone账号的uid
     """
-    prefix = "qa_"
+    prefix = "611_"
     cur = 0
     init(bp)
     while not fish_finish(fished_dict,fish_type_map):
@@ -297,13 +300,13 @@ def main(bp:BasePage, fish_type_map, fished_dict, uid=None):
     print("全部钓完")
 
 if __name__ == '__main__':
-    # with open("../statistics/hook_log.txt", "w") as file:
-    #     pass  # 不做任何操作,关闭文件即可清空内容
-    # with open("../statistics/cast_log.txt", "w") as file:
-    #     pass  # 不做任何操作,关闭文件即可清空内容
+    with open("../statistics/hook_log.txt", "w") as file:
+        pass  # 不做任何操作,关闭文件即可清空内容
+    with open("../statistics/cast_log.txt", "w") as file:
+        pass  # 不做任何操作,关闭文件即可清空内容
 
     bp = BasePage()
-    fish_type_map, fished_dict = auto_fish_all_type(bp,"500301")
+    fish_type_map, fished_dict = auto_fish_all_type(bp,"500305")
 
     # setSceneType x (x=1是pve，x=2是pvp, x=3是钓者挑战, x=4是新主线, x=5是爬塔)
     bp.custom_cmd("setSceneType 4")
@@ -311,6 +314,6 @@ if __name__ == '__main__':
     # 主函数，可以修改登录名称前缀：prefix
     # 若clone账号需要填写uid
     main(bp,fish_type_map,fished_dict,uid=1074242127)
-
+    # photo_shot(bp)
     bp.connect_close()
 
