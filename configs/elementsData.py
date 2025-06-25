@@ -66,6 +66,10 @@ class ElementsData:
         btn_close = {"locator": "UICanvas>Important>ActivityCenterPanel>panel>btn_close>img"}
         viewport = {"locator": "UICanvas>Important>ActivityCenterPanel>panel>panel_tab>content>TabList>Viewport", "focus":(0, 0.05)}
 
+    class ActivityThreeColorMainPanel:
+        ActivityThreeColorMainPanel = {"locator":"UICanvas>Default>ActivityThreeColorMainPanel"}
+        btn_close= {"locator":"UICanvas>Default>ActivityThreeColorMainPanel>panel>btn_close>img"}
+
     class AgentPackPopupPanel:
         AgentPackPopupPanel = {"locator": "UICanvas>Important>UICanvas>Default>AgentPackPopupPanel"}
         btn_close = {"locator": "UICanvas>Default>AgentPackPopupPanel>btn_close>img"}
@@ -1333,6 +1337,10 @@ class ElementsData:
         title = {"locator": "UICanvas>Default>ItemTipsPanel>panel>title_bg>title"}
         icon = {"locator": "UICanvas>Default>ItemTipsPanel>panel>bg>patterns1>icon"}
         quantity = {"locator": "UICanvas>Default>ItemTipsPanel>panel>info>quantity>value"}
+
+    class JumpBlockPopupPanel:
+        JumpBlockPopupPanel = {"locator": "UICanvas>Default>JumpBlockPopupPanel"}
+        btn_close = {"locator": "UICanvas>Default>JumpBlockPopupPanel>Panel_Events_jumping_manor(Clone)>panel>btn_close>img"}
 
     class LeaderBoardPanel:
         LeaderBoardPanel = {"locator":"UICanvas>Default>LeaderBoardPanel"}
