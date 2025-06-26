@@ -36,6 +36,7 @@ class JumpData:
         "FlashCardReceivePanel",
         "GachaPackPopupPanel",
         "GearEnhanceSuccesPanel",
+        "JumpBlockPopupPanel",
         "KatanaPackPopupPanel",
         "LeaderBoardPopResultPanel",
         "LocationPanel",
@@ -52,6 +53,7 @@ class JumpData:
         "RechargeBlack5Panel",
         "RechargeEndlessThanksPanel",
         "RechargeEndlessNewYearPanel",
+        "RechargeEndlessAddOnPanel",
         "RodSkinGiftPack027Panel",
         "RodSkinGiftPack030Panel",
         "RogueSelectSkillPanel",
@@ -64,7 +66,8 @@ class JumpData:
         # "NewbieGuidePanel",
         "NewRankingActivityCompetitionPanel",
         "ValentinePackPopupPanel",
-        "FishSeasonPopPanel"
+        "FishSeasonPopPanel",
+        "ActivityThreeColorMainPanel"
     }
 
     panel_dict = {
@@ -72,6 +75,7 @@ class JumpData:
         "AchievementGroupPanel": {"element_data": ElementsData.AchievementGroupPanel.AchievementGroupPanel, "close_path": [ElementsData.AchievementGroupPanel.btn_close]},
         "AchievementPanel": {"element_data": ElementsData.AchievementPanel.AchievementPanel, "open_path": [ElementsData.HomePanel.btn_achievement], "close_path": [ElementsData.AchievementPanel.btn_close]},
         "AchievementPopupPanel": {"element_data": ElementsData.AchievementPopupPanel.AchievementPopupPanel},
+        "ActivityThreeColorMainPanel":{"element_data": ElementsData.ActivityCenterPanel.ActivityCenterPanel, "close_path":[ElementsData.ActivityThreeColorMainPanel.btn_close]},
         "AchievementWantedPanel": {"element_data": ElementsData.AchievementWantedPanel.AchievementWantedPanel, "close_path": [ElementsData.AchievementWantedPanel.btn_close]},
         "AgentPackPopupPanel":{"element_data": ElementsData.AgentPackPopupPanel.AgentPackPopupPanel, "close_path": [ElementsData.AgentPackPopupPanel.btn_close]},
         "AlbumFishDetailPanel": {"element_data": ElementsData.AlbumFishDetailPanel.AlbumFishDetailPanel, "close_path": [ElementsData.AlbumFishDetailPanel.btn_close_share_chat, ElementsData.AlbumFishDetailPanel.btn_close]},
@@ -144,6 +148,7 @@ class JumpData:
         "GearEnhanceSuccesPanel": {"element_data": ElementsData.GearEnhanceSuccesPanel.GearEnhanceSuccesPanel, "close_path": [ElementsData.GearEnhanceSuccesPanel.btn_close]},
         "HomePanelNew": {"element_data": ElementsData.HomePanelNew.HomePanelNew, "open_path": [ElementsData.Home3DPanel.btn_mainstage],"close_path": [ElementsData.HomePanelNew.btn_close]},
         "HomePanel": {"element_data": ElementsData.HomePanel.HomePanel},
+        "JumpBlockPopupPanel":{"element_data": ElementsData.JumpBlockPopupPanel.JumpBlockPopupPanel, "close_path": [ElementsData.JumpBlockPopupPanel.btn_close]},
         "IAAPanel": {"element_data": ElementsData.IAAPanel.IAAPanel, "close_path": [ElementsData.IAAPanel.btn_close]},
         "KatanaPackPopupPanel": {"element_data": ElementsData.KatanaPackPopupPanel.KatanaPackPopupPanel, "close_path": [ElementsData.KatanaPackPopupPanel.btn_close]},
         "LeaderBoardPopResultPanel": {"element_data": ElementsData.LeaderBoardPopResultPanel.LeaderBoardPopResultPanel, "close_path": [ElementsData.LeaderBoardPopResultPanel.btn_claim]},
@@ -180,7 +185,9 @@ class JumpData:
         "Recharge1And1Panel": {"element_data": ElementsData.Recharge1And1Panel.Recharge1And1Panel, "open_path": [ElementsData.HomePanel.btn_1add1]},
         "RechargeBlack5Panel": {"element_data": ElementsData.RechargeBlack5Panel.RechargeBlack5Panel, "open_path": [ElementsData.HomePanel.btn_black5], "close_path": [ElementsData.EventsGiftCenterPanel.btn_close]},
         "RechargeEndlessThanksPanel": {"element_data": ElementsData.RechargeEndlessThanksPanel.RechargeEndlessThanksPanel, "open_path": [ElementsData.HomePanel.btn_events_endless_thanksgiving], "close_path": [ElementsData.RechargeEndlessThanksPanel.btn_close, ElementsData.EventsGiftCenterPanel.btn_close]},
-        "RechargeEndlessNewYearPanel": {"element_data": ElementsData.RechargeEndlessNewYearPanel.RechargeEndlessNewYearPanel, "open_path": [ElementsData.HomePanel.btn_events_endless_newyear], "close_path": [ElementsData.RechargeEndlessNewYearPanel.btn_close, ElementsData.EventsGiftCenterPanel.btn_close]},
+        #"RechargeEndlessNewYearPanel": {"element_data": ElementsData.RechargeEndlessNewYearPanel.RechargeEndlessNewYearPanel, "open_path": [ElementsData.HomePanel.btn_events_endless_newyear], "close_path": [ElementsData.RechargeEndlessNewYearPanel.btn_close, ElementsData.EventsGiftCenterPanel.btn_close]},
+        #yaerlan
+        "RechargeEndlessAddOnPanel":{"element_data": ElementsData.RechargeEndlessAddOnPanel.RechargeEndlessAddOnPanel, "open_path": [ElementsData.HomePanel.btn_events_endless_thanksgiving],"close_path": [ElementsData.EventsGiftCenterPanel.btn_close]},
         "RoulettePanel": {"element_data": ElementsData.RoulettePanel.RoulettePanel, "open_path": [ElementsData.Home3DPanel.btn_pvp, ElementsData.PVPHallPanel.btn_turntable], "close_path": [ElementsData.RoulettePanel.btn_close]},
         "StoreSuitPopupPanel": {"element_data": ElementsData.StoreSuitPopupPanel.StoreSuitPopupPanel, "close_path": [ElementsData.StoreSuitPopupPanel.btn_close]},
         "StoreChristmasPopupPanel": {"element_data": ElementsData.StoreChristmasPopupPanel.StoreChristmasPopupPanel, "close_path": [ElementsData.StoreChristmasPopupPanel.btn_close]},

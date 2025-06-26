@@ -19,6 +19,7 @@ from activities.decl.NEW_PLOT_MAP_MAIN import NEW_PLOT_MAP_MAIN
 from activities.decl.NEW_PLOT_MAP_POINT import NEW_PLOT_MAP_POINT
 from activities.decl.NEW_PLOT_MAP_POINT_LANGUAGE import NEW_PLOT_MAP_POINT_LANGUAGE
 from activities.decl.PANEL_STATIC_LANGUAGE import PANEL_STATIC_LANGUAGE
+from activities.decl.SHOP_GOODS_SEASON_INFO import SHOP_GOODS_SEASON_INFO
 from activities.fishery.load_tools import get_spot_fish_type_detail, get_fishery_info, get_exclude_info, \
     get_cfg_fishery, get_cfg_ndays, get_quest_info
 from activities.fishery.temp.main_id import load_main_id, save_main_id
@@ -36,8 +37,13 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
         # return excel_tool.get_table_data_object_by_key_value(key="triggerKeyS", value=fish_id, table_data_detail=new_plot_quest_detail)["tpId"]
         index = quest_info.index(fish_id)
         new_plot_quest_list = cfg_ndays["mission_cfg"]["new_plot_quest_list"]
-        quest_id = new_plot_quest_list[index]
-        return quest_id
+        try:
+            quest_id = new_plot_quest_list[index]
+            return quest_id
+        except IndexError:
+            return None
+
+
 
     new_plot_fish_spot_detail = excel_tool.get_table_data_detail(book_name="NEW_PLOT_FISH_SPOT.xlsm")
     # new_plot_quest_detail = excel_tool.get_table_data_detail(book_name="NEW_PLOT_QUEST.xlsm")
@@ -53,6 +59,7 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
 
     spot_fish_type_detail = get_spot_fish_type_detail()
     last_weight = {
+        0: 0,
         1: 1000,
         2: 500,
         3: 334,
@@ -95,10 +102,15 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
             if fish_class == 2:
                 info = RAREINFO()
                 info.fishId = fish_info["tpId"]
-                info.weight = 1000 // fish_type_detail["rare"]
+                if fish_type_detail["rare"] == 0:
+                    info.weight = 0
+                else:
+                    info.weight = 1000 // fish_type_detail["rare"]
                 if info.fishId in exclude_list:
                     info.excludeType = 1
                     info.excludeArgs = get_quest_id(fish_id=info.fishId)
+                    if not info.excludeArgs:
+                        info.excludeType = None
                 if counter["rare"] == 0:
                     info.weight = last_weight[fish_type_detail["rare"]]
                 counter["rare"] += 1
@@ -108,10 +120,15 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
             if fish_class == 3:
                 info = ELITEINFO()
                 info.fishId = fish_info["tpId"]
-                info.weight = 1000 // fish_type_detail["elite"]
+                if fish_type_detail["elite"] == 0:
+                    info.weight = 0
+                else:
+                    info.weight = 1000 // fish_type_detail["elite"]
                 if info.fishId in exclude_list:
                     info.excludeType = 1
                     info.excludeArgs = get_quest_id(fish_id=info.fishId)
+                    if not info.excludeArgs:
+                        info.excludeType = None
                 if counter["elite"] == 0:
                     info.weight = last_weight[fish_type_detail["elite"]]
                 counter["elite"] += 1
@@ -121,10 +138,15 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
             if fish_class == 4:
                 info = MONSTERINFO()
                 info.fishId = fish_info["tpId"]
-                info.weight = 1000 // fish_type_detail["monster"]
+                if fish_type_detail["monster"] == 0:
+                    info.weight = 0
+                else:
+                    info.weight = 1000 // fish_type_detail["monster"]
                 if info.fishId in exclude_list:
                     info.excludeType = 1
                     info.excludeArgs = get_quest_id(fish_id=info.fishId)
+                    if not info.excludeArgs:
+                        info.excludeType = None
                 if counter["monster"] == 0:
                     info.weight = last_weight[fish_type_detail["monster"]]
                 counter["monster"] += 1
@@ -136,7 +158,10 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
             if fish_type == 1:
                 info = SMALLINFO()
                 info.fishId = fish_info["tpId"]
-                info.weight = 1000 // fish_type_detail["small"]
+                if fish_type_detail["small"] == 0:
+                    info.weight = 0
+                else:
+                    info.weight = 1000 // fish_type_detail["small"]
                 if counter["small"] == 0:
                     info.weight = last_weight[fish_type_detail["small"]]
                 counter["small"] += 1
@@ -146,7 +171,10 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
             if fish_type == 2:
                 info = MEDIUMINFO()
                 info.fishId = fish_info["tpId"]
-                info.weight = 1000 // fish_type_detail["medium"]
+                if fish_type_detail["medium"] == 0:
+                    info.weight = 0
+                else:
+                    info.weight = 1000 // fish_type_detail["medium"]
                 if counter["medium"] == 0:
                     info.weight = last_weight[fish_type_detail["medium"]]
                 counter["medium"] += 1
@@ -156,7 +184,10 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
             if fish_type == 3:
                 info = LARGEINFO()
                 info.fishId = fish_info["tpId"]
-                info.weight = 1000 // fish_type_detail["large"]
+                if fish_type_detail["large"] == 0:
+                    info.weight = 0
+                else:
+                    info.weight = 1000 // fish_type_detail["large"]
                 if counter["large"] == 0:
                     info.weight = last_weight[fish_type_detail["large"]]
                 counter["large"] += 1
@@ -166,7 +197,10 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
             if fish_type == 4:
                 info = HUGEINFO()
                 info.fishId = fish_info["tpId"]
-                info.weight = 1000 // fish_type_detail["hidden"]
+                if fish_type_detail["hidden"] == 0:
+                    info.weight = 0
+                else:
+                    info.weight = 1000 // fish_type_detail["hidden"]
                 if counter["hidden"] == 0:
                     info.weight = last_weight[fish_type_detail["hidden"]]
                 counter["hidden"] += 1
@@ -176,7 +210,10 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
             if fish_type == 5:
                 info = GIANTINFO()
                 info.fishId = fish_info["tpId"]
-                info.weight = 1000 // fish_type_detail["boss"]
+                if fish_type_detail["boss"] == 0:
+                    info.weight = 0
+                else:
+                    info.weight = 1000 // fish_type_detail["boss"]
                 if counter["boss"] == 0:
                     info.weight = last_weight[fish_type_detail["boss"]]
                 counter["boss"] += 1
@@ -273,7 +310,7 @@ def fish_golden_show(excel_tool: ExcelToolsForActivities, fishery_id, fishery_in
             instance_object = FISH_GOLDEN_SHOW()
             instance_object.id = id_start + cur
         instance_object.tpId = fish_id
-        instance_object.name = f"渔场{fishery_index}-{cur + 1}-改"
+        instance_object.name = f"渔场{fishery_index}-{cur - 15 + 1}-改"
         asset_name = excel_tool.get_table_data_object_by_key_value(key="tpId", value=fish_id, table_data_detail=fish_detail)["assetName"]
         instance_object.goldenShowImage = asset_name.split("/")[-1]
         print(instance_object)
@@ -353,6 +390,9 @@ def fish(excel_tool: ExcelToolsForActivities, fishery_info, fishery_index, livin
             instance_object.name += "-改"
             instance_object.boneId = 380001 + (fishery_index - 1) * 15 + cur % 15
             instance_object.glodBoneId = 385001 + (fishery_index - 1) * 15 + cur % 15
+            instance_object.failFishStateId = 6020001 + (fishery_index-1) * 15
+            instance_object.mapNormalFailFishStateId = instance_object.failFishStateId
+            instance_object.mapGoldenFailFishStateId = 6025001 + (fishery_index-1) * 15
         else:
             instance_object.subspecies = [fish_id + 10000, 0]
         instance_object.fishType = fish_info["fishType"]
@@ -376,7 +416,7 @@ def fish(excel_tool: ExcelToolsForActivities, fishery_info, fishery_index, livin
             excel_tool.add_object(key=key, value=instance_object.tpId, table_data_detail=fish_detail, instance_object=instance_object)
         cur += 1
 
-def fisheries(excel_tool: ExcelToolsForActivities, fishery_id, icon_name, scene_name, fishery_info):
+def fisheries(excel_tool: ExcelToolsForActivities, fishery_id, icon_name, scene_name, fishery_info, fishery_name):
     fisheries_detail = excel_tool.get_table_data_detail(book_name="FISHERIES.xlsm")
     fish_bag_detail = excel_tool.get_table_data_detail(book_name="FISH_BAG.xlsm")
     key = "tpId"
@@ -399,6 +439,9 @@ def fisheries(excel_tool: ExcelToolsForActivities, fishery_id, icon_name, scene_
     instance_object.displayLoadingPic = f"loading_fisheries_{scene_name}_1"
     instance_object.cardPackIcon = f"FishCard_fisheries_{icon_name}"
     instance_object.battleScene = f"{icon_name}_NanaoIsland"
+    instance_object.unlockKeyCost = 10000
+    instance_object.unlockByFishing = 20
+    instance_object.dlcName = f"DLC_FISHERY_{fishery_name}"
     fish_id_list = []
     for fish_info in fishery_info:
         fish_id_list.append(fish_info["tpId"])
@@ -1012,6 +1055,47 @@ def new_plot_map_point_language(excel_tool: ExcelToolsForActivities,fishery_id, 
             excel_tool.add_object(key=key, value=instance_object.tpId, table_data_detail=new_plot_map_point_language_detail, instance_object=instance_object)
         cur += 1
 
+def shop_goods_season_info(excel_tool: ExcelToolsForActivities, fishery_index, ChapterId):
+    shop_goods_season_info_detail = excel_tool.get_table_data_detail(book_name="SHOP_GOODS_SEASON_INFO.xlsm")
+    openTimeTimer = 102100 + fishery_index - 1
+    key = "tpId"
+    id_start = excel_tool.get_min_value_more_than_start(key_list=["id", key], table_object_detail=shop_goods_season_info_detail, start=190001, long=2)
+    json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="openTimeTimer", value=openTimeTimer, table_data_detail=shop_goods_season_info_detail)
+    if json_object_list:
+        instance_object_low: SHOP_GOODS_SEASON_INFO
+        instance_object_high: SHOP_GOODS_SEASON_INFO
+        mode = 2
+        instance_object_low = json_to_instance(json_object=json_object_list[0], cls=SHOP_GOODS_SEASON_INFO)
+        instance_object_high = json_to_instance(json_object=json_object_list[1], cls=SHOP_GOODS_SEASON_INFO)
+    else:
+        mode = 1
+        instance_object_low = SHOP_GOODS_SEASON_INFO()
+        instance_object_high = SHOP_GOODS_SEASON_INFO()
+        instance_object_low.id = id_start
+        instance_object_high.id = id_start + 1
+        instance_object_low.tpId = instance_object_low.id
+        instance_object_high.tpId = instance_object_high.id
+    instance_object_low.enabled = 1
+    instance_object_low.name = f"赛季溢出资源兑换商店-渔场{fishery_index}-鱼卡200-低价"
+    instance_object_low.plotId = ChapterId
+    instance_object_low.openTimeTimer = openTimeTimer
+    instance_object_low.unlockPic = "fishbag_kind_T_04"
+    instance_object_low.languageId = 2020067
+    instance_object_high.enabled = 1
+    instance_object_high.name = f"赛季溢出资源兑换商店-渔场{fishery_index}-鱼卡200-高价"
+    instance_object_high.plotId = ChapterId
+    instance_object_high.openTimeTimer = openTimeTimer
+    instance_object_high.unlockPic = "fishbag_kind_T_04"
+    instance_object_high.languageId = 2020067
+    print(instance_object_low)
+    print(instance_object_high)
+    if mode == 2:
+        excel_tool.change_object(key=key, value=instance_object_low.tpId, table_data_detail=shop_goods_season_info_detail, instance_object=instance_object_low)
+        excel_tool.change_object(key=key, value=instance_object_high.tpId, table_data_detail=shop_goods_season_info_detail, instance_object=instance_object_high)
+    else:
+        excel_tool.add_object(key=key, value=instance_object_low.tpId, table_data_detail=shop_goods_season_info_detail, instance_object=instance_object_low)
+        excel_tool.add_object(key=key, value=instance_object_high.tpId, table_data_detail=shop_goods_season_info_detail, instance_object=instance_object_high)
+
 def main(excel_tool: ExcelToolsForActivities, mode = 1):
     """
         读写方式：新增/修改
@@ -1071,7 +1155,7 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
     fishery_info = get_fishery_info(excel_tool=excel_tool, fishery_id=fishery_id)
     exclude_info = get_exclude_info(excel_tool=excel_tool, fishery_id=fishery_id)
     fish(excel_tool=excel_tool, fishery_info=fishery_info, fishery_index=fishery_index, living=living)
-    fisheries(excel_tool=excel_tool, fishery_id=fishery_id, icon_name=icon_name, scene_name=scene_name_list[0], fishery_info=fishery_info)
+    fisheries(excel_tool=excel_tool, fishery_id=fishery_id, icon_name=icon_name, scene_name=scene_name_list[0], fishery_info=fishery_info, fishery_name=fishery_name)
     point_list = new_plot_map_point(excel_tool=excel_tool, fishery_id=fishery_id,  fishery_index=fishery_index, fishery_cfg_list=fishery_cfg_list, map_point_position_list=map_point_position_list)
     new_plot_map_point_language(excel_tool=excel_tool, fishery_id=fishery_id, point_list=point_list, map_point_position_list=map_point_position_list, spot_language_list=spot_language_list)
     new_plot_map_main(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index, sectionNameID=sectionNameID, icon_name=icon_name, clue_reward=clue_reward, scene_name=scene_name_list[1], bgm_name=bgm_name, point_list=point_list)
@@ -1085,6 +1169,7 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
     activityBPId = panel_static_language(excel_tool=excel_tool, activityBP=activityBP, activityBPId=activityBPId)
     battle_pass_groupId, battle_pass_main_2024_tpId = battle_pass_main_2024(excel_tool=excel_tool, fishery_id=fishery_id, icon_name=icon_name, activityBPId=activityBPId, battle_pass_main_2024_tpId=battle_pass_main_2024_tpId)
     battle_pass(excel_tool=excel_tool, fishery_id=fishery_id, battle_pass_groupId=battle_pass_groupId)
+    shop_goods_season_info(excel_tool=excel_tool, fishery_index=fishery_index, ChapterId=ChapterId)
     new_plot_fish_spot(excel_tool=excel_tool, fishery_id=fishery_id, tpId_start=new_plot_fish_spot_tpId_start, fishery_cfg_list=fishery_cfg_list, fishery_info=fishery_info, exclude_info=exclude_info, bgm_name=bgm_name, fishery_name=fishery_name, scene_name_list=scene_name_list, mapPointId_list=mapPointId_list, cfg_ndays=cfg_ndays)
 
     save_main_id(file_name=file_name, id_dict={"activityBPId": activityBPId, "battle_pass_main_2024_tpId": battle_pass_main_2024_tpId})
@@ -1093,4 +1178,4 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
 
 if __name__ == '__main__':
     excel_tool = ExcelToolsForActivities(EXCEL_PATH)
-    main(excel_tool, mode=2)
+    main(excel_tool, mode=1)
