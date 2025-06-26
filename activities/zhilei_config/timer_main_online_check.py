@@ -11,13 +11,10 @@ PATH1 = r"C:/Users/TU/Documents/release_2025_4_1/datapool/ElementData/BaseData/T
 # 将要上线的文件
 PATH2 = r"C:/Users/TU/Documents/release_2025_4_1/datapool/ElementData/TIMER_MAIN.data.txt"
 
-# 活动开始时间范围
-open_start_data="2025-06-05 00:00:00"
-open_end_data="2025-06-13 00:00:00"
+# 更新时间 ,注意，一般是会早一些开服，就设在23点就可以
+update_data_time="2025-07-10 23:00:00"
 
-# 活动结束时间范围
-end_start_data="2025-06-12 23:00:00"
-end_end_data="2025-07-10 00:00:00"
+activity_end_time=update_data_time
 
 # timer数据
 timer_data1 = get_table_data_by_file("timer_main",PATH1)
@@ -25,17 +22,14 @@ timer_data2 = get_table_data_by_file("timer_main",PATH2)
 
 # 时间数据格式化
 date_format = "%Y-%m-%d %H:%M:%S"
-open_start_data=datetime.strptime(open_start_data,date_format)
-open_end_data=datetime.strptime(open_end_data,date_format)
-end_start_data=datetime.strptime(end_start_data,date_format)
-end_end_data=datetime.strptime(end_end_data,date_format)
+update_data_time=datetime.strptime(update_data_time,date_format)
 
 result_list=[]
 for key,value in timer_data1.items():
     try:
         openTime,endTime,delta_day=get_timer_data(value)
         # 筛选那种持续时间比较短的
-        if 0<delta_day<30 and open_start_data<openTime<open_end_data and end_start_data<endTime<end_end_data:
+        if 0<delta_day<60 and openTime<update_data_time<endTime:
             compare_result="相同"
             if key not in timer_data2:
                 compare_result="严重问题！！timer消失！！！"
