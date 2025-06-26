@@ -1,8 +1,7 @@
 """
 文件说明，比对当前线上timer和 将要上线的timer，判断是否有存在正在运转的活动的timer被修改
 """
-
-
+from activities.zhilei_config.timer_main_check import get_timer_data
 from tools.txtTableRead.get_table_data import get_table_data,write_table_data,get_table_data_by_file
 import copy
 from datetime import datetime,timedelta
@@ -30,19 +29,6 @@ open_start_data=datetime.strptime(open_start_data,date_format)
 open_end_data=datetime.strptime(open_end_data,date_format)
 end_start_data=datetime.strptime(end_start_data,date_format)
 end_end_data=datetime.strptime(end_end_data,date_format)
-
-
-def get_timer_data(value):
-    openTime = datetime.strptime(value['openTime'], date_format)
-    delta_day = 0  # 持续时间
-    if value.get('endTime'):
-        endTime = datetime.strptime(value['endTime'], date_format)
-        delta_day = (endTime + timedelta(seconds=2) - openTime).days
-    else:
-        delta_day = int(value['durationTime']['day'])
-        endTime = openTime + timedelta(days=delta_day) - timedelta(seconds=1)
-    return openTime,endTime,delta_day
-
 
 result_list=[]
 for key,value in timer_data1.items():
