@@ -168,7 +168,7 @@ def event_n_day_tasks_milestone(excel_tool: ExcelToolsForActivities, fishery_id,
         cur += 1
 
 
-def item_main(excel_tool: ExcelToolsForActivities, fishery_id, activityName, tokenID=None):
+def item_main(excel_tool: ExcelToolsForActivities, activityName, tokenID):
     # 活动代币
     template_itemTpId = 261103
     item_main_detail = excel_tool.get_table_data_detail(book_name="ITEM_MAIN.xlsm")
@@ -429,18 +429,18 @@ def mission_condition(excel_tool: ExcelToolsForActivities,fishery_id, mission_cf
             excel_tool.add_object(key=key, value=instance_object.missionConditionID, table_data_detail=mission_condition_detail, instance_object=instance_object)
         cur += 1
 
-def panel_static_language(excel_tool: ExcelToolsForActivities, t_panellanguage, activityNameId=None):
+def panel_static_language(excel_tool: ExcelToolsForActivities, t_panellanguage, activityNameId):
     panel_static_language_detail = excel_tool.get_table_data_detail(book_name="PANEL_STATIC_LANGUAGE.xlsm")
     key = "templateID"
     if activityNameId is None:
         mode = 1
         instance_object = PANEL_STATIC_LANGUAGE()
         instance_object.templateID = excel_tool.get_min_value_more_than_start(key_list=[key, "id"], table_object_detail=panel_static_language_detail, start=2030040)
-        activityNameId = instance_object.templateID
         instance_object.id = instance_object.templateID
     else:
         mode = 2
         json_object, instance_object = excel_tool.get_object(key=key, value=activityNameId, table_data_detail=panel_static_language_detail, cls=PANEL_STATIC_LANGUAGE)
+    activityNameId = instance_object.templateID
     # 标题语言
 
     instance_object.name = t_panellanguage
@@ -574,7 +574,7 @@ def main(excel_tool: ExcelToolsForActivities, mode, groupId, groupId_battle_pass
     TimerId = timer_main(excel_tool=excel_tool, open_time=open_time, fishery_id=fishery_id, activityName=activityName, TimerId=TimerId)
     activityNameId = panel_static_language(excel_tool=excel_tool, t_panellanguage=activityName, activityNameId=activityNameId)
     mission_group(excel_tool=excel_tool, TimerId=TimerId, fishery_id=fishery_id, activityName=activityName, activityNameId=activityNameId, imgNameInner=imgNameInner, newNDaysImgName=newNDaysImgName, groupId=groupId)
-    tokenID = item_main(excel_tool=excel_tool, fishery_id=fishery_id, activityName=activityName, tokenID=tokenID)
+    tokenID = item_main(excel_tool=excel_tool, activityName=activityName, tokenID=tokenID)
     item_main_language(excel_tool=excel_tool, tokenID=tokenID, activityName=activityName)
     battle_pass_main_2024(excel_tool=excel_tool, fishery_id=fishery_id, groupId_battle_pass=groupId_battle_pass, TimerId=TimerId, newNDaysImgName=newNDaysImgName, activityNameId=activityNameId)
     battle_pass(excel_tool=excel_tool, fishery_id=fishery_id, groupId_battle_pass=groupId_battle_pass)
