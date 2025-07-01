@@ -626,6 +626,15 @@ class ExcelToolsForActivities(ExcelTools):
         table_data_object = self.get_table_data_object_by_key_value(key="tpId", value=fish_id, table_data_detail=fish_detail)
         return table_data_object["fishClass"]
 
+    def get_fish_battle_type(self, fish_id, fish_detail=None):
+        """
+            查FISH表里的fishClass
+        """
+        if fish_detail is None:
+            fish_detail = self.get_table_data_detail(book_name="FISH.xlsm")
+        table_data_object = self.get_table_data_object_by_key_value(key="tpId", value=fish_id, table_data_detail=fish_detail)
+        return table_data_object["newPlotBattleType"]
+
     def get_rod(self, fishery_id, rarity, fisheries_detail=None, fishing_rod_detail=None):
         """
             根据渔场id和稀有度查对应的鱼竿
@@ -760,11 +769,26 @@ class ExcelToolsForActivities(ExcelTools):
             return nextQuestId_dict[nextQuestId]
         return None
 
+    def fish_to_fish_spot_list(self,fish_id, new_plot_fish_spot_detail=None):
+        def is_exist_target_fish():
+            for info in info_list:
+                if "fishId" not in info:
+                    continue
+                if info["fishId"] == fish_id:
+                    return True
+            return False
 
-
-
-
-
+        if new_plot_fish_spot_detail is None:
+            new_plot_fish_spot_detail = self.get_table_data_detail(book_name="NEW_PLOT_FISH_SPOT.xlsm")
+        fish_spot_list = []
+        json_object_list = new_plot_fish_spot_detail[0]
+        for json_object in json_object_list:
+            info_list = (json_object["smallInfo"] + json_object["mediumInfo"]+ json_object["largeInfo"]
+                         + json_object["hugeInfo"] + json_object["giantInfo"] + json_object["rareInfo"]
+                         + json_object["eliteInfo"] + json_object["monsterInfo"])
+            if is_exist_target_fish():
+                fish_spot_list.append(json_object["tpId"])
+        return fish_spot_list
 
 
 

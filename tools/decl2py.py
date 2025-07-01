@@ -243,14 +243,14 @@ def json_list_to_blocks(json_object_list, name):
         blocks += "\n\n"
     return blocks
 
-def update_h():
+def update_h(output_dir="../activities/decl"):
     # 生成excel表解析
     base_data_path = Path(EXCEL_PATH.split("策划模板导出工具/")[0] + r"ElementData/BaseData/")
     direct_files = list(base_data_path.glob("*"))  # 包含文件和目录
     direct_files = [p for p in direct_files if p.is_file()]
     batch_process(
         input_files=direct_files,
-        output_dir=Path("../activities/decl")
+        output_dir=Path(output_dir)
     )
 
 if __name__ == "__main__":
