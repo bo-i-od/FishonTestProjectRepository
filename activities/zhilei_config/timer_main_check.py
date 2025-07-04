@@ -19,7 +19,7 @@ dev_path = os.path.dirname(os.path.dirname(EXCEL_PATH))+'/ElementData/BaseData/'
 release_path = os.path.dirname(os.path.dirname(RELEASE_EXCEL_PATH))+'/ElementData/BaseData/'+data_keys.upper()+".data.txt"
 
 # 这里用dev还是release
-timer_data=get_table_data_by_file(data_keys,release_path)
+timer_data=get_table_data_by_file(data_keys,dev_path)
 
 # 时间数据格式化
 date_format = "%Y-%m-%d %H:%M:%S"

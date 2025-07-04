@@ -1,20 +1,18 @@
 import copy
 
-from activities.zhilei_config.common_functions import match_keys,get_format_data
+from activities.zhilei_config.common_functions import match_keys, get_format_data, match_keys_get_value
 from tools.txtTableRead.get_table_data import get_table_data,write_table_data
 # from icecream import ic
 import pandas as pd
 import numpy as np
 
+# 装备战力计算
+
+# 读表
 adv_level_data=get_table_data("ADV_LEVEL_UP")
 adv_quality_data=get_table_data("ADV_GEAR_QUALITY")
 adv_star_data=get_table_data("ADV_GEAR_STAR")
 power_convert_data=get_table_data("POWER_NEW_PLOT_CONVERT")
-
-damage=100
-hookDamage=1000
-lineLength=1000
-reelVelocityZ=2323
 
 
 base_attr_config={
@@ -24,13 +22,22 @@ base_attr_config={
     'reelVelocityZ':0,
 }
 
-
-
+# 根据装备品质+部位 找到 adv_gear_star表对应的group id
 star_type_data={
-    1:'14211',
-    2:'14206',
-    3:'14205'
+    # 红色
+    6:{
+        1:'14211',
+        2:'14206',
+        3:'14205',
+    },
+    # 金色
+    5: {
+        1: '14209',
+        2: '14203',
+        3: '14204',
+    }
 }
+
 base_star_config={
     'add_damage':0,
     'add_lineLength':0,
@@ -39,11 +46,10 @@ base_star_config={
     'powerSkillRate':0,
 }
 
-def get_star_data(adv_type,star):
-    """ 返还指定装备，指定星级的加成数值 """
-    match_data={'starGroupId':star_type_data[adv_type],'star':str(star)}
-    key=match_keys(adv_star_data,match_data)
-    value=adv_star_data[key]
+def get_star_data(adv_type,star,quality):
+    """ 返还指定品质指定星级的装备的  ADV_GEAR_STAR表对应参数， 包括 星级加成数值、技能强度数值 等配置 """
+    match_data={'starGroupId':star_type_data[quality][adv_type],'star':str(star)}
+    value=match_keys_get_value(adv_star_data,match_data)
     return get_format_data(value,base_star_config)
 
 base_quality_config={
@@ -54,9 +60,8 @@ base_quality_config={
 }
 
 def get_quality_data(adv_type,quality):
-    """ 返回指定品质，加成数值"""
-    key=match_keys(adv_quality_data, {'qualityType':str(quality)})
-    value=adv_quality_data[key]
+    """ 返回指定品质的ADV_GEAR_QUALITY表的 加成数值"""
+    value=match_keys_get_value(adv_quality_data, {'qualityType':str(quality)})
     key2={1:'rod',2:'line',3:'bait'}[adv_type]
     return get_format_data(value[key2],base_quality_config)
 
@@ -69,8 +74,13 @@ def add_dict(data1,data2):
         data1[key]+=data2[key]
 
 def get_attr(suit_data):
-    """ quality_data={
-            1:  {'star':5,'quality':5},
+    """
+    获取每个部位的装备的属性，并且将他们汇总
+    输入样例：
+    suit_data={
+        1:{'level':195,'quality':5,'star':3},
+        2:{'level':200,'quality':6,'star':1},
+        3:{'level':198,'quality':6,'star':0},
     }
     """
     final_attr=copy.deepcopy(base_attr_config)
@@ -82,7 +92,7 @@ def get_attr(suit_data):
         attr_data=get_format_data(value,base_attr_config)
         star=suit_data[adv_type]['star']
         quality=suit_data[adv_type]['quality']
-        star_data=get_star_data(adv_type,star)
+        star_data=get_star_data(adv_type,star,quality)
         quality_data=get_quality_data(adv_type,quality)
 
         int_data(attr_data)
@@ -102,15 +112,17 @@ def get_attr(suit_data):
     return final_attr
 
 def get_skill_rate(suit_data):
-    """先默认红色"""
+    """ 获取当前装备的技能强度系数 """
     ret=[]
     for adv_type in [1, 2, 3]:
         star = suit_data[adv_type]['star']
-        star_data = get_star_data(adv_type, star)
+        quality = suit_data[adv_type]['quality']
+        star_data = get_star_data(adv_type, star,quality)
         ret.append(int(star_data['powerSkillRate']))
     return ret
 
 def convert_power(pre_num,data):
+    """ 计算战力的最后一步，缩放映射，主要是减小高低属性之间的战力差距 """
     key_list=list(data.keys())
     for i in range(1,len(key_list)):
         key=key_list[i]
@@ -127,6 +139,7 @@ def convert_power(pre_num,data):
             ret=afterValue+(pre_num-preValue)*(next_afterValue-afterValue)/(next_preValue-preValue)
             return int(ret)
 def cal_power(suit_data):
+    """ 根据属性值计算最终的战力 """
     attr_data=get_attr(suit_data)
     # print(attr_data)
     skill_rate=sum(get_skill_rate(suit_data))
@@ -134,6 +147,7 @@ def cal_power(suit_data):
     return convert_power(power,power_convert_data)
 
 def get_level_cost(level):
+    """ 计算3个部位装备 在当前等级 提升1级所需要的金币花费，返回[10w,10w,10w] 各部位的花费 """
     cost_list=[]
     for adv_type in [1, 2, 3]:
         total_cost=0
@@ -150,7 +164,7 @@ def get_level_cost(level):
     return cost_list
 
 def get_level_up_num(start_level,cost):
-    """ 按消耗获取升级次数 """
+    """ 按照 总持有金币数 获取 当前等级能 升级的次数 """
     now_level=start_level
     num=0
     for i in range(999):
@@ -162,7 +176,7 @@ def get_level_up_num(start_level,cost):
             return num
 
 def get_suit_data(level,star):
-    """ 构造套装数据，默认红装 """
+    """ 构造套装数据，默认红装，支持star=数字 或者分部位配置 [4,5,6] """
     if isinstance(star,int):
         ret={
             1:{'level':level,'quality':6,'star':star},
@@ -179,39 +193,33 @@ def get_suit_data(level,star):
         return ret
 
 def cal_power_simple(level,star_list):
+    """ 输入装备等级和 星级列表，返还最终战力"""
     return cal_power(get_suit_data(level,star_list))
 
 def get_up_num_power(star,start_level,up_num):
-    """ 升级提升多少战力 """
+    """ 计算升到xx级，会提升多少战力 """
     power1 = cal_power_simple(start_level,star)
     power2 = cal_power_simple(start_level+up_num, star)
     return power2-power1
 
+# 样例展示，计算指定装备战力
 suit_data={
-    1:{'level':194,'quality':6,'star':2},
-    2:{'level':193,'quality':6,'star':4},
-    3:{'level':193,'quality':6,'star':2},
+    1:{'level':195,'quality':5,'star':3},
+    2:{'level':200,'quality':6,'star':1},
+    3:{'level':198,'quality':6,'star':0},
 }
-cal_power(suit_data)
+print(cal_power(suit_data))
 
-
-
-target=[
-[180,1],
-[180,2],
-[180,3],
-[190,3],
-[200,3],
-[200,4],
-]
-for i in target:
-    cal_power(get_suit_data(i[0],i[1]))
-
+# 样例展示，计算指定级别 升1级的消耗
 level_list=[50,100,150,190]
 for level in level_list:
     cost_list=get_level_cost(level)
     total_cost=sum(cost_list)
-    print(total_cost)
+    print(level,total_cost)
+
+# 样例展示，计算指定级别 花费指定金币数，能够提升的等级以及能战力
+# 以红2星为例
+now_star=2
 
 data1=[
 [50,1000000],
@@ -221,28 +229,18 @@ data1=[
 
 for value in data1:
     up_num=get_level_up_num(value[0],value[1])
-    print(up_num)
-    power_num=get_up_num_power(3,value[0],up_num)
-    print(power_num)
+    power_num=get_up_num_power(now_star,value[0],up_num)
+    print(up_num,power_num)
 
-for value in data1:
-    power1=cal_power_simple(value[0],[4,3,3])
-    power2=cal_power_simple(value[0],[3,3,3])
-    print(power1,power2,power1-power2)
+def output_full_power():
+    """ 计算全装备星级+等级 对应的详细战力值 """
+    data=np.zeros((300,6))
+    for level in range(1,301):
+        for star in [0, 1,2,3,4,5]:
+            power = cal_power_simple(level, star)
+            data[level-1][star]=power
+    column_labels = [0, 1, 2, 3, 4, 5]
+    index_labels = list(range(1, 301))
+    df=pd.DataFrame(data,columns=column_labels,index=index_labels)
+    df.to_excel('output.xlsx', index=True)
 
-for level in data1:
-    for star in [1,2,3,4]:
-        power1=cal_power_simple(value[0],star)
-        print(star,power1)
-
-data=np.zeros((300,6))
-
-for level in range(1,301):
-    for star in [0, 1,2,3,4,5]:
-        power = cal_power_simple(level, star)
-        data[level-1][star]=power
-column_labels = [0, 1, 2, 3, 4, 5]
-index_labels = list(range(1, 301))
-df=pd.DataFrame(data,columns=column_labels,index=index_labels)
-
-df.to_excel('output.xlsx', index=True)

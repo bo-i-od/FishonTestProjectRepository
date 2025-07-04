@@ -19,6 +19,10 @@ def match_keys(data,match_data):
             return key
     return False
 
+def match_keys_get_value(data,match_data):
+    key=match_keys(data,match_data)
+    return data[key]
+
 def get_format_data(data,base_data):
     """ 基于base_config 格式的数据 筛选data的数据 """
     ret=copy.deepcopy(base_data)
