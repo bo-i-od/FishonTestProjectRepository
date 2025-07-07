@@ -25,14 +25,14 @@ def panel_static_language(excel_tool: ExcelToolsForActivities, title,fishery_id,
     if title_id is None:
         mode = 1
         instance_object = PANEL_STATIC_LANGUAGE()
-        title_id = excel_tool.get_min_value_more_than_start(key_list=[key, "id"], table_object_detail=panel_static_language_detail, start=1998237)
+        title_id = excel_tool.get_min_value_more_than_start(key=key, table_object_detail=panel_static_language_detail, start=1998237)
         instance_object.templateID = title_id
-        instance_object.id = instance_object.templateID
 
     else:
         mode = 2
         instance_object: PANEL_STATIC_LANGUAGE
         json_object, instance_object = excel_tool.get_object(key=key, value=title_id, table_data_detail=panel_static_language_detail, cls=PANEL_STATIC_LANGUAGE)
+    instance_object.id = instance_object.templateID
     instance_object.name = "新鱼场活动"
     instance_object.t_panellanguage = title
     print(instance_object)
@@ -76,8 +76,8 @@ def mission_group(excel_tool: ExcelToolsForActivities, fishery_id, title_id, img
     def get_openArg():
         mission_condition_detail = excel_tool.get_table_data_detail(book_name="MISSION_CONDITION.xlsm")
         instance_obj = MISSION_CONDITION()
-        instance_obj.id = excel_tool.get_min_value_more_than_start(key="id", table_object_detail=mission_condition_detail, start=135054)
         instance_obj.missionConditionID = excel_tool.get_min_value_more_than_start(key="missionConditionID", table_object_detail=mission_condition_detail, start=6011950)
+        instance_obj.id = instance_obj.missionConditionID
         instance_obj.enabled = 1
         instance_obj.triggerTypeId = 9800100
         instance_obj.triggerDataMode = 1
@@ -106,10 +106,9 @@ def mission_group(excel_tool: ExcelToolsForActivities, fishery_id, title_id, img
     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=template_groupId, table_data_detail=mission_group_detail)
     instance_object: MISSION_GROUP
     instance_object = json_to_instance(json_object=json_object_list[0], cls=MISSION_GROUP)
-    if mode == 1:
-        instance_object.id = groupId
     instance_object.name = f"{excel_tool.get_fishery_name(fishery_id=fishery_id)}-配套活动"
     instance_object.groupId =groupId
+    instance_object.id = instance_object.groupId
     instance_object.openArg = openArg
     instance_object.extArgs[5] = fishery_id
     instance_object.extArgs[6] = fishery_id
@@ -139,7 +138,7 @@ def item_main(excel_tool: ExcelToolsForActivities, fishery_id, tokenID=None):
     json_object, instance_object = excel_tool.get_object(key=key, value=template_itemTpId, table_data_detail=item_main_detail, cls=ITEM_MAIN)
     if mode == 1:
         instance_object.itemTpId = tokenID
-        instance_object.id = instance_object.itemTpId
+    instance_object.id = instance_object.itemTpId
     instance_object.name = f"{excel_tool.get_fishery_name(fishery_id=fishery_id)}活动代币"
     print(instance_object)
     if mode == 2:
@@ -161,16 +160,16 @@ def item_main_language(excel_tool: ExcelToolsForActivities,fishery_id, tokenID):
         mode = 1
     instance_object: ITEM_MAIN_LANGUAGE
     json_object, instance_object = excel_tool.get_object(key=key, value=template_tpId, table_data_detail=item_main_language_detail, cls=ITEM_MAIN_LANGUAGE)
-    if mode == 1:
-        instance_object.id = excel_tool.get_max_value(key="id", table_object_detail=item_main_language_detail) + 1
     instance_object.name = f"{excel_tool.get_fishery_name(fishery_id=fishery_id)}活动代币"
     instance_object.tpId = tokenID
+    instance_object.id = instance_object.tpId
     instance_object.t_description = f"活动积分，积累进度赢取额外奖励"
     print(instance_object)
     if mode == 2:
         excel_tool.change_object(key=key, value=instance_object.tpId, table_data_detail=item_main_language_detail, instance_object=instance_object)
     else:
         excel_tool.add_object(key=key, value=instance_object.tpId, table_data_detail=item_main_language_detail, instance_object=instance_object)
+
 def mission_condition(excel_tool: ExcelToolsForActivities, fishery_id,fishery_index, mission_cfg,spot_id_start,spot_language_start, missionConditionID_start=None):
     def apply_cfg(mission_condition_object:MISSION_CONDITION, cfg):
         if "spot_language" in cfg:
@@ -275,14 +274,12 @@ def mission_condition(excel_tool: ExcelToolsForActivities, fishery_id,fishery_in
     else:
         mode = 2
         template_missionConditionID_start = missionConditionID_start
-    id_start = excel_tool.get_min_value_more_than_start(key="id", table_object_detail=mission_condition_detail, start=134845, long=70)
     cur = 0
     while cur < 70:
         instance_object: MISSION_CONDITION
         json_object, instance_object = excel_tool.get_object(key=key, value=template_missionConditionID_start + cur, table_data_detail=mission_condition_detail, cls=MISSION_CONDITION)
-        if mode == 1:
-            instance_object.id = id_start + cur
         instance_object.missionConditionID = missionConditionID_start + cur
+        instance_object.id = instance_object.missionConditionID
         name_split = instance_object.name.split("卡多湖")
         if len(name_split) > 1:
             instance_object.name = name_split[0] + excel_tool.get_fishery_name(fishery_id=fishery_id) + name_split[1]
@@ -328,9 +325,8 @@ def mission_main(excel_tool: ExcelToolsForActivities, fishery_id, groupId, token
     while cur < len(json_object_list):
         instance_object: MISSION_MAIN
         instance_object = json_to_instance(json_object=json_object_list[cur], cls=MISSION_MAIN)
-        if mode == 1:
-            instance_object.id = id_start + cur
         instance_object.missionID = missionID_start + cur
+        instance_object.id = instance_object.missionID
         instance_object.missionType = 82
         instance_object.groupId = groupId
         if cur in cfg:
@@ -378,15 +374,13 @@ def event_n_day_tasks_milestone(excel_tool: ExcelToolsForActivities, fishery_id,
         mode = 1
         json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="groupId", value=template_groupId, table_data_detail=event_n_day_tasks_milestone_detail)
         autoId_start = excel_tool.get_min_value_more_than_start(key=key, table_object_detail=event_n_day_tasks_milestone_detail, start=json_object_list[0][key], long=len(json_object_list))
-    id_start = excel_tool.get_min_value_more_than_start(key="id", table_object_detail=event_n_day_tasks_milestone_detail, start=json_object_list[0]["id"], long=len(json_object_list))
     cur = 0
     while cur < len(json_object_list):
         instance_object: EVENT_N_DAY_TASKS_MILESTONE
         instance_object = json_to_instance(json_object=json_object_list[cur],  cls=EVENT_N_DAY_TASKS_MILESTONE)
-        if mode == 1:
-            instance_object.id = id_start + cur
         instance_object.name = excel_tool.get_fishery_name(fishery_id=fishery_id) + "配套"
         instance_object.autoId = autoId_start + cur
+        instance_object.id = instance_object.autoId
         instance_object.tokenID = tokenID
         instance_object.groupId = groupId
         fish_bag = excel_tool.change_fish_bag_fishery(fish_bag_id=instance_object.milestoneRewards[0].itemId, fishery_id=fishery_id)

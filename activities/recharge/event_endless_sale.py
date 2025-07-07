@@ -53,14 +53,13 @@ def event_endless_sale(excel_tool: ExcelToolsForActivities, group_id):
         mode = 1
         json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="groupId", value=template_groupId, table_data_detail=event_endless_sale_detail)
     autoId_start = excel_tool.get_min_value_more_than_start(key="autoId", table_object_detail=event_endless_sale_detail, start=json_object_list[0]["autoId"], long=len(json_object_list))
-    id_start = excel_tool.get_max_value(key="id", table_object_detail=event_endless_sale_detail) + 1
     cur = 0
     while cur < len(json_object_list):
         instance_object: EVENT_ENDLESS_SALE
         instance_object = json_to_instance(json_object=json_object_list[cur], cls=EVENT_ENDLESS_SALE)
         if mode == 1:
-            instance_object.id = id_start + cur
             instance_object.autoId = autoId_start + cur
+        instance_object.id = instance_object.autoId
         instance_object.groupId = group_id
         print(instance_object)
         if mode == 2:
@@ -229,6 +228,7 @@ def main():
 
     excel_tool = ExcelToolsForActivities(EXCEL_PATH)
     group_id, timer_id_list = mission_group(excel_tool=excel_tool, group_id=group_id, event_endless_sale_cfg_list=event_endless_sale_cfg_list)
+    print(timer_id_list)
     event_endless_sale(excel_tool=excel_tool, group_id=group_id)
     event_endless_sale_container(excel_tool=excel_tool, event_endless_sale_cfg_list=event_endless_sale_cfg_list, group_id=group_id, timer_id_list=timer_id_list)
 

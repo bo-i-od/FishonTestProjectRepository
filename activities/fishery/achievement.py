@@ -27,8 +27,7 @@ def item_main(excel_tool: ExcelToolsForActivities, fishery_id,  itemTpId_start, 
         instance_object: ITEM_MAIN
         json_object, instance_object = excel_tool.get_object(key=key, value=template_itemTpId_start + cur, table_data_detail=item_main_detail, cls=ITEM_MAIN)
         instance_object.itemTpId = itemTpId_start + cur
-        if mode == 1:
-            instance_object.id = instance_object.itemTpId
+        instance_object.id = instance_object.itemTpId
         instance_object.name = f"鱼场{excel_tool.get_fishery_name(fishery_id=fishery_id)}-6鱼"
         if cur == 0:
             instance_object.name += "徽章"
@@ -59,8 +58,7 @@ def item_main_language(excel_tool: ExcelToolsForActivities, fishery_id,  itemTpI
         instance_object: ITEM_MAIN_LANGUAGE
         json_object, instance_object = excel_tool.get_object(key=key, value=template_tpId_start + cur, table_data_detail=item_main_language_detail, cls=ITEM_MAIN_LANGUAGE)
         instance_object.tpId = itemTpId_start + cur
-        if mode == 1:
-            instance_object.id = instance_object.tpId
+        instance_object.id = instance_object.tpId
         instance_object.name = f"鱼场{excel_tool.get_fishery_name(fishery_id=fishery_id)}-6鱼"
         instance_object.t_name = name
         if cur == 0:
@@ -110,18 +108,17 @@ def achievement_wanted(excel_tool: ExcelToolsForActivities, fishery_id, itemTpId
         pics_list[0].append(achievements_fishphoto)
         pics_list[1].append(icon_goldenlegend)
     order_start = excel_tool.get_max_value(key="order", table_object_detail=achievement_wanted_detail) + 1
-    id_start = excel_tool.get_max_value(key="id", table_object_detail=achievement_wanted_detail) + 1
     order_list = []
     cur = 0
     while cur < 2:
         instance_object: ACHIEVEMENT_WANTED
         json_object, instance_object = excel_tool.get_object(key=key, value=template_TPID_start + cur, table_data_detail=achievement_wanted_detail, cls=ACHIEVEMENT_WANTED)
         if mode == 1:
-            instance_object.id = id_start + cur
             instance_object.order = order_start + cur
         order_list.append(instance_object.order)
         instance_object.name = f"{excel_tool.get_fishery_name(fishery_id=fishery_id)}_{cur + 1}"
         instance_object.TPID = TPID_start + cur
+        instance_object.id = instance_object.TPID
         fishery_detail = excel_tool.get_fishery_detail(fishery_id=fishery_id, fisheries_detail=fisheries_detail)
         instance_object.achievementName = instance_object.TPID
         instance_object.icon = achievement_icon_list[cur]
@@ -162,10 +159,11 @@ def achievement_group_rewards_language(excel_tool: ExcelToolsForActivities, fish
     else:
         mode = 1
         instance_object = ACHIEVEMENT_GROUP_REWARDS_LANGUAGE()
-        instance_object.id = excel_tool.get_max_value(key="id", table_object_detail=achievement_group_rewards_language_detail) + 1
+
     fishery_name = excel_tool.get_fishery_name(fishery_id=fishery_id)
     instance_object.name = f"成就{fishery_name}6鱼"
     instance_object.achievementGroupId = achievementGroupId
+    instance_object.id= instance_object.achievementGroupId
     instance_object.title = name
     print(instance_object)
     if mode == 2:
@@ -182,10 +180,11 @@ def achievement_group_rewards_language(excel_tool: ExcelToolsForActivities, fish
     else:
         mode = 1
         instance_object = ACHIEVEMENT_GROUP_REWARDS_LANGUAGE()
-        instance_object.id = excel_tool.get_max_value(key="id", table_object_detail=achievement_group_rewards_language_detail) + 1
+
     fishery_name = excel_tool.get_fishery_name(fishery_id=fishery_id)
     instance_object.name = f"成就{fishery_name}6鱼黄金"
     instance_object.achievementGroupId = achievementGroupId_gold
+    instance_object.id = instance_object.achievementGroupId
     instance_object.title = name + "[黄金]"
     print(instance_object)
     if mode == 2:

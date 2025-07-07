@@ -32,9 +32,10 @@ def fish(excel_tool: ExcelToolsForActivities, fishery_index):
         else:
             json_object = excel_tool.get_table_data_object_by_key_value(key=key, value=common_fish_id_start + cur, table_data_detail=fish_detail)
             instance_object = json_to_instance(json_object=json_object, cls=FISH)
-        instance_object.id = common_fish_id_start + cur
+
         instance_object.name = f"渔场{fishery_index}-{cur + 1}"
         instance_object.tpId = common_fish_id_start + cur
+        instance_object.id = instance_object.tpId
         print(instance_object)
         if mode == 2:
             excel_tool.change_object(key=key, value=instance_object.tpId, instance_object=instance_object,  table_data_detail=fish_detail)
@@ -56,9 +57,10 @@ def fish(excel_tool: ExcelToolsForActivities, fishery_index):
         else:
             json_object = excel_tool.get_table_data_object_by_key_value(key=key, value=rare_fish_id_start + cur, table_data_detail=fish_detail)
             instance_object = json_to_instance(json_object=json_object, cls=FISH)
-        instance_object.id = rare_fish_id_start + cur
+
         instance_object.name = f"渔场{fishery_index}-{cur + 1}-改"
         instance_object.tpId = rare_fish_id_start + cur
+        instance_object.id = instance_object.tpId
         print(instance_object)
         if mode == 2:
             excel_tool.change_object(key=key, value=instance_object.tpId, instance_object=instance_object,  table_data_detail=fish_detail)
@@ -80,9 +82,10 @@ def fish(excel_tool: ExcelToolsForActivities, fishery_index):
         else:
             json_object = excel_tool.get_table_data_object_by_key_value(key=key, value=fish_bone_id_start + cur, table_data_detail=fish_detail)
             instance_object = json_to_instance(json_object=json_object, cls=FISH)
-        instance_object.id = fish_bone_id_start + cur
+
         instance_object.name = f"渔场{fishery_index}_信物鱼{cur + 1}"
         instance_object.tpId = fish_bone_id_start + cur
+        instance_object.id = instance_object.tpId
         print(instance_object)
         if mode == 2:
             excel_tool.change_object(key=key, value=instance_object.tpId, instance_object=instance_object, table_data_detail=fish_detail)
@@ -103,9 +106,10 @@ def fish(excel_tool: ExcelToolsForActivities, fishery_index):
         else:
             json_object = excel_tool.get_table_data_object_by_key_value(key=key, value=gold_fish_bone_id_start + cur, table_data_detail=fish_detail)
             instance_object = json_to_instance(json_object=json_object, cls=FISH)
-        instance_object.id = gold_fish_bone_id_start + cur
+
         instance_object.name = f"渔场{fishery_index}_黄金鱼骨{cur + 1}"
         instance_object.tpId = gold_fish_bone_id_start + cur
+        instance_object.id = instance_object.tpId
         print(instance_object)
         if mode == 2:
             excel_tool.change_object(key=key, value=instance_object.tpId, instance_object=instance_object, table_data_detail=fish_detail)
@@ -126,9 +130,9 @@ def fisheries(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index):
         mode = 1
         json_objects = excel_tool.get_table_data_object_list_by_key_value(key=key, value=template_tpId, table_data_detail=fisheries_detail)
         instance_object = json_to_instance(json_object=json_objects[0], cls=FISHERIES)
-        instance_object.id = json_objects[0]["id"] + 1
     instance_object.name = f"新主线{fishery_id}"
     instance_object.tpId = fishery_id
+    instance_object.id = instance_object.tpId
     instance_object.fish = []
     cur = 0
     while cur < 15:
@@ -159,9 +163,10 @@ def fisheries_language(excel_tool: ExcelToolsForActivities, fishery_id, fishery_
         mode = 1
         json_objects = excel_tool.get_table_data_object_list_by_key_value(key=key, value=template_tpId, table_data_detail=fisheries_language_detail)
         instance_object = json_to_instance(json_object=json_objects[0], cls=FISHERIES_LANGUAGE)
-        instance_object.id = json_objects[0]["id"] + 1
+
     instance_object.name = f"新主线渔场{fishery_index}"
     instance_object.tpId = fishery_id
+    instance_object.id = instance_object.tpId
     instance_object.t_name = instance_object.name
     print(instance_object)
     if mode == 2:
@@ -187,13 +192,13 @@ def present(excel_tool: ExcelToolsForActivities, fishery_index):
         if mode == 1:
             json_object = excel_tool.get_table_data_object_by_key_value(key=key, value=template_fish_bone_id_start + cur, table_data_detail=present_detail)
             instance_object = json_to_instance(json_object=json_object, cls=PRESENT)
-            instance_object.id = json_object["id"] + 30 + cur
         else:
             json_object = excel_tool.get_table_data_object_by_key_value(key=key, value=fish_bone_id_start + cur, table_data_detail=present_detail)
             instance_object = json_to_instance(json_object=json_object, cls=PRESENT)
 
         instance_object.name = f"渔场{fishery_index}_信物鱼{cur + 1}"
         instance_object.presentId = fish_bone_id_start + cur
+        instance_object.id = instance_object.presentId
         instance_object.presentDescription = instance_object.name
         print(instance_object)
         if mode == 2:
@@ -215,9 +220,9 @@ def present(excel_tool: ExcelToolsForActivities, fishery_index):
         else:
             json_object = excel_tool.get_table_data_object_by_key_value(key=key, value=gold_fish_bone_id_start + cur, table_data_detail=present_detail)
             instance_object = json_to_instance(json_object=json_object, cls=PRESENT)
-            instance_object.id = json_objects[0]["id"] + 30 + cur
         instance_object.name = f"渔场{fishery_index}_黄金鱼骨{cur + 1}"
         instance_object.presentId = gold_fish_bone_id_start + cur
+        instance_object.id = instance_object.presentId
         instance_object.presentDescription = instance_object.name
         print(instance_object)
         if mode == 2:
@@ -239,10 +244,11 @@ def championships(excel_tool: ExcelToolsForActivities, fishery_id):
         mode = 1
         json_objects = excel_tool.get_table_data_object_list_by_key_value(key=key, value=template_fishery_id, table_data_detail=championships_detail)
         instance_object = json_to_instance(json_object=json_objects[0], cls=CHAMPIONSHIPS)
-        instance_object.id = json_objects[0]["id"] + 1
         instance_object.name = int(json_objects[0]["name"]) + 1
         instance_object.tpId = json_objects[0]["tpId"] + 1
+
     instance_object.fishSceneTpId = fishery_id
+    instance_object.id = instance_object.tpId
     print(instance_object)
     if mode == 2:
         excel_tool.change_object(key=key, value=instance_object.fishSceneTpId, instance_object=instance_object, table_data_detail=championships_detail)

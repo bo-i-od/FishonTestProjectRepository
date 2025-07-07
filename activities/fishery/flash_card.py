@@ -43,7 +43,6 @@ def collection_base(excel_tool: ExcelToolsForActivities, fishery_id, fishery_ind
         template_collectionId_start = collectionId_start
     else:
         mode = 1
-    id_start = excel_tool.get_max_value(key="id", table_object_detail=collection_base_detail) + 1
     fish_id_list = excel_tool.get_fish_id_list(fishery_id=fishery_id, fisheries_detail=fisheries_detail)
 
     # 将鱼按照fish_class进行排序
@@ -62,10 +61,9 @@ def collection_base(excel_tool: ExcelToolsForActivities, fishery_id, fishery_ind
         fish_id = fish_id_list[cur]
         instance_object: COLLECTION_BASE
         json_object, instance_object = excel_tool.get_object(key=key, value=template_collectionId_start + cur, table_data_detail=collection_base_detail, cls=COLLECTION_BASE)
-        if mode == 1:
-            instance_object.id = id_start + cur
         instance_object.name = cur + 1
         instance_object.collectionId = collectionId_start + cur
+        instance_object.id = instance_object.collectionId
         instance_object.fishId = fish_id_list[cur]
         instance_object.fishSceneTpId = fishery_id
         instance_object.orderId = cur + 1
@@ -97,10 +95,11 @@ def timer_main(excel_tool: ExcelToolsForActivities,fishery_index, time_start, ti
         instance_object = TIMER_MAIN()
         timerID = excel_tool.get_min_value_more_than_start(key=key, table_object_detail=timer_main_detail, start=151100)
         instance_object.timerID = timerID
-        instance_object.id = instance_object.timerID
+
     else:
         mode = 2
         json_object, instance_object = excel_tool.get_object(key=key, value=timerID, table_data_detail=timer_main_detail, cls=TIMER_MAIN)
+    instance_object.id = instance_object.timerID
     instance_object.name = f"闪卡新主线-渔场{fishery_index}"
     instance_object.timerName = instance_object.name
     instance_object.cycleType = 1
@@ -128,9 +127,9 @@ def collection_chapter(excel_tool: ExcelToolsForActivities, fishery_id, fishery_
         json_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=template_tpId, table_data_detail=collection_chapter_detail)
     instance_object: COLLECTION_CHAPTER
     instance_object = json_to_instance(json_object=json_object_list[0], cls=COLLECTION_CHAPTER)
-    instance_object.id = tpId
     instance_object.name = str(tpId)
     instance_object.tpId = tpId
+    instance_object.id = instance_object.tpId
     instance_object.chapterID = 100 + fishery_index
     instance_object.fishSceneTpId = fishery_id
     instance_object.chapterTimerId = chapterTimerId
@@ -162,10 +161,9 @@ def item_main(excel_tool: ExcelToolsForActivities, fishery_index, icon_name, wil
         wildCardId = excel_tool.get_min_value_more_than_start(key=key, table_object_detail=item_main_detail, start=240150)
     instance_object: ITEM_MAIN
     json_object, instance_object = excel_tool.get_object(key=key, value=template_itemTpId, table_data_detail=item_main_detail, cls=ITEM_MAIN)
-    if mode == 1:
-        instance_object.id = wildCardId
     instance_object.name = f"新主线万能卡{fishery_index}"
     instance_object.itemTpId = wildCardId
+    instance_object.id = instance_object.itemTpId
     instance_object.iconName = f"flashcard_com_{icon_name}"
     print(instance_object)
     if mode == 2:
@@ -191,8 +189,8 @@ def item_main_language(excel_tool: ExcelToolsForActivities,fishery_id, fishery_i
     json_object, instance_object = excel_tool.get_object(key=key, value=template_tpId, table_data_detail=item_main_language_detail, cls=ITEM_MAIN_LANGUAGE)
 
     instance_object.tpId = wildCardId
-    if mode == 1:
-        instance_object.id = instance_object.tpId
+
+    instance_object.id = instance_object.tpId
     instance_object.name = f"新主线万能卡{fishery_index}"
     t_name = excel_tool.get_table_data_object_by_key_value(key="tpId",value=fishery_id,  book_name="FISHERIES_LANGUAGE.xlsm")["t_name"]
 
@@ -220,15 +218,12 @@ def collection_energy_cost_debuff(excel_tool: ExcelToolsForActivities, fishery_i
         mode = 1
         tpId_start = excel_tool.get_max_value(key=key, table_object_detail=collection_energy_cost_debuff_detail) + 1
 
-    id_start = excel_tool.get_max_value(key="id", table_object_detail=collection_energy_cost_debuff_detail) + 1
     cur = 0
     while cur < 8:
         instance_object: COLLECTION_ENERGY_COST_DEBUFF
         json_object, instance_object = excel_tool.get_object(key=key, value=template_tpId_start + cur, table_data_detail= collection_energy_cost_debuff_detail, cls=COLLECTION_ENERGY_COST_DEBUFF)
-        if mode == 1:
-            instance_object.id = id_start + cur
-
         instance_object.tpId = tpId_start + cur
+        instance_object.id = instance_object.tpId
         instance_object.name = instance_object.tpId
         instance_object.fishSceneTpId = fishery_id
         print(instance_object)
@@ -250,7 +245,6 @@ def collection_protect(excel_tool: ExcelToolsForActivities, fishery_id):
         json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="fishSceneTpId", value=template_fishSceneTpId, table_data_detail=collection_protect_detail)
     key = "tpId"
     tpId_start = excel_tool.get_max_value(key=key, table_object_detail=collection_protect_detail) + 1
-    id_start = excel_tool.get_min_value_more_than_start(key="id", table_object_detail=collection_protect_detail, start=json_object_list[0]["id"], long=18)
     fish_id_list = excel_tool.get_fish_id_list(fishery_id=fishery_id)
     monster_id_list = []
     for fish_id in fish_id_list:
@@ -264,7 +258,7 @@ def collection_protect(excel_tool: ExcelToolsForActivities, fishery_id):
         instance_object = json_to_instance(json_object=json_object_list[cur], cls=COLLECTION_PROTECT)
         if mode == 1:
             instance_object.tpId = tpId_start + cur
-            instance_object.id = id_start + cur
+        instance_object.id = instance_object.tpId
         instance_object.fishSceneTpId = fishery_id
         instance_object.protectFishIdGroup[0] = monster_id_list[cur // 3]
         instance_object.protectFlashCardIdGroup[0] = excel_tool.get_flash_card_id(fish_id=instance_object.protectFishIdGroup[0])
@@ -290,14 +284,14 @@ def collection_exchange_store(excel_tool: ExcelToolsForActivities, fishery_id, c
         mode = 1
         json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="collectionChapterId", value=template_collectionChapterId, table_data_detail=collection_exchange_store_detail)
     tpId_start = excel_tool.get_max_value(key=key, table_object_detail=collection_exchange_store_detail) + 1
-    id_start = excel_tool.get_max_value(key="id", table_object_detail=collection_exchange_store_detail) + 1
     cur = 0
     while cur < len(json_object_list):
         instance_object: COLLECTION_EXCHANGE_STORE
         instance_object = json_to_instance(json_object=json_object_list[cur], cls=COLLECTION_EXCHANGE_STORE)
         if mode == 1:
-            instance_object.id = id_start + cur
+
             instance_object.tpId = tpId_start + cur
+        instance_object.id = instance_object.tpId
         instance_object.collectionChapterId = collectionChapterId
 
         if cur < 2:
@@ -324,15 +318,14 @@ def collection_reward(excel_tool: ExcelToolsForActivities, fishery_id, collectio
         mode = 1
         json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="collectionChapterId", value=template_collectionChapterId, table_data_detail=collection_reward_detail)
     tpId_start = excel_tool.get_max_value(key=key, table_object_detail=collection_reward_detail) + 1
-    id_start = excel_tool.get_max_value(key="id", table_object_detail=collection_reward_detail) + 1
     cur = 0
     while cur < len(json_object_list):
         instance_object: COLLECTION_REWARD
         instance_object = json_to_instance(json_object=json_object_list[cur], cls=COLLECTION_REWARD)
         if mode == 1:
-            instance_object.id = id_start + cur
             instance_object.tpId = tpId_start + cur
         instance_object.collectionChapterId = collectionChapterId
+        instance_object.id = instance_object.tpId
         for normalRewards in instance_object.normalRewards:
             fish_bag = excel_tool.change_fish_bag_fishery(fish_bag_id=normalRewards.itemId, fishery_id=fishery_id)
             if not fish_bag:
@@ -358,9 +351,9 @@ def panel_static_language(excel_tool: ExcelToolsForActivities, fishery_id, chapt
     else:
         mode = 1
         instance_object = PANEL_STATIC_LANGUAGE()
-    instance_object.id = chapterNamePanelId
     instance_object.name = "新主线闪卡"
     instance_object.templateID = chapterNamePanelId
+    instance_object.id = instance_object.templateID
     instance_object.t_panellanguage = f"{excel_tool.get_fishery_name(fishery_id=fishery_id)}"
     print(instance_object)
     if mode == 2:
@@ -374,10 +367,10 @@ def panel_static_language(excel_tool: ExcelToolsForActivities, fishery_id, chapt
         instance_object = PANEL_STATIC_LANGUAGE()
         notOpenText = excel_tool.get_min_value_more_than_start(key_list=[key, "id"], table_object_detail=panel_static_language_detail, start=19960945)
         instance_object.templateID = notOpenText
-        instance_object.id = instance_object.templateID
     else:
         mode = 2
         json_object, instance_object = excel_tool.get_object(key=key, value=notOpenText, table_data_detail=panel_static_language_detail, cls=PANEL_STATIC_LANGUAGE)
+    instance_object.id = instance_object.templateID
     instance_object.name = "闪卡相关-渔场开启条件"
     instance_object.t_panellanguage = f"完成{excel_tool.get_fishery_name(fishery_id=fishery_id-1)}游钓任务后解锁{excel_tool.get_fishery_name(fishery_id=fishery_id)}渔场"
     print(instance_object)

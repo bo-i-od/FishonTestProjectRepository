@@ -74,8 +74,8 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
         counter = {"small": 0, "medium": 0, "large": 0, "hidden": 0, "boss": 0, "rare": 0, "elite": 0, "monster": 0, }
         instance_object: NEW_PLOT_FISH_SPOT
         json_object, instance_object = excel_tool.get_object(key=key, value=template_tpId_start + cur, table_data_detail=new_plot_fish_spot_detail, cls=NEW_PLOT_FISH_SPOT)
-        instance_object.id = tpId_start + cur
-        instance_object.tpId = instance_object.id
+        instance_object.tpId = tpId_start + cur
+        instance_object.id = instance_object.tpId
         instance_object.name = f"{excel_tool.get_fishery_name(fishery_id=fishery_id)}-{instance_object.name.split('-')[1]}"
         instance_object.newPlotFisheriesId = fishery_id
         instance_object.multipleRoomId = fishery_id * 100 + cur % 4 + 1
@@ -293,7 +293,6 @@ def fish_golden_show(excel_tool: ExcelToolsForActivities, fishery_id, fishery_in
     fish_golden_show_detail = excel_tool.get_table_data_detail(book_name="FISH_GOLDEN_SHOW.xlsm")
     fisheries_detail = excel_tool.get_table_data_detail(book_name="FISHERIES.xlsm")
     fish_detail = excel_tool.get_table_data_detail(book_name="FISH.xlsm")
-    id_start = excel_tool.get_max_value(key="id", table_object_detail=fish_golden_show_detail) + 1
     key = "tpId"
     fish_id_list = excel_tool.get_fish_id_list(fishery_id=fishery_id, fisheries_detail=fisheries_detail)
     cur = 0
@@ -308,8 +307,8 @@ def fish_golden_show(excel_tool: ExcelToolsForActivities, fishery_id, fishery_in
         else:
             mode = 1
             instance_object = FISH_GOLDEN_SHOW()
-            instance_object.id = id_start + cur
         instance_object.tpId = fish_id
+        instance_object.id = instance_object.tpId
         instance_object.name = f"渔场{fishery_index}-{cur - 15 + 1}-改"
         asset_name = excel_tool.get_table_data_object_by_key_value(key="tpId", value=fish_id, table_data_detail=fish_detail)["assetName"]
         instance_object.goldenShowImage = asset_name.split("/")[-1]
@@ -333,7 +332,6 @@ def fish_weight_new(excel_tool: ExcelToolsForActivities, fishery_info, fishery_i
         8: {"minweight": 39000, "firstRate": 3900, "secondStar":78000,"secondRate": 2769},
     }
     fish_weight_new_detail = excel_tool.get_table_data_detail(book_name="FISH_WEIGHT_NEW.xlsm")
-    id_start = excel_tool.get_max_value(key="id", table_object_detail=fish_weight_new_detail) + 1
 
     key = "fishId"
     cur = 0
@@ -347,8 +345,8 @@ def fish_weight_new(excel_tool: ExcelToolsForActivities, fishery_info, fishery_i
         else:
             mode = 1
             instance_object = FISH_WEIGHT_NEW()
-            instance_object.id = id_start + cur
         instance_object.fishId = fish_id
+        instance_object.id = instance_object.fishId
         instance_object.name = f"渔场{fishery_index}-{cur % 15 + 1}"
         if cur > 14:
             instance_object.name += "-改"
@@ -429,10 +427,10 @@ def fisheries(excel_tool: ExcelToolsForActivities, fishery_id, icon_name, scene_
         json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="tpId", value=template_tpId, table_data_detail=fisheries_detail)
     instance_object = json_to_instance(json_object=json_object_list[0], cls=FISHERIES)
     instance_object: FISHERIES
-    if mode == 1:
-        instance_object.id = excel_tool.get_min_value_more_than_start(key="id", table_object_detail=fisheries_detail, start=instance_object.id)
+
     instance_object.name = excel_tool.get_fishery_name(fishery_id=fishery_id)
     instance_object.tpId = fishery_id
+    instance_object.id = instance_object.tpId
     instance_object.displayicon = f"icon_fisheries_{icon_name}"
     instance_object.displayBlurBG = f"bg_fisheries_blur_{icon_name}"
     instance_object.displayBanner = f"home_banner_{icon_name}"
@@ -517,13 +515,13 @@ def multiplayer_room_enum(excel_tool: ExcelToolsForActivities, fishery_id, fishe
     while cur < len(json_object_list):
         instance_object: MULTIPLAYER_ROOM_ENUM
         instance_object = json_to_instance(json_object=json_object_list[cur], cls=MULTIPLAYER_ROOM_ENUM)
-        instance_object.id = fishery_id * 100 + cur + 1
         instance_object.name = f"{fishery_name}-钓点{cur//2 + 1}"
         if cur % 2 == 0:
             instance_object.name += "白天"
         else:
             instance_object.name += "晚上"
-        instance_object.tpId = instance_object.id
+        instance_object.tpId = fishery_id * 100 + cur + 1
+        instance_object.id = instance_object.tpId
         instance_object.multiType = 2
         instance_object.fisheriesId = fishery_id
         instance_object.fishSpotIds = [fishSpotId_start + cur, fishSpotId_start + cur + 4, 0, 0]
@@ -541,7 +539,6 @@ def new_plot_clue_reward(excel_tool: ExcelToolsForActivities, fishery_id, fisher
     template_newPlotFisheries = 500302
     key = "tpid"
     tpid_start = excel_tool.get_max_value(key=key, table_object_detail=new_plot_clue_reward_detail) + 1
-    id_start = excel_tool.get_max_value(key="id", table_object_detail=new_plot_clue_reward_detail) + 1
     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="newPlotFisheries", value=fishery_id, table_data_detail=new_plot_clue_reward_detail)
     if json_object_list:
         mode = 2
@@ -554,9 +551,8 @@ def new_plot_clue_reward(excel_tool: ExcelToolsForActivities, fishery_id, fisher
     while cur < len(json_object_list):
         instance_object: NEW_PLOT_CLUE_REWARD
         instance_object = json_to_instance(json_object=json_object_list[cur], cls=NEW_PLOT_CLUE_REWARD)
-        if mode == 1:
-            instance_object.id = id_start + cur
         instance_object.tpid = tpid_start + cur
+        instance_object.id = instance_object.tpid
         instance_object.name = f"第{fishery_index}节词条收集奖励{cur + 1}"
         instance_object.newPlotFisheries = fishery_id
         instance_object.CollectCount = clue_reward[cur]["CollectCount"]
@@ -587,7 +583,6 @@ def fish_state(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index,  
     tpId_fail_glod_start = tpId_bone_start + 15000
 
     # 鱼骨
-    id_start = excel_tool.get_max_value(key="id", table_object_detail=fish_state_detail) + 1
     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=tpId_bone_start, table_data_detail=fish_state_detail)
     if json_object_list:
         mode = 2
@@ -600,10 +595,9 @@ def fish_state(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index,  
         fish_info = fishery_info[cur + 15]
         instance_object: FISH_STATE
         json_object, instance_object = excel_tool.get_object(key="tpId", value=template_tpId_bone_start + cur, table_data_detail=fish_state_detail, cls=FISH_STATE)
-        if mode == 1:
-            instance_object.id = id_start + cur
         instance_object.name = f"新主线渔场{fishery_index}-称号鱼{cur+1}-鱼骨"
         instance_object.tpId = tpId_bone_start + cur
+        instance_object.id = instance_object.tpId
         instance_object.stateType = 1
         instance_object.startConditionId = instance_object.tpId + 900000
         instance_object.endConditionId = instance_object.tpId + 910000
@@ -632,7 +626,6 @@ def fish_state(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index,  
 
     # 黄金鱼骨
     fish_state_detail = excel_tool.get_table_data_detail(book_name="FISH_STATE.xlsm")
-    id_start = excel_tool.get_max_value(key="id", table_object_detail=fish_state_detail) + 1
     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=tpId_bone_glod_start, table_data_detail=fish_state_detail)
     if json_object_list:
         mode = 2
@@ -643,10 +636,9 @@ def fish_state(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index,  
     while cur < 15:
         fish_info = fishery_info[cur + 15]
         json_object, instance_object = excel_tool.get_object(key="tpId", value=template_tpId_bone_glod_start + cur, table_data_detail=fish_state_detail, cls=FISH_STATE)
-        if mode == 1:
-            instance_object.id = id_start + cur
         instance_object.name = f"新主线渔场{fishery_index}-称号鱼{cur + 1}-黄金鱼骨"
         instance_object.tpId = tpId_bone_glod_start + cur
+        instance_object.id = instance_object.tpId
         instance_object.stateType = 1
         instance_object.startConditionId = instance_object.tpId + 900000
         instance_object.endConditionId = instance_object.tpId + 905000
@@ -676,7 +668,6 @@ def fish_state(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index,  
 
     # 失败鱼情
     fish_state_detail = excel_tool.get_table_data_detail(book_name="FISH_STATE.xlsm")
-    id_start = excel_tool.get_max_value(key="id", table_object_detail=fish_state_detail) + 1
     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=tpId_fail_start, table_data_detail=fish_state_detail)
     if json_object_list:
         mode = 2
@@ -688,10 +679,9 @@ def fish_state(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index,  
     while cur < 15:
         fish_info = fishery_info[cur + 15]
         json_object, instance_object = excel_tool.get_object(key="tpId", value=template_tpId_fail_start + cur, table_data_detail=fish_state_detail, cls=FISH_STATE)
-        if mode == 1:
-            instance_object.id = id_start + cur
         instance_object.name = f"新主线渔场{fishery_index}-称号鱼{cur+1}-失败"
         instance_object.tpId = tpId_fail_start + cur
+        instance_object.id = instance_object.tpId
         instance_object.stateType = 2
         instance_object.endConditionId = instance_object.tpId + 900000
         instance_object.endTime = 10
@@ -729,10 +719,9 @@ def fish_state(excel_tool: ExcelToolsForActivities, fishery_id, fishery_index,  
     while cur < 15:
         fish_info = fishery_info[cur + 15]
         json_object, instance_object = excel_tool.get_object(key="tpId", value=template_tpId_fail_glod_start + cur, table_data_detail=fish_state_detail, cls=FISH_STATE)
-        if mode == 1:
-            instance_object.id = id_start + cur
         instance_object.name = f"新主线渔场{fishery_index}-称号鱼{cur + 1}-黄金失败"
         instance_object.tpId = tpId_fail_glod_start + cur
+        instance_object.id = instance_object.tpId
         instance_object.stateType = 2
         instance_object.endConditionId = instance_object.tpId + 895000
         instance_object.endTime = 10
@@ -779,10 +768,10 @@ def mission_condition(excel_tool:ExcelToolsForActivities,fishery_id, fishery_ind
         instance_object: MISSION_CONDITION
         if mode == 1:
             instance_object = MISSION_CONDITION()
-            instance_object.id = id_start + cur
             instance_object.missionConditionID = bone_start_condition + cur
         else:
             json_object, instance_object = excel_tool.get_object(key=key, value=bone_start_condition + cur, table_data_detail=mission_condition_detail, cls=MISSION_CONDITION)
+        instance_object.id = instance_object.missionConditionID
         instance_object.name = f"新主线渔场{fishery_index}-称号鱼{cur + 1}-鱼情开启条件"
         instance_object.enabled = 1
         instance_object.triggerTypeId = 9800145
@@ -812,10 +801,10 @@ def mission_condition(excel_tool:ExcelToolsForActivities,fishery_id, fishery_ind
         instance_object: MISSION_CONDITION
         if mode == 1:
             instance_object = MISSION_CONDITION()
-            instance_object.id = id_start + cur
             instance_object.missionConditionID = bone_glod_start_condition + cur
         else:
             json_object, instance_object = excel_tool.get_object(key=key, value=bone_glod_start_condition + cur, table_data_detail=mission_condition_detail, cls=MISSION_CONDITION)
+        instance_object.id = instance_object.missionConditionID
         instance_object.name = f"新主线渔场{fishery_index}-称号鱼{cur + 1}-黄金鱼情开启条件"
         instance_object.enabled = 1
         instance_object.triggerTypeId = 9800145
@@ -847,10 +836,10 @@ def mission_condition(excel_tool:ExcelToolsForActivities,fishery_id, fishery_ind
         instance_object: MISSION_CONDITION
         if mode == 1:
             instance_object = MISSION_CONDITION()
-            instance_object.id = id_start + cur
             instance_object.missionConditionID = end_condition + cur
         else:
             json_object, instance_object = excel_tool.get_object(key=key, value=end_condition + cur, table_data_detail=mission_condition_detail, cls=MISSION_CONDITION)
+        instance_object.id = instance_object.missionConditionID
         instance_object.name = f"新主线渔场{fishery_index}-称号鱼{cur + 1}-鱼情结束条件"
         instance_object.enabled = 1
         instance_object.triggerTypeId = 9800061
@@ -876,10 +865,10 @@ def panel_static_language(excel_tool: ExcelToolsForActivities, activityBP, activ
         mode = 1
         instance_object = PANEL_STATIC_LANGUAGE()
         instance_object.templateID = excel_tool.get_min_value_more_than_start(key_list=[key, "id"], table_object_detail=panel_static_language_detail, start=19960945)
-        instance_object.id = instance_object.templateID
     else:
         mode = 2
         json_object, instance_object = excel_tool.get_object(key=key, value=activityBPId, table_data_detail=panel_static_language_detail, cls=PANEL_STATIC_LANGUAGE)
+    instance_object.id = instance_object.templateID
     instance_object.name = "BP名称"
     instance_object.t_panellanguage = activityBP
     print(instance_object)
@@ -902,9 +891,9 @@ def battle_pass_main_2024(excel_tool: ExcelToolsForActivities, fishery_id, icon_
     instance_object: BATTLE_PASS_MAIN_2024
     json_object, instance_object = excel_tool.get_object(key=key, value=template_tpId, table_data_detail=battle_pass_main_2024_detail, cls=BATTLE_PASS_MAIN_2024)
     if mode == 1:
-        instance_object.id = excel_tool.get_max_value(key="id", table_object_detail=battle_pass_main_2024_detail) + 1
         instance_object.groupId = excel_tool.get_max_value(key="groupId", table_object_detail=battle_pass_main_2024_detail) + 1
     instance_object.tpId = battle_pass_main_2024_tpId
+    instance_object.id = instance_object.tpId
     instance_object.name = "新主线-" + excel_tool.get_fishery_name(fishery_id=fishery_id) + "BP"
     for itemReward in instance_object.itemReward:
         fish_bag = excel_tool.change_fish_bag_fishery(fish_bag_id=itemReward.tpId, fishery_id=fishery_id)
@@ -929,7 +918,6 @@ def battle_pass(excel_tool: ExcelToolsForActivities, fishery_id, battle_pass_gro
     battle_pass_detail = excel_tool.get_table_data_detail(book_name="BATTLE_PASS.xlsm")
     key = "tpId"
     template_battle_pass_groupId = 28
-    id_start = excel_tool.get_max_value(key="id", table_object_detail=battle_pass_detail) + 1
     tpId_start = excel_tool.get_min_value_more_than_start(key="tpId", table_object_detail=battle_pass_detail, start=100710, long=60)
     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="groupId", value=battle_pass_groupId, table_data_detail=battle_pass_detail)
     if json_object_list:
@@ -942,10 +930,9 @@ def battle_pass(excel_tool: ExcelToolsForActivities, fishery_id, battle_pass_gro
     while cur < len(json_object_list):
         instance_object: BATTLE_PASS
         instance_object = json_to_instance(json_object=json_object_list[cur], cls=BATTLE_PASS)
-        if mode == 1:
-            instance_object.id = id_start + cur
         instance_object.name = f"{excel_tool.get_fishery_name(fishery_id=fishery_id)}BP等级{cur+1}奖励"
         instance_object.tpId = tpId_start + cur
+        instance_object.id = instance_object.tpId
         instance_object.groupId = battle_pass_groupId
         fish_bag = excel_tool.change_fish_bag_fishery(fish_bag_id=instance_object.freeRewards[0].tpId, fishery_id=fishery_id)
         if fish_bag:
@@ -974,7 +961,7 @@ def new_plot_map_point(excel_tool: ExcelToolsForActivities, fishery_id,fishery_i
     point_list = []
     new_plot_map_point_detail = excel_tool.get_table_data_detail(book_name="NEW_PLOT_MAP_POINT.xlsm")
     key = "tpId"
-    id_start = excel_tool.get_min_value_more_than_start(key_list=["id", key], table_object_detail=new_plot_map_point_detail, start=10000, long=len(map_point_position_list))
+    tpId_start = excel_tool.get_min_value_more_than_start(key=key, table_object_detail=new_plot_map_point_detail, start=10000, long=len(map_point_position_list))
     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="fisheriesId", value=fishery_id, table_data_detail=new_plot_map_point_detail)
     if json_object_list:
         mode = 2
@@ -986,12 +973,12 @@ def new_plot_map_point(excel_tool: ExcelToolsForActivities, fishery_id,fishery_i
         instance_object: NEW_PLOT_MAP_POINT
         if mode == 1:
             instance_object = NEW_PLOT_MAP_POINT()
-            instance_object.id = id_start + cur
-            instance_object.tpId = instance_object.id
+            instance_object.tpId = tpId_start + cur
         else:
             instance_object = json_to_instance(json_object=json_object_list[cur], cls=NEW_PLOT_MAP_POINT)
         if cur < 5:
             point_list.append(instance_object.tpId)
+        instance_object.id = instance_object.tpId
         instance_object.name = fishery_name + "-" + map_point_position_list[cur]["name"]
         instance_object.enabled = 1
         instance_object.fisheriesId = fishery_id
@@ -1040,8 +1027,8 @@ def new_plot_map_point_language(excel_tool: ExcelToolsForActivities,fishery_id, 
         else:
             mode = 1
             instance_object = NEW_PLOT_MAP_POINT_LANGUAGE()
-        instance_object.id = point_list[cur]
-        instance_object.tpId = instance_object.id
+        instance_object.tpId = point_list[cur]
+        instance_object.id = instance_object.tpId
         instance_object.name = fishery_name + "-" + map_point_position_list[cur]["name"]
         if instance_object.t_name is None:
             instance_object.t_name = fishery_name + "-" + map_point_position_list[cur]["name"]
@@ -1071,10 +1058,10 @@ def shop_goods_season_info(excel_tool: ExcelToolsForActivities, fishery_index, C
         mode = 1
         instance_object_low = SHOP_GOODS_SEASON_INFO()
         instance_object_high = SHOP_GOODS_SEASON_INFO()
-        instance_object_low.id = id_start
-        instance_object_high.id = id_start + 1
-        instance_object_low.tpId = instance_object_low.id
-        instance_object_high.tpId = instance_object_high.id
+        instance_object_low.tpId = id_start
+        instance_object_high.tpId = id_start + 1
+    instance_object_low.id = instance_object_low.tpId
+    instance_object_high.id = instance_object_high.tpId
     instance_object_low.enabled = 1
     instance_object_low.name = f"赛季溢出资源兑换商店-渔场{fishery_index}-鱼卡200-低价"
     instance_object_low.plotId = ChapterId
