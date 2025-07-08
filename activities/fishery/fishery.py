@@ -18,6 +18,7 @@ from activities.decl.NEW_PLOT_FISH_TYPE_DROP import NEW_PLOT_FISH_TYPE_DROP
 from activities.decl.NEW_PLOT_MAP_MAIN import NEW_PLOT_MAP_MAIN
 from activities.decl.NEW_PLOT_MAP_POINT import NEW_PLOT_MAP_POINT
 from activities.decl.NEW_PLOT_MAP_POINT_LANGUAGE import NEW_PLOT_MAP_POINT_LANGUAGE
+from activities.decl.NEW_PLOT_QUEST import NEW_PLOT_QUEST
 from activities.decl.PANEL_STATIC_LANGUAGE import PANEL_STATIC_LANGUAGE
 from activities.decl.SHOP_GOODS_SEASON_INFO import SHOP_GOODS_SEASON_INFO
 from activities.fishery.load_tools import get_spot_fish_type_detail, get_fishery_info, get_exclude_info, \
@@ -32,22 +33,22 @@ from tools.decl2py import *
 """
 
 
-def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_start, fishery_cfg_list, fishery_info,exclude_info, bgm_name,fishery_name, scene_name_list, mapPointId_list, cfg_ndays):
-    def get_quest_id(fish_id):
-        # return excel_tool.get_table_data_object_by_key_value(key="triggerKeyS", value=fish_id, table_data_detail=new_plot_quest_detail)["tpId"]
-        index = quest_info.index(fish_id)
-        new_plot_quest_list = cfg_ndays["mission_cfg"]["new_plot_quest_list"]
-        try:
-            quest_id = new_plot_quest_list[index]
-            return quest_id
-        except IndexError:
-            return None
+def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_start, fishery_cfg_list, fishery_info, bgm_name,fishery_name, scene_name_list, mapPointId_list):
+    # def get_quest_id(fish_id):
+    #     # return excel_tool.get_table_data_object_by_key_value(key="triggerKeyS", value=fish_id, table_data_detail=new_plot_quest_detail)["tpId"]
+    #     index = quest_info.index(fish_id)
+    #     new_plot_quest_list = cfg_ndays["mission_cfg"]["new_plot_quest_list"]
+    #     try:
+    #         quest_id = new_plot_quest_list[index]
+    #         return quest_id
+    #     except IndexError:
+    #         return None
 
 
 
     new_plot_fish_spot_detail = excel_tool.get_table_data_detail(book_name="NEW_PLOT_FISH_SPOT.xlsm")
     # new_plot_quest_detail = excel_tool.get_table_data_detail(book_name="NEW_PLOT_QUEST.xlsm")
-    quest_info = get_quest_info(excel_tool=excel_tool, fishery_id=fishery_id)
+    # quest_info = get_quest_info(excel_tool=excel_tool, fishery_id=fishery_id)
     template_tpId_start = 10101
     key = "tpId"
     table_data_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=tpId_start, table_data_detail=new_plot_fish_spot_detail)
@@ -69,7 +70,7 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
      }
     cur = 0
     while cur < 8:
-        exclude_list = exclude_info[cur]
+        # exclude_list = exclude_info[cur]
         fishery_cfg = fishery_cfg_list[cur]
         counter = {"small": 0, "medium": 0, "large": 0, "hidden": 0, "boss": 0, "rare": 0, "elite": 0, "monster": 0, }
         instance_object: NEW_PLOT_FISH_SPOT
@@ -106,11 +107,11 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
                     info.weight = 0
                 else:
                     info.weight = 1000 // fish_type_detail["rare"]
-                if info.fishId in exclude_list:
-                    info.excludeType = 1
-                    info.excludeArgs = get_quest_id(fish_id=info.fishId)
-                    if not info.excludeArgs:
-                        info.excludeType = None
+                # if info.fishId in exclude_list:
+                #     info.excludeType = 1
+                #     info.excludeArgs = get_quest_id(fish_id=info.fishId)
+                #     if not info.excludeArgs:
+                #         info.excludeType = None
                 if counter["rare"] == 0:
                     info.weight = last_weight[fish_type_detail["rare"]]
                 counter["rare"] += 1
@@ -124,11 +125,11 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
                     info.weight = 0
                 else:
                     info.weight = 1000 // fish_type_detail["elite"]
-                if info.fishId in exclude_list:
-                    info.excludeType = 1
-                    info.excludeArgs = get_quest_id(fish_id=info.fishId)
-                    if not info.excludeArgs:
-                        info.excludeType = None
+                # if info.fishId in exclude_list:
+                #     info.excludeType = 1
+                #     info.excludeArgs = get_quest_id(fish_id=info.fishId)
+                #     if not info.excludeArgs:
+                #         info.excludeType = None
                 if counter["elite"] == 0:
                     info.weight = last_weight[fish_type_detail["elite"]]
                 counter["elite"] += 1
@@ -142,11 +143,11 @@ def new_plot_fish_spot(excel_tool: ExcelToolsForActivities, fishery_id, tpId_sta
                     info.weight = 0
                 else:
                     info.weight = 1000 // fish_type_detail["monster"]
-                if info.fishId in exclude_list:
-                    info.excludeType = 1
-                    info.excludeArgs = get_quest_id(fish_id=info.fishId)
-                    if not info.excludeArgs:
-                        info.excludeType = None
+                # if info.fishId in exclude_list:
+                #     info.excludeType = 1
+                #     info.excludeArgs = get_quest_id(fish_id=info.fishId)
+                #     if not info.excludeArgs:
+                #         info.excludeType = None
                 if counter["monster"] == 0:
                     info.weight = last_weight[fish_type_detail["monster"]]
                 counter["monster"] += 1
@@ -1083,6 +1084,22 @@ def shop_goods_season_info(excel_tool: ExcelToolsForActivities, fishery_index, C
         excel_tool.add_object(key=key, value=instance_object_low.tpId, table_data_detail=shop_goods_season_info_detail, instance_object=instance_object_low)
         excel_tool.add_object(key=key, value=instance_object_high.tpId, table_data_detail=shop_goods_season_info_detail, instance_object=instance_object_high)
 
+def new_plot_quest(excel_tool, new_plot_quest_list, new_plot_quest_list_israre):
+    new_plot_quest_detail = excel_tool.get_table_data_detail(book_name="NEW_PLOT_QUEST.xlsm")
+    key = "tpId"
+    instance_object: NEW_PLOT_QUEST
+    cur = 0
+    while cur < len(new_plot_quest_list):
+        json_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=new_plot_quest_list[cur], table_data_detail=new_plot_quest_detail)
+        if not json_object_list:
+            cur += 1
+            continue
+        instance_object = json_to_instance(json_object=json_object_list[cur], cls=NEW_PLOT_QUEST)
+        instance_object.conchSummon = new_plot_quest_list_israre[cur]
+        print(instance_object)
+        excel_tool.change_object(key=key, value=instance_object.tpId, table_data_detail=new_plot_quest_detail, instance_object=instance_object)
+        cur += 1
+
 def main(excel_tool: ExcelToolsForActivities, mode = 1):
     """
         读写方式：新增/修改
@@ -1118,6 +1135,8 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
         {"name": "订单", "xPosition": -73, "yPosition": 369},
         {"name": "锦标赛", "xPosition": 22, "yPosition": 412},
     ]
+    new_plot_quest_list = cfg_ndays["mission_cfg"]["new_plot_quest_list"]
+    new_plot_quest_list_israre = cfg_ndays["mission_cfg"]["new_plot_quest_list_israre"]
     # map_point_position_list = cfg["map_point_position_list"]
 
 
@@ -1140,7 +1159,7 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
     # 配置修改区结束
 
     fishery_info = get_fishery_info(excel_tool=excel_tool, fishery_id=fishery_id)
-    exclude_info = get_exclude_info(excel_tool=excel_tool, fishery_id=fishery_id)
+    # exclude_info = get_exclude_info(excel_tool=excel_tool, fishery_id=fishery_id)
     fish(excel_tool=excel_tool, fishery_info=fishery_info, fishery_index=fishery_index, living=living)
     fisheries(excel_tool=excel_tool, fishery_id=fishery_id, icon_name=icon_name, scene_name=scene_name_list[0], fishery_info=fishery_info, fishery_name=fishery_name)
     point_list = new_plot_map_point(excel_tool=excel_tool, fishery_id=fishery_id,  fishery_index=fishery_index, fishery_cfg_list=fishery_cfg_list, map_point_position_list=map_point_position_list)
@@ -1157,8 +1176,9 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
     battle_pass_groupId, battle_pass_main_2024_tpId = battle_pass_main_2024(excel_tool=excel_tool, fishery_id=fishery_id, icon_name=icon_name, activityBPId=activityBPId, battle_pass_main_2024_tpId=battle_pass_main_2024_tpId)
     battle_pass(excel_tool=excel_tool, fishery_id=fishery_id, battle_pass_groupId=battle_pass_groupId)
     shop_goods_season_info(excel_tool=excel_tool, fishery_index=fishery_index, ChapterId=ChapterId)
-    new_plot_fish_spot(excel_tool=excel_tool, fishery_id=fishery_id, tpId_start=new_plot_fish_spot_tpId_start, fishery_cfg_list=fishery_cfg_list, fishery_info=fishery_info, exclude_info=exclude_info, bgm_name=bgm_name, fishery_name=fishery_name, scene_name_list=scene_name_list, mapPointId_list=mapPointId_list, cfg_ndays=cfg_ndays)
-
+    new_plot_fish_spot(excel_tool=excel_tool, fishery_id=fishery_id, tpId_start=new_plot_fish_spot_tpId_start, fishery_cfg_list=fishery_cfg_list, fishery_info=fishery_info, bgm_name=bgm_name, fishery_name=fishery_name, scene_name_list=scene_name_list, mapPointId_list=mapPointId_list)
+    # # 需要剧情表配好
+    # new_plot_quest(excel_tool=excel_tool, new_plot_quest_list=new_plot_quest_list, new_plot_quest_list_israre=new_plot_quest_list_israre)
     save_main_id(file_name=file_name, id_dict={"activityBPId": activityBPId, "battle_pass_main_2024_tpId": battle_pass_main_2024_tpId})
     print("涉及到的表：", list(excel_tool.data_txt_changed))
 
