@@ -1,6 +1,8 @@
+from tools.decl2py import update_h
+update_h(output_dir="../decl")
 from activities.three_days import three_days
 from configs.pathConfig import EXCEL_PATH
-from tools.decl2py import update_h
+
 from tools.excelRead import ExcelToolsForActivities
 
 
@@ -16,5 +18,5 @@ def main():
 
 
 if __name__ == '__main__':
-    update_h(output_dir="../decl")
+
     main()

@@ -1,12 +1,13 @@
+from tools.decl2py import update_h
+update_h(output_dir="../decl")
 from activities.ndays import ndays
 from configs.pathConfig import EXCEL_PATH
-from tools.decl2py import update_h
 from tools.excelRead import ExcelToolsForActivities
 
 
 def main():
     excel_tool = ExcelToolsForActivities(EXCEL_PATH)
-    mode = 1
+    mode = 2
 
     groupId = 5100104
     groupId_battle_pass = 44
@@ -20,5 +21,5 @@ def main():
 
 
 if __name__ == '__main__':
-    update_h(output_dir="../decl")
+
     main()
