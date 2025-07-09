@@ -390,8 +390,8 @@ def fish(excel_tool: ExcelToolsForActivities, fishery_info, fishery_index, livin
             instance_object.boneId = 380001 + (fishery_index - 1) * 15 + cur % 15
             instance_object.glodBoneId = 385001 + (fishery_index - 1) * 15 + cur % 15
             instance_object.failFishStateId = 6020001 + (fishery_index-1) * 15
-            instance_object.mapNormalFailFishStateId = instance_object.failFishStateId
-            instance_object.mapGoldenFailFishStateId = 6025001 + (fishery_index-1) * 15
+            instance_object.mapNormalFailFishStateId = instance_object.failFishStateId + cur % 15
+            instance_object.mapGoldenFailFishStateId = 6025001 + (fishery_index-1) * 15 + cur % 15
         else:
             instance_object.subspecies = [fish_id + 10000, 0]
         instance_object.fishType = fish_info["fishType"]
