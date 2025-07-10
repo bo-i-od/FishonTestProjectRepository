@@ -20,6 +20,7 @@ from activities.decl.NEW_PLOT_MAP_POINT import NEW_PLOT_MAP_POINT
 from activities.decl.NEW_PLOT_MAP_POINT_LANGUAGE import NEW_PLOT_MAP_POINT_LANGUAGE
 from activities.decl.NEW_PLOT_QUEST import NEW_PLOT_QUEST
 from activities.decl.PANEL_STATIC_LANGUAGE import PANEL_STATIC_LANGUAGE
+from activities.decl.SHOP_GOODS import SHOP_GOODS, ITEM_INFO
 from activities.decl.SHOP_GOODS_SEASON_INFO import SHOP_GOODS_SEASON_INFO
 from activities.fishery.load_tools import get_spot_fish_type_detail, get_fishery_info, get_exclude_info, \
     get_cfg_fishery, get_cfg_ndays, get_quest_info
@@ -1047,7 +1048,7 @@ def shop_goods_season_info(excel_tool: ExcelToolsForActivities, fishery_index, C
     shop_goods_season_info_detail = excel_tool.get_table_data_detail(book_name="SHOP_GOODS_SEASON_INFO.xlsm")
     openTimeTimer = 102100 + fishery_index - 1
     key = "tpId"
-    id_start = excel_tool.get_min_value_more_than_start(key_list=["id", key], table_object_detail=shop_goods_season_info_detail, start=190001, long=2)
+    tpId_start = excel_tool.get_min_value_more_than_start(key=key, table_object_detail=shop_goods_season_info_detail, start=190001, long=2)
     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="openTimeTimer", value=openTimeTimer, table_data_detail=shop_goods_season_info_detail)
     if json_object_list:
         instance_object_low: SHOP_GOODS_SEASON_INFO
@@ -1059,8 +1060,8 @@ def shop_goods_season_info(excel_tool: ExcelToolsForActivities, fishery_index, C
         mode = 1
         instance_object_low = SHOP_GOODS_SEASON_INFO()
         instance_object_high = SHOP_GOODS_SEASON_INFO()
-        instance_object_low.tpId = id_start
-        instance_object_high.tpId = id_start + 1
+        instance_object_low.tpId = tpId_start
+        instance_object_high.tpId = tpId_start + 1
     instance_object_low.id = instance_object_low.tpId
     instance_object_high.id = instance_object_high.tpId
     instance_object_low.enabled = 1
@@ -1083,6 +1084,67 @@ def shop_goods_season_info(excel_tool: ExcelToolsForActivities, fishery_index, C
     else:
         excel_tool.add_object(key=key, value=instance_object_low.tpId, table_data_detail=shop_goods_season_info_detail, instance_object=instance_object_low)
         excel_tool.add_object(key=key, value=instance_object_high.tpId, table_data_detail=shop_goods_season_info_detail, instance_object=instance_object_high)
+    return instance_object_low.tpId
+
+def shop_goods(excel_tool, fishery_id, fishery_index, ChapterId, goodsId_start):
+    shop_goods_detail = excel_tool.get_table_data_detail(book_name="SHOP_GOODS.xlsm")
+    key = "goodsId"
+    json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="goodsId", value=goodsId_start, table_data_detail=shop_goods_detail) + excel_tool.get_table_data_object_list_by_key_value(key="goodsId", value=goodsId_start + 1, table_data_detail=shop_goods_detail)
+    if json_object_list:
+        instance_object_low: SHOP_GOODS
+        instance_object_high: SHOP_GOODS
+        mode = 2
+        instance_object_low = json_to_instance(json_object=json_object_list[0], cls=SHOP_GOODS)
+        instance_object_high = json_to_instance(json_object=json_object_list[1], cls=SHOP_GOODS)
+    else:
+        mode = 1
+        instance_object_low = SHOP_GOODS()
+        instance_object_high = SHOP_GOODS()
+        instance_object_low.goodsId = goodsId_start
+        instance_object_high.goodsId = goodsId_start + 1
+    instance_object_low.id = instance_object_low.goodsId
+    instance_object_low.name = f"赛季溢出资源兑换商店-渔场{fishery_index}-鱼卡200-低价"
+    instance_object_low.enabled = 1
+    instance_object_low.shopId = 503
+    instance_object_low.needChapterLvMax = 99999
+    instance_object_low.groupId = fishery_index * 2 - 1
+    instance_object_low.weight = 10000
+    instance_object_low.discount = "100"
+    instance_object_low.itemType = 2
+    instance_object_low.itemTpId =  excel_tool.change_fish_bag_fishery(fish_bag_id=211268, fishery_id=fishery_id)
+    instance_object_low.itemCount = 1
+    instance_object_low.priceTpId = 103700
+    instance_object_low.priceCount = 300
+    instance_object_low.buyLimit = 3
+    instance_object_low.goods_order = fishery_index
+    instance_object_low.notification = 1
+    instance_object_low.items = [ITEM_INFO(), ITEM_INFO(), ITEM_INFO()]
+
+    instance_object_high.id = instance_object_high.goodsId
+    instance_object_high.name = f"赛季溢出资源兑换商店-渔场{fishery_index}-鱼卡200-高价"
+    instance_object_high.enabled = 1
+    instance_object_high.shopId = 503
+    instance_object_high.needChapterLvMax = 99999
+    instance_object_high.groupId = fishery_index * 2
+    instance_object_high.weight = 10000
+    instance_object_high.discount = "100"
+    instance_object_high.itemType = 2
+    instance_object_high.itemTpId =instance_object_low.itemTpId
+    instance_object_high.itemCount = 1
+    instance_object_high.priceTpId = 103700
+    instance_object_high.priceCount = 600
+    instance_object_high.buyLimit = -1
+    instance_object_high.goods_order = 100 + fishery_index
+    instance_object_high.items = [ITEM_INFO(), ITEM_INFO(), ITEM_INFO()]
+    print(instance_object_low)
+    print(instance_object_high)
+    if mode == 2:
+        excel_tool.change_object(key=key, value=instance_object_low.goodsId, table_data_detail=shop_goods_detail, instance_object=instance_object_low)
+        excel_tool.change_object(key=key, value=instance_object_high.goodsId, table_data_detail=shop_goods_detail, instance_object=instance_object_high)
+    else:
+        excel_tool.add_object(key=key, value=instance_object_low.goodsId, table_data_detail=shop_goods_detail, instance_object=instance_object_low)
+        excel_tool.add_object(key=key, value=instance_object_high.goodsId, table_data_detail=shop_goods_detail, instance_object=instance_object_high)
+
 
 def new_plot_quest(excel_tool, new_plot_quest_list, new_plot_quest_list_israre):
     new_plot_quest_detail = excel_tool.get_table_data_detail(book_name="NEW_PLOT_QUEST.xlsm")
@@ -1139,8 +1201,6 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
     new_plot_quest_list_israre = cfg_ndays["mission_cfg"]["new_plot_quest_list_israre"]
     # map_point_position_list = cfg["map_point_position_list"]
 
-
-    cfg_ndays = get_cfg_ndays()
     # 该区域参数为None则新增
     if mode == 1:
         activityBPId = None       # bp标题对应的panel_static_language中templateID
@@ -1157,7 +1217,6 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
     mapPointId_list = [10001 + 5 * (fishery_index - 1), 10002 + 5 * (fishery_index - 1)]
     sectionNameID = 1998083 + fishery_index
     # 配置修改区结束
-
     fishery_info = get_fishery_info(excel_tool=excel_tool, fishery_id=fishery_id)
     # exclude_info = get_exclude_info(excel_tool=excel_tool, fishery_id=fishery_id)
     fish(excel_tool=excel_tool, fishery_info=fishery_info, fishery_index=fishery_index, living=living)
@@ -1175,7 +1234,8 @@ def main(excel_tool: ExcelToolsForActivities, mode = 1):
     activityBPId = panel_static_language(excel_tool=excel_tool, activityBP=activityBP, activityBPId=activityBPId)
     battle_pass_groupId, battle_pass_main_2024_tpId = battle_pass_main_2024(excel_tool=excel_tool, fishery_id=fishery_id, icon_name=icon_name, activityBPId=activityBPId, battle_pass_main_2024_tpId=battle_pass_main_2024_tpId)
     battle_pass(excel_tool=excel_tool, fishery_id=fishery_id, battle_pass_groupId=battle_pass_groupId)
-    shop_goods_season_info(excel_tool=excel_tool, fishery_index=fishery_index, ChapterId=ChapterId)
+    goodsId_start = shop_goods_season_info(excel_tool=excel_tool, fishery_index=fishery_index, ChapterId=ChapterId)
+    shop_goods(excel_tool=excel_tool, fishery_id=fishery_id, fishery_index=fishery_index, ChapterId=ChapterId, goodsId_start=goodsId_start)
     new_plot_fish_spot(excel_tool=excel_tool, fishery_id=fishery_id, tpId_start=new_plot_fish_spot_tpId_start, fishery_cfg_list=fishery_cfg_list, fishery_info=fishery_info, bgm_name=bgm_name, fishery_name=fishery_name, scene_name_list=scene_name_list, mapPointId_list=mapPointId_list)
     # # 需要剧情表配好
     # new_plot_quest(excel_tool=excel_tool, new_plot_quest_list=new_plot_quest_list, new_plot_quest_list_israre=new_plot_quest_list_israre)
