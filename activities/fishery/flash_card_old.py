@@ -194,6 +194,11 @@ def collection_base(excel_tool: ExcelToolsForActivities, fishery_id, collectionC
         {"dropRate_list": [11, 11, 15],"ownedDebuff": 40, "totalEnergyCostGroup": [0, 0, 0]},
         {"dropRate_list": [40, 40, 30],"ownedDebuff": 20, "totalEnergyCostGroup": [0, 0, 0]},
     ]
+    fish_count_dict = {
+        18: 400311,
+        21: 400303,
+        24: 400322
+    }
 
     collection_base_detail = excel_tool.get_table_data_detail(book_name="COLLECTION_BASE.xlsm")
     fish_detail = excel_tool.get_table_data_detail(book_name="FISH.xlsm")
@@ -203,8 +208,8 @@ def collection_base(excel_tool: ExcelToolsForActivities, fishery_id, collectionC
     fishery_fish_type_detail = excel_tool.get_fishery_fish_type_detail(fishery_id=fishery_id)
     fish_count = fishery_fish_type_detail["total"]
 
-    template_fish_id = 310001
-    id_start = excel_tool.get_max_value(key="id", table_object_detail=collection_base_detail) + 1
+    template_fishery_id = fish_count_dict[fish_count]
+    json_object_list_template = excel_tool.get_table_data_object_list_by_key_value(key="fishSceneTpId", value=template_fishery_id,  table_data_detail=collection_base_detail)
     collectionId_start = excel_tool.get_max_value(key="collectionId", table_object_detail=collection_base_detail) + 1
     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="fishSceneTpId", value=fishery_id, table_data_detail=collection_base_detail)
     if json_object_list:
@@ -256,8 +261,8 @@ def collection_base(excel_tool: ExcelToolsForActivities, fishery_id, collectionC
         instance_object.resourceName = f"icon_flashcard_{name}"
         instance_object.orderId = cur + 1
         instance_object.noEventDebuff = 100
-        instance_object.totalEnergyCostGroup = [0, 0, 0]
         instance_object.totalEnergyCostByDiffCardNum = [0, 0, 0, 0, 0, 0]
+        instance_object.totalEnergyCostGroup = json_object_list_template[cur]["totalEnergyCostGroup"]
         # if fish_count != 15:
         #     raise IndexError("totalEnergyCostGroup需要确认下配置")
         print(instance_object)
