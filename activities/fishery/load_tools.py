@@ -67,6 +67,7 @@ def get_exclude_info(excel_tool: ExcelToolsForActivities, fishery_id):
         color_font_list.append(get_row_color_font(worksheet, row_index=cur, column_start=8, table_data_len=15))
         cur += 1
     exclude_info = []
+    exclude_set = set()
     cur = 0
     while cur < 8:
         info = []
@@ -75,16 +76,19 @@ def get_exclude_info(excel_tool: ExcelToolsForActivities, fishery_id):
             color = color_bg_list[cur][i]
             if color == "FFA9D08D":
                 info.append(fish_list[i + 15])
+                exclude_set.add(fish_list[i + 15])
                 i += 1
                 continue
             if color_font_list[cur][i] == "FFFE0300":
                 info.append(fish_list[i + 15])
+                exclude_set.add(fish_list[i + 15])
                 i += 1
                 continue
             i += 1
         exclude_info.append(info)
         cur += 1
-    return exclude_info
+
+    return exclude_info, list(exclude_set)
 
 def get_fishery_info(excel_tool: ExcelToolsForActivities, fishery_id):
     worksheet = get_worksheet()
