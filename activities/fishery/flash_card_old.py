@@ -72,7 +72,9 @@ def activity_double_week(excel_tool: ExcelToolsForActivities,fishery_id, chapter
     instance_object.fishSceneTpId = fishery_id
     instance_object.fishSpot = [fishery_id * 100 + 1, fishery_id * 100 + 2, fishery_id * 100 + 3, fishery_id * 100 + 4]
     instance_object.fishSpotB = [fishery_id * 100 + 1, fishery_id * 100 + 2, fishery_id * 100 + 3, fishery_id * 100 + 4]
-
+    instance_object.doubleRewardTimerId = TimerId
+    instance_object.returnId = 1
+    instance_object.returnTimerId = TimerId
 
     # 渔场鱼数
     fish_id_list = excel_tool.get_fish_id_list(fishery_id=fishery_id)
