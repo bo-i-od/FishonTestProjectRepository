@@ -84,7 +84,7 @@ class JumpData:
         "AnniversaryEventMainPanel": {"element_data": ElementsData.AnniversaryEventMainPanel.AnniversaryEventMainPanel, "close_path": [ElementsData.AnniversaryEventMainPanel.btn_close]},
         "AnniversaryEventMemoirPanel":{"element_data": ElementsData.AnniversaryEventMemoirPanel.AnniversaryEventMemoirPanel, "close_path": [ElementsData.AnniversaryEventMemoirPanel.btn_close]},
         "AquariumFishNewPanel": {"element_data": ElementsData.AquariumFishNewPanel.AquariumFishNewPanel, "open_path": [ElementsData.HomePanel.btn_aquarium, ElementsData.AquariumMainPanel.btn_fish]},
-        "AquariumNewThreeColorsPopupPanel":{"element_data": ElementsData.AquariumNewThreeColorsPopupPanel.AquariumNewAnniversaryPopupPanel, "close_path": [ElementsData.AquariumNewThreeColorsPopupPanel.btn_close]},
+        "AquariumNewThreeColorsPopupPanel":{"element_data": ElementsData.AquariumNewThreeColorsPopupPanel.AquariumNewThreeColorsPopupPanel, "close_path": [ElementsData.AquariumNewThreeColorsPopupPanel.btn_close]},
         "AquariumNewAnniversaryPopupPanel":{"element_data": ElementsData.AquariumNewAnniversaryPopupPanel.AquariumNewAnniversaryPopupPanel, "close_path": [ElementsData.AquariumNewAnniversaryPopupPanel.btn_close]},
         "AquariumMainPanel": {"element_data": ElementsData.AquariumMainPanel.AquariumMainPanel, "open_path": [ElementsData.HomePanel.btn_aquarium], "close_path": [ElementsData.AquariumMainPanel.btn_close]},
         "AquariumNewSkinPanel": {"element_data": ElementsData.AquariumNewSkinPanel.AquariumNewSkinPanel, "close_path": [ElementsData.AquariumNewSkinPanel.btn_close]},
