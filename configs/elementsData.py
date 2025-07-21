@@ -143,6 +143,10 @@ class ElementsData:
         item_list = {"locator": "UICanvas>Default>AquariumNewActivityPopupPanel>panel>bg>down>rewards>"}
         btn_enter = {"locator": "UICanvas>Default>AquariumNewActivityPopupPanel>panel>bg>down>btn_enter"}
 
+    class AquariumNewThreeColorsPopupPanel:
+        AquariumNewThreeColorsPopupPanel = {"locator": "UICanvas>Default>AquariumNewThreeColorsPopupPanel"}
+        btn_close = {"locator": "UICanvas>Default>AquariumNewThreeColorsPopupPanel>panel>btn_close>img"}
+
     class AquariumNewAnniversaryPopupPanel:
         AquariumNewAnniversaryPopupPanel = {"locator": "UICanvas>Default>AquariumNewAnniversaryPopupPanel"}
         btn_close = {"locator": "UICanvas>Default>AquariumNewAnniversaryPopupPanel>panel>btn_close>img"}
@@ -878,6 +882,9 @@ class ElementsData:
         btn_close = {"locator": "UICanvas>Important>DLCDownloadPanel>Panel>btn_close>img"}
         group_list = {"locator": "UICanvas>Important>DLCDownloadPanel>Panel>bg>group_list>"}
 
+    class DivePackPopupPanel:
+        DivePackPopupPanel = {"locator": "UICanvas>Default>DivePackPopupPanel"}
+        btn_close = {"locator": "UICanvas>Default>DivePackPopupPanel>btn_close>img"}
 
     class EntryUpdateLoading:
         EntryUpdateLoading = {"locator": "GameUpdater>Canvas>EntryUpdateLoading"}
@@ -2020,7 +2027,7 @@ class ElementsData:
     class RogueMainStagePanel:
         RogueMainStagePanel = {"locator": "UICanvas>Default>RogueMainStagePanel"}
         btn_close = {"locator": "UICanvas>Default>RogueMainStagePanel>panel>btn_close>img"}
-        btn_challenge = {"locator": "UICanvas>Default>RogueMainStagePanel>panel>btn_challenge", "focus": (1, 0.5)}
+        btn_challenge = {"locator": "UICanvas>Default>RogueMainStagePanel>panel>>btn_challenge", "focus": (1, 0.5)}
         class panel_tips_up:
             btn_close = {"locator": "UICanvas>Default>RogueMainStagePanel>panel_tips_up>panel>btn_close>text"}
 
