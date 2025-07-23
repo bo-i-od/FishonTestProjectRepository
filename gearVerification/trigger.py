@@ -127,7 +127,7 @@ class Trigger:
     def _create_dynamic_effect_trigger(self, effect_type, effect_id, arg1, arg2=None):
         """
         创建动态效果触发器
-        effect_type: 2=伤害增加, 3=一次性伤害, 4=速度变化
+        effect_type: 2=伤害增加, 3=一次性伤害, 4，5=速度变化
         effect_id: 效果标识符
         """
         # 将参数绑定到处理函数，避免额外传递参数问题
@@ -164,9 +164,8 @@ class Trigger:
         """
         伤害增加效果处理器
         delta: 触发次数
-        effect_id: 效果标识符
-        base_value: 基础增加量
-        effect_type: 效果类型 (0:百分比增加, 1:固定值增加)
+        arg1: 效果
+        arg2: 持续时间期望
         """
         self.bb.Formula.damage_increased_args_list.append({"arg1": arg1, "arg2": arg2, "count": delta})
 
@@ -175,8 +174,8 @@ class Trigger:
         """
         一次性伤害效果处理器
         delta: 触发次数
-        effect_id: 效果标识符
-        damage_value: 伤害值
+        arg1: 伤害值
+        arg2 无意义
         """
         self.bb.Formula.damage_once_args_list.append({"arg1": arg1, "arg2": arg2, "count": delta})
 
@@ -185,8 +184,8 @@ class Trigger:
         """
         速度变化效果处理器
         delta: 触发次数
-        effect_id: 效果标识符
-        change_value: 速度变化值 (正数加速，负数减速)
+        arg1: 速度变化百分比 (正数鱼减速，负数鱼加速)
+        arg2: 持续时间期望
         """
         self.bb.Formula.speed_change_args_list.append({"arg1": arg1, "arg2": arg2, "count": delta, "object": 2})
 
@@ -195,8 +194,8 @@ class Trigger:
         """
         速度变化效果处理器
         delta: 触发次数
-        effect_id: 效果标识符
-        change_value: 速度变化值 (正数加速，负数减速)
+        arg1: 拉力变化百分比(正数收线加快，负数收线减慢)
+        arg2: 持续时间期望
         """
         self.bb.Formula.speed_change_args_list.append({"arg1": arg1, "arg2": arg2, "count": delta, "object": 1})
 
