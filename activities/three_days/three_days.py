@@ -213,14 +213,14 @@ def mission_main(excel_tool: ExcelToolsForActivities,fishery_id, groupId, tokenI
         {"template_missionID": 6031032,"missionRedirection":8, "template_missionConditionIDs": {6012762: ["fishery_id", "fisheries_language"]}, },
         {"template_missionID": 6031033,"missionRedirection":8, "template_missionConditionIDs": {6012763: ["fishery_id", "fisheries_language"]}, },
         {"template_missionID": 6031034,"missionRedirection":8, "template_missionConditionIDs": {6012764: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": 6031035,"missionRedirection":8, "template_missionConditionIDs": {6012765: ["fishery_id", "fisheries_language"]}, 6012824:["fishery_id","fisheries_language"], },
-        {"template_missionID": 6031036,"missionRedirection":8, "template_missionConditionIDs": {6012766: ["fishery_id", "fisheries_language"]}, 6012825:["fishery_id","fisheries_language"], },
-        {"template_missionID": 6031037,"missionRedirection":8, "template_missionConditionIDs": {6012767: ["fishery_id", "fisheries_language"]}, 6012826:["fishery_id","fisheries_language"], },
-        {"template_missionID": 6031038,"missionRedirection":8, "template_missionConditionIDs": {6012768: ["fishery_id", "fisheries_language"]}, 6012827:["fishery_id","fisheries_language"], },
-        {"template_missionID": 6031039,"missionRedirection":8, "template_missionConditionIDs": {6012769: ["fishery_id", "fisheries_language"]}, 6012828:["fishery_id","fisheries_language"],},
-        {"template_missionID": 6031040,"missionRedirection":8, "template_missionConditionIDs": {6012770: []}, 6012829:[],},
-        {"template_missionID": 6031041,"missionRedirection":8, "template_missionConditionIDs": {6012771: []}, 6012830:[],},
-        {"template_missionID": 6031042, "missionRedirection": 8,  "template_missionConditionIDs": {6012772: []}, 6012831:[],},
+        {"template_missionID": 6031035,"missionRedirection":8, "template_missionConditionIDs": {6012765: ["fishery_id", "fisheries_language"], 6012824:["fishery_id","fisheries_language"]}, },
+        {"template_missionID": 6031036,"missionRedirection":8, "template_missionConditionIDs": {6012766: ["fishery_id", "fisheries_language"], 6012825:["fishery_id","fisheries_language"]}, },
+        {"template_missionID": 6031037,"missionRedirection":8, "template_missionConditionIDs": {6012767: ["fishery_id", "fisheries_language"], 6012826:["fishery_id","fisheries_language"]}, },
+        {"template_missionID": 6031038,"missionRedirection":8, "template_missionConditionIDs": {6012768: ["fishery_id", "fisheries_language"], 6012827:["fishery_id","fisheries_language"]}, },
+        {"template_missionID": 6031039,"missionRedirection":8, "template_missionConditionIDs": {6012769: ["fishery_id", "fisheries_language"], 6012828:["fishery_id","fisheries_language"]},},
+        {"template_missionID": 6031040,"missionRedirection":8, "template_missionConditionIDs": {6012770: [], 6012829: []},},
+        {"template_missionID": 6031041,"missionRedirection":8, "template_missionConditionIDs": {6012771: [], 6012830: []},},
+        {"template_missionID": 6031042, "missionRedirection": 8,  "template_missionConditionIDs": {6012772: [], 6012831: []},},
         {"template_missionID": 6031043, "missionRedirection": 8,  "template_missionConditionIDs": {6012773: []}},
         {"template_missionID": 6031044, "missionRedirection": 8, "template_missionConditionIDs": {6012774: []}},
         {"template_missionID": 6031045, "missionRedirection": 8, "template_missionConditionIDs": {6012775: ["fishery_id", "fisheries_language"]} },
@@ -333,6 +333,7 @@ def mission_main(excel_tool: ExcelToolsForActivities,fishery_id, groupId, tokenI
     mission_condition(excel_tool=excel_tool, fishery_id=fishery_id, mission_cfg_list=mission_cfg_list,  missionConditionID_list=missionConditionID_list)
 
 def mission_condition(excel_tool: ExcelToolsForActivities,fishery_id, mission_cfg_list, missionConditionID_list):
+    print(missionConditionID_list)
     mission_condition_detail = excel_tool.get_table_data_detail(book_name="MISSION_CONDITION.xlsm")
     mission_condition_cfg_dict = {}
     cur = 0
