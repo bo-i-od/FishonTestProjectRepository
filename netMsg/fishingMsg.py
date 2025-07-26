@@ -27,6 +27,15 @@ def get_rod_id(scene_id):
                     "500301": "500001",
                     "500302": "500001",
                     "500303": "500001",
+                    "500304": "500001",
+                    "500305": "500001",
+                    "500306": "500001",
+                    "500307": "500001",
+                    "500308": "500001",
+                    "500309": "500001",
+                    "500310": "500001",
+                    "500311": "500001",
+                    "500312": "500001",
                     }
     rod_id = scene_to_rod[scene_id]
     return rod_id
@@ -39,6 +48,7 @@ def fish(bp: BasePage, arg_list):
     while cur < len(arg_list):
         spot_id = arg_list[cur]["spot_id"]
         scene_id = bp.spot_id_to_fishery_id(spot_id=spot_id)
+        print(scene_id)
         rod_id = get_rod_id(scene_id)
 
         times = arg_list[cur]["times"]
