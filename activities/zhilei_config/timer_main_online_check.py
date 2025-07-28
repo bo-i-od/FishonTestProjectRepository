@@ -9,10 +9,10 @@ from datetime import datetime,timedelta
 # 线上文件
 PATH1 = r"C:/Users/TU/Documents/release_2025_4_1/datapool/ElementData/BaseData/TIMER_MAIN.data.txt"
 # 将要上线的文件
-PATH2 = r"C:/Users/TU/Documents/release_2025_4_1/datapool/ElementData/TIMER_MAIN.data.txt"
+PATH2 = r"C:/Users/TU/Documents/fish_on/datapool/ElementData/BaseData/TIMER_MAIN.data.txt"
 
 # 更新时间 ,注意，一般是会早一些开服，就设在23点就可以
-update_data_time="2025-07-10 23:00:00"
+update_data_time="2025-08-07 23:00:00"
 
 activity_end_time=update_data_time
 

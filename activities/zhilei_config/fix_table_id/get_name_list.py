@@ -28,7 +28,8 @@ non_language_tables = [name for name in table_names if 'LANGUAGE' not in name.up
 
 # print('含LANGUAGE的表名:')
 # for name in language_tables:
-#     print(name)
+#     # print(name)
+#     print("'", name, "',", sep='')
 
 print('\n不含LANGUAGE的表名:')
 for name in non_language_tables:

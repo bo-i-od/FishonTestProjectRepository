@@ -39,17 +39,19 @@ def get_timer_data(value):
         endTime = openTime + timedelta(days=delta_day) - timedelta(seconds=1)
     return openTime,endTime,delta_day
 
-result_list=[]
-for key,value in timer_data.items():
-    try:
-        openTime,endTime,delta_day=get_timer_data(value)
-        # 筛选那种持续时间比较短的
-        if 0<delta_day<60 and ((show_start_data<=openTime<=show_end_data) or (show_start_data<=endTime<=show_end_data) or (show_start_data>=openTime and show_end_data<=endTime) )  :
-            result_list.append([value['name'],openTime,endTime,delta_day,key])
-    except:
-        pass
 
-# 按时间先后排序
-new_list=sorted(result_list,key=lambda x:x[sort_type])
-for i in new_list:
-    print(i[4],"  ",i[1],"  ",i[2],"    ",i[3],"   ",i[0])
+if __name__ == '__main__':
+    result_list=[]
+    for key,value in timer_data.items():
+        try:
+            openTime,endTime,delta_day=get_timer_data(value)
+            # 筛选那种持续时间比较短的
+            if 0<delta_day<60 and ((show_start_data<=openTime<=show_end_data) or (show_start_data<=endTime<=show_end_data) or (show_start_data>=openTime and show_end_data<=endTime) )  :
+                result_list.append([value['name'],openTime,endTime,delta_day,key])
+        except:
+            pass
+
+    # 按时间先后排序
+    new_list=sorted(result_list,key=lambda x:x[sort_type])
+    for i in new_list:
+        print(i[4],"  ",i[1],"  ",i[2],"    ",i[3],"   ",i[0])

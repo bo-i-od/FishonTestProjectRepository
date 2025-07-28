@@ -1,5 +1,7 @@
+"""
+计算当前装备的最终战力是多少
+"""
 import copy
-
 from activities.zhilei_config.common_functions import match_keys, get_format_data, match_keys_get_value
 from tools.txtTableRead.get_table_data import get_table_data,write_table_data
 # from icecream import ic
@@ -13,7 +15,7 @@ adv_level_data=get_table_data("ADV_LEVEL_UP")
 adv_quality_data=get_table_data("ADV_GEAR_QUALITY")
 adv_star_data=get_table_data("ADV_GEAR_STAR")
 power_convert_data=get_table_data("POWER_NEW_PLOT_CONVERT")
-
+medal_star_data=get_table_data("FISHING_MEDAL_STARS")
 
 base_attr_config={
     'damage':0,
@@ -64,6 +66,31 @@ def get_quality_data(adv_type,quality):
     value=match_keys_get_value(adv_quality_data, {'qualityType':str(quality)})
     key2={1:'rod',2:'line',3:'bait'}[adv_type]
     return get_format_data(value[key2],base_quality_config)
+
+# 1代表词条，2代表技能勋章
+medal_group_id={
+    1:{
+        4:4,
+        5:5,
+        6:6,
+    },
+    2:{
+        4:7,
+        5:8,
+        6:9,
+    },
+}
+medal_base_star_config={
+    'powerRate':0,
+    'powerCollectionScore':0,
+}
+def get_medal_star_data(medal_type,star,quality):
+    """ 返还指定品质指定星级的勋章的  FISHING_MEDAL_STARS表 对应参数"""
+    match_data={'starGroup':str(medal_group_id[medal_type][quality]),'starNum':str(star)}
+    print(match_data)
+    value=match_keys_get_value(medal_star_data,match_data)
+    return get_format_data(value,medal_base_star_config)
+
 
 def int_data(data):
     for key in data:
@@ -121,6 +148,18 @@ def get_skill_rate(suit_data):
         ret.append(int(star_data['powerSkillRate']))
     return ret
 
+def get_medal_rate(medal_list):
+    """获取当前勋章的技能强度系数"""
+    ret=[]
+    for medal_data in medal_list:
+        star = medal_data['star']
+        quality = medal_data['quality']
+        medal_type = medal_data['type']
+        star_data = get_medal_star_data(medal_type, star,quality)
+        ret.append(int(star_data['powerRate']))
+    return ret
+
+
 def convert_power(pre_num,data):
     """ 计算战力的最后一步，缩放映射，主要是减小高低属性之间的战力差距 """
     key_list=list(data.keys())
@@ -138,12 +177,13 @@ def convert_power(pre_num,data):
         if pre_num<next_preValue:
             ret=afterValue+(pre_num-preValue)*(next_afterValue-afterValue)/(next_preValue-preValue)
             return int(ret)
-def cal_power(suit_data):
+def cal_power(suit_data,medal_list=[]):
     """ 根据属性值计算最终的战力 """
     attr_data=get_attr(suit_data)
     # print(attr_data)
     skill_rate=sum(get_skill_rate(suit_data))
-    power=(attr_data['damage']+attr_data['hookDamage']*0.005)/100*attr_data['lineLength']/10*((attr_data['reelVelocityZ']/1000)**2)*(1+skill_rate/100)
+    medal_rate=sum(get_medal_rate(medal_list))
+    power=(attr_data['damage']+attr_data['hookDamage']*0.005)/100*attr_data['lineLength']/10*((attr_data['reelVelocityZ']/1000)**2)*(1+skill_rate/100+medal_rate/1000)
     return convert_power(power,power_convert_data)
 
 def get_level_cost(level):
@@ -204,11 +244,14 @@ def get_up_num_power(star,start_level,up_num):
 
 # 样例展示，计算指定装备战力
 suit_data={
-    1:{'level':195,'quality':5,'star':3},
-    2:{'level':200,'quality':6,'star':1},
-    3:{'level':198,'quality':6,'star':0},
+    1:{'level':300,'quality':6,'star':5},
+    2:{'level':300,'quality':6,'star':5},
+    3:{'level':300,'quality':6,'star':5},
 }
-print(cal_power(suit_data))
+medal_list=[
+    # {'type':1,'quality':6,'star':10} for i in range(9)
+]
+print(cal_power(suit_data,medal_list))
 
 # 样例展示，计算指定级别 升1级的消耗
 level_list=[50,100,150,190]

@@ -1,3 +1,6 @@
+"""
+将xx表的xx字段的值，替换成另外一个值
+"""
 from tools.txtTableRead.get_table_data import get_table_data,write_table_data
 from icecream import ic
 import copy

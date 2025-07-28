@@ -1,7 +1,10 @@
+"""
+走格子抽奖模拟程序
+"""
 from activities.zhilei_config.common_functions import rand_with_weight
 from activities.zhilei_config.block_draw.block_draw_config import *
 N=14
-round_price=[0,3,9,12,15,15,20,20,20,20,20,20,20,20]
+round_price=[0,5,15,20,25,25,30,30,30,30,30,30,30,30]
 round_total_cost=[sum(round_price[:i+1]) for i in range(N)]
 print(round_total_cost)
 # pos_weight=[[850,100,50] for i in range(N)]
