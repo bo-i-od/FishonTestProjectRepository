@@ -27,6 +27,7 @@ update_data_time=datetime.strptime(update_data_time,date_format)
 result_list=[]
 for key,value in timer_data1.items():
     try:
+        key=value['timerID']  # 以前第一列的id不等于第三列id，所以做一个容错
         openTime,endTime,delta_day=get_timer_data(value)
         # 筛选那种持续时间比较短的
         if 0<delta_day<60 and openTime<update_data_time<endTime:
