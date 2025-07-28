@@ -278,6 +278,18 @@ def clue_start_to_end(bp: BasePage, start_clue_id: int, end_clue_id: int):
             bp.sleep(1)
             print(f"当前clue_id: {clue_id}")
 
+def add_medal_shards(bp:BasePage):
+    table_data_detail = bp.excelTools.get_table_data_detail(book_name="FISHING_MEDAL_SHARDS")
+    medal_shards_detail = table_data_detail[0]
+    bp.cmd("fishMedalGetAll")
+    for medal_shards in medal_shards_detail:
+        medal_id = medal_shards['id']
+        bp.cmd(f"add 21 {medal_id} 100")
+        print(f"add 21 {medal_id} 100")
+
+
+
+
 if __name__ == '__main__':
     base_page = BasePage(serial_number="127.0.0.1:21593", is_mobile_device=False)
     # base_page.cmd_list(["mode 500301 360107"])
@@ -285,6 +297,7 @@ if __name__ == '__main__':
     base_page.is_time_scale = False
     base_page.time_scale_default = 5
     base_page.set_time_scale(base_page.time_scale_default)
+    add_medal_shards(base_page)
     # base_page.set_is_quick_qte(True)
     # base_page.set_object_active(active=False, element_data={"locator": "UICanvas>Default>EventPanel_N_DAYS_10>Panel>panel_right>tab>Scroll View>Viewport>content>day_1(Clone)>lock"})
     # base_page.cmd("mode 500301 360101")
