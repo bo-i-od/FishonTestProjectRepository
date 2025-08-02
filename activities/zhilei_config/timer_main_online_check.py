@@ -20,6 +20,24 @@ activity_end_time=update_data_time
 timer_data1 = get_table_data_by_file("timer_main",PATH1)
 timer_data2 = get_table_data_by_file("timer_main",PATH2)
 
+def trans_data(table_data):
+    # 以前第一列的id不等于第三列id，所以做一个容错
+    table_data_list = list(table_data.items())
+    for num in range(len(table_data_list)):
+        key, value = table_data_list[num]
+        tp_id_value = value['timerID']
+        value_list = list(value.items())
+
+        if value_list[1][1]!=tp_id_value:
+            # 不一致，需要统一, 赋值
+            value_list[1]=('id',tp_id_value)
+            table_data_list[num]=(tp_id_value,dict(value_list))
+    table_data = dict(table_data_list)
+    return table_data
+
+timer_data1=trans_data(timer_data1)
+timer_data2=trans_data(timer_data2)
+
 # 时间数据格式化
 date_format = "%Y-%m-%d %H:%M:%S"
 update_data_time=datetime.strptime(update_data_time,date_format)
@@ -27,7 +45,6 @@ update_data_time=datetime.strptime(update_data_time,date_format)
 result_list=[]
 for key,value in timer_data1.items():
     try:
-        key=value['timerID']  # 以前第一列的id不等于第三列id，所以做一个容错
         openTime,endTime,delta_day=get_timer_data(value)
         # 筛选那种持续时间比较短的
         if 0<delta_day<60 and openTime<update_data_time<endTime:
