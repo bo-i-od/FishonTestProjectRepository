@@ -1307,6 +1307,7 @@ class ElementsData:
         top_res_btns = {"locator": "UICanvas>Default>HomePanel>panel>top_res>ResourceBar>>btn_add"}
         navbar_btns = {"locator": "UICanvas>Default>HomePanel>panel>navbar>btns>"}
         btn_chat = {"locator": "UICanvas>Default>HomePanel>panel>panel_left>btn_chat"}
+        btn_chip = {"locator": "UICanvas>Default>HomePanel>panel>navbar>btns>btn_chip"}
 
 
         class Panel_mini_task:
@@ -1452,6 +1453,18 @@ class ElementsData:
         MonthCardPopPanel = {"locator": "UICanvas>Default>MonthCardPopPanel"}
         btn_close = {"locator": "UICanvas>Default>MonthCardPopPanel>panel>btn_close>img"}
         btn_go = {"locator": "UICanvas>Default>MonthCardPopPanel>panel>btn_go", "focus": (1, 1)}
+
+    class MedalMainPanel:
+        btn_close = {"locator": "UICanvas>Default>MedalMainPanel>btn_close>img"}
+        btn_plan = {"locator": "UICanvas>Default>MedalMainPanel>panel_overview>btn_plan"}
+        btn_equip = {"locator": "UICanvas>Default>MedalMainPanel>panel_overview>btn_equip"}
+        btn_overview = {"locator": "UICanvas>Default>MedalMainPanel>panel_tab>TabList>Viewport>Content>tab_1>icon"}
+        btn_upgrade = {"locator": "UICanvas>Default>MedalMainPanel>panel_tab>TabList>Viewport>Content>tab_2>icon"}
+        btn_exchange = {"locator": "UICanvas>Default>MedalMainPanel>panel_tab>TabList>Viewport>Content>tab_3>icon"}
+        btn_decompose = {"locator": "UICanvas>Default>MedalMainPanel>panel_tab>TabList>Viewport>Content>tab_4>icon"}
+        Panel_1 = {"locator": "UICanvas>Default>MedalMainPanel>panel_overview>Panel_Medal_overview>panel_1"}
+        Panel_2 = {"locator": "UICanvas>Default>MedalMainPanel>panel_overview>Panel_Medal_overview>panel_2"}
+        Panel_3 = {"locator": "UICanvas>Default>MedalMainPanel>panel_overview>Panel_Medal_overview>panel_3"}
 
     class NewRankingActivityCompetitionPanel:
         NewRankingActivityCompetitionPanel =  {"locator": "UICanvas>Default>NewRankingActivityCompetitionPanel"}
