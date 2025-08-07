@@ -1,0 +1,199 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+class TierSystemSimulator:
+    def __init__(self, tier_names, initial_populations, weekly_upgrades, weekly_downgrades):
+        """
+        初始化段位系统模拟器
+
+        参数:
+        tier_names: 段位名称列表（从高到低排列）
+        initial_populations: 每个段位的初始人数
+        weekly_upgrades: 每周每个段位的升级人数
+        weekly_downgrades: 每周每个段位的降级人数
+        """
+        self.tier_names = tier_names
+        self.current_populations = np.array(initial_populations, dtype=float)
+        self.weekly_upgrades = np.array(weekly_upgrades, dtype=float)
+        self.weekly_downgrades = np.array(weekly_downgrades, dtype=float)
+
+        # 验证参数
+        if len(tier_names) != len(initial_populations) or \
+           len(initial_populations) != len(weekly_upgrades) or \
+           len(weekly_upgrades) != len(weekly_downgrades):
+            raise ValueError("所有参数列表长度必须一致")
+
+        # 验证升级降级人数合理性
+        for i in range(len(tier_names)):
+            pop = initial_populations[i]
+            up = weekly_upgrades[i]
+            down = weekly_downgrades[i]
+
+            # 最高段位没有升级
+            if i == 0 and up != 0:
+                print(f"警告: 最高段位 '{tier_names[i]}' 的升级人数已强制设为0")
+                self.weekly_upgrades[i] = 0
+                up = 0
+
+            # 最低段位没有降级
+            if i == len(tier_names) - 1 and down != 0:
+                print(f"警告: 最低段位 '{tier_names[i]}' 的降级人数已强制设为0")
+                self.weekly_downgrades[i] = 0
+                down = 0
+
+            # 检查升级+降级人数不超过当前人数
+            if up + down > pop:
+                raise ValueError(f"段位 '{tier_names[i]}' 升级+降级人数({up}+{down})超过初始人数({pop})")
+
+    def simulate_week(self):
+        """执行一周的段位升降级"""
+        # 创建新的人口数组，初始化为0
+        new_populations = np.zeros_like(self.current_populations)
+        n_tiers = len(self.tier_names)
+
+        for tier_idx in range(n_tiers):
+            current_pop = self.current_populations[tier_idx]
+            upgrades = self.weekly_upgrades[tier_idx]
+            downgrades = self.weekly_downgrades[tier_idx]
+
+            # 确保升级和降级人数不超过当前人数
+            if upgrades + downgrades > current_pop:
+                # 按比例缩减升级和降级人数
+                scaling_factor = current_pop / (upgrades + downgrades)
+                upgrades *= scaling_factor
+                downgrades *= scaling_factor
+
+            # 计算留在当前段位的人数
+            stayers = current_pop - upgrades - downgrades
+
+            # 留在当前段位
+            new_populations[tier_idx] += stayers
+
+            # 处理升级（到上一级段位）
+            if tier_idx > 0:  # 最高段位没有上一级
+                new_populations[tier_idx - 1] += upgrades
+
+            # 处理降级（到下一级段位）
+            if tier_idx < n_tiers - 1:  # 最低段位没有下一级
+                new_populations[tier_idx + 1] += downgrades
+
+        self.current_populations = new_populations
+
+    def simulate(self, weeks, verbose=False):
+        """执行多周模拟"""
+        # 记录每段位每周的变化
+        history = [self.current_populations.copy()]
+
+        for week in range(1, weeks + 1):
+            self.simulate_week()
+            history.append(self.current_populations.copy())
+
+            if verbose:
+                total = sum(self.current_populations)
+                print(f"\n第 {week} 周结果 (总人数: {total:,.0f}):")
+                for name, pop in zip(self.tier_names, self.current_populations):
+                    print(f"{name}: {pop:,.0f}人 ({pop/total:.2%})")
+
+        return history
+
+    def get_final_distribution(self):
+        """获取最终段位分布"""
+        total = sum(self.current_populations)
+        return {tier: (pop, pop/total) for tier, pop in zip(self.tier_names, self.current_populations)}
+
+    def plot_distribution_history(self, history, weeks):
+        """绘制段位分布随时间变化图"""
+        plt.figure(figsize=(12, 8))
+
+        # 转换历史数据为数组
+        history_array = np.array(history).T
+        percentages = history_array / np.sum(history_array, axis=0)
+
+        # 绘制面积图
+        colors = plt.cm.tab20(np.linspace(0, 1, len(self.tier_names)))
+
+        ax = plt.subplot(211)
+        bottom = np.zeros(weeks + 1)
+        for i, (tier, pops) in enumerate(zip(self.tier_names, percentages)):
+            ax.fill_between(range(weeks + 1), bottom, bottom + pops, label=tier, alpha=0.7, color=colors[i])
+            bottom += pops
+
+        ax.set_title('段位分布变化')
+        ax.set_xlabel('周数')
+        ax.set_ylabel('人口比例')
+        ax.legend(title='段位', loc='upper left', bbox_to_anchor=(1, 1))
+        ax.set_ylim(0, 1)
+        ax.grid(True, alpha=0.3)
+
+        # 绘制绝对数量变化
+        ax2 = plt.subplot(212)
+        for i, (tier, pops) in enumerate(zip(self.tier_names, history_array)):
+            ax2.plot(range(weeks + 1), pops, label=tier, linewidth=2, color=colors[i])
+
+        ax2.set_title('各段位人口数量变化')
+        ax2.set_xlabel('周数')
+        ax2.set_ylabel('人口数量')
+        ax2.grid(True, alpha=0.3)
+
+        plt.tight_layout()
+        plt.subplots_adjust(top=0.9)
+        plt.suptitle(f"段位系统模拟 ({weeks}周)", fontsize=16)
+        plt.tight_layout()
+        plt.show()
+
+def run_simulation():
+    """运行段位系统模拟"""
+    print("=== 段位升降系统模拟 ===")
+
+    # 用户输入段位信息
+    tiers_input = input("请输入段位名称（从高到低，用逗号分隔，例如: 王者,钻石,黄金,白银,青铜）: ")
+    tier_names = [t.strip() for t in tiers_input.split(',')]
+    n_tiers = len(tier_names)
+
+    # 用户输入初始人数
+    populations_input = input(f"请输入每个段位初始人数（逗号分隔，共{n_tiers}个值）: ")
+    initial_populations = [int(p.strip()) for p in populations_input.split(',')]
+
+    # 用户输入每周升级人数
+    upgrades_input = input(f"请输入每个段位每周升级人数（逗号分隔，共{n_tiers}个值）: ")
+    weekly_upgrades = [int(u.strip()) for u in upgrades_input.split(',')]
+
+    # 用户输入每周降级人数
+    downgrades_input = input(f"请输入每个段位每周降级人数（逗号分隔，共{n_tiers}个值）: ")
+    weekly_downgrades = [int(d.strip()) for d in downgrades_input.split(',')]
+
+    # 用户输入模拟周数
+    weeks = int(input("请输入模拟周数: "))
+
+    # 创建模拟器
+    try:
+        simulator = TierSystemSimulator(
+            tier_names=tier_names,
+            initial_populations=initial_populations,
+            weekly_upgrades=weekly_upgrades,
+            weekly_downgrades=weekly_downgrades
+        )
+
+        # 运行模拟
+        print(f"\n开始模拟段位升降系统，共 {weeks} 周...")
+        history = simulator.simulate(weeks, verbose=True)
+
+        # 获取最终分布
+        final_dist = simulator.get_final_distribution()
+        total_population = sum(final_dist[tier][0] for tier in tier_names)
+
+        print("\n=== 最终段位分布 ===")
+        print(f"总人口: {total_population:,.0f}")
+        for tier in tier_names:
+            population, percentage = final_dist[tier]
+            print(f"{tier}: {population:,.0f}人 ({percentage:.2%})")
+
+        # 绘制图表
+        simulator.plot_distribution_history(history, weeks)
+
+    except Exception as e:
+        print(f"错误: {str(e)}")
+
+# 运行程序
+if __name__ == "__main__":
+    run_simulation()
