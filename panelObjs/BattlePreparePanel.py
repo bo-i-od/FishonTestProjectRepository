@@ -44,7 +44,7 @@ class BattlePreparePanel(BasePage):
 
     # 点击抛竿
     def click_btn_cast(self):
-        element_data_list = [ElementsData.BattlePreparePanel.panel_MainStage_challenge_prepare.btn_cast, ElementsData.BattlePreparePanel.btn_cast, ElementsData.BattlePreparePanel.btn_start]
+        element_data_list = [ElementsData.BattlePreparePanel.panel_MainStage_challenge_prepare.btn_cast, ElementsData.BattlePreparePanel.btn_cast, ElementsData.BattlePreparePanel.btn_start, ElementsData.BattlePreparePanel.panel_MainStage_pve_prepare.btn_cast]
         position_list = self.wait_for_appear(element_data_list=element_data_list, is_click=False)
         cur = 0
         while cur < len(position_list):
@@ -317,16 +317,22 @@ class BattlePreparePanel(BasePage):
 
     class panel_MainStage_daily_prepare(BasePage):
         def click_btn_tournaments(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.panel_MainStage_daily_prepare.btn_tournaments)
+            self.click_element(element_data=ElementsData.BattlePreparePanel.panel_MainStage_pve_prepare.btn_tournaments)
 
         def click_btn_btn_receive(self):
-            self.click_element_safe(element_data=ElementsData.BattlePreparePanel.panel_MainStage_daily_prepare.btn_receive)
+            self.click_element_safe(element_data=ElementsData.BattlePreparePanel.panel_MainStage_pve_prepare.btn_receive)
 
         def click_outboard_tip(self):
-            self.click_element_safe(element_data=ElementsData.BattlePreparePanel.panel_MainStage_daily_prepare.outboard_tip)
+            self.click_element_safe(element_data=ElementsData.BattlePreparePanel.panel_MainStage_pve_prepare.outboard_tip)
 
         def click_btn_gohome(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.panel_MainStage_daily_prepare.btn_gohome)
+            self.click_element(element_data=ElementsData.BattlePreparePanel.panel_MainStage_pve_prepare.btn_gohome)
+
+        def get_rank(self):
+            text_list = self.get_text_list(element_data=ElementsData.BattlePreparePanel.panel_MainStage_pve_prepare.rank)
+            if text_list:
+                return text_list[0]
+            return None
 
     class panel_MainStage_challenge_prepare(BasePage):
         def click_btn_cast(self):
@@ -347,15 +353,15 @@ class BattlePreparePanel(BasePage):
             self.lua_console(lua_code)
 
         def is_panel_tip_location_active(self):
-            return self.exist(element_data=ElementsData.BattlePreparePanel.panel_MainStage_daily_prepare.panel_tip_location_newtreasure)
+            return self.exist(element_data=ElementsData.BattlePreparePanel.panel_MainStage_pve_prepare.panel_tip_location_newtreasure)
 
         def get_value_cost(self):
             self.wait_for_appear(element_data=ElementsData.BattlePreparePanel.btn_cast, is_click=False)
-            value_cost = self.get_text(element_data=ElementsData.BattlePreparePanel.panel_MainStage_daily_prepare.value_cost)
+            value_cost = self.get_text(element_data=ElementsData.BattlePreparePanel.panel_MainStage_pve_prepare.value_cost)
             return int(value_cost)
 
         def click_btn_gohome(self):
-            self.click_element(element_data=ElementsData.BattlePreparePanel.panel_MainStage_daily_prepare.btn_gohome)
+            self.click_element(element_data=ElementsData.BattlePreparePanel.panel_MainStage_pve_prepare.btn_gohome)
 
     class panel_gears_new(BasePage):
         def is_panel_active(self):

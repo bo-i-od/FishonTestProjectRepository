@@ -1759,12 +1759,14 @@ class BasePage(BasePageMain):
         cmd_list = []
         cmd_list.append(f"clearElements")
         lua_code = "Gameplay.Joystick.HorizontalValue = -1"
+
         cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left>qte 0 {lua_code}")
         cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_2>qte 0 {lua_code}")
         cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_3>qte 0 {lua_code}")
         cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_4>qte 0 {lua_code}")
         cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_5>qte 0 {lua_code}")
         cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_6>qte 0.75 {lua_code}")
+        cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_7>qte 0 {lua_code}")
         cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_fishJump>qte 0 {lua_code}")
         lua_code = "Gameplay.Joystick.HorizontalValue = 1"
         cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right>qte 0 {lua_code}")
@@ -1773,24 +1775,25 @@ class BasePage(BasePageMain):
         cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_4>qte 0 {lua_code}")
         cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_5>qte 0 {lua_code}")
         cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_6>qte 0.75 {lua_code}")
+        cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_7>qte 0 {lua_code}")
         cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_fishJump>qte 0 {lua_code}")
+
         lua_code = """local fishingMatch = GameRoot:GetFishingMatch()
 local actorPlayer  = fishingMatch:GetPlayer()
 local actorFish = actorPlayer:GetCurrentFish()
 local caBeCounter = actorFish:GetGEByClass(BATTLE_GE.CAN_BE_COUNTER, true)
 local skillCounter = actorPlayer:GetSkillByClass(BATTLE_SKILL.PLAYER.COUNTER)
+local counterType = skillCounter:GetCounterType(actorPlayer)
 if not caBeCounter then
     return
 end
-if not skillCounter then
-    return
-end
-if not skillCounter:IsHaveEnoughEnergy(caBeCounter:GetType()) then
+if not skillCounter:IsHaveEnoughEnergy(counterType) then
     return
 end
 fishingMatch:TriggerActiveSkill(skillCounter:GetSlotIndex())"""
         cmd_list.append(f"addElement joystickUp UICanvas>Default>BattlePanel>FishHUD>qte_up>qte 0 {lua_code}")
         cmd_list.append(f"addElement joystickUp UICanvas>Default>BattlePanel>FishHUD>qte_juesha>qte 0 {lua_code}")
+
 #         lua_code = """local BattlePanel = PanelMgr:Find("BattlePanel")
 # if not BattlePanel then
 #     return
@@ -1813,11 +1816,11 @@ fishingMatch:TriggerActiveSkill(skillCounter:GetSlotIndex())"""
         self.lua_console(lua_code)
 
     def go_to_spot(self, spot_id):
-            lua_code = f"""local battleController = ControllerMgr:Get("BattleController")
-            battleController:GoToDaily({spot_id}, true)
-            """
-            self.lua_console(lua_code)
-            return
+        print()
+        lua_code = f"""local battleController = ControllerMgr:Get("BattleController")
+battleController:GoToDaily({spot_id}, true)"""
+        self.lua_console(lua_code)
+        return
 
 
     def get_rod_list(self, rarity=None, fisheries_living=None, fisheries_rank=None, fishery_id=None):
@@ -2554,9 +2557,7 @@ end
         返回:
             钓点列表（list）， 是否是双周活动钓点（bool）， 是否是新主线钓点（bool）
         """
-        table_data_object_list_activity_double_week = self.excelTools.get_table_data_object_list_by_key_value(key="fishSceneTpId",
-                                                                                                    value=fishery_id,
-                                                                                                    book_name="ACTIVITY_DOUBLE_WEEK.xlsm")
+        table_data_object_list_activity_double_week = self.excelTools.get_table_data_object_list_by_key_value(key="fishSceneTpId", value=fishery_id, book_name="ACTIVITY_DOUBLE_WEEK.xlsm")
         if not table_data_object_list_activity_double_week:
             spot_id_list = []
             table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="newPlotFisheriesId", value= fishery_id,book_name="NEW_PLOT_FISH_SPOT.xlsm")
@@ -2651,15 +2652,18 @@ end
 
 
 if __name__ == '__main__':
-    bp = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21593")
-    print(bp.get_fish_type(fish_tpid=360105))
+    bp = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21503")
+    bp.cmd("mode 400301 390001")
+    # bp.is_time_scale=True
+    # bp.set_time_scale(5)
+    # bp.lua_console("DebugLog=true")
+    # print(bp.get_fish_type(fish_tpid=360105))
     # bp.lua_console('PanelMgr:OpenPanel("NewRankingPanel"')
     # "127.0.0.1:21613"
     # "b6h65hd64p5pxcyh"
     # "TimeMgr:GetServerTime()"
     # t = bp.lua_console_with_response(lua_code_return="_G.PassiveNewbieGuideEnum")
     # str(t)
-
     # bp.cmd_list(["levelupto 69", "guideskip"])
     # bp.sleep(1)
 

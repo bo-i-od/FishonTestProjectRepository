@@ -533,13 +533,15 @@ class ElementsData:
                 btn_achievement = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_achievement>btn"}
                 btn_fishalbum = {"locator": "UICanvas>Default>BattlePreparePanel>panel_pve_prepare>panel_main_sidebar>panel>panel_sidebar>panel_info>btn_fishalbum>btn"}
 
-        class panel_MainStage_daily_prepare:
-            btn_tournaments = {"locator": "UICanvas>Default>BattlePreparePanel>panel_MainStage_daily_prepare>panel_activity>btn_activity>btn_evt>btn_tournaments", "focus": (0, 0)}
-            btn_receive = {"locator": "UICanvas>Default>BattlePreparePanel>panel_MainStage_daily_prepare>Panel_MainStage_MiniTask_new>Panel_MainStage_MiniTask>model_order>btn_receive"}
-            panel_tip_location_newtreasure = {"locator": "UICanvas>Default>BattlePreparePanel>panel_MainStage_daily_prepare>panel_pve>panel_tip_location_newtreasure", "focus": (1, 0.8)}
-            value_cost = {"locator": "UICanvas>Default>BattlePreparePanel>panel_MainStage_daily_prepare>panel_pve>btn_cast>value_cost"}
-            btn_gohome = {"locator":"UICanvas>Default>BattlePreparePanel>panel_MainStage_daily_prepare>panel_gohome>btn_gohome>img"}
-            outboard_tip = {"locator":"UICanvas>Default>BattlePreparePanel>panel_MainStage_daily_prepare>panel_gohome>menu_tips>outboard_tip>panel>bg", "focus": (0, 0)}
+        class panel_MainStage_pve_prepare:
+            btn_cast = {"locator":"UICanvas>Default>BattlePreparePanel>panel_MainStage_pve_prepare>panel_pve>btn_cast"}
+            btn_tournaments = {"locator": "UICanvas>Default>BattlePreparePanel>panel_MainStage_pve_prepare>panel_activity>btn_activity>btn_evt>btn_tournaments", "focus": (0, 0)}
+            btn_receive = {"locator": "UICanvas>Default>BattlePreparePanel>panel_MainStage_pve_prepare>Panel_MainStage_MiniTask_new>Panel_MainStage_MiniTask>model_RookieTasks>btn_receive"}
+            panel_tip_location_newtreasure = {"locator": "UICanvas>Default>BattlePreparePanel>panel_MainStage_pve_prepare>panel_pve>panel_tip_location_newtreasure", "focus": (1, 0.8)}
+            value_cost = {"locator": "UICanvas>Default>BattlePreparePanel>panel_MainStage_pve_prepare>panel_pve>btn_cast>value_cost"}
+            btn_gohome = {"locator":"UICanvas>Default>BattlePreparePanel>panel_MainStage_pve_prepare>panel_gohome>btn_gohome>img"}
+            outboard_tip = {"locator":"UICanvas>Default>BattlePreparePanel>panel_MainStage_pve_prepare>panel_gohome>menu_tips>outboard_tip>panel>bg", "focus": (0, 0)}
+            rank = {"locator":"UICanvas>Default>BattlePreparePanel>panel_MainStage_pve_prepare>panel_activity>btn_activity>btn_evt>btn_tournaments>rank>value"}
 
         class PanelPrepareWarning:
             btn_icon = {"locator": "UICanvas>Default>BattlePreparePanel>Panel_Prepare_Warning>panel>panel_icon>>btn_icon>bg_icon"}
@@ -662,6 +664,11 @@ class ElementsData:
         progress_cur = {"locator": "UICanvas>Default>ChampionshipInfoNewPanel>panel>panel_rules>rules_2>rules>Viewport>Content>progress_info>progressValueLayout>cur"}
         progress_max = {"locator": "UICanvas>Default>ChampionshipInfoNewPanel>panel>panel_rules>rules_2>rules>Viewport>Content>progress_info>progressValueLayout>max"}
 
+    class ChampionshipNavigationPanel:
+        ChampionshipNavigationPanel = {"locator": "UICanvas>Default>ChampionshipNavigationPanel"}
+        btn_close = {"locator": "UICanvas>Default>ChampionshipNavigationPanel>panel>btn_close>img"}
+        btn_enter_list = {"locator": "UICanvas>Default>ChampionshipNavigationPanel>panel>panel_entrance>List>Viewport>Content>>model>btn_enter"}
+        logo_list = {"locator": "UICanvas>Default>ChampionshipNavigationPanel>panel>panel_entrance>List>Viewport>Content>entrance_model(Clone)>model>tournaments_info>logo"}
 
     class ChampionshipNewPanel:
         ChampionshipNewPanel = {"locator": "UICanvas>Default>ChampionshipNewPanel"}
@@ -1307,7 +1314,7 @@ class ElementsData:
         top_res_btns = {"locator": "UICanvas>Default>HomePanel>panel>top_res>ResourceBar>>btn_add"}
         navbar_btns = {"locator": "UICanvas>Default>HomePanel>panel>navbar>btns>"}
         btn_chat = {"locator": "UICanvas>Default>HomePanel>panel>panel_left>btn_chat"}
-
+        btn_Tournamentsnts = {"locator": "UICanvas>Default>HomePanel>panel>panel_left>list>Viewport>Content>btn_Tournamentsnts>img"}
 
         class Panel_mini_task:
             # minitask
@@ -1347,7 +1354,7 @@ class ElementsData:
 
     class JumpBlockPopupPanel:
         JumpBlockPopupPanel = {"locator": "UICanvas>Default>JumpBlockPopupPanel"}
-        btn_close = {"locator": "UICanvas>Default>JumpBlockPopupPanel>Panel_Events_jumping_manor(Clone)>panel>btn_close>img"}
+        btn_close = {"locator": "UICanvas>Default>JumpBlockPopupPanel>>panel>btn_close>img"}
 
     class LeaderBoardPanel:
         LeaderBoardPanel = {"locator":"UICanvas>Default>LeaderBoardPanel"}
@@ -1642,6 +1649,11 @@ class ElementsData:
         btn_close = {"locator": "UICanvas>Default>NumberKeyboardPanel>panel>btn_close>img"}
         btn_confirm = {"locator": "UICanvas>Default>NumberKeyboardPanel>panel>keyboard>btn_confirm"}
         btns = {"locator": "UICanvas>Default>NumberKeyboardPanel>panel>keyboard>key>"}
+
+    class PVEFisheryListPanel:
+        PVEFisheryListPanel = {"locator": "UICanvas>Default>PVEFisheryListPanel"}
+        btn_close = {"locator": "UICanvas>Default>PVEFisheryListPanel>panel>btn_close>img"}
+
 
     class PartySalePanel:
         PartySalePanel = {"locator": "UICanvas>Default>PartySalePanel"}
