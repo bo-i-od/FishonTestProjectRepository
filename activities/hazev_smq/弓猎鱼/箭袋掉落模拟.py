@@ -19,6 +19,7 @@ def simulate_one_player(global_rate, slot_cost, slot_drop_rate, bonus_thresholds
     while total_stamina + slot_cost <= stamina_limit:
         bonus = get_bonus(acc_stamina, bonus_thresholds, bonus_rates)
         p = global_rate * slot_drop_rate * bonus
+        p = min(p, 1.0)   # 掉落概率最大不能超过1
         if p >= 1:
             block_this = 0
         else:
@@ -52,14 +53,12 @@ def simulate_slot_limited_fast(global_rate, slot_cost, slot_drop_rate, bonus_thr
     return mean, max_v, min_v, median_v, non_drop_ratio
 
 # 配置
-global_rate = 1.5
+global_rate = 1
 slot_costs = [1,3,10,20,30,50,100,150,200,300,500,1000,2000]
-slot_drop_rates = [0.0066,0.02,0.0667,0.1333,0.1818,0.2778,0.4762,0.6667,0.7,1,1,1,1]
-bonus_thresholds = [50,100,300,500,800,1000]
-bonus_rates = [1,1,1,1,1,1]
-drop_counts_weights = [{1:1,2:0,3:0},{1:1,2:0,3:0},{1:1,2:0,3:0},{1:1,2:0,3:0},{1:0.9,2:0.1,3:0},{1:0.8,2:0.2,3:0},{1:0.7,2:0.2,3:0.1},{1:0.6,2:0.3,3:0.1},{1:0.3,2:0.5,3:0.2},{1:0.2,2:0.6,3:0.2},{1:0,2:0.6,3:0.4},{1:0,2:0.9,3:0.1},{1:0,2:0.1,3:0.9}]
-
-
+slot_drop_rates = [0.0007,0.002,0.0067,0.0133,0.02,0.0333,0.0667,0.1,0.1333,0.1994,0.3258,0.6392,1]
+bonus_thresholds = [10,50,100,1500,3000,5000]
+bonus_rates = [1,1,1,1.2,2,10]
+drop_counts_weights = [{1:1,2:0,3:0},{1:1,2:0,3:0},{1:1,2:0,3:0},{1:1,2:0,3:0},{1:1,2:0,3:0},{1:1,2:0,3:0},{1:1,2:0,3:0},{1:1,2:0,3:0},{1:1,2:0,3:0},{1:0.98,2:0.01,3:0.001},{1:0.98,2:0.02,3:0.001},{1:0.98,2:0.03,3:0.001},{1:0.98,2:0.05,3:0.005}]
 
 stamina_limit = 10000
 player_count = 10000
