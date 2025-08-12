@@ -118,7 +118,7 @@ def collection_chapter(excel_tool: ExcelToolsForActivities, fishery_id, fishery_
     collection_chapter_detail = excel_tool.get_table_data_detail(book_name="COLLECTION_CHAPTER.xlsm")
     key = "tpId"
     template_tpId = 1
-    tpId = fishery_index
+    tpId = fishery_index + 21
     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=tpId, table_data_detail=collection_chapter_detail)
     if json_object_list:
         mode = 2

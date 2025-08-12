@@ -176,7 +176,7 @@ def mission_group(excel_tool: ExcelToolsForActivities, missionConditionID, fishe
     instance_object.gConditions = []
     instance_object.fisheriesId = fishery_id
     instance_object.key = "N_DAYS"
-    instance_object.subType = 6
+    instance_object.subType = 11
     instance_object.keyDesc = "n天活动"
     instance_object.openType = 3
     instance_object.openArg = missionConditionID
@@ -187,7 +187,7 @@ def mission_group(excel_tool: ExcelToolsForActivities, missionConditionID, fishe
     instance_object.extArgs[1] = "2200"
     instance_object.extArgs[2] = "0"
     instance_object.extArgs[3] = "0"
-    instance_object.extArgs[4] = "3"
+    instance_object.extArgs[4] = "0"
     instance_object.extArgs[5] = f"{fishery_id}"
     instance_object.extArgs[6] = instance_object.extArgs[5]
     instance_object.extArgs[7] = "0"

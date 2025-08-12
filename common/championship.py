@@ -6,6 +6,7 @@ from panelObjs.AquariumFishNewPanel import AquariumFishNewPanel
 from panelObjs.BattlePreparePanel import BattlePreparePanel
 from panelObjs.ChallengeMainStagePanel import ChallengeMainStagePanel
 from panelObjs.ChampionshipInfoNewPanel import ChampionshipInfoNewPanel
+from panelObjs.ChampionshipNavigationPanel import ChampionshipNavigationPanel
 from panelObjs.ChampionshipNewPanel import ChampionshipNewPanel
 from panelObjs.LoadingPanel import LoadingPanel
 from panelObjs.LoginPanel import LoginPanel
@@ -42,18 +43,16 @@ def check_reward(bp, overflow_factor: float = 1):
 
 
 def check_reward_new(bp, overflow_factor: float = 1):
-    BattlePreparePanel.panel_MainStage_daily_prepare.click_btn_tournaments(bp)
-    bp.sleep(1)
-
+    rank = BattlePreparePanel.panel_MainStage_daily_prepare.get_rank(bp)
+    if not rank:
+        return
+    rank_split = rank.split("/")
     # 还没打
-    if ChampionshipNewPanel.is_progress_active(bp):
-        ChampionshipNewPanel.click_btn_close(bp)
+    if rank_split[0] == "0":
         return False
 
-    # 已经打了
-    if ChampionshipNewPanel.is_panel_active(bp):
-        ChampionshipNewPanel.click_btn_close(bp)
-        return True
+    BattlePreparePanel.panel_MainStage_daily_prepare.click_btn_tournaments(bp)
+    bp.sleep(1)
 
     ChampionshipInfoNewPanel.switch_tab(bp, index=2)
     bp.sleep(1)
@@ -114,8 +113,8 @@ def championship(bp,  times, index=None, fishery_id=None, energy_cost=50, is_mon
         fishery_id_list = TournamentsPanel.get_fishery_tpid_list(bp)
         fishery_id = fishery_id_list[entrance_index]
         TournamentsPanel.go_to_fishery_by_id(bp, fishery_id=fishery_id)
-
     spot_id_list, is_in_double_week, is_new_plot = bp.get_spot_id_list(fishery_id=fishery_id)
+
     if energy_cost < 3:
         spot_id_index = 0
     elif energy_cost < 10:
@@ -127,17 +126,14 @@ def championship(bp,  times, index=None, fishery_id=None, energy_cost=50, is_mon
     bp.lua_console(lua_code)
     bp.sleep(0.5)
     BattlePreparePanel.wait_for_panel_appear(bp)
-
     if check_reward(bp, overflow_factor=overflow_factor):
         bp.go_home()
         return bp
-
     if is_treasure_map:
         BattlePreparePanel.panel_pve_prepare.try_go_to_treasure_map(bp, fishery_id=fishery_id)
         lua_code = csMsgAll.get_CSFishingSaveLimitedSpotEnergyCostIdMsg(chooseEnergyCostId=bp.energy_cost_to_id(energy_cost=energy_cost), newPlot=0)
         bp.lua_console(lua_code)
         bp.sleep(1)
-
     circulate_fish(bp, times=times, is_quick=False)
 
     while BattlePreparePanel.get_btn_icon_warning_position(bp):
@@ -148,26 +144,62 @@ def championship(bp,  times, index=None, fishery_id=None, energy_cost=50, is_mon
     return bp
 
 @handle_game_exception
-def championship_new(bp: BasePage, spot_id, times, is_monitor=True, overflow_factor: float = 1, is_treasure_map=False, energy_cost=50):
+def championship_new(bp: BasePage, index=0,spot_index=2, times=999, is_monitor=True, overflow_factor: float = 1, is_treasure_map=False, energy_cost=100):
     gameInit.set_joystick(bp)
     bp.clear_popup()
-    bp.go_to_panel("HomePanelNew")
+    bp.go_to_panel("ChampionshipNavigationPanel")
     bp.sleep(1)
-    bp.go_to_spot(spot_id=spot_id)
+    logo_list = ChampionshipNavigationPanel.get_logo_list(bp)
+    table_data_detail = base_page.excelTools.get_table_data_detail(book_name="FISHERIES.xlsm")
+    fishery_id = None
+    fisheries_type = None
+    cur = 0
+    while cur < len(logo_list):
+        if cur != index:
+            cur += 1
+            continue
+        logo = logo_list[cur]
+        icon = "icon_fisheries_" + logo.split("_")[-1]
+        table_data_object_list = base_page.excelTools.get_table_data_object_list_by_key_value(key="displayicon", value=icon, table_data_detail=table_data_detail)
+        if not table_data_object_list:
+            cur += 1
+            break
+        table_data_object = table_data_object_list[0]
+        fishery_id = table_data_object["tpId"]
+        if "fisheriesType" in table_data_object:
+            fisheries_type = table_data_object["fisheriesType"]
+        cur += 1
+
+    if not fishery_id:
+        return bp
+    spot_id_list, is_in_double_week, is_new_plot = bp.get_spot_id_list(fishery_id=fishery_id)
+    if not fisheries_type:
+        bp.go_to_fishery(fishery_id=fishery_id)
+
+        spot_id = spot_id_list[spot_index]
+        lua_code = csMsgAll.get_CSFishingSaveFishSpotMsg(fishSpotId=int(spot_id), fishSceneTpId=int(fishery_id), source=0, isInDoubleWeek=is_in_double_week)
+        bp.lua_console(lua_code)
+    else:
+        spot_id = spot_id_list[spot_index]
+
+        bp.go_to_spot(spot_id=spot_id)
+    # else:
+    #
+
     BattlePreparePanel.wait_for_panel_appear(bp)
     bp.sleep(1)
     BattlePreparePanel.panel_MainStage_daily_prepare.click_btn_btn_receive(bp)
     bp.sleep(1)
-    BattlePreparePanel.panel_MainStage_daily_prepare.click_outboard_tip(bp)
-    bp.sleep(1)
-    if ChallengeMainStagePanel.is_panel_active(bp):
-        ChallengeMainStagePanel.click_btn_close(bp)
-        bp.sleep(1)
+    # BattlePreparePanel.panel_MainStage_daily_prepare.click_outboard_tip(bp)
+    # bp.sleep(1)
+    # if ChallengeMainStagePanel.is_panel_active(bp):
+    #     ChallengeMainStagePanel.click_btn_close(bp)
+    #     bp.sleep(1)
     if check_reward_new(bp, overflow_factor=overflow_factor):
         bp.go_home()
         return bp
 
-    if is_treasure_map:
+    if spot_id and is_treasure_map:
         BattlePreparePanel.panel_MainStage_challenge_prepare.try_go_to_treasure_map(bp, spot_id=spot_id)
         lua_code = csMsgAll.get_CSFishingSaveLimitedSpotEnergyCostIdMsg(chooseEnergyCostId=bp.energy_cost_to_id(energy_cost=energy_cost), newPlot=1)
         bp.lua_console(lua_code)
@@ -233,7 +265,16 @@ if __name__ == '__main__':
     # 设定张力
     base_page.set_tension_default(tension_default=0.9)
     base_page.set_hook_progress(hook_progress=0.85)
-
+    # icon = base_page.get_icon(element_data=)
+    # table_data_detail = base_page.excelTools.get_table_data_detail(book_name="FISHERIES.xlsm")
+    # print(table_data_detail)
+    # table_data_object_list = base_page.excelTools.get_table_data_object_list_by_key_value(key="displayicon", value=icon, table_data_detail=table_data_detail)
+    # if not table_data_object_list:
+    #     print("没有匹配到图标")
+    #     return
+    # table_data_object = table_data_object_list[0]
+    # fishery_id = table_data_object["tpId"]
+    # fisheries_type = table_data_object["fisheriesType"]
 
 
     # 设定log输出
@@ -245,7 +286,7 @@ if __name__ == '__main__':
     #     print(f"第{cur}次钓鱼")
 
     # 备战界面钓指定次数
-    # circulate_fish(bp=base_page, is_quick=False, times=100)
+    # circulate_fish(bp=base_page, is_quick=False, times=50)
     # i = 0
     # while i < 10:
     #     fish_once(bp=base_page, is_quick=False)
@@ -258,17 +299,15 @@ if __name__ == '__main__':
     # aquarium(bp=base_page)
     # base_page.clear_popup()
     # 循环进行水族箱/新主线/旧主线 直到打满
+    # base_page = championship_new(base_page, index=0, spot_index=0, times=10, is_treasure_map=True, energy_cost=20)
     cur = 0
     while True:
         if cur > 10:
-            base_page = aquarium(base_page, is_monitor=True)
+            base_page = aquarium(base_page)
             cur = 0
-        base_page = championship_new(base_page, spot_id=10201, times=10, is_treasure_map=False)
-        # base_page = championship(base_page, index=0, times=20, cost=2, overflow_factor=1, is_monitor=True)
-        # # base_page.sleep(60)
 
-        base_page = championship(base_page, times=20, index=0, energy_cost=3, is_treasure_map=False)
-        base_page = championship(base_page, times=20, index=1, energy_cost=3, is_treasure_map=False)
+        base_page = championship_new(base_page, index=1,spot_index=0, times=10, is_treasure_map=True, energy_cost=20)
+        base_page = championship_new(base_page, index=0,spot_index=0, times=10, is_treasure_map=True, energy_cost=20)
         cur += 1
 
 

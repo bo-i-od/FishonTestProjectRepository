@@ -69,7 +69,8 @@ class JumpData:
         "NewRankingActivityCompetitionPanel",
         "ValentinePackPopupPanel",
         "FishSeasonPopPanel",
-        "ActivityThreeColorMainPanel"
+        "ActivityThreeColorMainPanel",
+        "FishCardPanel",
     }
 
     panel_dict = {
@@ -118,6 +119,7 @@ class JumpData:
         "CareerPanel": {"element_data": ElementsData.CareerPanel.CareerPanel, "open_path": [ElementsData.Home3DPanel.btn_pve, ElementsData.TournamentsPanel.btn_career], "close_path": [ElementsData.CareerPanel.btn_close]},
         "ChatPanel": {"element_data": ElementsData.ChatPanel.ChatPanel, "close_path": [ElementsData.ChatPanel.btn_close]},
         "ChallengeMainStageAFKPanel": {"element_data": ElementsData.ChallengeMainStageAFKPanel.ChallengeMainStageAFKPanel,"close_path": [ElementsData.ChallengeMainStageAFKPanel.btn_go]},
+        "ChampionshipNavigationPanel": {"element_data": ElementsData.ChampionshipNavigationPanel.ChampionshipNavigationPanel,"open_path": [ElementsData.HomePanel.btn_Tournamentsnts],"close_path": [ElementsData.ChampionshipNavigationPanel.btn_close]},
         "ChampointshipResultPopup": {"element_data": ElementsData.ChampointshipResultPopup.ChampointshipResultPopup, "close_path": [ElementsData.ChampointshipResultPopup.btn_close]},
         "CommonWebViewPanel": {"element_data": ElementsData.CommonWebViewPanel.CommonWebViewPanel, "close_path": [ElementsData.CommonWebViewPanel.btn_close]},
         "ClubApplyPanel": {"element_data": ElementsData.ClubApplyPanel.ClubApplyPanel, "close_path": [ElementsData.ClubApplyPanel.btn_close]},
@@ -170,6 +172,7 @@ class JumpData:
         "PlayerLevelupPanel": {"element_data": ElementsData.PlayerLevelupPanel.PlayerLevelupPanel, "close_path": [ElementsData.PlayerLevelupPanel.tap_to_continue]},
         "PVPBoosterGiftPackPanel": {"element_data": ElementsData.PVPBoosterGiftPackPanel.PVPBoosterGiftPackPanel, "close_path": [ElementsData.PVPBoosterGiftPackPanel.btn_close]},
         "PVENewbieGiftPackPanel": {"element_data": ElementsData.PVENewbieGiftPackPanel.PVENewbieGiftPackPanel, "close_path": [ElementsData.PVENewbieGiftPackPanel.btn_close]},
+        "PVEFisheryListPanel": {"element_data": ElementsData.PVEFisheryListPanel.PVEFisheryListPanel, "close_path": [ElementsData.PVEFisheryListPanel.btn_close]},
         "ProgressRewardsPanel": {"element_data": ElementsData.ProgressRewardsPanel.ProgressRewardsPanel, "open_path": [ElementsData.HomePanel.btn_globa_progress], "close_path": [ElementsData.ProgressRewardsPanel.btn_close]},
         "PVPHallPanel": {"element_data": ElementsData.PVPHallPanel.PVPHallPanel, "open_path": [ElementsData.Home3DPanel.btn_pvp, ElementsData.NewbieGuidePanel.NBG_friend_duel_1_1, ElementsData.PVPResultPanel.tap_to_close], "close_path": [ElementsData.PVPHallPanel.btn_close]},
         "PVPResultPanel": {"element_data": ElementsData.PVPResultPanel.PVPResultPanel, "close_path": [ElementsData.PVPResultPanel.tap_to_close]},

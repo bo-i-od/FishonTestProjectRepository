@@ -10,7 +10,7 @@ class ParseError(Exception):
 
 # 克制伤害加成
 def formula_restrain_bonus(bb: Blackboard):
-    bonus = 0
+    bonus = bb.restrain
     excel_tool = ExcelTools(EXCEL_PATH)
     adv_gear_fishing_gear_detail = excel_tool.get_table_data_detail(book_name="ADV_GEAR_FISHING_GEAR.xlsm")
     adv_gear_fishing_rod_detail = excel_tool.get_table_data_detail(book_name="ADV_GEAR_FISHING_ROD.xlsm")
@@ -24,7 +24,7 @@ def formula_restrain_bonus(bb: Blackboard):
         if bb.battle_tag != json_object["counterType"]:
             continue
         bonus += 0.1
-    print(f"克制伤害加成：{bonus:.2f}")
+    print(f"克制伤害加成：{bonus:.3f}")
     return bonus
 
 
@@ -34,7 +34,7 @@ def formula_hook_damage_bonus(bb: Blackboard):
     for damage_hook_extend_args in bb.Formula.damage_hook_extend_args_list:
         arg1 = arg_to_value(bb, arg=damage_hook_extend_args["arg1"])
         bonus += arg1
-    print(f"刺鱼加成：{bonus:.2f}")
+    print(f"刺鱼加成：{bonus:.3f}")
     return bonus
 
 
@@ -48,8 +48,7 @@ def formula_damage_increased_bonus(bb: Blackboard):
             arg2 = 1
         count = damage_increased_args["count"]
         bonus += count * arg1 * arg2 / bb.battle_time
-
-    print(f"增伤伤害加成：{bonus:.2f}")
+    print(f"增伤伤害加成：{bonus:.3f}")
     return bonus
 
 
@@ -60,20 +59,29 @@ def formula_damage_once_bonus(bb: Blackboard):
         arg1 = arg_to_value(bb, arg=damage_once_args["arg1"])
         count = damage_once_args["count"]
         bonus += count * arg1 / bb.damage_modifier
-    print(f"一次性伤害加成：{bonus:.2f}")
+    print(f"一次性伤害加成：{bonus:.3f}")
     return bonus
 
 
 # 战斗时间延长加成
 def formula_battle_extend_bonus(bb: Blackboard):
     bonus = get_time_extension_result(bb=bb) / bb.battle_time
-    print(f"战斗时间延长加成：{bonus:.2f}")
+    bonus = min(bonus, 0.5)
+    print(f"战斗时间延长加成：{bonus:.3f}")
     return bonus
 
+def formula_multiplicative_bonus(bb: Blackboard):
+    bonus = 1
+    for damage_once_args in bb.Formula.damage_multiplicative_args_list:
+        arg1 = arg_to_value(bb, arg=damage_once_args["arg1"])
+        bonus *= (1 + arg1)
+    bonus -= 1
+    print(f"额外乘法区间伤害加成：{bonus:.3f}")
+    return bonus
 
 def formula_main(bb: Blackboard):
-    bonus = (1 + formula_restrain_bonus(bb)) * ((1 + formula_damage_increased_bonus(bb)) * (1 + formula_damage_once_bonus(bb)) * (1 + formula_battle_extend_bonus(bb)) + formula_hook_damage_bonus(bb)) - 1
-    print(f"总体伤害加成：{bonus:.2f}")
+    bonus = (1 + formula_restrain_bonus(bb)) * ((1 + formula_damage_increased_bonus(bb)) * (1 + formula_damage_once_bonus(bb)) * (1 + formula_battle_extend_bonus(bb)) * (1 + formula_multiplicative_bonus(bb))+ formula_hook_damage_bonus(bb)) - 1
+    print(f"总体伤害加成：{bonus:.3f}")
     return bonus
 
 

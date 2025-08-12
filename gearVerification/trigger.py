@@ -23,6 +23,7 @@ class Trigger:
             "回气": {"name": "energy", "trigger_func": self.energy, "triggered_count": self.bb.count_energy},
             "技能": {"name": "skill", "trigger_func": self.skill,  "triggered_count": self.bb.count_skill},
             "压制": {"name": "oppress", "trigger_func": self.oppress, "triggered_count": self.bb.count_oppress},
+            "减速": {"name": "speed_down", "trigger_func": self.speed_down, "triggered_count": self.bb.count_speed_down},
             "自定义": {"name": "customize", "trigger_func": self.customize,  "triggered_count": self.bb.count_customize},
         }
         # 自定义触发关系字典
@@ -95,9 +96,17 @@ class Trigger:
                 self.bb.set_variable(name=arg1_split[0], value=arg_to_value(self.bb, arg=arg1_split[1]))
                 cur += 1
                 continue
+            if trigger_detail["effect"] == 8:
+                self.bb.Formula.damage_multiplicative_args_list.append({"arg1": trigger_detail["arg1"]})
+                cur += 1
+                continue
+            # if trigger_detail["effect"] == 8:
+            #     self.bb.Formula.damage_multiplicative_args_list.append({"arg1": trigger_detail["arg1"]})
+            #     cur += 1
+            #     continue
             # trigger_detail["effect"] == 1
             trigger_name = trigger_detail["triggerName"]
-            triggered_trigger_name = trigger_detail["triggeredTriggerName"]
+            triggered_trigger_name = trigger_detail["arg1"]
             source_name = None
             target_name = None
             if "自定义" in trigger_name:
@@ -112,7 +121,9 @@ class Trigger:
                 triggered_trigger = "customize"
             else:
                 triggered_trigger = self.trigger_dict[triggered_trigger_name]["name"]
-            delta = trigger_detail["arg1"]
+            delta = trigger_detail["arg2"]
+            # if trigger_detail["arg0"] == 1:
+            #     pass
             self.add_custom_trigger(
                 source_trigger=source_trigger,
                 triggered_trigger=triggered_trigger,
@@ -364,7 +375,7 @@ class Trigger:
 
     def attack(self, delta_attack):
         delta_attack = arg_to_value(self, delta_attack)
-        if delta_attack < 0.001:
+        if abs(delta_attack) < 0.001:
             return
         self.bb.count_attack += delta_attack
         # 执行自定义触发
@@ -372,7 +383,7 @@ class Trigger:
 
     def qte(self, delta_qte):
         delta_qte = arg_to_value(self, delta_qte)
-        if delta_qte < 0.001:
+        if abs(delta_qte) < 0.001:
             return
         self.bb.count_qte += delta_qte
         # print(f"  -> 触发 energy" + f" (变化量: {delta_qte})")
@@ -382,7 +393,7 @@ class Trigger:
 
     def oppress(self, delta_oppress):
         delta_oppress = arg_to_value(self, delta_oppress)
-        if delta_oppress < 0.001:
+        if abs(delta_oppress) < 0.001:
             return
         self.bb.count_oppress += delta_oppress
         self.energy(delta_energy=delta_oppress)
@@ -392,7 +403,7 @@ class Trigger:
 
     def energy(self, delta_energy):
         delta_energy = arg_to_value(self, delta_energy)
-        if delta_energy < 0.001:
+        if abs(delta_energy) < 0.001:
             return
         self.bb.count_energy += delta_energy
         # print(f"  -> 触发 ult" + f" (变化量: {delta_energy/3})")
@@ -402,21 +413,21 @@ class Trigger:
 
     def ult(self, delta_ult):
         delta_ult = arg_to_value(self, delta_ult)
-        if delta_ult < 0.001:
+        if abs(delta_ult) < 0.001:
             return
         self.bb.count_ult += delta_ult
         # print(f"  -> 触发 exhausted" + f" (变化量: {delta_ult * 0.4})")
-        self.exhausted(delta_exhausted=delta_ult * 0.4)
+        self.exhausted(delta_exhausted=delta_ult * 4000/(self.bb.toughness_max+3000))
         # 执行自定义触发
         self._execute_custom_triggers(source_trigger="ult", source_delta=delta_ult)
 
     def counter(self, delta_counter):
         delta_counter = arg_to_value(self, delta_counter)
-        if delta_counter < 0.001:
+        if abs(delta_counter) < 0.001:
             return
         self.bb.count_counter += delta_counter
         # print(f"  -> 触发 exhausted" + f" (变化量: {delta_counter * 0.2})")
-        self.exhausted(delta_exhausted=delta_counter * 0.2)
+        self.exhausted(delta_exhausted=delta_counter * 2000/(self.bb.toughness_max+3000))
         # print(f"  -> 触发 energy" + f" (变化量: {-delta_counter})")
         self.energy(delta_energy=-delta_counter)
         # print(f"  -> 触发 skill" + f" (变化量: {delta_counter})")
@@ -426,39 +437,55 @@ class Trigger:
 
     def exhausted(self, delta_exhausted):
         delta_exhausted = arg_to_value(self, delta_exhausted)
-        if delta_exhausted < 0.001:
+        if abs(delta_exhausted) < 0.001:
+            return
+        if self.bb.count_exhausted > 3:
             return
         self.bb.count_exhausted += delta_exhausted
-        self.bb.time_exhausted += delta_exhausted * self.bb.duration_exhausted
+        delta_time_exhausted = delta_exhausted * self.bb.duration_exhausted * (1 + self.bb.duration_exhausted_modifier)
+        self.bb.time_exhausted += delta_time_exhausted
+        self.speed_down(delta_speed_down=delta_exhausted, delta_time_speed_down=delta_time_exhausted)
         # 执行自定义触发
         self._execute_custom_triggers(source_trigger="exhausted", source_delta=delta_exhausted)
 
     def dizzy(self, delta_dizzy):
         delta_dizzy = arg_to_value(self, delta_dizzy)
-        if delta_dizzy < 0.001:
+        if abs(delta_dizzy) < 0.001:
             return
         self.bb.count_dizzy += delta_dizzy
-        self.bb.time_dizzy += delta_dizzy * self.bb.duration_dizzy
+        delta_time_dizzy = delta_dizzy * self.bb.duration_dizzy * (1 + self.bb.duration_dizzy_modifier)
+        self.bb.time_dizzy += delta_time_dizzy
+        self.speed_down(delta_speed_down=delta_dizzy, delta_time_speed_down=delta_time_dizzy)
         # 执行自定义触发
         self._execute_custom_triggers(source_trigger="dizzy", source_delta=delta_dizzy)
 
     def skill(self, delta_skill):
         delta_skill = arg_to_value(self, delta_skill)
-        if delta_skill < 0.001:
+        if abs(delta_skill) < 0.001:
             return
         self.bb.count_skill += delta_skill
         # 执行自定义触发
         self._execute_custom_triggers(source_trigger="skill", source_delta=delta_skill)
 
+    def speed_down(self, delta_speed_down, delta_time_speed_down):
+        delta_speed_down = arg_to_value(self, delta_speed_down)
+        if abs(delta_speed_down) < 0.001:
+            return
+        self.bb.count_speed_down += delta_speed_down
+        self.bb.time_speed_down += delta_time_speed_down
+        # 执行自定义触发
+        self._execute_custom_triggers(source_trigger="speed_down", source_delta=delta_speed_down)
+
     def customize(self, delta_customize, name):
         delta_customize = arg_to_value(self, delta_customize)
-        if delta_customize < 0.001:
+        if abs(delta_customize) < 0.001:
             return
         if name not in self.bb.count_customize:
             self.bb.count_customize[name] = 0
         self.bb.count_customize[name] += delta_customize
         # 执行自定义触发（带名称）
         self._execute_custom_triggers(source_trigger="customize", source_delta=delta_customize, source_name=name)
+
 
 
 
