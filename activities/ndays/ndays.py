@@ -109,7 +109,7 @@ def battle_pass(excel_tool: ExcelToolsForActivities, fishery_id, groupId_battle_
 def event_n_day_tasks_leaderboard(excel_tool: ExcelToolsForActivities, fishery_id, groupId):
     event_n_day_tasks_leaderboard_detail = excel_tool.get_table_data_detail(book_name="EVENT_N_DAY_TASKS_LEADERBOARD.xlsm")
     fishery_name = excel_tool.get_fishery_name(fishery_id=fishery_id)
-    template_groupId = 5100103
+    template_groupId = 5100104
     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="groupId", value=groupId, table_data_detail=event_n_day_tasks_leaderboard_detail)
     key = "autoId"
     if json_object_list:
@@ -124,7 +124,7 @@ def event_n_day_tasks_leaderboard(excel_tool: ExcelToolsForActivities, fishery_i
         instance_object = json_to_instance(json_object=json_object_list[cur], cls=EVENT_N_DAY_TASKS_LEADERBOARD)
         if mode == 1:
             instance_object.autoId = autoId_start + cur
-            instance_object.name = instance_object.name.replace("卡多湖", fishery_name)
+            instance_object.name = instance_object.name.replace("伏尔加河", fishery_name)
         instance_object.id = instance_object.autoId
         instance_object.groupId = groupId
         print(instance_object)
@@ -137,7 +137,7 @@ def event_n_day_tasks_leaderboard(excel_tool: ExcelToolsForActivities, fishery_i
 def event_n_day_tasks_milestone(excel_tool: ExcelToolsForActivities, fishery_id, groupId, tokenID):
     event_n_day_tasks_milestone_detail = excel_tool.get_table_data_detail(book_name="EVENT_N_DAY_TASKS_MILESTONE.xlsm")
     fishery_name = excel_tool.get_fishery_name(fishery_id=fishery_id)
-    template_groupId = 5100103
+    template_groupId = 5100104
     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="groupId", value=groupId, table_data_detail=event_n_day_tasks_milestone_detail)
     key = "autoId"
     if json_object_list:
@@ -152,7 +152,7 @@ def event_n_day_tasks_milestone(excel_tool: ExcelToolsForActivities, fishery_id,
         instance_object = json_to_instance(json_object=json_object_list[cur], cls=EVENT_N_DAY_TASKS_MILESTONE)
         if mode == 1:
             instance_object.autoId = autoId_start + cur
-            instance_object.name = instance_object.name.replace("卡多湖", fishery_name)
+            instance_object.name = instance_object.name.replace("伏尔加河", fishery_name)
         instance_object.id = instance_object.autoId
         instance_object.tokenID = tokenID
         instance_object.groupId = groupId
@@ -229,7 +229,7 @@ def mission_group(excel_tool: ExcelToolsForActivities, TimerId, fishery_id,activ
 
     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key=key, value=groupId, table_data_detail=mission_group_detail)
     # ndays
-    template_groupId = 5100103
+    template_groupId = 5100104
     if json_object_list:
         mode = 2
         template_groupId = groupId
@@ -278,63 +278,65 @@ def mission_group(excel_tool: ExcelToolsForActivities, TimerId, fishery_id,activ
 
 
 def mission_main(excel_tool: ExcelToolsForActivities,fishery_id, groupId, tokenID):
+    missionID_template_start = 6030189
+    missionConditionID_template_start = 6013213
     mission_cfg_list = [
-        {"template_missionID": 6030146, "template_missionConditionIDs": {6012601:["fishery_id", "fisheries_language"], } },
-        {"template_missionID": 6030147, "template_missionConditionIDs": {6012602: ["fishery_id", "fisheries_language"],} },
-        {"template_missionID": 6030148, "template_missionConditionIDs": {6012603: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": 6030149, "template_missionConditionIDs": {6012604: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": 6030150, "template_missionConditionIDs": {6012605: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": 6030151, "template_missionConditionIDs": {6012606: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": 6030152, "template_missionConditionIDs": {6012607: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": 6030153, "template_missionConditionIDs": {6012608: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": 6030154, "template_missionConditionIDs": {6012609: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": 6030155, "template_missionConditionIDs": {6012610: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": 6030156, "template_missionConditionIDs": {6012611: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": 6030157, "template_missionConditionIDs": {6012612: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": 6030158, "template_missionConditionIDs": {6012613: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": 6030159, "template_missionConditionIDs": {6012614: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": 6030160, "template_missionConditionIDs": {6012615: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": 6030161, "template_missionConditionIDs": {6012616: ["fishery_id", "fisheries_language"], 6012644:["fishery_id"] }},
-        {"template_missionID": 6030162, "template_missionConditionIDs": {6012617: ["fishery_id", "fisheries_language"], 6012645:["fishery_id"] }},
-        {"template_missionID": 6030163, "template_missionConditionIDs": {6012618: ["fishery_id", "fisheries_language"], 6012646:["fishery_id"] }},
-        {"template_missionID": 6030164, "template_missionConditionIDs": {6012619: ["fishery_id", "fisheries_language"], 6012647:["fishery_id"] }},
-        {"template_missionID": 6030165, "template_missionConditionIDs": {6012620: ["fishery_id", "fisheries_language"], 6012648:["fishery_id"]}},
-        {"template_missionID": 6030166, "template_missionConditionIDs": {6012621: ["fishery_id", "fisheries_language"], 6012649:["fishery_id"] }},
-        {"template_missionID": 6030167, "template_missionConditionIDs": {6012622: ["fishery_id", "fisheries_language"], 6012650:["fishery_id"]}},
-        {"template_missionID": 6030168, "template_missionConditionIDs": {6012623: []}, 6012651:["fishery_id"]},
-        {"template_missionID": 6030169, "template_missionConditionIDs": {6012624: []}, 6012652:["fishery_id"]},
-        {"template_missionID": 6030170, "template_missionConditionIDs": {6012625: []}, 6012653:["fishery_id"]},
-        {"template_missionID": 6030171, "template_missionConditionIDs": {6012626: []}, 6012654:["fishery_id"]},
-        {"template_missionID": 6030172, "template_missionConditionIDs": {6012627: []}, 6012655:["fishery_id"]},
-        {"template_missionID": 6030173, "template_missionConditionIDs": {6012628: []}, 6012656:["fishery_id"]},
-        {"template_missionID": 6030174, "template_missionConditionIDs": {6012629: []}, },
-        {"template_missionID": 6030175, "template_missionConditionIDs": {6012630: []}, },
-        {"template_missionID": 6030176, "template_missionConditionIDs": {6012631: []}, },
-        {"template_missionID": 6030177, "template_missionConditionIDs": {6012632: []}, },
-        {"template_missionID": 6030178, "template_missionConditionIDs": {6012633: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": 6030179, "template_missionConditionIDs": {6012634: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": 6030180, "template_missionConditionIDs": {6012635: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": 6030181, "template_missionConditionIDs": {6012636: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": 6030182, "template_missionConditionIDs": {6012637: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": 6030183, "template_missionConditionIDs": {6012638: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": 6030184, "template_missionConditionIDs": {6012639: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": 6030185, "template_missionConditionIDs": {6012640: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": 6030186, "template_missionConditionIDs": {6012641: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": 6030187, "template_missionConditionIDs": {6012642: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": 6030188, "template_missionConditionIDs": {6012643: ["fishery_id", "fisheries_language"]} },
+        {"template_missionID": missionID_template_start, "template_missionConditionIDs": {missionConditionID_template_start:["fishery_id", "fisheries_language"], } },
+        {"template_missionID": missionID_template_start + 1, "template_missionConditionIDs": {missionConditionID_template_start + 1: ["fishery_id", "fisheries_language"],} },
+        {"template_missionID": missionID_template_start + 2, "template_missionConditionIDs": {missionConditionID_template_start + 2: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": missionID_template_start + 3, "template_missionConditionIDs": {missionConditionID_template_start + 3: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": missionID_template_start + 4, "template_missionConditionIDs": {missionConditionID_template_start + 4: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": missionID_template_start + 5, "template_missionConditionIDs": {missionConditionID_template_start + 5: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": missionID_template_start + 6, "template_missionConditionIDs": {missionConditionID_template_start + 6: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": missionID_template_start + 7, "template_missionConditionIDs": {missionConditionID_template_start + 7: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": missionID_template_start + 8, "template_missionConditionIDs": {missionConditionID_template_start + 8: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": missionID_template_start + 9, "template_missionConditionIDs": {missionConditionID_template_start + 9: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": missionID_template_start + 10, "template_missionConditionIDs": {missionConditionID_template_start + 10: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": missionID_template_start + 11, "template_missionConditionIDs": {missionConditionID_template_start + 11: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": missionID_template_start + 12, "template_missionConditionIDs": {missionConditionID_template_start + 12: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": missionID_template_start + 13, "template_missionConditionIDs": {missionConditionID_template_start + 13: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": missionID_template_start + 14, "template_missionConditionIDs": {missionConditionID_template_start + 14: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": missionID_template_start + 15, "template_missionConditionIDs": {missionConditionID_template_start + 15: ["fishery_id", "fisheries_language"], missionConditionID_template_start + 43:["fishery_id"] }},
+        {"template_missionID": missionID_template_start + 16, "template_missionConditionIDs": {missionConditionID_template_start + 16: ["fishery_id", "fisheries_language"], missionConditionID_template_start + 44:["fishery_id"] }},
+        {"template_missionID": missionID_template_start + 17, "template_missionConditionIDs": {missionConditionID_template_start + 17: ["fishery_id", "fisheries_language"], missionConditionID_template_start + 45:["fishery_id"] }},
+        {"template_missionID": missionID_template_start + 18, "template_missionConditionIDs": {missionConditionID_template_start + 18: ["fishery_id", "fisheries_language"], missionConditionID_template_start + 46:["fishery_id"] }},
+        {"template_missionID": missionID_template_start + 19, "template_missionConditionIDs": {missionConditionID_template_start + 19: ["fishery_id", "fisheries_language"], missionConditionID_template_start + 47:["fishery_id"]}},
+        {"template_missionID": missionID_template_start + 20, "template_missionConditionIDs": {missionConditionID_template_start + 20: ["fishery_id", "fisheries_language"], missionConditionID_template_start:["fishery_id"] }},
+        {"template_missionID": missionID_template_start + 21, "template_missionConditionIDs": {missionConditionID_template_start + 21: ["fishery_id", "fisheries_language"], missionConditionID_template_start:["fishery_id"]}},
+        {"template_missionID": missionID_template_start + 22, "template_missionConditionIDs": {missionConditionID_template_start + 22: []}, missionConditionID_template_start:["fishery_id"]},
+        {"template_missionID": missionID_template_start + 23, "template_missionConditionIDs": {missionConditionID_template_start + 23: []}, missionConditionID_template_start:["fishery_id"]},
+        {"template_missionID": missionID_template_start + 24, "template_missionConditionIDs": {missionConditionID_template_start + 24: []}, missionConditionID_template_start:["fishery_id"]},
+        {"template_missionID": missionID_template_start + 25, "template_missionConditionIDs": {missionConditionID_template_start + 25: []}, missionConditionID_template_start:["fishery_id"]},
+        {"template_missionID": missionID_template_start + 26, "template_missionConditionIDs": {missionConditionID_template_start + 26: []}, missionConditionID_template_start:["fishery_id"]},
+        {"template_missionID": missionID_template_start + 27, "template_missionConditionIDs": {missionConditionID_template_start + 27: []}, missionConditionID_template_start:["fishery_id"]},
+        {"template_missionID": missionID_template_start + 28, "template_missionConditionIDs": {missionConditionID_template_start + 28: []}, },
+        {"template_missionID": missionID_template_start + 29, "template_missionConditionIDs": {missionConditionID_template_start + 29: []}, },
+        {"template_missionID": missionID_template_start + 30, "template_missionConditionIDs": {missionConditionID_template_start + 30: []}, },
+        {"template_missionID": missionID_template_start + 31, "template_missionConditionIDs": {missionConditionID_template_start + 31: []}, },
+        {"template_missionID": missionID_template_start + 32, "template_missionConditionIDs": {missionConditionID_template_start + 32: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": missionID_template_start + 33, "template_missionConditionIDs": {missionConditionID_template_start + 33: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": missionID_template_start + 34, "template_missionConditionIDs": {missionConditionID_template_start + 34: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": missionID_template_start + 35, "template_missionConditionIDs": {missionConditionID_template_start + 35: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": missionID_template_start + 36, "template_missionConditionIDs": {missionConditionID_template_start + 36: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": missionID_template_start + 37, "template_missionConditionIDs": {missionConditionID_template_start + 37: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": missionID_template_start + 38, "template_missionConditionIDs": {missionConditionID_template_start + 38: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": missionID_template_start + 39, "template_missionConditionIDs": {missionConditionID_template_start + 39: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": missionID_template_start + 40, "template_missionConditionIDs": {missionConditionID_template_start + 40: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": missionID_template_start + 41, "template_missionConditionIDs": {missionConditionID_template_start + 41: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": missionID_template_start + 42, "template_missionConditionIDs": {missionConditionID_template_start + 42: ["fishery_id", "fisheries_language"]} },
     ]
 
     mission_main_detail = excel_tool.get_table_data_detail(book_name="MISSION_MAIN.xlsm")
     mission_condition_detail = excel_tool.get_table_data_detail(book_name="MISSION_CONDITION.xlsm")
     fishery_name = excel_tool.get_fishery_name(fishery_id=fishery_id)
-    id_start = excel_tool.get_min_value_more_than_start(key="id", start=135021, long=len(mission_cfg_list), table_object_detail=mission_main_detail)
-    missionConditionID_start = excel_tool.get_min_value_more_than_start(key="missionConditionID", start=6012601, long=56, table_object_detail=mission_condition_detail)
+    missionConditionID_start = excel_tool.get_min_value_more_than_start(key="missionConditionID", start=missionConditionID_template_start, long=56, table_object_detail=mission_condition_detail)
+
     table_data_object_list = excel_tool.get_table_data_object_list_by_key_value(key="groupId", value=groupId, table_data_detail=mission_main_detail)
     if table_data_object_list:
         mode = 2
     else:
         mode = 1
-    missionID_start = excel_tool.get_min_value_more_than_start(key="missionID", start=6030146, long=len(mission_cfg_list),table_object_detail=mission_main_detail)
+    missionID_start = excel_tool.get_min_value_more_than_start(key="missionID", start=missionID_template_start, long=len(mission_cfg_list),table_object_detail=mission_main_detail)
     missionConditionID_set = set()
     key = "missionID"
     cur = 0
@@ -345,9 +347,9 @@ def mission_main(excel_tool: ExcelToolsForActivities,fishery_id, groupId, tokenI
         if mode == 1:
             json_object, instance_object = excel_tool.get_object(key=key, value=mission_cfg["template_missionID"], table_data_detail=mission_main_detail, cls=MISSION_MAIN)
             instance_object.missionID = missionID_start + cur
-            instance_object.name = instance_object.name.replace("卡多湖", fishery_name)
-            instance_object.missionName = instance_object.missionName.replace("卡多湖", fishery_name)
-            instance_object.missionDes = instance_object.missionDes.replace("卡多湖", fishery_name)
+            instance_object.name = instance_object.name.replace("伏尔加河", fishery_name)
+            instance_object.missionName = instance_object.missionName.replace("伏尔加河", fishery_name)
+            instance_object.missionDes = instance_object.missionDes.replace("伏尔加河", fishery_name)
             missionConditionID = missionConditionID_start + cur
             while missionConditionID in missionConditionID_set:
                 missionConditionID += 1
@@ -407,7 +409,7 @@ def mission_condition(excel_tool: ExcelToolsForActivities,fishery_id, mission_cf
         instance_object: MISSION_CONDITION
         json_object, instance_object = excel_tool.get_object(key=key, value=template_missionConditionID, table_data_detail=mission_condition_detail, cls=MISSION_CONDITION)
         if mode == 1:
-            instance_object.name = instance_object.name.replace("卡多湖", fishery_name)
+            instance_object.name = instance_object.name.replace("伏尔加河", fishery_name)
         instance_object.missionConditionID = missionConditionID
         instance_object.id = instance_object.missionConditionID
         if "fishery_id" in mission_condition_cfg:
@@ -456,7 +458,7 @@ def repeatable_challenge(excel_tool: ExcelToolsForActivities, fishery_id, groupI
     key = "autoId"
     autoId_start = excel_tool.get_min_value_more_than_start(key=key,start=498, long=6, table_object_detail=repeatable_challenge_detail)
     json_object_list = excel_tool.get_table_data_object_list_by_key_value(key="groupId", value=groupId, table_data_detail=repeatable_challenge_detail)
-    template_groupId = 5100103
+    template_groupId = 5100104
     if json_object_list:
         mode = 2
     else:
