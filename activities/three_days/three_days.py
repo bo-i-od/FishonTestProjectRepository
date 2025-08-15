@@ -141,7 +141,7 @@ def mission_condition_open(excel_tool, fishery_id, missionConditionID):
     instance_object.missionConditionID = missionConditionID
     instance_object.id = instance_object.missionConditionID
     instance_object.enabled = 1
-    instance_object.triggerTypeId = 9800181
+    instance_object.triggerTypeId = 9800267
     instance_object.triggerDataMode = 1
     instance_object.triggerKeyM = fishery_id
     instance_object.triggerValue = 1
@@ -192,7 +192,7 @@ def mission_group(excel_tool: ExcelToolsForActivities, missionConditionID, fishe
     instance_object.extArgs[6] = instance_object.extArgs[5]
     instance_object.extArgs[7] = "0"
     instance_object.extArgs[8] = "0"
-    instance_object.extArgs[9] = "0"
+    instance_object.extArgs[9] = "2030090;2030091;2030092;2030093"
     instance_object.imgName = "ActivityCenter_banner_bg_29"
     instance_object.activityName = activityNameId
     instance_object.imgNameInner = imgNameInner
