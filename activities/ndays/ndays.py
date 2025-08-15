@@ -281,49 +281,49 @@ def mission_main(excel_tool: ExcelToolsForActivities,fishery_id, groupId, tokenI
     missionID_template_start = 6030189
     missionConditionID_template_start = 6013213
     mission_cfg_list = [
-        {"template_missionID": missionID_template_start, "template_missionConditionIDs": {missionConditionID_template_start:["fishery_id", "fisheries_language"], } },
-        {"template_missionID": missionID_template_start + 1, "template_missionConditionIDs": {missionConditionID_template_start + 1: ["fishery_id", "fisheries_language"],} },
-        {"template_missionID": missionID_template_start + 2, "template_missionConditionIDs": {missionConditionID_template_start + 2: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": missionID_template_start + 3, "template_missionConditionIDs": {missionConditionID_template_start + 3: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": missionID_template_start + 4, "template_missionConditionIDs": {missionConditionID_template_start + 4: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": missionID_template_start + 5, "template_missionConditionIDs": {missionConditionID_template_start + 5: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": missionID_template_start + 6, "template_missionConditionIDs": {missionConditionID_template_start + 6: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": missionID_template_start + 7, "template_missionConditionIDs": {missionConditionID_template_start + 7: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": missionID_template_start + 8, "template_missionConditionIDs": {missionConditionID_template_start + 8: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": missionID_template_start + 9, "template_missionConditionIDs": {missionConditionID_template_start + 9: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": missionID_template_start + 10, "template_missionConditionIDs": {missionConditionID_template_start + 10: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": missionID_template_start + 11, "template_missionConditionIDs": {missionConditionID_template_start + 11: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": missionID_template_start + 12, "template_missionConditionIDs": {missionConditionID_template_start + 12: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": missionID_template_start + 13, "template_missionConditionIDs": {missionConditionID_template_start + 13: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": missionID_template_start + 14, "template_missionConditionIDs": {missionConditionID_template_start + 14: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": missionID_template_start + 15, "template_missionConditionIDs": {missionConditionID_template_start + 15: ["fishery_id", "fisheries_language"], missionConditionID_template_start + 43:["fishery_id"] }},
-        {"template_missionID": missionID_template_start + 16, "template_missionConditionIDs": {missionConditionID_template_start + 16: ["fishery_id", "fisheries_language"], missionConditionID_template_start + 44:["fishery_id"] }},
-        {"template_missionID": missionID_template_start + 17, "template_missionConditionIDs": {missionConditionID_template_start + 17: ["fishery_id", "fisheries_language"], missionConditionID_template_start + 45:["fishery_id"] }},
-        {"template_missionID": missionID_template_start + 18, "template_missionConditionIDs": {missionConditionID_template_start + 18: ["fishery_id", "fisheries_language"], missionConditionID_template_start + 46:["fishery_id"] }},
-        {"template_missionID": missionID_template_start + 19, "template_missionConditionIDs": {missionConditionID_template_start + 19: ["fishery_id", "fisheries_language"], missionConditionID_template_start + 47:["fishery_id"]}},
-        {"template_missionID": missionID_template_start + 20, "template_missionConditionIDs": {missionConditionID_template_start + 20: ["fishery_id", "fisheries_language"], missionConditionID_template_start + 48:["fishery_id"] }},
-        {"template_missionID": missionID_template_start + 21, "template_missionConditionIDs": {missionConditionID_template_start + 21: ["fishery_id", "fisheries_language"], missionConditionID_template_start + 49:["fishery_id"]}},
-        {"template_missionID": missionID_template_start + 22, "template_missionConditionIDs": {missionConditionID_template_start + 22: [], missionConditionID_template_start + 50:["fishery_id"]}},
-        {"template_missionID": missionID_template_start + 23, "template_missionConditionIDs": {missionConditionID_template_start + 23: [], missionConditionID_template_start + 51:["fishery_id"]}},
-        {"template_missionID": missionID_template_start + 24, "template_missionConditionIDs": {missionConditionID_template_start + 24: [], missionConditionID_template_start + 52:["fishery_id"]}},
-        {"template_missionID": missionID_template_start + 25, "template_missionConditionIDs": {missionConditionID_template_start + 25: [], missionConditionID_template_start + 53:["fishery_id"]}},
-        {"template_missionID": missionID_template_start + 26, "template_missionConditionIDs": {missionConditionID_template_start + 26: [], missionConditionID_template_start + 54:["fishery_id"]}},
-        {"template_missionID": missionID_template_start + 27, "template_missionConditionIDs": {missionConditionID_template_start + 27: [], missionConditionID_template_start + 55:["fishery_id"]}},
-        {"template_missionID": missionID_template_start + 28, "template_missionConditionIDs": {missionConditionID_template_start + 28: []}, },
-        {"template_missionID": missionID_template_start + 29, "template_missionConditionIDs": {missionConditionID_template_start + 29: []}, },
-        {"template_missionID": missionID_template_start + 30, "template_missionConditionIDs": {missionConditionID_template_start + 30: []}, },
-        {"template_missionID": missionID_template_start + 31, "template_missionConditionIDs": {missionConditionID_template_start + 31: []}, },
-        {"template_missionID": missionID_template_start + 32, "template_missionConditionIDs": {missionConditionID_template_start + 32: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": missionID_template_start + 33, "template_missionConditionIDs": {missionConditionID_template_start + 33: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": missionID_template_start + 34, "template_missionConditionIDs": {missionConditionID_template_start + 34: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": missionID_template_start + 35, "template_missionConditionIDs": {missionConditionID_template_start + 35: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": missionID_template_start + 36, "template_missionConditionIDs": {missionConditionID_template_start + 36: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": missionID_template_start + 37, "template_missionConditionIDs": {missionConditionID_template_start + 37: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": missionID_template_start + 38, "template_missionConditionIDs": {missionConditionID_template_start + 38: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": missionID_template_start + 39, "template_missionConditionIDs": {missionConditionID_template_start + 39: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": missionID_template_start + 40, "template_missionConditionIDs": {missionConditionID_template_start + 40: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": missionID_template_start + 41, "template_missionConditionIDs": {missionConditionID_template_start + 41: ["fishery_id", "fisheries_language"]}, },
-        {"template_missionID": missionID_template_start + 42, "template_missionConditionIDs": {missionConditionID_template_start + 42: ["fishery_id", "fisheries_language"]} },
+        {"template_missionID": {missionID_template_start: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start:["fishery_id", "fisheries_language"], } },
+        {"template_missionID": {missionID_template_start + 1: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 1: ["fishery_id", "fisheries_language"],} },
+        {"template_missionID": {missionID_template_start + 2: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 2: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": {missionID_template_start + 3: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 3: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": {missionID_template_start + 4: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 4: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": {missionID_template_start + 5: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 5: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": {missionID_template_start + 6: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 6: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": {missionID_template_start + 7: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 7: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": {missionID_template_start + 8: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 8: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": {missionID_template_start + 9: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 9: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": {missionID_template_start + 10: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 10: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": {missionID_template_start + 11: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 11: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": {missionID_template_start + 12: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 12: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": {missionID_template_start + 13: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 13: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": {missionID_template_start + 14: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 14: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": {missionID_template_start + 15: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 15: ["fishery_id", "fisheries_language"], missionConditionID_template_start + 43:["fishery_id"] }},
+        {"template_missionID": {missionID_template_start + 16: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 16: ["fishery_id", "fisheries_language"], missionConditionID_template_start + 44:["fishery_id"] }},
+        {"template_missionID": {missionID_template_start + 17: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 17: ["fishery_id", "fisheries_language"], missionConditionID_template_start + 45:["fishery_id"] }},
+        {"template_missionID": {missionID_template_start + 18: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 18: ["fishery_id", "fisheries_language"], missionConditionID_template_start + 46:["fishery_id"] }},
+        {"template_missionID": {missionID_template_start + 19: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 19: ["fishery_id", "fisheries_language"], missionConditionID_template_start + 47:["fishery_id"]}},
+        {"template_missionID": {missionID_template_start + 20: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 20: ["fishery_id", "fisheries_language"], missionConditionID_template_start + 48:["fishery_id"] }},
+        {"template_missionID": {missionID_template_start + 21: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 21: ["fishery_id", "fisheries_language"], missionConditionID_template_start + 49:["fishery_id"]}},
+        {"template_missionID": {missionID_template_start + 22: []}, "template_missionConditionIDs": {missionConditionID_template_start + 22: [], missionConditionID_template_start + 50:["fishery_id"]}},
+        {"template_missionID": {missionID_template_start + 23: []}, "template_missionConditionIDs": {missionConditionID_template_start + 23: [], missionConditionID_template_start + 51:["fishery_id"]}},
+        {"template_missionID": {missionID_template_start + 24: []}, "template_missionConditionIDs": {missionConditionID_template_start + 24: [], missionConditionID_template_start + 52:["fishery_id"]}},
+        {"template_missionID": {missionID_template_start + 25: []}, "template_missionConditionIDs": {missionConditionID_template_start + 25: [], missionConditionID_template_start + 53:["fishery_id"]}},
+        {"template_missionID": {missionID_template_start + 26: []}, "template_missionConditionIDs": {missionConditionID_template_start + 26: [], missionConditionID_template_start + 54:["fishery_id"]}},
+        {"template_missionID": {missionID_template_start + 27: []}, "template_missionConditionIDs": {missionConditionID_template_start + 27: [], missionConditionID_template_start + 55:["fishery_id"]}},
+        {"template_missionID": {missionID_template_start + 28: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 28: []}, },
+        {"template_missionID": {missionID_template_start + 29: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 29: []}, },
+        {"template_missionID": {missionID_template_start + 30: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 30: []}, },
+        {"template_missionID": {missionID_template_start + 31: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 31: []}, },
+        {"template_missionID": {missionID_template_start + 32: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 32: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": {missionID_template_start + 33: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 33: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": {missionID_template_start + 34: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 34: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": {missionID_template_start + 35: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 35: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": {missionID_template_start + 36: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 36: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": {missionID_template_start + 37: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 37: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": {missionID_template_start + 38: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 38: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": {missionID_template_start + 39: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 39: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": {missionID_template_start + 40: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 40: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": {missionID_template_start + 41: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 41: ["fishery_id", "fisheries_language"]}, },
+        {"template_missionID": {missionID_template_start + 42: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 42: ["fishery_id", "fisheries_language"]} },
     ]
 
     mission_main_detail = excel_tool.get_table_data_detail(book_name="MISSION_MAIN.xlsm")
@@ -343,9 +343,9 @@ def mission_main(excel_tool: ExcelToolsForActivities,fishery_id, groupId, tokenI
     while cur < len(mission_cfg_list):
         mission_cfg = mission_cfg_list[cur]
         instance_object: MISSION_MAIN
-
+        jump_list = list(mission_cfg["template_missionID"])
         if mode == 1:
-            json_object, instance_object = excel_tool.get_object(key=key, value=mission_cfg["template_missionID"], table_data_detail=mission_main_detail, cls=MISSION_MAIN)
+            json_object, instance_object = excel_tool.get_object(key=key, value=jump_list[0], table_data_detail=mission_main_detail, cls=MISSION_MAIN)
             instance_object.missionID = missionID_start + cur
             instance_object.name = instance_object.name.replace("伏尔加河", fishery_name)
             instance_object.missionName = instance_object.missionName.replace("伏尔加河", fishery_name)
@@ -369,6 +369,12 @@ def mission_main(excel_tool: ExcelToolsForActivities,fishery_id, groupId, tokenI
         instance_object.groupId = groupId
         instance_object.missionType = 86
         instance_object.awards[0].itemId = tokenID
+        if "fishery_id" in mission_cfg["template_missionID"][jump_list[0]]:
+            instance_object.missionRedirection = 8
+            instance_object.redirectionParams[0] = fishery_id
+        else:
+            instance_object.missionRedirection = 30
+            instance_object.redirectionParams[0] = 0
 
         print(instance_object)
         if mode == 2:
