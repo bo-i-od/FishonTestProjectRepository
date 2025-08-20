@@ -59,7 +59,6 @@ def activity_double_week(excel_tool: ExcelToolsForActivities,fishery_id, chapter
     TimerId, chapterTimerId = timer_main(excel_tool=excel_tool, open_time=open_time, fishery_id=fishery_id)
     instance_object.chapterTimerId = chapterTimerId
     instance_object.TimerId = TimerId
-    instance_object.doubleRewardTimerId = TimerId
     wildCardId = item_main_wild_card(excel_tool=excel_tool, fishery_id=fishery_id, icon_name=icon_name, wildCardId=wildCardId)
     instance_object.wildCardId = wildCardId
     item_main_language_wild_card(excel_tool=excel_tool, fishery_id=fishery_id, wildCardId=wildCardId)

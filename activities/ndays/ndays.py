@@ -483,6 +483,7 @@ def repeatable_challenge(excel_tool: ExcelToolsForActivities, fishery_id, groupI
         instance_object.groupId = groupId
         instance_object.triggerKeyM = fishery_id
         instance_object.rewards[0].itemId = tokenID
+        instance_object.redirectionParams = [fishery_id]
 
         print(instance_object)
         if mode == 2:
