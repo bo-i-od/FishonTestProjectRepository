@@ -1,258 +1,139 @@
 import random
-from collections import defaultdict
-
 
 class DropSimulator:
-    def __init__(self, global_rate, slot_costs, slot_drop_rates,
-                 bonus_thresholds, bonus_rates, drop_counts_weights):
+    def __init__(self, global_rate, slot_costs, slot_drop_rates, bonus_thresholds,
+                 bonus_rates, drop_counts_weights, slot_target_fish_rates):
         self.global_rate = global_rate
         self.slot_costs = slot_costs
         self.slot_drop_rates = slot_drop_rates
         self.bonus_thresholds = bonus_thresholds
         self.bonus_rates = bonus_rates
         self.drop_counts_weights = drop_counts_weights
+        self.slot_target_fish_rates = slot_target_fish_rates
 
-        # 验证参数
-        assert len(slot_costs) == len(slot_drop_rates) == len(drop_counts_weights), "档位数据长度不匹配"
-        assert len(bonus_thresholds) == len(bonus_rates), "体力累积加成数据长度不匹配"
+        assert len(slot_costs) == len(slot_drop_rates) == len(drop_counts_weights) == len(slot_target_fish_rates), "各档参数数量需一致"
+        assert len(bonus_thresholds) == len(bonus_rates), "加成参数数量需一致"
 
-    def get_bonus_rate(self, accumulated_stamina):
-        """根据累积体力获取加成倍率"""
+    def get_bonus_rate(self, stamina):
         bonus = 1.0
-        for i, threshold in enumerate(self.bonus_thresholds):
-            if accumulated_stamina >= threshold:
-                bonus = self.bonus_rates[i]
-            else:
-                break
+        for thresh, rate in zip(self.bonus_thresholds, self.bonus_rates):
+            if stamina >= thresh:
+                bonus = rate
         return bonus
 
     def get_drop_count(self, slot_index):
-        """根据档位和权重随机获取掉落数量"""
-        weights = self.drop_counts_weights[slot_index]
-        counts = list(weights.keys())
-        probs = list(weights.values())
+        weight_dict = self.drop_counts_weights[slot_index]
+        counts = []
+        weights = []
+        for k, v in weight_dict.items():
+            if v > 0:
+                counts.append(k)
+                weights.append(v)
+        total = sum(weights)
+        if total == 0:
+            return 1
+        weights = [w / total for w in weights]
+        rnd = random.random()
+        s = 0
+        for c, w in zip(counts, weights):
+            s += w
+            if rnd <= s:
+                return c
+        return counts[-1]
 
-        # 归一化概率
-        total_prob = sum(probs)
-        if total_prob > 0:
-            probs = [p / total_prob for p in probs]
-            # 手动实现random.choices的功能以提高兼容性
-            rand_val = random.random()
-            cumulative_prob = 0
-            for i, prob in enumerate(probs):
-                cumulative_prob += prob
-                if rand_val <= cumulative_prob:
-                    return counts[i]
-        return 1
+    def calc_avg(self, lst):
+        return sum(lst) / len(lst) if lst else 0
 
-    def calculate_mean(self, data):
-        """计算平均值"""
-        return sum(data) / len(data) if data else 0
-
-    def calculate_median(self, data):
-        """计算中位数"""
-        if not data:
+    def calc_median(self, lst):
+        lst = sorted(lst)
+        n = len(lst)
+        if n == 0:
             return 0
-        sorted_data = sorted(data)
-        n = len(sorted_data)
-        if n % 2 == 0:
-            return (sorted_data[n // 2 - 1] + sorted_data[n // 2]) / 2
+        if n % 2 == 1:
+            return lst[n // 2]
         else:
-            return sorted_data[n // 2]
+            return (lst[n // 2 - 1] + lst[n // 2]) / 2
 
-    def simulate_single_player(self, slot_index, total_energy):
-        """模拟单个玩家在指定档位消耗总体力的掉落情况"""
-        accumulated_stamina = 0  # 累积体力（用于计算加成）
-        consumed_stamina = 0  # 已消耗的总体力
+    def simulate_one_player(self, slot_index, total_energy):
+        stamina_counter = 0
+        used_energy = 0
         slot_cost = self.slot_costs[slot_index]
         base_drop_rate = self.slot_drop_rates[slot_index]
+        target_fish_rate = self.slot_target_fish_rates[slot_index]
+        drop_costs = []
 
-        drop_results = []  # 记录每次掉落时消耗的体力
+        while used_energy + slot_cost <= total_energy:
+            used_energy += slot_cost
+            stamina_counter += slot_cost
 
-        while consumed_stamina < total_energy:
-            # 检查是否还有足够体力进行一次操作
-            if consumed_stamina + slot_cost > total_energy:
-                break
+            # 钓到目标鱼判定
+            if random.random() > target_fish_rate:
+                continue
 
-            # 消耗体力
-            accumulated_stamina += slot_cost
-            consumed_stamina += slot_cost
+            # 掉落判定
+            bonus = self.get_bonus_rate(stamina_counter)
+            real_drop_rate = base_drop_rate * self.global_rate * bonus
+            if random.random() < real_drop_rate:
+                drops = self.get_drop_count(slot_index)
+                avg_per_drop = stamina_counter / drops
+                drop_costs.extend([avg_per_drop] * drops)
+                stamina_counter = 0
 
-            # 计算当前掉落率
-            bonus_rate = self.get_bonus_rate(accumulated_stamina)
-            current_drop_rate = min(1.0, base_drop_rate * self.global_rate * bonus_rate)
+        return drop_costs
 
-            # 判断是否掉落
-            if random.random() < current_drop_rate:
-                # 获得掉落
-                drop_count = self.get_drop_count(slot_index)
-                # 记录每个掉落所需的平均体力
-                cost_per_drop = accumulated_stamina / drop_count
-                for _ in range(drop_count):
-                    drop_results.append(cost_per_drop)
+    def simulate_slot(self, slot_index, num_players, total_energy):
+        all_drop_costs = []
+        total_energy_used = num_players * total_energy
+        for _ in range(num_players):
+            costs = self.simulate_one_player(slot_index, total_energy)
+            all_drop_costs.extend(costs)
+        total_drops = len(all_drop_costs)
 
-                # 重置累积体力
-                accumulated_stamina = 0
+        # 原方式：只统计产生掉落的平均消耗
+        avg = sum(all_drop_costs) / total_drops if total_drops else 0
 
-        return drop_results, consumed_stamina
+        # 新方式：包含未出掉落玩家的总体力分摊平均体力
+        avg_by_all = total_energy_used / total_drops if total_drops else 0
 
-    def simulate_players(self, slot_index, num_players, total_energy_per_player):
-        """模拟多个玩家在指定档位的掉落情况"""
-        all_drop_costs = []  # 所有玩家获得每个掉落的体力消耗
-        total_drops = 0
-        total_energy_consumed = 0
-
-        for player_id in range(num_players):
-            drop_costs, energy_consumed = self.simulate_single_player(slot_index, total_energy_per_player)
-            all_drop_costs.extend(drop_costs)
-            total_drops += len(drop_costs)
-            total_energy_consumed += energy_consumed
-
-            # 进度提示
-            if (player_id + 1) % (num_players // 10) == 0:
-                progress = (player_id + 1) / num_players * 100
-                print(f"  进度: {progress:.0f}%")
-
-        if not all_drop_costs:
-            return {
-                'slot_index': slot_index,
-                'slot_cost': self.slot_costs[slot_index],
-                'base_drop_rate': self.slot_drop_rates[slot_index],
-                'total_drops': 0,
-                'average_cost_per_drop': 0,
-                'minimum': 0,
-                'maximum': 0,
-                'median': 0,
-                'total_energy_consumed': total_energy_consumed,
-                'drop_rate_actual': 0
-            }
-
-        # 计算实际掉落率
-        actual_drop_rate = total_drops / (
-                    total_energy_consumed / self.slot_costs[slot_index]) if total_energy_consumed > 0 else 0
-
+        if all_drop_costs:
+            mn = min(all_drop_costs)
+            mx = max(all_drop_costs)
+            md = self.calc_median(all_drop_costs)
+            drops = total_drops
+        else:
+            mn = mx = md = drops = 0
         return {
-            'slot_index': slot_index,
-            'slot_cost': self.slot_costs[slot_index],
-            'base_drop_rate': self.slot_drop_rates[slot_index],
-            'total_drops': total_drops,
-            'average_cost_per_drop': self.calculate_mean(all_drop_costs),
-            'minimum': min(all_drop_costs),
-            'maximum': max(all_drop_costs),
-            'median': self.calculate_median(all_drop_costs),
-            'total_energy_consumed': total_energy_consumed,
-            'drop_rate_actual': actual_drop_rate
+            "average": avg,         # 只统计有掉落体力分摊
+            "avg_by_all": avg_by_all, # 所有体力分摊到掉落数
+            "min": mn,
+            "max": mx,
+            "median": md,
+            "drops": drops
         }
 
-    def run_full_simulation(self, num_players, total_energy_per_player):
-        """运行完整的模拟，测试所有档位"""
-        print("=" * 90)
-        print("掉落机制模拟结果")
-        print("=" * 90)
-        print(f"全局倍率: {self.global_rate}")
-        print(f"模拟玩家数: {num_players}")
-        print(f"每个玩家总体力: {total_energy_per_player}")
-        print("=" * 90)
-
-        all_results = []
-
-        for slot_index in range(len(self.slot_costs)):
-            print(
-                f"\n正在模拟档位 {slot_index + 1} (体力消耗: {self.slot_costs[slot_index]}, 基础掉落率: {self.slot_drop_rates[slot_index]:.4f})...")
-
-            result = self.simulate_players(slot_index, num_players, total_energy_per_player)
-            all_results.append(result)
-
-            print(f"档位 {slot_index + 1} 结果:")
-            print(f"  总掉落数: {result['total_drops']}")
-            print(f"  获得一个掉落的平均体力消耗: {result['average_cost_per_drop']:.2f}")
-            print(f"  最小值: {result['minimum']:.2f}")
-            print(f"  最大值: {result['maximum']:.2f}")
-            print(f"  中位数: {result['median']:.2f}")
-            print(f"  实际掉落率: {result['drop_rate_actual']:.4f}")
-
-        return all_results
-
-    def print_configuration(self):
-        """打印当前配置"""
-        print("当前配置:")
-        print(f"全局倍率: {self.global_rate}")
-        print(f"档位体力消耗: {self.slot_costs}")
-        print(f"档位掉落率: {self.slot_drop_rates}")
-        print(f"累积体力阈值: {self.bonus_thresholds}")
-        print(f"对应加成倍率: {self.bonus_rates}")
-        print("掉落数量权重:")
-        for i, weights in enumerate(self.drop_counts_weights):
-            print(f"  档位{i + 1}: {weights}")
-        print()
-
-
 def main():
-    # 配置参数
     global_rate = 1.25
     slot_costs = [1, 3, 10, 20, 30, 50, 100, 150, 200, 300, 500, 1000, 2000]
-    slot_drop_rates = [0.0002, 0.0006, 0.002, 0.0038, 0.006, 0.0095, 0.019, 0.029, 0.04, 0.06, 0.1, 0.2, 0.5]
+    slot_drop_rates = [0.002, 0.006, 0.02, 0.038, 0.06, 0.095, 0.19, 0.29, 0.4, 0.6, 1, 1, 1]
+    slot_target_fish_rates = [0.145, 0.145, 0.145, 0.145, 0.145, 0.145, 0.145, 0.145, 0.145, 0.145, 0.145, 0.145, 0.145]
     bonus_thresholds = [300, 600, 3000, 6000, 9000, 10000]
     bonus_rates = [1, 1, 1.5, 6, 30, 500]
     drop_counts_weights = [{1: 1, 2: 0, 3: 0}, {1: 1, 2: 0, 3: 0}, {1: 1, 2: 0, 3: 0}, {1: 1, 2: 0, 3: 0},
                            {1: 1, 2: 0, 3: 0}, {1: 1, 2: 0, 3: 0}, {1: 1, 2: 0, 3: 0}, {1: 1, 2: 0, 3: 0},
-                           {1: 1, 2: 0, 3: 0}, {1: 1, 2: 0, 3: 0}, {1: 1, 2: 0, 3: 0}, {1
-                                                                                        : 1, 2: 0, 3: 0},
-                           {1: 1, 2: 0, 3: 0}]
+                           {1: 1, 2: 0, 3: 0}, {1: 1, 2: 0, 3: 0}, {1: 1, 2: 0, 3: 0}, {1: 1, 2: 0.5, 3: 0.5},
+                           {1: 0, 2: 0.1, 3: 0.9}]
     player_total_energy = 10000
     num_players = 1000
+    sim = DropSimulator(global_rate, slot_costs, slot_drop_rates, bonus_thresholds,
+                       bonus_rates, drop_counts_weights, slot_target_fish_rates)
 
-
-
-
-
-    # 创建模拟器
-    simulator = DropSimulator(
-        global_rate, slot_costs, slot_drop_rates,
-        bonus_thresholds, bonus_rates, drop_counts_weights
-    )
-
-    # 打印配置
-    simulator.print_configuration()
-
-    # 运行模拟
-    results = simulator.run_full_simulation(num_players, player_total_energy)
-
-    # 汇总结果表格
-    print("\n" + "=" * 120)
-    print("汇总结果表格")
-    print("=" * 120)
-    print(
-        f"{'档位':<4} {'体力消耗':<8} {'基础掉落率':<12} {'实际掉落率':<12} {'总掉落数':<10} {'平均体力':<10} {'最小值':<8} {'最大值':<8} {'中位数':<8}")
-    print("-" * 120)
-
-    for result in results:
-        print(f"{result['slot_index'] + 1:<4} "
-              f"{result['slot_cost']:<8} "
-              f"{result['base_drop_rate']:<12.4f} "
-              f"{result['drop_rate_actual']:<12.4f} "
-              f"{result['total_drops']:<10} "
-              f"{result['average_cost_per_drop']:<10.2f} "
-              f"{result['minimum']:<8.2f} "
-              f"{result['maximum']:<8.2f} "
-              f"{result['median']:<8.2f}")
-
-    # 效率分析
-    print("\n" + "=" * 90)
-    print("效率分析 (获得一个掉落所需平均体力)")
-    print("=" * 90)
-
-    # 找出效率最高的档位
-    valid_results = [r for r in results if r['total_drops'] > 0]
-    if valid_results:
-        best_efficiency = min(valid_results, key=lambda x: x['average_cost_per_drop'])
-        print(f"最高效率档位: 档位{best_efficiency['slot_index'] + 1} "
-              f"(平均{best_efficiency['average_cost_per_drop']:.2f}体力/掉落)")
-
-        worst_efficiency = max(valid_results, key=lambda x: x['average_cost_per_drop'])
-        print(f"最低效率档位: 档位{worst_efficiency['slot_index'] + 1} "
-              f"(平均{worst_efficiency['average_cost_per_drop']:.2f}体力/掉落)")
-
+    print(f"{'档位':<4}{'体力':<8}{'掉落率':<10}{'目标鱼率':<10}{'样本':<6}{'掉落数':<8}{'有掉落均':<12}{'总均':<12}{'中位数':<10}{'最小':<8}{'最大':<8}")
+    print('='*105)
+    for i in range(13):
+        res = sim.simulate_slot(i, num_players, player_total_energy)
+        print(f"{i+1:<4}{slot_costs[i]:<8}{slot_drop_rates[i]:<10.3f}{slot_target_fish_rates[i]:<10.2f}"
+              f"{num_players:<6}{res['drops']:<8}{res['average']:<12.2f}{res['avg_by_all']:<12.2f}"
+              f"{res['median']:<10.2f}{res['min']:<8.2f}{res['max']:<8.2f}")
 
 if __name__ == "__main__":
     main()
