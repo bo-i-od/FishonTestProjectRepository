@@ -303,12 +303,12 @@ def mission_main(excel_tool: ExcelToolsForActivities,fishery_id, groupId, tokenI
         {"template_missionID": {missionID_template_start + 19: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 19: ["fishery_id", "fisheries_language"], missionConditionID_template_start + 47:["fishery_id"]}},
         {"template_missionID": {missionID_template_start + 20: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 20: ["fishery_id", "fisheries_language"], missionConditionID_template_start + 48:["fishery_id"] }},
         {"template_missionID": {missionID_template_start + 21: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 21: ["fishery_id", "fisheries_language"], missionConditionID_template_start + 49:["fishery_id"]}},
-        {"template_missionID": {missionID_template_start + 22: []}, "template_missionConditionIDs": {missionConditionID_template_start + 22: [], missionConditionID_template_start + 50:["fishery_id"]}},
-        {"template_missionID": {missionID_template_start + 23: []}, "template_missionConditionIDs": {missionConditionID_template_start + 23: [], missionConditionID_template_start + 51:["fishery_id"]}},
-        {"template_missionID": {missionID_template_start + 24: []}, "template_missionConditionIDs": {missionConditionID_template_start + 24: [], missionConditionID_template_start + 52:["fishery_id"]}},
-        {"template_missionID": {missionID_template_start + 25: []}, "template_missionConditionIDs": {missionConditionID_template_start + 25: [], missionConditionID_template_start + 53:["fishery_id"]}},
-        {"template_missionID": {missionID_template_start + 26: []}, "template_missionConditionIDs": {missionConditionID_template_start + 26: [], missionConditionID_template_start + 54:["fishery_id"]}},
-        {"template_missionID": {missionID_template_start + 27: []}, "template_missionConditionIDs": {missionConditionID_template_start + 27: [], missionConditionID_template_start + 55:["fishery_id"]}},
+        {"template_missionID": {missionID_template_start + 22: []}, "template_missionConditionIDs": {missionConditionID_template_start + 22: [], missionConditionID_template_start + 50:["fishery_id", "fisheries_language"]}},
+        {"template_missionID": {missionID_template_start + 23: []}, "template_missionConditionIDs": {missionConditionID_template_start + 23: [], missionConditionID_template_start + 51:["fishery_id", "fisheries_language"]}},
+        {"template_missionID": {missionID_template_start + 24: []}, "template_missionConditionIDs": {missionConditionID_template_start + 24: [], missionConditionID_template_start + 52:["fishery_id", "fisheries_language"]}},
+        {"template_missionID": {missionID_template_start + 25: []}, "template_missionConditionIDs": {missionConditionID_template_start + 25: [], missionConditionID_template_start + 53:["fishery_id", "fisheries_language"]}},
+        {"template_missionID": {missionID_template_start + 26: []}, "template_missionConditionIDs": {missionConditionID_template_start + 26: [], missionConditionID_template_start + 54:["fishery_id", "fisheries_language"]}},
+        {"template_missionID": {missionID_template_start + 27: []}, "template_missionConditionIDs": {missionConditionID_template_start + 27: [], missionConditionID_template_start + 55:["fishery_id", "fisheries_language"]}},
         {"template_missionID": {missionID_template_start + 28: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 28: []}, },
         {"template_missionID": {missionID_template_start + 29: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 29: []}, },
         {"template_missionID": {missionID_template_start + 30: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 30: []}, },
@@ -414,7 +414,7 @@ def mission_condition(excel_tool: ExcelToolsForActivities,fishery_id, mission_cf
         mission_condition_cfg = mission_condition_cfg_dict[template_missionConditionID_list_copy[cur]]
         instance_object: MISSION_CONDITION
         json_object, instance_object = excel_tool.get_object(key=key, value=template_missionConditionID, table_data_detail=mission_condition_detail, cls=MISSION_CONDITION)
-        if mode == 1:
+        if "伏尔加河" in instance_object.name:
             instance_object.name = instance_object.name.replace("伏尔加河", fishery_name)
         instance_object.missionConditionID = missionConditionID
         instance_object.id = instance_object.missionConditionID
