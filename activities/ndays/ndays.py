@@ -303,12 +303,12 @@ def mission_main(excel_tool: ExcelToolsForActivities,fishery_id, groupId, tokenI
         {"template_missionID": {missionID_template_start + 19: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 19: ["fishery_id", "fisheries_language"], missionConditionID_template_start + 47:["fishery_id"]}},
         {"template_missionID": {missionID_template_start + 20: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 20: ["fishery_id", "fisheries_language"], missionConditionID_template_start + 48:["fishery_id"] }},
         {"template_missionID": {missionID_template_start + 21: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 21: ["fishery_id", "fisheries_language"], missionConditionID_template_start + 49:["fishery_id"]}},
-        {"template_missionID": {missionID_template_start + 22: []}, "template_missionConditionIDs": {missionConditionID_template_start + 22: [], missionConditionID_template_start + 50:["fishery_id", "fisheries_language"]},},
-        {"template_missionID": {missionID_template_start + 23: []}, "template_missionConditionIDs": {missionConditionID_template_start + 23: [], missionConditionID_template_start + 51:["fishery_id", "fisheries_language"]},},
-        {"template_missionID": {missionID_template_start + 24: []}, "template_missionConditionIDs": {missionConditionID_template_start + 24: [], missionConditionID_template_start + 52:["fishery_id", "fisheries_language"]},},
-        {"template_missionID": {missionID_template_start + 25: []}, "template_missionConditionIDs": {missionConditionID_template_start + 25: [], missionConditionID_template_start + 53:["fishery_id", "fisheries_language"]},},
-        {"template_missionID": {missionID_template_start + 26: []}, "template_missionConditionIDs": {missionConditionID_template_start + 26: [], missionConditionID_template_start + 54:["fishery_id", "fisheries_language"]},},
-        {"template_missionID": {missionID_template_start + 27: []}, "template_missionConditionIDs": {missionConditionID_template_start + 27: [], missionConditionID_template_start + 55:["fishery_id", "fisheries_language"]},},
+        {"template_missionID": {missionID_template_start + 22: []}, "template_missionConditionIDs": {missionConditionID_template_start + 22: [], 6012651:[]},},
+        {"template_missionID": {missionID_template_start + 23: []}, "template_missionConditionIDs": {missionConditionID_template_start + 23: [], 6012652:[]},},
+        {"template_missionID": {missionID_template_start + 24: []}, "template_missionConditionIDs": {missionConditionID_template_start + 24: [], 6012653:[]},},
+        {"template_missionID": {missionID_template_start + 25: []}, "template_missionConditionIDs": {missionConditionID_template_start + 25: [], 6012654:[]},},
+        {"template_missionID": {missionID_template_start + 26: []}, "template_missionConditionIDs": {missionConditionID_template_start + 26: [], 6012655:[]},},
+        {"template_missionID": {missionID_template_start + 27: []}, "template_missionConditionIDs": {missionConditionID_template_start + 27: [], 6012656:[]},},
         {"template_missionID": {missionID_template_start + 28: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 28: []}, },
         {"template_missionID": {missionID_template_start + 29: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 29: []}, },
         {"template_missionID": {missionID_template_start + 30: ["fishery_id"]}, "template_missionConditionIDs": {missionConditionID_template_start + 30: []}, },
@@ -421,7 +421,8 @@ def mission_condition(excel_tool: ExcelToolsForActivities,fishery_id, mission_cf
         if "fishery_id" in mission_condition_cfg:
             instance_object.triggerKeyM = fishery_id
         if "fisheries_language" in mission_condition_cfg:
-            instance_object.numDisplay[0] = f"fisheries_language|t_name|{fishery_id}"
+            instance_object.numDisplay = [f"fisheries_language|t_name|{fishery_id}", "", ""]
+
 
         print(instance_object)
         if mode == 2:
