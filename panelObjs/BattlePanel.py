@@ -33,6 +33,7 @@ class BattlePanel(BasePage):
             ElementsData.BattlePanel.BattlePanel,
             ElementsData.BattlePanel.crt,
             ElementsData.BattlePanel.crt2,
+            ElementsData.QuiverDropShowPanel.QuiverDropShowPanel
         ]
         qte_left_index = element_data_list.index(ElementsData.BattlePanel.qte_left)
         qte_right_index = element_data_list.index(ElementsData.BattlePanel.qte_right)
@@ -48,6 +49,7 @@ class BattlePanel(BasePage):
         btn_again_2_index = element_data_list.index(ElementsData.MainStageBattleFailedPanel.btn_again)
         FlashCardReceivePanel_index = element_data_list.index(ElementsData.FlashCardReceivePanel.FlashCardReceivePanel)
         MainlineFlashCardReceivePanel_index = element_data_list.index(ElementsData.MainlineFlashCardReceivePanel.MainlineFlashCardReceivePanel)
+        QuiverDropShowPanel_index = element_data_list.index(ElementsData.QuiverDropShowPanel.QuiverDropShowPanel)
         crt_index = element_data_list.index(ElementsData.BattlePanel.crt)
         crt2_index = element_data_list.index(ElementsData.BattlePanel.crt2)
         size_tension = None
@@ -55,10 +57,8 @@ class BattlePanel(BasePage):
         # False且当前在张力区间代表首次进入，变为True
         # True且当前在张力区间代表非首次进入
         # True且不在张力区间代表非首次退出， 变为False
-
         while True:
             object_id_list = self.get_object_id_list(element_data_list=element_data_list)
-
             if object_id_list[crt_index] or object_id_list[crt2_index]:
                 if size_tension is None:
                     size_tension = self.get_size(element_data=ElementsData.BattlePanel.hud_tension)
@@ -110,6 +110,9 @@ class BattlePanel(BasePage):
                 ResultPanel.automatic_settlement(self, element_btn=ElementsData.MainStageBattleFailedPanel.btn_again)
                 break
             if object_id_list[FlashCardReceivePanel_index]:
+                self.clear_popup()
+                continue
+            if object_id_list[QuiverDropShowPanel_index]:
                 self.clear_popup()
                 continue
             if object_id_list[MainlineFlashCardReceivePanel_index]:

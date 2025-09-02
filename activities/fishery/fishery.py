@@ -486,8 +486,8 @@ def new_plot_map_main(excel_tool: ExcelToolsForActivities, fishery_id,fishery_in
     instance_object.displayLoadingPic = instance_object.loadingImg
     instance_object.foreshow[0].waitingIcon = f"icon_mainstage_clue_{icon_name}_{clue_reward[-1]['CollectCount'] + 1}"
     instance_object.foreshow[1].waitingIcon = f"icon_mainstage_clue_{icon_name}_{clue_reward[-1]['CollectCount'] + 2}"
-    instance_object.challengeIcon = f"challenge_point_0{fishery_index * 2 - 1}"
-    instance_object.challengeIcon2 = f"challenge_point_0{fishery_index * 2}"
+    instance_object.challengeIcon = f"challenge_point_{fishery_index * 2 - 1}"
+    instance_object.challengeIcon2 = f"challenge_point_{fishery_index * 2}"
     instance_object.challengeBg = f"ChallengeBG_00{fishery_index}"
     instance_object.nextFisheryUnlockDialog = None
     instance_object.questLimit = excel_tool.get_last_quest_id(fishery_id=fishery_id - 1)

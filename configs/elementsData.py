@@ -1899,6 +1899,10 @@ class ElementsData:
         btn_close = {"locator": "UICanvas>Important>QuestionnairePanel>Panel>btn_close>img"}
         btn_confirm = {"locator": "UICanvas>Important>QuestionnairePanel>Panel>btn_confirm"}
 
+    class QuiverDropShowPanel:
+        QuiverDropShowPanel = {"locator": "UICanvas>Default>QuiverDropShowPanel"}
+        btn_close = {"locator": "UICanvas>Default>QuiverDropShowPanel>btn_close>text"}
+
     class RankPanel:
         RankPanel = {"locator": "UICanvas>Default>RankPanel"}
         btn_close = {"locator": "UICanvas>Default>RankPanel>panel>btn_close>img"}
