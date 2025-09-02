@@ -414,7 +414,7 @@ def mission_condition(excel_tool: ExcelToolsForActivities,fishery_id, mission_cf
         mission_condition_cfg = mission_condition_cfg_dict[template_missionConditionID_list_copy[cur]]
         instance_object: MISSION_CONDITION
         json_object, instance_object = excel_tool.get_object(key=key, value=template_missionConditionID, table_data_detail=mission_condition_detail, cls=MISSION_CONDITION)
-        if mode == 1:
+        if "伏尔加河" in instance_object.name:
             instance_object.name = instance_object.name.replace("伏尔加河", fishery_name)
         instance_object.missionConditionID = missionConditionID
         instance_object.id = instance_object.missionConditionID
