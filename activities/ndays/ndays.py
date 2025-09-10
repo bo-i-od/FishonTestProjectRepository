@@ -421,7 +421,7 @@ def mission_condition(excel_tool: ExcelToolsForActivities,fishery_id, mission_cf
         if "fishery_id" in mission_condition_cfg:
             instance_object.triggerKeyM = fishery_id
         if "fisheries_language" in mission_condition_cfg:
-            instance_object.numDisplay = [f"fisheries_language|t_name|{fishery_id}", "", ""]
+            instance_object.numDisplay = [f"fisheries_language|t_name|{fishery_id}", "0", "0"]
 
 
         print(instance_object)
