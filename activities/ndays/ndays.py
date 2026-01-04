@@ -329,7 +329,7 @@ def mission_main(excel_tool: ExcelToolsForActivities,fishery_id, groupId, tokenI
     mission_main_detail = excel_tool.get_table_data_detail(book_name="MISSION_MAIN.xlsm")
     mission_condition_detail = excel_tool.get_table_data_detail(book_name="MISSION_CONDITION.xlsm")
     fishery_name = excel_tool.get_fishery_name(fishery_id=fishery_id)
-    missionConditionID_start = excel_tool.get_min_value_more_than_start(key="missionConditionID", start=missionConditionID_template_start, long=56, table_object_detail=mission_condition_detail)
+    missionConditionID_start = excel_tool.get_min_value_more_than_start(key="missionConditionID", start=missionConditionID_template_start, long=50, table_object_detail=mission_condition_detail)
 
     table_data_object_list = excel_tool.get_table_data_object_list_by_key_value(key="groupId", value=groupId, table_data_detail=mission_main_detail)
     if table_data_object_list:
@@ -343,9 +343,10 @@ def mission_main(excel_tool: ExcelToolsForActivities,fishery_id, groupId, tokenI
     while cur < len(mission_cfg_list):
         mission_cfg = mission_cfg_list[cur]
         instance_object: MISSION_MAIN
-        jump_list = list(mission_cfg["template_missionID"])
+        mission_id_list = list(mission_cfg["template_missionID"])
+        mission_condition_id_list = list(mission_cfg["template_missionConditionIDs"])
         if mode == 1:
-            json_object, instance_object = excel_tool.get_object(key=key, value=jump_list[0], table_data_detail=mission_main_detail, cls=MISSION_MAIN)
+            json_object, instance_object = excel_tool.get_object(key=key, value=mission_id_list[0], table_data_detail=mission_main_detail, cls=MISSION_MAIN)
             instance_object.missionID = missionID_start + cur
             instance_object.name = instance_object.name.replace("伏尔加河", fishery_name)
             instance_object.missionName = instance_object.missionName.replace("伏尔加河", fishery_name)
@@ -355,9 +356,14 @@ def mission_main(excel_tool: ExcelToolsForActivities,fishery_id, groupId, tokenI
                 missionConditionID += 1
             instance_object.missionConditionIDs[0] = missionConditionID
             missionConditionID_set.add(instance_object.missionConditionIDs[0])
-            if len(mission_cfg["template_missionConditionIDs"]) > 1:
-                instance_object.missionConditionIDs[1] = instance_object.missionConditionIDs[0] + 28
-                missionConditionID_set.add(instance_object.missionConditionIDs[1])
+            if len(mission_condition_id_list) > 1:
+                if mission_condition_id_list[1] in [6012651, 6012652, 6012653, 6012654, 6012655, 6012656]:
+                    instance_object.missionConditionIDs[1] = mission_condition_id_list[1]
+                else:
+                # instance_object.missionConditionIDs[1] = instance_object.missionConditionIDs[0] + 28
+                    instance_object.missionConditionIDs[1] = instance_object.missionConditionIDs[0] + 28
+                    missionConditionID_set.add(instance_object.missionConditionIDs[1])
+
         else:
             instance_object = json_to_instance(json_object=table_data_object_list[cur], cls=MISSION_MAIN)
             missionConditionID_set.add(instance_object.missionConditionIDs[0])
@@ -369,7 +375,7 @@ def mission_main(excel_tool: ExcelToolsForActivities,fishery_id, groupId, tokenI
         instance_object.groupId = groupId
         instance_object.missionType = 86
         instance_object.awards[0].itemId = tokenID
-        if "fishery_id" in mission_cfg["template_missionID"][jump_list[0]]:
+        if "fishery_id" in mission_cfg["template_missionID"][mission_id_list[0]]:
             instance_object.missionRedirection = 8
             instance_object.redirectionParams[0] = fishery_id
         else:
@@ -385,6 +391,7 @@ def mission_main(excel_tool: ExcelToolsForActivities,fishery_id, groupId, tokenI
 
     # 接着整mission_condition表
     missionConditionID_list = sorted(missionConditionID_set)
+    # print(missionConditionID_list)
     mission_condition(excel_tool=excel_tool, fishery_id=fishery_id, mission_cfg_list=mission_cfg_list,  missionConditionID_list=missionConditionID_list)
 
 def mission_condition(excel_tool: ExcelToolsForActivities,fishery_id, mission_cfg_list, missionConditionID_list):
@@ -393,11 +400,19 @@ def mission_condition(excel_tool: ExcelToolsForActivities,fishery_id, mission_cf
     cur = 0
     while cur < len(mission_cfg_list):
         template_missionConditionIDs = mission_cfg_list[cur]["template_missionConditionIDs"]
+
         mission_condition_cfg_dict.update(template_missionConditionIDs)
         cur += 1
+
+    mission_condition_cfg_dict.pop(6012651)
+    mission_condition_cfg_dict.pop(6012652)
+    mission_condition_cfg_dict.pop(6012653)
+    mission_condition_cfg_dict.pop(6012654)
+    mission_condition_cfg_dict.pop(6012655)
+    mission_condition_cfg_dict.pop(6012656)
     template_missionConditionID_list = sorted(mission_condition_cfg_dict)
     template_missionConditionID_list_copy = template_missionConditionID_list
-    id_start = excel_tool.get_max_value(key="id", table_object_detail=mission_condition_detail) + 1
+    # id_start = excel_tool.get_max_value(key="id", table_object_detail=mission_condition_detail) + 1
     table_data_object_list = excel_tool.get_table_data_object_list_by_key_value(key="missionConditionID", value=missionConditionID_list[0], table_data_detail=mission_condition_detail)
     if table_data_object_list:
         mode = 2
@@ -408,6 +423,7 @@ def mission_condition(excel_tool: ExcelToolsForActivities,fishery_id, mission_cf
     key = "missionConditionID"
     fishery_name = excel_tool.get_fishery_name(fishery_id=fishery_id)
     cur = 0
+    print(f"template_missionConditionID_list:{template_missionConditionID_list}, missionConditionID_list:{missionConditionID_list}")
     while cur < len(template_missionConditionID_list):
         missionConditionID = missionConditionID_list[cur]
         template_missionConditionID = template_missionConditionID_list[cur]
@@ -421,7 +437,9 @@ def mission_condition(excel_tool: ExcelToolsForActivities,fishery_id, mission_cf
         if "fishery_id" in mission_condition_cfg:
             instance_object.triggerKeyM = fishery_id
         if "fisheries_language" in mission_condition_cfg:
-            instance_object.numDisplay = [f"fisheries_language|t_name|{fishery_id}", "0", "0"]
+            instance_object.numDisplay[0] = f"fisheries_language|t_name|{fishery_id}"
+
+
 
 
         print(instance_object)
