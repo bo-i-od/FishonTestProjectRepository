@@ -1,18 +1,15 @@
 import random
 import threading
-from datetime import datetime
 
 from airtest.core.helper import G
 from poco.drivers.unity3d.device import UnityEditorWindow
-import netMsg.luaLog
 import json
 from importlib import import_module
 
 import tools.commonTools
 from common.uimonitor import UIMonitor
 from common.viewport import Viewport
-from configs.pathConfig import EXCEL_PATH
-from tools.excelRead import ExcelTools
+
 
 import time
 import base64
@@ -32,7 +29,7 @@ import wda
 
 
 class BasePageMain:
-    def __init__(self, serial_number=None, dev=None, is_mobile_device=False, is_monitor=False):
+    def __init__(self, serial_number=None, dev=None, is_mobile_device=False, is_monitor=False, excel_path=None):
         # 不打印airtest日志
         logging.getLogger("airtest").setLevel(logging.ERROR)
         # unity窗口使用UnityEditorWindow()
@@ -63,22 +60,22 @@ class BasePageMain:
             self.is_ios = True
 
         # 默认端口 5001
-        addr = ('', 5001)
-        # Unity log接收端口5002
-        addr_listen = ('', 5002)
+        addr = ('127.0.0.1', 5001)
+        addr_listen = ('127.0.0.1', 5001)
         self.dev = dev
         if self.dev is None:
             print("self.dev is None")
             self.serial_number = serial_number
             self.dev = self.get_device(serial_number=serial_number)
-
-        self.poco = UnityPoco(addr, device=dev)
+        self.poco = UnityPoco(addr, device=self.dev)
         self.custom_cmd("setCamera UICamera_Front")
         self.poco_listen = None
+        self.addr_listen = addr_listen
 
-        # 不是ios就可以开启Unity log接收
         if not self.is_ios:
+            rpcMethodRequest.set_send_log_flag(self.poco, False)
             self.poco_listen = UnityPoco(addr_listen, device=dev)
+            rpcMethodRequest.register_push_channel(self.poco_listen)
         self.screen_w, self.screen_h = self.poco.get_screen_size()  # 获取屏幕尺寸
 
 
@@ -167,16 +164,19 @@ class BasePageMain:
         # dev = connect_device("android://127.0.0.1:5037/28cce18906027ece")
         return dev
 
-    # 断开poco连接
     def connect_close(self):
-        """函数功能简述
-            关闭与c#的rpc连接
-            当开启Unity log接收端口也同时关闭
-        """
+        """关闭与c#的rpc连接和推送连接"""
         self.send_log_flag = False
-        self.poco.agent.c.conn.close()
-        if self.poco_listen is not None:
+        try:
+            self.poco.agent.c.conn.close()
+        except Exception as e:
+            print(f"[connect_close] poco关闭异常: {type(e).__name__}: {e}")
+        if self.poco_listen is None:
+            return
+        try:
             self.poco_listen.agent.c.conn.close()
+        except Exception as e:
+            print(f"[connect_close] poco_listen关闭异常: {type(e).__name__}: {e}")
 
     def debug_log(self, *msg):
         """函数功能简述
@@ -215,10 +215,10 @@ class BasePageMain:
         返回:
             dict
         """
-        element_data_copy = element_data
-        if offspring_path != "":
-            element_data_copy = element_data.copy()
-            element_data_copy["locator"] = element_data_copy["locator"] + '>' + offspring_path
+        element_data_copy = element_data.copy()
+        if offspring_path == "":
+            return element_data_copy
+        element_data_copy["locator"] = element_data_copy["locator"] + '/' + offspring_path
         return element_data_copy
 
     def get_element_data_list(self, element_data_list, offspring_path):
@@ -1230,10 +1230,10 @@ class BasePageMain:
         if not pop_window_set:
             return True
         for panel_name in pop_window_set:
-            # 开鱼卡特殊处理，进行一次点击跳过动画
-            if panel_name == "FishBagPanel":
-                self.click_position_base([0.5, 0.5])
-                self.sleep(0.5)
+            # # 开鱼卡特殊处理，进行一次点击跳过动画
+            # if panel_name == "FishBagPanel":
+            #     self.click_position_base([0.5, 0.5])
+            #     self.sleep(0.5)
             if "close_path" not in JumpData.panel_dict[panel_name]:
                 continue
             for close_element in JumpData.panel_dict[panel_name]["close_path"]:
@@ -1644,28 +1644,44 @@ class BasePageMain:
         if send_log_flag:
             self.wait_msg()
 
-    # 接收C#传来的消息
     def circulate_update(self):
-        """函数功能简述
-            接收C#传来的消息
-        """
+        """接收C#传来的消息，带异常分类和重连逻辑"""
+        reconnect_count = 0
+        max_reconnect = 5
         while self.send_log_flag:
             if not self.listen_log_flag:
                 time.sleep(0.1)
                 continue
-            # 每隔一段时间取一下接收区的消息
             try:
                 rec = self.poco_listen.agent.c.conn.recv()
-            except:
-                # print(e)
+                reconnect_count = 0
+                for m in rec:
+                    try:
+                        data = json.loads(m)
+                        self.handle_message(data)
+                        self.handle_request(data)
+                    except json.JSONDecodeError as e:
+                        print(f"[circulate_update] JSON解析失败, 跳过该消息: {e}")
+                    except Exception as e:
+                        print(f"[circulate_update] 消息处理异常: {type(e).__name__}: {e}")
+            except (ConnectionResetError, ConnectionAbortedError, BrokenPipeError, OSError) as e:
+                if not self.send_log_flag:
+                    break
+                reconnect_count += 1
+                print(f"[circulate_update] 连接断开({type(e).__name__}), 第{reconnect_count}次重连...")
+                if reconnect_count > max_reconnect:
+                    print(f"[circulate_update] 超过最大重连次数{max_reconnect}, 停止日志接收")
+                    break
+                time.sleep(min(2 ** reconnect_count, 10))
+                try:
+                    self.poco_listen = UnityPoco(self.addr_listen, device=self.dev)
+                    rpcMethodRequest.register_push_channel(self.poco_listen)
+                    print(f"[circulate_update] 重连成功")
+                except Exception as re:
+                    print(f"[circulate_update] 重连失败: {type(re).__name__}: {re}")
+            except Exception as e:
+                print(f"[circulate_update] 未预期异常({type(e).__name__}): {e}, 停止日志接收")
                 break
-            for m in rec:
-                # 转格式加处理消息
-                data = json.loads(m)
-                self.handle_message(data)
-                self.handle_request(data)
-                # 返回消息给C#
-                # poco.agent.c.conn.send("ok")
             time.sleep(0.01)
 
     def handle_message(self, data):
@@ -1675,12 +1691,12 @@ class BasePageMain:
         """
         if 'msg' not in data:
             return
-        # print(data)
+        print(data)
         msg = data['msg']
         if self.log_list_flag:
             self.log_list.append(msg)
         self.log_list_duel.append(msg)
-        netMsg.luaLog.deal_with_msg(msg)
+        # netMsg.luaLog.deal_with_msg(msg)
 
     def handle_request(self, data):
         """函数功能简述
@@ -1722,938 +1738,24 @@ class BasePageMain:
 
 
 class BasePage(BasePageMain):
-    def __init__(self, serial_number=None, dev=None, is_mobile_device=False, is_monitor=False):
-        super().__init__(serial_number, dev, is_mobile_device, is_monitor)
-        # 是否测试会拉起支付的按钮
-        self.is_pay = True
-
-        # 全局变量
-        self.cur = 0
+    def __init__(self, serial_number=None, dev=None, is_mobile_device=False, is_monitor=False, excel_path=None):
+        super().__init__(serial_number, dev, is_mobile_device, is_monitor, excel_path)
 
         self.is_monitor = is_monitor
-
-        # self._extend_base_page()
-
-        # 配置表的路径
-        self.excelTools = ExcelTools(EXCEL_PATH)
 
         if self.is_monitor:
             self.monitor = UIMonitor(self)
             self.monitor.start_monitoring(threading.current_thread())
 
-        # 设置默认张力
-        self.tension_default = None
-        self.set_tension_default(0.95)
+    """
+        BasePage补充项目特有的方法
+    """
 
-        # 设置是否使用快速qte
-        self.is_quick_qte = None
-        self.set_is_quick_qte(True)
-
-        self.auto_fish_init()
-
-        # 设置默认拉线张力
-        self.hook_progress = None
-        self.set_hook_progress(0.75)
-
-    def auto_fish_init(self):
-        cmd_list = []
-        cmd_list.append(f"clearElements")
-        lua_code = "Gameplay.Joystick.HorizontalValue = -1"
-
-        cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left>qte 0 {lua_code}")
-        cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_2>qte 0 {lua_code}")
-        cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_3>qte 0 {lua_code}")
-        cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_4>qte 0 {lua_code}")
-        cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_5>qte 0 {lua_code}")
-        cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_6>qte 0.75 {lua_code}")
-        cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_7>qte 0 {lua_code}")
-        cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_fishJump>qte 0 {lua_code}")
-        lua_code = "Gameplay.Joystick.HorizontalValue = 1"
-        cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right>qte 0 {lua_code}")
-        cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_2>qte 0 {lua_code}")
-        cmd_list.append(f"addElement joystickLeft UICanvas>Default>BattlePanel>FishHUD>qte_left_3>qte 0 {lua_code}")
-        cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_4>qte 0 {lua_code}")
-        cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_5>qte 0 {lua_code}")
-        cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_6>qte 0.75 {lua_code}")
-        cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_7>qte 0 {lua_code}")
-        cmd_list.append(f"addElement joystickRight UICanvas>Default>BattlePanel>FishHUD>qte_right_fishJump>qte 0 {lua_code}")
-
-        lua_code = """local fishingMatch = GameRoot:GetFishingMatch()
-local actorPlayer  = fishingMatch:GetPlayer()
-local actorFish = actorPlayer:GetCurrentFish()
-local caBeCounter = actorFish:GetGEByClass(BATTLE_GE.CAN_BE_COUNTER, true)
-local skillCounter = actorPlayer:GetSkillByClass(BATTLE_SKILL.PLAYER.COUNTER)
-local counterType = skillCounter:GetCounterType(actorPlayer)
-if not caBeCounter then
-    return
-end
-if not skillCounter:IsHaveEnoughEnergy(counterType) then
-    return
-end
-fishingMatch:TriggerActiveSkill(skillCounter:GetSlotIndex())"""
-        cmd_list.append(f"addElement joystickUp UICanvas>Default>BattlePanel>FishHUD>qte_up>qte 0 {lua_code}")
-        cmd_list.append(f"addElement joystickUp UICanvas>Default>BattlePanel>FishHUD>qte_juesha>qte 0 {lua_code}")
-
-#         lua_code = """local BattlePanel = PanelMgr:Find("BattlePanel")
-# if not BattlePanel then
-#     return
-# end
-# if not BattlePanel:IsActive() then
-#  return
-# end
-# BattlePanel:OnCastDragDirUp()"""
-        # cmd_list.append(f"addElement reelUp UICanvas>Default>BattlePanel>hud_power>barPanel>list> {lua_code}")
-        cmd_list.append(f"addElement tensionSpecial UICanvas>Default>BattlePanel>FishHUD>hud_tension>tensileStress>lock>left")
-        cmd_list.append(f"addElement tensionSpecial UICanvas>Default>BattlePanel>FishHUD>hud_tension>tensileStress>lock>right")
-        cmd_list.append(f"addElement fishJack UICanvas>Default>BattlePanel>FishHUD>hud_tension>fish_jack")
-        cmd_list.append(f"addElement fishJackPerfect UICanvas>Default>BattlePanel>FishHUD>hud_tension>fish_jack>bar_2")
-        cmd_list.append(f"addElement hookProgress UICanvas>Default>BattlePanel>hook>progress")
-        cmd_list.append(f"addElement hookArrow UICanvas>Default>BattlePanel>hook>progress>arrow")
-        self.custom_cmd_list(cmd_list)
-
-    def go_to_fishery(self, fishery_id):
-        lua_code = f'ControllerMgr:Get("BattleController"):GoToPVE({fishery_id})'
-        self.lua_console(lua_code)
-
-    def go_to_spot(self, spot_id):
-        print()
-        lua_code = f"""local battleController = ControllerMgr:Get("BattleController")
-battleController:GoToDaily({spot_id}, true)"""
-        self.lua_console(lua_code)
-        return
-
-
-    def get_rod_list(self, rarity=None, fisheries_living=None, fisheries_rank=None, fishery_id=None):
-        rod_list = []
-        if fishery_id:
-            table_data_object_list = self.excelTools.get_table_data_object_list(book_name="FISHERIES.xlsm")
-            for table_data_object in table_data_object_list:
-                if "tpId" not in table_data_object:
-                    continue
-                if table_data_object["tpId"] != fishery_id:
-                    continue
-                if "fisheriesLiving" not in table_data_object:
-                    continue
-                if "fisheriesRank" not in table_data_object:
-                    continue
-                fisheries_living = table_data_object["fisheriesLiving"]
-                fisheries_rank = table_data_object["fisheriesRank"]
-        table_data_object_list = self.excelTools.get_table_data_object_list(book_name="FISHING_ROD.xlsm")
-        for table_data_object in table_data_object_list:
-            if table_data_object["isFreshWater"] != fisheries_living:
-                continue
-            if table_data_object["fisheriesRank"] != fisheries_rank:
-                continue
-            if rarity and table_data_object["rank"] != rarity:
-                continue
-            rod_list.append(table_data_object["tpId"])
-        return rod_list
-
-
-
-
-    def get_fishery_id_list(self, is_new_plot=False):
-        """函数功能简述
-            根据配置表获取渔场id列表
-        """
-        fishery_id_list = []
-        table_data_object_list = self.excelTools.get_table_data_detail(book_name="FISHERIES.xlsm")[0]
-        for table_data_object in table_data_object_list:
-            if "tpId" not in table_data_object:
-                continue
-            if "enabled" not in table_data_object:
-                continue
-            if table_data_object["enabled"] != 1:
-                continue
-            if "fisheriesType" in table_data_object and not is_new_plot:
-                continue
-            if "fisheriesType" not in table_data_object and is_new_plot:
-                continue
-            fishery_id = table_data_object["tpId"]
-            fishery_id_list.append(fishery_id)
-        return fishery_id_list
-
-
-    def get_fish_id_list(self, fishery_id):
-        """函数功能简述
-            根据fishery_id获取该渔场的鱼id列表
-
-        参数:
-            fishery_id: 渔场id
-        """
-        table_data_object = self.excelTools.get_table_data_object_by_key_value(key="tpId", value=fishery_id,
-                                                                               book_name="FISHERIES.xlsm")
-        fish_list = table_data_object["fish"]
-        activity_fish_list = []
-        if "activityFishNotShow" in table_data_object:
-            activity_fish_list = table_data_object["activityFishNotShow"]
-        res_list = []
-        for fish in fish_list:
-            if not fish:
-                continue
-            if activity_fish_list and fish in activity_fish_list:
-                continue
-            res_list.append(str(fish))
-        return res_list
-
-    def get_tpid(self, item_name: str = "", item_icon_name: str = ""):
-        """函数功能简述
-            根据RESOURCE.xlsm或ITEM_MAIN.xlsm
-            以道具名或icon名获取道具tpid列表
-
-        参数:
-            item_name和item_icon_name选择一个输入
-            item_name: 道具名
-            item_icon_name: 图标名
-
-        输出:
-            list[str]
-        """
-        item_tpid_list = []
-        book_list = [{"book_name": "RESOURCE.xlsm", "name": "name", "id": "resourceID", "icon": "itemIcon"},
-                     {"book_name": "ITEM_MAIN.xlsm", "name": "name", "id": "itemTpId", "icon": "iconName"}]
-        for book_dict in book_list:
-            book_name = book_dict["book_name"]
-            table_data_detail = self.excelTools.get_table_data_detail(book_name=book_name)
-
-            if item_name != "":
-                table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key=book_dict["name"],
-                                                                                                 value=item_name,
-                                                                                                 table_data_detail=table_data_detail)
-                if table_data_object_list:
-                    for table_data_object in table_data_object_list:
-                        item_tpid = table_data_object[book_dict["id"]]
-                        item_tpid_list.append(item_tpid)
-
-            if item_icon_name != "":
-                table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key=book_dict["icon"],
-                                                                                                 value=item_icon_name,
-                                                                                                 table_data_detail=table_data_detail)
-                if table_data_object_list:
-                    for table_data_object in table_data_object_list:
-                        item_tpid = table_data_object[book_dict["id"]]
-                        item_tpid_list.append(item_tpid)
-
-        return item_tpid_list
-
-    def get_tpid_list(self, item_name_list=None, item_icon_name_list=None):
-        """函数功能简述
-            以道具名或icon名获取道具tpid列表
-
-        参数:
-            item_name_list和item_icon_name_list选择一个输入
-            item_name_list: item_name组成的list
-            item_icon_name_list: item_icon_name组成的list
-
-        输出:
-            list[list[str]]
-        """
-        item_tpid_list = []
-        if item_name_list is not None:
-            cur = 0
-            while cur < len(item_name_list):
-                item_tpid_list.append(self.get_tpid(item_name=item_name_list[cur])[0])
-                cur += 1
-            return item_tpid_list
-        cur = 0
-        while cur < len(item_icon_name_list):
-            item_tpid_list.append(self.get_tpid(item_icon_name=item_icon_name_list[cur])[0])
-            cur += 1
-        return item_tpid_list
-
-    def get_unlock_lv(self, system_name):
-        """函数功能简述
-            从UNLOCK_SYSTEM.xlsm中获取系统解锁等级
-
-        参数:
-            item_name_list和item_icon_name_list选择一个输入
-            item_name_list: item_name组成的list
-            item_icon_name_list: item_icon_name组成的list
-
-        输出:
-            list[list[str]]
-        """
-        table_data_object = self.excelTools.get_table_data_object_by_key_value(key="name", value=system_name,
-                                                                               book_name="UNLOCK_SYSTEM.xlsm")
-        unlock_lv = int(table_data_object["content"])
-        return unlock_lv
-
-    def get_fish_type(self, fish_tpid, table_data_detail=None):
-        """函数功能简述
-            从FISH.xlsm中获取鱼的体型
-
-        参数:
-            fish_tpid: 鱼id
-
-        输出:
-            str
-            "小"，"中"，"大"，"特大"，"超巨"，"奇珍"，"超奇珍"，"典藏"，"其它"
-        """
-        fish_tpid = str(fish_tpid)
-        if table_data_detail is None:
-            table_data_detail = self.excelTools.get_table_data_detail("FISH.xlsm")
-        if fish_tpid == '':
-            return "钓鱼失败"
-        if fish_tpid in ["399001", "399002"]:
-            return "藏宝图"
-
-        table_data_object = self.excelTools.get_table_data_object_by_key_value(key="tpId", value=fish_tpid,
-                                                                               table_data_detail=table_data_detail)
-
-        fishClass = 0
-        fishType = 0
-        if "fishClass" in table_data_object:
-            fishClass = table_data_object["fishClass"]
-        if "fishType" in table_data_object:
-            fishType = table_data_object["fishType"]
-        # index = table_data_object_list["tpId"].index(int(fish_tpid))
-
-        if fishClass == 1:
-            if fishType == 1:
-                return "小"
-            if fishType == 2:
-                return "中"
-            if fishType == 3:
-                return "大"
-            if fishType == 4:
-                return "特大"
-            if fishType == 5:
-                return "超巨"
-        if fishClass == 2:
-            return "奇珍"
-        if fishClass == 3:
-            return "超奇珍"
-        if fishClass == 4:
-            return "典藏"
-
-        fish_id = self.fish_bone_id_to_fish_id(fish_bone_id=fish_tpid)
-        if not fish_id:
-            return None
-        fish_type = self.get_fish_type(fish_tpid=fish_id)
-        if not fish_type:
-            return None
-        if fish_tpid[0:2] in ["37"]:
-            fish_type = fish_type + "黄金"
-        if fish_tpid[0:3] in ["385"]:
-            fish_type = fish_type + "黄金"
-        return fish_type + "鱼骨"
-
-
-    def get_fish_type_list(self, fish_list):
-        """函数功能简述
-            从get_fish_type()方法中获取鱼的体型
-
-        参数:
-            fish_list: 鱼id组成的list
-
-        输出:
-            list[str]
-        """
-        table_data_detail = self.excelTools.get_table_data_detail("FISH.xlsm")
-        fish_type_list = []
-        cur = 0
-        while cur < len(fish_list):
-            fish_type = self.get_fish_type(fish_tpid=fish_list[cur], table_data_detail=table_data_detail)
-            if not fish_type:
-                fish_type_list.append("其它")
-                cur += 1
-                continue
-            fish_type_list.append(fish_type)
-            cur += 1
-        return fish_type_list
-
-    # 获取物品数量
-    def get_item_count(self, item_name: str = "", item_icon_name: str = "", item_tpid: str = ""):
-        """函数功能简述
-            获取物品数量
-
-        参数:
-            item_name、item_icon_name、item_tpid选择一个输入
-            item_name和item_icon_name会转换成item_tpid
-            item_name: 物品名
-            item_icon_name: 物品图标名
-            item_tpid: 物品tpid
-
-
-        输出:
-            int
-        """
-        if item_tpid != "":
-            item_count_list = self.get_item_count_list(item_tpid_list=[item_tpid])
-            self.is_single_element(item_count_list)
-            return item_count_list[0]
-        item_tpid = self.get_tpid(item_name, item_icon_name)[0]
-        tpid_list = [item_tpid]
-        item_count_list = self.get_item_count_list(item_tpid_list=tpid_list)
-        self.is_single_element(item_count_list)
-        return item_count_list[0]
-
-    # 设置物品数量
-    def set_item_count(self, target_count, item_name: str = "", item_icon_name: str = "", item_tpid: str = ""):
-        """函数功能简述
-            设定物品数量
-
-        参数:
-            item_name、item_icon_name、item_tpid选择一个输入，item_name和item_icon_name会转换成item_tpid
-            target_count: 设定数量
-            item_name: 物品名
-            item_icon_name: 物品图标名
-            item_tpid: 物品tpid
-
-        """
-        # 参数给的是icon_name或item_name就转换为tpid
-        if item_tpid == "":
-            item_tpid = self.get_tpid(item_name, item_icon_name)[0]
-        item_count = self.get_item_count(item_tpid=item_tpid)
-        count = target_count - item_count
-        if not isinstance(count, int):
-            return
-        if count == 0:
-            return
-        self.cmd(f"add {item_tpid[0]} {item_tpid} {target_count - item_count}")
-
-    def set_item_count_list(self, target_count_list, item_name_list: list = None, item_icon_name_list: list = None,
-                            item_tpid_list: list = None):
-        """函数功能简述
-            批量设定物品数量
-
-        参数:
-            item_name_list、item_icon_name_list、item_tpid_list选择一个输入，item_name_list和item_icon_name_list会转换成item_tpid_list
-            target_count_list: 设定数量组成的list
-            item_name_list: 物品名组成的list
-            item_icon_name_list: 物品图标名组成的list
-            item_tpid_list: 物品tpid组成的list
-
-        """
-        if item_tpid_list is None:
-            item_tpid_list = self.get_tpid_list(item_name_list=item_name_list, item_icon_name_list=item_icon_name_list)
-        item_count_list = self.get_item_count_list(item_tpid_list=item_tpid_list)
-        command_list = []
-        cur = 0
-        while cur < len(item_tpid_list):
-            item_tpid = item_tpid_list[cur]
-            target_count = target_count_list[cur]
-            item_count = item_count_list[cur]
-            count = target_count - item_count
-            if not isinstance(count, int):
-                cur += 1
-                continue
-            if count == 0:
-                cur += 1
-                continue
-            command_list.append(f"add {item_tpid[0]} {item_tpid} {count}")
-            cur += 1
-        self.cmd_list(command_list=command_list)
-
-    # 判断资源是否充足
-    def is_resource_enough(self, icon_list, value_list):
-        cur = 0
-        while cur < len(icon_list):
-            item_count = self.get_item_count(item_icon_name=icon_list[cur])
-            if item_count < value_list[cur]:
-                return False
-            cur += 1
-        return True
-
-    # 根据图标得到物品数量列表
-    def get_item_count_list(self, item_name_list=None, item_icon_name_list=None, item_tpid_list=None):
-        """函数功能简述
-            批量获取物品数量
-
-        参数:
-            item_name、item_icon_name、item_tpid选择一个输入
-            item_name和item_icon_name会转换成item_tpid
-
-        输出:
-            int
-        """
-        if item_tpid_list is not None:
-            item_count_list = rpcMethodRequest.get_item_count(self.poco, item_tpid_list)
-            return item_count_list
-        item_tpid_list = self.get_tpid_list(item_name_list=item_name_list, item_icon_name_list=item_icon_name_list)
-        item_count_list = rpcMethodRequest.get_item_count(self.poco, item_tpid_list)
-        return item_count_list
-
-    # 得到消耗后的物品数量列表
-    def get_consumed_item_count_list(self, icon_list, count_list):
-        item_count_list = self.get_item_count_list(item_icon_name_list=icon_list)
-        cur = 0
-        while cur < len(item_count_list):
-            item_count_list[cur] -= count_list[cur]
-            cur += 1
-        return item_count_list
-
-    def cmd(self, command):
-        """函数功能简述
-            gm命令
-
-        参数:
-            command:str
-        """
-        if not command:
-            return
-        self.cmd_list(command_list=[command])
-
-    def cmd_list(self, command_list):
-        """函数功能简述
-            批量gm命令
-
-        参数:
-            command_list:list[str]
-        """
-        if not command_list:
-            return
-        lua_code = "local ConsolePanel = require('View.Common.ConsolePanel')\n"
-        for command in command_list:
-            lua_code += f'ConsolePanel:OnPocoCMD("{command}")\n'
-        self.lua_console(lua_code)
-
-    def lua_console(self, command):
-        """函数功能简述
-            lua代码片段
-
-        参数:
-            command:str
-        """
-        if not command:
-            return
-        self.lua_console_list([command])
-
-    def lua_console_list(self, command_list):
-        """函数功能简述
-            批量lua代码片段
-
-        参数:
-            command_list:list[str]
-        """
-        if not command_list:
-            return
-        rpcMethodRequest.lua_console(self.poco, command_list)
-
-    # lua_code_main是lua代码主体
-    # lua_code_res是需要接收的部分
-    def lua_console_with_response(self, lua_code_main="", lua_code_return=""):
-        """函数功能简述
-            有返回值的lua代码片段
-
-        参数:
-            lua_code_main: lua代码片段的逻辑主体部分（简单情况下为空）
-            lua_code_return: 需要返回值的部分
-        返回值:
-            str
-        """
-        # 清空消息列表 开始收消息
-        self.log_list.clear()
-        self.log_list_flag = True
-        title = f'<==== [C#] Receive LuaSnippets Response "{lua_code_return}" ====>'
-
-        lua_code = lua_code_main
-
-        if lua_code:
-            lua_code += "\n"
-        if lua_code_return:
-            lua_code += """
-function table_to_string(tbl, already_printed)
-    if type(tbl) ~= "table" then
-        if type(tbl) == "string" then
-            return '"'..tbl..'"'
-        end
-        return tostring(tbl)
-    end
-
-    already_printed = already_printed or {}
-    if already_printed[tbl] then
-        return "<循环引用>"
-    end
-    already_printed[tbl] = true
-
-    local result = "{"
-    local first = true
-
-    -- 先处理数组部分
-    local max_index = 0
-    for i, v in ipairs(tbl) do
-        if not first then result = result.."," end
-        first = false
-        result = result..table_to_string(v, already_printed)
-        max_index = i
-    end
-
-    -- 再处理其他键值对
-    for k, v in pairs(tbl) do
-        if type(k) ~= "number" or k > max_index or k < 1 then
-            if not first then result = result.."," end
-            first = false
-            local key
-            if type(k) == "string" and k:match("^[%a_][%w_]*$") then
-                key = k
-            else
-                key = "["..table_to_string(k, already_printed).."]"
-            end
-            result = result..key.."="..table_to_string(v, already_printed)
-        end
-    end
-
-    return result.."}"
-end
-"""
-            lua_code += rf"print('{title}',table_to_string({lua_code_return}))"
-        # 发送消息
-        self.lua_console(lua_code)
-
-        target_log = self.receive_until_get_msg(msg_name="", key_sc=title)
-
-        if not target_log:
-            return None
-
-        return target_log.split(title)[1].strip()
-
-    def get_scene_list(self):
-        """函数功能简述
-            获取当前激活的场景名
-        """
-        return rpcMethodRequest.get_scene_list(self.poco)
-
-    def get_drop_fish_id_list(self, spot_id):
-        # 旧渔场
-        fish_id_list = []
-        table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="tpId", value=spot_id, book_name="FISH_SPOT.xlsm")
-        for table_data_object in table_data_object_list:
-            if "fishInfo" not in table_data_object:
-                continue
-            if "enabled" not in table_data_object:
-                continue
-            fish_info_list = table_data_object["fishInfo"]
-            for fish_info in fish_info_list:
-                if "fish" not in fish_info:
-                    continue
-                fish_id = fish_info["fish"]
-                fish_id_list.append(fish_id)
-        if table_data_object_list:
-            return fish_id_list
-
-        # 新渔场
-        table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="tpId", value=spot_id, book_name="NEW_PLOT_FISH_SPOT.xlsm")
-        fish_id_set = set()
-        for table_data_object in table_data_object_list:
-            if "enabled" not in table_data_object:
-                continue
-            fish_info = []
-            fish_info += table_data_object["smallInfo"]
-            fish_info += table_data_object["mediumInfo"]
-            fish_info += table_data_object["largeInfo"]
-            fish_info += table_data_object["hugeInfo"]
-            fish_info += table_data_object["giantInfo"]
-            fish_info += table_data_object["rareInfo"]
-            fish_info += table_data_object["eliteInfo"]
-            fish_info += table_data_object["monsterInfo"]
-
-            for info in fish_info:
-                if "fishId" not in info:
-                    continue
-                fish_id_set.add(info["fishId"])
-
-        return list(fish_id_set)
-
-
-    def get_drop_item_id_list(self, spot_id):
-        """函数功能简述
-            获取钓点的出鱼列表
-
-        参数:
-            spot_id: 钓点id
-        """
-
-        table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="tpId", value=spot_id, book_name="FISH_SPOT.xlsm")
-        # 新渔场
-        if not table_data_object_list:
-            drop_item_id_list = []
-            table_data_detail = self.excelTools.get_table_data_detail(book_name="FISH.xlsm")
-            fish_id_list = self.get_drop_fish_id_list(spot_id=spot_id)
-            for fish_id in fish_id_list:
-                table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(table_data_detail=table_data_detail, key="tpId", value=fish_id)
-                if not table_data_object_list:
-                    continue
-                table_data_object = table_data_object_list[0]
-                if "boneId" in table_data_object:
-                    drop_item_id_list.append(table_data_object["boneId"])
-                if "glodBoneId" in table_data_object:
-                    drop_item_id_list.append(table_data_object["glodBoneId"])
-            return drop_item_id_list
-
-        # 旧渔场
-        fishDropInfo_list = []
-        # 鱼骨tpid转missionConditionID
-        for table_data_object in table_data_object_list:
-            fishDropInfo = table_data_object["fishDropInfo"]
-            fishDropInfo_list += fishDropInfo
-
-        #
-        # fishery_id = self.spot_id_to_fishery_id(spot_id=spot_id)
-        # table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="newPlotFisheriesId", value=fishery_id,
-        #                                                                                  book_name="NEW_PLOT_FISH_TYPE_DROP.xlsm")
-        # for table_data_object in table_data_object_list:
-        #     fishDropInfo = table_data_object["fishDropInfo"]
-        #     fishDropInfo_list += fishDropInfo
-
-
-        # 拿到对应钓点的DropID列表
-        drop_id_list = []
-        for fishDropInfo in fishDropInfo_list:
-            if "DropID" not in fishDropInfo:
-                continue
-            drop_id = fishDropInfo["DropID"]
-            drop_id_list.append(drop_id)
-
-        # 鱼骨tpid转missionConditionID
-        drop_pack_id_list = []
-        table_data_detail = self.excelTools.get_table_data_detail("DROP_PACK.xlsm")
-        for drop_id in drop_id_list:
-            table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="dropId",
-                                                                                             value=drop_id,
-                                                                                             table_data_detail=table_data_detail)
-            for table_data_object in table_data_object_list:
-                if "enabled" not in table_data_object:
-                    continue
-                dropPackId = table_data_object["dropPackId"]
-                drop_pack_id_list.append(dropPackId)
-
-        # drop_pack_id转item_id
-        item_id_list = []
-        table_data_detail = self.excelTools.get_table_data_detail("DROP_ENTITY.xlsm")
-        for drop_pack_id in drop_pack_id_list:
-            table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="dropPackId",
-                                                                                             value=int(drop_pack_id),
-                                                                                             table_data_detail=table_data_detail)
-            for table_data_object in table_data_object_list:
-                if "enabled" not in table_data_object:
-                    continue
-                itemID = table_data_object["itemID"]
-                item_id_list.append(itemID)
-
-        return item_id_list
-
-    def fish_bone_id_to_fish_id(self, fish_bone_id):
-        """函数功能简述
-            获得鱼骨id对应的鱼id
-
-        参数:
-            fish_bone_id: 鱼骨id
-        """
-        # 鱼骨tpid转missionConditionID
-        table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="triggerKeyS", value=fish_bone_id,
-                                                                               book_name="MISSION_CONDITION.xlsm")
-
-        if not table_data_object_list:
-            return None
-        mission_condition_id = 0
-        for table_data_object in table_data_object_list:
-            if "enabled" not in table_data_object:
-                continue
-            mission_condition_id = table_data_object["missionConditionID"]
-            break
-
-        # missionConditionID转鱼id
-        table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="startConditionId",
-                                                                               value=mission_condition_id,
-                                                                               book_name="FISH_STATE.xlsm")
-        if not table_data_object_list:
-            return None
-
-        fish_id = 0
-        for table_data_object in table_data_object_list:
-            if "enabled" not in table_data_object:
-                continue
-            fish_id = table_data_object["fishChange"][0]["fish"]
-            break
-
-        return str(fish_id)
-
-    def fish_id_to_spot_id(self, fish_id):
-        fish_id = int(fish_id)
-        spot_id_list = []
-        table_data_object_list = self.excelTools.get_table_data_object_list(book_name="FISH_SPOT.xlsm")
-        for table_data_object in table_data_object_list:
-            fish_list = []
-            for info in table_data_object["fishInfo"]:
-                if "fish" not in info:
-                    continue
-                fish_list.append(info["fish"])
-            if fish_id not in fish_list:
-                continue
-            if "enabled" not in table_data_object:
-                continue
-            if table_data_object["spotType"] not in [1, 2]:
-                continue
-            spot_id_list.append(table_data_object["tpId"])
-        if spot_id_list:
-            return spot_id_list
-        table_data_object_list = self.excelTools.get_table_data_object_list(book_name="NEW_PLOT_FISH_SPOT.xlsm")
-        for table_data_object in table_data_object_list:
-            if "enabled" not in table_data_object:
-                continue
-            fish_info = []
-            fish_info += table_data_object["smallInfo"]
-            fish_info += table_data_object["mediumInfo"]
-            fish_info += table_data_object["largeInfo"]
-            fish_info += table_data_object["hugeInfo"]
-            fish_info += table_data_object["giantInfo"]
-            fish_info += table_data_object["rareInfo"]
-            fish_info += table_data_object["eliteInfo"]
-            fish_info += table_data_object["monsterInfo"]
-            fish_list = []
-
-            for info in fish_info:
-                if "fishId" not in info:
-                    continue
-                fish_list.append(info["fishId"])
-
-            if fish_id not in fish_list:
-                continue
-
-            spot_id_list.append(table_data_object["tpId"])
-
-        return spot_id_list
-    #     key="tpId", value=spot_id,
-    # def fish_id_to_fish_bone_id(self, fish_id):
-    #
-    #     drop_item_id_list = self.get_drop_item_id_list(spot_id)
-
-    def fish_id_to_fishery_id(self, fish_id):
-        fish_id = int(fish_id)
-        table_data_object_list = self.excelTools.get_table_data_object_list(book_name="FISHERIES.xlsm")
-        for table_data_object in table_data_object_list:
-            if "enabled" not in table_data_object:
-                continue
-            fish_list = table_data_object["fish"]
-            if fish_id not in fish_list:
-                continue
-            return table_data_object["tpId"]
-
-        table_data_object_list = self.excelTools.get_table_data_object_list(book_name="NEW_PLOT_FISH_SPOT.xlsm")
-
-        for table_data_object in table_data_object_list:
-            fish_list = []
-            fish_list += table_data_object["smallInfo"]
-            fish_list += table_data_object["mediumInfo"]
-            fish_list += table_data_object["largeInfo"]
-            fish_list += table_data_object["hugeInfo"]
-            fish_list += table_data_object["giantInfo"]
-            fish_list += table_data_object["rareInfo"]
-            fish_list += table_data_object["eliteInfo"]
-            fish_list += table_data_object["monsterInfo"]
-            if fish_id not in fish_list:
-                continue
-            return table_data_object["newPlotFisheriesId"]
-        return ""
-
-    def get_spot_id_list(self, fishery_id):
-        """函数功能简述
-            获得渔场的钓点id列表
-
-        参数:
-            fishery_id: 钓场id
-
-        返回:
-            钓点列表（list）， 是否是双周活动钓点（bool）， 是否是新主线钓点（bool）
-        """
-        table_data_object_list_activity_double_week = self.excelTools.get_table_data_object_list_by_key_value(key="fishSceneTpId", value=fishery_id, book_name="ACTIVITY_DOUBLE_WEEK.xlsm")
-        if not table_data_object_list_activity_double_week:
-            spot_id_list = []
-            table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="newPlotFisheriesId", value= fishery_id,book_name="NEW_PLOT_FISH_SPOT.xlsm")
-            for table_data_object in table_data_object_list:
-                spot_id_list.append(table_data_object["tpId"])
-            return spot_id_list, False, True
-        table_data_object_activity_double_week = table_data_object_list_activity_double_week[0]
-        if "TimerId" not in table_data_object_activity_double_week:
-            return table_data_object_activity_double_week["fishSpot"], False, False
-        timer_id = table_data_object_activity_double_week["TimerId"]
-        table_data_object_timer_main = self.excelTools.get_table_data_object_by_key_value(key="timerID", value=timer_id,
-                                                                                          book_name="TIMER_MAIN.xlsm")
-        open_time = table_data_object_timer_main["openTime"]
-        open_time = datetime.strptime(open_time, '%Y-%m-%d %H:%M:%S')
-        open_time = int(time.mktime(open_time.timetuple()))
-        end_time = table_data_object_timer_main["endTime"]
-        end_time = datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S')
-        end_time = int(time.mktime(end_time.timetuple()))
-        game_server_time = self.lua_console_with_response(lua_code_return="_G.game_server_time")
-        if game_server_time:
-            cur_time = float(game_server_time) / 1000
-        else:
-            cur_time = time.time()
-        if cur_time > end_time:
-            return table_data_object_activity_double_week["fishSpotB"], False, False
-        if cur_time > open_time:
-            return table_data_object_activity_double_week["fishSpotB"], True, False
-        return table_data_object_activity_double_week["fishSpot"], False, False
-
-
-    def spot_id_to_fishery_id(self, spot_id):
-        """函数功能简述
-            钓点id转渔场id
-
-        参数:
-            spot_id: 钓点id
-        """
-        table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="tpId", value=spot_id, book_name="FISH_SPOT.xlsm")
-        if table_data_object_list:
-            return str(spot_id)[:6]
-        table_data_object_list = self.excelTools.get_table_data_object_list_by_key_value(key="tpId", value=spot_id, book_name="NEW_PLOT_FISH_SPOT.xlsm")
-        if table_data_object_list:
-            return str(table_data_object_list[0]["newPlotFisheriesId"])
-
-    def fish_id_to_flash_card_id(self, fish_id, table_data_detail=None):
-        if table_data_detail is None:
-            table_data_detail = self.excelTools.get_table_data_detail(book_name="COLLECTION_BASE.xlsm")
-
-        table_data_object = self.excelTools.get_table_data_object_by_key_value(key="fishId", value=fish_id, table_data_detail=table_data_detail)
-        flash_card_id = table_data_object['collectionId']
-        return flash_card_id
-
-    def flash_card_id_to_fish_id(self, flash_card_id, table_data_detail=None):
-        if table_data_detail is None:
-            table_data_detail = self.excelTools.get_table_data_detail(book_name="COLLECTION_BASE.xlsm")
-
-        table_data_object = self.excelTools.get_table_data_object_by_key_value(key="collectionId", value=flash_card_id, table_data_detail=table_data_detail)
-        fish_id = table_data_object['fishId']
-        return fish_id
-
-    def get_flash_card_type(self, flash_card_id, table_data_detail=None):
-        if table_data_detail is None:
-            table_data_detail = self.excelTools.get_table_data_detail(book_name="COLLECTION_BASE.xlsm")
-        table_data_object = self.excelTools.get_table_data_object_by_key_value(key="collectionId", value=flash_card_id, table_data_detail=table_data_detail)
-        flash_card_type = table_data_object['collectionLevel']
-        return flash_card_type
-
-    def energy_cost_to_id(self, energy_cost):
-        table_data_object_list = self.excelTools.get_table_data_object_list(book_name="FISH_ACTIVITY_SPOT_ENERGY.xlsm")
-        for table_data_object in table_data_object_list:
-            if "energyCost" not in table_data_object:
-                continue
-            if table_data_object["energyCost"] == energy_cost:
-                return table_data_object["tpId"]
-        return table_data_object_list[0]["tpId"]
-
-
-    def set_is_quick_qte(self, is_quick_qte):
-        self.is_quick_qte = is_quick_qte
-        if is_quick_qte:
-            self.custom_cmd(f"setQuickQTE 1")
-        else:
-            self.custom_cmd(f"setQuickQTE 0")
-
-    def set_hook_progress(self, hook_progress):
-        self.hook_progress = hook_progress
-        self.custom_cmd(f"setHookProgress {hook_progress}")
-
-    def set_tension_default(self, tension_default):
-        self.tension_default = tension_default
-        self.custom_cmd(f"setTension {tension_default}")
 
 
 if __name__ == '__main__':
     bp = BasePage(is_mobile_device=False, serial_number="127.0.0.1:21503")
-    bp.cmd("mode 400301 390001")
+    # bp.cmd("mode 400301 390001")
     # bp.is_time_scale=True
     # bp.set_time_scale(5)
     # bp.lua_console("DebugLog=true")
@@ -2674,7 +1776,7 @@ if __name__ == '__main__':
     # bp.cmd_list(["guideskip", "levelupto 90"])
     # bp.cmd("levelupto 12")
     # bp.lua_console('PanelMgr:OpenPanel("HomePanel")')
-    # bp.set_text(element_data={"locator":"UICanvas>Default>PlayerInfoPanel>panel>Panel_PlayerCard_new>panel>panel_playerinfo>playerinfo>player_id>value"}, text="1000002002")
+
 
     bp.connect_close()
 
