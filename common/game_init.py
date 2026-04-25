@@ -3,7 +3,7 @@ import traceback
 
 from airtest.core.api import shell
 
-from common.basePage import BasePage
+from common.base_page import BasePage
 
 
 def get_bp(dev, is_monitor=False):

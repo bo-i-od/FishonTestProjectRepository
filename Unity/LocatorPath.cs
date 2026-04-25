@@ -1,4 +1,3 @@
-#if !WEIXINMINIGAME || UNITY_EDITOR
 using UnityEngine;
 using System.Text.RegularExpressions;
 
@@ -10,7 +9,7 @@ public class LocatorPath : MonoBehaviour
     public string elementData;
 
     public int instanceId;
-    private GameObject pocoManager;
+    private GameObject WSClientForTestManager;
 
     public void RefreshLocatorPath(string path)
     {
@@ -55,7 +54,7 @@ public class LocatorPath : MonoBehaviour
 
     private void CallChildrenToRefresh(string path)
     {
-        if (pocoManager == null)
+        if (WSClientForTestManager == null)
         {
             Debug.LogWarning($"LocatorPath: pocoManager is null on '{gameObject.name}', skipping children refresh.");
             return;
@@ -66,14 +65,13 @@ public class LocatorPath : MonoBehaviour
         while(cur < childCount)
         {
             GameObject child = this.transform.GetChild(cur).gameObject;
-            pocoManager.GetComponent<PocoManager>().GetLocatorPathComponent(child, path);
+            WSClientForTestManager.GetComponent<WSClientForTest>().GetLocatorPathComponent(child, path);
             cur += 1;
         }
     }
 
-    public void AddPocoManager(GameObject gameObject)
+    public void AddWSClientForTestManager(GameObject gameObject)
     {
-        pocoManager = gameObject;
+        WSClientForTestManager = gameObject;
     }
 }
-#endif

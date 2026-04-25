@@ -1,4 +1,4 @@
-from common.basePage import BasePage
+from common.base_page import BasePage
 
 
 

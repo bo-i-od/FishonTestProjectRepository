@@ -23,7 +23,7 @@ public class Locate
             locatorArray = locators["locator"].ToString().Split('/');
             // ??????????
             GameObject rootGameObject = GameObject.Find(locatorArray[0]);
-            if(rootGameObject == null)
+            if (rootGameObject == null)
             {
                 return transformList;
             }
@@ -99,11 +99,11 @@ public class Locate
 
     //???? Transform
     //???? ?????????Transform????
-    private static void AddChildren(Transform parent ,ref List<Transform> transformListNew)
+    private static void AddChildren(Transform parent, ref List<Transform> transformListNew)
     {
         int childCount = parent.childCount;
         int childIndex = 0;
-        while(childIndex < childCount)
+        while (childIndex < childCount)
         {
             Transform child = parent.GetChild(childIndex);
             childIndex += 1;
@@ -194,7 +194,7 @@ public class Locate
         }
         while (index < locatorArrayLen)
         {
-            if(locatorArray[index] == "")
+            if (locatorArray[index] == "")
             {
                 transformList = GetChildTransformList(transformList);
                 index += 1;
@@ -206,15 +206,16 @@ public class Locate
     }
 
     // ????locator??????????????????????? 
-    private static List<Transform> UpdateTransformListByChild(string locator , List<Transform> transformList)
+    private static List<Transform> UpdateTransformListByChild(string locator, List<Transform> transformList)
     {
         List<Transform> resList = new List<Transform>();
         int transformListCount = transformList.Count;
         int cur = 0;
-        while (cur < transformListCount) {
+        while (cur < transformListCount)
+        {
             int childCount = transformList[cur].childCount;
             int i = 0;
-            while(i < childCount)
+            while (i < childCount)
             {
                 Transform childTransform = transformList[cur].GetChild(i);
                 if (childTransform == null || !childTransform.gameObject.activeInHierarchy)
@@ -222,7 +223,7 @@ public class Locate
                     i += 1;
                     continue;
                 }
-                if(childTransform.name != locator)
+                if (childTransform.name != locator)
                 {
                     i += 1;
                     continue;
@@ -316,7 +317,7 @@ public class Locate
         while (cur < transformListCount)
         {
 
-            
+
             Transform offspringTransform = FindChildRecursively(transformList[cur], locator);
             if (offspringTransform == null || !offspringTransform.gameObject.activeInHierarchy)
             {
@@ -331,6 +332,39 @@ public class Locate
             }
             cur += 1;
         }
+    }
+
+    public static Transform FindTransformByPath(string path)
+    {
+        if (string.IsNullOrEmpty(path))
+        {
+            return null;
+        }
+
+        string[] parts = path.Split('/');
+        List<string> segments = new List<string>();
+        for (int i = 0; i < parts.Length; i++)
+        {
+            if (parts[i].Length > 0) segments.Add(parts[i]);
+        }
+        
+        if (segments.Count == 0)
+        {
+            return null;
+        }
+
+        GameObject root = GameObject.Find(segments[0]);
+        if (root == null)
+        {
+            return null;
+        }
+
+        if (segments.Count == 1)
+        {
+            return root.transform;
+        }
+
+        return root.transform.Find(string.Join("/", segments.GetRange(1, segments.Count - 1).ToArray()));
     }
 
     public static List<Dictionary<string, object>> ObjToLocatorList(List<object> param)
@@ -353,7 +387,7 @@ public class Locate
                 imgNameList.Add(knightImage.sprite.name);
                 continue;
             }
-            if(target.TryGetComponent(out Image image))
+            if (target.TryGetComponent(out Image image))
             {
                 imgNameList.Add(image.sprite.name);
                 continue;
@@ -429,17 +463,16 @@ public class Locate
         return nameList;
     }
 
-    public static List<float[]> GetPositionList(List<Transform> targetList, int[] screenSize, Camera uiCamer)
+    public static List<float[]> GetPositionList(List<Transform> targetList, int[] screenSize, Camera cam)
     {
         List<float[]> positionList = new List<float[]>();
         foreach (Transform target in targetList)
         {
-            Vector2 ScreenVec = UIPointToScreenPoint(target.position, uiCamer);
-            // ????????????????
-            float[] ScreenVec_normalization = new float[2];
-            ScreenVec_normalization[0] = ScreenVec.x / screenSize[0];
-            ScreenVec_normalization[1] = 1f - ScreenVec.y / screenSize[1];
-            positionList.Add(ScreenVec_normalization);
+            Vector2 screenVec = TransformToScreenPoint(target, cam);
+            float[] normalized = new float[2];
+            normalized[0] = screenVec.x / screenSize[0];
+            normalized[1] = 1f - screenVec.y / screenSize[1];
+            positionList.Add(normalized);
         }
         return positionList;
     }
@@ -450,12 +483,16 @@ public class Locate
         int[] screenSize = GetScreenSize();
         foreach (Transform target in targetList)
         {
-            Vector2 size = target.GetComponent<RectTransform>().rect.size;
-            // ????????????????
-            float[] sizeNormalization = new float[2];
-            sizeNormalization[0] = size.x / screenSize[0];
-            sizeNormalization[1] = size.y / screenSize[1];
-            sizeList.Add(sizeNormalization);
+            RectTransform rt = target.GetComponent<RectTransform>();
+            if (rt != null)
+            {
+                Vector2 size = rt.rect.size;
+                sizeList.Add(new float[] { size.x / screenSize[0], size.y / screenSize[1] });
+            }
+            else
+            {
+                sizeList.Add(new float[] { 0f, 0f });
+            }
         }
         return sizeList;
     }
@@ -463,7 +500,7 @@ public class Locate
     public static List<int> GetInstanceIDList(List<Transform> targetList)
     {
         List<int> instanceIDList = new List<int>();
-        foreach(Transform target in targetList)
+        foreach (Transform target in targetList)
         {
             // ??????????instanceID
             if (!target.gameObject.activeInHierarchy)
@@ -495,7 +532,7 @@ public class Locate
     public static Vector2 GetCanvasReferenceResolution()
     {
         GameObject UICanvas = GameObject.Find("UICanvas");
-        if(UICanvas == null)
+        if (UICanvas == null)
         {
             return new Vector2(1, 1);
         }
@@ -503,13 +540,28 @@ public class Locate
         return canvasScaler.referenceResolution;
     }
 
-    // UI ???????????????
+    /// <summary>
+    /// Converts a Transform's position to screen coordinates.
+    /// Uses RectTransformUtility for UI elements (RectTransform),
+    /// uses Camera.WorldToScreenPoint for 3D objects (plain Transform).
+    /// </summary>
+    public static Vector2 TransformToScreenPoint(Transform target, Camera cam)
+    {
+        if (target.GetComponent<RectTransform>() != null)
+        {
+            return RectTransformUtility.WorldToScreenPoint(cam, target.position);
+        }
+        Vector3 sp = cam.WorldToScreenPoint(target.position);
+        return new Vector2(sp.x, sp.y);
+    }
+
+    /// <summary>
+    /// Legacy UI-only conversion, kept for backward compatibility.
+    /// Prefer TransformToScreenPoint for new code.
+    /// </summary>
     public static Vector2 UIPointToScreenPoint(Vector3 worldPoint, Camera uiCamera)
     {
-        // RectTransform??target
-        // worldPoint = target.position;
-        Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(uiCamera, worldPoint);
-        return screenPoint;
+        return RectTransformUtility.WorldToScreenPoint(uiCamera, worldPoint);
     }
 
     // ???????? ??????poco??offspring
@@ -545,7 +597,7 @@ public class Locate
 
         string[] locatorArray = offspringPath.Split('>');
         // ???locator????????
-        if(locatorArray.Length == 1 && locatorArray[0] == "")
+        if (locatorArray.Length == 1 && locatorArray[0] == "")
         {
             return transformList;
             //string[] result = new string[locatorArray.Length - 1];
@@ -594,7 +646,7 @@ public class Locate
             transformList = result;
             cur += 1;
         }
-        return transformList; 
+        return transformList;
     }
 
     public static Transform GetTransformByInstanceID(int instanceID)
@@ -621,7 +673,7 @@ public class Locate
         List<float[]> res;
         res = new List<float[]>();
         int cur = 0;
-        while(cur < positionList.Count)
+        while (cur < positionList.Count)
         {
             res.Add(new float[] { positionList[cur][0] + sizeList[cur][0] * biasX, positionList[cur][1] += sizeList[cur][1] * biasY });
             cur += 1;
