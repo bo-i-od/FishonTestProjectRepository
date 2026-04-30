@@ -675,7 +675,7 @@ public class Locate
         int cur = 0;
         while (cur < positionList.Count)
         {
-            res.Add(new float[] { positionList[cur][0] + sizeList[cur][0] * biasX, positionList[cur][1] += sizeList[cur][1] * biasY });
+            res.Add(new float[] { positionList[cur][0] + sizeList[cur][0] * biasX, positionList[cur][1] + sizeList[cur][1] * biasY });
             cur += 1;
         }
         return res;
@@ -685,17 +685,80 @@ public class Locate
 
 
 
-    //// ???UICanvas?????
-    //public static Camera GetUICamera()
-    //{
-    //    Camera UICamera = null;
-    //    Canvas canvas = GameObject.Find("UICanvas").GetComponent<Canvas>();
-    //    if (canvas.renderMode == RenderMode.ScreenSpaceCamera
-    //        || canvas.renderMode == RenderMode.WorldSpace)
-    //    {
-    //        UICamera = canvas.worldCamera;
-    //    }
+    public static List<Dictionary<string, object>> GetScrollViewInfoList(
+        List<Transform> targetList, int[] screenSize, Camera cam, float[] focus)
+    {
+        List<float[]> positionList = GetPositionList(targetList, screenSize, cam);
+        List<float[]> sizeList = GetSizeList(targetList);
+        List<float[]> correctedPositionList = CorrectPosition(positionList, sizeList, focus);
 
-    //    return UICamera;
-    //}
+        List<Dictionary<string, object>> result = new List<Dictionary<string, object>>();
+
+        for (int cur = 0; cur < targetList.Count; cur++)
+        {
+            Transform target = targetList[cur];
+
+            ScrollRect scrollRect = target.GetComponent<ScrollRect>();
+            if (scrollRect == null)
+            {
+                Transform search = target.parent;
+                while (search != null)
+                {
+                    scrollRect = search.GetComponent<ScrollRect>();
+                    if (scrollRect != null) break;
+                    search = search.parent;
+                }
+            }
+
+            if (scrollRect == null)
+            {
+                result.Add(new Dictionary<string, object>());
+                continue;
+            }
+
+            List<int> contentChildrenIds = new List<int>();
+            float[] firstChildSize = null;
+
+            if (scrollRect.content != null)
+            {
+                for (int i = 0; i < scrollRect.content.childCount; i++)
+                {
+                    Transform child = scrollRect.content.GetChild(i);
+                    if (child.gameObject.activeInHierarchy)
+                    {
+                        contentChildrenIds.Add(child.gameObject.GetInstanceID());
+                    }
+                }
+
+                if (contentChildrenIds.Count > 0)
+                {
+                    Transform firstChild = GetTransformByInstanceID(contentChildrenIds[0]);
+                    if (firstChild != null)
+                    {
+                        List<float[]> fcs = GetSizeList(new List<Transform> { firstChild });
+                        if (fcs.Count > 0) firstChildSize = fcs[0];
+                    }
+                }
+            }
+
+            bool isElastic = scrollRect.movementType == ScrollRect.MovementType.Elastic;
+
+            Dictionary<string, object> info = new Dictionary<string, object>
+            {
+                { "instanceId", target.gameObject.GetInstanceID() },
+                { "horizontal", scrollRect.horizontal },
+                { "vertical", scrollRect.vertical },
+                { "elastic", isElastic },
+                { "elasticity", scrollRect.elasticity },
+                { "inertia", scrollRect.inertia },
+                { "decelerationRate", scrollRect.decelerationRate },
+                { "position", correctedPositionList[cur] },
+                { "size", sizeList[cur] },
+                { "contentChildrenIds", contentChildrenIds },
+                { "firstChildSize", firstChildSize },
+            };
+            result.Add(info);
+        }
+        return result;
+    }
 }

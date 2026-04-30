@@ -131,7 +131,7 @@ async def get_position(server, element_data_list: list) -> list:
     return await server.call("GetPosition", element_data_list)
 
 
-async def get_position_by_id(server, id_list: list, offspring_path: str, locator_camera: str) -> list:
+async def get_position_by_id(server, id_list: list, offspring_path: str, focus: list, locator_camera: str) -> list:
     """
     通过实例ID和子节点路径在指定摄像机下获取坐标位置。
 
@@ -141,7 +141,7 @@ async def get_position_by_id(server, id_list: list, offspring_path: str, locator
     :param locator_camera: 摄像机名称。
     :return await: 包含位置信息的列表。
     """
-    return await server.call("GetPositionById", id_list, offspring_path, locator_camera)
+    return await server.call("GetPositionById", id_list, offspring_path,focus, locator_camera)
 
 
 async def get_size(server, element_data_list: list) -> list:
@@ -433,3 +433,73 @@ async def remove_camera(server, path_node: str) -> Any:
     :return await: 服务器返回的执行结果。
     """
     return await server.call("RemoveCamera", path_node)
+
+
+async def start_recording(server) -> Any:
+    """
+    启动 Unity 端 TouchRecorder 录制。
+
+    要求 CameraRegistry 已注册至少一项配置（先调用 set_camera）。
+    Unity 端会通过 push 消息以 record_event 形式回传录制事件。
+
+    :param server: RPC服务器实例对象。
+    :return await: True 表示已成功启动；False 表示已在录制中。
+    """
+    return await server.call("StartRecording")
+
+
+async def stop_recording(server) -> Any:
+    """
+    停止 Unity 端 TouchRecorder 录制。
+
+    :param server: RPC服务器实例对象。
+    :return await: True 表示已停止；False 表示当前未在录制。
+    """
+    return await server.call("StopRecording")
+
+
+async def get_scroll_view_info(server, element_data_list: list) -> list:
+    """
+    获取 ScrollRect/ScrollView 组件的详细信息。
+
+    返回结构与 element_data_list 一一对应，每项包含:
+    instanceId, horizontal, vertical, elastic, elasticity,
+    inertia, decelerationRate, position, size,
+    contentChildrenIds, firstChildSize。
+
+    :param server: RPC服务器实例对象。
+    :param element_data_list: 目标元素路径或标识列表。
+    :return: 包含 ScrollView 信息字典的嵌套列表。
+    """
+    return await server.call("GetScrollViewInfo", element_data_list)
+
+
+async def get_scroll_view_info_by_id(server, id_list: list, offspring_path: str,
+                                     focus: list, locator_camera: str) -> list:
+    """
+    通过实例ID获取 ScrollRect/ScrollView 组件的详细信息。
+
+    :param server: RPC服务器实例对象。
+    :param id_list: 实例ID列表。
+    :param offspring_path: 子节点相对路径。
+    :param focus: 锚点。
+    :param locator_camera: 摄像机名称。
+    :return: 包含 ScrollView 信息字典的嵌套列表。
+    """
+    return await server.call("GetScrollViewInfoById", id_list, offspring_path, focus, locator_camera)
+
+
+async def ray_input_at_position(server, norm_x: float, norm_y: float, locator_camera: str = "") -> Any:
+    """
+    回放兜底原语：按归一化坐标 (norm_x, norm_y) 在指定相机下触发一次 click。
+
+    当 click_element_for_playback 在 timeout 内未能定位到目标元素时，
+    会调用此原语以原始录制坐标点击屏幕，作为最后兜底。
+
+    :param server: RPC服务器实例对象。
+    :param norm_x: 归一化 X 坐标 [0, 1]。
+    :param norm_y: 归一化 Y 坐标 [0, 1]，y 向下。
+    :param locator_camera: 相机节点路径；空串表示自动取 CameraRegistry 中第一项 2d 相机。
+    :return await: 实际触发点击时的屏幕像素坐标 [x, y]。
+    """
+    return await server.call("RayInputAtPosition", norm_x, norm_y, locator_camera)

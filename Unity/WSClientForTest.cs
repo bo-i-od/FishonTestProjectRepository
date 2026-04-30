@@ -102,6 +102,8 @@ public class WSClientForTest : MonoBehaviour
 
     private Dictionary<string, Func<JArray, object>> rpcHandlers = new Dictionary<string, Func<JArray, object>>();
 
+    private TouchRecorder touchRecorder;
+
     private static bool consoleTransmitted = false;
     private static int consoleTransmitLevel = 1; // 0=全部, 1=warn+error, 2=仅error
     private const float RefreshLocatorIntervalSeconds = 5f;
@@ -227,6 +229,11 @@ public class WSClientForTest : MonoBehaviour
         RegisterRpcHandler("RemoveCamera", RemoveCameraRpc);
         RegisterRpcHandler("SetTimeScale", SetTimeScale);
         RegisterRpcHandler("SetSendLogFlag", SetSendLogFlag);
+        RegisterRpcHandler("StartRecording", StartRecordingRpc);
+        RegisterRpcHandler("StopRecording", StopRecordingRpc);
+        RegisterRpcHandler("RayInputAtPosition", RayInputAtPositionRpc);
+        RegisterRpcHandler("GetScrollViewInfo", GetScrollViewInfo);
+        RegisterRpcHandler("GetScrollViewInfoById", GetScrollViewInfoById);
     }
 
     public void GetLocatorPathComponent(GameObject gameObject, string path)
@@ -725,14 +732,20 @@ public class WSClientForTest : MonoBehaviour
         JArray jArray = (JArray)param[0];
         List<int> instanceIdList = jArray.ToObject<List<int>>();
         string offspringPath = param[1].ToString();
-        string cameraLocator = param[2].ToString();
+        float[] focus = { 0.5f, 0.5f };
+        JArray focusArray = (JArray)param[2];
+        List<float> focusList = focusArray.ToObject<List<float>>();
+        focus = focusList.ToArray();
+        string cameraLocator = param[3].ToString();
 
         Camera uiCamer = GetCameraByLocator(cameraLocator, "GetPositionById");
         for (int cur = 0; cur < instanceIdList.Count; cur++)
         {
             int instanceId = instanceIdList[cur];
             List<Transform> transformList = Locate.GetTransformListByInstanceID(instanceId, offspringPath);
-            res.Add(Locate.GetPositionList(transformList, screenSize, uiCamer));
+            List<float[]> position = Locate.GetPositionList(transformList, screenSize, uiCamer);
+            List<float[]> size = Locate.GetSizeList(transformList);
+            res.Add(Locate.CorrectPosition(position, size, focus));
         }
         return res;
     }
@@ -809,6 +822,50 @@ public class WSClientForTest : MonoBehaviour
             List<Transform> targetList = Locate.LocateTransform(locatorList[cur]);
             List<Transform> parentList = Locate.GetParentTransformList(targetList);
             res.Add(Locate.GetInstanceIDList(parentList));
+        }
+        return res;
+    }
+
+    public object GetScrollViewInfo(JArray paramArray)
+    {
+        List<object> param = paramArray.ToObject<List<object>>();
+        List<Dictionary<string, object>> locatorList = Locate.ObjToLocatorList(param);
+        List<List<Dictionary<string, object>>> res = new List<List<Dictionary<string, object>>>();
+        for (int cur = 0; cur < locatorList.Count; cur++)
+        {
+            Dictionary<string, object> locator = locatorList[cur];
+            Camera cam = GetCamera(locator);
+            float[] focus = { 0.5f, 0.5f };
+            if (locator.ContainsKey("focus"))
+            {
+                JArray jArray = (JArray)locator["focus"];
+                focus = jArray.ToObject<float[]>();
+            }
+            List<Transform> targetList = Locate.LocateTransform(locator);
+            res.Add(Locate.GetScrollViewInfoList(targetList, screenSize, cam, focus));
+        }
+        return res;
+    }
+
+    public object GetScrollViewInfoById(JArray paramArray)
+    {
+        List<object> param = paramArray.ToObject<List<object>>();
+        List<List<Dictionary<string, object>>> res = new List<List<Dictionary<string, object>>>();
+        JArray jArray = (JArray)param[0];
+        List<int> instanceIdList = jArray.ToObject<List<int>>();
+        string offspringPath = param[1].ToString();
+        float[] focus = { 0.5f, 0.5f };
+        JArray focusArray = (JArray)param[2];
+        List<float> focusList = focusArray.ToObject<List<float>>();
+        focus = focusList.ToArray();
+        string cameraLocator = param[3].ToString();
+
+        Camera cam = GetCameraByLocator(cameraLocator, "GetScrollViewInfoById");
+        for (int cur = 0; cur < instanceIdList.Count; cur++)
+        {
+            int instanceId = instanceIdList[cur];
+            List<Transform> transformList = Locate.GetTransformListByInstanceID(instanceId, offspringPath);
+            res.Add(Locate.GetScrollViewInfoList(transformList, screenSize, cam, focus));
         }
         return res;
     }
@@ -1028,6 +1085,85 @@ public class WSClientForTest : MonoBehaviour
         sendLogFlag = (bool)param[0];
         // 此处你可以结合日志控制逻辑，如果 sendLogFlag == false，就不发送日志
         return null;
+    }
+
+    /// <summary>
+    /// 启动 TouchRecorder 录制。CameraRegistry 必须先有相机配置，否则抛错。
+    /// 复用同一 GameObject 上挂载的 TouchRecorder（不存在则 AddComponent）。
+    /// </summary>
+    private object StartRecordingRpc(JArray paramArray)
+    {
+        List<CameraConfigEntry> configList = CameraRegistry.List();
+        if (configList.Count == 0)
+        {
+            throw new Exception("[WSClient] CameraRegistry is empty! 请先通过 SetCamera RPC 注册相机配置。");
+        }
+
+        if (touchRecorder == null)
+        {
+            touchRecorder = gameObject.GetComponent<TouchRecorder>();
+            if (touchRecorder == null)
+            {
+                touchRecorder = gameObject.AddComponent<TouchRecorder>();
+            }
+            touchRecorder.Configure(SendRecordEventToServer);
+        }
+        touchRecorder.StopRecording();
+        touchRecorder.SetCameraConfigList(configList);
+        return touchRecorder.StartRecording();
+    }
+
+    private object StopRecordingRpc(JArray paramArray)
+    {
+        if (touchRecorder == null) return false;
+        return touchRecorder.StopRecording();
+    }
+
+    /// <summary>
+    /// 把录制事件包装成与日志相同的 push 消息（id="" + msg.{type,data}）发回 Python。
+    /// </summary>
+    private void SendRecordEventToServer(object data)
+    {
+        if (!isConnected) return;
+        try
+        {
+            string msg = FormatMessage("", data);
+            SendMsgToServer(msg);
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning("[WSClient] SendRecordEventToServer failed: " + e.Message);
+        }
+    }
+
+    /// <summary>
+    /// 回放兜底：按归一化坐标 (norm_x, norm_y) 在指定相机下触发一次 click 事件。
+    /// 当 element_data 定位失败时由 click_element_for_playback 调用。
+    /// </summary>
+    private object RayInputAtPositionRpc(JArray paramArray)
+    {
+        if (paramArray == null || paramArray.Count < 2)
+        {
+            throw new ArgumentException("[RayInputAtPosition] 参数不足，应为 [norm_x, norm_y, locator_camera?]。");
+        }
+        float normX = paramArray[0].ToObject<float>();
+        float normY = paramArray[1].ToObject<float>();
+        string locatorCamera = paramArray.Count > 2 ? paramArray[2].ToString() : "";
+
+        Camera cam = GetCameraByLocator(locatorCamera, "RayInputAtPosition");
+        float screenX = normX * Screen.width;
+        float screenY = (1f - normY) * Screen.height;
+        Vector3 screenPoint = new Vector3(screenX, screenY, 0f);
+
+        PointerEventData pointerData = new PointerEventData(EventSystem.current) { position = screenPoint };
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerData, results);
+
+        if (results.Count > 0)
+        {
+            ExecuteEvents.Execute(results[0].gameObject, pointerData, ExecuteEvents.pointerClickHandler);
+        }
+        return new float[] { screenX, screenY };
     }
 
     #endregion

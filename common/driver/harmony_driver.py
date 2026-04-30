@@ -5,12 +5,14 @@ import os
 import platform
 import shutil
 import subprocess
+import sys
 import tempfile
 import time
 
 import cv2
 from common.driver.base_driver import BaseDeviceDriver
 
+_NO_WINDOW = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
 _hdc_path_cache: str | None = None
 
 
@@ -187,7 +189,8 @@ class HarmonyDriver(BaseDeviceDriver):
                     "-b", self._RECORDER_BUNDLE,
                     "-a", self._RECORDER_ABILITY,
                 ],
-                capture_output=True, text=True, timeout=10)
+                capture_output=True, text=True, timeout=10,
+                creationflags=_NO_WINDOW)
             logger.info("[Harmony] 系统录屏已启动 (视频保留在设备端)")
         except Exception as e:
             logger.warning(f"[Harmony] 启动录屏失败: {e}")
@@ -207,7 +210,8 @@ class HarmonyDriver(BaseDeviceDriver):
                     "-b", self._RECORDER_BUNDLE,
                     "-a", self._RECORDER_ABILITY,
                 ],
-                capture_output=True, text=True, timeout=10)
+                capture_output=True, text=True, timeout=10,
+                creationflags=_NO_WINDOW)
             logger.info("[Harmony] 系统录屏已停止，视频保存在设备端")
         except Exception as e:
             logger.warning(f"[Harmony] 停止录屏失败: {e}")
@@ -231,7 +235,8 @@ class HDCSession:
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            text=True
+            text=True,
+            creationflags=_NO_WINDOW,
         )
 
     def shell(self, cmd):
@@ -247,7 +252,8 @@ class HDCSession:
                 cmd_list,
                 capture_output=True,
                 text=True,
-                timeout=15
+                timeout=15,
+                creationflags=_NO_WINDOW,
             )
             return result.stdout
         except Exception as e:
@@ -265,7 +271,8 @@ class HDCSession:
         try:
             result = subprocess.run(
                 [get_hdc_path(), "list", "targets"],
-                capture_output=True, text=True, timeout=30
+                capture_output=True, text=True, timeout=30,
+                creationflags=_NO_WINDOW,
             )
             devices = []
             for line in result.stdout.strip().splitlines():
@@ -282,7 +289,8 @@ class HDCSession:
         """hdc -t <device_id> rport tcp:<port> tcp:<port> (反向端口转发)"""
         subprocess.run(
             [get_hdc_path(), "-t", device_id, "rport", f"tcp:{port}", f"tcp:{port}"],
-            check=True, capture_output=True, text=True, timeout=15
+            check=True, capture_output=True, text=True, timeout=15,
+            creationflags=_NO_WINDOW,
         )
 
     @staticmethod
@@ -290,7 +298,8 @@ class HDCSession:
         """移除反向端口转发。"""
         subprocess.run(
             [get_hdc_path(), "-t", device_id, "rport", "rm", f"tcp:{port}", f"tcp:{port}"],
-            capture_output=True, text=True, timeout=15
+            capture_output=True, text=True, timeout=15,
+            creationflags=_NO_WINDOW,
         )
 
     @staticmethod
@@ -298,7 +307,8 @@ class HDCSession:
         """hdc -t <device_id> fport tcp:<host_port> tcp:<device_port> (正向端口转发)"""
         subprocess.run(
             [get_hdc_path(), "-t", device_id, "fport", f"tcp:{host_port}", f"tcp:{device_port}"],
-            check=True, capture_output=True, text=True, timeout=15
+            check=True, capture_output=True, text=True, timeout=15,
+            creationflags=_NO_WINDOW,
         )
 
     @staticmethod
@@ -306,7 +316,8 @@ class HDCSession:
         """从设备拉取文件到本地。"""
         subprocess.run(
             [get_hdc_path(), "-t", device_id, "file", "recv", remote_path, local_path],
-            check=True, capture_output=True, text=True, timeout=60
+            check=True, capture_output=True, text=True, timeout=60,
+            creationflags=_NO_WINDOW,
         )
 
     @staticmethod
@@ -314,5 +325,6 @@ class HDCSession:
         """推送本地文件到设备。"""
         subprocess.run(
             [get_hdc_path(), "-t", device_id, "file", "send", local_path, remote_path],
-            check=True, capture_output=True, text=True, timeout=60
+            check=True, capture_output=True, text=True, timeout=60,
+            creationflags=_NO_WINDOW,
         )

@@ -5,6 +5,7 @@ import os
 import socket
 import struct
 import subprocess
+import sys
 import threading
 import time
 
@@ -12,6 +13,8 @@ import cv2
 import numpy as np
 from ppadb.client import Client as AdbClient
 from common.driver.base_driver import BaseDeviceDriver
+
+_NO_WINDOW = subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
 
 
 class AndroidDriver(BaseDeviceDriver):
@@ -120,7 +123,8 @@ class AndroidDriver(BaseDeviceDriver):
             # 关键步骤：使用adb exec-out命令直接获取二进制的PNG数据流
             # 这避免了临时文件，效率更高
             command = ['adb', '-s', f'{self.base_page.device_id}','exec-out', 'screencap', '-p']
-            process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                      creationflags=_NO_WINDOW)
             png_data, error = process.communicate()
 
             if process.returncode != 0:
@@ -148,7 +152,8 @@ class AndroidDriver(BaseDeviceDriver):
         try:
             result = subprocess.run(
                 ["adb", "-s", device_id, "shell", "wm", "size"],
-                capture_output=True, text=True, timeout=5)
+                capture_output=True, text=True, timeout=5,
+                creationflags=_NO_WINDOW)
             dims_str = ""
             for line in reversed(result.stdout.strip().splitlines()):
                 if 'x' in line:
@@ -173,7 +178,8 @@ class AndroidDriver(BaseDeviceDriver):
             ["adb", "-s", device_id, "shell",
              "screenrecord", "--bit-rate", "2000000"] + self._video_size_args +
             ["--time-limit", "180", remote_path],
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            creationflags=_NO_WINDOW)
 
     def _stop_current_segment(self):
         """停止当前正在运行的 screenrecord 进程。"""
@@ -183,12 +189,14 @@ class AndroidDriver(BaseDeviceDriver):
         try:
             pid_result = subprocess.run(
                 ["adb", "-s", device_id, "shell", "pidof", "screenrecord"],
-                capture_output=True, text=True, timeout=5)
+                capture_output=True, text=True, timeout=5,
+                creationflags=_NO_WINDOW)
             pid = pid_result.stdout.strip()
             if pid:
                 subprocess.run(
                     ["adb", "-s", device_id, "shell", "kill", "-2", pid],
-                    capture_output=True, text=True, timeout=5)
+                    capture_output=True, text=True, timeout=5,
+                    creationflags=_NO_WINDOW)
             self._screenrecord_process.wait(timeout=10)
         except Exception as e:
             logger.warning(f"停止 screenrecord 片段异常: {e}")
@@ -250,10 +258,12 @@ class AndroidDriver(BaseDeviceDriver):
             try:
                 subprocess.run(
                     ["adb", "-s", device_id, "pull", remote_path, local_path],
-                    check=True, capture_output=True, text=True, timeout=60)
+                    check=True, capture_output=True, text=True, timeout=60,
+                    creationflags=_NO_WINDOW)
                 subprocess.run(
                     ["adb", "-s", device_id, "shell", "rm", remote_path],
-                    capture_output=True, text=True, timeout=5)
+                    capture_output=True, text=True, timeout=5,
+                    creationflags=_NO_WINDOW)
                 local_segments.append(local_path)
             except Exception as e:
                 logger.warning(f"拉取视频片段失败: {e}")
@@ -289,7 +299,8 @@ class AndroidDriver(BaseDeviceDriver):
             subprocess.run(
                 ["ffmpeg", "-y", "-f", "concat", "-safe", "0",
                  "-i", list_file, "-c", "copy", output_path],
-                check=True, capture_output=True, timeout=120)
+                check=True, capture_output=True, timeout=120,
+                creationflags=_NO_WINDOW)
             os.remove(list_file)
             return True
         except (FileNotFoundError, subprocess.CalledProcessError) as e:
@@ -332,7 +343,8 @@ class ADBSession:
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            text=True
+            text=True,
+            creationflags=_NO_WINDOW,
         )
 
     def shell(self, cmd):
@@ -353,7 +365,8 @@ class ADBSession:
                 cmd_list,
                 capture_output=True,
                 text=True,
-                timeout=10
+                timeout=10,
+                creationflags=_NO_WINDOW,
             )
             return result.stdout
         except Exception as e:
@@ -370,7 +383,8 @@ class ADBSession:
         首次调用可能触发 adb server 启动，需要较长超时。"""
         try:
             result = subprocess.run(
-                ["adb", "devices"], capture_output=True, text=True, timeout=30
+                ["adb", "devices"], capture_output=True, text=True, timeout=30,
+                creationflags=_NO_WINDOW,
             )
             devices = []
             for line in result.stdout.strip().splitlines()[1:]:
@@ -387,7 +401,8 @@ class ADBSession:
         """执行 adb -s <device_id> reverse tcp:<port> tcp:<port>，不需要实例。"""
         subprocess.run(
             ["adb", "-s", device_id, "reverse", f"tcp:{port}", f"tcp:{port}"],
-            check=True, capture_output=True, text=True, timeout=15
+            check=True, capture_output=True, text=True, timeout=15,
+            creationflags=_NO_WINDOW,
         )
 
     @staticmethod
@@ -395,7 +410,8 @@ class ADBSession:
         """执行 adb -s <device_id> reverse --remove tcp:<port>，不需要实例。"""
         subprocess.run(
             ["adb", "-s", device_id, "reverse", "--remove", f"tcp:{port}"],
-            capture_output=True, text=True, timeout=15
+            capture_output=True, text=True, timeout=15,
+            creationflags=_NO_WINDOW,
         )
 
 
@@ -487,14 +503,16 @@ class MinicapService:
             subprocess.Popen(
                 self._adb_prefix + cmd,
                 stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL
+                stderr=subprocess.DEVNULL,
+                creationflags=_NO_WINDOW,
             )
             time.sleep(2)
 
             # ✅ 每台设备转发到各自独立的本地端口
             subprocess.run(
                 self._adb_prefix + ['forward', f'tcp:{self.local_port}', 'localabstract:minicap'],
-                check=True, capture_output=True
+                check=True, capture_output=True,
+                creationflags=_NO_WINDOW,
             )
             logger.info(f"[Minicap][{self.device_id}] 端口转发: localhost:{self.local_port} -> minicap")
 
@@ -570,7 +588,8 @@ class MinicapService:
         try:
             subprocess.run(
                 self._adb_prefix + ['shell', 'pkill', '-f', 'minicap'],
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                creationflags=_NO_WINDOW,
             )
             time.sleep(0.5)
         except:
@@ -587,7 +606,8 @@ class MinicapService:
         self._kill_existing_minicap()
         subprocess.run(
             self._adb_prefix + ['forward', '--remove', f'tcp:{self.local_port}'],
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            creationflags=_NO_WINDOW,
         )
         # ✅ 释放端口，允许其他实例复用
         MinicapService._release_port(self.local_port)

@@ -10,6 +10,7 @@ import cv2
 import numpy as np
 
 from common import rpc_method_request
+from common.base_page_by_id import BasePageByIdMixin
 from common.error import FindNoElementError, PluralElementError, InvalidOperationError
 from common.log import get_logger
 from common.step_recorder import StepRecorder
@@ -24,7 +25,7 @@ from tools.common_tools import merge_list
 logger = get_logger("base_page")
 
 
-class BasePageMain:
+class BasePageMain(BasePageByIdMixin):
     def __init__(self, server, device_type="pc", device_id=None, is_record=False, session_dir=None):
         self.server = server
 
@@ -162,25 +163,16 @@ class BasePageMain:
             result.append({**ed, **changes} if changes else ed)
         return result
 
-    async def exist(self, object_id=0, element_data=None, offspring_path=""):
-        """函数功能简述
-            判断元素是否存在
+    async def exist(self, element_data=None, offspring_path=""):
+        """判断元素是否存在
 
         参数:
-            object_id和element_data输入其中的一个
-            object_id: 优先object_id定位元素
-            element_data: 元素定位信息定位
+            element_data: 元素定位信息
             offspring_path: 偏移路径
 
         返回:
-            存在返回True
-            不存在返回False
+            存在返回True，不存在返回False
         """
-        if object_id != 0:
-            if await self.get_offspring_id_list(object_id=object_id, offspring_path=offspring_path):
-                return True
-            return False
-
         if await self.get_offspring_id_list(element_data=element_data, offspring_path=offspring_path):
             return True
         return False
@@ -222,168 +214,115 @@ class BasePageMain:
         self.is_single_element(object_id_list)
         return object_id_list[0]
 
-    # 得到后代的Instance Id
-    async def get_offspring_id_list(self, offspring_path, object_id=0, object_id_list=None, element_data=None,
+    async def get_offspring_id_list(self, offspring_path, element_data=None,
                               element_data_list: list = None):
-        """函数功能简述
-            根据偏移路径获取元素id
+        """根据偏移路径获取元素id
 
         参数:
-            object_id, object_id_list, element_data, element_data_list输入其中一个
-            object_id: 元素id
-            object_id_list: object_id组成的list
+            element_data和element_data_list输入其中一个
             element_data: 元素定位信息
             element_data_list: element_data组成的list
             offspring_path: 偏移路径
 
         返回:
-            输入object_id或element_data时，返回list[int]
-            输入object_id_list或element_data_list时，返回list[list[int]]
+            输入element_data时，返回list[int]
+            输入element_data_list时，返回list[list[int]]
         """
-        if object_id_list is not None:
-            return await rpc_method_request.get_offspring_id_by_id(self.server, object_id_list, offspring_path)
-
-        if object_id != 0:
-            return (await self.get_offspring_id_list(object_id_list=[object_id], offspring_path=offspring_path))[0]
-
         if element_data_list is not None:
             element_data_copy_list = self._prepare_element_data_list(element_data_list, offspring_path)
             return await self.get_object_id_list(element_data_list=element_data_copy_list)
 
         return (await self.get_object_id_list(element_data_list=[element_data], offspring_path=offspring_path))[0]
 
-    async def get_offspring_id(self, offspring_path, object_id=0, element_data=None):
-        """函数功能简述
-            根据偏移路径获取元素id
+    async def get_offspring_id(self, offspring_path, element_data=None):
+        """根据偏移路径获取元素id
 
         参数:
-            object_id和element_data输入其中的一个
-            object_id: 元素id
             element_data: 元素定位信息
             offspring_path: 偏移路径
 
         返回:
-            object_id_list有且只有一个元素时，返回int
+            offspring_id_list有且只有一个元素时，返回int
         """
-        offspring_id_list = await self.get_offspring_id_list(object_id=object_id, element_data=element_data,
+        offspring_id_list = await self.get_offspring_id_list(element_data=element_data,
                                                        offspring_path=offspring_path)
         self.is_single_element(offspring_id_list)
         return offspring_id_list[0]
 
-    # 得到父节点
-    async def get_parent_id_list(self, object_id=0, object_id_list=None, element_data=None, element_data_list: list = None,
+    async def get_parent_id_list(self, element_data=None, element_data_list: list = None,
                            offspring_path=""):
-        """函数功能简述
-            定位元素后取元素的父节点id
+        """定位元素后取元素的父节点id
 
         参数:
-            object_id, object_id_list, element_data, element_data_list输入其中一个
-            object_id: 元素id
-            object_id_list: 元素id组成的list
+            element_data和element_data_list输入其中一个
             element_data: 元素定位信息
             element_data_list: 元素定位信息组成的list
             offspring_path: 偏移路径
 
         返回:
-            输入object_id或element_data时，返回list[int]
-            输入object_id_list或element_data_list时，返回list[list[int]]
+            输入element_data时，返回list[int]
+            输入element_data_list时，返回list[list[int]]
         """
-        if object_id_list is not None:
-            return await rpc_method_request.get_parent_id_by_id(self.server, object_id_list, offspring_path)
-
-        if object_id != 0:
-            return (await self.get_parent_id_list(object_id_list=[object_id], offspring_path=offspring_path))[0]
-
         if element_data_list is not None:
             element_data_copy_list = self._prepare_element_data_list(element_data_list, offspring_path)
             return await rpc_method_request.get_parent_id(self.server, element_data_copy_list)
 
         return (await self.get_parent_id_list(element_data_list=[element_data], offspring_path=offspring_path))[0]
 
-    async def get_parent_id(self, object_id=0, element_data=None, offspring_path=""):
-        """函数功能简述
-            定位元素后取元素的父节点id
+    async def get_parent_id(self, element_data=None, offspring_path=""):
+        """定位元素后取元素的父节点id
 
         参数:
-            object_id和element_data输入其中的一个
-            object_id: 元素id
             element_data: 元素定位信息
             offspring_path: 偏移路径
 
         返回:
             parent_id_list有且只有一个元素时，返回int
         """
-        if object_id != 0:
-            parent_id_list = await self.get_parent_id_list(object_id=object_id, offspring_path=offspring_path)
-            self.is_single_element(parent_id_list)
-            return parent_id_list[0]
-
         parent_id_list = await self.get_parent_id_list(element_data=element_data, offspring_path=offspring_path)
         self.is_single_element(parent_id_list)
         return parent_id_list[0]
 
-    # 获得文本
-    async def get_text_list(self, object_id=0, object_id_list: list = None, element_data: dict = None,
+    async def get_text_list(self, element_data: dict = None,
                       element_data_list: list = None, offspring_path=""):
-        """函数功能简述
-            定位元素后取元素文本组件的值
+        """定位元素后取元素文本组件的值
 
         参数:
-            object_id, object_id_list, element_data, element_data_list输入其中一个
-            object_id: 元素id
-            object_id_list: 元素id组成的list
+            element_data和element_data_list输入其中一个
             element_data: 元素定位信息
             element_data_list: 元素定位信息组成的list
             offspring_path: 偏移路径
 
         返回:
-            输入object_id或element_data时，返回list[str]
-            输入object_id_list或element_data_list时，返回list[list[str]]
+            输入element_data时，返回list[str]
+            输入element_data_list时，返回list[list[str]]
         """
-        if object_id_list is not None:
-            return await rpc_method_request.get_text_by_id(self.server, object_id_list, offspring_path)
-
-        if object_id != 0:
-            return (await self.get_text_list(object_id_list=[object_id], offspring_path=offspring_path))[0]
-
         if element_data_list is not None:
             element_data_copy_list = self._prepare_element_data_list(element_data_list, offspring_path)
             return await rpc_method_request.get_text(self.server, element_data_copy_list)
 
         return (await self.get_text_list(element_data_list=[element_data], offspring_path=offspring_path))[0]
 
-    async def get_text(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
-        """函数功能简述
-            定位元素后取元素文本组件的值
+    async def get_text(self, element_data: dict = None, offspring_path=""):
+        """定位元素后取元素文本组件的值
 
         参数:
-            object_id和element_data输入其中的一个
-            object_id: 元素id
             element_data: 元素定位信息
             offspring_path: 偏移路径
 
         返回:
             text_list有且只有一个元素时，返回str
         """
-        if object_id != 0:
-            text_list = await self.get_text_list(object_id=object_id, offspring_path=offspring_path)
-            self.is_single_element(text_list)
-            return text_list[0]
-
         text_list = await self.get_text_list(element_data=element_data, offspring_path=offspring_path)
         self.is_single_element(text_list)
         return text_list[0]
 
-    # 修改文本
-    async def set_text_list(self, object_id=0, object_id_list: list = None, element_data: dict = None,
+    async def set_text_list(self, element_data: dict = None,
                       element_data_list: list = None, text="", offspring_path=""):
-        """函数功能简述
-            定位元素后设元素文本组件的值
+        """定位元素后设元素文本组件的值
 
         参数:
-            object_id, object_id_list, element_data, element_data_list输入其中一个
-            object_id: 元素id
-            object_id_list: 元素id组成的list
+            element_data和element_data_list输入其中一个
             element_data: 元素定位信息
             element_data_list: 元素定位信息组成的list
             offspring_path: 偏移路径
@@ -391,14 +330,6 @@ class BasePageMain:
         返回:
             None
         """
-        if object_id_list is not None:
-            await rpc_method_request.set_text_by_id(self.server, object_id_list, offspring_path, text)
-            return
-
-        if object_id != 0:
-            await self.set_text_list(object_id_list=[object_id], offspring_path=offspring_path, text=text)
-            return
-
         if element_data_list is not None:
             element_data_copy_list = self._prepare_element_data_list(element_data_list, offspring_path)
             await rpc_method_request.set_text(self.server, element_data_copy_list, text)
@@ -406,187 +337,116 @@ class BasePageMain:
 
         await self.set_text_list(element_data_list=[element_data], text=text, offspring_path=offspring_path)
 
-    async def set_text(self, object_id: int = 0, element_data: dict = None, text="", offspring_path=""):
-        """函数功能简述
-            定位元素后设元素文本组件的值
+    async def set_text(self, element_data: dict = None, text="", offspring_path=""):
+        """定位元素后设元素文本组件的值
 
         参数:
-            object_id和element_data输入其中的一个
-            object_id: 元素id
             element_data: 元素定位信息
             offspring_path: 偏移路径
 
         返回:
             None
         """
-        if object_id != 0:
-            await self.set_text_list(object_id=object_id, offspring_path=offspring_path, text=text)
-            return
-
         await self.set_text_list(element_data=element_data, text=text, offspring_path=offspring_path)
 
-    # 获取图标名
-    async def get_icon_list(self, object_id=0, object_id_list: list = None, element_data: dict = None,
+    async def get_icon_list(self, element_data: dict = None,
                       element_data_list: list = None, offspring_path=""):
-        """函数功能简述
-            定位元素后取元素图标组件的Sprite名
+        """定位元素后取元素图标组件的Sprite名
 
         参数:
-            object_id, object_id_list, element_data, element_data_list输入其中一个
-            object_id: 元素id
-            object_id_list: 元素id组成的list
+            element_data和element_data_list输入其中一个
             element_data: 元素定位信息
             element_data_list: 元素定位信息组成的list
             offspring_path: 偏移路径
 
         返回:
-            输入object_id或element_data时，返回list[str]
-            输入object_id_list或element_data_list时，返回list[list[str]]
+            输入element_data时，返回list[str]
+            输入element_data_list时，返回list[list[str]]
         """
-        if object_id_list is not None:
-            res = await rpc_method_request.get_img_name_by_id(self.server, object_id_list, offspring_path)
-            return res
-
-        if object_id != 0:
-            return (await self.get_icon_list(object_id_list=[object_id], offspring_path=offspring_path))[0]
-
         if element_data_list is not None:
             element_data_copy_list = self._prepare_element_data_list(element_data_list, offspring_path)
-            res = await rpc_method_request.get_img_name(self.server, element_data_copy_list)
-            return res
+            return await rpc_method_request.get_img_name(self.server, element_data_copy_list)
 
         return (await self.get_icon_list(element_data_list=[element_data], offspring_path=offspring_path))[0]
 
-    async def get_icon(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
-        """函数功能简述
-            定位元素后取元素图标组件的Sprite名
+    async def get_icon(self, element_data: dict = None, offspring_path=""):
+        """定位元素后取元素图标组件的Sprite名
 
         参数:
-            object_id和element_data输入其中的一个
-            object_id: 元素id
             element_data: 元素定位信息
             offspring_path: 偏移路径
 
         返回:
             icon_list有且只有一个元素时，返回str
         """
-        if object_id != 0:
-            icon_list = await self.get_icon_list(object_id=object_id, offspring_path=offspring_path)
-            self.is_single_element(icon_list)
-            icon = icon_list[0]
-            return icon
-
         icon_list = await self.get_icon_list(element_data=element_data, offspring_path=offspring_path)
         self.is_single_element(icon_list)
         return icon_list[0]
 
-    # 获取节点名称
-    async def get_name_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None,
+    async def get_name_list(self, element_data: dict = None,
                       element_data_list: list = None, offspring_path=""):
-        """函数功能简述
-            定位元素后取元素图标组件的Sprite名
+        """定位元素后取元素节点名称
 
         参数:
-            object_id, object_id_list, element_data, element_data_list输入其中一个
-            object_id: 元素id
-            object_id_list: 元素id组成的list
+            element_data和element_data_list输入其中一个
             element_data: 元素定位信息
             element_data_list: 元素定位信息组成的list
             offspring_path: 偏移路径
 
         返回:
-            输入object_id或element_data时，返回list[str]
-            输入object_id_list或element_data_list时，返回list[list[str]]
+            输入element_data时，返回list[str]
+            输入element_data_list时，返回list[list[str]]
         """
-
-        # 输入object_id_list的情况，直接调用rpc
-        if object_id_list is not None:
-            return await rpc_method_request.get_name_by_id(self.server, object_id_list, offspring_path)
-
-        # 输入object_id的情况，将object_id加上[]转为object_id_list
-        if object_id != 0:
-            return (await self.get_name_list(object_id_list=[object_id], offspring_path=offspring_path))[0]
-
-        # 输入element_data_list的情况，直接调用rpc
         if element_data_list is not None:
             element_data_copy_list = self._prepare_element_data_list(element_data_list, offspring_path)
             return await rpc_method_request.get_name(self.server, element_data_copy_list)
 
-        # 输入element_data的情况,将element_data加[]转为element_data_list
         return (await self.get_name_list(element_data_list=[element_data], offspring_path=offspring_path))[0]
 
-    async def get_name(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
-        """函数功能简述
-            定位元素后取元素名
+    async def get_name(self, element_data: dict = None, offspring_path=""):
+        """定位元素后取元素名
 
         参数:
-            object_id和element_data输入其中的一个
-            object_id: 元素id
             element_data: 元素定位信息
             offspring_path: 偏移路径
 
         返回:
             name_list有且只有一个元素时，返回str
          """
-        if object_id != 0:
-            name_list = await self.get_name_list(object_id=object_id, offspring_path=offspring_path)
-            self.is_single_element(name_list)
-            return name_list[0]
-
         name_list = await self.get_name_list(element_data=element_data, offspring_path=offspring_path)
         self.is_single_element(name_list)
         return name_list[0]
 
-    # 获取滑条值，值在0~1
-    async def get_slider_value_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None,
+    async def get_slider_value_list(self, element_data: dict = None,
                               element_data_list: list = None, offspring_path=""):
-        """函数功能简述
-            定位元素后取元素slider组件的值
+        """定位元素后取元素slider组件的值
 
         参数:
-            object_id, object_id_list, element_data, element_data_list输入其中一个
-            object_id: 元素id
-            object_id_list: 元素id组成的list
+            element_data和element_data_list输入其中一个
             element_data: 元素定位信息
             element_data_list: 元素定位信息组成的list
             offspring_path: 偏移路径
 
         返回:
-            输入object_id或element_data时，返回list[float]
-            输入object_id_list或element_data_list时，返回list[list[float]]
+            输入element_data时，返回list[float]
+            输入element_data_list时，返回list[list[float]]
         """
-        if object_id_list is not None:
-            return await rpc_method_request.get_slider_value_by_id(self.server, object_id_list, offspring_path)
-
-        if object_id != 0:
-            return (await self.get_slider_value_list(object_id_list=[object_id], offspring_path=offspring_path))[0]
-
         if element_data_list is not None:
             element_data_copy_list = self._prepare_element_data_list(element_data_list, offspring_path)
             return await rpc_method_request.get_slider_value(self.server, element_data_copy_list)
 
         return (await self.get_slider_value_list(element_data_list=[element_data], offspring_path=offspring_path))[0]
 
-    # 获取到的滑条值是float类型，值在0~1
-    async def get_slider_value(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
-        """函数功能简述
-            定位元素后取元素slider组件的值
+    async def get_slider_value(self, element_data: dict = None, offspring_path=""):
+        """定位元素后取元素slider组件的值
 
         参数:
-            object_id和element_data输入其中的一个
-            object_id: 元素id
             element_data: 元素定位信息
             offspring_path: 偏移路径
 
         返回:
-            slider_value_list有且只有一个元素时，返回float
-            值在0~1
+            slider_value_list有且只有一个元素时，返回float，值在0~1
          """
-        if object_id != 0:
-            slider_value_list = await self.get_slider_value_list(object_id=object_id, offspring_path=offspring_path)
-            self.is_single_element(slider_value_list)
-            return slider_value_list[0]
-
         slider_value_list = await self.get_slider_value_list(element_data=element_data, offspring_path=offspring_path)
         self.is_single_element(slider_value_list)
         return slider_value_list[0]
@@ -619,194 +479,143 @@ class BasePageMain:
          """
         await rpc_method_request.set_dropdown_value(self.server, [element_data], index)
 
-    # 获取元素尺寸
-    async def get_size_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None,
+    async def get_size_list(self, element_data: dict = None,
                       element_data_list: list = None, offspring_path=""):
-        """函数功能简述
-            定位元素后取元素的width和height值
+        """定位元素后取元素的width和height值
 
         参数:
-            object_id, object_id_list, element_data, element_data_list输入其中一个
-            object_id: 元素id
-            object_id_list: 元素id组成的list
+            element_data和element_data_list输入其中一个
             element_data: 元素定位信息
             element_data_list: 元素定位信息组成的list
             offspring_path: 偏移路径
 
         返回:
-            输入object_id或element_data时，返回list[[float, float]]
-            输入object_id_list或element_data_list时，返回list[list[[float, float]]]
+            输入element_data时，返回list[[float, float]]
+            输入element_data_list时，返回list[list[[float, float]]]
         """
-        if object_id_list is not None:
-            return await rpc_method_request.get_size_by_id(self.server, object_id_list, offspring_path)
-
-        if object_id != 0:
-            return (await self.get_size_list(object_id_list=[object_id], offspring_path=offspring_path))[0]
-
         if element_data_list is not None:
             element_data_copy_list = self._prepare_element_data_list(element_data_list, offspring_path)
             return await rpc_method_request.get_size(self.server, element_data_copy_list)
 
         return (await self.get_size_list(element_data_list=[element_data], offspring_path=offspring_path))[0]
 
-    async def get_size(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
-        """函数功能简述
-            定位元素后取元素的width和height值
+    async def get_size(self, element_data: dict = None, offspring_path=""):
+        """定位元素后取元素的width和height值
 
         参数:
-            object_id和element_data输入其中的一个
-            object_id: 元素id
             element_data: 元素定位信息
             offspring_path: 偏移路径
 
         返回:
-            size_list有且只有一个元素时，返回[float, float]
-            width和height值在0~1
+            size_list有且只有一个元素时，返回[float, float]，width和height值在0~1
          """
-        if object_id != 0:
-            size_list = await self.get_size_list(object_id=object_id, offspring_path=offspring_path)
-            self.is_single_element(size_list)
-            return size_list[0]
-
         size_list = await self.get_size_list(element_data=element_data, offspring_path=offspring_path)
         self.is_single_element(size_list)
         return size_list[0]
 
-    # 获取勾选状态
-    async def get_toggle_is_on_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None,
-                              element_data_list: list = None, offspring_path=""):
-        """函数功能简述
-            定位元素后取元素toggle组件的IsOn
+    async def get_scroll_view_info_list(self, element_data: dict = None,
+                                        element_data_list: list = None, offspring_path=""):
+        """获取 ScrollRect/ScrollView 组件的详细信息。
 
         参数:
-            object_id, object_id_list, element_data, element_data_list输入其中一个
-            object_id: 元素id
-            object_id_list: 元素id组成的list
+            element_data和element_data_list输入其中一个
             element_data: 元素定位信息
             element_data_list: 元素定位信息组成的list
             offspring_path: 偏移路径
 
         返回:
-            输入object_id或element_data时，返回list[bool]
-            输入object_id_list或element_data_list时，返回list[list[bool]]
+            输入element_data时，返回list[dict]
+            输入element_data_list时，返回list[list[dict]]
         """
-        if object_id_list is not None:
-            return await rpc_method_request.get_toggle_is_on_by_id(self.server, object_id_list, offspring_path)
+        if element_data_list is not None:
+            element_data_copy_list = self._prepare_element_data_list(element_data_list, offspring_path)
+            return await rpc_method_request.get_scroll_view_info(self.server, element_data_copy_list)
 
-        if object_id != 0:
-            return (await self.get_toggle_is_on_list(object_id_list=[object_id], offspring_path=offspring_path))[0]
+        return (await self.get_scroll_view_info_list(element_data_list=[element_data], offspring_path=offspring_path))[0]
 
+    async def get_scroll_view_info(self, element_data: dict = None, offspring_path=""):
+        """获取 ScrollRect/ScrollView 组件的详细信息。
+
+        参数:
+            element_data: 元素定位信息
+            offspring_path: 偏移路径
+
+        返回:
+            包含 instanceId, horizontal, vertical, elastic, elasticity,
+            inertia, decelerationRate, position, size,
+            contentChildrenIds, firstChildSize 的字典。
+        """
+        info_list = await self.get_scroll_view_info_list(element_data=element_data, offspring_path=offspring_path)
+        self.is_single_element(info_list)
+        return info_list[0]
+
+    async def get_toggle_is_on_list(self, element_data: dict = None,
+                              element_data_list: list = None, offspring_path=""):
+        """定位元素后取元素toggle组件的IsOn
+
+        参数:
+            element_data和element_data_list输入其中一个
+            element_data: 元素定位信息
+            element_data_list: 元素定位信息组成的list
+            offspring_path: 偏移路径
+
+        返回:
+            输入element_data时，返回list[bool]
+            输入element_data_list时，返回list[list[bool]]
+        """
         if element_data_list is not None:
             element_data_copy_list = self._prepare_element_data_list(element_data_list, offspring_path)
             return await rpc_method_request.get_toggle_is_on(self.server, element_data_copy_list)
 
         return (await self.get_toggle_is_on_list(element_data_list=[element_data], offspring_path=offspring_path))[0]
 
-    async def get_toggle_is_on(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
-        """函数功能简述
-            定位元素后取元素toggle组件的IsOn
+    async def get_toggle_is_on(self, element_data: dict = None, offspring_path=""):
+        """定位元素后取元素toggle组件的IsOn
 
         参数:
-            object_id和element_data输入其中的一个
-            object_id: 元素id
             element_data: 元素定位信息
             offspring_path: 偏移路径
 
         返回:
             toggle_is_on_list有且只有一个元素时，返回bool
         """
-        if object_id != 0:
-            toggle_is_on_list = await self.get_toggle_is_on_list(object_id=object_id, offspring_path=offspring_path)
-            self.is_single_element(toggle_is_on_list)
-            return toggle_is_on_list[0]
-
         toggle_is_on_list = await self.get_toggle_is_on_list(element_data=element_data, offspring_path=offspring_path)
         self.is_single_element(toggle_is_on_list)
         return toggle_is_on_list[0]
 
-    # 获取位置
-    async def get_position_list(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None,
-                                element_data_list: list = None, offspring_path="",focus: list[float] = None, locator_camera=""):
-        """函数功能简述
-            定位元素后取元素的position值
+    async def get_position_list(self, element_data: dict = None,
+                                element_data_list: list = None, offspring_path=""):
+        """定位元素后取元素的 position 值。
 
         参数:
-            object_id, object_id_list, element_data, element_data_list输入其中一个
-            object_id: 元素id
-            object_id_list: 元素id组成的list
+            element_data 和 element_data_list 输入其中一个
             element_data: 元素定位信息
-            element_data_list: 元素定位信息组成的list
+            element_data_list: 元素定位信息组成的 list
             offspring_path: 偏移路径
 
         返回:
-            输入object_id或element_data时，返回list[[float, float]]
-            输入object_id_list或element_data_list时，返回list[list[[float, float]]]
+            输入 element_data 时，返回 list[[float, float]]
+            输入 element_data_list 时，返回 list[list[[float, float]]]
         """
-        if focus is None:
-            focus = [0.5, 0.5]
-
-        if object_id_list is not None:
-            return await rpc_method_request.get_position_by_id(self.server, object_id_list, offspring_path, locator_camera)
-
-        if object_id != 0:
-            return (await self.get_position_list(object_id_list=[object_id], offspring_path=offspring_path, locator_camera=locator_camera))[0]
-
         if element_data_list is not None:
             element_data_copy_list = self._prepare_element_data_list(
-                element_data_list, offspring_path, focus=focus, locator_camera=locator_camera)
+                element_data_list, offspring_path)
             return await rpc_method_request.get_position(self.server, element_data_copy_list)
 
-        return (await self.get_position_list(element_data_list=[element_data], offspring_path=offspring_path,
-                                             focus=focus, locator_camera=locator_camera))[0]
+        return (await self.get_position_list(element_data_list=[element_data], offspring_path=offspring_path))[0]
 
-    async def get_position(self, object_id: int = 0, element_data: dict = None, offspring_path="", locator_camera=""):
-        """函数功能简述
-            定位元素后取元素的position值
-
-        参数:
-            object_id和element_data输入其中的一个
-            object_id: 元素id
-            element_data: 元素定位信息
-            offspring_path: 偏移路径
+    async def get_position(self, element_data: dict = None, offspring_path=""):
+        """定位元素后取元素的 position 值。
 
         返回:
-            position_list有且只有一个元素时，返回[float, float]
-            float值在0~1，以屏幕左上角作为原点
-
+            position_list 有且只有一个元素时，返回 [float, float]
+            float 值在 0~1，以屏幕左上角作为原点
         """
-        """
-               (0, 0)    (0.5, 0)   (1, 0)
-                      ______ ______
-                     |      |      |
-             (0, 0.5)|______|______|(1, 0.5)
-                     |      |      |
-                     |______|______|
-               (0, 1)    (0.5, 1)   (1, 1)
-        """
-        if object_id != 0:
-            position_list = await self.get_position_list(object_id=object_id, offspring_path=offspring_path, locator_camera=locator_camera)
-            self.is_single_element(position_list)
-            return position_list[0]
-
-        position_list = await self.get_position_list(element_data=element_data, offspring_path=offspring_path)
+        position_list = await self.get_position_list(
+            element_data=element_data, offspring_path=offspring_path)
         self.is_single_element(position_list)
         return position_list[0]
 
-    # 元素长按
-    async def press(self, object_id: int = 0, element_data: dict = None, duration: float = 2.0, offspring_path=""):
-        """函数功能简述
-            定位元素后取元素的position值
-            取到position值后，按压该位置duration秒
-
-        参数:
-            object_id和element_data输入其中的一个
-            object_id: 元素id
-            element_data: 元素定位信息
-            offspring_path: 偏移路径
-            duration: 按压时长（默认值为2s
-         """
-        position = await self.get_position(object_id=object_id, element_data=element_data, offspring_path=offspring_path)
-        await self.press_position(position=position, duration=duration)
 
     # 位置长按
     async def press_position(self, position, duration: float = 2.0, ignore_element_list=None):
@@ -877,74 +686,45 @@ class BasePageMain:
 
         # 元素点击
 
-    async def click_element(self, object_id: int = 0, element_data: dict = None, offspring_path="", locator_camera="", ignore_element_list=None, focus=None):
-        """函数功能简述
-            定位元素后取元素的position值
+    async def click(self, element_data: dict = None, offspring_path="", ignore_element_list=None):
+        """定位元素后点击。"""
+        logger.info(f"click 点击 {element_data}")
+        return await self.press(
+            element_data=element_data, duration=0, offspring_path=offspring_path,
+            ignore_element_list=ignore_element_list)
 
-        参数:
-            object_id和element_data输入其中的一个
-            object_id: 元素id
-            element_data: 元素定位信息
-            offspring_path: 偏移路径
-            ignore_element_list: 需要忽略清除的弹窗
-            focus: 元素锚点，用于计算元素中心位置
-
-        返回:
-            position_list有且只有一个元素时，返回[float, float]
-        """
-        logger.info(f"click_element 点击 {element_data} {focus}")
-        position = await self.press_element(duration=0, object_id=object_id, element_data=element_data,
-                                            offspring_path=offspring_path, focus=focus,
-                                            locator_camera=locator_camera, ignore_element_list=ignore_element_list)
-        return position
-
-    async def press_element(self, object_id: int = 0, element_data: dict = None, duration: float = 2.0, offspring_path="", locator_camera="", ignore_element_list=None, focus=None):
-        """函数功能简述
-            定位元素后取元素的position值
-
-        参数:
-            object_id和element_data输入其中的一个
-            object_id: 元素id
-            element_data: 元素定位信息
-            offspring_path: 偏移路径
-            ignore_element_list: 需要忽略清除的弹窗
-            focus: 元素锚点，用于计算元素中心位置
-
-        返回:
-            position_list有且只有一个元素时，返回[float, float]
-        """
+    async def press(self, element_data: dict = None, duration: float = 2.0,
+                    offspring_path="", ignore_element_list=None):
+        """定位元素后按压 duration 秒。"""
         await self.clear_popup(ignore_element_list)
-        position_list = await self.get_position_list(object_id=object_id, element_data=element_data, offspring_path=offspring_path, focus=focus, locator_camera=locator_camera)
+        position_list = await self.get_position_list(
+            element_data=element_data, offspring_path=offspring_path)
         self.is_single_element(position_list)
         await self.press_position_base(position=position_list[0], duration=duration)
         return position_list[0]
 
-    async def click_object_of_plural_objects(self, object_id: int = 0, object_id_list: list = None, element_data: dict = None, element_data_list: list = None, offspring_path="", index=None, viewport: Viewport = None, element_viewport: dict = None, viewport_direction=None, viewport_range=None, viewport_edge=None, delta_len=None, locator_camera="", ignore_element_list=None):
-        """函数功能简述
-            点击一堆物体中的其中一个
-        """
-        if object_id != 0:
-            await self.click_object_of_plural_objects(object_id_list=[object_id], offspring_path=offspring_path,
-                                                      index=index, viewport=viewport, element_viewport=element_viewport,
-                                                      viewport_direction=viewport_direction, viewport_range=viewport_range,
-                                                      viewport_edge=viewport_edge, delta_len=delta_len,
-                                                      locator_camera=locator_camera, ignore_element_list=ignore_element_list)
-            return
+    async def click_plural(self, element_data=None, element_data_list=None, offspring_path="",
+                           index=None, viewport: Viewport = None, element_viewport: dict = None,
+                           viewport_direction=None, viewport_range=None, viewport_edge=None,
+                           delta_len=None, ignore_element_list=None):
+        """点击一堆物体中的其中一个（element_data 版本）。"""
         if element_data is not None:
-            await self.click_object_of_plural_objects(element_data_list=[element_data], offspring_path=offspring_path,
-                                                      index=index, viewport=viewport, element_viewport=element_viewport,
-                                                      viewport_direction=viewport_direction, viewport_range=viewport_range,
-                                                      viewport_edge=viewport_edge, delta_len=delta_len,
-                                                      locator_camera=locator_camera, ignore_element_list=ignore_element_list)
+            await self.click_plural(
+                element_data_list=[element_data], offspring_path=offspring_path,
+                index=index, viewport=viewport, element_viewport=element_viewport,
+                viewport_direction=viewport_direction, viewport_range=viewport_range,
+                viewport_edge=viewport_edge, delta_len=delta_len,
+                ignore_element_list=ignore_element_list)
             return
 
-        # 如果传入viewport的定位就得到viewport
         if element_viewport:
-            viewport = Viewport(self, element_viewport=element_viewport, element_item_list=element_data_list[0], item_id_list=object_id_list, viewport_direction=viewport_direction, viewport_range=viewport_range, viewport_edge=viewport_edge, delta_len=delta_len, locator_camera=locator_camera)
+            viewport = await Viewport.create(
+                self, element_data=element_viewport,
+                element_data_items=element_data_list[0],
+                direction=viewport_direction, range=viewport_range,
+                edge=viewport_edge, delta_len=delta_len)
 
-        # 如果有viewport就挪动到元素出现
         if viewport:
-
             if index is None:
                 index = random.randint(0, len(viewport.item_id_list) - 1)
             if index < 0:
@@ -952,72 +732,44 @@ class BasePageMain:
             target_id = viewport.item_id_list[index]
             await viewport.move_until_appear(target_id=target_id, ignore_element_list=ignore_element_list)
 
-        # 得到位置
-        position_list = await self.get_position_list(element_data_list=element_data_list, object_id_list=object_id_list, offspring_path=offspring_path, locator_camera=locator_camera)
+        position_list = await self.get_position_list(
+            element_data_list=element_data_list, offspring_path=offspring_path)
         position_list = merge_list(position_list)
 
         if index is None:
             index = random.randint(0, len(position_list) - 1)
-        # 如果index没有赋合法值，就随机点击一个
         if index < 0:
             index = len(position_list) + index
 
         await self.click_position(position=position_list[index], ignore_element_list=ignore_element_list)
 
-    async def click_element_outside(self, object_id: int = 0, element_data: dict = None, locator_camera: str = "",
-                                    ignore_element_list=None):
-        """
-        点击元素外部区域。
-        计算元素周围上下左右的空间，点击空间最大的那一侧。
-        通常用于点击非蒙层关闭气泡。
-
-        :param element_data: 元素定位信息
-        :param object_id: 元素 ID
-        :param locator_camera: 指定摄像机
-
-        """
+    async def click_outside(self, element_data: dict = None, ignore_element_list=None):
+        """点击元素外部区域。"""
         await self.clear_popup(ignore_element_list=ignore_element_list)
-        click_result = await self.click_element_outside_safe(object_id=object_id, element_data=element_data,
-                                                             locator_camera=locator_camera)
-        if click_result:
-            return
-        if object_id:
-            raise FindNoElementError(f"object_id{object_id}不存在")
-        if element_data:
+        click_result = await self.click_outside_safe(element_data=element_data)
+        if not click_result:
             raise FindNoElementError(f"element_data{element_data}不存在")
 
-    async def click_element_outside_safe(self, object_id: int = 0, element_data: dict = None, locator_camera: str = ""):
-        """
-        点击元素外部区域。
-        计算元素周围上下左右的空间，点击空间最大的那一侧。且**不清除弹窗**。
-        通常用于点击非蒙层关闭气泡。
-
-        :param element_data: 元素定位信息
-        :param object_id: 元素 ID
-        :param locator_camera: 指定摄像机
-        :return 如果检测到目标，返回 True；否则返回 False
-        """
-        position_list = await self.get_position_list(object_id=object_id, element_data=element_data,
-                                                     locator_camera=locator_camera)
-        size_list = await self.get_size_list(object_id=object_id, element_data=element_data)
+    async def click_outside_safe(self, element_data: dict = None):
+        """点击元素外部区域（不清除弹窗）。"""
+        position_list = await self.get_position_list(element_data=element_data)
+        size_list = await self.get_size_list(element_data=element_data)
         if not position_list:
-            logger.warning(f"点击目标不存在")
+            logger.warning("点击目标不存在")
             return False
         if not size_list:
-            logger.warning(f"点击目标不存在")
+            logger.warning("点击目标不存在")
             return False
         position = position_list[0]
         size = size_list[0]
 
-        margin = 0.01  # 元素外侧安全边距，防止落点仍落在命中区内
-        # 元素四边到屏幕边界的可用距离
+        margin = 0.01
         left_gap = position[0] - 0.5 * size[0]
         right_gap = 1 - position[0] - 0.5 * size[0]
         up_gap = position[1] - 0.5 * size[1]
         down_gap = 1 - position[1] - 0.5 * size[1]
 
         areas = {
-            # 落点 = 元素外侧那块空白区域的几何中点
             "left": {"area": left_gap,
                      "position": [(position[0] - 0.5 * size[0] - margin) * 0.5,
                                   position[1]]},
@@ -1035,7 +787,7 @@ class BasePageMain:
         best_direction = max(areas, key=lambda k: areas[k]["area"])
         position_out_side = list(areas[best_direction]["position"])
         await self.press_position_base(position_out_side, duration=0)
-        logger.info(f"click_element_outside_safe 尝试点击: {element_data}, 位置={position_out_side}, 方向={best_direction}")
+        logger.info(f"click_outside_safe 尝试点击: {element_data}, 位置={position_out_side}, 方向={best_direction}")
         return True
 
         # 在b元素出现前一直尝试点击a元素
@@ -1045,7 +797,7 @@ class BasePageMain:
             在element_data_b元素出现之前，一直点击element_data_a元素
         """
         while not await self.exist(element_data=element_data_b):
-            await self.click_element_safe(element_data=element_data_a)
+            await self.click_safe(element_data=element_data_a)
             await self.clear_popup(ignore_element_list=ignore_element_list)
             await self.sleep(interval)
 
@@ -1068,7 +820,7 @@ class BasePageMain:
         await self.wait_for_appear(element_data=element_data_b, is_click=False)
         while await self.exist(element_data=element_data_b):
             await self.clear_popup(ignore_element_list=ignore_element_list)
-            await self.click_element_safe(element_data=element_data_a)
+            await self.click_safe(element_data=element_data_a)
             await self.sleep(interval)
 
         # 在a元素消失前一直尝试点击a元素
@@ -1122,11 +874,10 @@ class BasePageMain:
 
         # 安全点击
 
-    async def click_element_safe(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
-        """函数功能简述
-            元素存在且在屏幕范围内时再点击
-        """
-        position_list = await self.get_position_list(object_id=object_id, element_data=element_data, offspring_path=offspring_path)
+    async def click_safe(self, element_data: dict = None, offspring_path=""):
+        """元素存在且在屏幕范围内时再点击。"""
+        position_list = await self.get_position_list(
+            element_data=element_data, offspring_path=offspring_path)
         if not position_list:
             return
         try:
@@ -1180,7 +931,7 @@ class BasePageMain:
                 if not element:
                     continue
 
-                await self.click_element_safe(element_data=element)
+                await self.click_safe(element_data=element)
                 await self.sleep(1)
 
         return False
@@ -1271,7 +1022,7 @@ class BasePageMain:
                 if not element:
                     continue
 
-                await self.click_element_safe(element_data=element)
+                await self.click_safe(element_data=element)
                 await self.sleep(0.5)
 
         # 关除了主界面的界面
@@ -1306,34 +1057,26 @@ class BasePageMain:
                 if not element:
                     continue
 
-                await self.click_element_safe(element_data=element)
+                await self.click_safe(element_data=element)
             break
 
         await self.sleep(0.2)
 
-    async def swipe(self, object_id: int = 0, element_data: dict = None, point_start=None, point_end=None, t: float = 0.5,
+    async def swipe(self, element_data=None, point_end=None, t: float = 0.5,
                     offspring_path="", ignore_element_list=None):
-        """函数功能简述
-            清除弹窗后滑动
-        """
+        """清除弹窗后滑动。"""
         await self.clear_popup(ignore_element_list)
-        await self.swipe_base(object_id, element_data, point_start, point_end, t, offspring_path)
-
-    async def swipe_base(self, object_id: int = 0, element_data: dict = None, point_start=None, point_end=None,
-                         t: float = 0.5, offspring_path=""):
-        """函数功能简述
-            滑动
-        """
-        if point_start is not None:
-            await self.driver.swipe(point_start, point_end, t)
-            return
-        if object_id != 0:
-            point_start = await self.get_position(object_id=object_id)
-            await self.driver.swipe(point_start, point_end, t)
-            return
         [element_data_copy] = self._prepare_element_data_list(element_data_list=[element_data], offspring_path=offspring_path)
         point_start = await self.get_position(element_data=element_data_copy)
+        await self.swipe_base( point_start=point_start,
+                              point_end=point_end, t=t)
+
+    async def swipe_base(self, point_start=None, point_end=None,
+                         t: float = 0.5):
+        """滑动。"""
         await self.driver.swipe(point_start, point_end, t)
+
+
 
     async def swipe_slider_base(self, slider, value_start=None, value_end=None):
         if not value_start:
@@ -1388,12 +1131,10 @@ class BasePageMain:
 
         # 对指定元素进行截取
 
-    async def get_element_shot(self, object_id: int = 0, element_data: dict = None, offspring_path=""):
-        """函数功能简述
-            指定元素截图
-        """
-        ui_x, ui_y = await self.get_position(object_id=object_id, element_data=element_data, offspring_path=offspring_path)
-        ui_w, ui_h = await self.get_size(object_id=object_id, element_data=element_data, offspring_path=offspring_path)
+    async def get_element_shot(self, element_data: dict = None, offspring_path=""):
+        """指定元素截图。"""
+        ui_x, ui_y = await self.get_position(element_data=element_data, offspring_path=offspring_path)
+        ui_w, ui_h = await self.get_size(element_data=element_data, offspring_path=offspring_path)
         ui_x, ui_y = int(ui_x * self.screen_w), int(ui_y * self.screen_h)
         ui_w, ui_h = int(ui_w * self.screen_w), int(ui_h * self.screen_h)
         img = await self.get_screen_shot(ui_x, ui_y, ui_w, ui_h)
@@ -1408,13 +1149,8 @@ class BasePageMain:
             return
         await self.click_button(element_data_list=[element_data])
 
-    async def ray_input(self, kind: str, object_id: int = 0, element_data: dict = None, offspring_path: str = ""):
-        """函数功能简述
-            对target_name身上有Empty4Raycast组件进行光线操作
-        """
-        if object_id != 0:
-            await rpc_method_request.ray_input_by_id(self.server, [object_id], offspring_path, kind)
-            return
+    async def ray_input(self, kind: str, element_data: dict = None, offspring_path: str = ""):
+        """对 element_data 身上有 Empty4Raycast 组件进行光线操作。"""
         [element_data_copy] = self._prepare_element_data_list([element_data], offspring_path)
         await rpc_method_request.ray_input(self.server, [element_data_copy], kind)
 
@@ -1477,6 +1213,232 @@ class BasePageMain:
         if not command:
             return
         await self.custom_cmd_list([command])
+
+    # ============================================================
+    # 录制回放专用方法（*_for_playback）
+    # ============================================================
+
+    async def click_for_playback(self, element_data: dict = None,
+                                 fallback_position: list[float] = None,
+                                 timeout: float = 10, delay: float = None):
+        """
+        回放点击：首先尝试通过 element_data 定位元素并点击；
+        在 timeout 内反复重试，超时仍未找到则使用 fallback_position 通过 RayInputAtPosition 兜底。
+        """
+        await self._wait_playback_ready(delay)
+        locator_camera = (element_data or {}).get("locator_camera", "")
+
+        if element_data:
+
+            deadline = time.time() + max(0.0, float(timeout))
+            last_error: Exception | None = None
+            while True:
+                try:
+                    await self.click(element_data=element_data)
+                    return
+                except (FindNoElementError, PluralElementError) as e:
+                    last_error = e
+                except Exception as e:
+                    last_error = e
+                    logger.debug(f"click_for_playback 重试中: {e}")
+                if time.time() >= deadline:
+                    break
+                await self.sleep(0.5)
+            if last_error is not None:
+                logger.warning(f"click_for_playback 元素定位失败: {last_error}; 使用 fallback_position={fallback_position}")
+
+        if fallback_position is None:
+            raise FindNoElementError("click_for_playback 没有可用的 fallback_position")
+        await rpc_method_request.ray_input_at_position(
+            self.server, fallback_position[0], fallback_position[1], locator_camera
+        )
+
+    async def long_press_for_playback(self, element_data: dict = None,
+                                      fallback_position: list[float] = None,
+                                      duration: float = 1.0,
+                                      timeout: float = 10, delay: float = None):
+        """
+        录制回放专用：先通过 element_data 定位元素并按住 duration 秒，超时后用归一化坐标兜底。
+        与 click_for_playback 的区别在于按压时长由 duration 控制（>0 表示长按）。
+
+        :param element_data: 元素定位信息 {"locator": "..."}
+        :param fallback_position: 兜底归一化坐标 [x, y]
+        :param duration: 按住持续时间(秒)
+        :param timeout: 等待元素出现的超时时间(秒)
+        :param delay: 操作前等待时间(秒)，None 时使用 playback_delay
+        :return: True 成功，False 失败
+        """
+        await self._wait_playback_ready(delay)
+
+        if element_data:
+            deadline = time.time() + max(0.0, float(timeout))
+            last_error: Exception | None = None
+            while True:
+                try:
+                    await self.press(element_data=element_data, duration=duration)
+                    logger.info(
+                        f"long_press_for_playback 长按元素: {element_data} "
+                        f"duration={duration}s"
+                    )
+                    return True
+                except (FindNoElementError, PluralElementError) as e:
+                    last_error = e
+                except Exception as e:
+                    last_error = e
+                    logger.debug(f"long_press_for_playback 重试中: {e}")
+                if time.time() >= deadline:
+                    break
+                await self.sleep(0.5)
+            if last_error is not None:
+                logger.warning(
+                    f"long_press_for_playback 元素定位失败: {last_error}; 尝试坐标兜底")
+
+        if fallback_position:
+            try:
+                await self.press_position_base(position=fallback_position, duration=duration)
+                logger.info(
+                    f"long_press_for_playback 坐标兜底: {fallback_position} duration={duration}s")
+                return True
+            except Exception as e:
+                logger.error(f"long_press_for_playback 坐标兜底失败: {e}")
+                return False
+
+        logger.error("long_press_for_playback 无 element_data 且无 fallback_position")
+        return False
+
+    async def swipe_for_playback(self, element_data: dict = None,
+                                 fallback_start: list[float] = None,
+                                 end: list[float] = None,
+                                 duration: float = 0.5,
+                                 timeout: float = 10):
+        """
+        回放滑动：优先以 element_data 元素中心为起点进行 swipe；
+        定位失败时直接用 fallback_start → end 坐标兜底（无需额外原语）。
+
+        :param element_data: 录制时记录的滑动起点元素信息。
+        :param fallback_start: 录制时的归一化起点坐标 [x, y]。
+        :param end: 录制时的归一化终点坐标 [x, y]。
+        :param duration: 滑动持续时间。
+        :param timeout: 等待元素出现的最大秒数。
+        """
+        if element_data:
+            deadline = time.time() + max(0.0, float(timeout))
+            while True:
+                try:
+                    await self.swipe(element_data=element_data, point_end=end, t=duration)
+                    return
+                except (FindNoElementError, PluralElementError):
+                    pass
+                except Exception as e:
+                    logger.debug(f"swipe_for_playback 重试中: {e}")
+                if time.time() >= deadline:
+                    break
+                await self.sleep(0.5)
+            logger.warning(f"swipe_for_playback 元素定位失败，使用坐标兜底 start={fallback_start} end={end}")
+
+        if fallback_start is None or end is None:
+            raise InvalidOperationError("swipe_for_playback 缺少 fallback_start / end 坐标")
+        await self.swipe(point_start=fallback_start, point_end=end, t=duration)
+
+    async def set_text_for_playback(self, element_data: dict = None,
+                                    text: str = "",
+                                    timeout: float = 10,
+                                    delay: float = None):
+        """
+        回放文本输入：在 timeout 内重试 set_text。
+
+        :param element_data: 录制时记录的输入框定位信息。
+        :param text: 要输入的文本。
+        :param timeout: 等待元素出现的最大秒数。
+        :param delay: 操作完成后的额外延时（None 时取 self.playback_delay）。
+        """
+        await self._wait_playback_ready(delay)
+        if element_data is None:
+            raise InvalidOperationError("set_text_for_playback 缺少 element_data")
+
+        deadline = time.time() + max(0.0, float(timeout))
+        last_error: Exception | None = None
+        while True:
+            try:
+                await self.set_text(element_data=element_data, text=text)
+                return
+            except (FindNoElementError, PluralElementError) as e:
+                last_error = e
+            except Exception as e:
+                last_error = e
+                logger.debug(f"set_text_for_playback 重试中: {e}")
+            if time.time() >= deadline:
+                break
+            await self.sleep(0.5)
+        raise last_error or FindNoElementError(f"set_text_for_playback 元素未出现: {element_data}")
+
+    async def scroll_and_click_for_playback(self, scroll_element_data: dict = None,
+                                            target_element_data: dict = None,
+                                            target_fallback_position: list[float] = None,
+                                            timeout: float = 30):
+        """
+        回放滚动后点击：在 timeout 内通过滚动 scroll_element_data 让 target 出现，
+        然后调用 click_for_playback。
+
+        :param scroll_element_data: ScrollRect 容器的定位信息。
+        :param target_element_data: 目标元素定位信息。
+        :param target_fallback_position: 目标元素的回放兜底坐标。
+        :param timeout: 总超时时间。
+        """
+        if target_element_data is None:
+            raise InvalidOperationError("scroll_and_click_for_playback 缺少 target_element_data")
+
+        deadline = time.time() + max(0.0, float(timeout))
+        scroll_dir_y_pairs = (([0.5, 0.7], [0.5, 0.3]), ([0.5, 0.3], [0.5, 0.7]))
+        idx = 0
+
+        while True:
+            if await self.exist(element_data=target_element_data):
+                break
+            if scroll_element_data is None:
+                break
+            try:
+                start, end = scroll_dir_y_pairs[idx % len(scroll_dir_y_pairs)]
+                await self.swipe(element_data=scroll_element_data,
+                                 point_start=start, point_end=end, t=0.5)
+            except Exception as e:
+                logger.debug(f"scroll_and_click_for_playback swipe 异常: {e}")
+            idx += 1
+            if time.time() >= deadline:
+                break
+            await self.sleep(0.3)
+
+        remaining = max(1.0, deadline - time.time())
+        await self.click_for_playback(
+            element_data=target_element_data,
+            fallback_position=target_fallback_position,
+            timeout=remaining,
+        )
+
+    async def click_3d_for_playback(self, element_data: dict = None,
+                                    fallback_position: list[float] = None,
+                                    timeout: float = 10,
+                                    delay: float = None,
+                                    locator_camera: str = ""):
+        """
+        回放 3D / HUD 元素点击：与 click_for_playback 一致，
+        但显式带 locator_camera，便于 Unity 端拿到正确的相机执行射线兜底。
+        """
+        ed = dict(element_data or {})
+        if locator_camera and "locator_camera" not in ed:
+            ed["locator_camera"] = locator_camera
+        await self.click_for_playback(
+            element_data=ed if ed else None,
+            fallback_position=fallback_position,
+            timeout=timeout,
+            delay=delay,
+        )
+
+    async def _wait_playback_ready(self, delay: float | None):
+        """统一处理回放方法的额外延时。delay=None 时使用 self.playback_delay。"""
+        wait = self.playback_delay if delay is None else delay
+        if wait and wait > 0:
+            await self.sleep(wait)
 
 
 class BasePage(BasePageMain):
